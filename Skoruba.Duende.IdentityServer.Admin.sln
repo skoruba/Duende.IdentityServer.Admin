@@ -7,55 +7,55 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "admin", "admin", "{588205D4
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0BC0CC4E-A0F1-45E8-B41A-AE0FA76BF3E5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin", "src\Skoruba.IdentityServer4.Admin\Skoruba.Duende.IdentityServer.Admin.csproj", "{E3713598-3375-4E81-9EC7-58DC090789BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin", "src\Skoruba.Duende.IdentityServer.Admin\Skoruba.Duende.IdentityServer.Admin.csproj", "{E3713598-3375-4E81-9EC7-58DC090789BD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.IntegrationTests", "tests\Skoruba.IdentityServer4.Admin.IntegrationTests\Skoruba.Duende.IdentityServer.Admin.IntegrationTests.csproj", "{BFF10ECC-B02A-4660-A82B-AADFDE0C0EBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.IntegrationTests", "tests\Skoruba.Duende.IdentityServer.Admin.IntegrationTests\Skoruba.Duende.IdentityServer.Admin.IntegrationTests.csproj", "{BFF10ECC-B02A-4660-A82B-AADFDE0C0EBF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.UnitTests", "tests\Skoruba.IdentityServer4.Admin.UnitTests\Skoruba.Duende.IdentityServer.Admin.UnitTests.csproj", "{92405E00-759C-4A20-A736-E21E7EF771C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.UnitTests", "tests\Skoruba.Duende.IdentityServer.Admin.UnitTests\Skoruba.Duende.IdentityServer.Admin.UnitTests.csproj", "{92405E00-759C-4A20-A736-E21E7EF771C2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sts", "sts", "{63D44665-AC4C-45F4-A2C7-A7DB394F44C4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.EntityFramework", "src\Skoruba.IdentityServer4.Admin.EntityFramework\Skoruba.Duende.IdentityServer.Admin.EntityFramework.csproj", "{D9F5B8B1-01F5-4996-8E75-A41532CF32CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.EntityFramework", "src\Skoruba.Duende.IdentityServer.Admin.EntityFramework\Skoruba.Duende.IdentityServer.Admin.EntityFramework.csproj", "{D9F5B8B1-01F5-4996-8E75-A41532CF32CD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.BusinessLogic", "src\Skoruba.IdentityServer4.Admin.BusinessLogic\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.csproj", "{491B30A8-D4A1-42E8-8DEE-4093E0E45C36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.BusinessLogic", "src\Skoruba.Duende.IdentityServer.Admin.BusinessLogic\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.csproj", "{491B30A8-D4A1-42E8-8DEE-4093E0E45C36}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.STS.Identity", "src\Skoruba.IdentityServer4.STS.Identity\Skoruba.Duende.IdentityServer.STS.Identity.csproj", "{72F17B1A-88D9-47FD-AA35-1C700E51CD0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.STS.Identity", "src\Skoruba.Duende.IdentityServer.STS.Identity\Skoruba.Duende.IdentityServer.STS.Identity.csproj", "{72F17B1A-88D9-47FD-AA35-1C700E51CD0E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity", "src\Skoruba.IdentityServer4.Admin.EntityFramework.Identity\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.csproj", "{2FAECDE3-8D21-4C36-BFF1-3F7C1A56F0D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity", "src\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.csproj", "{2FAECDE3-8D21-4C36-BFF1-3F7C1A56F0D4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared", "src\Skoruba.IdentityServer4.Admin.BusinessLogic.Shared\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared.csproj", "{C360A0D5-1671-4738-BC5D-BED0E8A24D66}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared", "src\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared.csproj", "{C360A0D5-1671-4738-BC5D-BED0E8A24D66}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity", "src\Skoruba.IdentityServer4.Admin.BusinessLogic.Identity\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.csproj", "{CA63CC7B-BE27-4737-AE91-42E43F729A1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity", "src\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.csproj", "{CA63CC7B-BE27-4737-AE91-42E43F729A1E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.STS.Identity.IntegrationTests", "tests\Skoruba.IdentityServer4.STS.Identity.IntegrationTests\Skoruba.Duende.IdentityServer.STS.Identity.IntegrationTests.csproj", "{83319150-92D2-408C-A944-52DBE6AB8B37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.STS.Identity.IntegrationTests", "tests\Skoruba.Duende.IdentityServer.STS.Identity.IntegrationTests\Skoruba.Duende.IdentityServer.STS.Identity.IntegrationTests.csproj", "{83319150-92D2-408C-A944-52DBE6AB8B37}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.Api", "src\Skoruba.IdentityServer4.Admin.Api\Skoruba.Duende.IdentityServer.Admin.Api.csproj", "{8F112368-2E45-4C3A-922E-85AB6056F559}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.Api", "src\Skoruba.Duende.IdentityServer.Admin.Api\Skoruba.Duende.IdentityServer.Admin.Api.csproj", "{8F112368-2E45-4C3A-922E-85AB6056F559}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared", "src\Skoruba.IdentityServer4.Admin.EntityFramework.Shared\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj", "{E18F8C70-7448-4039-9D78-1369D7F498EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared", "src\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj", "{E18F8C70-7448-4039-9D78-1369D7F498EF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions", "src\Skoruba.IdentityServer4.Admin.EntityFramework.Extensions\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.csproj", "{2DD3CB7D-462E-4039-B684-81B1E88C7C6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions", "src\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.csproj", "{2DD3CB7D-462E-4039-B684-81B1E88C7C6A}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{F817047F-018D-4F93-BDA5-58602073B634}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer", "src\Skoruba.IdentityServer4.Admin.EntityFramework.SqlServer\Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.csproj", "{8230366D-81F9-4FA5-8F5D-8546B527F54F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer", "src\Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer\Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.csproj", "{8230366D-81F9-4FA5-8F5D-8546B527F54F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL", "src\Skoruba.IdentityServer4.Admin.EntityFramework.PostgreSQL\Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.csproj", "{3ECDC91E-0D3E-4E4D-A34E-D33BB714578D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL", "src\Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL\Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.csproj", "{3ECDC91E-0D3E-4E4D-A34E-D33BB714578D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "database", "database", "{2A514C8F-6A53-41CA-AB41-B644E7BC92A7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "business", "business", "{EE588CE5-51D0-4E98-A2B3-40EC8E655931}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql", "src\Skoruba.IdentityServer4.Admin.EntityFramework.MySql\Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.csproj", "{0A8A0DB7-0509-4DFB-9201-74398511B481}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql", "src\Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql\Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.csproj", "{0A8A0DB7-0509-4DFB-9201-74398511B481}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests", "tests\Skoruba.IdentityServer4.Admin.Api.IntegrationTests\Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.csproj", "{4D123ACB-ACBD-4E40-AE6B-1B0F79D703B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests", "tests\Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests\Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.csproj", "{4D123ACB-ACBD-4E40-AE6B-1B0F79D703B0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Shared", "src\Skoruba.IdentityServer4.Shared\Skoruba.Duende.IdentityServer.Shared.csproj", "{61B285F0-EE06-4AEE-AAF3-71492CBD11C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Shared", "src\Skoruba.Duende.IdentityServer.Shared\Skoruba.Duende.IdentityServer.Shared.csproj", "{61B285F0-EE06-4AEE-AAF3-71492CBD11C5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.UI", "src\Skoruba.IdentityServer4.Admin.UI\Skoruba.Duende.IdentityServer.Admin.UI.csproj", "{6DD24C2C-0FB5-4C37-8B42-5DACA0FDE4EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.UI", "src\Skoruba.Duende.IdentityServer.Admin.UI\Skoruba.Duende.IdentityServer.Admin.UI.csproj", "{6DD24C2C-0FB5-4C37-8B42-5DACA0FDE4EC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration", "src\Skoruba.IdentityServer4.Admin.EntityFramework.Configuration\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.csproj", "{45FB23BE-A7F9-4172-8868-B5E387007644}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration", "src\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.csproj", "{45FB23BE-A7F9-4172-8868-B5E387007644}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Shared.Configuration", "src\Skoruba.IdentityServer4.Shared.Configuration\Skoruba.Duende.IdentityServer.Shared.Configuration.csproj", "{D49A2D61-AEEB-457C-B3BA-D1322EB2F4EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Shared.Configuration", "src\Skoruba.Duende.IdentityServer.Shared.Configuration\Skoruba.Duende.IdentityServer.Shared.Configuration.csproj", "{D49A2D61-AEEB-457C-B3BA-D1322EB2F4EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
