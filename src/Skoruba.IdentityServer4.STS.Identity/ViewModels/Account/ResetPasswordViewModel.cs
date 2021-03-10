@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Skoruba.IdentityServer4.STS.Identity.ViewModels.Account
+namespace Skoruba.Duende.IdentityServer.STS.Identity.ViewModels.Account
 {
     public class ResetPasswordViewModel
     {

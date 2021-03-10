@@ -1,7 +1,7 @@
 ﻿using Skoruba.AuditLogging.Events;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Dtos.Configuration;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration;
 
-namespace Skoruba.IdentityServer4.Admin.BusinessLogic.Events.IdentityResource
+namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Events.IdentityResource
 {
     public class IdentityResourcePropertiesRequestedEvent : AuditEvent
     {

@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 using FluentAssertions;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Mappers;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Mappers.Converters;
-using Skoruba.IdentityServer4.Admin.UnitTests.Mocks;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Mappers;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Mappers.Converters;
+using Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks;
 using Xunit;
 
-namespace Skoruba.IdentityServer4.Admin.UnitTests.Mappers
+namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mappers
 {
 	public class ApiResourceMappers
 	{

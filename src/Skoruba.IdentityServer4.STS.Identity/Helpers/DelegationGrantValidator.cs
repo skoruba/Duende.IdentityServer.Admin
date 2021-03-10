@@ -1,10 +1,9 @@
-
 using System.Linq;
 using System.Threading.Tasks;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Validation;
 
-namespace Skoruba.IdentityServer4.STS.Identity.Helpers
+namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
 {
     public class DelegationGrantValidator : IExtensionGrantValidator
     {

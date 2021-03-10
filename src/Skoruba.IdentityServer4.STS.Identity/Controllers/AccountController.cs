@@ -10,13 +10,13 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using IdentityModel;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
+using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -24,13 +24,13 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using Skoruba.IdentityServer4.Shared.Configuration.Configuration.Identity;
-using Skoruba.IdentityServer4.STS.Identity.Configuration;
-using Skoruba.IdentityServer4.STS.Identity.Helpers;
-using Skoruba.IdentityServer4.STS.Identity.Helpers.Localization;
-using Skoruba.IdentityServer4.STS.Identity.ViewModels.Account;
+using Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration.Identity;
+using Skoruba.Duende.IdentityServer.STS.Identity.Configuration;
+using Skoruba.Duende.IdentityServer.STS.Identity.Helpers;
+using Skoruba.Duende.IdentityServer.STS.Identity.Helpers.Localization;
+using Skoruba.Duende.IdentityServer.STS.Identity.ViewModels.Account;
 
-namespace Skoruba.IdentityServer4.STS.Identity.Controllers
+namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
 {
     [SecurityHeaders]
     [Authorize]

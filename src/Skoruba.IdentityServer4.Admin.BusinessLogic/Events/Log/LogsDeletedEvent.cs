@@ -1,7 +1,7 @@
 ﻿using System;
 using Skoruba.AuditLogging.Events;
 
-namespace Skoruba.IdentityServer4.Admin.BusinessLogic.Events.Log
+namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Events.Log
 {
     public class LogsDeletedEvent : AuditEvent
     {

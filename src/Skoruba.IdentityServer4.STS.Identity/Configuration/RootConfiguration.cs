@@ -1,7 +1,7 @@
-﻿using Skoruba.IdentityServer4.Shared.Configuration.Configuration.Identity;
-using Skoruba.IdentityServer4.STS.Identity.Configuration.Interfaces;
+﻿using Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration.Identity;
+using Skoruba.Duende.IdentityServer.STS.Identity.Configuration.Interfaces;
 
-namespace Skoruba.IdentityServer4.STS.Identity.Configuration
+namespace Skoruba.Duende.IdentityServer.STS.Identity.Configuration
 {
     public class RootConfiguration : IRootConfiguration
     {      

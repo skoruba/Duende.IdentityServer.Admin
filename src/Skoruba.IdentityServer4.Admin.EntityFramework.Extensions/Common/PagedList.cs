@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Skoruba.IdentityServer4.Admin.EntityFramework.Extensions.Common
+namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Common
 {
     public class PagedList<T> where T : class 
     {

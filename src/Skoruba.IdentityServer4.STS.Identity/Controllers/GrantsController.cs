@@ -13,10 +13,10 @@ using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Skoruba.IdentityServer4.STS.Identity.Helpers;
-using Skoruba.IdentityServer4.STS.Identity.ViewModels.Grants;
+using Skoruba.Duende.IdentityServer.STS.Identity.Helpers;
+using Skoruba.Duende.IdentityServer.STS.Identity.ViewModels.Grants;
 
-namespace Skoruba.IdentityServer4.STS.Identity.Controllers
+namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
 {
     /// <summary>
     /// This sample controller allows a user to revoke grants given to clients

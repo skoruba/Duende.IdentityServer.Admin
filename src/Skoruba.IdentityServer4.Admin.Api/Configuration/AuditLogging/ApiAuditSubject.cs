@@ -2,9 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Skoruba.AuditLogging.Constants;
 using Skoruba.AuditLogging.Events;
-using Skoruba.IdentityServer4.Admin.Api.Configuration;
 
-namespace Skoruba.IdentityServer4.Admin.Api.AuditLogging
+namespace Skoruba.Duende.IdentityServer.Admin.Api.Configuration.AuditLogging
 {
     public class ApiAuditSubject : IAuditSubject
     {

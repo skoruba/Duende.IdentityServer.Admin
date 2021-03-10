@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Resources;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Services;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Services.Interfaces;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Interfaces;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Repositories;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Repositories.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Resources;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Interfaces;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Extensions
 {
     public static class AdminServicesExtensions
     {

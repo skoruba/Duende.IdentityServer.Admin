@@ -1,16 +1,15 @@
 ﻿using System.Threading.Tasks;
-using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Skoruba.IdentityServer4.Admin.Api.Configuration.Constants;
-using Skoruba.IdentityServer4.Admin.Api.Dtos.IdentityResources;
-using Skoruba.IdentityServer4.Admin.Api.ExceptionHandling;
-using Skoruba.IdentityServer4.Admin.Api.Mappers;
-using Skoruba.IdentityServer4.Admin.Api.Resources;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Dtos.Configuration;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Services.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.Api.Configuration.Constants;
+using Skoruba.Duende.IdentityServer.Admin.Api.Dtos.IdentityResources;
+using Skoruba.Duende.IdentityServer.Admin.Api.ExceptionHandling;
+using Skoruba.Duende.IdentityServer.Admin.Api.Mappers;
+using Skoruba.Duende.IdentityServer.Admin.Api.Resources;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces;
 
-namespace Skoruba.IdentityServer4.Admin.Api.Controllers
+namespace Skoruba.Duende.IdentityServer.Admin.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

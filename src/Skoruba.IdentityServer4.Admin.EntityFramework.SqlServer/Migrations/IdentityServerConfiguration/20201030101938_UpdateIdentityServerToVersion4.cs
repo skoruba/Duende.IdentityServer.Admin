@@ -4,7 +4,7 @@
 using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Skoruba.IdentityServer4.Admin.EntityFramework.SqlServer.Migrations.IdentityServerConfiguration
+namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migrations.IdentityServerConfiguration
 {
     public partial class UpdateIdentityServerToVersion4 : Migration
     {

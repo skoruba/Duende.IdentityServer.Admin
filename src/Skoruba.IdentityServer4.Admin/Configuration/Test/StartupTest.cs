@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using Skoruba.Duende.IdentityServer.Admin.UI.Helpers.DependencyInjection;
 
-namespace Skoruba.IdentityServer4.Admin.Configuration.Test
+namespace Skoruba.Duende.IdentityServer.Admin.Configuration.Test
 {
 	public class StartupTest : Startup
     {

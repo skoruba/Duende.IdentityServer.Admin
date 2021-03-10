@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using Skoruba.IdentityServer4.Admin.UI.Configuration;
-using Skoruba.IdentityServer4.Admin.UI.Configuration.Constants;
-using System;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Configuration.Configuration;
-using Skoruba.IdentityServer4.Shared.Configuration.Configuration.Common;
+using Microsoft.Extensions.DependencyInjection;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
+using Skoruba.Duende.IdentityServer.Admin.UI.Configuration;
+using Skoruba.Duende.IdentityServer.Admin.UI.Configuration.Constants;
+using Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration.Common;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Skoruba.Duende.IdentityServer.Admin.UI.Helpers.DependencyInjection
 {
 	public class IdentityServer4AdminUIOptions
 	{

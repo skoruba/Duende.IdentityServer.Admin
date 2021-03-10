@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Skoruba.IdentityServer4.STS.Identity.ViewModels.Manage
+namespace Skoruba.Duende.IdentityServer.STS.Identity.ViewModels.Manage
 {
     public class EnableAuthenticatorViewModel
     {

@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Duende.IdentityServer.EntityFramework.Entities;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Entities;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Extensions.Common;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Entities;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Common;
 
-namespace Skoruba.IdentityServer4.Admin.EntityFramework.Identity.Repositories.Interfaces
+namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.Repositories.Interfaces
 {
 	public interface IPersistedGrantAspNetIdentityRepository
     {

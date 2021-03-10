@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Duende.IdentityServer.EntityFramework.Entities;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Dtos.Grant;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Entities;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Extensions.Common;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Grant;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Entities;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Common;
 
-namespace Skoruba.IdentityServer4.Admin.BusinessLogic.Mappers
+namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Mappers
 {
     public class PersistedGrantMapperProfile : Profile
     {

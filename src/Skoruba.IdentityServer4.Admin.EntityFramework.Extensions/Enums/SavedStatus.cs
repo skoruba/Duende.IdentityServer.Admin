@@ -1,4 +1,4 @@
-﻿namespace Skoruba.IdentityServer4.Admin.EntityFramework.Extensions.Enums
+﻿namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Enums
 {
     public enum SavedStatus
     {

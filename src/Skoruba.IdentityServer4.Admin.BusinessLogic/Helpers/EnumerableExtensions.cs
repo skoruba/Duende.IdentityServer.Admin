@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Skoruba.IdentityServer4.Admin.BusinessLogic.Helpers
+namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Helpers
 {
     public static class EnumerableExtensions
     {

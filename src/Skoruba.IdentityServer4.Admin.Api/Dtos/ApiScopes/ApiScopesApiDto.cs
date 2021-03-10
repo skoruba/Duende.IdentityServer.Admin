@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Skoruba.IdentityServer4.Admin.Api.Dtos.ApiScopes
+namespace Skoruba.Duende.IdentityServer.Admin.Api.Dtos.ApiScopes
 {
     public class ApiScopesApiDto
     {

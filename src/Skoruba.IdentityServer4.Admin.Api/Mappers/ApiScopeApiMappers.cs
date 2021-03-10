@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace Skoruba.IdentityServer4.Admin.Api.Mappers
+namespace Skoruba.Duende.IdentityServer.Admin.Api.Mappers
 {
     public static class ApiScopeApiMappers
     {

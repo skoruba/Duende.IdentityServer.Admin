@@ -1,8 +1,7 @@
-﻿
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace Skoruba.IdentityServer4.Admin.UI.Helpers
+namespace Skoruba.Duende.IdentityServer.Admin.UI.Helpers
 {
     /// <summary>
     /// Helper-class to create Md5hashes from strings

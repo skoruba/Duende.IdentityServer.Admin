@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
-using Skoruba.IdentityServer4.Shared.Configuration.Configuration.Identity;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration.Identity;
 
-namespace Skoruba.IdentityServer4.STS.Identity.Helpers
+namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
 {
     public class UserResolver<TUser> where TUser : class
     {

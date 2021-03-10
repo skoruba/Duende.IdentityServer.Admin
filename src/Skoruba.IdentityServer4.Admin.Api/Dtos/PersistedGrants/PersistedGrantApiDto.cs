@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Skoruba.IdentityServer4.Admin.Api.Dtos.PersistedGrants
+namespace Skoruba.Duende.IdentityServer.Admin.Api.Dtos.PersistedGrants
 {
     public class PersistedGrantApiDto
     {

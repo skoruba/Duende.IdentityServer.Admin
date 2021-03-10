@@ -1,6 +1,6 @@
-﻿using Skoruba.IdentityServer4.Admin.Api.ExceptionHandling;
+﻿using Skoruba.Duende.IdentityServer.Admin.Api.ExceptionHandling;
 
-namespace Skoruba.IdentityServer4.Admin.Api.Resources
+namespace Skoruba.Duende.IdentityServer.Admin.Api.Resources
 {
     public interface IApiErrorResources
     {

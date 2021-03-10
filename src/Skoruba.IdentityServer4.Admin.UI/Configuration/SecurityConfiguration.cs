@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.HttpsPolicy;
-using System;
-using System.Collections.Generic;
 
-namespace Skoruba.IdentityServer4.Admin.UI.Configuration
+namespace Skoruba.Duende.IdentityServer.Admin.UI.Configuration
 {
 	public class SecurityConfiguration
 	{

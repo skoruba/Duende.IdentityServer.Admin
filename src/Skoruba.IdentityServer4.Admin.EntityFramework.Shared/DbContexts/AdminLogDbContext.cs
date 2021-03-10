@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Constants;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Entities;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Constants;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Entities;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
 
-namespace Skoruba.IdentityServer4.Admin.EntityFramework.Shared.DbContexts
+namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts
 {
     public class AdminLogDbContext : DbContext, IAdminLogDbContext
     {

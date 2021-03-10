@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Dtos.Identity;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Identity;
 
-namespace Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Mappers.Configuration
+namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Mappers.Configuration
 {
     public class MapperConfigurationBuilder : IMapperConfigurationBuilder
     {

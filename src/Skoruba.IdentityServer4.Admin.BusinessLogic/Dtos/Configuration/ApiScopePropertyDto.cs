@@ -1,4 +1,4 @@
-﻿namespace Skoruba.IdentityServer4.Admin.BusinessLogic.Dtos.Configuration
+﻿namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration
 {
     public class ApiScopePropertyDto
     {

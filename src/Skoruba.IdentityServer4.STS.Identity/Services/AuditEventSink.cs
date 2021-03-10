@@ -3,7 +3,7 @@ using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Services;
 using Microsoft.Extensions.Logging;
 
-namespace Skoruba.IdentityServer4.STS.Identity.Services
+namespace Skoruba.Duende.IdentityServer.STS.Identity.Services
 {
     public class AuditEventSink : DefaultEventSink
     {

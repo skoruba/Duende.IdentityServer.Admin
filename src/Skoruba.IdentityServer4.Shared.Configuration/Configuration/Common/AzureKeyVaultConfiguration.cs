@@ -1,4 +1,4 @@
-﻿namespace Skoruba.IdentityServer4.Shared.Configuration.Configuration.Common
+﻿namespace Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration.Common
 {
     public class AzureKeyVaultConfiguration
     {

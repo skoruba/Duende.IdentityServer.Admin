@@ -1,15 +1,13 @@
-﻿using HealthChecks.UI.Client;
+﻿using System;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using Skoruba.IdentityServer4.Admin.UI.Configuration;
-using Skoruba.IdentityServer4.Admin.UI.Helpers;
-using Skoruba.IdentityServer4.Admin.UI.Middlewares;
-using System;
-using System.Collections.Generic;
-using Skoruba.IdentityServer4.Admin.UI.Configuration.Constants;
+using Skoruba.Duende.IdentityServer.Admin.UI.Configuration;
+using Skoruba.Duende.IdentityServer.Admin.UI.Configuration.Constants;
 
-namespace Microsoft.AspNetCore.Builder
+namespace Skoruba.Duende.IdentityServer.Admin.UI.Helpers.ApplicationBuilder
 {
     public static class AdminUIApplicationBuilderExtensions
     {

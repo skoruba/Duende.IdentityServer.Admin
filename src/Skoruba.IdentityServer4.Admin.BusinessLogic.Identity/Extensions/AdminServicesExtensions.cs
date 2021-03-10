@@ -4,16 +4,17 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Dtos.Identity;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Mappers.Configuration;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Resources;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Services;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Services.Interfaces;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Identity.Repositories;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Identity.Repositories.Interfaces;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Identity;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Mappers.Configuration;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Resources;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Services;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Services.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.Repositories;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.Repositories.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Extensions
 {
     public static class AdminServicesExtensions
     {

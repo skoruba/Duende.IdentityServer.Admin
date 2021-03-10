@@ -4,7 +4,7 @@ using System.Linq;
 using Bogus;
 using Duende.IdentityServer.EntityFramework.Entities;
 
-namespace Skoruba.IdentityServer4.Admin.UnitTests.Mocks
+namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
 {
     public static class ApiResourceMock
     {

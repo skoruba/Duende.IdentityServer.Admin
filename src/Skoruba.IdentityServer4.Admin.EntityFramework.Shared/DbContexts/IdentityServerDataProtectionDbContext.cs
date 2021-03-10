@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Skoruba.IdentityServer4.Admin.EntityFramework.Shared.DbContexts
+namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts
 {
     public class IdentityServerDataProtectionDbContext : DbContext, IDataProtectionKeyContext
     {

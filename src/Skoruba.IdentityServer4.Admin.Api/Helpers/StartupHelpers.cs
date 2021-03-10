@@ -1,7 +1,7 @@
 ﻿using System;
+using Duende.IdentityServer.EntityFramework.Options;
 using IdentityModel;
 using IdentityServer4.AccessTokenValidation;
-using Duende.IdentityServer.EntityFramework.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -15,20 +15,20 @@ using Skoruba.AuditLogging.EntityFramework.Entities;
 using Skoruba.AuditLogging.EntityFramework.Extensions;
 using Skoruba.AuditLogging.EntityFramework.Repositories;
 using Skoruba.AuditLogging.EntityFramework.Services;
-using Skoruba.IdentityServer4.Admin.Api.AuditLogging;
-using Skoruba.IdentityServer4.Admin.Api.Configuration;
-using Skoruba.IdentityServer4.Admin.Api.Configuration.ApplicationParts;
-using Skoruba.IdentityServer4.Admin.Api.Configuration.Constants;
-using Skoruba.IdentityServer4.Admin.Api.Helpers.Localization;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Dtos.Identity;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Configuration.Configuration;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Configuration.MySql;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Configuration.PostgreSQL;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Configuration.SqlServer;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Helpers;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.Api.Configuration;
+using Skoruba.Duende.IdentityServer.Admin.Api.Configuration.ApplicationParts;
+using Skoruba.Duende.IdentityServer.Admin.Api.Configuration.AuditLogging;
+using Skoruba.Duende.IdentityServer.Admin.Api.Configuration.Constants;
+using Skoruba.Duende.IdentityServer.Admin.Api.Helpers.Localization;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Identity;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySql;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.PostgreSQL;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.SqlServer;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Helpers;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
 
-namespace Skoruba.IdentityServer4.Admin.Api.Helpers
+namespace Skoruba.Duende.IdentityServer.Admin.Api.Helpers
 {
     public static class StartupHelpers
     {

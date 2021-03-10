@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Skoruba.IdentityServer4.Admin.UI.Configuration.Constants;
-using System.Collections.Generic;
+using Skoruba.Duende.IdentityServer.Admin.UI.Configuration.Constants;
 
-namespace Skoruba.IdentityServer4.Admin.UI.Areas.AdminUI.Controllers
+namespace Skoruba.Duende.IdentityServer.Admin.UI.Areas.AdminUI.Controllers
 {
     [Authorize]
     [Area(CommonConsts.AdminUIArea)]

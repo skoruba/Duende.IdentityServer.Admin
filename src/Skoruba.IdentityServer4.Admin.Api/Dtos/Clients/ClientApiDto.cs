@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Skoruba.IdentityServer4.Admin.Api.Dtos.Clients
+namespace Skoruba.Duende.IdentityServer.Admin.Api.Dtos.Clients
 {
     public class ClientApiDto
     {

@@ -1,7 +1,7 @@
 ﻿using Bogus;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Entities;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Entities;
 
-namespace Skoruba.IdentityServer4.Admin.UnitTests.Mocks
+namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
 {
     public class LogMock
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Skoruba.IdentityServer4.Admin.Api.Dtos.Users
+namespace Skoruba.Duende.IdentityServer.Admin.Api.Dtos.Users
 {
     public class UserChangePasswordApiDto<TKey>
     {

@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
-using Skoruba.IdentityServer4.STS.Identity.Configuration.Test;
+using Skoruba.Duende.IdentityServer.STS.Identity.Configuration.Test;
 
-namespace Skoruba.IdentityServer4.STS.Identity.IntegrationTests.Common
+namespace Skoruba.Duende.IdentityServer.STS.Identity.IntegrationTests.Common
 {
     public static class WebApplicationFactoryExtensions 
     {

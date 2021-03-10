@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Skoruba.IdentityServer4.STS.Identity\Skoruba.IdentityServer4.STS.Identity.csproj" />
+        <ProjectReference Include="..\..\src\Skoruba.IdentityServer4.STS.Identity\Skoruba.Duende.IdentityServer.STS.Identity.csproj" />
     </ItemGroup>
 
 </Project>

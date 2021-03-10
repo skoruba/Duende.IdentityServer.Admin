@@ -9,12 +9,12 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Extensions.Common;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Extensions.Enums;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Extensions.Extensions;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Identity.Repositories.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Common;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Enums;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Extensions;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.Repositories.Interfaces;
 
-namespace Skoruba.IdentityServer4.Admin.EntityFramework.Identity.Repositories
+namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.Repositories
 {
     public class IdentityRepository<TIdentityDbContext, TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken>
         : IIdentityRepository<TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken>

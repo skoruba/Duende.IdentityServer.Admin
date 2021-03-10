@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Bogus;
 using Duende.IdentityServer.EntityFramework.Entities;
 
-namespace Skoruba.IdentityServer4.Admin.UnitTests.Mocks
+namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
 {
     public class PersistedGrantMock
     {

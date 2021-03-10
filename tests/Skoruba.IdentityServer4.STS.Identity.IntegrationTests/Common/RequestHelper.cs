@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Net.Http;
 
-namespace Skoruba.IdentityServer4.STS.Identity.IntegrationTests.Common
+namespace Skoruba.Duende.IdentityServer.STS.Identity.IntegrationTests.Common
 {
     public class RequestHelper
     {

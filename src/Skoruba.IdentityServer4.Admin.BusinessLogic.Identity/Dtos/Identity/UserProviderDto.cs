@@ -1,7 +1,7 @@
-﻿using Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Dtos.Identity.Base;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Dtos.Identity.Interfaces;
+﻿using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Identity.Base;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Identity.Interfaces;
 
-namespace Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Dtos.Identity
+namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Identity
 {
     public class UserProviderDto<TKey> : BaseUserProviderDto<TKey>, IUserProviderDto
     {

@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Duende.IdentityServer.EntityFramework.Entities;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Extensions.Common;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Common;
 using ApiResource = Duende.IdentityServer.EntityFramework.Entities.ApiResource;
 
-namespace Skoruba.IdentityServer4.Admin.EntityFramework.Repositories.Interfaces
+namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Interfaces
 {
     public interface IApiResourceRepository
     {

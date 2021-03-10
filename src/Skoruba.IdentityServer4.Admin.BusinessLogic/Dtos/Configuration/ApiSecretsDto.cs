@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Shared.Dtos.Common;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Helpers;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared.Dtos.Common;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Helpers;
 
-namespace Skoruba.IdentityServer4.Admin.BusinessLogic.Dtos.Configuration
+namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration
 {
 	public class ApiSecretsDto
 	{
@@ -42,7 +42,7 @@ namespace Skoruba.IdentityServer4.Admin.BusinessLogic.Dtos.Configuration
                     return result;
                 }
 
-                return EntityFramework.Helpers.HashType.Sha256;
+                return Duende.IdentityServer.Admin.EntityFramework.Helpers.HashType.Sha256;
             }
         }
 

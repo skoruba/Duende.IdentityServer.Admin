@@ -8,11 +8,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Microsoft.Extensions.DependencyInjection;
 using SendGrid;
-using Skoruba.IdentityServer4.Shared.Configuration.Configuration.Common;
-using Skoruba.IdentityServer4.Shared.Configuration.Configuration.Email;
-using Skoruba.IdentityServer4.Shared.Configuration.Email;
+using Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration.Common;
+using Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration.Email;
+using Skoruba.Duende.IdentityServer.Shared.Configuration.Email;
 
-namespace Skoruba.IdentityServer4.Shared.Configuration.Helpers
+namespace Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers
 {
     public static class StartupHelpers
     {

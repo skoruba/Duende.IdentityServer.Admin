@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Skoruba.IdentityServer4.Admin.UI.Configuration.Constants
+﻿namespace Skoruba.Duende.IdentityServer.Admin.UI.Configuration.Constants
 {
     public class ConfigurationConsts
     {

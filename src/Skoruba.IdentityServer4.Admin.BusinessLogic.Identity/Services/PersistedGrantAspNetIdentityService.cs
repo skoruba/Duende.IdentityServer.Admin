@@ -1,14 +1,14 @@
 ﻿using System.Threading.Tasks;
 using Skoruba.AuditLogging.Services;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Dtos.Grant;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Events.PersistedGrant;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Mappers;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Resources;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Services.Interfaces;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Shared.ExceptionHandling;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Identity.Repositories.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Grant;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Events.PersistedGrant;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Mappers;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Resources;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Services.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared.ExceptionHandling;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.Repositories.Interfaces;
 
-namespace Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Services
+namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Services
 {
     public class PersistedGrantAspNetIdentityService : IPersistedGrantAspNetIdentityService
     {

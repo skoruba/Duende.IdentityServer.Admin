@@ -1,4 +1,4 @@
-﻿namespace Skoruba.IdentityServer4.Admin.Api.Configuration
+﻿namespace Skoruba.Duende.IdentityServer.Admin.Api.Configuration
 {
     public class AdminApiConfiguration
     {

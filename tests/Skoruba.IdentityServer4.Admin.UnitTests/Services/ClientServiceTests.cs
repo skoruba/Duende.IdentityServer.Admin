@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Duende.IdentityServer.EntityFramework.Options;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Skoruba.AuditLogging.Services;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Mappers;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Resources;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Services;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Services.Interfaces;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Repositories;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Repositories.Interfaces;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Shared.DbContexts;
-using Skoruba.IdentityServer4.Admin.UnitTests.Mocks;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Mappers;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Resources;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
+using Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks;
 using Xunit;
 
-namespace Skoruba.IdentityServer4.Admin.UnitTests.Services
+namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 {
     public class ClientServiceTests
     {

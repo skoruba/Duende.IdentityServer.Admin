@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Skoruba.IdentityServer4.Admin.UI.Configuration
+namespace Skoruba.Duende.IdentityServer.Admin.UI.Configuration
 {
     public class CultureConfiguration
     {

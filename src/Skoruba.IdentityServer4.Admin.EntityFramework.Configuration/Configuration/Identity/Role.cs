@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Skoruba.IdentityServer4.Admin.EntityFramework.Configuration.Configuration.Identity
+namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration.Identity
 {
     public class Role
     {

@@ -1,7 +1,7 @@
 ﻿using Skoruba.AuditLogging.Events;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Dtos.Configuration;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration;
 
-namespace Skoruba.IdentityServer4.Admin.BusinessLogic.Events.ApiScope
+namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Events.ApiScope
 {
     public class ApiScopeAddedEvent : AuditEvent
     {

@@ -9,19 +9,21 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Skoruba.AuditLogging.EntityFramework.Entities;
-using Skoruba.IdentityServer4.Admin.Api.Configuration;
-using Skoruba.IdentityServer4.Admin.Api.Configuration.Authorization;
-using Skoruba.IdentityServer4.Admin.Api.ExceptionHandling;
-using Skoruba.IdentityServer4.Admin.Api.Helpers;
-using Skoruba.IdentityServer4.Admin.Api.Mappers;
-using Skoruba.IdentityServer4.Admin.Api.Resources;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Shared.DbContexts;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Shared.Entities.Identity;
-using Skoruba.IdentityServer4.Shared.Configuration.Helpers;
-using Skoruba.IdentityServer4.Shared.Dtos;
-using Skoruba.IdentityServer4.Shared.Dtos.Identity;
+using Skoruba.Duende.IdentityServer.Admin.Api.Configuration;
+using Skoruba.Duende.IdentityServer.Admin.Api.Configuration.Authorization;
+using Skoruba.Duende.IdentityServer.Admin.Api.ExceptionHandling;
+using Skoruba.Duende.IdentityServer.Admin.Api.Helpers;
+using Skoruba.Duende.IdentityServer.Admin.Api.Mappers;
+using Skoruba.Duende.IdentityServer.Admin.Api.Resources;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Extensions;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Extensions;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Entities.Identity;
+using Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers;
+using Skoruba.Duende.IdentityServer.Shared.Dtos;
+using Skoruba.Duende.IdentityServer.Shared.Dtos.Identity;
 
-namespace Skoruba.IdentityServer4.Admin.Api
+namespace Skoruba.Duende.IdentityServer.Admin.Api
 {
     public class Startup
     {

@@ -1,4 +1,4 @@
-﻿namespace Skoruba.IdentityServer4.Shared.Configuration.Configuration.Identity
+﻿namespace Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration.Identity
 {
     // From where should the login be sourced
     // by default it's sourced from Username

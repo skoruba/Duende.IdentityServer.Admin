@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.Extensions.Configuration;
-using Skoruba.IdentityServer4.Shared.Configuration.Configuration.Common;
-using Skoruba.IdentityServer4.Shared.Configuration.Helpers;
+using Microsoft.Extensions.DependencyInjection;
+using Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration.Common;
+using Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers;
 
-namespace Skoruba.IdentityServer4.STS.Identity.Helpers
+namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
 {
     public static class IdentityServerBuilderExtensions
     {

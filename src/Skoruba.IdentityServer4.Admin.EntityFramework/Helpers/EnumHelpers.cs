@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Extensions.Common;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Common;
 
-namespace Skoruba.IdentityServer4.Admin.EntityFramework.Helpers
+namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Helpers
 {
 	public class EnumHelpers
 	{

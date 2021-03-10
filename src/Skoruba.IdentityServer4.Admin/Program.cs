@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Configuration.Configuration;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Shared.DbContexts;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Shared.Entities.Identity;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Shared.Helpers;
-using Skoruba.IdentityServer4.Shared.Configuration.Helpers;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Entities.Identity;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Helpers;
+using Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers;
 
-namespace Skoruba.IdentityServer4.Admin
+namespace Skoruba.Duende.IdentityServer.Admin
 {
 	public class Program
     {

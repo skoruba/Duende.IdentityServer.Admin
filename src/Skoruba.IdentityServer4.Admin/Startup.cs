@@ -1,5 +1,4 @@
 using System.IdentityModel.Tokens.Jwt;
-using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -7,14 +6,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Skoruba.AuditLogging.EntityFramework.Entities;
-using Skoruba.IdentityServer4.Admin.Configuration.Database;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Shared.DbContexts;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Shared.Entities.Identity;
-using Skoruba.IdentityServer4.Shared.Configuration.Helpers;
-using Skoruba.IdentityServer4.Shared.Dtos;
-using Skoruba.IdentityServer4.Shared.Dtos.Identity;
+using Skoruba.Duende.IdentityServer.Admin.Configuration.Database;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Entities.Identity;
+using Skoruba.Duende.IdentityServer.Admin.UI.Helpers.ApplicationBuilder;
+using Skoruba.Duende.IdentityServer.Admin.UI.Helpers.DependencyInjection;
+using Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers;
+using Skoruba.Duende.IdentityServer.Shared.Dtos;
+using Skoruba.Duende.IdentityServer.Shared.Dtos.Identity;
 
-namespace Skoruba.IdentityServer4.Admin
+namespace Skoruba.Duende.IdentityServer.Admin
 {
     public class Startup
     {

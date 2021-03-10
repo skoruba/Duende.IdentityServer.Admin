@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Skoruba.IdentityServer4.STS.Identity.Configuration
+namespace Skoruba.Duende.IdentityServer.STS.Identity.Configuration
 {
     public class CultureConfiguration
     {

@@ -5,13 +5,11 @@
 // Modified by Jan Škoruba
 
 using System;
-using System.Threading.Tasks;
 using Duende.IdentityServer.Models;
-using Duende.IdentityServer.Stores;
 using Microsoft.AspNetCore.Mvc;
-using Skoruba.IdentityServer4.STS.Identity.ViewModels.Account;
+using Skoruba.Duende.IdentityServer.STS.Identity.ViewModels.Account;
 
-namespace Skoruba.IdentityServer4.STS.Identity.Helpers
+namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
 {
     public static class Extensions
     {

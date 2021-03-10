@@ -48,10 +48,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Skoruba.IdentityServer4.Admin.EntityFramework.Configuration\Skoruba.IdentityServer4.Admin.EntityFramework.Configuration.csproj" />
-        <ProjectReference Include="..\Skoruba.IdentityServer4.Admin.EntityFramework.Shared\Skoruba.IdentityServer4.Admin.EntityFramework.Shared.csproj" />
-        <ProjectReference Include="..\Skoruba.IdentityServer4.Shared.Configuration\Skoruba.IdentityServer4.Shared.Configuration.csproj" />
-        <ProjectReference Include="..\Skoruba.IdentityServer4.Shared\Skoruba.IdentityServer4.Shared.csproj" />
+        <ProjectReference Include="..\Skoruba.IdentityServer4.Admin.EntityFramework.Configuration\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.csproj" />
+        <ProjectReference Include="..\Skoruba.IdentityServer4.Admin.EntityFramework.Shared\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj" />
+        <ProjectReference Include="..\Skoruba.IdentityServer4.Shared.Configuration\Skoruba.Duende.IdentityServer.Shared.Configuration.csproj" />
+        <ProjectReference Include="..\Skoruba.IdentityServer4.Shared\Skoruba.Duende.IdentityServer.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>

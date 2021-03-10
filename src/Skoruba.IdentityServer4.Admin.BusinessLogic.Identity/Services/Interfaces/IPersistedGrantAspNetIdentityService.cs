@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Dtos.Grant;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Grant;
 
-namespace Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Services.Interfaces
+namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Services.Interfaces
 {
     public interface IPersistedGrantAspNetIdentityService
     {

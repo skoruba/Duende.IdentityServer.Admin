@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
-namespace Skoruba.IdentityServer4.Admin.Api.Configuration.ApplicationParts
+namespace Skoruba.Duende.IdentityServer.Admin.Api.Configuration.ApplicationParts
 {
     public class GenericControllerRouteConvention : IControllerModelConvention
     {

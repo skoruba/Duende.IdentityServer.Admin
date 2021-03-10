@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Skoruba.IdentityServer4.Admin.EntityFramework.MySql.Migrations.Logging
+namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.Migrations.Logging
 {
     public partial class DbInit : Migration
     {

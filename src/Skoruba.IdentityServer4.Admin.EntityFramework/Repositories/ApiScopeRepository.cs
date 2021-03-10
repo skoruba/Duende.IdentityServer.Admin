@@ -5,13 +5,13 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Duende.IdentityServer.EntityFramework.Entities;
 using Microsoft.EntityFrameworkCore;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Extensions.Common;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Extensions.Enums;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Extensions.Extensions;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Interfaces;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Repositories.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Common;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Enums;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Extensions;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Interfaces;
 
-namespace Skoruba.IdentityServer4.Admin.EntityFramework.Repositories
+namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
 {
     public class ApiScopeRepository<TDbContext> : IApiScopeRepository
         where TDbContext : DbContext, IAdminConfigurationDbContext

@@ -1,4 +1,4 @@
-﻿namespace Skoruba.IdentityServer4.Admin.Api.Dtos.IdentityResources
+﻿namespace Skoruba.Duende.IdentityServer.Admin.Api.Dtos.IdentityResources
 {
     public class IdentityResourcePropertyApiDto
     {

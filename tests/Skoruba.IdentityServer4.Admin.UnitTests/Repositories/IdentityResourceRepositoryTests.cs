@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Duende.IdentityServer.EntityFramework.Options;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Repositories;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Repositories.Interfaces;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Shared.DbContexts;
-using Skoruba.IdentityServer4.Admin.UnitTests.Mocks;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
+using Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks;
 using Xunit;
 
-namespace Skoruba.IdentityServer4.Admin.UnitTests.Repositories
+namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
 {
     public class IdentityResourceRepositoryTests
     {

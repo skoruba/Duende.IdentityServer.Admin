@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Reflection;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Localization;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Reflection;
 
-namespace Skoruba.IdentityServer4.Admin.UI.Helpers.Localization
+namespace Skoruba.Duende.IdentityServer.Admin.UI.Helpers.Localization
 {
 	public class ResourceViewLocalizer : IViewLocalizer, IViewContextAware
 	{

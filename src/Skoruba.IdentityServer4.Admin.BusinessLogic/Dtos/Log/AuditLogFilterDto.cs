@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Skoruba.IdentityServer4.Admin.BusinessLogic.Dtos.Log
+namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Log
 {
     public class AuditLogFilterDto
     {

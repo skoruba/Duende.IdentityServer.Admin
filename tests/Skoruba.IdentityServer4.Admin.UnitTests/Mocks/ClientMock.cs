@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Bogus;
 using Duende.IdentityServer.EntityFramework.Entities;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Constants;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Constants;
 
-namespace Skoruba.IdentityServer4.Admin.UnitTests.Mocks
+namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
 {
     public static class ClientMock
     {

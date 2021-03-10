@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Logging;
 
-namespace Skoruba.IdentityServer4.Shared.Configuration.Email
+namespace Skoruba.Duende.IdentityServer.Shared.Configuration.Email
 {
     public class LogEmailSender : IEmailSender
     {

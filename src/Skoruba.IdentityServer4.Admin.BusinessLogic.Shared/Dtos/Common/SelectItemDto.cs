@@ -1,4 +1,4 @@
-﻿namespace Skoruba.IdentityServer4.Admin.BusinessLogic.Shared.Dtos.Common
+﻿namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared.Dtos.Common
 {
 	public class SelectItemDto
 	{

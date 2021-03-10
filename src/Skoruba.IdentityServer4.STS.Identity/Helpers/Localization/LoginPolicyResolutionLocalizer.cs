@@ -1,6 +1,6 @@
-﻿using Skoruba.IdentityServer4.Shared.Configuration.Configuration.Identity;
+﻿using Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration.Identity;
 
-namespace Skoruba.IdentityServer4.STS.Identity.Helpers.Localization
+namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers.Localization
 {
     public static class LoginPolicyResolutionLocalizer
     {

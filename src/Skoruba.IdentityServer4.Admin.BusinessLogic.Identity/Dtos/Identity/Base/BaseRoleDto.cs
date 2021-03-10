@@ -1,7 +1,7 @@
-﻿using Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Dtos.Identity.Interfaces;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Identity.Interfaces;
 
-namespace Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.Dtos.Identity.Base
+namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Identity.Base
 {
     public class BaseRoleDto<TRoleId> : IBaseRoleDto
     {

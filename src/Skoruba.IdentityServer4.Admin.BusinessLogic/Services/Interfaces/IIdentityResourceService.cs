@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Dtos.Configuration;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration;
 
-namespace Skoruba.IdentityServer4.Admin.BusinessLogic.Services.Interfaces
+namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces
 {
     public interface IIdentityResourceService
     {

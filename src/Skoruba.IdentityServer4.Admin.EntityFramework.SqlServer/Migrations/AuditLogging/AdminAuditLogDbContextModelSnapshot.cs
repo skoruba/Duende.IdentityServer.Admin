@@ -4,9 +4,9 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Skoruba.IdentityServer4.Admin.EntityFramework.Shared.DbContexts;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 
-namespace Skoruba.IdentityServer4.Admin.EntityFramework.SqlServer.Migrations.AuditLogging
+namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migrations.AuditLogging
 {
     [DbContext(typeof(AdminAuditLogDbContext))]
     partial class AdminAuditLogDbContextModelSnapshot : ModelSnapshot
