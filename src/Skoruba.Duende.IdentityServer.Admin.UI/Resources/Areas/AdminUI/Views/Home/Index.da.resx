@@ -145,6 +145,6 @@
     <value>Brugere</value>
   </data>
   <data name="PageSubTitle" xml:space="preserve">
-    <value>Administration af ​​IdentityServer4 og ASP.NET Core Identity</value>
+    <value>Administration af ​​Duende IdentityServer og ASP.NET Core Identity</value>
   </data>
 </root>

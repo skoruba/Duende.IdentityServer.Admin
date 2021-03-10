@@ -69,7 +69,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Helpers
                     next(builder);
 
                     // Routing-dependent middleware needs to go in between UseRouting and UseEndpoints and therefore 
-                    // needs to be handled by the user using UseIdentityServer4AdminUI().
+                    // needs to be handled by the user using UseIdentityServerAdminUI().
                 };
             }
         }
@@ -330,7 +330,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Helpers
 
         /// <summary>
         /// Register services for authentication, including Identity.
-        /// For production mode is used OpenId Connect middleware which is connected to IdentityServer4 instance.
+        /// For production mode is used OpenId Connect middleware which is connected to Duende IdentityServer instance.
         /// For testing purpose is used cookie middleware with fake login url.
         /// </summary>
         /// <typeparam name="TContext"></typeparam>

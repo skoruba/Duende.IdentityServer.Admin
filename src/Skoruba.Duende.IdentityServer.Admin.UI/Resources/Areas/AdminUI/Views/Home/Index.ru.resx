@@ -145,6 +145,6 @@
     <value>Пользователи</value>
   </data>
   <data name="PageSubTitle" xml:space="preserve">
-    <value>Управление для IdentityServer4 и Asp.Net Core Identity</value>
+    <value>Управление для Duende IdentityServer и Asp.Net Core Identity</value>
   </data>
 </root>

@@ -506,7 +506,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Controllers
 
             var userId = await dbContext.Users.Where(x => x.UserName == userDto.UserName).Select(x => x.Id).SingleOrDefaultAsync();
 
-            var changePassword = IdentityDtoMock<string>.GenerateRandomUserChangePassword(userId, "IdentityServer4!");
+            var changePassword = IdentityDtoMock<string>.GenerateRandomUserChangePassword(userId, "IdentityServer5!");
 
             var result = await controller.UserChangePassword(changePassword);
 
@@ -601,7 +601,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Controllers
             var context = new DefaultHttpContext();
             services.AddSingleton<IHttpContextAccessor>(new HttpContextAccessor { HttpContext = context });
 
-            //IdentityServer4 EntityFramework configuration
+            //Duende IdentityServer EntityFramework configuration
             services.AddSingleton<ConfigurationStoreOptions>();
             services.AddSingleton<OperationalStoreOptions>();
 

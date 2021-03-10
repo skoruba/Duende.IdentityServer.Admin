@@ -145,6 +145,6 @@
     <value>کاربران</value>
   </data>
   <data name="PageSubTitle" xml:space="preserve">
-    <value>ادمین برای IdentityServer4 و Asp.Net Core Identity</value>
+    <value>ادمین برای Duende IdentityServer و Asp.Net Core Identity</value>
   </data>
 </root>

@@ -9,7 +9,7 @@ using Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration.Common;
 
 namespace Skoruba.Duende.IdentityServer.Admin.UI.Helpers.DependencyInjection
 {
-	public class IdentityServer4AdminUIOptions
+	public class IdentityServerAdminUIOptions
 	{
 		/// <summary>
 		/// The settings for test deployments.

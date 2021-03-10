@@ -1,19 +1,19 @@
 version: '3.4'
 
 services:
-  skoruba.identityserver4.admin:
+  skoruba.duende.identityserver.admin:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
   
-  skoruba.identityserver4.admin.api:
+  skoruba.duende.identityserver.admin.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
 
-  skoruba.identityserver4.sts.identity:
+  skoruba.duende.identityserver.sts.identity:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:

@@ -145,6 +145,6 @@
     <value>Användare</value>
   </data>
   <data name="PageSubTitle" xml:space="preserve">
-    <value>Administration för IdentityServer4 och Asp.Net Core Identity</value>
+    <value>Administration för Duende IdentityServer och Asp.Net Core Identity</value>
   </data>
 </root>

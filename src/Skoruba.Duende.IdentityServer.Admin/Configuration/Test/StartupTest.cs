@@ -10,7 +10,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Configuration.Test
         {
         }
 
-        public override void ConfigureUIOptions(IdentityServer4AdminUIOptions options)
+        public override void ConfigureUIOptions(IdentityServerAdminUIOptions options)
         {
             base.ConfigureUIOptions(options);
 

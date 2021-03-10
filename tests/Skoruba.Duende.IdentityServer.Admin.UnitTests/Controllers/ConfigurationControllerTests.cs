@@ -783,7 +783,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Controllers
             var context = new DefaultHttpContext();
             services.AddSingleton<IHttpContextAccessor>(new HttpContextAccessor { HttpContext = context });
 
-            //IdentityServer4 EntityFramework configuration
+            //Duende IdentityServer EntityFramework configuration
             services.AddSingleton<ConfigurationStoreOptions>();
             services.AddSingleton<OperationalStoreOptions>();
 

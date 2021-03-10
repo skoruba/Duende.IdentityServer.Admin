@@ -145,6 +145,6 @@
     <value>用户</value>
   </data>
   <data name="PageSubTitle" xml:space="preserve">
-    <value>IdentityServer4 和 Asp.Net Core Identity 管理</value>
+    <value>Duende IdentityServer 和 Asp.Net Core Identity 管理</value>
   </data>
 </root>

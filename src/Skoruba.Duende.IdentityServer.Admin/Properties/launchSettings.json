@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Skoruba.IdentityServer4.Admin": {
+    "Skoruba.Duende.IdentityServer.Admin": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

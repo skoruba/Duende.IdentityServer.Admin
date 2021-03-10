@@ -145,6 +145,6 @@
     <value>Usuarios</value>
   </data>
   <data name="PageSubTitle" xml:space="preserve">
-    <value>La herramienta de administración para IdentityServer4 y Asp.Net Core Identity</value>
+    <value>La herramienta de administración para Duende IdentityServer y Asp.Net Core Identity</value>
   </data>
 </root>

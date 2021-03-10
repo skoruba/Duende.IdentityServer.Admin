@@ -20,12 +20,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Helpers.DependencyInjection
     public static class AdminUIServiceCollectionExtensions
     {
         /// <summary>
-        /// Adds the Skoruba IdentityServer4 Admin UI with the default entity model.
+        /// Adds the Skoruba Duende IdentityServer Admin UI with the default entity model.
         /// </summary>
         /// <param name="services"></param>
         /// <param name="optionsAction"></param>
         /// <returns></returns>
-        public static IServiceCollection AddIdentityServer4AdminUI<TIdentityDbContext, TIdentityServerDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLogDbContext, TAuditLog, TDataProtectionDbContext>(this IServiceCollection services, Action<IdentityServer4AdminUIOptions> optionsAction) 
+        public static IServiceCollection AddIdentityServerAdminUI<TIdentityDbContext, TIdentityServerDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLogDbContext, TAuditLog, TDataProtectionDbContext>(this IServiceCollection services, Action<IdentityServerAdminUIOptions> optionsAction) 
             where TIdentityDbContext : IdentityDbContext<IdentityUser<string>, IdentityRole, string, IdentityUserClaim<string>, IdentityUserRole<string>, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>
             where TIdentityServerDbContext : DbContext, IAdminConfigurationDbContext
             where TPersistedGrantDbContext : DbContext, IAdminPersistedGrantDbContext
@@ -33,7 +33,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Helpers.DependencyInjection
             where TAuditLogDbContext : DbContext, IAuditLoggingDbContext<TAuditLog>
             where TDataProtectionDbContext : DbContext, IDataProtectionKeyContext
             where TAuditLog : AuditLog, new()
-            => AddIdentityServer4AdminUI<TIdentityDbContext, TIdentityServerDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLogDbContext, TAuditLog, TDataProtectionDbContext, IdentityUser<string>, IdentityRole, IdentityUserClaim<string>,
+            => AddIdentityServerAdminUI<TIdentityDbContext, TIdentityServerDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLogDbContext, TAuditLog, TDataProtectionDbContext, IdentityUser<string>, IdentityRole, IdentityUserClaim<string>,
                 IdentityUserRole<string>, IdentityUserLogin<string>, IdentityRoleClaim<string>,
                 IdentityUserToken<string>, string,
                 UserDto<string>, RoleDto<string>, UsersDto<UserDto<string>, string>, RolesDto<RoleDto<string>, string>,
@@ -41,14 +41,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Helpers.DependencyInjection
                 UserChangePasswordDto<string>, RoleClaimsDto<RoleClaimDto<string>, string>, UserClaimDto<string>, RoleClaimDto<string>>(services, optionsAction);
 
         /// <summary>
-        /// Adds the Skoruba IdentityServer4 Admin UI with a custom user model and database context.
+        /// Adds the Skoruba Duende IdentityServer Admin UI with a custom user model and database context.
         /// </summary>
         /// <typeparam name="TIdentityDbContext"></typeparam>
         /// <typeparam name="TUser"></typeparam>
         /// <param name="services"></param>
         /// <param name="optionsAction"></param>
         /// <returns></returns>
-        public static IServiceCollection AddIdentityServer4AdminUI<TIdentityDbContext, TIdentityServerDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLogDbContext, TAuditLog, TDataProtectionDbContext, TUser>(this IServiceCollection services, Action<IdentityServer4AdminUIOptions> optionsAction)
+        public static IServiceCollection AddIdentityServerAdminUI<TIdentityDbContext, TIdentityServerDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLogDbContext, TAuditLog, TDataProtectionDbContext, TUser>(this IServiceCollection services, Action<IdentityServerAdminUIOptions> optionsAction)
             where TIdentityDbContext : IdentityDbContext<TUser, IdentityRole, string, IdentityUserClaim<string>,
                 IdentityUserRole<string>, IdentityUserLogin<string>, IdentityRoleClaim<string>,
                 IdentityUserToken<string>>
@@ -59,23 +59,23 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Helpers.DependencyInjection
             where TDataProtectionDbContext : DbContext, IDataProtectionKeyContext
             where TUser : IdentityUser<string>
             where TAuditLog : AuditLog, new()
-            => AddIdentityServer4AdminUI<TIdentityDbContext, TIdentityServerDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLogDbContext, TAuditLog, TDataProtectionDbContext, TUser, IdentityRole, IdentityUserClaim<string>,
+            => AddIdentityServerAdminUI<TIdentityDbContext, TIdentityServerDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLogDbContext, TAuditLog, TDataProtectionDbContext, TUser, IdentityRole, IdentityUserClaim<string>,
                 IdentityUserRole<string>, IdentityUserLogin<string>, IdentityRoleClaim<string>,
                 IdentityUserToken<string>, string, UserDto<string>, RoleDto<string>, UsersDto<UserDto<string>, string>, RolesDto<RoleDto<string>, string>,
                 UserRolesDto<RoleDto<string>, string>, UserClaimsDto<UserClaimDto<string>, string>, UserProviderDto<string>, UserProvidersDto<UserProviderDto<string>, string>,
                 UserChangePasswordDto<string>, RoleClaimsDto<RoleClaimDto<string>, string>, UserClaimDto<string>, RoleClaimDto<string>>(services, optionsAction);
 
         /// <summary>
-        /// Adds the Skoruba IdentityServer4 Admin UI with a fully custom entity model and database contexts.
+        /// Adds the Skoruba Duende IdentityServer Admin UI with a fully custom entity model and database contexts.
         /// </summary>
         /// <param name="services"></param>
         /// <param name="optionsAction"></param>
         /// <returns></returns>
-        public static IServiceCollection AddIdentityServer4AdminUI<TIdentityDbContext, TIdentityServerDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLogDbContext, TAuditLog, TDataProtectionDbContext, TUser, TRole, TUserClaim,
+        public static IServiceCollection AddIdentityServerAdminUI<TIdentityDbContext, TIdentityServerDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLogDbContext, TAuditLog, TDataProtectionDbContext, TUser, TRole, TUserClaim,
             TUserRole, TUserLogin, TRoleClaim, TUserToken, TKey, TUserDto, TRoleDto, TUsersDto, TRolesDto, TUserRolesDto,
             TUserClaimsDto, TUserProviderDto, TUserProvidersDto, TUserChangePasswordDto, TRoleClaimsDto, TUserClaimDto,
             TRoleClaimDto>
-            (this IServiceCollection services, Action<IdentityServer4AdminUIOptions> optionsAction)
+            (this IServiceCollection services, Action<IdentityServerAdminUIOptions> optionsAction)
             where TIdentityDbContext : IdentityDbContext<TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken>
             where TIdentityServerDbContext : DbContext, IAdminConfigurationDbContext
             where TPersistedGrantDbContext : DbContext, IAdminPersistedGrantDbContext
@@ -105,7 +105,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Helpers.DependencyInjection
             where TAuditLog : AuditLog, new()
         {
             // Builds the options from user preferences or configuration.
-            var options = new IdentityServer4AdminUIOptions();
+            var options = new IdentityServerAdminUIOptions();
             optionsAction(options);
 
             // Adds root configuration to the DI.

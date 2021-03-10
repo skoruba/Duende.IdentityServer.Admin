@@ -32,8 +32,8 @@ namespace Skoruba.Duende.IdentityServer.Admin
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // Adds the IdentityServer4 Admin UI with custom options.
-            services.AddIdentityServer4AdminUI<AdminIdentityDbContext, IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext,
+            // Adds the Duende IdentityServer Admin UI with custom options.
+            services.AddIdentityServerAdminUI<AdminIdentityDbContext, IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext,
             AdminLogDbContext, AdminAuditLogDbContext, AuditLog, IdentityServerDataProtectionDbContext,
                 UserIdentity, UserIdentityRole, UserIdentityUserClaim, UserIdentityUserRole,
                 UserIdentityUserLogin, UserIdentityRoleClaim, UserIdentityUserToken, string,
@@ -49,16 +49,16 @@ namespace Skoruba.Duende.IdentityServer.Admin
         {
             app.UseRouting();
 
-            app.UseIdentityServer4AdminUI();
+            app.UseIdentityServerAdminUI();
 
             app.UseEndpoints(endpoint =>
             {
-                endpoint.MapIdentityServer4AdminUI();
-                endpoint.MapIdentityServer4AdminUIHealthChecks();
+                endpoint.MapIdentityServerAdminUI();
+                endpoint.MapIdentityServerAdminUIHealthChecks();
             });
         }
 
-        public virtual void ConfigureUIOptions(IdentityServer4AdminUIOptions options)
+        public virtual void ConfigureUIOptions(IdentityServerAdminUIOptions options)
         {
             // Applies configuration from appsettings.
             options.BindConfiguration(Configuration);

@@ -1,5 +1,4 @@
 ﻿using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Helpers;
-using Skoruba.IdentityServer4.Admin.BusinessLogic.Resources;
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Resources
 {
