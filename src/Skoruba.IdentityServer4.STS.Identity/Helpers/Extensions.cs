@@ -6,8 +6,8 @@
 
 using System;
 using System.Threading.Tasks;
-using IdentityServer4.Models;
-using IdentityServer4.Stores;
+using Duende.IdentityServer.Models;
+using Duende.IdentityServer.Stores;
 using Microsoft.AspNetCore.Mvc;
 using Skoruba.IdentityServer4.STS.Identity.ViewModels.Account;
 

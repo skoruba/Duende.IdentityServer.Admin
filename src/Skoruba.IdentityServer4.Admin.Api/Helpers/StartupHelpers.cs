@@ -1,7 +1,7 @@
 ﻿using System;
 using IdentityModel;
 using IdentityServer4.AccessTokenValidation;
-using IdentityServer4.EntityFramework.Options;
+using Duende.IdentityServer.EntityFramework.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.HttpOverrides;

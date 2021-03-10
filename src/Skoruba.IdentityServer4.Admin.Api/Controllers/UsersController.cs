@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using IdentityModel;
 using IdentityServer4.AccessTokenValidation;
-using IdentityServer4.Extensions;
+using Duende.IdentityServer.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

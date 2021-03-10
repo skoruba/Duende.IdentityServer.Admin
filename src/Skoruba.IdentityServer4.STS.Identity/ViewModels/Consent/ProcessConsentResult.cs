@@ -4,7 +4,7 @@
 // Original file: https://github.com/IdentityServer/IdentityServer4.Quickstart.UI
 // Modified by Jan Škoruba
 
-using IdentityServer4.Models;
+using Duende.IdentityServer.Models;
 
 namespace Skoruba.IdentityServer4.STS.Identity.ViewModels.Consent
 {

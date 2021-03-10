@@ -1,4 +1,4 @@
-﻿using IdentityServer4.EntityFramework.Interfaces;
+﻿using Duende.IdentityServer.EntityFramework.Interfaces;
 
 namespace Skoruba.IdentityServer4.Admin.EntityFramework.Interfaces
 {

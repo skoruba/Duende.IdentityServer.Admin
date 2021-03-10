@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using IdentityServer4.EntityFramework.Storage;
+using Duende.IdentityServer.EntityFramework.Storage;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -338,6 +338,8 @@ namespace Skoruba.IdentityServer4.STS.Identity.Helpers
                     {
                         options.IssuerUri = advancedConfiguration.IssuerUri;
                     }
+
+                    options.KeyManagement.Enabled = false;
                 })
                 .AddConfigurationStore<TConfigurationDbContext>()
                 .AddOperationalStore<TPersistedGrantDbContext>()

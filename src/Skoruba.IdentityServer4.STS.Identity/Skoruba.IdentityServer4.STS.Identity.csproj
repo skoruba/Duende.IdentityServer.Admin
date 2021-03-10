@@ -32,8 +32,8 @@
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.9" />
         <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="3.1.6" />
-        <PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.1" />
-        <PackageReference Include="IdentityServer4.EntityFramework" Version="4.1.1" />
+        <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="5.0.5" />
+        <PackageReference Include="Duende.IdentityServer.EntityFramework" Version="5.0.5" />
         <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
         <PackageReference Include="Serilog" Version="2.10.0" />
         <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
