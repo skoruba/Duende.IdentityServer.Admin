@@ -10,17 +10,17 @@
 [![Build Status](https://dev.azure.com/skoruba/IdentityServer4.Admin/_apis/build/status/IdentityServer4.Admin-CI?branchName=master)](https://dev.azure.com/skoruba/IdentityServer4.Admin/_build/latest?definitionId=2?branchName=master)
 [![Join the chat at https://gitter.im/skoruba/IdentityServer4.Admin](https://badges.gitter.im/skoruba/IdentityServer4.Admin.svg)](https://gitter.im/skoruba/IdentityServer4.Admin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-The application is written in the **Asp.Net Core MVC - using .NET Core 3.1**
+The application is written in the **Asp.Net Core MVC - using .NET 5.0**
 
 ## Requirements
 
-- [Install](https://www.microsoft.com/net/download/windows#/current) the latest .NET Core 3.x SDK (using older versions may lead to 502.5 errors when hosted on IIS or application exiting immediately after starting when self-hosted)
+- [Install](https://www.microsoft.com/net/download/windows#/current) the latest .NET 5 SDK (using older versions may lead to 502.5 errors when hosted on IIS or application exiting immediately after starting when self-hosted)
 
 ## Installation via dotnet new template
 
 - Install the dotnet new template:
 
-- 🔒 **NOTE:** This version affects your database data if you use the default database migrations that are part of the project - double check the migrations according to your database provider and create a database backup
+- 🔒 **NOTE:** The project uses the default database migrations which affect your database therefore double check the migrations according to your database provider and create a database backup
 
 ```sh
 dotnet new -i Skoruba.Duende.IdentityServer.Admin.Templates::1.0.0
