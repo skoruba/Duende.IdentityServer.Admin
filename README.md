@@ -1,4 +1,4 @@
-![Logo](docs/Images/Skoruba.IdentityServer4.Admin-Logo-ReadMe.png)
+![Logo](docs/Images/Skoruba.Duende.IdentityServer.Admin-Logo-ReadMe.png)
 
 # Duende.Skoruba.IdentityServer.Admin
 
