@@ -6,9 +6,9 @@
 	  <Authors>Jan Škoruba</Authors>
 	  <PackageTags>Duende IdentityServer Admin OpenIDConnect OAuth2 Identity</PackageTags>
 	  <Description>Shared Business Logic layer for the administration of the Duende IdentityServer and Asp.Net Core Identity</Description>
-	  <PackageLicenseUrl>https://github.com/skoruba/IdentityServer4.Admin/blob/master/LICENSE.md</PackageLicenseUrl>
-	  <PackageProjectUrl>https://github.com/skoruba/IdentityServer4.Admin</PackageProjectUrl>
-	  <PackageIconUrl>https://raw.githubusercontent.com/skoruba/IdentityServer4.Admin/master/docs/Images/Skoruba.IdentityServer4.Admin-Logo-Nuget.png</PackageIconUrl>
+      <PackageLicenseUrl>https://github.com/skoruba/Duende.IdentityServer.Admin/blob/master/LICENSE.md</PackageLicenseUrl>
+      <PackageProjectUrl>https://github.com/skoruba/Duende.IdentityServer.Admin</PackageProjectUrl>
+      <PackageIconUrl>https://raw.githubusercontent.com/skoruba/Duende.IdentityServer.Admin/master/docs/Images/Skoruba.Duende.IdentityServer.Admin-Logo-Nuget.png</PackageIconUrl>
   </PropertyGroup>
 
 </Project>
