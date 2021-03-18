@@ -158,6 +158,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
         /// <typeparam name="TConfigurationDbContext"></typeparam>
         /// <typeparam name="TPersistedGrantDbContext"></typeparam>
         /// <typeparam name="TIdentityDbContext"></typeparam>
+        /// <typeparam name="TDataProtectionDbContext"></typeparam>
         /// <param name="services"></param>
         /// <param name="configuration"></param>
         public static void RegisterDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TDataProtectionDbContext>(this IServiceCollection services, IConfiguration configuration)

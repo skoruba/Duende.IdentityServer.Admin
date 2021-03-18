@@ -40,34 +40,31 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySq
             where TAuditLog : AuditLog
         {
             var migrationsAssembly = typeof(DatabaseExtensions).GetTypeInfo().Assembly.GetName().Name;
-
-
-
-            // Config DB for identity
             
+            // Config DB for identity
             services.AddDbContext<TIdentityDbContext>(options =>
-                options.UseMySql(ServerVersion.AutoDetect(connectionStrings.IdentityDbConnection), sql => sql.MigrationsAssembly(databaseMigrations.IdentityDbMigrationsAssembly ?? migrationsAssembly)));
+                options.UseMySql(connectionStrings.IdentityDbConnection, ServerVersion.AutoDetect(connectionStrings.IdentityDbConnection), sql => sql.MigrationsAssembly(databaseMigrations.IdentityDbMigrationsAssembly ?? migrationsAssembly)));
 
             // Config DB from existing connection
             services.AddConfigurationDbContext<TConfigurationDbContext>(options =>
                 options.ConfigureDbContext = b =>
-                    b.UseMySql(ServerVersion.AutoDetect(connectionStrings.ConfigurationDbConnection), sql => sql.MigrationsAssembly(databaseMigrations.ConfigurationDbMigrationsAssembly ?? migrationsAssembly)));
+                    b.UseMySql(connectionStrings.IdentityDbConnection, ServerVersion.AutoDetect(connectionStrings.ConfigurationDbConnection), sql => sql.MigrationsAssembly(databaseMigrations.ConfigurationDbMigrationsAssembly ?? migrationsAssembly)));
 
             // Operational DB from existing connection
             services.AddOperationalDbContext<TPersistedGrantDbContext>(options => options.ConfigureDbContext = b =>
-                b.UseMySql(ServerVersion.AutoDetect(connectionStrings.PersistedGrantDbConnection), sql => sql.MigrationsAssembly(databaseMigrations.PersistedGrantDbMigrationsAssembly ?? migrationsAssembly)));
+                b.UseMySql(connectionStrings.IdentityDbConnection, ServerVersion.AutoDetect(connectionStrings.PersistedGrantDbConnection), sql => sql.MigrationsAssembly(databaseMigrations.PersistedGrantDbMigrationsAssembly ?? migrationsAssembly)));
 
             // Log DB from existing connection
-            services.AddDbContext<TLogDbContext>(options => options.UseMySql(ServerVersion.AutoDetect(connectionStrings.AdminLogDbConnection),
+            services.AddDbContext<TLogDbContext>(options => options.UseMySql(connectionStrings.IdentityDbConnection, ServerVersion.AutoDetect(connectionStrings.AdminLogDbConnection),
                 optionsSql => optionsSql.MigrationsAssembly(databaseMigrations.AdminLogDbMigrationsAssembly ?? migrationsAssembly)));
 
             // Audit logging connection
-            services.AddDbContext<TAuditLoggingDbContext>(options => options.UseMySql(ServerVersion.AutoDetect(connectionStrings.AdminAuditLogDbConnection),
+            services.AddDbContext<TAuditLoggingDbContext>(options => options.UseMySql(connectionStrings.IdentityDbConnection, ServerVersion.AutoDetect(connectionStrings.AdminAuditLogDbConnection),
                 optionsSql => optionsSql.MigrationsAssembly(databaseMigrations.AdminAuditLogDbMigrationsAssembly ?? migrationsAssembly)));
 
             // DataProtectionKey DB from existing connection
             if(!string.IsNullOrEmpty(connectionStrings.DataProtectionDbConnection))
-                services.AddDbContext<TDataProtectionDbContext>(options => options.UseMySql(ServerVersion.AutoDetect(connectionStrings.DataProtectionDbConnection),
+                services.AddDbContext<TDataProtectionDbContext>(options => options.UseMySql(connectionStrings.IdentityDbConnection, ServerVersion.AutoDetect(connectionStrings.DataProtectionDbConnection),
                     optionsSql => optionsSql.MigrationsAssembly(databaseMigrations.DataProtectionDbMigrationsAssembly ?? migrationsAssembly)));
         }
 
@@ -96,16 +93,16 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySq
             var migrationsAssembly = typeof(DatabaseExtensions).GetTypeInfo().Assembly.GetName().Name;
 
             // Config DB for identity
-            services.AddDbContext<TIdentityDbContext>(options => options.UseMySql(ServerVersion.AutoDetect(identityConnectionString), sql => sql.MigrationsAssembly(migrationsAssembly)));
+            services.AddDbContext<TIdentityDbContext>(options => options.UseMySql(identityConnectionString, ServerVersion.AutoDetect(identityConnectionString), sql => sql.MigrationsAssembly(migrationsAssembly)));
 
             // Config DB from existing connection
-            services.AddConfigurationDbContext<TConfigurationDbContext>(options => options.ConfigureDbContext = b => b.UseMySql(ServerVersion.AutoDetect(configurationConnectionString), sql => sql.MigrationsAssembly(migrationsAssembly)));
+            services.AddConfigurationDbContext<TConfigurationDbContext>(options => options.ConfigureDbContext = b => b.UseMySql(identityConnectionString, ServerVersion.AutoDetect(configurationConnectionString), sql => sql.MigrationsAssembly(migrationsAssembly)));
 
             // Operational DB from existing connection
-            services.AddOperationalDbContext<TPersistedGrantDbContext>(options => options.ConfigureDbContext = b => b.UseMySql(ServerVersion.AutoDetect(persistedGrantConnectionString), sql => sql.MigrationsAssembly(migrationsAssembly)));
+            services.AddOperationalDbContext<TPersistedGrantDbContext>(options => options.ConfigureDbContext = b => b.UseMySql(identityConnectionString, ServerVersion.AutoDetect(persistedGrantConnectionString), sql => sql.MigrationsAssembly(migrationsAssembly)));
 
             // DataProtectionKey DB from existing connection
-            services.AddDbContext<TDataProtectionDbContext>(options => options.UseMySql(ServerVersion.AutoDetect(dataProtectionConnectionString),
+            services.AddDbContext<TDataProtectionDbContext>(options => options.UseMySql(identityConnectionString, ServerVersion.AutoDetect(dataProtectionConnectionString),
                 optionsSql => optionsSql.MigrationsAssembly(migrationsAssembly)));
 
         }

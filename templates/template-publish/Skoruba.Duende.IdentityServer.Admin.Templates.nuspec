@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Skoruba.Duende.IdentityServer.Admin.Templates</id>
+    <version>2.0.0-rc3</version>
+    <authors>Jan Škoruba</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/skoruba/Duende.IdentityServer.Admin/blob/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/skoruba/Duende.IdentityServer.Admin</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/skoruba/Duende.IdentityServer.Admin/master/docs/Images/Skoruba.Duende.IdentityServer.Admin-Logo-Nuget.png</iconUrl>
+    <description>Templates for the administration of the Duende IdentityServer and Asp.Net Core Identity</description>
+    <language>en-US</language>
+    <tags>Duende IdentityServer, Admin, OpenIDConnect, OAuth2, Identity</tags>
+    <packageTypes>
+      <packageType name="Template" />
+    </packageTypes>
+  </metadata>
+</package>
+
+
+
+
+
+
+
+

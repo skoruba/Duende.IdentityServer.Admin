@@ -16,6 +16,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
                 .RuleFor(o => o.Description, f => f.Random.Words(f.Random.Number(1, 5)))
                 .RuleFor(o => o.DisplayName, f => f.Random.Words(f.Random.Number(1, 5)))
                 .RuleFor(o => o.Enabled, f => f.Random.Bool())
+                .RuleFor(o => o.RequireResourceIndicator, f => f.Random.Bool())
                 .RuleFor(o => o.UserClaims, f => Enumerable.Range(1, f.Random.Int(1, 10)).Select(x => f.PickRandom(ClientConsts.GetStandardClaims())).ToList())
                 .RuleFor(o => o.ShowInDiscoveryDocument, f => f.Random.Bool())
                 .RuleFor(o => o.AllowedAccessTokenSigningAlgorithms, f => ClientMock.AllowedSigningAlgorithms().Take(f.Random.Number(1, 5)).ToList());

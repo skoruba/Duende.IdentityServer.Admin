@@ -3,24 +3,24 @@
   "author": "Jan Skoruba",
   "classifications": [
     "Web",
-    "IdentityServer4",
+    "Duende IdentityServer",
     "Admin"
   ],
-  "name": "Skoruba IdentityServer4 Admin",
-  "identity": "Skoruba.IdentityServer4.Admin",
-  "groupIdentity": "Skoruba.IdentityServer4.Admin",
-  "shortName": "skoruba.is4admin",
+  "name": "Skoruba Duende.IdentityServer Admin",
+  "identity": "Skoruba.Duende.IdentityServer.Admin",
+  "groupIdentity": "Skoruba.Duende.IdentityServer.Admin",
+  "shortName": "skoruba.duende.isadmin",
   "tags": {
     "language": "C#",
     "type": "project"
   },
-  "sourceName": "SkorubaIdentityServer4Admin",
+  "sourceName": "SkorubaDuende.IdentityServerAdmin",
   "preferNameDirectory": true,
   "symbols": {
     "title": {
       "type": "parameter",
-      "defaultValue": "Skoruba IdentityServer4 Admin",
-      "replaces": "Skoruba IdentityServer4 Admin",
+      "defaultValue": "Skoruba Duende IdentityServer Admin",
+      "replaces": "Skoruba Duende IdentityServer Admin",
       "isRequired": true,
       "description": "The title and footer of the Admin UI"
     },
@@ -50,14 +50,14 @@
       "defaultValue": "skoruba_identity_admin",
       "replaces": "skoruba_identity_admin",
       "isRequired": true,
-      "description": "The name of client, that is used in the IdentityServer4"
+      "description": "The name of client, that is used in the Duende IdentityServer"
     },
     "adminclientsecret": {
       "type": "parameter",
       "defaultValue": "skoruba_admin_client_secret",
       "replaces": "skoruba_admin_client_secret",
       "isRequired": true,
-      "description": "The value of client secret, that is used in the IdentityServer4"
+      "description": "The value of client secret, that is used in the Duende IdentityServer"
     },
     "dockersupport": {
       "type": "parameter",
@@ -80,16 +80,16 @@
             "docker-compose.override.yml",
             "docker-compose.vs.debug.yml",
             "docker-compose.vs.release.yml",
-            "src/SkorubaIdentityServer4Admin.Admin/Dockerfile",
-            "src/SkorubaIdentityServer4Admin.Admin.Api/Dockerfile",
-            "src/SkorubaIdentityServer4Admin.STS.Identity/Dockerfile",
-            "SkorubaIdentityServer4Admin.AdminUI.sln"            
+            "src/SkorubaDuende.IdentityServerAdmin.Admin/Dockerfile",
+            "src/SkorubaDuende.IdentityServerAdmin.Admin.Api/Dockerfile",
+            "src/SkorubaDuende.IdentityServerAdmin.STS.Identity/Dockerfile",
+            "SkorubaDuende.IdentityServerAdmin.AdminUI.sln"            
           ]
         },
         {
           "condition": "(dockersupport)",
           "exclude": [
-            "SkorubaIdentityServer4Admin.Admin.sln"
+            "SkorubaDuende.IdentityServerAdmin.Admin.sln"
           ]
         }
       ]
@@ -97,28 +97,28 @@
   ],
   "primaryOutputs": [
     {
-      "path": "src/SkorubaIdentityServer4Admin.Admin/SkorubaIdentityServer4Admin.Admin.csproj"
+      "path": "src/SkorubaDuende.IdentityServerAdmin.Admin/SkorubaDuende.IdentityServerAdmin.Admin.csproj"
     },
     {
-      "path": "src/SkorubaIdentityServer4Admin.STS.Identity/SkorubaIdentityServer4Admin.STS.Identity.csproj"
+      "path": "src/SkorubaDuende.IdentityServerAdmin.STS.Identity/SkorubaDuende.IdentityServerAdmin.STS.Identity.csproj"
     },
     {
-      "path": "src/SkorubaIdentityServer4Admin.Admin.Api/SkorubaIdentityServer4Admin.Admin.Api.csproj"
+      "path": "src/SkorubaDuende.IdentityServerAdmin.Admin.Api/SkorubaDuende.IdentityServerAdmin.Admin.Api.csproj"
     },
     {
-      "path": "src/SkorubaIdentityServer4Admin.Admin.EntityFramework.Shared/SkorubaIdentityServer4Admin.Admin.EntityFramework.Shared.csproj"
+      "path": "src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.csproj"
     },
     {
-      "path": "src/SkorubaIdentityServer4Admin.Admin.EntityFramework.MySql/SkorubaIdentityServer4Admin.Admin.EntityFramework.MySql.csproj"
+      "path": "src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql.csproj"
     },
     {
-      "path": "src/SkorubaIdentityServer4Admin.Admin.EntityFramework.PostgreSQL/SkorubaIdentityServer4Admin.Admin.EntityFramework.PostgreSQL.csproj"
+      "path": "src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL.csproj"
     },
     {
-      "path": "src/SkorubaIdentityServer4Admin.Admin.EntityFramework.SqlServer/SkorubaIdentityServer4Admin.Admin.EntityFramework.SqlServer.csproj"
+      "path": "src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer.csproj"
     },
     {
-      "path": "src/SkorubaIdentityServer4Admin.Shared/SkorubaIdentityServer4Admin.Shared.csproj"
+      "path": "src/SkorubaDuende.IdentityServerAdmin.Shared/SkorubaDuende.IdentityServerAdmin.Shared.csproj"
     }
   ],
   "postActions": [

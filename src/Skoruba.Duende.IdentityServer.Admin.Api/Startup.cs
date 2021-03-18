@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using Skoruba.AuditLogging.EntityFramework.Entities;
 using Skoruba.Duende.IdentityServer.Admin.Api.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.Api.Configuration.Authorization;
+using Skoruba.Duende.IdentityServer.Admin.Api.Configuration.Constants;
 using Skoruba.Duende.IdentityServer.Admin.Api.ExceptionHandling;
 using Skoruba.Duende.IdentityServer.Admin.Api.Helpers;
 using Skoruba.Duende.IdentityServer.Admin.Api.Mappers;
@@ -134,7 +135,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapDefaultControllerRoute();
+                endpoints.MapControllers().RequireAuthorization(AuthorizationConsts.ApiScopePolicy);
                 endpoints.MapHealthChecks("/health", new HealthCheckOptions
                 {
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse

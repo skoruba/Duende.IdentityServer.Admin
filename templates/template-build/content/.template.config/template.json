@@ -3,24 +3,24 @@
   "author": "Jan Skoruba",
   "classifications": [
     "Web",
-    "IdentityServer4",
+    "Duende.IdentityServer",
     "Admin"
   ],
-  "name": "Skoruba IdentityServer4 Admin",
-  "identity": "Skoruba.IdentityServer4.Admin",
-  "groupIdentity": "Skoruba.IdentityServer4.Admin",
-  "shortName": "skoruba.is4admin",
+  "name": "Skoruba Duende IdentityServer Admin",
+  "identity": "Skoruba.Duende.IdentityServer.Admin",
+  "groupIdentity": "Skoruba.Duende.IdentityServer.Admin",
+  "shortName": "skoruba.duende.isadmin",
   "tags": {
     "language": "C#",
     "type": "project"
   },
-  "sourceName": "Skoruba.IdentityServer4",
+  "sourceName": "Skoruba.Duende.IdentityServer",
   "preferNameDirectory": true,
   "symbols": {
     "title": {
       "type": "parameter",
-      "defaultValue": "Skoruba IdentityServer4 Admin",
-      "replaces": "Skoruba IdentityServer4 Admin",
+      "defaultValue": "Skoruba Duende IdentityServer Admin",
+      "replaces": "Skoruba Duende IdentityServer Admin",
       "isRequired": true,
       "description": "The title and footer of the administration"
     },
@@ -36,40 +36,40 @@
       "defaultValue": "skoruba_identity_admin",
       "replaces": "skoruba_identity_admin",
       "isRequired": true,
-      "description": "The name of client, that is be used in the IdentityServer4"
+      "description": "The name of client, that is be used in the Duende IdentityServer"
     },
     "adminclientsecret": {
       "type": "parameter",
       "defaultValue": "skoruba_admin_client_secret",
       "replaces": "skoruba_admin_client_secret",
       "isRequired": true,
-      "description": "The value of client secret, that is be used in the IdentityServer4"
+      "description": "The value of client secret, that is be used in the Duende IdentityServer"
     }
   },
   "primaryOutputs": [
     {
-      "path": "src/Skoruba.IdentityServer4.Admin/Skoruba.IdentityServer4.Admin.csproj"
+      "path": "src/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj"
     },
     {
-      "path": "src/Skoruba.IdentityServer4.STS.Identity/Skoruba.IdentityServer4.STS.Identity.csproj"
+      "path": "src/Skoruba.Duende.IdentityServer.STS.Identity/Skoruba.Duende.IdentityServer.STS.Identity.csproj"
     },
     {
-      "path": "src/Skoruba.IdentityServer4.Admin.Api/Skoruba.IdentityServer4.Admin.Api.csproj"
+      "path": "src/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj"
     },
     {
-      "path": "src/Skoruba.IdentityServer4.Admin.EntityFramework.Shared/Skoruba.IdentityServer4.Admin.EntityFramework.Shared.csproj"
+      "path": "src/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj"
     },
     {
-      "path": "src/Skoruba.IdentityServer4.Admin.EntityFramework.MySql/Skoruba.IdentityServer4.Admin.EntityFramework.MySql.csproj"
+      "path": "src/Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql/Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.csproj"
     },
     {
-      "path": "src/Skoruba.IdentityServer4.Admin.EntityFramework.PostgreSQL/Skoruba.IdentityServer4.Admin.EntityFramework.PostgreSQL.csproj"
+      "path": "src/Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL/Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.csproj"
     },
     {
-      "path": "src/Skoruba.IdentityServer4.Admin.EntityFramework.SqlServer/Skoruba.IdentityServer4.Admin.EntityFramework.SqlServer.csproj"
+      "path": "src/Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer/Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.csproj"
     },
     {
-      "path": "src/Skoruba.IdentityServer4.Shared/Skoruba.IdentityServer4.Shared.csproj"
+      "path": "src/Skoruba.Duende.IdentityServer.Shared/Skoruba.Duende.IdentityServer.Shared.csproj"
     }
   ],
   "postActions": [

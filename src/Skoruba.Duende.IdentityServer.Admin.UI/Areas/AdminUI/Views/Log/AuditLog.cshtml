@@ -104,17 +104,17 @@
                         @foreach (var auditLog in Model.Logs)
                         {
                             <tr>
-                                <td><a href="#" data-error-id="@auditLog.Id" class="btn btn-primary btn-error-detail">@Localizer["Detail"]</a></td>
+                                <td><a href="#" data-error-id="@Html.Encode(auditLog.Id)" class="btn btn-primary btn-error-detail">@Localizer["Detail"]</a></td>
                                 <td>@auditLog.Event</td>
                                 <td>@auditLog.Source</td>
-                                <td><button class="audit-subject-button btn btn-outline-primary" data-subject-name="@auditLog.SubjectName" data-subject-identifier="@auditLog.SubjectIdentifier" data-subject-type="@auditLog.SubjectType" data-subject-additional-data="@auditLog.SubjectAdditionalData">@auditLog.SubjectName - @Localizer["Show detail"] <i class="fa fa-eye"></i></button></td>
-                                <td><button class="audit-action-button btn btn-outline-primary" data-action-title="@Localizer["Action"]" data-action="@auditLog.Action">@Localizer["Show detail"] <i class="fa fa-eye"></i></button></td>
+                                <td><button class="audit-subject-button btn btn-outline-primary" data-subject-name="@Html.Encode(auditLog.SubjectName)" data-subject-identifier="@Html.Encode(auditLog.SubjectIdentifier)" data-subject-type="@Html.Encode(auditLog.SubjectType)" data-subject-additional-data="@Html.Encode(auditLog.SubjectAdditionalData)">@auditLog.SubjectName - @Localizer["Show detail"] <i class="fa fa-eye"></i></button></td>
+                                <td><button class="audit-action-button btn btn-outline-primary" data-action-title="@Html.Encode(Localizer["Action"])" data-action="@Html.Encode(auditLog.Action)">@Localizer["Show detail"] <i class="fa fa-eye"></i></button></td>
                                 <td>
                                     @auditLog.Created
                                 </td>
                             </tr>
-                            <tr class="row-error-detail d-none" data-error-id="@auditLog.Id">
-                                <td colspan="6" data-error-json="@auditLog.Data"></td>
+                            <tr class="row-error-detail d-none" data-error-id="@Html.Encode(auditLog.Id)">
+                                <td colspan="6" data-error-json="@Html.Encode(auditLog.Data)"></td>
                             </tr>
                         }
                     </tbody>

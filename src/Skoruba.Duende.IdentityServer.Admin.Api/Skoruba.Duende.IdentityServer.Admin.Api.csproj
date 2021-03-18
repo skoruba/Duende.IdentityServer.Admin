@@ -18,6 +18,7 @@
         <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="5.0.2" />
         <PackageReference Include="AspNetCore.HealthChecks.UI" Version="5.0.1" />
         <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="5.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.4" />
         <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="5.0.4" />
         <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="5.0.4" />
 
@@ -31,7 +32,6 @@
         </PackageReference>
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
         <PackageReference Include="AutoMapper" Version="10.1.1" />
-        <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
         <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
         <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
         <PackageReference Include="Serilog.Sinks.Seq" Version="5.0.0" />

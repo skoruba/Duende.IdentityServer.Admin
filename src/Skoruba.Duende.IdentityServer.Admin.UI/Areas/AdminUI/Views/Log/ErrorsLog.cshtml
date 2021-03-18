@@ -81,18 +81,18 @@
                     @foreach (var log in Model.Logs)
                     {
                         <tr>
-                            <td><a href="#" data-error-id="@log.Id" class="btn btn-primary btn-error-detail">@Localizer["TableShowDetail"]</a></td>
+                            <td><a href="#" data-error-id="@Html.Encode(log.Id)" class="btn btn-primary btn-error-detail">@Localizer["TableShowDetail"]</a></td>
                             <td>@log.Level</td>
                             <td>
-                                <span class="local-datetime" title="@log.TimeStamp" data-utc="@log.TimeStamp.GetEpochTicks()" data-toggle="tooltip" data-placement="top">
+                                <span class="local-datetime" title="@Html.Encode(log.TimeStamp)" data-utc="@Html.Encode(log.TimeStamp.GetEpochTicks())" data-toggle="tooltip" data-placement="top">
                                     @log.TimeStamp
                                 </span>
-                                <span class="oi oi-clock" title="@log.TimeStamp" data-toggle="tooltip" data-placement="top"></span>
+                                <span class="oi oi-clock" title="@Html.Encode(log.TimeStamp)" data-toggle="tooltip" data-placement="top"></span>
                             </td>
                             <td>@log.Message</td>
                         </tr>
-                        <tr class="row-error-detail d-none" data-error-id="@log.Id">
-                            <td colspan="4" data-error-json="@log.LogEvent"></td>
+                        <tr class="row-error-detail d-none" data-error-id="@Html.Encode(log.Id)">
+                            <td colspan="4" data-error-json="@Html.Encode(log.LogEvent)"></td>
                         </tr>
                     }
                 </tbody>

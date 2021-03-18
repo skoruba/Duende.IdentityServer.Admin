@@ -23,6 +23,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration
 
 		public bool Enabled { get; set; } = true;
 
+		public bool RequireResourceIndicator { get; set; }
+
 		public List<string> UserClaims { get; set; }
 
 		public string UserClaimsItems { get; set; }

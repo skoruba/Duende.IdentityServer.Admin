@@ -16,6 +16,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
                 .RuleFor(o => o.Description, f => f.Random.Words(f.Random.Number(1, 5)))
                 .RuleFor(o => o.DisplayName, f => f.Random.Words(f.Random.Number(1, 5)))
                 .RuleFor(o => o.Enabled, f => f.Random.Bool())
+                .RuleFor(o => o.RequireResourceIndicator, f => f.Random.Bool())
                 .RuleFor(o => o.Scopes, new List<ApiResourceScope>()) //Api Scopes are managed with separate method
                 .RuleFor(o => o.Secrets, new List<ApiResourceSecret>()) //Api Secret are managed with separate method
                 .RuleFor(o => o.UserClaims, f => GetApiResourceClaimFaker(0).Generate(f.Random.Number(10)))

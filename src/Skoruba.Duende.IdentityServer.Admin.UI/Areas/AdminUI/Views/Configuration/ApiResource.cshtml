@@ -78,18 +78,30 @@
             </div>
 
             <!--Checkbox-->
+            <div class="form-group row">
+                <label asp-for="Enabled" class="col-sm-3 col-form-label">
+                    @await Html.PartialAsync("ApiResource/Section/Label", "Enabled")
+                </label>
+                <div class="col-sm-9">
+                    <toggle-button>
+                        <input asp-for="Enabled" type="checkbox">
+                    </toggle-button>
+                </div>
+            </div>
+			
+			<!--Checkbox-->
 			<div class="form-group row">
-				<label asp-for="Enabled" class="col-sm-3 col-form-label">
-					@await Html.PartialAsync("ApiResource/Section/Label", "Enabled")
+				<label asp-for="RequireResourceIndicator" class="col-sm-3 col-form-label">
+					@await Html.PartialAsync("ApiResource/Section/Label", "RequireResourceIndicator")
 				</label>
 				<div class="col-sm-9">
 					<toggle-button>
-						<input asp-for="Enabled" type="checkbox">
+						<input asp-for="RequireResourceIndicator" type="checkbox">
 					</toggle-button>
 				</div>
 			</div>
 
-			@if (Model.Id != 0)
+            @if (Model.Id != 0)
 			{
 				<!--Button-->
 				<div class="form-group row">
