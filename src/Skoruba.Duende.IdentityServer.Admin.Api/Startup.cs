@@ -135,7 +135,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers().RequireAuthorization(AuthorizationConsts.ApiScopePolicy);
+                endpoints.MapDefaultControllerRoute()
+                    .RequireAuthorization(AuthorizationConsts.ApiScopePolicy);
+
                 endpoints.MapHealthChecks("/health", new HealthCheckOptions
                 {
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
