@@ -158,6 +158,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
         /// <typeparam name="TConfigurationDbContext"></typeparam>
         /// <typeparam name="TPersistedGrantDbContext"></typeparam>
         /// <typeparam name="TIdentityDbContext"></typeparam>
+        /// <typeparam name="TDataProtectionDbContext"></typeparam>
         /// <param name="services"></param>
         /// <param name="configuration"></param>
         public static void RegisterDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TDataProtectionDbContext>(this IServiceCollection services, IConfiguration configuration)
@@ -228,7 +229,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
         }
 
         /// <summary>
-        /// Add services for authentication, including Identity model, IdentityServer4 and external providers
+        /// Add services for authentication, including Identity model, Duende IdentityServer and external providers
         /// </summary>
         /// <typeparam name="TIdentityDbContext">DbContext for Identity</typeparam>
         /// <typeparam name="TUserIdentity">User Identity class</typeparam>
@@ -311,7 +312,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
         }
 
         /// <summary>
-        /// Add configuration for IdentityServer4
+        /// Add configuration for Duende IdentityServer
         /// </summary>
         /// <typeparam name="TUserIdentity"></typeparam>
         /// <typeparam name="TConfigurationDbContext"></typeparam>

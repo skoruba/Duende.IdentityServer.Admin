@@ -165,6 +165,12 @@
   <data name="PropertyValue_Label" xml:space="preserve">
     <value>مقدار</value>
   </data>
+  <data name="RequireResourceIndicator_Info" xml:space="preserve">
+    <value>Indicates if this API resource requires the resource indicator to request it, and expects access tokens issued to it will only ever contain this API resource as the audience.</value>
+  </data>
+  <data name="RequireResourceIndicator_Label" xml:space="preserve">
+    <value>Require Resource Indicator</value>
+  </data>
   <data name="Scopes_Info" xml:space="preserve">
     <value>یک API باید حداقل یک اسکوپ داشته باشد. هر اسکوپ می تواند تنظیمات مختلفی داشته باشد.</value>
   </data>

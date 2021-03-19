@@ -1,16 +1,16 @@
 param([string] $packagesVersions, [string]$gitBranchName = 'dev')
 
 # This script contains following steps:
-# - Download latest version of Skoruba.IdentityServer4.Admin from git repository
+# - Download latest version of Skoruba.Duende.IdentityServer.Admin from git repository
 # - Use folders src and tests for project template
 # - Create db migrations for seed data
 
-$gitProject = "https://github.com/skoruba/IdentityServer4.Admin"
-$gitProjectFolder = "Skoruba.IdentityServer4.Admin"
+$gitProject = "https://github.com/skoruba/Duende.IdentityServer.Admin"
+$gitProjectFolder = "Skoruba.Duende.IdentityServer.Admin"
 $templateSrc = "template-build/content/src"
 $templateRoot = "template-build/content"
 $templateTests = "template-build/content/tests"
-$templateAdminProject = "template-build/content/src/Skoruba.IdentityServer4.Admin"
+$templateAdminProject = "template-build/content/src/Skoruba.Duende.IdentityServer.Admin"
 
 function CleanBinObjFolders { 
 
@@ -53,104 +53,104 @@ CleanBinObjFolders
 # Remove references
 
 # API
-dotnet.exe remove ./$templateSrc/Skoruba.IdentityServer4.Admin.Api/Skoruba.IdentityServer4.Admin.Api.csproj reference ..\Skoruba.IdentityServer4.Admin.BusinessLogic.Identity\Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.csproj
-dotnet.exe remove ./$templateSrc/Skoruba.IdentityServer4.Admin.Api/Skoruba.IdentityServer4.Admin.Api.csproj reference ..\Skoruba.IdentityServer4.Admin.BusinessLogic.Shared\Skoruba.IdentityServer4.Admin.BusinessLogic.Shared.csproj
-dotnet.exe remove ./$templateSrc/Skoruba.IdentityServer4.Admin.Api/Skoruba.IdentityServer4.Admin.Api.csproj reference ..\Skoruba.IdentityServer4.Admin.BusinessLogic\Skoruba.IdentityServer4.Admin.BusinessLogic.csproj
-dotnet.exe remove ./$templateSrc/Skoruba.IdentityServer4.Admin.Api/Skoruba.IdentityServer4.Admin.Api.csproj reference ..\Skoruba.IdentityServer4.Shared.Configuration\Skoruba.IdentityServer4.Shared.Configuration.csproj
+dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.csproj
+dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared.csproj
+dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.csproj
+dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj reference ..\Skoruba.Duende.IdentityServer.Shared.Configuration\Skoruba.Duende.IdentityServer.Shared.Configuration.csproj
 
 # Admin
-dotnet.exe remove ./$templateSrc/Skoruba.IdentityServer4.Admin/Skoruba.IdentityServer4.Admin.csproj reference ..\Skoruba.IdentityServer4.Admin.BusinessLogic.Identity\Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.csproj
-dotnet.exe remove ./$templateSrc/Skoruba.IdentityServer4.Admin/Skoruba.IdentityServer4.Admin.csproj reference ..\Skoruba.IdentityServer4.Admin.BusinessLogic.Shared\Skoruba.IdentityServer4.Admin.BusinessLogic.Shared.csproj
-dotnet.exe remove ./$templateSrc/Skoruba.IdentityServer4.Admin/Skoruba.IdentityServer4.Admin.csproj reference ..\Skoruba.IdentityServer4.Admin.BusinessLogic\Skoruba.IdentityServer4.Admin.BusinessLogic.csproj
-dotnet.exe remove ./$templateSrc/Skoruba.IdentityServer4.Admin/Skoruba.IdentityServer4.Admin.csproj reference ..\Skoruba.IdentityServer4.Admin.UI\Skoruba.IdentityServer4.Admin.UI.csproj
+dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.csproj
+dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared.csproj
+dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.csproj
+dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.UI\Skoruba.Duende.IdentityServer.Admin.UI.csproj
 
 # STS
-dotnet.exe remove ./$templateSrc/Skoruba.IdentityServer4.STS.Identity/Skoruba.IdentityServer4.STS.Identity.csproj reference ..\Skoruba.IdentityServer4.Shared.Configuration\Skoruba.IdentityServer4.Shared.Configuration.csproj
-dotnet.exe remove ./$templateSrc/Skoruba.IdentityServer4.STS.Identity/Skoruba.IdentityServer4.STS.Identity.csproj reference ..\Skoruba.IdentityServer4.Admin.EntityFramework.Configuration\Skoruba.IdentityServer4.Admin.EntityFramework.Configuration.csproj
+dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.STS.Identity/Skoruba.Duende.IdentityServer.STS.Identity.csproj reference ..\Skoruba.Duende.IdentityServer.Shared.Configuration\Skoruba.Duende.IdentityServer.Shared.Configuration.csproj
+dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.STS.Identity/Skoruba.Duende.IdentityServer.STS.Identity.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.csproj
 
 # EF Shared
-dotnet.exe remove ./$templateSrc/Skoruba.IdentityServer4.Admin.EntityFramework.Shared/Skoruba.IdentityServer4.Admin.EntityFramework.Shared.csproj reference ..\Skoruba.IdentityServer4.Admin.EntityFramework\Skoruba.IdentityServer4.Admin.EntityFramework.csproj
-dotnet.exe remove ./$templateSrc/Skoruba.IdentityServer4.Admin.EntityFramework.Shared/Skoruba.IdentityServer4.Admin.EntityFramework.Shared.csproj reference ..\Skoruba.IdentityServer4.Admin.EntityFramework.Identity\Skoruba.IdentityServer4.Admin.EntityFramework.Identity.csproj
-dotnet.exe remove ./$templateSrc/Skoruba.IdentityServer4.Admin.EntityFramework.Shared/Skoruba.IdentityServer4.Admin.EntityFramework.Shared.csproj reference ..\Skoruba.IdentityServer4.Admin.EntityFramework.Configuration\Skoruba.IdentityServer4.Admin.EntityFramework.Configuration.csproj
+dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.EntityFramework\Skoruba.Duende.IdentityServer.Admin.EntityFramework.csproj
+dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.csproj
+dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.csproj
 
 # EF MySql
-dotnet.exe remove ./$templateSrc/Skoruba.IdentityServer4.Admin.EntityFramework.MySql/Skoruba.IdentityServer4.Admin.EntityFramework.MySql.csproj reference ..\Skoruba.IdentityServer4.Admin.EntityFramework\Skoruba.IdentityServer4.Admin.EntityFramework.csproj
-dotnet.exe remove ./$templateSrc/Skoruba.IdentityServer4.Admin.EntityFramework.MySql/Skoruba.IdentityServer4.Admin.EntityFramework.MySql.csproj reference ..\Skoruba.IdentityServer4.Admin.EntityFramework.Identity\Skoruba.IdentityServer4.Admin.EntityFramework.Identity.csproj
+dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql/Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.EntityFramework\Skoruba.Duende.IdentityServer.Admin.EntityFramework.csproj
+dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql/Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.csproj
 
 # EF PostgreSQL
-dotnet.exe remove ./$templateSrc/Skoruba.IdentityServer4.Admin.EntityFramework.PostgreSQL/Skoruba.IdentityServer4.Admin.EntityFramework.PostgreSQL.csproj reference ..\Skoruba.IdentityServer4.Admin.EntityFramework\Skoruba.IdentityServer4.Admin.EntityFramework.csproj
-dotnet.exe remove ./$templateSrc/Skoruba.IdentityServer4.Admin.EntityFramework.PostgreSQL/Skoruba.IdentityServer4.Admin.EntityFramework.PostgreSQL.csproj reference ..\Skoruba.IdentityServer4.Admin.EntityFramework.Identity\Skoruba.IdentityServer4.Admin.EntityFramework.Identity.csproj
+dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL/Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.EntityFramework\Skoruba.Duende.IdentityServer.Admin.EntityFramework.csproj
+dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL/Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.csproj
 
 # EF SqlServer
-dotnet.exe remove ./$templateSrc/Skoruba.IdentityServer4.Admin.EntityFramework.SqlServer/Skoruba.IdentityServer4.Admin.EntityFramework.SqlServer.csproj reference ..\Skoruba.IdentityServer4.Admin.EntityFramework\Skoruba.IdentityServer4.Admin.EntityFramework.csproj
-dotnet.exe remove ./$templateSrc/Skoruba.IdentityServer4.Admin.EntityFramework.SqlServer/Skoruba.IdentityServer4.Admin.EntityFramework.SqlServer.csproj reference ..\Skoruba.IdentityServer4.Admin.EntityFramework.Identity\Skoruba.IdentityServer4.Admin.EntityFramework.Identity.csproj
+dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer/Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.EntityFramework\Skoruba.Duende.IdentityServer.Admin.EntityFramework.csproj
+dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer/Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.csproj
 
 # Shared
-dotnet.exe remove ./$templateSrc/Skoruba.IdentityServer4.Shared/Skoruba.IdentityServer4.Shared.csproj reference ..\Skoruba.IdentityServer4.Admin.BusinessLogic.Identity\Skoruba.IdentityServer4.Admin.BusinessLogic.Identity.csproj
+dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Shared/Skoruba.Duende.IdentityServer.Shared.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.csproj
 
 # Add nuget packages
 # Admin
-dotnet.exe add ./$templateSrc/Skoruba.IdentityServer4.Admin/Skoruba.IdentityServer4.Admin.csproj package Skoruba.IdentityServer4.Admin.BusinessLogic -v $packagesVersions
-dotnet.exe add ./$templateSrc/Skoruba.IdentityServer4.Admin/Skoruba.IdentityServer4.Admin.csproj package Skoruba.IdentityServer4.Admin.BusinessLogic.Identity -v $packagesVersions
-dotnet.exe add ./$templateSrc/Skoruba.IdentityServer4.Admin/Skoruba.IdentityServer4.Admin.csproj package Skoruba.IdentityServer4.Admin.UI -v $packagesVersions
+dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj package Skoruba.Duende.IdentityServer.Admin.BusinessLogic -v $packagesVersions
+dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj package Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity -v $packagesVersions
+dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj package Skoruba.Duende.IdentityServer.Admin.UI -v $packagesVersions
 
 # STS
-dotnet.exe add ./$templateSrc/Skoruba.IdentityServer4.STS.Identity/Skoruba.IdentityServer4.STS.Identity.csproj package Skoruba.IdentityServer4.Shared.Configuration -v $packagesVersions
+dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.STS.Identity/Skoruba.Duende.IdentityServer.STS.Identity.csproj package Skoruba.Duende.IdentityServer.Shared.Configuration -v $packagesVersions
 
 # API
-dotnet.exe add ./$templateSrc/Skoruba.IdentityServer4.Admin.Api/Skoruba.IdentityServer4.Admin.Api.csproj package Skoruba.IdentityServer4.Admin.BusinessLogic -v $packagesVersions
-dotnet.exe add ./$templateSrc/Skoruba.IdentityServer4.Admin.Api/Skoruba.IdentityServer4.Admin.Api.csproj package Skoruba.IdentityServer4.Admin.BusinessLogic.Identity -v $packagesVersions
-dotnet.exe add ./$templateSrc/Skoruba.IdentityServer4.Admin.Api/Skoruba.IdentityServer4.Admin.Api.csproj package Skoruba.IdentityServer4.Shared.Configuration -v $packagesVersions
+dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj package Skoruba.Duende.IdentityServer.Admin.BusinessLogic -v $packagesVersions
+dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj package Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity -v $packagesVersions
+dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj package Skoruba.Duende.IdentityServer.Shared.Configuration -v $packagesVersions
 
 # EF Shared
-dotnet.exe add ./$templateSrc/Skoruba.IdentityServer4.Admin.EntityFramework.Shared/Skoruba.IdentityServer4.Admin.EntityFramework.Shared.csproj package Skoruba.IdentityServer4.Admin.EntityFramework -v $packagesVersions
-dotnet.exe add ./$templateSrc/Skoruba.IdentityServer4.Admin.EntityFramework.Shared/Skoruba.IdentityServer4.Admin.EntityFramework.Shared.csproj package Skoruba.IdentityServer4.Admin.EntityFramework.Identity -v $packagesVersions
-dotnet.exe add ./$templateSrc/Skoruba.IdentityServer4.Admin.EntityFramework.Shared/Skoruba.IdentityServer4.Admin.EntityFramework.Shared.csproj package Skoruba.IdentityServer4.Admin.EntityFramework.Configuration -v $packagesVersions
+dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj package Skoruba.Duende.IdentityServer.Admin.EntityFramework -v $packagesVersions
+dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj package Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity -v $packagesVersions
+dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj package Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration -v $packagesVersions
 
 # EF MySql
-dotnet.exe add ./$templateSrc/Skoruba.IdentityServer4.Admin.EntityFramework.MySql/Skoruba.IdentityServer4.Admin.EntityFramework.MySql.csproj package Skoruba.IdentityServer4.Admin.EntityFramework -v $packagesVersions
-dotnet.exe add ./$templateSrc/Skoruba.IdentityServer4.Admin.EntityFramework.MySql/Skoruba.IdentityServer4.Admin.EntityFramework.MySql.csproj package Skoruba.IdentityServer4.Admin.EntityFramework.Identity -v $packagesVersions
+dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql/Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.csproj package Skoruba.Duende.IdentityServer.Admin.EntityFramework -v $packagesVersions
+dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql/Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.csproj package Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity -v $packagesVersions
 
 # EF PostgreSQL
-dotnet.exe add ./$templateSrc/Skoruba.IdentityServer4.Admin.EntityFramework.PostgreSQL/Skoruba.IdentityServer4.Admin.EntityFramework.PostgreSQL.csproj package Skoruba.IdentityServer4.Admin.EntityFramework -v $packagesVersions
-dotnet.exe add ./$templateSrc/Skoruba.IdentityServer4.Admin.EntityFramework.PostgreSQL/Skoruba.IdentityServer4.Admin.EntityFramework.PostgreSQL.csproj package Skoruba.IdentityServer4.Admin.EntityFramework.Identity -v $packagesVersions
+dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL/Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.csproj package Skoruba.Duende.IdentityServer.Admin.EntityFramework -v $packagesVersions
+dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL/Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.csproj package Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity -v $packagesVersions
 
 # EF SqlServer
-dotnet.exe add ./$templateSrc/Skoruba.IdentityServer4.Admin.EntityFramework.SqlServer/Skoruba.IdentityServer4.Admin.EntityFramework.SqlServer.csproj package Skoruba.IdentityServer4.Admin.EntityFramework -v $packagesVersions
-dotnet.exe add ./$templateSrc/Skoruba.IdentityServer4.Admin.EntityFramework.SqlServer/Skoruba.IdentityServer4.Admin.EntityFramework.SqlServer.csproj package Skoruba.IdentityServer4.Admin.EntityFramework.Identity -v $packagesVersions
+dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer/Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.csproj package Skoruba.Duende.IdentityServer.Admin.EntityFramework -v $packagesVersions
+dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer/Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.csproj package Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity -v $packagesVersions
 
 # Shared
-dotnet.exe add ./$templateSrc/Skoruba.IdentityServer4.Shared/Skoruba.IdentityServer4.Shared.csproj package Skoruba.IdentityServer4.Admin.BusinessLogic.Identity -v $packagesVersions
+dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Shared/Skoruba.Duende.IdentityServer.Shared.csproj package Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity -v $packagesVersions
 
 # Clean solution and folders bin, obj
 CleanBinObjFolders
 
 # Clean up projects which will be installed via nuget packages
-Remove-Item ./$templateSrc/Skoruba.IdentityServer4.Admin.BusinessLogic -Force -recurse
-Remove-Item ./$templateSrc/Skoruba.IdentityServer4.Admin.BusinessLogic.Identity -Force -recurse
-Remove-Item ./$templateSrc/Skoruba.IdentityServer4.Admin.BusinessLogic.Shared -Force -recurse
-Remove-Item ./$templateSrc/Skoruba.IdentityServer4.Admin.EntityFramework -Force -recurse
-Remove-Item ./$templateSrc/Skoruba.IdentityServer4.Admin.EntityFramework.Identity -Force -recurse
-Remove-Item ./$templateSrc/Skoruba.IdentityServer4.Admin.EntityFramework.Extensions -Force -recurse
-Remove-Item ./$templateSrc/Skoruba.IdentityServer4.Admin.EntityFramework.Configuration -Force -recurse
-Remove-Item ./$templateSrc/Skoruba.IdentityServer4.Shared.Configuration -Force -recurse
-Remove-Item ./$templateSrc/Skoruba.IdentityServer4.Admin.UI -Force -recurse
+Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.BusinessLogic -Force -recurse
+Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity -Force -recurse
+Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared -Force -recurse
+Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework -Force -recurse
+Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity -Force -recurse
+Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions -Force -recurse
+Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration -Force -recurse
+Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Shared.Configuration -Force -recurse
+Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.UI -Force -recurse
 Remove-Item ./$templateTests -Force -recurse
 
 ######################################
 # Step 2
-$templateNuspecPath = "template-build/Skoruba.IdentityServer4.Admin.Templates.nuspec"
+$templateNuspecPath = "template-build/Skoruba.Duende.IdentityServer.Admin.Templates.nuspec"
 nuget pack $templateNuspecPath
 
 ######################################
 # Step 3
-$templateLocalName = "Skoruba.IdentityServer4.Admin.Templates.$packagesVersions.nupkg"
+$templateLocalName = "Skoruba.Duende.IdentityServer.Admin.Templates.$packagesVersions.nupkg"
 dotnet.exe new -i $templateLocalName
 
 ######################################
 # Step 4
 # Create template for fixing project name
-dotnet new skoruba.is4admin --name SkorubaIdentityServer4Admin --title "Skoruba IdentityServer4 Admin" --adminrole SkorubaIdentityAdminAdministrator --adminclientid skoruba_identity_admin --adminclientsecret skoruba_admin_client_secret
+dotnet new skoruba.duende.isadmin --name SkorubaDuende.IdentityServerAdmin --title "Skoruba Duende IdentityServer Admin" --adminrole SkorubaIdentityAdminAdministrator --adminclientid skoruba_identity_admin --adminclientsecret skoruba_admin_client_secret
 
 ######################################
 # Step 5
@@ -158,41 +158,41 @@ dotnet new skoruba.is4admin --name SkorubaIdentityServer4Admin --title "Skoruba 
 
 CleanBinObjFolders
 
-$templateFiles = Get-ChildItem .\SkorubaIdentityServer4Admin\src -include *.cs, *.csproj, *.cshtml -Recurse
+$templateFiles = Get-ChildItem .\SkorubaDuende.IdentityServerAdmin\src -include *.cs, *.csproj, *.cshtml -Recurse
 foreach ($file in $templateFiles) {
     Write-Host $file.PSPath
 
 
     (Get-Content $file.PSPath -raw -Encoding UTF8) |
-    Foreach-Object { $_ -replace "SkorubaIdentityServer4Admin.Shared.Configuration", "Skoruba.IdentityServer4.Shared.Configuration" } |
+    Foreach-Object { $_ -replace "SkorubaDuende.IdentityServerAdmin.Shared.Configuration", "Skoruba.Duende.IdentityServer.Shared.Configuration" } |
     Set-Content $file.PSPath -Encoding UTF8
 
     (Get-Content $file.PSPath -raw -Encoding UTF8) |
-    Foreach-Object { $_ -replace "SkorubaIdentityServer4Admin.Admin.UI", "Skoruba.IdentityServer4.Admin.UI" } |
+    Foreach-Object { $_ -replace "SkorubaDuende.IdentityServerAdmin.Admin.UI", "Skoruba.Duende.IdentityServer.Admin.UI" } |
     Set-Content $file.PSPath -Encoding UTF8
 
     (Get-Content $file.PSPath -raw -Encoding UTF8) |
-    Foreach-Object { $_ -replace "SkorubaIdentityServer4Admin.Admin.BusinessLogic", "Skoruba.IdentityServer4.Admin.BusinessLogic" } |
+    Foreach-Object { $_ -replace "SkorubaDuende.IdentityServerAdmin.Admin.BusinessLogic", "Skoruba.Duende.IdentityServer.Admin.BusinessLogic" } |
     Set-Content $file.PSPath -Encoding UTF8
 
     (Get-Content $file.PSPath -raw -Encoding UTF8) |
-    Foreach-Object { $_ -replace "SkorubaIdentityServer4Admin.Admin.EntityFramework", "Skoruba.IdentityServer4.Admin.EntityFramework" } |
+    Foreach-Object { $_ -replace "SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework", "Skoruba.Duende.IdentityServer.Admin.EntityFramework" } |
     Set-Content $file.PSPath -Encoding UTF8
 
     (Get-Content $file.PSPath -raw -Encoding UTF8) |
-    Foreach-Object { $_ -replace "Skoruba.IdentityServer4.Admin.EntityFramework.Shared", "SkorubaIdentityServer4Admin.Admin.EntityFramework.Shared" } |
+    Foreach-Object { $_ -replace "Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared", "SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared" } |
     Set-Content $file.PSPath -Encoding UTF8
 
     (Get-Content $file.PSPath -raw -Encoding UTF8) |
-    Foreach-Object { $_ -replace "Skoruba.IdentityServer4.Admin.EntityFramework.MySql", "SkorubaIdentityServer4Admin.Admin.EntityFramework.MySql" } |
+    Foreach-Object { $_ -replace "Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql", "SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql" } |
     Set-Content $file.PSPath -Encoding UTF8
 
     (Get-Content $file.PSPath -raw -Encoding UTF8) |
-    Foreach-Object { $_ -replace "Skoruba.IdentityServer4.Admin.EntityFramework.PostgreSQL", "SkorubaIdentityServer4Admin.Admin.EntityFramework.PostgreSQL" } |
+    Foreach-Object { $_ -replace "Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL", "SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL" } |
     Set-Content $file.PSPath -Encoding UTF8
 
     (Get-Content $file.PSPath -raw -Encoding UTF8) |
-    Foreach-Object { $_ -replace "Skoruba.IdentityServer4.Admin.EntityFramework.SqlServer", "SkorubaIdentityServer4Admin.Admin.EntityFramework.SqlServer" } |
+    Foreach-Object { $_ -replace "Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer", "SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer" } |
     Set-Content $file.PSPath -Encoding UTF8
 }
 
