@@ -69,15 +69,19 @@ Project template options:
 
 - This administration uses bootstrap 4
 
-- Admin UI
+### Admin UI - Light mode 🌞
 
 ![Admin-preview](docs/Images/App/Skoruba-Home-Preview.PNG)
 
-- Security token service (STS)
+### Admin UI - Dark mode 🌙
+
+![Admin-preview](docs/Images/App/Skoruba-Home-Preview-Dark.PNG)
+
+### Security token service (STS)
 
 ![Admin-preview](docs/Images/App/Skoruba-STS-Home-Preview.PNG)
 
-- Forms:
+### Forms:
 
 ![Admin-preview-form](docs/Images/App/Skoruba-Forms-Preview.PNG)
 
