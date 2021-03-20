@@ -630,7 +630,7 @@ Integration tests use StartupTest class which is pre-configured with:
 
 ### The admininistration contains the following sections:
 
-![Skoruba.Duende.IdentityServer.Admin App](docs/Images/Skoruba.IdentityServer4.Admin-Solution.png)
+![Skoruba.Duende.IdentityServer.Admin App](docs/Images/Skoruba.Duende.IdentityServer.Admin-Solution.png)
 
 ## Duende.IdentityServer
 
@@ -691,7 +691,7 @@ It is possible to define the configuration according the client type - by defaul
 
 ## Application Diagram
 
-![Skoruba.Duende.IdentityServer.Admin Diagram](docs/Images/Skoruba.IdentityServer4.Admin-App-Diagram.png)
+![Skoruba.Duende.IdentityServer.Admin Diagram](docs/Images/Skoruba.Duende.IdentityServer.Admin-App-Diagram.png)
 
 ## Roadmap & Vision
 
