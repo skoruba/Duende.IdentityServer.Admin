@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <Version>2.0.0-rc3</Version>
+        <Version>1.0.0-preview1</Version>
         <Authors>Jan Škoruba</Authors>
         <UserSecretsId>9c91d295-54c5-4d09-9bd6-fa56fb74011b</UserSecretsId>
         <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
@@ -26,8 +26,8 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.4" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.4" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.4">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.4" />
@@ -55,39 +55,40 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Resources\Views\Account\RegisterConfirmation.ru.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\Account\RegisterConfirmation.zh.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\Account\RegisterConfirmation.sv.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\Account\RegisterConfirmation.fi.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\Account\RegisterConfirmation.fr.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\Account\RegisterConfirmation.fa.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\Account\RegisterConfirmation.es.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\Account\RegisterConfirmation.de.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\Account\RegisterConfirmation.da.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Views\Account\RegisterConfirmation.en.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-      </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Views\Account\RegisterConfirmation.ru.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Views\Account\RegisterConfirmation.zh.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Views\Account\RegisterConfirmation.sv.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Views\Account\RegisterConfirmation.fi.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Views\Account\RegisterConfirmation.fr.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Views\Account\RegisterConfirmation.fa.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Views\Account\RegisterConfirmation.es.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Views\Account\RegisterConfirmation.de.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Views\Account\RegisterConfirmation.da.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Views\Account\RegisterConfirmation.en.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+        </EmbeddedResource>
     </ItemGroup>
 
 </Project>
+
 
 
 

@@ -1,64 +1,65 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <Version>2.0.0-rc3</Version>
-    <Authors>Jan Škoruba</Authors>
-    <Description>Business Logic layer for the administration of the Duende IdentityServer</Description>
-    <PackageTags>Duende IdentityServer Admin OpenIDConnect OAuth2 Identity</PackageTags>
-      <PackageLicenseUrl>https://github.com/skoruba/Duende.IdentityServer.Admin/blob/master/LICENSE.md</PackageLicenseUrl>
-      <PackageProjectUrl>https://github.com/skoruba/Duende.IdentityServer.Admin</PackageProjectUrl>
-      <PackageIconUrl>https://raw.githubusercontent.com/skoruba/Duende.IdentityServer.Admin/master/docs/Images/Skoruba.Duende.IdentityServer.Admin-Logo-Nuget.png</PackageIconUrl>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <Version>1.0.0-preview1</Version>
+        <Authors>Jan Škoruba</Authors>
+        <Description>Business Logic layer for the administration of the Duende IdentityServer</Description>
+        <PackageTags>Duende IdentityServer Admin OpenIDConnect OAuth2 Identity</PackageTags>
+        <PackageLicenseUrl>https://github.com/skoruba/Duende.IdentityServer.Admin/blob/main/LICENSE</PackageLicenseUrl>
+        <PackageProjectUrl>https://github.com/skoruba/Duende.IdentityServer.Admin</PackageProjectUrl>
+        <PackageIconUrl>https://raw.githubusercontent.com/skoruba/Duende.IdentityServer.Admin/main/docs/Images/Skoruba.Duende.IdentityServer.Admin-Logo-Nuget.png</PackageIconUrl>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Duende.IdentityServer.EntityFramework" Version="5.0.5" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Duende.IdentityServer.EntityFramework" Version="5.0.5" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared.csproj" />
-    <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework\Skoruba.Duende.IdentityServer.Admin.EntityFramework.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared.csproj" />
+        <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework\Skoruba.Duende.IdentityServer.Admin.EntityFramework.csproj" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Resources\ApiResourceServiceResource - Copy.Designer.cs">
-      <DependentUpon>ApiResourceServiceResource.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\ApiResourceServiceResource.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ApiResourceServiceResource.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\ApiScopeServiceResource.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ApiScopeServiceResource.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\IdentityResourceServiceResource.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>IdentityResourceServiceResource.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Update="Resources\ApiResourceServiceResource - Copy.Designer.cs">
+            <DependentUpon>ApiResourceServiceResource.resx</DependentUpon>
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+        </Compile>
+        <Compile Update="Resources\ApiResourceServiceResource.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>ApiResourceServiceResource.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\ApiScopeServiceResource.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>ApiScopeServiceResource.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\IdentityResourceServiceResource.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>IdentityResourceServiceResource.resx</DependentUpon>
+        </Compile>
+    </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\ApiResourceServiceResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ApiResourceServiceResource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\ApiScopeServiceResource.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ApiScopeServiceResource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\IdentityResourceServiceResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>IdentityResourceServiceResource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Update="Resources\ApiResourceServiceResource.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>ApiResourceServiceResource.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\ApiScopeServiceResource.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>ApiScopeServiceResource.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\IdentityResourceServiceResource.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>IdentityResourceServiceResource.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
 
 </Project>
+
 
 
 

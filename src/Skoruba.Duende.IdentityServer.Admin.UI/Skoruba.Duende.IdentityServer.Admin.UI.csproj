@@ -2,13 +2,13 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <Version>2.0.0-rc3</Version>
+        <Version>1.0.0-preview1</Version>
         <Authors>Jan Škoruba</Authors>
         <Description>The package with UI for the administration of the Duende IdentityServer</Description>
         <PackageTags>Duende IdentityServer Admin OpenIDConnect OAuth2 Identity</PackageTags>
-        <PackageLicenseUrl>https://github.com/skoruba/Duende.IdentityServer.Admin/blob/master/LICENSE.md</PackageLicenseUrl>
+        <PackageLicenseUrl>https://github.com/skoruba/Duende.IdentityServer.Admin/blob/main/LICENSE</PackageLicenseUrl>
         <PackageProjectUrl>https://github.com/skoruba/Duende.IdentityServer.Admin</PackageProjectUrl>
-        <PackageIconUrl>https://raw.githubusercontent.com/skoruba/Duende.IdentityServer.Admin/master/docs/Images/Skoruba.Duende.IdentityServer.Admin-Logo-Nuget.png</PackageIconUrl>
+        <PackageIconUrl>https://raw.githubusercontent.com/skoruba/Duende.IdentityServer.Admin/main/docs/Images/Skoruba.Duende.IdentityServer.Admin-Logo-Nuget.png</PackageIconUrl>
         <LangVersion>latest</LangVersion>
         <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
         <StaticWebAssetBasePath Condition="$(StaticWebAssetBasePath) == ''">/</StaticWebAssetBasePath>
@@ -117,6 +117,7 @@
     </ItemGroup>
 
 </Project>
+
 
 
 
