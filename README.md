@@ -2,7 +2,7 @@
 
 # Duende.Skoruba.IdentityServer.Admin
 
-> The administration of the Duende IdentityServer and Asp.Net Core Identity 🚀
+> The administration for the Duende IdentityServer and Asp.Net Core Identity 🚀
 
 ## Project Status
 
