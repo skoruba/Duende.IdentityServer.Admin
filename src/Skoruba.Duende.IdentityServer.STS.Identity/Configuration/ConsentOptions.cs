@@ -1,7 +1,7 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+﻿// Copyright (c) Duende Software. All rights reserved.
+// See LICENSE in the project root for license information.
 
-// Original file: https://github.com/IdentityServer/IdentityServer4.Quickstart.UI
+// Original file: https://github.com/DuendeSoftware/IdentityServer.Quickstart.UI
 // Modified by Jan Škoruba
 
 namespace Skoruba.Duende.IdentityServer.STS.Identity.Configuration
