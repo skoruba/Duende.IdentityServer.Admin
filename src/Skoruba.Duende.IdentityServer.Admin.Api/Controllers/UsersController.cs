@@ -181,11 +181,6 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.Controllers
         {
             var userClaimDto = _mapper.Map<TUserClaimsDto>(claim);
 
-            if (!userClaimDto.ClaimId.Equals(default))
-            {
-                return BadRequest(_errorResources.CannotSetId());
-            }
-
             await _identityService.CreateUserClaimsAsync(userClaimDto);
 
             return Ok();
