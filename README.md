@@ -757,9 +757,9 @@ It is possible to define the configuration according the client type - by defaul
 
 This repository is licensed under the terms of the [**Apache License 2.0**](LICENSE).
 
-### Duende.IdentityServer License
+### Duende.IdentityServer License 🔑
 
-**📢 Duende.IdentityServer** is available under both a **FOSS (RPL) and a commercial** license. 
+**Duende.IdentityServer** is available under both a **FOSS (RPL) and a commercial** license. 
 
 For the production environment is necesarry to get the specific license. For more information about licencing of Duende.IdentityServer - please check [this link](https://duendesoftware.com/products/identityserver#pricing).
 
