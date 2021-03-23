@@ -734,7 +734,7 @@ It is possible to define the configuration according the client type - by defaul
 - [x] Protect keys for dataprotection from Azure Key Vault ([#715](https://github.com/skoruba/IdentityServer4.Admin/pull/715))
 - [x] Update to Duende.IdentityServer version 4 ([#633](https://github.com/skoruba/IdentityServer4.Admin/issues/633))
 - [x] Add support for themes ([#725](https://github.com/skoruba/IdentityServer4.Admin/issues/725))
-- [x] Extract UI part into nuget package ([#770](https://github.com/skoruba/IdentityServer4.Admin/issues/770), [#409](https://github.com/skoruba/IdentityServer4.Admin/issues/409), [#55](https://github.com/skoruba/IdentityServer4.Admin/issues/55),), [#322](https://github.com/skoruba/IdentityServer4.Admin/issues/322), [#28](https://github.com/skoruba/IdentityServer4.Admin/issues/28), , [#133](https://github.com/skoruba/IdentityServer4.Admin/issues/133)) 
+- [x] Extract UI part into nuget package ([#770](https://github.com/skoruba/IdentityServer4.Admin/issues/770), [#409](https://github.com/skoruba/IdentityServer4.Admin/issues/409), [#55](https://github.com/skoruba/IdentityServer4.Admin/issues/55), [#322](https://github.com/skoruba/IdentityServer4.Admin/issues/322), [#28](https://github.com/skoruba/IdentityServer4.Admin/issues/28), [#133](https://github.com/skoruba/IdentityServer4.Admin/issues/133)) 
 
 ### 2.0.0
 - [ ] Connect Admin Api to the Admin UI ([#478](https://github.com/skoruba/IdentityServer4.Admin/issues/478))
@@ -757,14 +757,14 @@ It is possible to define the configuration according the client type - by defaul
 
 This repository is licensed under the terms of the [**Apache License 2.0**](LICENSE).
 
-**NOTE 📢**: **Duende.IdentityServer** is available under both a **FOSS (RPL) and a commercial** license. 
+### Duende.IdentityServer License
 
-For the production environment is necesarry to get the licence bellow.
+**📢 Duende.IdentityServer** is available under both a **FOSS (RPL) and a commercial** license. 
 
-For more information about licencing please check this [link](https://duendesoftware.com/products/identityserver#pricing).
+For the production environment is necesarry to get the specific license. For more information about licencing of Duende.IdentityServer - please check [this link](https://duendesoftware.com/products/identityserver#pricing).
 
 This repository uses the source code from https://github.com/DuendeSoftware/IdentityServer.Quickstart.UI which is under the terms of the following
-[**lincese**](https://github.com/DuendeSoftware/IdentityServer.Quickstart.UI/blob/main/LICENSE).
+[**lincense**](https://github.com/DuendeSoftware/IdentityServer.Quickstart.UI/blob/main/LICENSE).
 
 
 ## Acknowledgements
