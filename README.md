@@ -579,7 +579,7 @@ Integration tests use StartupTest class which is pre-configured with:
 
 - STS:
 
-  - `Skoruba.Duende.IdentityServer.STS.Identity` - project that contains the instance of Duende.IdentityServer and combine these samples - [Quickstart UI for the IdentityServer4 with Asp.Net Core Identity and EF Core storage](https://github.com/IdentityServer/IdentityServer4/tree/master/samples/Quickstarts/9_Combined_AspId_and_EFStorage) and [damienbod - IdentityServer4 and Identity template](https://github.com/damienbod/IdentityServer4AspNetCoreIdentityTemplate)
+  - `Skoruba.Duende.IdentityServer.STS.Identity` - project that contains the instance of Duende.IdentityServer and combine these samples - [Quickstart UI for the Duende.IdentityServer with Asp.Net Core Identitye](https://github.com/DuendeSoftware/IdentityServer/tree/main/hosts/AspNetIdentity) and [Quickstart UI for the Duende.IdentityServer with EF Core storage](https://github.com/DuendeSoftware/IdentityServer/tree/main/hosts/EntityFramework) and [damienbod - IdentityServer4 and Identity template](https://github.com/damienbod/IdentityServer4AspNetCoreIdentityTemplate)
 
 - Admin UI Api:
 
@@ -755,12 +755,16 @@ It is possible to define the configuration according the client type - by defaul
 
 ## Licence
 
-This repository is licensed under the terms of the [**Apache License 2.0**](LICENSE.md).
+This repository is licensed under the terms of the [**Apache License 2.0**](LICENSE).
 
-**NOTE**: Duende.IdentityServer is available under both a FOSS (RPL) and a commercial license. For more information about licencing please check this [link](https://duendesoftware.com/products/identityserver#pricing).
+**NOTE 📢**: **Duende.IdentityServer** is available under both a **FOSS (RPL) and a commercial** license. 
 
-This repository uses the source code from https://github.com/IdentityServer/IdentityServer4.Quickstart.UI which is under the terms of the
-[**Apache License 2.0**](https://github.com/IdentityServer/IdentityServer4.Quickstart.UI/blob/master/LICENSE).
+For the production environment is necesarry to get the licence bellow.
+
+For more information about licencing please check this [link](https://duendesoftware.com/products/identityserver#pricing).
+
+This repository uses the source code from https://github.com/DuendeSoftware/IdentityServer.Quickstart.UI which is under the terms of the following
+[**lincese**](https://github.com/DuendeSoftware/IdentityServer.Quickstart.UI/blob/main/LICENSE).
 
 
 ## Acknowledgements

@@ -23,7 +23,7 @@ We will assume in the tutorial that STS and Admin were deployed to:
 
 ### Updating URLs
 
-Remember to replace those values with your own in `src/Skoruba.IdentityServer4.Admin/appsettings.json` before first publish -
+Remember to replace those values with your own in `src/Skoruba.Duende.IdentityServer.Admin/appsettings.json` before first publish -
 
 ```json
 "AdminConfiguration": {
@@ -72,7 +72,7 @@ Name: WEBSITE_LOAD_CERTIFICATES
 Value: *
 ```
 
-Last step before deploy - we need to update `src/Skoruba.IdentityServer4.STS.Identity/appsettings.json` and modify following lines:
+Last step before deploy - we need to update `src/Skoruba.Duende.IdentityServer.STS.Identity/appsettings.json` and modify following lines:
 
 ```json
 "CertificateConfiguration": {

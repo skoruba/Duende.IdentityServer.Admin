@@ -41,7 +41,7 @@ Console commands will be used throghout the tutorial but for code editing it is 
 # Cloning Admin
 
 ```
-git clone https://github.com/skoruba/IdentityServer4.Admin
+git clone https://github.com/skoruba/Duende.IdentityServer.Admin
 ```
 
 # Adjustments for PostgreSQL
@@ -49,7 +49,7 @@ git clone https://github.com/skoruba/IdentityServer4.Admin
 By default everything is configured for Microsoft SQL Server, but fortunately it's pretty easy to change.
 
 ## Replace connection strings
-First change connection strings in `src/Skoruba.IdentityServer4.Admin/appsettings.json` and  `src/Skoruba.IdentityServer4.STS.Identity/appsettings.json` and replace them with following connection string:
+First change connection strings in `src/Skoruba.Duende.IdentityServer.Admin/appsettings.json` and  `src/Skoruba.Duende.IdentityServer.STS.Identity/appsettings.json` and replace them with following connection string:
 
 ```
 Server=localhost; User Id=postgres; Database=is4admin; Port=5432; Password=postgres; SSL Mode=Prefer; Trust Server Certificate=true
@@ -58,9 +58,9 @@ Server=localhost; User Id=postgres; Database=is4admin; Port=5432; Password=postg
 ## Switch to PostgreSQL
 
 It is possible to change database provider in `appsettings.json` in following projects:
- - Skoruba.IdentityServer4.Admin
- - Skoruba.IdentityServer4.Admin.Api
- - Skoruba.IdentityServer4.STS.Identity
+ - Skoruba.Duende.IdentityServer.Admin
+ - Skoruba.Duende.IdentityServer.Admin.Api
+ - Skoruba.Duende.IdentityServer.STS.Identity
  
 Change parameter `ProviderType` in section to:
 ```
@@ -73,19 +73,19 @@ Change parameter `ProviderType` in section to:
 
 ## Run STS and Admin
 
-First run STS in `src/Skoruba.IdentityServer4.STS.Identity` launch:
+First run STS in `src/Skoruba.Duende.IdentityServer.STS.Identity` launch:
 
 ```
 dotnet run
 ```
 
-Admin also needs to seed the database so seperate terminal in `src/Skoruba.IdentityServer4.Admin` we add additional seed parameter:
+Admin also needs to seed the database so seperate terminal in `src/Skoruba.Duende.IdentityServer.Admin` we add additional seed parameter:
 
 ```
 dotnet run /seed
 ```
 
-After that we should have STS listening on http://localhost:5000 and Admin on http://localhost:9000.  We can go to the latter and we should be redirected to our STS for authentication. You can find the default credentials in `identitydata.json` in project called `Skoruba.IdentityServer4.Admin`.
+After that we should have STS listening on http://localhost:5000 and Admin on http://localhost:9000.  We can go to the latter and we should be redirected to our STS for authentication. You can find the default credentials in `identitydata.json` in project called `Skoruba.Duende.IdentityServer.Admin`.
 
 # Final thoughts
 

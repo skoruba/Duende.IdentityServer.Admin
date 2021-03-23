@@ -1,8 +1,8 @@
-![Logo](Images/Skoruba.IdentityServer4.Admin-Logo-ReadMe.png)
+![Logo](Images/Skoruba.Duende.IdentityServer.Admin-Logo-ReadMe.png)
 
-# Skoruba.IdentityServer4.Admin - Documentation
+# Skoruba.Duende.IdentityServer.Admin - Documentation
 
-- The administration of the IdentityServer4 and Asp.Net Core Identity
+- The administration of the Duende.IdentityServer and Asp.Net Core Identity
 
 # Content
 
