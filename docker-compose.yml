@@ -60,7 +60,7 @@ services:
     image: '${DOCKER_REGISTRY-}skoruba-duende-identityserver-admin-api'
     build:
       context: .
-      dockerfile: src/Skoruba-Duende.IdentityServer.Admin.Api/Dockerfile
+      dockerfile: src/Skoruba.Duende.IdentityServer.Admin.Api/Dockerfile
     container_name: skoruba-duende-identityserver-admin-api
     environment:
       - VIRTUAL_HOST=admin-api.skoruba.local
