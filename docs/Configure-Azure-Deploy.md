@@ -17,8 +17,8 @@ Replace connection strings in `appSettings.json` with connection string to gener
 
 We will assume in the tutorial that STS and Admin were deployed to:
 
-- https://is4-sts.azurewebsites.net - STS
-- https://is4-admin.azurewebsites.net - Admin panel
+- https://is-sts.azurewebsites.net - STS
+- https://is-admin.azurewebsites.net - Admin panel
 
 
 ### Updating URLs
@@ -27,9 +27,9 @@ Remember to replace those values with your own in `src/Skoruba.Duende.IdentitySe
 
 ```json
 "AdminConfiguration": {
-	"IdentityAdminBaseUrl": "https://is4-admin.azurewebsites.net",
-	"IdentityAdminRedirectUri": "https://is4-admin.azurewebsites.net/signin-oidc",
-	"IdentityServerBaseUrl": "https://is4-sts.azurewebsites.net"
+	"IdentityAdminBaseUrl": "https://is-admin.azurewebsites.net",
+	"IdentityAdminRedirectUri": "https://is-admin.azurewebsites.net/signin-oidc",
+	"IdentityServerBaseUrl": "https://is-sts.azurewebsites.net"
 }
 ```
 
