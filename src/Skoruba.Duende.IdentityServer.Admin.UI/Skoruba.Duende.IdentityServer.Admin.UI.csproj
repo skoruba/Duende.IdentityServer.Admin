@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <Version>1.0.0-preview2</Version>
+        <Version>1.0.0-preview3</Version>
         <Authors>Jan Škoruba</Authors>
         <Description>The package with UI for the administration of the Duende IdentityServer</Description>
         <PackageTags>Duende IdentityServer Admin OpenIDConnect OAuth2 Identity</PackageTags>
@@ -117,6 +117,7 @@
     </ItemGroup>
 
 </Project>
+
 
 
 

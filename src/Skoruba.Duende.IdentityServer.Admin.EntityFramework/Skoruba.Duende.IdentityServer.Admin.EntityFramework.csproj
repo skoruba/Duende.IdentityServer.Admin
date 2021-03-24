@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <Version>1.0.0-preview2</Version>
+        <Version>1.0.0-preview3</Version>
         <Authors>Jan Škoruba</Authors>
         <PackageTags>Duende IdentityServer Admin OpenIDConnect OAuth2 Identity</PackageTags>
         <Description>Entity Framework layer for the administration of the Duende IdentityServer</Description>
@@ -20,6 +20,7 @@
         <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.csproj" />
     </ItemGroup>
 </Project>
+
 
 
 
