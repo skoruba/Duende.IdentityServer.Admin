@@ -1,4 +1,7 @@
-﻿using System.Collections;
+﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
+using System.Collections;
 using System.Collections.Generic;
 using Skoruba.Duende.IdentityServer.Admin.UI.Helpers.Identity;
 

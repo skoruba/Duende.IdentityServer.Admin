@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.ApplicationModels;
+﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace Skoruba.Duende.IdentityServer.Admin.UI.Configuration.ApplicationParts
 {

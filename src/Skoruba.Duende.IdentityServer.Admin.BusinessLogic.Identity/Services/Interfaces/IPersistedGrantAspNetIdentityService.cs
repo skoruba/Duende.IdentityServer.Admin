@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
+using System.Threading.Tasks;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Grant;
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Services.Interfaces

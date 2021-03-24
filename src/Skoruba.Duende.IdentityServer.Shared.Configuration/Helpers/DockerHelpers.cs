@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
+using Microsoft.Extensions.Configuration;
 using Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration.Common;
 
 namespace Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers

@@ -1,4 +1,7 @@
-﻿using System.Diagnostics;
+﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
+using System.Diagnostics;
 using System.IO;
 
 namespace Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers

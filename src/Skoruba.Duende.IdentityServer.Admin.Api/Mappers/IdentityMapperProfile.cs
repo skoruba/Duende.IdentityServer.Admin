@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
+using AutoMapper;
 using Skoruba.Duende.IdentityServer.Admin.Api.Dtos.Roles;
 using Skoruba.Duende.IdentityServer.Admin.Api.Dtos.Users;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Identity;

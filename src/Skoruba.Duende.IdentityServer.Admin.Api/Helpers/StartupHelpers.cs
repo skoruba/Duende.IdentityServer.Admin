@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
+using System;
 using Duende.IdentityServer.EntityFramework.Options;
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

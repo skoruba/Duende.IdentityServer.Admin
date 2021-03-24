@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Skoruba.AuditLogging.Events;
 

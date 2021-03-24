@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Resources;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services;
