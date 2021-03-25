@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
+using Microsoft.AspNetCore.Mvc;
 using SkorubaDuende.IdentityServerAdmin.STS.Identity.Configuration.Interfaces;
 
 namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.ViewComponents

@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
+using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Helpers.TagHelpers
 {

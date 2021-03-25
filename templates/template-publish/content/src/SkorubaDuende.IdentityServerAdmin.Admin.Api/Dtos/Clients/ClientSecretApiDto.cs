@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
+using System;
 using System.ComponentModel.DataAnnotations;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Helpers;
 
@@ -18,20 +21,7 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api.Dtos.Clients
 
         public string HashType { get; set; }
 
-        public HashType HashTypeEnum
-        {
-            get
-            {
-                HashType result;
-
-                if (Enum.TryParse(HashType, true, out result))
-                {
-                    return result;
-                }
-
-                return Skoruba.Duende.IdentityServer.Admin.EntityFramework.Helpers.HashType.Sha256;
-            }
-        }
+        public HashType HashTypeEnum => Enum.TryParse(HashType, true, out HashType result) ? result : Skoruba.Duende.IdentityServer.Admin.EntityFramework.Helpers.HashType.Sha256;
 
         public DateTime? Expiration { get; set; }
     }

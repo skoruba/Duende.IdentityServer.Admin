@@ -2,7 +2,7 @@
 // See LICENSE in the project root for license information.
 
 // Original file: https://github.com/DuendeSoftware/IdentityServer.Quickstart.UI
-// Modified by Jan �koruba
+// Modified by Jan Škoruba
 
 using System.Linq;
 using System.Threading.Tasks;

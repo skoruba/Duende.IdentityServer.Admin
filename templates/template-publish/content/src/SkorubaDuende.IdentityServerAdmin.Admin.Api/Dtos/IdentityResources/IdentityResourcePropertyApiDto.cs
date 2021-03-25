@@ -1,4 +1,7 @@
-﻿namespace SkorubaDuende.IdentityServerAdmin.Admin.Api.Dtos.IdentityResources
+﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
+namespace SkorubaDuende.IdentityServerAdmin.Admin.Api.Dtos.IdentityResources
 {
     public class IdentityResourcePropertyApiDto
     {

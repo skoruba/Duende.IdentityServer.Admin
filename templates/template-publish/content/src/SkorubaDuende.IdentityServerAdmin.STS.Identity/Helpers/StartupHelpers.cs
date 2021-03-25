@@ -1,10 +1,12 @@
-﻿using System;
+﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Duende.IdentityServer.EntityFramework.Storage;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
@@ -17,6 +19,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using Microsoft.Identity.Web;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySql;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.PostgreSQL;
@@ -334,10 +337,15 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Helpers
                     options.Events.RaiseInformationEvents = true;
                     options.Events.RaiseFailureEvents = true;
                     options.Events.RaiseSuccessEvents = true;
-                    
+
                     if (!string.IsNullOrEmpty(advancedConfiguration.IssuerUri))
                     {
                         options.IssuerUri = advancedConfiguration.IssuerUri;
+                    }
+
+                    if (!string.IsNullOrEmpty(advancedConfiguration.IdentityServerLicenseKey))
+                    {
+                        options.LicenseKey = advancedConfiguration.IdentityServerLicenseKey;
                     }
 
                     options.KeyManagement.Enabled = false;
@@ -376,16 +384,15 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Helpers
 
             if (externalProviderConfiguration.UseAzureAdProvider)
             {
-                authenticationBuilder.AddAzureAD(AzureADDefaults.AuthenticationScheme, AzureADDefaults.OpenIdScheme, AzureADDefaults.CookieScheme, AzureADDefaults.DisplayName,options =>
-                    {
-                        options.ClientSecret = externalProviderConfiguration.AzureAdSecret;
-                        options.ClientId = externalProviderConfiguration.AzureAdClientId;
-                        options.TenantId = externalProviderConfiguration.AzureAdTenantId;
-                        options.Instance = externalProviderConfiguration.AzureInstance;
-                        options.Domain = externalProviderConfiguration.AzureDomain;
-                        options.CallbackPath = externalProviderConfiguration.AzureAdCallbackPath;
-                        options.CookieSchemeName = IdentityConstants.ExternalScheme;
-                    });
+                authenticationBuilder.AddMicrosoftIdentityWebApp(options =>
+                  {
+                      options.ClientSecret = externalProviderConfiguration.AzureAdSecret;
+                      options.ClientId = externalProviderConfiguration.AzureAdClientId;
+                      options.TenantId = externalProviderConfiguration.AzureAdTenantId;
+                      options.Instance = externalProviderConfiguration.AzureInstance;
+                      options.Domain = externalProviderConfiguration.AzureDomain;
+                      options.CallbackPath = externalProviderConfiguration.AzureAdCallbackPath;
+                  });
             }
         }
 

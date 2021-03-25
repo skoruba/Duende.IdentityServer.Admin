@@ -1,4 +1,7 @@
-﻿using System.Security.Cryptography;
+﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
+using System.Security.Cryptography;
 using System.Text;
 
 namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Helpers
