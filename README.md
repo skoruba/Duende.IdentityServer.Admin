@@ -22,7 +22,7 @@ The application is written in the **Asp.Net Core MVC - using .NET 5.0**
 - 🔒 **NOTE:** The project uses the default database migrations which affect your database therefore double check the migrations according to your database provider and create a database backup
 
 ```sh
-dotnet new -i Skoruba.Duende.IdentityServer.Admin.Templates::1.0.0-preview-2
+dotnet new -i Skoruba.Duende.IdentityServer.Admin.Templates::1.0.0-preview-3
 ```
 
 ### Create new project:
@@ -163,12 +163,6 @@ docker-compose up -d
 
 ### Docker images
 - Docker images will be available also in [docker hub](https://hub.docker.com/u/skoruba)
-  - AdminUI:    
-    - `skoruba/duende-identityserver-admin:1.0.0`
-  - Admin Api:
-    - `skoruba/duende-identityserver-admin-api:1.0.0`
-  - STS:
-    - `skoruba/duende-identityserver-sts-identity:1.0.0`
        
 ### Publish Docker images to Docker hub
 - Check the script in `build/publish-docker-images.ps1` - change the profile name according to your requirements.
