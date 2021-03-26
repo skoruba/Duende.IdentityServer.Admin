@@ -76,7 +76,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.IntegrationTests.Tests
             // Build expected error messages
             var expectedErrorMessages = new List<string>
             {
-                $"User name &#x27;{registerFormData["UserName"]}&#x27; is already taken.",
+                $"Username &#x27;{registerFormData["UserName"]}&#x27; is already taken.",
                 $"Email &#x27;{registerFormData["Email"]}&#x27; is already taken."
             };
 
