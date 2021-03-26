@@ -2,30 +2,28 @@
 // Licensed under the Apache License, Version 2.0.
 
 using System.Net.Http;
-using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Skoruba.Duende.IdentityServer.Admin.Api.Configuration;
-using Skoruba.Duende.IdentityServer.Admin.Api.Configuration.Test;
 using Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Common;
 using Xunit;
 
 namespace Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Tests.Base
 {
-    public class BaseClassFixture : IClassFixture<WebApplicationFactory<StartupTest>>
+    public class BaseClassFixture : IClassFixture<TestFixture>
     {
-        protected readonly WebApplicationFactory<StartupTest> Factory;
         protected readonly HttpClient Client;
+        protected readonly TestServer TestServer;
 
-        public BaseClassFixture(WebApplicationFactory<StartupTest> factory)
+        public BaseClassFixture(TestFixture fixture)
         {
-            Factory = factory;
-            Client = factory.SetupClient();
-            Factory.CreateClient();
+            Client = fixture.Client;
+            TestServer = fixture.TestServer;
         }
 
         protected virtual void SetupAdminClaimsViaHeaders()
         {
-            using (var scope = Factory.Services.CreateScope())
+            using (var scope = TestServer.Services.CreateScope())
             {
                 var configuration = scope.ServiceProvider.GetRequiredService<AdminApiConfiguration>();
                 Client.SetAdminClaimsViaHeaders(configuration);

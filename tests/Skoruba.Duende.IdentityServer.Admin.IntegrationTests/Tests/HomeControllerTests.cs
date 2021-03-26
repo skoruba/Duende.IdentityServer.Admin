@@ -4,8 +4,6 @@
 using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Skoruba.Duende.IdentityServer.Admin.Configuration.Test;
 using Skoruba.Duende.IdentityServer.Admin.IntegrationTests.Tests.Base;
 using Skoruba.Duende.IdentityServer.Admin.UI.Configuration.Constants;
 using Xunit;
@@ -14,8 +12,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.IntegrationTests.Tests
 {
 	public class HomeControllerTests : BaseClassFixture
     {
-        public HomeControllerTests(WebApplicationFactory<StartupTest> factory) : 
-            base(factory)
+        public HomeControllerTests(TestFixture fixture)
+            : base(fixture)
         {
         }
 

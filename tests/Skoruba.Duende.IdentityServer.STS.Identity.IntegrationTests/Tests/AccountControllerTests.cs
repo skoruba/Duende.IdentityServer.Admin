@@ -8,8 +8,6 @@ using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
 using HtmlAgilityPack;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Skoruba.Duende.IdentityServer.STS.Identity.Configuration.Test;
 using Skoruba.Duende.IdentityServer.STS.Identity.IntegrationTests.Common;
 using Skoruba.Duende.IdentityServer.STS.Identity.IntegrationTests.Mocks;
 using Skoruba.Duende.IdentityServer.STS.Identity.IntegrationTests.Tests.Base;
@@ -19,7 +17,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.IntegrationTests.Tests
 {
     public class AccountControllerTests : BaseClassFixture
     {
-        public AccountControllerTests(WebApplicationFactory<StartupTest> factory) : base(factory)
+        public AccountControllerTests(TestFixture fixture) : base(fixture)
         {
         }
 
