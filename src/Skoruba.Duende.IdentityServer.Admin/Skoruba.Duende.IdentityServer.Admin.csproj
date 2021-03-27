@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <Version>1.0.0-preview3</Version>
+        <Version>1.0.0-preview4</Version>
         <Authors>Jan Škoruba</Authors>
         <LangVersion>latest</LangVersion>
         <UserSecretsId>8fe260ca-ef4c-4fa3-9364-029146f8d339</UserSecretsId>
@@ -65,6 +65,7 @@
     </ItemGroup>
 
 </Project>
+
 
 
 

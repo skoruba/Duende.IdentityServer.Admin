@@ -235,8 +235,11 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 				//Get new api secret    
 				var newApiSecret = await apiResourceService.GetApiSecretAsync(secretsDto.ApiSecretId);
 
+				//Assert secret value
+                secretsDto.Value.Should().Be(apiSecretsDto.Value);
+
 				//Assert
-				newApiSecret.ShouldBeEquivalentTo(secretsDto, o => o.Excluding(x => x.ApiResourceName));
+				newApiSecret.ShouldBeEquivalentTo(secretsDto, o => o.Excluding(x => x.ApiResourceName).Excluding(x => x.Value));
 			}
 		}
 
@@ -277,7 +280,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 				var newApiSecret = await apiResourceService.GetApiSecretAsync(apiSecretsDto.ApiSecretId);
 
 				//Assert
-				newApiSecret.ShouldBeEquivalentTo(apiSecretsDto, o => o.Excluding(x => x.ApiResourceName));
+				newApiSecret.ShouldBeEquivalentTo(apiSecretsDto, o => o.Excluding(x => x.ApiResourceName).Excluding(x => x.Value));
+
+                apiSecretsDto.Value.Should().Be(apiSecretsDtoMock.Value);
 
 				//Delete it
 				await apiResourceService.DeleteApiSecretAsync(newApiSecret);
