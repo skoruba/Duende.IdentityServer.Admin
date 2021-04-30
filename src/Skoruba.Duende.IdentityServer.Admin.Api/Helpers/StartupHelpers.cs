@@ -194,16 +194,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.Helpers
                 {
                     options.Authority = adminApiConfiguration.IdentityServerBaseUrl;
                     options.RequireHttpsMetadata = adminApiConfiguration.RequireHttpsMetadata;
+                    options.Audience = adminApiConfiguration.OidcApiName;
                 });
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(AuthorizationConsts.ApiScopePolicy, policy =>
-                {
-                    policy.RequireAuthenticatedUser();
-                    policy.RequireClaim(JwtClaimTypes.Scope, adminApiConfiguration.OidcApiName);
-                });
-            });
         }
 
         /// <summary>
@@ -255,9 +247,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.Helpers
                 options.AddPolicy(AuthorizationConsts.AdministrationPolicy,
                     policy =>
                         policy.RequireAssertion(context => context.User.HasClaim(c =>
-                                (c.Type == JwtClaimTypes.Role && c.Value == adminApiConfiguration.AdministrationRole) ||
-                                (c.Type == $"client_{JwtClaimTypes.Role}" && c.Value == adminApiConfiguration.AdministrationRole)
-                            )
+                                ((c.Type == JwtClaimTypes.Role && c.Value == adminApiConfiguration.AdministrationRole) ||
+                                 (c.Type == $"client_{JwtClaimTypes.Role}" && c.Value == adminApiConfiguration.AdministrationRole))
+                            ) && context.User.HasClaim(c => c.Type == JwtClaimTypes.Scope && c.Value == adminApiConfiguration.OidcApiName)
                         ));
             });
         }

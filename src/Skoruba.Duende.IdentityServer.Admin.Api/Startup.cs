@@ -138,8 +138,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapDefaultControllerRoute()
-                    .RequireAuthorization(AuthorizationConsts.ApiScopePolicy);
+                endpoints.MapControllers();
 
                 endpoints.MapHealthChecks("/health", new HealthCheckOptions
                 {
