@@ -41,6 +41,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.Helpers
             where TAuditLog : AuditLog, new()
             where TAuditLoggingDbContext : IAuditLoggingDbContext<TAuditLog>
         {
+            services.AddHttpContextAccessor();
+
             var auditLoggingConfiguration = configuration.GetSection(nameof(AuditLoggingConfiguration))
                 .Get<AuditLoggingConfiguration>();
             services.AddSingleton(auditLoggingConfiguration);
