@@ -41,6 +41,8 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api.Helpers
             where TAuditLog : AuditLog, new()
             where TAuditLoggingDbContext : IAuditLoggingDbContext<TAuditLog>
         {
+            services.AddHttpContextAccessor();
+
             var auditLoggingConfiguration = configuration.GetSection(nameof(AuditLoggingConfiguration))
                 .Get<AuditLoggingConfiguration>();
             services.AddSingleton(auditLoggingConfiguration);
@@ -184,8 +186,8 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api.Helpers
         {
             var adminApiConfiguration = configuration.GetSection(nameof(AdminApiConfiguration)).Get<AdminApiConfiguration>();
 
-            services
-                .AddIdentity<TUser, TRole>(options => configuration.GetSection(nameof(IdentityOptions)).Bind(options))
+            services.AddIdentityCore<TUser>(options => configuration.GetSection(nameof(IdentityOptions)).Bind(options))
+                .AddRoles<TRole>()
                 .AddEntityFrameworkStores<TIdentityDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -194,16 +196,8 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api.Helpers
                 {
                     options.Authority = adminApiConfiguration.IdentityServerBaseUrl;
                     options.RequireHttpsMetadata = adminApiConfiguration.RequireHttpsMetadata;
+                    options.Audience = adminApiConfiguration.OidcApiName;
                 });
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(AuthorizationConsts.ApiScopePolicy, policy =>
-                {
-                    policy.RequireAuthenticatedUser();
-                    policy.RequireClaim(JwtClaimTypes.Scope, adminApiConfiguration.OidcApiName);
-                });
-            });
         }
 
         /// <summary>
@@ -255,9 +249,9 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api.Helpers
                 options.AddPolicy(AuthorizationConsts.AdministrationPolicy,
                     policy =>
                         policy.RequireAssertion(context => context.User.HasClaim(c =>
-                                (c.Type == JwtClaimTypes.Role && c.Value == adminApiConfiguration.AdministrationRole) ||
-                                (c.Type == $"client_{JwtClaimTypes.Role}" && c.Value == adminApiConfiguration.AdministrationRole)
-                            )
+                                ((c.Type == JwtClaimTypes.Role && c.Value == adminApiConfiguration.AdministrationRole) ||
+                                 (c.Type == $"client_{JwtClaimTypes.Role}" && c.Value == adminApiConfiguration.AdministrationRole))
+                            ) && context.User.HasClaim(c => c.Type == JwtClaimTypes.Scope && c.Value == adminApiConfiguration.OidcApiName)
                         ));
             });
         }
