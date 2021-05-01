@@ -189,7 +189,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.Helpers
                 .AddEntityFrameworkStores<TIdentityDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultForbidScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
                     options.Authority = adminApiConfiguration.IdentityServerBaseUrl;
