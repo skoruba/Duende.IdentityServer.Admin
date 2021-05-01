@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <Version>1.0.0-preview4</Version>
+        <Version>1.0.0-preview5</Version>
         <Authors>Jan Škoruba</Authors>
         <PackageTags>Duende IdentityServer Admin OpenIDConnect OAuth2 Identity</PackageTags>
         <Description>DbContexts and Identity entities for the administration of the Duende IdentityServer and Asp.Net Core Identity</Description>
@@ -14,11 +14,12 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="5.0.4" />
         <PackageReference Include="Skoruba.AuditLogging.EntityFramework" Version="1.0.0" />
-        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework" Version="1.0.0-preview4" />
-        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration" Version="1.0.0-preview4" />
-        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity" Version="1.0.0-preview4" />
+        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework" Version="1.0.0-preview5" />
+        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration" Version="1.0.0-preview5" />
+        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity" Version="1.0.0-preview5" />
     </ItemGroup>
 </Project>
+
 
 
 

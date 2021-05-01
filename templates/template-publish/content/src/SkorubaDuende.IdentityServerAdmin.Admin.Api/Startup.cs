@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -33,6 +34,7 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api
     {
         public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             HostingEnvironment = env;
             Configuration = configuration;
         }
@@ -138,8 +140,7 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapDefaultControllerRoute()
-                    .RequireAuthorization(AuthorizationConsts.ApiScopePolicy);
+                endpoints.MapControllers();
 
                 endpoints.MapHealthChecks("/health", new HealthCheckOptions
                 {

@@ -18,6 +18,8 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api.Dtos.ApiResources
         [Required]
         public string Value { get; set; }
 
+        public string HashType { get; set; }
+
         public DateTime? Expiration { get; set; }
     }
 }

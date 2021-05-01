@@ -19,7 +19,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Common
             {
                 new Claim(JwtClaimTypes.Subject, Guid.NewGuid().ToString()),
                 new Claim(JwtClaimTypes.Name, Guid.NewGuid().ToString()),
-                new Claim(JwtClaimTypes.Role, adminConfiguration.AdministrationRole)
+                new Claim(JwtClaimTypes.Role, adminConfiguration.AdministrationRole),
+                new Claim(JwtClaimTypes.Scope, adminConfiguration.OidcApiName)
             };
 
             var token = new JwtSecurityToken(claims: claims);

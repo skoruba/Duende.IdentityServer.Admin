@@ -3,7 +3,6 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Helpers;
 
 namespace SkorubaDuende.IdentityServerAdmin.Admin.Api.Dtos.Clients
 {
@@ -20,8 +19,6 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api.Dtos.Clients
         public string Value { get; set; }
 
         public string HashType { get; set; }
-
-        public HashType HashTypeEnum => Enum.TryParse(HashType, true, out HashType result) ? result : Skoruba.Duende.IdentityServer.Admin.EntityFramework.Helpers.HashType.Sha256;
 
         public DateTime? Expiration { get; set; }
     }
