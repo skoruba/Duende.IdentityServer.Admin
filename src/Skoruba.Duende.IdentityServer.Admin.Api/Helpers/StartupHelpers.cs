@@ -186,7 +186,6 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.Helpers
 
             services.AddIdentityCore<TUser>(options => configuration.GetSection(nameof(IdentityOptions)).Bind(options))
                 .AddRoles<TRole>()
-                .AddSignInManager<SignInManager<TUser>>()
                 .AddEntityFrameworkStores<TIdentityDbContext>()
                 .AddDefaultTokenProviders();
 
