@@ -5,14 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Bogus;
-using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration;
+using Skoruba.Duende.IdentityServer.Admin.Api.Dtos.Clients;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Constants;
 
-namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
+namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mocks
 {
-    public static class ClientDtoMock
+    public static class ClientDtoApiMock
     {
-        public static ClientDto GenerateRandomClient(int id)
+        public static ClientApiDto GenerateRandomClient(int id)
         {
             var clientFaker = ClientFaker(id);
 
@@ -21,25 +21,48 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
             return clientTesting;
         }
 
-        public static ClientClaimsDto GenerateRandomClientClaim(int id, int clientId)
+        public static List<string> GetScopes()
         {
-            var clientClaimFaker = ClientClaimFaker(id, clientId);
+            var scopes = new List<string>
+            {
+                "openid",
+                "profile",
+                "email"
+            };
+
+            return scopes;
+        }
+
+        public static List<string> GetIdentityProviders()
+        {
+            var providers = new List<string>
+            {
+                "facebook",
+                "google"
+            };
+
+            return providers;
+        }
+
+        public static ClientClaimApiDto GenerateRandomClientClaim(int id)
+        {
+            var clientClaimFaker = ClientClaimFaker(id);
 
             var clientClaimTesting = clientClaimFaker.Generate();
 
             return clientClaimTesting;
         }
 
-        public static ClientPropertiesDto GenerateRandomClientProperty(int id, int clientId)
+        public static ClientPropertyApiDto GenerateRandomClientProperty(int id)
         {
-            var clientPropertyFaker = ClientPropertyFaker(id, clientId);
+            var clientPropertyFaker = ClientPropertyFaker(id);
 
             var clientPropertyTesting = clientPropertyFaker.Generate();
 
             return clientPropertyTesting;
         }
 
-        public static ClientCloneDto GenerateClientCloneDto(int id, bool cloneClientClaims = true,
+        public static ClientCloneApiDto GenerateClientCloneDto(int id, bool cloneClientClaims = true,
             bool cloneClientCorsOrigins = true, bool cloneClientGrantTypes = true, bool cloneClientIdPRestrictions = true,
             bool cloneClientPostLogoutRedirectUris = true, bool cloneClientProperties = true,
             bool cloneClientRedirectUris = true, bool cloneClientScopes = true)
@@ -53,18 +76,32 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
             return clientCloneDto;
         }
 
-        public static ClientSecretsDto GenerateRandomClientSecret(int id, int clientId)
+        public static ClientSecretApiDto GenerateRandomClientSecret(int id)
         {
-            var clientSecretFaker = ClientSecretFaker(id, clientId);
+            var clientSecretFaker = ClientSecretFaker(id);
 
             var clientSecretTesting = clientSecretFaker.Generate();
 
             return clientSecretTesting;
         }
 
-        public static Faker<ClientDto> ClientFaker(int id)
+        public static List<string> AllowedSigningAlgorithms()
         {
-            var clientFaker = new Faker<ClientDto>()
+            var algs = new List<string>
+            {
+                "RS256",
+                "RS512",
+                "ES256",
+                "ES384",
+                "ES512"
+            };
+
+            return algs;
+        }
+
+        public static Faker<ClientApiDto> ClientFaker(int id)
+        {
+            var clientFaker = new Faker<ClientApiDto>()
                .StrictMode(false)
                .RuleFor(o => o.ClientId, f => Guid.NewGuid().ToString())
                .RuleFor(o => o.ClientName, f => Guid.NewGuid().ToString())
@@ -78,7 +115,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
                .RuleFor(o => o.AllowRememberConsent, f => f.Random.Bool())
                .RuleFor(o => o.AllowedCorsOrigins, f => Enumerable.Range(1, f.Random.Int(1, 10)).Select(x => f.PickRandom(f.Internet.Url())).ToList())
                .RuleFor(o => o.AllowedGrantTypes, f => Enumerable.Range(1, f.Random.Int(1, 10)).Select(x => f.PickRandom(ClientConsts.GetGrantTypes())).ToList())
-               .RuleFor(o => o.AllowedScopes, f => Enumerable.Range(1, f.Random.Int(1, 10)).Select(x => f.PickRandom(ClientMock.GetScopes())).ToList())
+               .RuleFor(o => o.AllowedScopes, f => Enumerable.Range(1, f.Random.Int(1, 10)).Select(x => f.PickRandom(GetScopes())).ToList())
                .RuleFor(o => o.AlwaysIncludeUserClaimsInIdToken, f => f.Random.Bool())
                .RuleFor(o => o.Enabled, f => f.Random.Bool())
                .RuleFor(o => o.ProtocolType, f => f.PickRandom(ClientConsts.GetProtocolTypes().Select(x => x.Id)))
@@ -105,62 +142,58 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
                .RuleFor(o => o.ClientClaimsPrefix, f => Guid.NewGuid().ToString())
                .RuleFor(o => o.IncludeJwtId, f => f.Random.Bool())
                .RuleFor(o => o.PairWiseSubjectSalt, f => Guid.NewGuid().ToString())
-               .RuleFor(o => o.IdentityProviderRestrictions, f => Enumerable.Range(1, f.Random.Int(1, 10)).Select(x => f.PickRandom(ClientMock.GetIdentityProviders())).ToList())
+               .RuleFor(o => o.IdentityProviderRestrictions, f => Enumerable.Range(1, f.Random.Int(1, 10)).Select(x => f.PickRandom(GetIdentityProviders())).ToList())
                .RuleFor(o => o.LogoUri, f => f.Internet.Url())
                .RuleFor(o => o.Updated, f => f.Date.Recent())
                .RuleFor(o => o.LastAccessed, f => f.Date.Recent())
                .RuleFor(o => o.UserSsoLifetime, f => f.Random.Int())
                .RuleFor(o => o.UserCodeType, f => f.Random.Word())
                .RuleFor(o => o.DeviceCodeLifetime, f => f.Random.Int())
-               .RuleFor(o => o.NonEditable, f => f.Random.Bool())
                .RuleFor(o => o.RequireRequestObject, f => f.Random.Bool())
-               .RuleFor(o => o.AllowedIdentityTokenSigningAlgorithms, f => ClientMock.AllowedSigningAlgorithms().Take(f.Random.Number(1, 5)).ToList());
+               .RuleFor(o => o.AllowedIdentityTokenSigningAlgorithms, f => AllowedSigningAlgorithms().Take(f.Random.Number(1, 5)).ToList());
 
             return clientFaker;
         }
 
-        public static Faker<ClientClaimsDto> ClientClaimFaker(int id, int clientId)
+        public static Faker<ClientClaimApiDto> ClientClaimFaker(int id)
         {
-            var clientClaimFaker = new Faker<ClientClaimsDto>()
+            var clientClaimFaker = new Faker<ClientClaimApiDto>()
                 .StrictMode(false)
-                .RuleFor(o => o.ClientClaimId, id)
+                .RuleFor(o => o.Id, id)
                 .RuleFor(o => o.Type, f => f.PickRandom(ClientConsts.GetStandardClaims()))
-                .RuleFor(o => o.Value, f => Guid.NewGuid().ToString())
-                .RuleFor(o => o.ClientId, clientId);
+                .RuleFor(o => o.Value, f => Guid.NewGuid().ToString());
 
             return clientClaimFaker;
         }
 
-        public static Faker<ClientSecretsDto> ClientSecretFaker(int id, int clientId)
+        public static Faker<ClientSecretApiDto> ClientSecretFaker(int id)
         {
-            var clientSecretFaker = new Faker<ClientSecretsDto>()
+            var clientSecretFaker = new Faker<ClientSecretApiDto>()
                 .StrictMode(false)
-                .RuleFor(o => o.ClientSecretId, id)
+                .RuleFor(o => o.Id, id)
                 .RuleFor(o => o.Type, f => f.PickRandom(ClientConsts.GetSecretTypes()))
-                .RuleFor(o => o.Value, f => Guid.NewGuid().ToString())
-                .RuleFor(o => o.ClientId, clientId);
+                .RuleFor(o => o.Value, f => Guid.NewGuid().ToString());
 
             return clientSecretFaker;
         }
 
-        public static Faker<ClientPropertiesDto> ClientPropertyFaker(int id, int clientId)
+        public static Faker<ClientPropertyApiDto> ClientPropertyFaker(int id)
         {
-            var clientPropertyFaker = new Faker<ClientPropertiesDto>()
+            var clientPropertyFaker = new Faker<ClientPropertyApiDto>()
                 .StrictMode(false)
-                .RuleFor(o => o.ClientPropertyId, id)
+                .RuleFor(o => o.Id, id)
                 .RuleFor(o => o.Key, f => Guid.NewGuid().ToString())
-                .RuleFor(o => o.Value, f => Guid.NewGuid().ToString())
-                .RuleFor(o => o.ClientId, clientId);
+                .RuleFor(o => o.Value, f => Guid.NewGuid().ToString());
 
             return clientPropertyFaker;
         }
 
-        public static Faker<ClientCloneDto> ClientCloneFaker(int id, bool cloneClientClaims,
+        public static Faker<ClientCloneApiDto> ClientCloneFaker(int id, bool cloneClientClaims,
         bool cloneClientCorsOrigins, bool cloneClientGrantTypes, bool cloneClientIdPRestrictions,
         bool cloneClientPostLogoutRedirectUris, bool cloneClientProperties,
         bool cloneClientRedirectUris, bool cloneClientScopes)
         {
-            var clientCloneDto = new Faker<ClientCloneDto>()
+            var clientCloneDto = new Faker<ClientCloneApiDto>()
                 .StrictMode(false)
                 .RuleFor(o => o.Id, id)
                 .RuleFor(o => o.CloneClientClaims, cloneClientClaims)
