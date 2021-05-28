@@ -116,19 +116,19 @@
 			<label asp-for="AllowedScopes" class="col-sm-3 col-form-label">
 				@await Html.PartialAsync("Client/Section/Label", "AllowedScopes")
 			</label>
-			<div class="col-sm-9">
-				<picker id="AllowedScopesItems" multiple-select="true" min-search-text="2"
-				        selected-items="@Model.AllowedScopes" url="@Url.Action("SearchScopes","Configuration")?scope"
-				        search-input-placeholder="@Localizer["PickerSearchItemPlaceholder"].Value"
-				        selected-items-title="@Localizer["PickerSelectedItemsTitle"].Value" 
-				        search-result-title="@Localizer["PickerSearchResultTitle"].Value"
-				        suggested-items-title="@Localizer["PickerSuggestedItemsTitle"].Value" 
-				        no-item-selected-title="@Localizer["PickerNoItemSelectedTitle"].Value" 
-				        show-all-items-title="@Localizer["PickerShowAllItemsTitle"].Value"
-				        item-already-selected-title="@Localizer["PickerItemAlreadySelectedTitle"].Value">
-				</picker>
-			</div>
-		</div>
+            <div class="col-sm-9">
+                <picker id="AllowedScopesItems" multiple-select="true" min-search-text="2"
+                        selected-items="@Model.AllowedScopes" url="@Url.Action("SearchScopes","Configuration")?scope"
+                        search-input-placeholder="@Localizer["PickerSearchItemPlaceholder"].Value"
+                        selected-items-title="@Localizer["PickerSelectedItemsTitle"].Value" 
+                        search-result-title="@Localizer["PickerSearchResultTitle"].Value"
+                        suggested-items-title="@Localizer["PickerSuggestedItemsTitle"].Value" 
+                        no-item-selected-title="@Localizer["PickerNoItemSelectedTitle"].Value" 
+                        show-all-items-title="@Localizer["PickerShowAllItemsTitle"].Value"
+                        item-already-selected-title="@Localizer["PickerItemAlreadySelectedTitle"].Value">
+                </picker>
+            </div>
+        </div>
 
 
 		<!--Select with tags-->
@@ -155,19 +155,25 @@
 			<label asp-for="AllowedGrantTypes" class="col-sm-3 col-form-label">
 				@await Html.PartialAsync("Client/Section/Label", "AllowedGrantTypes")
 			</label>
-			<div class="col-sm-9">
-				<picker id="AllowedGrantTypesItems" multiple-select="true" min-search-text="2"
-						url="@Url.Action("SearchGrantTypes","Configuration")?grant"
-				        selected-items="@Model.AllowedGrantTypes"
-				        search-input-placeholder="@Localizer["PickerSearchItemPlaceholder"].Value"
-				        selected-items-title="@Localizer["PickerSelectedItemsTitle"].Value" 
-				        search-result-title="@Localizer["PickerSearchResultTitle"].Value"
-				        suggested-items-title="@Localizer["PickerSuggestedItemsTitle"].Value" 
-				        no-item-selected-title="@Localizer["PickerNoItemSelectedTitle"].Value" 
-				        show-all-items-title="@Localizer["PickerShowAllItemsTitle"].Value"
-				        item-already-selected-title="@Localizer["PickerItemAlreadySelectedTitle"].Value">
-				</picker>
-			</div>
+            <div class="col-sm-9">
+                <picker id="AllowedGrantTypesItems" multiple-select="true" min-search-text="2"
+                        url="@Url.Action("SearchGrantTypes","Configuration")?grant"
+                        selected-items="@Model.AllowedGrantTypes"
+                        search-input-placeholder="@Localizer["PickerSearchItemPlaceholder"].Value"
+                        selected-items-title="@Localizer["PickerSelectedItemsTitle"].Value" 
+                        search-result-title="@Localizer["PickerSearchResultTitle"].Value"
+                        suggested-items-title="@Localizer["PickerSuggestedItemsTitle"].Value" 
+                        no-item-selected-title="@Localizer["PickerNoItemSelectedTitle"].Value" 
+                        show-all-items-title="@Localizer["PickerShowAllItemsTitle"].Value"
+                        item-already-selected-title="@Localizer["PickerItemAlreadySelectedTitle"].Value">
+                </picker>
+            </div>
+            <div class="col-sm-3"></div>
+            <div class="col-sm-9">
+                <div class="alert alert-warning mt-2">
+                    <span class="oi oi-pin"></span> It is not recommended to use the <strong>Implicit Flow (implicit)</strong> and <strong>Resource Owner Password Flow (password).</strong>
+                </div>
+            </div>
 		</div>
 
 		<!--Button-->
