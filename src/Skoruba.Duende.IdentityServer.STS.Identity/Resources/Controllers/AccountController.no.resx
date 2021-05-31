@@ -1,0 +1,41 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ConfirmEmailBody" xml:space="preserve">
+        <value>Bekreft kontoen din ved å &lt;a href='{0}'&gt;klikke her &lt;/a&gt;.</value>
+    </data>
+    <data name="ConfirmEmailTitle" xml:space="preserve">
+        <value>Bekreft e-posten din</value>
+    </data>
+    <data name="EmailNotFound" xml:space="preserve">
+        <value>Brukeren eksisterer ikke eller blir ikke bekreftet</value>
+    </data>
+    <data name="ErrorExternalProvider" xml:space="preserve">
+        <value>Feil fra ekstern leverandør: {0}</value>
+    </data>
+    <data name="InvalidAuthenticatorCode" xml:space="preserve">
+        <value>Ugyldig autentiseringskode.</value>
+    </data>
+    <data name="InvalidRecoveryCode" xml:space="preserve">
+        <value>Ugyldig gjenopprettingskode tastet inn.</value>
+    </data>
+    <data name="ResetPasswordBody" xml:space="preserve">
+        <value>Tilbakestill passordet ditt ved å &lt;a href='{0}'&gt; klikke her &lt;/a&gt;.</value>
+    </data>
+    <data name="ResetPasswordTitle" xml:space="preserve">
+        <value>Tilbakestille passord</value>
+    </data>
+    <data name="Unable2FA" xml:space="preserve">
+        <value>Kan ikke laste tofaktorautentiseringsbruker.</value>
+    </data>
+</root>

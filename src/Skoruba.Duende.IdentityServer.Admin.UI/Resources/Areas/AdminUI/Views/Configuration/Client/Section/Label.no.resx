@@ -1,0 +1,350 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Claims_Info" xml:space="preserve">
+        <value>Tillater innstillingskrav for klienten (vil bli inkludert i tilgangstokenet).</value>
+    </data>
+    <data name="Claims_Label" xml:space="preserve">
+        <value>Krav</value>
+    </data>
+    <data name="ClientClaimsPrefix_Info" xml:space="preserve">
+        <value>Hvis angitt, vil prefiksklientkravstypene bli prefikset med. Standard er client_. Hensikten er å sikre at de ikke ved et uhell kolliderer med brukerkrav.</value>
+    </data>
+    <data name="ClientClaimsPrefix_Label" xml:space="preserve">
+        <value>Klientkrav prefiks</value>
+    </data>
+    <data name="ClientId_Info" xml:space="preserve">
+        <value>Unik ID til klienten</value>
+    </data>
+    <data name="ClientId_Label" xml:space="preserve">
+        <value>ClientId</value>
+    </data>
+    <data name="ClientName_Info" xml:space="preserve">
+        <value>Klientens visningsnavn (brukes til logging og samtykke)</value>
+    </data>
+    <data name="ClientName_Label" xml:space="preserve">
+        <value>Klientens navn</value>
+    </data>
+    <data name="ClientSecrets_Info" xml:space="preserve">
+        <value>Liste over klienthemmeligheter - legitimasjon for å få tilgang til token-endepunktet.</value>
+    </data>
+    <data name="ClientSecrets_Label" xml:space="preserve">
+        <value>Klienthemmeligheter</value>
+    </data>
+    <data name="ClientUri_Info" xml:space="preserve">
+        <value>URI for ytterligere informasjon om klienten (brukes på samtykkeskjermen)</value>
+    </data>
+    <data name="ClientUri_Label" xml:space="preserve">
+        <value>Klient Uri</value>
+    </data>
+    <data name="Description_Info" xml:space="preserve">
+        <value>Kundebeskrivelse</value>
+    </data>
+    <data name="Description_Label" xml:space="preserve">
+        <value>Beskrivelse</value>
+    </data>
+    <data name="DeviceCodeLifetime_Label" xml:space="preserve">
+        <value>Enhetskode levetid</value>
+    </data>
+    <data name="DeviceCodeLifetime_Info" xml:space="preserve">
+        <value>Levetid til enhetskode på sekunder (standard er 300 sekunder / 5 minutter)</value>
+    </data>
+    <data name="Enabled_Info" xml:space="preserve">
+        <value>Spesifiserer om klienten er aktivert. Standard er aktivert.</value>
+    </data>
+    <data name="Enabled_Label" xml:space="preserve">
+        <value>Aktivert</value>
+    </data>
+    <data name="EnableLocalLogin_Info" xml:space="preserve">
+        <value>Spesifiserer om denne klienten bare kan bruke lokale kontoer eller eksterne IdP-er. Standard er sant.</value>
+    </data>
+    <data name="EnableLocalLogin_Label" xml:space="preserve">
+        <value>Aktiver lokal pålogging</value>
+    </data>
+    <data name="Expiration_Info" xml:space="preserve">
+        <value>Utløp</value>
+    </data>
+    <data name="Expiration_Label" xml:space="preserve">
+        <value>Utløp</value>
+    </data>
+    <data name="FrontChannelLogoutSessionRequired_Info" xml:space="preserve">
+        <value>Spesifiserer om brukerens økt-ID skal sendes til FrontChannelLogoutUri. Standard er sant.</value>
+    </data>
+    <data name="FrontChannelLogoutSessionRequired_Label" xml:space="preserve">
+        <value>Frontkanalavloggingsøkt kreves</value>
+    </data>
+    <data name="FrontChannelLogoutUri_Info" xml:space="preserve">
+        <value>Spesifiserer utloggings-URI på klient for HTTP-basert frontkanal-avlogging. Se OIDC Front-Channel spesifikasjonen for mer informasjon.</value>
+    </data>
+    <data name="FrontChannelLogoutUri_Label" xml:space="preserve">
+        <value>Avlogging Uri på frontkanalen</value>
+    </data>
+    <data name="HashType_Label" xml:space="preserve">
+        <value>Hash-type</value>
+    </data>
+    <data name="IdentityProviderRestrictions_Info" xml:space="preserve">
+        <value>Spesifiserer hvilke eksterne IdP-er som kan brukes med denne klienten (hvis listen er tom, er alle IdP-er tillatt). Standard er tom.</value>
+    </data>
+    <data name="IdentityProviderRestrictions_Label" xml:space="preserve">
+        <value>Begrensninger for identitetsleverandører</value>
+    </data>
+    <data name="IdentityTokenLifetime_Info" xml:space="preserve">
+        <value>Levetid til identitetstoken i sekunder (standard er 300 sekunder / 5 minutter)</value>
+    </data>
+    <data name="IdentityTokenLifetime_Label" xml:space="preserve">
+        <value>Identitetstoken levetid</value>
+    </data>
+    <data name="IncludeJwtId_Info" xml:space="preserve">
+        <value>Angir om JWT-tilgangstokener skal ha en innebygd unik ID (via jti-kravet).</value>
+    </data>
+    <data name="IncludeJwtId_Label" xml:space="preserve">
+        <value>Inkluder Jwt Id</value>
+    </data>
+    <data name="LogoUri_Info" xml:space="preserve">
+        <value>URI til klientlogo (brukes på skjermbildet om samtykke)</value>
+    </data>
+    <data name="LogoUri_Label" xml:space="preserve">
+        <value>Logo Uri</value>
+    </data>
+    <data name="AbsoluteRefreshTokenLifetime_Info" xml:space="preserve">
+        <value>Maksimal levetid for et oppdateringstoken i sekunder. Standardinnstillingen er 2592000 sekunder / 30 dager</value>
+    </data>
+    <data name="AbsoluteRefreshTokenLifetime_Label" xml:space="preserve">
+        <value>Absolutt levetid for oppdateringstoken</value>
+    </data>
+    <data name="AccessTokenLifetime_Info" xml:space="preserve">
+        <value>Levetid for tilgangstoken i sekunder (standard er 3600 sekunder / 1 time)</value>
+    </data>
+    <data name="AccessTokenLifetime_Label" xml:space="preserve">
+        <value>Tilgangstoken levetid</value>
+    </data>
+    <data name="AccessTokenTypes_Info" xml:space="preserve">
+        <value>Spesifiserer om tilgangstokenet er et referansetoken eller et selvstendig JWT-token (som standard Jwt).</value>
+    </data>
+    <data name="AccessTokenTypes_Label" xml:space="preserve">
+        <value>Tilgangstokentype</value>
+    </data>
+    <data name="AllowAccessTokensViaBrowser_Info" xml:space="preserve">
+        <value>Spesifiserer om denne klienten har lov til å motta tilgangstokener via nettleseren. Dette er nyttig for å herde strømmer som tillater flere responstyper (for eksempel ved å ikke tillate en hybridflytklient som skal bruke kode id_token for å legge til token-svarstypen og dermed lekker tokenet til nettleseren.</value>
+    </data>
+    <data name="AllowAccessTokensViaBrowser_Label" xml:space="preserve">
+        <value>Tillat tilgangstoken via nettleser</value>
+    </data>
+    <data name="AllowedCorsOrigins_Info" xml:space="preserve">
+        <value>Hvis spesifisert, vil det bli brukt av standard implementeringer av CORS policy-tjenesten (In-Memory og EF) for å bygge en CORS-policy for JavaScript-klienter.</value>
+    </data>
+    <data name="AllowedCorsOrigins_Label" xml:space="preserve">
+        <value>Tillatt CORS opprinnelse</value>
+    </data>
+    <data name="AllowedGrantTypes_Info" xml:space="preserve">
+        <value>Spesifiserer tilskuddstyper klienten har lov til å bruke. Bruk GrantTypes-klassen for vanlige kombinasjoner. Liste over standardtilskudd: implisitt tilskudd - (implicit), tildeling av klientlegitimasjon - (client_credentials), tildeling av autorisasjonskode - (authorization_code), hybridtilskudd - (hybrid), ressurseier passordlegitimasjonsbevilling - (password)</value>
+    </data>
+    <data name="AllowedGrantTypes_Label" xml:space="preserve">
+        <value>Tillatte tilskuddstyper</value>
+    </data>
+    <data name="AllowedScopes_Info" xml:space="preserve">
+        <value>Som standard har en klient ikke tilgang til noen ressurser - spesifiser de tillatte ressursene ved å legge til de tilsvarende omfangsnavnene</value>
+    </data>
+    <data name="AllowedScopes_Label" xml:space="preserve">
+        <value>Tillatte omfang</value>
+    </data>
+    <data name="AllowOfflineAccess_Info" xml:space="preserve">
+        <value>Spesifiserer om denne klienten kan be om oppdateringstokener (be om omfanget offline_access)</value>
+    </data>
+    <data name="AllowOfflineAccess_Label" xml:space="preserve">
+        <value>Tillat frakoblet tilgang</value>
+    </data>
+    <data name="AllowPlainTextPkce_Info" xml:space="preserve">
+        <value>Spesifiserer om klienter som bruker PKCE, kan bruke en utfordring med ren tekstkode (anbefales ikke - og standard som usann)</value>
+    </data>
+    <data name="AllowPlainTextPkce_Label" xml:space="preserve">
+        <value>Tillat vanlig tekst PKCE</value>
+    </data>
+    <data name="AllowRememberConsent_Info" xml:space="preserve">
+        <value>Spesifiserer om brukeren kan velge å lagre samtykkebeslutninger. Standard er sant.</value>
+    </data>
+    <data name="AllowRememberConsent_Label" xml:space="preserve">
+        <value>Tillat husk samtykke</value>
+    </data>
+    <data name="AlwaysIncludeUserClaimsInIdToken_Label" xml:space="preserve">
+        <value>Inkluder alltid brukerkrav i IdToken</value>
+    </data>
+    <data name="AlwaysSendClientClaims_Info" xml:space="preserve">
+        <value>Hvis angitt, sendes klientkravene for hver flyt. Hvis ikke, bare for klientinformasjon (standard er falsk)</value>
+    </data>
+    <data name="AlwaysSendClientClaims_Label" xml:space="preserve">
+        <value>Send alltid klientkrav</value>
+    </data>
+    <data name="AuthorizationCodeLifetime_Info" xml:space="preserve">
+        <value>Levetid for autorisasjonskoden i sekunder (standard er 300 sekunder / 5 minutter)</value>
+    </data>
+    <data name="AuthorizationCodeLifetime_Label" xml:space="preserve">
+        <value>Autorisasjonskode levetid</value>
+    </data>
+    <data name="BackChannelLogoutSessionRequired_Info" xml:space="preserve">
+        <value>Spesifiserer om brukerens session ID skal sendes i forespørselen til BackChannelLogoutUri. Standard er sant.</value>
+    </data>
+    <data name="BackChannelLogoutSessionRequired_Label" xml:space="preserve">
+        <value>Back Channel Logout session kreves</value>
+    </data>
+    <data name="BackChannelLogoutUri_Info" xml:space="preserve">
+        <value>Spesifiserer utloggings-URI på klient for HTTP-basert back-channel. Se OIDC Back-Channel-spesifikasjonen for mer informasjon.</value>
+    </data>
+    <data name="BackChannelLogoutUri_Label" xml:space="preserve">
+        <value>Back Channel Logout Uri</value>
+    </data>
+    <data name="PairWiseSubjectSalt_Info" xml:space="preserve">
+        <value>Salt verdien som brukes i parvis subjectId generasjon for brukere av denne klienten.</value>
+    </data>
+    <data name="PairWiseSubjectSalt_Label" xml:space="preserve">
+        <value>Parvis emne Salt</value>
+    </data>
+    <data name="PostLogoutRedirectUris_Info" xml:space="preserve">
+        <value>Spesifiserer tillatte URI-er som skal omdirigeres til etter utlogging</value>
+    </data>
+    <data name="PostLogoutRedirectUris_Label" xml:space="preserve">
+        <value>Post Logout Redirect URI-er</value>
+    </data>
+    <data name="Properties_Info" xml:space="preserve">
+        <value>Liste for å holde eventuelle tilpassede klientspesifikke verdier etter behov.</value>
+    </data>
+    <data name="Properties_Label" xml:space="preserve">
+        <value>Egenskaper</value>
+    </data>
+    <data name="PropertyKey_Info" xml:space="preserve">
+        <value>Nøkkel</value>
+    </data>
+    <data name="PropertyKey_Label" xml:space="preserve">
+        <value>Nøkkel</value>
+    </data>
+    <data name="PropertyValue_Info" xml:space="preserve">
+        <value>Verdi</value>
+    </data>
+    <data name="PropertyValue_Label" xml:space="preserve">
+        <value>Verdi</value>
+    </data>
+    <data name="ProtocolType_Info" xml:space="preserve">
+        <value>Standard er OpenID Connect protokoll</value>
+    </data>
+    <data name="ProtocolType_Label" xml:space="preserve">
+        <value>Protokolltype</value>
+    </data>
+    <data name="RedirectUris_Info" xml:space="preserve">
+        <value>Spesifiserer de tillatte URI-ene du kan returnere tokens eller autorisasjonskoder til</value>
+    </data>
+    <data name="RedirectUris_Label" xml:space="preserve">
+        <value>Omdiriger URI-er</value>
+    </data>
+    <data name="RefreshTokenExpiration_Info" xml:space="preserve">
+        <value>Absolutt oppdateringstoken utløper på et fast tidspunkt (spesifisert av AbsoluteRefreshTokenLifetime)
+
+Hvis du glir når du oppdaterer tokenet, fornyes levetiden til oppdateringstokenet (med beløpet spesifisert i SlidingRefreshTokenLifetime). Levetiden vil ikke overstige AbsoluteRefreshTokenLifetime.</value>
+    </data>
+    <data name="RefreshTokenExpiration_Label" xml:space="preserve">
+        <value>Oppdater utløpstoken</value>
+    </data>
+    <data name="RefreshTokenUsage.Info" xml:space="preserve">
+        <value>ReUse, oppdateringstokenhåndtaket forblir det samme når du oppdaterer tokens
+
+OneTime oppdateringshåndtaket for oppdatering oppdateres når du oppdaterer tokens</value>
+    </data>
+    <data name="RefreshTokenUsage.Label" xml:space="preserve">
+        <value>Oppdater bruk av token</value>
+    </data>
+    <data name="RefreshTokenUsage_Info" xml:space="preserve">
+        <value>ReUse, oppdateringstokenhåndtaket forblir det samme når du oppdaterer tokens
+
+OneTime oppdateringshåndtaket for oppdatering oppdateres når du oppdaterer tokens</value>
+    </data>
+    <data name="RefreshTokenUsage_Label" xml:space="preserve">
+        <value>Oppdater bruk av token</value>
+    </data>
+    <data name="RequireClientSecret_Info" xml:space="preserve">
+        <value>Spesifiserer om denne klienten trenger en hemmelighet for å be om tokens fra token-endepunktet (standard er sant)</value>
+    </data>
+    <data name="RequireClientSecret_Label" xml:space="preserve">
+        <value>Krev klienthemmelighet</value>
+    </data>
+    <data name="RequireConsent_Info" xml:space="preserve">
+        <value>Spesifiserer om det kreves en samtykke-skjerm. Standard er sant.</value>
+    </data>
+    <data name="RequireConsent_Label" xml:space="preserve">
+        <value>Krev samtykke</value>
+    </data>
+    <data name="RequirePkce_Info" xml:space="preserve">
+        <value>Spesifiserer om klienter som bruker en autorisasjonskodebasert tilskuddstype, må sende en bevisnøkkel</value>
+    </data>
+    <data name="RequirePkce_Label" xml:space="preserve">
+        <value>Krev Pkce</value>
+    </data>
+    <data name="RequireRequestObject_Info" xml:space="preserve">
+        <value>Specifies whether this client needs to wrap the authorize request parameters in a JWT (defaults to false)</value>
+    </data>
+    <data name="RequireRequestObject_Label" xml:space="preserve">
+        <value>Require Request Object</value>
+    </data>
+    <data name="RoleNormalizedName_Info" xml:space="preserve">
+        <value>Det normaliserte rollenavnet</value>
+    </data>
+    <data name="RoleNormalizedName_Label" xml:space="preserve">
+        <value>Normalisert navn</value>
+    </data>
+    <data name="SecretDescription_Info" xml:space="preserve">
+        <value>Beskrivelse</value>
+    </data>
+    <data name="SecretDescription_Label" xml:space="preserve">
+        <value>Beskrivelse</value>
+    </data>
+    <data name="SecretType_Label" xml:space="preserve">
+        <value>Hemmelig type</value>
+    </data>
+    <data name="SecretValue_Label" xml:space="preserve">
+        <value>Hemmelig verdi</value>
+    </data>
+    <data name="SigningAlgorithms_Info" xml:space="preserve">
+        <value>List of allowed signing algorithms for identity token. If empty, will use the server default signing algorithm.</value>
+    </data>
+    <data name="SigningAlgorithms_Label" xml:space="preserve">
+        <value>Allowed Identity Token Signing Algorithms</value>
+    </data>
+    <data name="SlidingRefreshTokenLifetime_Info" xml:space="preserve">
+        <value>Glidende levetid for et oppdateringstoken på sekunder. Standardinnstillingen er 1296000 sekunder / 15 dager</value>
+    </data>
+    <data name="SlidingRefreshTokenLifetime_Label" xml:space="preserve">
+        <value>Glidende oppdateringstoken levetid</value>
+    </data>
+    <data name="Type_Label" xml:space="preserve">
+        <value>Kravtype</value>
+    </data>
+    <data name="UpdateAccessTokenClaimsOnRefresh_Info" xml:space="preserve">
+        <value>Får eller setter en verdi som indikerer om tilgangstokenet (og dets krav) skal oppdateres på en forespørsel om oppdateringstoken.</value>
+    </data>
+    <data name="UpdateAccessTokenClaimsOnRefresh_Label" xml:space="preserve">
+        <value>Oppdater krav på tilgangstoken på oppdatering</value>
+    </data>
+    <data name="UserCodeType_Info" xml:space="preserve">
+        <value>Spesifiserer typen brukerkode som skal brukes for klienten. Ellers faller tilbake til standard.</value>
+    </data>
+    <data name="UserCodeType_Label" xml:space="preserve">
+        <value>Brukerkodetype</value>
+    </data>
+    <data name="UserSsoLifetime_Info" xml:space="preserve">
+        <value>Sletting av brukerrollen mislyktes</value>
+    </data>
+    <data name="UserSsoLifetime_Label" xml:space="preserve">
+        <value>Bruker Sso levetid</value>
+    </data>
+    <data name="Value_Label" xml:space="preserve">
+        <value>Kravverdi</value>
+    </data>
+</root>

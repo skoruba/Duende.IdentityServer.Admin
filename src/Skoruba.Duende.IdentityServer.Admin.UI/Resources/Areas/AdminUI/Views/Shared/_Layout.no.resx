@@ -1,0 +1,59 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="FooterCopyright" xml:space="preserve">
+        <value>&amp;copy;</value>
+    </data>
+    <data name="LinkApiResources" xml:space="preserve">
+        <value>Api ressurser</value>
+    </data>
+    <data name="LinkApiScopes" xml:space="preserve">
+        <value>Api Scopes</value>
+    </data>
+    <data name="LinkAuditLogs" xml:space="preserve">
+        <value>Audit Logs</value>
+    </data>
+    <data name="LinkClients" xml:space="preserve">
+        <value>Klienter</value>
+    </data>
+    <data name="LinkErrorLogs" xml:space="preserve">
+        <value>Error Logs</value>
+    </data>
+    <data name="LinkIdentityResources" xml:space="preserve">
+        <value>Identitetsressurser</value>
+    </data>
+    <data name="LinkLogout" xml:space="preserve">
+        <value>Logg ut</value>
+    </data>
+    <data name="LinkPersistedGrants" xml:space="preserve">
+        <value>Vedvarende tilskudd</value>
+    </data>
+    <data name="LinkRoles" xml:space="preserve">
+        <value>Roller</value>
+    </data>
+    <data name="LinkUsers" xml:space="preserve">
+        <value>Brukere</value>
+    </data>
+    <data name="MenuButton" xml:space="preserve">
+        <value>Menu</value>
+    </data>
+    <data name="TitleConfiguration" xml:space="preserve">
+        <value>Klienter/ressurser</value>
+    </data>
+    <data name="TitleLogs" xml:space="preserve">
+        <value>Logger</value>
+    </data>
+    <data name="TitleUsermanagement" xml:space="preserve">
+        <value>Brukere/roller</value>
+    </data>
+</root>
