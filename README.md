@@ -6,7 +6,7 @@
 
 ## Project Status
 
-[![Build status](https://ci.appveyor.com/api/projects/status/563ug5gcxk904m6g?svg=true)](https://ci.appveyor.com/project/JanSkoruba/duende-identityserver-admin)
+[![Build status](https://ci.appveyor.com/api/projects/status/563ug5gcxk904m6g/branch/main?svg=true)](https://ci.appveyor.com/project/JanSkoruba/duende-identityserver-admin/branch/main)
 [![Join the chat at https://gitter.im/skoruba/IdentityServer4.Admin](https://badges.gitter.im/skoruba/IdentityServer4.Admin.svg)](https://gitter.im/skoruba/IdentityServer4.Admin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 The application is written in the **Asp.Net Core MVC - using .NET 5.0**
