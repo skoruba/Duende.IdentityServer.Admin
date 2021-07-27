@@ -1,0 +1,56 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ErrorDeleteUser_CannotSelfDelete" xml:space="preserve">
+        <value>Du kan ikke slette deg selv. Hvis du vil slette denne kontoen, må du først opprette en ny administrativ konto, deretter bytte til den og slette denne kontoen derfra.</value>
+    </data>
+    <data name="SuccessCreateRole" xml:space="preserve">
+        <value>Rollen {0} er lagret!</value>
+    </data>
+    <data name="SuccessCreateRoleClaims" xml:space="preserve">
+        <value>Krav {0} - {1} er lagret!</value>
+    </data>
+    <data name="SuccessCreateUser" xml:space="preserve">
+        <value>Bruker {0} er lagret!</value>
+    </data>
+    <data name="SuccessCreateUserClaims" xml:space="preserve">
+        <value>Krav {0} - {1} er lagret!</value>
+    </data>
+    <data name="SuccessCreateUserRole" xml:space="preserve">
+        <value>Rollen er vellykket lagret!</value>
+    </data>
+    <data name="SuccessDeleteRole" xml:space="preserve">
+        <value>Rollen er slettet!</value>
+    </data>
+    <data name="SuccessDeleteRoleClaims" xml:space="preserve">
+        <value>Kravet er slettet!</value>
+    </data>
+    <data name="SuccessDeleteUser" xml:space="preserve">
+        <value>Brukeren er slettet!</value>
+    </data>
+    <data name="SuccessDeleteUserClaims" xml:space="preserve">
+        <value>Kravet er slettet!</value>
+    </data>
+    <data name="SuccessDeleteUserProviders" xml:space="preserve">
+        <value>Brukerleverandøren er slettet!</value>
+    </data>
+    <data name="SuccessDeleteUserRole" xml:space="preserve">
+        <value>Rollen er slettet!</value>
+    </data>
+    <data name="SuccessTitle" xml:space="preserve">
+        <value>Suksess</value>
+    </data>
+    <data name="SuccessUserChangePassword" xml:space="preserve">
+        <value>Nytt passord er endret!</value>
+    </data>
+</root>
