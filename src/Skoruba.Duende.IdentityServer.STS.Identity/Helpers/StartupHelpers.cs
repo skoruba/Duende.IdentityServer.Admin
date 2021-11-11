@@ -348,7 +348,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
                         options.LicenseKey = advancedConfiguration.IdentityServerLicenseKey;
                     }
 
-                    options.KeyManagement.Enabled = false;
+                    options.KeyManagement.Enabled = true;
                 })
                 .AddConfigurationStore<TConfigurationDbContext>()
                 .AddOperationalStore<TPersistedGrantDbContext>()

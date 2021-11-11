@@ -12,8 +12,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Duende.IdentityServer.EntityFramework.Storage" Version="5.0.5" />
-        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0-alpha.2" />
+        <PackageReference Include="Duende.IdentityServer.EntityFramework.Storage" Version="5.2.3" />
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.2" />
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2" />
     </ItemGroup>
 
