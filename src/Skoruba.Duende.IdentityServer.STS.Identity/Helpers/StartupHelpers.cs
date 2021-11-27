@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.EntityFramework.Storage;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
@@ -329,33 +330,21 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
             where TConfigurationDbContext : DbContext, IAdminConfigurationDbContext
             where TUserIdentity : class
         {
-            var advancedConfiguration = configuration.GetSection(nameof(AdvancedConfiguration)).Get<AdvancedConfiguration>();
+            var configurationSection = configuration.GetSection(nameof(IdentityServerOptions));
 
-            var builder = services.AddIdentityServer(options =>
-                {
-                    options.Events.RaiseErrorEvents = true;
-                    options.Events.RaiseInformationEvents = true;
-                    options.Events.RaiseFailureEvents = true;
-                    options.Events.RaiseSuccessEvents = true;
-
-                    if (!string.IsNullOrEmpty(advancedConfiguration.IssuerUri))
-                    {
-                        options.IssuerUri = advancedConfiguration.IssuerUri;
-                    }
-
-                    if (!string.IsNullOrEmpty(advancedConfiguration.IdentityServerLicenseKey))
-                    {
-                        options.LicenseKey = advancedConfiguration.IdentityServerLicenseKey;
-                    }
-
-                    options.KeyManagement.Enabled = false;
-                })
+            var identityServerOptions = configurationSection.Get<IdentityServerOptions>();
+            
+            var builder = services.AddIdentityServer(options => configurationSection.Bind(options))
                 .AddConfigurationStore<TConfigurationDbContext>()
                 .AddOperationalStore<TPersistedGrantDbContext>()
                 .AddAspNetIdentity<TUserIdentity>();
 
-            builder.AddCustomSigningCredential(configuration);
-            builder.AddCustomValidationKey(configuration);
+            if (!identityServerOptions.KeyManagement.Enabled)
+            {
+                builder.AddCustomSigningCredential(configuration);
+                builder.AddCustomValidationKey(configuration);
+            }
+            
             builder.AddExtensionGrantValidator<DelegationGrantValidator>();
 
             return builder;
@@ -392,7 +381,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
                       options.Instance = externalProviderConfiguration.AzureInstance;
                       options.Domain = externalProviderConfiguration.AzureDomain;
                       options.CallbackPath = externalProviderConfiguration.AzureAdCallbackPath;
-                  });
+                  }, cookieScheme: null);
             }
         }
 

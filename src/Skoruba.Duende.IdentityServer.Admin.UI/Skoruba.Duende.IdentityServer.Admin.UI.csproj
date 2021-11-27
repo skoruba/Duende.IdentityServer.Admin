@@ -9,7 +9,6 @@
         <PackageLicenseUrl>https://github.com/skoruba/Duende.IdentityServer.Admin/blob/main/LICENSE</PackageLicenseUrl>
         <PackageProjectUrl>https://github.com/skoruba/Duende.IdentityServer.Admin</PackageProjectUrl>
         <PackageIconUrl>https://raw.githubusercontent.com/skoruba/Duende.IdentityServer.Admin/main/docs/Images/Skoruba.Duende.IdentityServer.Admin-Logo-Nuget.png</PackageIconUrl>
-        <LangVersion>latest</LangVersion>
         <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
         <StaticWebAssetBasePath Condition="$(StaticWebAssetBasePath) == ''">/</StaticWebAssetBasePath>
     </PropertyGroup>
@@ -97,14 +96,14 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="5.0.4" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.4" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.4" />
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="5.0.4" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="5.0.12" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.12" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.12" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="5.0.12" />
         <PackageReference Include="AspNetCore.HealthChecks.MySql" Version="5.0.1" />
         <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="5.0.2" />
         <PackageReference Include="AspNetCore.HealthChecks.OpenIdConnectServer" Version="5.0.1" />
-        <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="5.0.2" />
+        <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="5.0.3" />
         <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
         <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="5.0.1" />
     </ItemGroup>

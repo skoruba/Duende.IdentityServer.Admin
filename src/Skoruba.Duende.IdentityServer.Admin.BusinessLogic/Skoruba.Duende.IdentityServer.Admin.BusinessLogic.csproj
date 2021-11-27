@@ -12,7 +12,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Duende.IdentityServer.EntityFramework" Version="5.0.5" />
+        <PackageReference Include="Duende.IdentityServer.EntityFramework" Version="5.2.3" />
     </ItemGroup>
 
     <ItemGroup>
