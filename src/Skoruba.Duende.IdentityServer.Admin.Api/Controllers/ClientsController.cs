@@ -72,7 +72,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.Controllers
             var clientDto = client.ToClientApiModel<ClientDto>();
 
             await _clientService.GetClientAsync(clientDto.Id);
-            await _clientService.UpdateClientAsync(clientDto);
+            await _clientService.UpdateClientAsync(clientDto, updateClientClaims: true, updateClientProperties: true);
 
             return Ok();
         }

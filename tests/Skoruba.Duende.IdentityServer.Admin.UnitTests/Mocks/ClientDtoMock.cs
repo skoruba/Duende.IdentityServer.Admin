@@ -114,6 +114,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
                .RuleFor(o => o.DeviceCodeLifetime, f => f.Random.Int())
                .RuleFor(o => o.NonEditable, f => f.Random.Bool())
                .RuleFor(o => o.RequireRequestObject, f => f.Random.Bool())
+               .RuleFor(o => o.Claims, f => new List<ClientClaimDto>()) //Client Claims are managed with seperate method
+               .RuleFor(o => o.Properties, f => new List<ClientPropertyDto>()) //Client Properties are managed with seperate method
+               .RuleFor(o => o.ClientSecrets, f => new List<ClientSecretDto>()) //Client Secrets are managed with seperate method
                .RuleFor(o => o.AllowedIdentityTokenSigningAlgorithms, f => ClientMock.AllowedSigningAlgorithms().Take(f.Random.Number(1, 5)).ToList());
 
             return clientFaker;

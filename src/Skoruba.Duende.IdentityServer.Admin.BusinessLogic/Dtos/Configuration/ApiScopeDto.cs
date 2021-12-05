@@ -33,5 +33,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration
         public string UserClaimsItems { get; set; }
 
 		public bool Enabled { get; set; } = true;
+
+        public List<ApiScopePropertyDto> ApiScopeProperties { get; set; }
 	}
 }
