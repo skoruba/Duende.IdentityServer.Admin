@@ -34,6 +34,11 @@
 			<AutoGen>True</AutoGen>
 			<DependentUpon>IdentityResourceServiceResource.resx</DependentUpon>
 		</Compile>
+		<Compile Update="Resources\KeyServiceResource.Designer.cs">
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		  <DependentUpon>KeyServiceResource.resx</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -48,6 +53,10 @@
 		<EmbeddedResource Update="Resources\IdentityResourceServiceResource.resx">
 			<Generator>ResXFileCodeGenerator</Generator>
 			<LastGenOutput>IdentityResourceServiceResource.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\KeyServiceResource.resx">
+		  <Generator>ResXFileCodeGenerator</Generator>
+		  <LastGenOutput>KeyServiceResource.Designer.cs</LastGenOutput>
 		</EmbeddedResource>
 	</ItemGroup>
 
