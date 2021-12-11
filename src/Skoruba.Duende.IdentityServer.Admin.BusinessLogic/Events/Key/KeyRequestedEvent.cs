@@ -1,5 +1,6 @@
 ﻿using Skoruba.AuditLogging.Events;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Grant;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Key;
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Events.Key
 {

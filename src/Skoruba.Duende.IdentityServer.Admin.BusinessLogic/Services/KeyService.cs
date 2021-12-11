@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Skoruba.AuditLogging.Services;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Grant;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Key;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Events.Key;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Mappers;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Resources;

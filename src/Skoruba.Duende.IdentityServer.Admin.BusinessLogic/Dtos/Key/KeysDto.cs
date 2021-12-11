@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 
-namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Grant
+namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Key
 {
     public class KeysDto
     {

@@ -4,6 +4,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Grant;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Key;
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces
 {

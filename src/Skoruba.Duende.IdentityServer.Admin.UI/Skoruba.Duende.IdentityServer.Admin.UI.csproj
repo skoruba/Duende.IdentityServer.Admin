@@ -49,6 +49,8 @@
         <None Include="Areas\AdminUI\Views\Configuration\IdentityResource\Section\Label.cshtml" />
         <None Include="Areas\AdminUI\Views\Grant\PersistedGrant.cshtml" />
         <None Include="Areas\AdminUI\Views\Grant\PersistedGrantDelete.cshtml" />
+        <None Include="Areas\AdminUI\Views\Key\Keys.cshtml" />
+        <None Include="Areas\AdminUI\Views\Key\KeyDelete.cshtml" />
         <None Include="Areas\AdminUI\Views\Grant\PersistedGrants.cshtml" />
         <None Include="Areas\AdminUI\Views\Home\Error.cshtml" />
         <None Include="Areas\AdminUI\Views\Home\Index.cshtml" />

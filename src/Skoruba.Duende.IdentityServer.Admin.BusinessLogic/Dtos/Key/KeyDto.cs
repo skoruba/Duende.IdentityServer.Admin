@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Grant
+namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Key
 {
     public class KeyDto
     {
