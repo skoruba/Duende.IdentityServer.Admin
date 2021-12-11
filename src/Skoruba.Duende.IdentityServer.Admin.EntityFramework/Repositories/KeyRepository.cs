@@ -43,7 +43,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
 
         public virtual async Task<Key> GetKeyAsync(string id, CancellationToken cancellationToken = default)
         {
-            return await DbContext.Keys.Where(x => x.Id == id).SingleOrDefaultAsync(cancellationToken: cancellationToken);
+            return await DbContext.Keys.Where(x => x.Id == id)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(cancellationToken: cancellationToken);
         }
 
         public virtual async Task DeleteKeyAsync(string id, CancellationToken cancellationToken = default)
