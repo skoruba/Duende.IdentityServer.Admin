@@ -1,15 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
-        <Version>1.0.0-preview5</Version>
-        <Authors>Jan Škoruba</Authors>
-        <PackageTags>Duende IdentityServer Admin OpenIDConnect OAuth2 Identity</PackageTags>
-        <Description>EntityFramework extensions for the administration of the Duende IdentityServer and Asp.Net Core Identity</Description>
-        <PackageLicenseUrl>https://github.com/skoruba/Duende.IdentityServer.Admin/blob/main/LICENSE</PackageLicenseUrl>
-        <PackageProjectUrl>https://github.com/skoruba/Duende.IdentityServer.Admin</PackageProjectUrl>
-        <PackageIconUrl>https://raw.githubusercontent.com/skoruba/Duende.IdentityServer.Admin/main/docs/Images/Skoruba.Duende.IdentityServer.Admin-Logo-Nuget.png</PackageIconUrl>
-    </PropertyGroup>
+	<PropertyGroup>
+		<Description>EntityFramework extensions for the administration of the Duende IdentityServer and Asp.Net Core Identity</Description>
+	</PropertyGroup>
 
 </Project>
 
