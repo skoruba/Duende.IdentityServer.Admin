@@ -19,11 +19,11 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration
 
         [Required]
         public string Value { get; set; }
-
-        public List<IdentityResourcePropertyDto> IdentityResourceProperties { get; set; } = new List<IdentityResourcePropertyDto>();
-
+        
         public int TotalCount { get; set; }
 
         public int PageSize { get; set; }
+
+        public List<IdentityResourcePropertyDto> IdentityResourceProperties { get; set; } = new();
     }
 }

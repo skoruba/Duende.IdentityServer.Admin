@@ -20,10 +20,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration
         [Required]
         public string Value { get; set; }
 
-        public List<ApiScopePropertyDto> ApiScopeProperties { get; set; } = new List<ApiScopePropertyDto>();
-
         public int TotalCount { get; set; }
 
         public int PageSize { get; set; }
+
+        public List<ApiScopePropertyDto> ApiScopeProperties { get; set; } = new();
     }
 }

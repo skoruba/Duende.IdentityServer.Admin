@@ -19,10 +19,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration
             IdentityProviderRestrictions = new List<string>();
             AllowedCorsOrigins = new List<string>();
             AllowedGrantTypes = new List<string>();
+            AllowedIdentityTokenSigningAlgorithms = new List<string>();
             Claims = new List<ClientClaimDto>();
             ClientSecrets = new List<ClientSecretDto>();
             Properties = new List<ClientPropertyDto>();
-            AllowedIdentityTokenSigningAlgorithms = new List<string>();
         }
 
         public ClientType ClientType { get; set; }
@@ -104,10 +104,6 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration
         public List<string> AllowedScopes { get; set; }
         public string AllowedScopesItems { get; set; }
 
-        public List<ClientClaimDto> Claims { get; set; }
-        public List<ClientSecretDto> ClientSecrets { get; set; }
-        public List<ClientPropertyDto> Properties { get; set; }
-
         public DateTime? Updated { get; set; }
         public DateTime? LastAccessed { get; set; }
 
@@ -122,5 +118,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration
         public List<string> AllowedIdentityTokenSigningAlgorithms { get; set; }
 
         public string AllowedIdentityTokenSigningAlgorithmsItems { get; set; }
+
+        public List<ClientClaimDto> Claims { get; set; }
+        public List<ClientSecretDto> ClientSecrets { get; set; }
+        public List<ClientPropertyDto> Properties { get; set; }
     }
 }

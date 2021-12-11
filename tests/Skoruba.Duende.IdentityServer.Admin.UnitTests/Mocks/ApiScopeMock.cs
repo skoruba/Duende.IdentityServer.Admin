@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0.
 
 using System;
+using System.Collections.Generic;
 using Bogus;
 using Duende.IdentityServer.EntityFramework.Entities;
 
@@ -28,6 +29,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
                 .RuleFor(o => o.UserClaims, f => GetApiScopeClaim(0).Generate(f.Random.Number(10)))
                 .RuleFor(o => o.Emphasize, f => f.Random.Bool())
                 .RuleFor(o => o.Required, f => f.Random.Bool())
+                .RuleFor(o => o.Properties, f => new List<ApiScopeProperty>())
                 .RuleFor(o => o.ShowInDiscoveryDocument, f => f.Random.Bool());
 
             return fakerApiScope;

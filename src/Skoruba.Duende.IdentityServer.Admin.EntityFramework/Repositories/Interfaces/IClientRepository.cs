@@ -12,7 +12,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Inter
     {
 		Task<int> AddClientAsync(Client client);
 
-		Task<int> UpdateClientAsync(Client client);
+		Task<int> UpdateClientAsync(Client client, bool updateClientClaims = false, bool updateClientProperties = false);
 
 	    Task<int> RemoveClientAsync(Client client);
 
