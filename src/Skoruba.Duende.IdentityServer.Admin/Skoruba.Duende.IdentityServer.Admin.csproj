@@ -60,6 +60,10 @@
         <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Shared\Skoruba.Duende.IdentityServer.Shared.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Helpers\" />
+    </ItemGroup>
+
 </Project>
 
 
