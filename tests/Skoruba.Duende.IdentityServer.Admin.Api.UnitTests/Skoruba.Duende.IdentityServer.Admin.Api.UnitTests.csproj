@@ -21,6 +21,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\Skoruba.Duende.IdentityServer.Admin.Api\Skoruba.Duende.IdentityServer.Admin.Api.csproj" />
+      <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.UnitTests\Skoruba.Duende.IdentityServer.Admin.UnitTests.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -20,6 +20,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
+                    <th>@Localizer["Id"]</th>
                     <th>@Localizer["Version"]</th>
                     <th>@Localizer["Algorithm"]</th>
                     <th>@Localizer["Use"]</th>
@@ -33,7 +34,8 @@
                 @foreach (var key in Model.Keys)
                 {
                     <tr>
-                        <th scope="row">@key.Version</th>
+                        <th scope="row">@key.Id</th>
+                        <td>@key.Version</td>
                         <td>@key.Algorithm</td>
                         <td>@key.Use</td>
                         <td>

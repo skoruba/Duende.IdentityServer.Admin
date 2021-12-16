@@ -117,52 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="FooterCopyright" xml:space="preserve">
-    <value>&amp;copy;</value>
-  </data>
-  <data name="Keys" xml:space="preserve">
-    <value>Keys</value>
-  </data>
-  <data name="LinkApiResources" xml:space="preserve">
-    <value>Api Ressourcen</value>
-  </data>
-  <data name="LinkApiScopes" xml:space="preserve">
-    <value>Api Scopes</value>
-  </data>
-  <data name="LinkAuditLogs" xml:space="preserve">
-    <value>Audit Logs</value>
-  </data>
-  <data name="LinkClients" xml:space="preserve">
-    <value>Clients</value>
-  </data>
-  <data name="LinkErrorLogs" xml:space="preserve">
-    <value>Error Logs</value>
-  </data>
-  <data name="LinkIdentityResources" xml:space="preserve">
-    <value>Identitäts-Ressources</value>
-  </data>
-  <data name="LinkLogout" xml:space="preserve">
-    <value>Logout</value>
-  </data>
-  <data name="LinkPersistedGrants" xml:space="preserve">
-    <value>Persisted Grants</value>
-  </data>
-  <data name="LinkRoles" xml:space="preserve">
-    <value>Rollen</value>
-  </data>
-  <data name="LinkUsers" xml:space="preserve">
-    <value>Benutzer</value>
-  </data>
-  <data name="MenuButton" xml:space="preserve">
-    <value>Menü</value>
-  </data>
-  <data name="TitleConfiguration" xml:space="preserve">
-    <value>Clients/Ressourcen</value>
-  </data>
-  <data name="TitleLogs" xml:space="preserve">
-    <value>Logs</value>
-  </data>
-  <data name="TitleUsermanagement" xml:space="preserve">
-    <value>Benutzer/Rollen</value>
+  <data name="KeyDoesNotExist" xml:space="preserve">
+    <value>Key with id {0} doesn't exist</value>
   </data>
 </root>

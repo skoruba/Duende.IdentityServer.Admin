@@ -120,6 +120,9 @@
   <data name="FooterCopyright" xml:space="preserve">
     <value>&amp;kopio;</value>
   </data>
+  <data name="Keys" xml:space="preserve">
+    <value>Keys</value>
+  </data>
   <data name="LinkApiResources" xml:space="preserve">
     <value>Api-resurssit</value>
   </data>

@@ -32,6 +32,7 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
+                        <th>@Localizer["Id"]</th>
                         <th>@Localizer["Version"]</th>
                         <th>@Localizer["Algorithm"]</th>
                         <th>@Localizer["Use"]</th>
@@ -43,7 +44,8 @@
                 <tbody>
 
                     <tr>
-                        <th scope="row">@Model.Version</th>
+                        <th scope="row">@Model.Id</th>
+                        <td>@Model.Version</td>
                         <td>@Model.Algorithm</td>
                         <td>@Model.Use</td>
                         <td>

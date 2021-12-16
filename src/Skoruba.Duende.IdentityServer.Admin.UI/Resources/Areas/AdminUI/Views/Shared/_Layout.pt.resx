@@ -177,4 +177,7 @@
   <data name="LinkErrorLogs" xml:space="preserve">
     <value>Error Logs</value>
   </data>
+  <data name="Keys" xml:space="preserve">
+    <value>Keys</value>
+  </data>
 </root>

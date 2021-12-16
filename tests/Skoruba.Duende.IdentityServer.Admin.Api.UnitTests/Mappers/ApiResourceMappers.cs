@@ -9,7 +9,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
     public class ApiResourceMappers
     {
         [Fact]
-        public void CanMapApiResourceDtoToEntity()
+        public void CanMapApiResourceApiDtoToApiResourceDto()
         {
             //Generate DTO
             var apiResourceApiDto = ApiResourceApiDtoMock.GenerateRandomApiResource(1);
