@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using Bogus;
 using Skoruba.Duende.IdentityServer.Admin.Api.Dtos.PersistedGrants;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Grant;
 
 namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mocks
 {
@@ -17,7 +18,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mocks
             return persistedGrants;
         }
 
-        public static Faker<PersistedGrantApiDto> PersistedGrantFaker(string key, int subjectId = 0)
+        public static Faker<PersistedGrantApiDto> PersistedGrantFaker(string key, string subjectId)
         {
             var persistedGrantFaker = new Faker<PersistedGrantApiDto>()
                 .StrictMode(true)
@@ -27,12 +28,16 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mocks
                 .RuleFor(o => o.Data, f => f.Random.Words(f.Random.Number(1, 10)))
                 .RuleFor(o => o.Type, f => f.PickRandom(PersistedGransList()))
                 .RuleFor(o => o.Expiration, f => f.Date.Future())
-                .RuleFor(o => o.SubjectId, f => subjectId == 0 ? f.Random.Number(int.MaxValue).ToString() : subjectId.ToString());
+                .RuleFor(o => o.SubjectId, f => subjectId)
+                .RuleFor(o => o.SubjectName, Guid.NewGuid().ToString)
+                .RuleFor(o => o.ConsumedTime, f => f.Date.Soon())
+                .RuleFor(o => o.SessionId, Guid.NewGuid().ToString())
+                .RuleFor(o => o.Description, Guid.NewGuid().ToString());
 
             return persistedGrantFaker;
         }
 
-        public static PersistedGrantApiDto GenerateRandomPersistedGrant(string key, int subjectId = 0)
+        public static PersistedGrantApiDto GenerateRandomPersistedGrant(string key, string subjectId)
         {
             var persistedGrantFaker = PersistedGrantFaker(key, subjectId);
 
