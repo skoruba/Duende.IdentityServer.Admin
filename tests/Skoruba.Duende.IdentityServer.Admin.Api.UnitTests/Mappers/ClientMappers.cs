@@ -15,7 +15,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
         {
             //Generate DTO
             var clientApiDto = ClientDtoApiMock.GenerateRandomClient(1);
-            
+
             var clientDto = clientApiDto.ToClientApiModel<ClientDto>();
 
             clientDto.Should().NotBeNull();
@@ -32,7 +32,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
             var clientApiDto = clientDto.ToClientApiModel<ClientApiDto>();
 
             clientDto.Should().NotBeNull();
-            
+
             clientDto.ShouldBeEquivalentTo(clientApiDto, options =>
                 options.Excluding(o => o.AllowedCorsOriginsItems)
                     .Excluding(o => o.AllowedGrantTypesItems)
@@ -71,16 +71,16 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             clientSecretDto.ClientSecretId.Should().Be(clientSecretApiDto.Id);
 
-            clientSecretDto.ShouldBeEquivalentTo(clientSecretApiDto, options => 
+            clientSecretDto.ShouldBeEquivalentTo(clientSecretApiDto, options =>
                 options.Excluding(x => x.ClientId)
-                    .Excluding(x=> x.ClientSecrets)
-                    .Excluding(x=> x.ClientName)
-                    .Excluding(x=> x.PageSize)
-                    .Excluding(x=> x.HashTypes)
-                    .Excluding(x=> x.ClientSecretId)
-                    .Excluding(x=> x.HashTypeEnum)
-                    .Excluding(x=> x.TypeList)
-                    .Excluding(x=> x.TotalCount));
+                    .Excluding(x => x.ClientSecrets)
+                    .Excluding(x => x.ClientName)
+                    .Excluding(x => x.PageSize)
+                    .Excluding(x => x.HashTypes)
+                    .Excluding(x => x.ClientSecretId)
+                    .Excluding(x => x.HashTypeEnum)
+                    .Excluding(x => x.TypeList)
+                    .Excluding(x => x.TotalCount));
         }
 
         [Fact]
@@ -92,7 +92,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             clientClaimApiDto.Id.Should().Be(clientClaimsDto.ClientClaimId);
 
-            clientClaimApiDto.ShouldBeEquivalentTo(clientClaimsDto, options => options.Excluding(x=> x.Id));
+            clientClaimApiDto.ShouldBeEquivalentTo(clientClaimsDto, options => options.Excluding(x => x.Id));
         }
 
         [Fact]
@@ -104,13 +104,43 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             clientClaimDto.ClientClaimId.Should().Be(clientClaimApiDto.Id);
 
-            clientClaimDto.ShouldBeEquivalentTo(clientClaimApiDto, options => 
-                options.Excluding(x=> x.ClientClaims)
+            clientClaimDto.ShouldBeEquivalentTo(clientClaimApiDto, options =>
+                options.Excluding(x => x.ClientClaims)
+                    .Excluding(x => x.PageSize)
+                    .Excluding(x => x.TotalCount)
+                    .Excluding(x => x.ClientId)
+                    .Excluding(x => x.ClientName)
+                    .Excluding(x => x.ClientClaimId));
+        }
+
+        [Fact]
+        public void CanMapClientPropertyApiDtoToClientPropertyDto()
+        {
+            var clientPropertyApiDto = ClientDtoApiMock.GenerateRandomClientProperty(1);
+
+            var clientPropertiesDto = clientPropertyApiDto.ToClientApiModel<ClientPropertiesDto>();
+
+            clientPropertyApiDto.Id.Should().Be(clientPropertiesDto.ClientPropertyId);
+            
+            clientPropertyApiDto.ShouldBeEquivalentTo(clientPropertiesDto, options => options.Excluding(x => x.Id));
+        }
+        
+        [Fact]
+        public void CanMapClientPropertyDtoToClientPropertyApiDto()
+        {
+            var clientPropertyDto = ClientDtoMock.GenerateRandomClientProperty(1, 1);
+
+            var clientPropertyApiDto = clientPropertyDto.ToClientApiModel<ClientPropertyApiDto>();
+
+            clientPropertyDto.ClientPropertyId.Should().Be(clientPropertyApiDto.Id);
+
+            clientPropertyDto.ShouldBeEquivalentTo(clientPropertyApiDto, options => 
+                options.Excluding(x=> x.ClientId)
+                    .Excluding(x=> x.ClientName)
                     .Excluding(x=> x.PageSize)
                     .Excluding(x=> x.TotalCount)
-                    .Excluding(x=> x.ClientId)
-                    .Excluding(x=> x.ClientName)
-                    .Excluding(x=> x.ClientClaimId));
+                    .Excluding(x=> x.ClientPropertyId)
+                    .Excluding(x=> x.ClientProperties));
         }
     }
 }
