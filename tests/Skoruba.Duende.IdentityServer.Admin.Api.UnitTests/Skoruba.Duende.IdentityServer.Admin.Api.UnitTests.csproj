@@ -24,8 +24,4 @@
       <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.UnitTests\Skoruba.Duende.IdentityServer.Admin.UnitTests.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Mappers\" />
-    </ItemGroup>
-
 </Project>
