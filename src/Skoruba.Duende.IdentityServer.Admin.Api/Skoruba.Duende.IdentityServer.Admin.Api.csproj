@@ -70,6 +70,10 @@
         </EmbeddedResource>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Dtos\Key\" />
+    </ItemGroup>
+
 </Project>
 
 

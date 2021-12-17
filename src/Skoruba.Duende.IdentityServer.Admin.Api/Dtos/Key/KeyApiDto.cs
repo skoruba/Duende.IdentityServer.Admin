@@ -3,9 +3,9 @@
 
 using System;
 
-namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Key
+namespace Skoruba.Duende.IdentityServer.Admin.Api.Dtos.Key
 {
-    public class KeyDto
+    public class KeyApiDto
     {
         public string Id { get; set; }
         public int Version { get; set; }
