@@ -31,6 +31,8 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api.Dtos.ApiScopes
         public bool Enabled { get; set; } = true;
 
         public List<string> UserClaims { get; set; }
+
+        public List<ApiScopePropertyApiDto> ApiScopeProperties { get; set; }
     }
 }
 
