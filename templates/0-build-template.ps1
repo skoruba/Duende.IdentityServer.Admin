@@ -38,6 +38,7 @@ Copy-Item ./$gitProjectFolder/tests/* $templateTests -recurse -force
 
 # Copy Docker files
 Copy-Item ./$gitProjectFolder/docker-compose.dcproj $templateRoot -recurse -force
+Copy-Item ./$gitProjectFolder/.dockerignore $templateRoot -recurse -force
 Copy-Item ./$gitProjectFolder/docker-compose.override.yml $templateRoot -recurse -force
 Copy-Item ./$gitProjectFolder/docker-compose.vs.debug.yml $templateRoot -recurse -force
 Copy-Item ./$gitProjectFolder/docker-compose.vs.release.yml $templateRoot -recurse -force
@@ -142,11 +143,13 @@ Remove-Item ./$templateTests -Force -recurse
 ######################################
 # Step 2
 $templateNuspecPath = "template-build/Skoruba.Duende.IdentityServer.Admin.Templates.nuspec"
-nuget pack $templateNuspecPath
+nuget pack $templateNuspecPath -NoDefaultExcludes
 
 ######################################
 # Step 3
 $templateLocalName = "Skoruba.Duende.IdentityServer.Admin.Templates.$packagesVersions.nupkg"
+
+dotnet.exe new --uninstall Skoruba.Duende.IdentityServer.Admin.Templates
 dotnet.exe new -i $templateLocalName
 
 ######################################
