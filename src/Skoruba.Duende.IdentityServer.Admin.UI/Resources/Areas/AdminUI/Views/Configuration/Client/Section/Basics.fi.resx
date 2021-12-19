@@ -123,6 +123,9 @@
   <data name="ButtonManageClientSecrets" xml:space="preserve">
     <value>Hallitse asiakassalaisuuksia</value>
   </data>
+  <data name="NotRecommendedGrantTypes" xml:space="preserve">
+    <value>It is not recommended to use the Implicit Flow (implicit) and Resource Owner Password Flow (password).</value>
+  </data>
   <data name="PanelTitle" xml:space="preserve">
     <value>Perustiedot</value>
   </data>

@@ -82,7 +82,6 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
                .RuleFor(o => o.AlwaysIncludeUserClaimsInIdToken, f => f.Random.Bool())
                .RuleFor(o => o.Enabled, f => f.Random.Bool())
                .RuleFor(o => o.ProtocolType, f => f.PickRandom(ClientConsts.GetProtocolTypes().Select(x => x.Id)))
-               .RuleFor(o => o.ClientSecrets, f => new List<ClientSecretDto>()) //Client Secrets are managed with seperate method
                .RuleFor(o => o.RequireClientSecret, f => f.Random.Bool())
                .RuleFor(o => o.Description, f => f.Random.Words(f.Random.Number(1, 7)))
                .RuleFor(o => o.ClientUri, f => f.Internet.Url())
@@ -106,9 +105,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
                .RuleFor(o => o.ClientClaimsPrefix, f => Guid.NewGuid().ToString())
                .RuleFor(o => o.IncludeJwtId, f => f.Random.Bool())
                .RuleFor(o => o.PairWiseSubjectSalt, f => Guid.NewGuid().ToString())
-               .RuleFor(o => o.Claims, f => new List<ClientClaimDto>()) //Client Claims are managed with seperate method
                .RuleFor(o => o.IdentityProviderRestrictions, f => Enumerable.Range(1, f.Random.Int(1, 10)).Select(x => f.PickRandom(ClientMock.GetIdentityProviders())).ToList())
-               .RuleFor(o => o.Properties, f => new List<ClientPropertyDto>()) //Client Properties are managed with seperate method
                .RuleFor(o => o.LogoUri, f => f.Internet.Url())
                .RuleFor(o => o.Updated, f => f.Date.Recent())
                .RuleFor(o => o.LastAccessed, f => f.Date.Recent())
@@ -117,6 +114,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
                .RuleFor(o => o.DeviceCodeLifetime, f => f.Random.Int())
                .RuleFor(o => o.NonEditable, f => f.Random.Bool())
                .RuleFor(o => o.RequireRequestObject, f => f.Random.Bool())
+               .RuleFor(o => o.Claims, f => new List<ClientClaimDto>()) //Client Claims are managed with seperate method
+               .RuleFor(o => o.Properties, f => new List<ClientPropertyDto>()) //Client Properties are managed with seperate method
+               .RuleFor(o => o.ClientSecrets, f => new List<ClientSecretDto>()) //Client Secrets are managed with seperate method
                .RuleFor(o => o.AllowedIdentityTokenSigningAlgorithms, f => ClientMock.AllowedSigningAlgorithms().Take(f.Random.Number(1, 5)).ToList());
 
             return clientFaker;

@@ -22,7 +22,7 @@ The application is written in the **Asp.Net Core MVC - using .NET 5.0**
 - 🔒 **NOTE:** The project uses the default database migrations which affect your database therefore double check the migrations according to your database provider and create a database backup
 
 ```sh
-dotnet new -i Skoruba.Duende.IdentityServer.Admin.Templates::1.0.0-preview5
+dotnet new -i Skoruba.Duende.IdentityServer.Admin.Templates::1.0.0
 ```
 
 ### Create new project:
@@ -730,6 +730,9 @@ It is possible to define the configuration according the client type - by defaul
 - [x] Add support for themes ([#725](https://github.com/skoruba/IdentityServer4.Admin/issues/725))
 - [x] Extract UI part into nuget package ([#770](https://github.com/skoruba/IdentityServer4.Admin/issues/770), [#409](https://github.com/skoruba/IdentityServer4.Admin/issues/409), [#55](https://github.com/skoruba/IdentityServer4.Admin/issues/55), [#322](https://github.com/skoruba/IdentityServer4.Admin/issues/322), [#28](https://github.com/skoruba/IdentityServer4.Admin/issues/28), [#133](https://github.com/skoruba/IdentityServer4.Admin/issues/133)) 
 
+### 1.1.0
+- [ ] Update to .NET 6
+
 ### 2.0.0
 - [ ] Connect Admin Api to the Admin UI ([#478](https://github.com/skoruba/IdentityServer4.Admin/issues/478))
 
@@ -743,8 +746,8 @@ It is possible to define the configuration according the client type - by defaul
 ### Future:
 
 - Add UI tests ([#97](https://github.com/skoruba/IdentityServer4.Admin/issues/97), [#116](https://github.com/skoruba/IdentityServer4.Admin/issues/116))
-- Add more unit and integration tests :blush:
 - Extend administration for another protocols
+- Multitenancy support
 
 
 ## Licence

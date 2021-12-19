@@ -34,6 +34,6 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration
 
 		public bool Enabled { get; set; } = true;
 
-		public List<ApiScopePropertyDto> ApiScopeProperties { get; set; }
+        public List<ApiScopePropertyDto> ApiScopeProperties { get; set; }
 	}
 }

@@ -1,0 +1,77 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Skoruba.Duende.IdentityServer.Admin.UI.Configuration.Constants
+@model Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Key.KeyDto
+@inject IViewLocalizer Localizer
+
+@{
+    ViewBag.Title = Localizer["Delete Key"];
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-area="@CommonConsts.AdminUIArea" asp-controller="Key" asp-action="Keys">@Localizer["Keys"]</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer["Delete Key"]</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="col-12">
+        <h2>@Localizer["Delete Key"]</h2>
+    </div>
+</div>
+
+<form asp-area="@CommonConsts.AdminUIArea" id="client-form" asp-controller="Key" asp-action="KeyDelete" Method="post">
+
+    <input type="hidden" asp-for="Id" />
+
+    <div class="row table-responsive">
+        <div class="col-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>@Localizer["Id"]</th>
+                        <th>@Localizer["Version"]</th>
+                        <th>@Localizer["Algorithm"]</th>
+                        <th>@Localizer["Use"]</th>
+                        <th>@Localizer["Is X509 Certificate"]</th>
+                        <th>@Localizer["Created"]</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <th scope="row">@Model.Id</th>
+                        <td>@Model.Version</td>
+                        <td>@Model.Algorithm</td>
+                        <td>@Model.Use</td>
+                        <td>
+                            @if (Model.IsX509Certificate)
+                            {
+                            <text>
+                                <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+                            </text>
+                            }
+                            else
+                            {
+                            <text>
+                                <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                            </text>
+                            }
+                        </td>
+                        <td>@Model.Created.ToString("G")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-danger">@Localizer["Delete"]</button>
+        </div>
+    </div>
+</form>

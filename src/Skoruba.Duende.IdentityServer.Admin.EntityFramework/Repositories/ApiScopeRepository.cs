@@ -132,6 +132,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
         {
             return DbContext.ApiScopes
                 .Include(x => x.UserClaims)
+                .Include(x=> x.Properties)
                 .Where(x => x.Id == apiScopeId)
                 .AsNoTracking()
                 .SingleOrDefaultAsync();

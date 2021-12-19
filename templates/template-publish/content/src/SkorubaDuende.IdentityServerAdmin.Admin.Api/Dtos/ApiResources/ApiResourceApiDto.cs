@@ -28,6 +28,8 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api.Dtos.ApiResources
 
         public bool ShowInDiscoveryDocument { get; set; }
 
+        public bool RequireResourceIndicator { get; set; }
+
         public List<string> UserClaims { get; set; }
 
         public List<string> AllowedAccessTokenSigningAlgorithms { get; set; }

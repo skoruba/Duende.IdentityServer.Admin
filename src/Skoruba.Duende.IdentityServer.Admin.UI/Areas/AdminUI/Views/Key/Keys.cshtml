@@ -1,0 +1,70 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared.Dtos.Common
+@using Skoruba.Duende.IdentityServer.Admin.UI.Configuration.Constants
+@model Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Key.KeysDto
+@inject IViewLocalizer Localizer
+
+@{
+    ViewBag.Title = Localizer["Keys"];
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col-12 mb-3 text-center mt-1">
+        <h2><span class="oi oi-key" title="Keys" aria-hidden="true"></span> @Localizer["Keys"]</h2>
+    </div>
+</div>
+
+<div class="row table-responsive">
+    <div class="col-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>@Localizer["Id"]</th>
+                    <th>@Localizer["Version"]</th>
+                    <th>@Localizer["Algorithm"]</th>
+                    <th>@Localizer["Use"]</th>
+                    <th>@Localizer["Is X509 Certificate"]</th>
+                    <th>@Localizer["Created"]</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var key in Model.Keys)
+                {
+                    <tr>
+                        <th scope="row">@key.Id</th>
+                        <td>@key.Version</td>
+                        <td>@key.Algorithm</td>
+                        <td>@key.Use</td>
+                        <td>
+                            @if (key.IsX509Certificate)
+                            {
+                                <text>
+                                    <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+                                </text>
+                            }
+                            else
+                            {
+                                <text>
+                                    <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                </text>
+                            }
+                        </td>
+                        <td>@key.Created.ToString("G")</td>
+                        <td>
+                            <a asp-area="@CommonConsts.AdminUIArea" class="btn btn-danger" asp-action="KeyDelete" asp-route-id="@key.Id"><span class="oi oi-x"></span></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        @await Html.PartialAsync("Common/Pager", new Pager() { Action = "Keys", PageSize = Model.PageSize, TotalCount = Model.TotalCount })
+    </div>
+</div>

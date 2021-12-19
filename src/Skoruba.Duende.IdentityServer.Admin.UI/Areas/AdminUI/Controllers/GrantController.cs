@@ -23,7 +23,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Areas.AdminUI.Controllers
         private readonly IStringLocalizer<GrantController> _localizer;
 
         public GrantController(IPersistedGrantAspNetIdentityService persistedGrantService,
-            ILogger<ConfigurationController> logger,
+            ILogger<GrantController> logger,
             IStringLocalizer<GrantController> localizer) : base(logger)
         {
             _persistedGrantService = persistedGrantService;

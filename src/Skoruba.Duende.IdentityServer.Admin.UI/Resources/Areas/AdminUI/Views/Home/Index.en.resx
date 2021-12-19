@@ -144,6 +144,9 @@
   <data name="ButtonUsers" xml:space="preserve">
     <value>Users</value>
   </data>
+  <data name="Keys" xml:space="preserve">
+    <value>Keys</value>
+  </data>
   <data name="PageSubTitle" xml:space="preserve">
     <value>The administration for the Duende IdentityServer and Asp.Net Core Identity</value>
   </data>
