@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<Description>Entity Framework layer for the administration of the Asp.Net Core Identity and Duende IdentityServer</Description>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Duende.IdentityServer.EntityFramework" Version="5.2.3" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.12" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

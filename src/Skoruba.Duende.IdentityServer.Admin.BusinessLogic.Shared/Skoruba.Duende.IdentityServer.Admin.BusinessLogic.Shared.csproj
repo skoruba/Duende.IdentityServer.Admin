@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<Description>Shared Business Logic layer for the administration of the Duende IdentityServer and Asp.Net Core Identity</Description>
 	</PropertyGroup>
 
