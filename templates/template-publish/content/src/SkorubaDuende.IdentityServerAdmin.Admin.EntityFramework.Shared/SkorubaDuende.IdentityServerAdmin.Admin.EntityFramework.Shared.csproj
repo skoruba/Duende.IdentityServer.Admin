@@ -1,15 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
 		<Description>DbContexts and Identity entities for the administration of the Duende IdentityServer and Asp.Net Core Identity</Description>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="5.0.12" />
 		<PackageReference Include="Skoruba.AuditLogging.EntityFramework" Version="1.0.0" />
-		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework" Version="1.0.0" />
-		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration" Version="1.0.0" />
-		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity" Version="1.0.0" />
+		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework" Version="1.0.1" />
+		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration" Version="1.0.1" />
+		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity" Version="1.0.1" />
 	</ItemGroup>
 </Project>
 

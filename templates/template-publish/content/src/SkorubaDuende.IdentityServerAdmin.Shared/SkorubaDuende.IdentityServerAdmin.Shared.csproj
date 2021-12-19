@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
 		<Description>Shared common layer for the administration of the Duende IdentityServer and Asp.Net Core Identity</Description>
 	</PropertyGroup>
 
@@ -12,7 +13,7 @@
 		<PackageReference Include="Azure.Security.KeyVault.Certificates" Version="4.2.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="3.1.21" />
 		<PackageReference Include="Sendgrid" Version="9.24.4" />
-		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity" Version="1.0.0" />
+		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity" Version="1.0.1" />
 	</ItemGroup>
 
 </Project>
