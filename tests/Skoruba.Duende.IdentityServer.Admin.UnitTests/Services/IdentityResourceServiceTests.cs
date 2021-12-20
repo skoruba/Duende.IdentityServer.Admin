@@ -86,7 +86,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 				var newIdentityResourceDto = await identityResourceService.GetIdentityResourceAsync(identityResource.Id);
 
 				//Assert new identity resource
-				identityResourceDto.ShouldBeEquivalentTo(newIdentityResourceDto, options => options.Excluding(o => o.Id));
+                newIdentityResourceDto.Should().BeEquivalentTo(identityResourceDto, options => options.Excluding(o => o.Id));
 			}
 		}
 
@@ -108,7 +108,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 				var newIdentityResourceDto = await identityResourceService.GetIdentityResourceAsync(identityResource.Id);
 
 				//Assert new identity resource
-				identityResourceDto.ShouldBeEquivalentTo(newIdentityResourceDto, options => options.Excluding(o => o.Id));
+                newIdentityResourceDto.Should().BeEquivalentTo(identityResourceDto, options => options.Excluding(o => o.Id));
 			}
 		}
 
@@ -130,7 +130,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 				var newIdentityResourceDto = await identityResourceService.GetIdentityResourceAsync(identityResource.Id);
 
 				//Assert new identity resource
-				identityResourceDto.ShouldBeEquivalentTo(newIdentityResourceDto, options => options.Excluding(o => o.Id));
+                newIdentityResourceDto.Should().BeEquivalentTo(identityResourceDto, options => options.Excluding(o => o.Id));
 
 				//Remove identity resource
 				await identityResourceService.DeleteIdentityResourceAsync(newIdentityResourceDto);
@@ -162,7 +162,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 				var newIdentityResourceDto = await identityResourceService.GetIdentityResourceAsync(identityResource.Id);
 
 				//Assert new identity resource
-				identityResourceDto.ShouldBeEquivalentTo(newIdentityResourceDto, options => options.Excluding(o => o.Id));
+                newIdentityResourceDto.Should().BeEquivalentTo(identityResourceDto, options => options.Excluding(o => o.Id));
 
 				//Detached the added item
 				context.Entry(identityResource).State = EntityState.Detached;
@@ -176,7 +176,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 				var updatedIdentityResourceDto = await identityResourceService.GetIdentityResourceAsync(identityResource.Id);
 
 				//Assert updated identity resuorce
-				updatedIdentityResource.ShouldBeEquivalentTo(updatedIdentityResourceDto, options => options.Excluding(o => o.Id));
+                updatedIdentityResourceDto.Should().BeEquivalentTo(updatedIdentityResource, options => options.Excluding(o => o.Id));
 			}
 		}
 
@@ -198,7 +198,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 				var identityResourceDto = await identityResourceService.GetIdentityResourceAsync(resource.Id);
 
 				//Assert new identity resource
-				identityResource.ShouldBeEquivalentTo(identityResourceDto, options => options.Excluding(o => o.Id));
+                identityResourceDto.Should().BeEquivalentTo(identityResource, options => options.Excluding(o => o.Id));
 
 				//Generate random new identity resource property
 				var resourceProperty = IdentityResourceDtoMock.GenerateRandomIdentityResourceProperty(0, resource.Id);
@@ -217,7 +217,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 				var resourcePropertiesDto = await identityResourceService.GetIdentityResourcePropertyAsync(property.Id);
 
 				//Assert
-				resourcePropertiesDto.ShouldBeEquivalentTo(propertyDto, options =>
+                propertyDto.Should().BeEquivalentTo(resourcePropertiesDto, options =>
 					options.Excluding(o => o.IdentityResourcePropertyId)
 						   .Excluding(o => o.IdentityResourceName));
 			}
@@ -241,7 +241,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 				var identityResourceDto = await identityResourceService.GetIdentityResourceAsync(resource.Id);
 
 				//Assert new identity resource
-				identityResource.ShouldBeEquivalentTo(identityResourceDto, options => options.Excluding(o => o.Id));
+                identityResourceDto.Should().BeEquivalentTo(identityResource, options => options.Excluding(o => o.Id));
 
 				//Generate random new identity resource property
 				var identityResourceProperty = IdentityResourceDtoMock.GenerateRandomIdentityResourceProperty(0, resource.Id);
@@ -260,7 +260,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 				var resourcePropertiesDto = await identityResourceService.GetIdentityResourcePropertyAsync(property.Id);
 
 				//Assert
-				resourcePropertiesDto.ShouldBeEquivalentTo(propertyDto, options =>
+                propertyDto.Should().BeEquivalentTo(resourcePropertiesDto, options =>
 					options.Excluding(o => o.IdentityResourcePropertyId)
 					.Excluding(o => o.IdentityResourceName));
 			}
@@ -284,7 +284,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 				var identityResourceDto = await identityResourceService.GetIdentityResourceAsync(resource.Id);
 
 				//Assert new identity resource
-				resourceDto.ShouldBeEquivalentTo(identityResourceDto, options => options.Excluding(o => o.Id));
+                identityResourceDto.Should().BeEquivalentTo(resourceDto, options => options.Excluding(o => o.Id));
 
 				//Generate random new identity resource Property
 				var identityResourcePropertiesDto = IdentityResourceDtoMock.GenerateRandomIdentityResourceProperty(0, resource.Id);
@@ -303,7 +303,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 				var resourcePropertiesDto = await identityResourceService.GetIdentityResourcePropertyAsync(property.Id);
 
 				//Assert
-				resourcePropertiesDto.ShouldBeEquivalentTo(propertiesDto, options =>
+                propertiesDto.Should().BeEquivalentTo(resourcePropertiesDto, options =>
 					options.Excluding(o => o.IdentityResourcePropertyId)
 					.Excluding(o => o.IdentityResourceName));
 

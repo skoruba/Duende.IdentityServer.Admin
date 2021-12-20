@@ -93,7 +93,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 				var newApiScope = await apiScopeService.GetApiScopeAsync(apiScopesDto.Id);
 
 				//Assert
-				newApiScope.ShouldBeEquivalentTo(apiScopesDto);
+                apiScopesDto.Should().BeEquivalentTo(newApiScope);
 			}
 		}
 
@@ -121,7 +121,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 				var newApiScope = await apiScopeService.GetApiScopeAsync(apiScopesDto.Id);
 
 				//Assert
-				newApiScope.ShouldBeEquivalentTo(apiScopesDto);
+                apiScopesDto.Should().BeEquivalentTo(newApiScope);
 			}
 		}
 
@@ -149,7 +149,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 				var newApiScope = await apiScopeService.GetApiScopeAsync(apiScopesDto.Id);
 
 				//Assert
-				newApiScope.ShouldBeEquivalentTo(apiScopesDto);
+                apiScopesDto.Should().BeEquivalentTo(newApiScope);
 
 				//Detached the added item
 				context.Entry(apiScope).State = EntityState.Detached;
@@ -162,7 +162,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 				var updatedApiScopeDto = await apiScopeService.GetApiScopeAsync(apiScopesDto.Id);
 
 				//Assert updated api scope
-				updatedApiScope.ShouldBeEquivalentTo(updatedApiScopeDto);
+                updatedApiScopeDto.Should().BeEquivalentTo(updatedApiScope);
 			}
 		}
 
@@ -190,7 +190,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 				var newApiScope = await apiScopeService.GetApiScopeAsync(apiScopeDto.Id);
 
 				//Assert
-				newApiScope.ShouldBeEquivalentTo(apiScopeDto);
+                apiScopeDto.Should().BeEquivalentTo(newApiScope);
 
 				//Delete it
 				await apiScopeService.DeleteApiScopeAsync(newApiScope);

@@ -57,7 +57,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 var newIdentityResource = await context.IdentityResources.Where(x => x.Id == identityResource.Id).SingleAsync();
 
                 //Assert new identity resource
-                newIdentityResource.ShouldBeEquivalentTo(identityResource, options => options.Excluding(o => o.Id));
+                identityResource.Should().BeEquivalentTo(newIdentityResource, options => options.Excluding(o => o.Id));
             }
         }
 
@@ -78,11 +78,11 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 var newIdentityResource = await identityResourceRepository.GetIdentityResourceAsync(identityResource.Id);
 
                 //Assert new identity resource
-                newIdentityResource.ShouldBeEquivalentTo(identityResource, options => options.Excluding(o => o.Id).Excluding(o => o.UserClaims));
+                identityResource.Should().BeEquivalentTo(newIdentityResource, options => options.Excluding(o => o.Id).Excluding(o => o.UserClaims));
 
-                newIdentityResource.UserClaims.ShouldBeEquivalentTo(identityResource.UserClaims,
-                    option => option.Excluding(x => x.SelectedMemberPath.EndsWith("Id"))
-                        .Excluding(x => x.SelectedMemberPath.EndsWith("IdentityResource")));
+                identityResource.UserClaims.Should().BeEquivalentTo(newIdentityResource.UserClaims,
+                    option => option.Excluding(x => x.Path.EndsWith("Id"))
+                        .Excluding(x => x.Path.EndsWith("IdentityResource")));
             }
         }
 
@@ -103,7 +103,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 var newIdentityResource = await context.IdentityResources.Where(x => x.Id == identityResource.Id).SingleAsync();
 
                 //Assert new identity resource
-                newIdentityResource.ShouldBeEquivalentTo(identityResource, options => options.Excluding(o => o.Id));
+                identityResource.Should().BeEquivalentTo(newIdentityResource, options => options.Excluding(o => o.Id));
 
                 //Delete identity resource
                 await identityResourceRepository.DeleteIdentityResourceAsync(newIdentityResource);
@@ -133,7 +133,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 var newIdentityResource = await context.IdentityResources.Where(x => x.Id == identityResource.Id).SingleOrDefaultAsync();
 
                 //Assert new identity resource
-                newIdentityResource.ShouldBeEquivalentTo(identityResource, options => options.Excluding(o => o.Id));
+                identityResource.Should().BeEquivalentTo(newIdentityResource, options => options.Excluding(o => o.Id));
 
                 //Detached the added item
                 context.Entry(newIdentityResource).State = EntityState.Detached;
@@ -148,7 +148,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 var updatedIdentityResourceEntity = await context.IdentityResources.Where(x => x.Id == updatedIdentityResource.Id).SingleAsync();
 
                 //Assert updated identity resource
-                updatedIdentityResource.ShouldBeEquivalentTo(updatedIdentityResourceEntity);
+                updatedIdentityResourceEntity.Should().BeEquivalentTo(updatedIdentityResource);
             }
         }
 
@@ -168,13 +168,13 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
 				//Get new identity resource
 				var resource = await identityResourceRepository.GetIdentityResourceAsync(identityResource.Id);
 
-				//Assert new identity resource
-				resource.ShouldBeEquivalentTo(identityResource, options => options.Excluding(o => o.Id)
+                //Assert new identity resource
+                identityResource.Should().BeEquivalentTo(resource, options => options.Excluding(o => o.Id)
                     .Excluding(o => o.UserClaims));
 
-                resource.UserClaims.ShouldBeEquivalentTo(identityResource.UserClaims,
-                    option => option.Excluding(x => x.SelectedMemberPath.EndsWith("Id"))
-                        .Excluding(x => x.SelectedMemberPath.EndsWith("IdentityResource")));
+                identityResource.UserClaims.Should().BeEquivalentTo(resource.UserClaims,
+                    option => option.Excluding(x => x.Path.EndsWith("Id"))
+                        .Excluding(x => x.Path.EndsWith("IdentityResource")));
 
                 //Generate random new identity resource property
                 var identityResourceProperty = IdentityResourceMock.GenerateRandomIdentityResourceProperty(0);
@@ -186,7 +186,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
 				var resourceProperty = await context.IdentityResourceProperties.Where(x => x.Id == identityResourceProperty.Id)
 					.SingleOrDefaultAsync();
 
-				resourceProperty.ShouldBeEquivalentTo(identityResourceProperty,
+                identityResourceProperty.Should().BeEquivalentTo(resourceProperty,
 					options => options.Excluding(o => o.Id).Excluding(x => x.IdentityResource));
 			}
 		}
@@ -207,12 +207,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
 				//Get new identity resource
 				var resource = await identityResourceRepository.GetIdentityResourceAsync(identityResource.Id);
 
-				//Assert new identity resource
-				resource.ShouldBeEquivalentTo(identityResource, options => options.Excluding(o => o.Id).Excluding(o => o.UserClaims));
+                //Assert new identity resource
+                identityResource.Should().BeEquivalentTo(resource, options => options.Excluding(o => o.Id).Excluding(o => o.UserClaims));
 
-                resource.UserClaims.ShouldBeEquivalentTo(identityResource.UserClaims,
-                    option => option.Excluding(x => x.SelectedMemberPath.EndsWith("Id"))
-                        .Excluding(x => x.SelectedMemberPath.EndsWith("IdentityResource")));
+                identityResource.UserClaims.Should().BeEquivalentTo(resource.UserClaims,
+                    option => option.Excluding(x => x.Path.EndsWith("Id"))
+                        .Excluding(x => x.Path.EndsWith("IdentityResource")));
 
                 //Generate random new identity resource property
                 var identityResourceProperty = IdentityResourceMock.GenerateRandomIdentityResourceProperty(0);
@@ -224,8 +224,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
 				var property = await context.IdentityResourceProperties.Where(x => x.Id == identityResourceProperty.Id)
 					.SingleOrDefaultAsync();
 
-				//Assert
-				property.ShouldBeEquivalentTo(identityResourceProperty,
+                //Assert
+                identityResourceProperty.Should().BeEquivalentTo(property,
 					options => options.Excluding(o => o.Id).Excluding(x => x.IdentityResource));
 
 				//Try delete it
@@ -256,12 +256,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
 				//Get new identity resource
 				var resource = await identityResourceRepository.GetIdentityResourceAsync(identityResource.Id);
 
-				//Assert new identity resource
-				resource.ShouldBeEquivalentTo(identityResource, options => options.Excluding(o => o.Id).Excluding(o => o.UserClaims));
+                //Assert new identity resource
+                identityResource.Should().BeEquivalentTo(resource, options => options.Excluding(o => o.Id).Excluding(o => o.UserClaims));
 
-                resource.UserClaims.ShouldBeEquivalentTo(identityResource.UserClaims,
-                    option => option.Excluding(x => x.SelectedMemberPath.EndsWith("Id"))
-                        .Excluding(x => x.SelectedMemberPath.EndsWith("IdentityResource")));
+                identityResource.UserClaims.Should().BeEquivalentTo(resource.UserClaims,
+                    option => option.Excluding(x => x.Path.EndsWith("Id"))
+                        .Excluding(x => x.Path.EndsWith("IdentityResource")));
 
                 //Generate random new identity resource property
                 var identityResourceProperty = IdentityResourceMock.GenerateRandomIdentityResourceProperty(0);
@@ -272,7 +272,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
 				//Get new identity resource property
 				var resourceProperty = await identityResourceRepository.GetIdentityResourcePropertyAsync(identityResourceProperty.Id);
 
-				resourceProperty.ShouldBeEquivalentTo(identityResourceProperty,
+                identityResourceProperty.Should().BeEquivalentTo(resourceProperty,
 					options => options.Excluding(o => o.Id).Excluding(x => x.IdentityResource));
 			}
 		}

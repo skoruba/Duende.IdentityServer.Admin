@@ -22,7 +22,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mappers
             //Asert
             logDto.Should().NotBeNull();
 
-            log.ShouldBeEquivalentTo(logDto, options =>
+            logDto.Should().BeEquivalentTo(log, options =>
                 options.Excluding(o => o.PropertiesXml));
         }
 
@@ -37,7 +37,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mappers
 
             log.Should().NotBeNull();
 
-            log.ShouldBeEquivalentTo(logDto, options =>
+            logDto.Should().BeEquivalentTo(log, options =>
                 options.Excluding(o => o.PropertiesXml));
         }
     }

@@ -67,7 +67,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                     var persistedGrantAdded = await persistedGrantRepository.GetPersistedGrantAsync(persistedGrantKey);
 
                     //Assert
-                    persistedGrant.ShouldBeEquivalentTo(persistedGrantAdded, opt => opt.Excluding(x => x.Key));
+                    persistedGrantAdded.Should().BeEquivalentTo(persistedGrant, opt => opt.Excluding(x => x.Key));
                 }
             }
         }

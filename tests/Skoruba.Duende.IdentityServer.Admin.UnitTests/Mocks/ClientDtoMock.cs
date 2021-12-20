@@ -166,6 +166,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
             var clientCloneDto = new Faker<ClientCloneDto>()
                 .StrictMode(false)
                 .RuleFor(o => o.Id, id)
+                .RuleFor(o => o.ClientId, Guid.NewGuid().ToString())
+                .RuleFor(o => o.ClientName, Guid.NewGuid().ToString())
                 .RuleFor(o => o.CloneClientClaims, cloneClientClaims)
                 .RuleFor(o => o.CloneClientCorsOrigins, cloneClientCorsOrigins)
                 .RuleFor(o => o.CloneClientGrantTypes, cloneClientGrantTypes)

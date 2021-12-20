@@ -24,7 +24,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mappers
 			//Assert
 			apiResourceDto.Should().NotBeNull();
 
-			apiResource.ShouldBeEquivalentTo(apiResourceDto, options =>
+            apiResourceDto.Should().BeEquivalentTo(apiResource, options =>
 				options.Excluding(o => o.Secrets)
 					   .Excluding(o => o.Scopes)
 					   .Excluding(o => o.Properties)
@@ -36,10 +36,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mappers
 					   .Excluding(o => o.UserClaims));
 
 			//Assert collection
-			apiResource.UserClaims.Select(x => x.Type).ShouldBeEquivalentTo(apiResourceDto.UserClaims);
+            apiResourceDto.UserClaims.Should().BeEquivalentTo(apiResource.UserClaims.Select(x => x.Type));
 
             var allowedAlgList = AllowedSigningAlgorithmsConverter.Converter.Convert(apiResource.AllowedAccessTokenSigningAlgorithms, null);
-			allowedAlgList.ShouldBeEquivalentTo(apiResourceDto.AllowedAccessTokenSigningAlgorithms);
+            apiResourceDto.AllowedAccessTokenSigningAlgorithms.Should().BeEquivalentTo(allowedAlgList);
 		}
 
 		[Fact]
@@ -53,7 +53,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mappers
 
 			apiResource.Should().NotBeNull();
 
-			apiResource.ShouldBeEquivalentTo(apiResourceDto, options =>
+            apiResourceDto.Should().BeEquivalentTo(apiResource, options =>
 				options.Excluding(o => o.Secrets)
 					.Excluding(o => o.Scopes)
 					.Excluding(o => o.Properties)
@@ -65,9 +65,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mappers
 					.Excluding(o => o.UserClaims));
 
 			//Assert collection
-			apiResource.UserClaims.Select(x => x.Type).ShouldBeEquivalentTo(apiResourceDto.UserClaims);
+            apiResourceDto.UserClaims.Should().BeEquivalentTo(apiResource.UserClaims.Select(x => x.Type));
             var allowedAlgList = AllowedSigningAlgorithmsConverter.Converter.Convert(apiResource.AllowedAccessTokenSigningAlgorithms, null);
-            allowedAlgList.ShouldBeEquivalentTo(apiResourceDto.AllowedAccessTokenSigningAlgorithms);
+            apiResourceDto.AllowedAccessTokenSigningAlgorithms.Should().BeEquivalentTo(allowedAlgList);
 		}
 
 		[Fact]
@@ -81,13 +81,13 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mappers
 
             apiScope.Should().NotBeNull();
 
-            apiScope.ShouldBeEquivalentTo(apiScopeDto, options =>
+            apiScopeDto.Should().BeEquivalentTo(apiScope, options =>
                 options.Excluding(o => o.UserClaims)
                     .Excluding(o => o.ApiScopeProperties)
 					.Excluding(o => o.UserClaimsItems));
 
 			//Assert collection
-            apiScopeDto.UserClaims.Select(x => x.Type).ShouldBeEquivalentTo(apiScope.UserClaims);
+            apiScope.UserClaims.Should().BeEquivalentTo(apiScopeDto.UserClaims.Select(x => x.Type));
             apiScope.Id.Should().Be(apiScopeDto.Id);
 		}
 
@@ -102,13 +102,13 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mappers
 
 			apiScope.Should().NotBeNull();
 
-			apiScope.ShouldBeEquivalentTo(apiScopeDto, options =>
+            apiScopeDto.Should().BeEquivalentTo(apiScope, options =>
 				options.Excluding(o => o.UserClaims)
                        .Excluding(o => o.Properties)
 					   .Excluding(o => o.Id));
 
 			//Assert collection
-			apiScope.UserClaims.Select(x => x.Type).ShouldBeEquivalentTo(apiScopeDto.UserClaims);
+            apiScopeDto.UserClaims.Should().BeEquivalentTo(apiScope.UserClaims.Select(x => x.Type));
 			apiScope.Id.Should().Be(apiScopeDto.Id);
 		}
 
@@ -124,7 +124,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mappers
 			//Assert
 			apiSecretsDto.Should().NotBeNull();
 
-			apiSecret.ShouldBeEquivalentTo(apiSecretsDto, options =>
+            apiSecretsDto.Should().BeEquivalentTo(apiSecret, options =>
 				options.Excluding(o => o.ApiResource)
 					.Excluding(o => o.Created)
 					.Excluding(o => o.Id));
@@ -143,7 +143,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mappers
 
 			apiSecret.Should().NotBeNull();
 
-			apiSecret.ShouldBeEquivalentTo(apiSecretsDto, options =>
+            apiSecretsDto.Should().BeEquivalentTo(apiSecret, options =>
 				options.Excluding(o => o.ApiResource)
 					.Excluding(o => o.Created)
 					.Excluding(o => o.Id));
