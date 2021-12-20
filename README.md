@@ -9,7 +9,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/563ug5gcxk904m6g/branch/main?svg=true)](https://ci.appveyor.com/project/JanSkoruba/duende-identityserver-admin/branch/main)
 [![Join the chat at https://gitter.im/skoruba/IdentityServer4.Admin](https://badges.gitter.im/skoruba/IdentityServer4.Admin.svg)](https://gitter.im/skoruba/IdentityServer4.Admin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-The application is written in the **Asp.Net Core MVC - using .NET 5.0**
+The application is written in the **Asp.Net Core MVC - using .NET 6.0**
 
 ## Requirements
 
@@ -22,7 +22,7 @@ The application is written in the **Asp.Net Core MVC - using .NET 5.0**
 - 🔒 **NOTE:** The project uses the default database migrations which affect your database therefore double check the migrations according to your database provider and create a database backup
 
 ```sh
-dotnet new -i Skoruba.Duende.IdentityServer.Admin.Templates::1.0.1
+dotnet new -i Skoruba.Duende.IdentityServer.Admin.Templates::1.1.0
 ```
 
 ### Create new project:
@@ -731,7 +731,7 @@ It is possible to define the configuration according the client type - by defaul
 - [x] Extract UI part into nuget package ([#770](https://github.com/skoruba/IdentityServer4.Admin/issues/770), [#409](https://github.com/skoruba/IdentityServer4.Admin/issues/409), [#55](https://github.com/skoruba/IdentityServer4.Admin/issues/55), [#322](https://github.com/skoruba/IdentityServer4.Admin/issues/322), [#28](https://github.com/skoruba/IdentityServer4.Admin/issues/28), [#133](https://github.com/skoruba/IdentityServer4.Admin/issues/133)) 
 
 ### 1.1.0
-- [ ] Update to .NET 6
+- [x] Update to .NET 6
 
 ### 2.0.0
 - [ ] Connect Admin Api to the Admin UI ([#478](https://github.com/skoruba/IdentityServer4.Admin/issues/478))
