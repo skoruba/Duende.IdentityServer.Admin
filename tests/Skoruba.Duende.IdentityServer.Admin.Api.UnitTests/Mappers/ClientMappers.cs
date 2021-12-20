@@ -20,7 +20,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             clientDto.Should().NotBeNull();
 
-            clientApiDto.ShouldBeEquivalentTo(clientDto);
+            clientDto.Should().BeEquivalentTo(clientApiDto);
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             clientDto.Should().NotBeNull();
 
-            clientDto.ShouldBeEquivalentTo(clientApiDto, options =>
+            clientApiDto.Should().BeEquivalentTo(clientDto, options =>
                 options.Excluding(o => o.AllowedCorsOriginsItems)
                     .Excluding(o => o.AllowedGrantTypesItems)
                     .Excluding(o => o.AllowedIdentityTokenSigningAlgorithmsItems)
@@ -59,7 +59,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             clientSecretApi.Id.Should().Be(clientSecretsDto.ClientSecretId);
 
-            clientSecretApi.ShouldBeEquivalentTo(clientSecretsDto, options => options.Excluding(x => x.Id));
+            clientSecretsDto.Should().BeEquivalentTo(clientSecretApi, options => options.Excluding(x => x.Id));
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             clientSecretDto.ClientSecretId.Should().Be(clientSecretApiDto.Id);
 
-            clientSecretDto.ShouldBeEquivalentTo(clientSecretApiDto, options =>
+            clientSecretApiDto.Should().BeEquivalentTo(clientSecretDto, options =>
                 options.Excluding(x => x.ClientId)
                     .Excluding(x => x.ClientSecrets)
                     .Excluding(x => x.ClientName)
@@ -92,7 +92,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             clientClaimApiDto.Id.Should().Be(clientClaimsDto.ClientClaimId);
 
-            clientClaimApiDto.ShouldBeEquivalentTo(clientClaimsDto, options => options.Excluding(x => x.Id));
+            clientClaimsDto.Should().BeEquivalentTo(clientClaimApiDto, options => options.Excluding(x => x.Id));
         }
 
         [Fact]
@@ -104,7 +104,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             clientClaimDto.ClientClaimId.Should().Be(clientClaimApiDto.Id);
 
-            clientClaimDto.ShouldBeEquivalentTo(clientClaimApiDto, options =>
+            clientClaimApiDto.Should().BeEquivalentTo(clientClaimDto, options =>
                 options.Excluding(x => x.ClientClaims)
                     .Excluding(x => x.PageSize)
                     .Excluding(x => x.TotalCount)
@@ -121,8 +121,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
             var clientPropertiesDto = clientPropertyApiDto.ToClientApiModel<ClientPropertiesDto>();
 
             clientPropertyApiDto.Id.Should().Be(clientPropertiesDto.ClientPropertyId);
-            
-            clientPropertyApiDto.ShouldBeEquivalentTo(clientPropertiesDto, options => options.Excluding(x => x.Id));
+
+            clientPropertiesDto.Should().BeEquivalentTo(clientPropertyApiDto, options => options.Excluding(x => x.Id));
         }
         
         [Fact]
@@ -134,7 +134,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             clientPropertyDto.ClientPropertyId.Should().Be(clientPropertyApiDto.Id);
 
-            clientPropertyDto.ShouldBeEquivalentTo(clientPropertyApiDto, options => 
+            clientPropertyApiDto.Should().BeEquivalentTo(clientPropertyDto, options => 
                 options.Excluding(x=> x.ClientId)
                     .Excluding(x=> x.ClientName)
                     .Excluding(x=> x.PageSize)

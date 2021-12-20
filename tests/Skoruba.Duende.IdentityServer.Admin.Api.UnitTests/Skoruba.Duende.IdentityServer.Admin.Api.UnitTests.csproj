@@ -14,7 +14,7 @@
         </PackageReference>
         <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
         <PackageReference Include="Bogus" Version="34.0.1" />
-        <PackageReference Include="FluentAssertions" Version="4.19.4" />
+        <PackageReference Include="FluentAssertions" Version="6.2.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
         <PackageReference Include="Moq" Version="4.16.1" />
     </ItemGroup>
