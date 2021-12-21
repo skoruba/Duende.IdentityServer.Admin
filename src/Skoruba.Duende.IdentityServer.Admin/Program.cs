@@ -98,7 +98,7 @@ namespace Skoruba.Duende.IdentityServer.Admin
 
             if (isDevelopment)
             {
-                configurationBuilder.AddUserSecrets<Startup>(false);
+                configurationBuilder.AddUserSecrets<Startup>(true);
             }
 
             var configuration = configurationBuilder.Build();
@@ -129,7 +129,7 @@ namespace Skoruba.Duende.IdentityServer.Admin
 
                      if (env.IsDevelopment())
                      {
-                         configApp.AddUserSecrets<Startup>(false);
+                         configApp.AddUserSecrets<Startup>(true);
                      }
 
                      configurationRoot.AddAzureKeyVaultConfiguration(configApp);

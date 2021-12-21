@@ -13,7 +13,5 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Key
         public string Use { get; set; }
         public string Algorithm { get; set; }
         public bool IsX509Certificate { get; set; }
-        public bool DataProtected { get; set; }
-        public string Data { get; set; }
     }
 }
