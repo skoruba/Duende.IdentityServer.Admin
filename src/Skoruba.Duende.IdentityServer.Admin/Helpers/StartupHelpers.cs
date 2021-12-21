@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Skoruba.Duende.IdentityServer.Admin.UI.Helpers.ApplicationBuilder;
 
 namespace Skoruba.Duende.IdentityServer.Admin.Helpers
 {
@@ -16,7 +17,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Helpers
             {
                 var builder = services.AddControllersWithViews();
 
-                var adminAssembly = typeof(StartupHelpers).GetTypeInfo().Assembly.GetName().Name;
+                var adminAssembly = typeof(AdminUIApplicationBuilderExtensions).GetTypeInfo().Assembly.GetName().Name;
 
                 builder.AddRazorRuntimeCompilation(options =>
                 {
