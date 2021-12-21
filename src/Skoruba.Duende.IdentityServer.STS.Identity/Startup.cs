@@ -72,11 +72,13 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity
 
             app.UsePathBase(Configuration.GetValue<string>("BasePath"));
 
-            // Add custom security headers
-            app.UseSecurityHeaders(Configuration);
 
             app.UseStaticFiles();
             UseAuthentication(app);
+
+            // Add custom security headers
+            app.UseSecurityHeaders(Configuration);
+
             app.UseMvcLocalizationServices();
 
             app.UseRouting();
