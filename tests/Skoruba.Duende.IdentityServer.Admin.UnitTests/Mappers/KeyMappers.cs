@@ -15,7 +15,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mappers
 
             var keyDto = key.ToModel();
 
-            keyDto.Should().BeEquivalentTo(key);
+            keyDto.Should().BeEquivalentTo(key, options => 
+                options.Excluding(x=> x.DataProtected)
+                    .Excluding(x=> x.Data));
         }
     }
 }
