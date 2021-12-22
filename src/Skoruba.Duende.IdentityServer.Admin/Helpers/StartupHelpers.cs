@@ -12,7 +12,6 @@ namespace Skoruba.Duende.IdentityServer.Admin.Helpers
     {
         public static void AddAdminUIRazorRuntimeCompilation(this IServiceCollection services, IWebHostEnvironment hostingEnvironment)
         {
-#if DEBUG
             if (hostingEnvironment.IsDevelopment())
             {
                 var builder = services.AddControllersWithViews();
@@ -27,7 +26,6 @@ namespace Skoruba.Duende.IdentityServer.Admin.Helpers
                     options.FileProviders.Add(new PhysicalFileProvider(libraryPath));
                 });
             }
-#endif
         }
     }
 }
