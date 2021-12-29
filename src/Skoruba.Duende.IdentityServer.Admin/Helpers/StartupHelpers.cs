@@ -23,7 +23,11 @@ namespace Skoruba.Duende.IdentityServer.Admin.Helpers
                     if (adminAssembly == null) return;
 
                     var libraryPath = Path.GetFullPath(Path.Combine(hostingEnvironment.ContentRootPath, "..", adminAssembly));
-                    options.FileProviders.Add(new PhysicalFileProvider(libraryPath));
+
+                    if (Directory.Exists(libraryPath))
+                    {
+                        options.FileProviders.Add(new PhysicalFileProvider(libraryPath));
+                    }
                 });
             }
         }
