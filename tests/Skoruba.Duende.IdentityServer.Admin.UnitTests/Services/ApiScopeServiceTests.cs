@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Duende.IdentityServer.EntityFramework.Options;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Skoruba.AuditLogging.Services;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Mappers;
@@ -23,19 +24,20 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 {
     public class ApiScopeServiceTests
     {
-        private readonly DbContextOptions<IdentityServerConfigurationDbContext> _dbContextOptions;
-        private readonly ConfigurationStoreOptions _storeOptions;
-
-        public ApiScopeServiceTests()
+		private IdentityServerConfigurationDbContext GetDbContext()
         {
-			var databaseName = Guid.NewGuid().ToString();
+            var serviceCollection = new ServiceCollection();
 
-            _dbContextOptions = new DbContextOptionsBuilder<IdentityServerConfigurationDbContext>()
-                .UseInMemoryDatabase(databaseName)
-                .Options;
+            serviceCollection.AddSingleton(new ConfigurationStoreOptions());
+            serviceCollection.AddSingleton(new OperationalStoreOptions());
 
-            _storeOptions = new ConfigurationStoreOptions();
-		}
+            serviceCollection.AddDbContext<IdentityServerConfigurationDbContext>(builder => builder.UseInMemoryDatabase(Guid.NewGuid().ToString()));
+
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            var context = serviceProvider.GetService<IdentityServerConfigurationDbContext>();
+
+            return context;
+        }
 
 		private IApiScopeRepository GetApiScopeRepository(IdentityServerConfigurationDbContext context)
         {
@@ -72,7 +74,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 		[Fact]
 		public async Task AddApiScopeAsync()
 		{
-			using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+			using (var context = GetDbContext())
 			{
 				var apiScopeService = GetApiScopeService(context);
 
@@ -100,7 +102,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 		[Fact]
 		public async Task GetApiScopeAsync()
 		{
-			using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+			using (var context = GetDbContext())
 			{
 				var apiScopeService = GetApiScopeService(context);
 
@@ -128,7 +130,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 		[Fact]
 		public async Task UpdateApiScopeAsync()
 		{
-			using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+			using (var context = GetDbContext())
 			{
 				var apiScopeService = GetApiScopeService(context);
 
@@ -169,7 +171,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 		[Fact]
 		public async Task DeleteApiScopeAsync()
 		{
-			using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+			using (var context = GetDbContext())
 			{
 				var apiScopeService = GetApiScopeService(context);
 

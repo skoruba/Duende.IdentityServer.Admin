@@ -100,6 +100,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.Dtos.Clients
 
         public bool RequireRequestObject { get; set; }
 
+        public int? CibaLifetime { get; set; }
+        public int? PollingInterval { get; set; }
+
+
         public List<string> AllowedIdentityTokenSigningAlgorithms { get; set; }
 
         public bool NonEditable { get; set; }

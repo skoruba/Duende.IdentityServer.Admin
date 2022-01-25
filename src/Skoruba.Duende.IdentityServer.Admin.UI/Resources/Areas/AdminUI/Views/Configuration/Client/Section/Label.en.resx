@@ -471,4 +471,16 @@ OneTime the refresh token handle will be updated when refreshing tokens</value>
   <data name="SigningAlgorithms_Info" xml:space="preserve">
     <value>List of allowed signing algorithms for identity token. If empty, will use the server default signing algorithm.</value>
   </data>
+  <data name="CibaLifetime_Info" xml:space="preserve">
+    <value>Specifies the backchannel authentication request lifetime in seconds. Default to empty.</value>
+  </data>
+  <data name="CibaLifetime_Label" xml:space="preserve">
+    <value>Ciba Lifetime</value>
+  </data>
+  <data name="PollingInterval_Info" xml:space="preserve">
+    <value>Backchannel polling interval in seconds. Default to empty.</value>
+  </data>
+  <data name="PollingInterval_Label" xml:space="preserve">
+    <value>Polling Interval</value>
+  </data>
 </root>

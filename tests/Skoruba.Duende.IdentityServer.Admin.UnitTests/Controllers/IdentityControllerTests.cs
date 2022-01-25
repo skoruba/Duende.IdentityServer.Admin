@@ -595,10 +595,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Controllers
             services.AddSingleton<IConfiguration>(new ConfigurationBuilder().Build());
 
             //Entity framework
-            var efServiceProvider = new ServiceCollection().AddEntityFrameworkInMemoryDatabase().BuildServiceProvider();
             services.AddOptions();
-            services.AddDbContext<AdminIdentityDbContext>(b => b.UseInMemoryDatabase(Guid.NewGuid().ToString()).UseInternalServiceProvider(efServiceProvider));
-            services.AddDbContext<AdminAuditLogDbContext>(b => b.UseInMemoryDatabase(Guid.NewGuid().ToString()).UseInternalServiceProvider(efServiceProvider));
+            services.AddDbContext<AdminIdentityDbContext>(b => b.UseInMemoryDatabase(Guid.NewGuid().ToString()));
+            services.AddDbContext<AdminAuditLogDbContext>(b => b.UseInMemoryDatabase(Guid.NewGuid().ToString()));
 
             //Http Context
             var context = new DefaultHttpContext();

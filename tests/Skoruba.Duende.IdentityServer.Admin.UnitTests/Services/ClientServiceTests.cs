@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Duende.IdentityServer.EntityFramework.Options;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Skoruba.AuditLogging.Services;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Mappers;
@@ -23,21 +24,20 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 {
     public class ClientServiceTests
     {
-        public ClientServiceTests()
+        private IdentityServerConfigurationDbContext GetDbContext()
         {
-            var databaseName = Guid.NewGuid().ToString();
+            var serviceCollection = new ServiceCollection();
 
-            _dbContextOptions = new DbContextOptionsBuilder<IdentityServerConfigurationDbContext>()
-                .UseInMemoryDatabase(databaseName)
-                .Options;
+            serviceCollection.AddSingleton(new ConfigurationStoreOptions());
+            serviceCollection.AddSingleton(new OperationalStoreOptions());
 
-            _storeOptions = new ConfigurationStoreOptions();
-            _operationalStore = new OperationalStoreOptions();
+            serviceCollection.AddDbContext<IdentityServerConfigurationDbContext>(builder => builder.UseInMemoryDatabase(Guid.NewGuid().ToString()));
+
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            var context = serviceProvider.GetService<IdentityServerConfigurationDbContext>();
+
+            return context;
         }
-
-        private readonly DbContextOptions<IdentityServerConfigurationDbContext> _dbContextOptions;
-        private readonly ConfigurationStoreOptions _storeOptions;
-        private readonly OperationalStoreOptions _operationalStore;
 
         private IClientRepository GetClientRepository(IdentityServerConfigurationDbContext context)
         {
@@ -71,7 +71,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task AddClientAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -96,7 +96,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         {
             int clonedClientId;
 
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 //Generate random new client
                 var clientDto = ClientDtoMock.GenerateRandomClient(0);
@@ -204,7 +204,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task UpdateClientAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -245,7 +245,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task RemoveClientAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -282,7 +282,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task GetClientAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -305,7 +305,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task AddClientClaimAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -349,7 +349,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task DeleteClientClaimAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -401,7 +401,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task GetClientClaimAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -444,7 +444,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task AddClientPropertyAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -488,7 +488,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task GetClientPropertyAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -531,7 +531,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task DeleteClientPropertyAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -583,7 +583,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task AddClientSecretAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -630,7 +630,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task GetClientSecretAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -676,7 +676,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task DeleteClientSecretAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
                 

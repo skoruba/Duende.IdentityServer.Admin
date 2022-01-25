@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Duende.IdentityServer.EntityFramework.Options;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Skoruba.AuditLogging.Services;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Mappers;
@@ -23,21 +24,20 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 {
 	public class IdentityResourceServiceTests
 	{
-		public IdentityResourceServiceTests()
-		{
-			var databaseName = Guid.NewGuid().ToString();
+        private IdentityServerConfigurationDbContext GetDbContext()
+        {
+            var serviceCollection = new ServiceCollection();
 
-			_dbContextOptions = new DbContextOptionsBuilder<IdentityServerConfigurationDbContext>()
-				.UseInMemoryDatabase(databaseName)
-				.Options;
+            serviceCollection.AddSingleton(new ConfigurationStoreOptions());
+            serviceCollection.AddSingleton(new OperationalStoreOptions());
 
-			_storeOptions = new ConfigurationStoreOptions();
-			_operationalStore = new OperationalStoreOptions();
-		}
+            serviceCollection.AddDbContext<IdentityServerConfigurationDbContext>(builder => builder.UseInMemoryDatabase(Guid.NewGuid().ToString()));
 
-		private readonly DbContextOptions<IdentityServerConfigurationDbContext> _dbContextOptions;
-		private readonly ConfigurationStoreOptions _storeOptions;
-		private readonly OperationalStoreOptions _operationalStore;
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            var context = serviceProvider.GetService<IdentityServerConfigurationDbContext>();
+
+            return context;
+        }
 
 		private IIdentityResourceRepository GetIdentityResourceRepository(IdentityServerConfigurationDbContext context)
 		{
@@ -71,7 +71,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
 		public async Task AddIdentityResourceAsync()
 		{
-			using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+			using (var context = GetDbContext())
             {
                 var identityResourceService = GetIdentityResourceService(context);
 
@@ -93,7 +93,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 		[Fact]
 		public async Task GetIdentityResourceAsync()
 		{
-			using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+			using (var context = GetDbContext())
 			{
                 var identityResourceService = GetIdentityResourceService(context);
                 
@@ -115,7 +115,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 		[Fact]
 		public async Task RemoveIdentityResourceAsync()
 		{
-			using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+			using (var context = GetDbContext())
 			{
                 var identityResourceService = GetIdentityResourceService(context);
                 
@@ -147,7 +147,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 		[Fact]
 		public async Task UpdateIdentityResourceAsync()
 		{
-			using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+			using (var context = GetDbContext())
 			{
                 var identityResourceService = GetIdentityResourceService(context);
 
@@ -183,7 +183,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 		[Fact]
 		public async Task AddIdentityResourcePropertyAsync()
 		{
-			using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+			using (var context = GetDbContext())
 			{
                 var identityResourceService = GetIdentityResourceService(context);
 
@@ -226,7 +226,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 		[Fact]
 		public async Task GetIdentityResourcePropertyAsync()
 		{
-			using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+			using (var context = GetDbContext())
 			{
                 var identityResourceService = GetIdentityResourceService(context);
 
@@ -269,7 +269,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 		[Fact]
 		public async Task DeleteIdentityResourcePropertyAsync()
 		{
-			using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+			using (var context = GetDbContext())
 			{
                 var identityResourceService = GetIdentityResourceService(context);
 

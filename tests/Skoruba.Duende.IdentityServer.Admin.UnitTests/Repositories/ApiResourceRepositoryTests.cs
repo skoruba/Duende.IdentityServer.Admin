@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Duende.IdentityServer.EntityFramework.Options;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
@@ -17,20 +18,19 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
 {
     public class ApiResourceRepositoryTests
     {
-        private readonly DbContextOptions<IdentityServerConfigurationDbContext> _dbContextOptions;
-        private readonly ConfigurationStoreOptions _storeOptions;
-        private readonly OperationalStoreOptions _operationalStore;
-
-        public ApiResourceRepositoryTests()
+        private IdentityServerConfigurationDbContext GetDbContext()
         {
-            var databaseName = Guid.NewGuid().ToString();
+            var serviceCollection = new ServiceCollection();
 
-            _dbContextOptions = new DbContextOptionsBuilder<IdentityServerConfigurationDbContext>()
-                .UseInMemoryDatabase(databaseName)
-                .Options;
+            serviceCollection.AddSingleton(new ConfigurationStoreOptions());
+            serviceCollection.AddSingleton(new OperationalStoreOptions());
 
-            _storeOptions = new ConfigurationStoreOptions();
-            _operationalStore = new OperationalStoreOptions();
+            serviceCollection.AddDbContext<IdentityServerConfigurationDbContext>(builder => builder.UseInMemoryDatabase(Guid.NewGuid().ToString()));
+
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            var context = serviceProvider.GetService<IdentityServerConfigurationDbContext>();
+
+            return context;
         }
 
         private IApiResourceRepository GetApiResourceRepository(IdentityServerConfigurationDbContext context)
@@ -44,7 +44,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
         [Fact]
         public async Task AddApiResourceAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var apiResourceRepository = GetApiResourceRepository(context);
 
@@ -65,7 +65,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
         [Fact]
         public async Task GetApiResourceAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var apiResourceRepository = GetApiResourceRepository(context);
 
@@ -92,7 +92,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
         [Fact]
         public async Task DeleteApiResourceAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var apiResourceRepository = GetApiResourceRepository(context);
 
@@ -122,7 +122,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
         [Fact]
         public async Task UpdateApiResourceAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var apiResourceRepository = GetApiResourceRepository(context);
 
@@ -158,7 +158,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
         [Fact]
         public async Task AddApiSecretAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var apiResourceRepository = GetApiResourceRepository(context);
 
@@ -185,7 +185,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
         [Fact]
         public async Task DeleteApiSecretAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var apiResourceRepository = GetApiResourceRepository(context);
 
@@ -221,7 +221,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
         [Fact]
         public async Task GetApiSecretAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var apiResourceRepository = GetApiResourceRepository(context);
 
@@ -251,7 +251,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
         [Fact]
         public async Task AddApiResourcePropertyAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var apiResourceRepository = GetApiResourceRepository(context);
 
@@ -292,7 +292,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
         [Fact]
         public async Task DeleteApiResourcePropertyAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var apiResourceRepository = GetApiResourceRepository(context);
 
@@ -344,7 +344,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
         [Fact]
         public async Task GetApiResourcePropertyAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var apiResourceRepository = GetApiResourceRepository(context);
 

@@ -111,6 +111,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration
         public string UserCodeType { get; set; }
         public int DeviceCodeLifetime { get; set; } = 300;
 
+        public int? CibaLifetime { get; set; }
+        public int? PollingInterval { get; set; }
+
         public bool NonEditable { get; set; }
 
         public bool RequireRequestObject { get; set; }

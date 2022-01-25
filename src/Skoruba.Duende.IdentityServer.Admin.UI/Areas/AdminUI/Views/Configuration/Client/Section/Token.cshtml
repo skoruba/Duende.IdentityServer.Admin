@@ -85,6 +85,26 @@
 			</div>
 		</div>
 
+		 <!--Input - number -->
+		<div class="form-group row">
+			<label asp-for="CibaLifetime" class="col-sm-3 col-form-label">
+				@await Html.PartialAsync("Client/Section/Label", "CibaLifetime")
+			</label>
+			<div class="col-sm-9">
+				<input type="number" class="form-control" asp-for="CibaLifetime">
+			</div>
+		</div>
+
+		 <!--Input - number -->
+		<div class="form-group row">
+			<label asp-for="PollingInterval" class="col-sm-3 col-form-label">
+				@await Html.PartialAsync("Client/Section/Label", "PollingInterval")
+			</label>
+			<div class="col-sm-9">
+				<input type="number" class="form-control" asp-for="PollingInterval">
+			</div>
+		</div>
+
 		<!--Select-->
 		<div class="form-group row">
 			<label asp-for="RefreshTokenUsage" class="col-sm-3 col-form-label">

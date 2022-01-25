@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Duende.IdentityServer.EntityFramework.Options;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.Repositories;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.Repositories.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
@@ -19,25 +20,30 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
     {
         public PersistedGrantRepositoryTests()
         {
-            var databaseName = Guid.NewGuid().ToString();
-            var idendityDatabaseName = Guid.NewGuid().ToString();
-
-            _dbContextOptions = new DbContextOptionsBuilder<IdentityServerPersistedGrantDbContext>()
-                .UseInMemoryDatabase(databaseName)
-                .Options;
-
+            var identityDatabaseName = Guid.NewGuid().ToString();
+            
             _identityDbContextOptions = new DbContextOptionsBuilder<AdminIdentityDbContext>()
-                .UseInMemoryDatabase(idendityDatabaseName)
+                .UseInMemoryDatabase(identityDatabaseName)
                 .Options;
-
-            _storeOptions = new ConfigurationStoreOptions();
-            _operationalStore = new OperationalStoreOptions();
+            
         }
-
-        private readonly DbContextOptions<IdentityServerPersistedGrantDbContext> _dbContextOptions;
+        
         private readonly DbContextOptions<AdminIdentityDbContext> _identityDbContextOptions;
-        private readonly ConfigurationStoreOptions _storeOptions;
-        private readonly OperationalStoreOptions _operationalStore;
+
+        private IdentityServerPersistedGrantDbContext GetDbContext()
+        {
+            var serviceCollection = new ServiceCollection();
+
+            serviceCollection.AddSingleton(new ConfigurationStoreOptions());
+            serviceCollection.AddSingleton(new OperationalStoreOptions());
+
+            serviceCollection.AddDbContext<IdentityServerPersistedGrantDbContext>(builder => builder.UseInMemoryDatabase(Guid.NewGuid().ToString()));
+            
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            var context = serviceProvider.GetService<IdentityServerPersistedGrantDbContext>();
+
+            return context;
+        }
 
         private IPersistedGrantAspNetIdentityRepository GetPersistedGrantRepository(AdminIdentityDbContext identityDbContext, IdentityServerPersistedGrantDbContext context)
         {
@@ -49,7 +55,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
         [Fact]
         public async Task GetPersistedGrantAsync()
         {
-            using (var context = new IdentityServerPersistedGrantDbContext(_dbContextOptions, _operationalStore))
+            using (var context = GetDbContext())
             {
                 using (var identityDbContext = new AdminIdentityDbContext(_identityDbContextOptions))
                 {
@@ -75,7 +81,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
         [Fact]
         public async Task DeletePersistedGrantAsync()
         {
-            using (var context = new IdentityServerPersistedGrantDbContext(_dbContextOptions, _operationalStore))
+            using (var context = GetDbContext())
             {
                 using (var identityDbContext = new AdminIdentityDbContext(_identityDbContextOptions))
                 {
@@ -103,7 +109,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
         [Fact]
         public async Task DeletePersistedGrantsAsync()
         {
-            using (var context = new IdentityServerPersistedGrantDbContext(_dbContextOptions, _operationalStore))
+            using (var context = GetDbContext())
             {
                 using (var identityDbContext = new AdminIdentityDbContext(_identityDbContextOptions))
                 {

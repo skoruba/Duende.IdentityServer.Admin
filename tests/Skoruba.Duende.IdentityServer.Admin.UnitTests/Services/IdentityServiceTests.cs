@@ -5,7 +5,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Duende.IdentityServer.EntityFramework.Options;
 using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -35,14 +34,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
             _dbContextOptions = new DbContextOptionsBuilder<AdminIdentityDbContext>()
                 .UseInMemoryDatabase(databaseName)
                 .Options;
-
-            _storeOptions = new ConfigurationStoreOptions();
-            _operationalStore = new OperationalStoreOptions();
         }
 
         private readonly DbContextOptions<AdminIdentityDbContext> _dbContextOptions;
-        private readonly ConfigurationStoreOptions _storeOptions;
-        private readonly OperationalStoreOptions _operationalStore;
 
         private IIdentityRepository<UserIdentity, UserIdentityRole, string,
             UserIdentityUserClaim, UserIdentityUserRole, UserIdentityUserLogin, UserIdentityRoleClaim,

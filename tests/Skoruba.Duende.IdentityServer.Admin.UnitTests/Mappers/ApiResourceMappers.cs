@@ -105,6 +105,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mappers
             apiScopeDto.Should().BeEquivalentTo(apiScope, options =>
 				options.Excluding(o => o.UserClaims)
                        .Excluding(o => o.Properties)
+                       .Excluding(o => o.Updated)
+                       .Excluding(o => o.LastAccessed)
+                       .Excluding(o => o.NonEditable)
+                       .Excluding(o => o.Created)
 					   .Excluding(o => o.Id));
 
 			//Assert collection

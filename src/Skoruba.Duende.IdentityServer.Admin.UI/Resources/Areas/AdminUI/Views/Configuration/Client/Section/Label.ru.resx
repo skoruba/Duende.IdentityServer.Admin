@@ -471,4 +471,16 @@
   <data name="SigningAlgorithms_Label" xml:space="preserve">
     <value>Allowed Identity Token Signing Algorithms</value>
   </data>
+  <data name="CibaLifetime_Info" xml:space="preserve">
+    <value>Specifies the backchannel authentication request lifetime in seconds. Default to empty.</value>
+  </data>
+  <data name="CibaLifetime_Label" xml:space="preserve">
+    <value>Ciba Lifetime</value>
+  </data>
+  <data name="PollingInterval_Info" xml:space="preserve">
+    <value>Backchannel polling interval in seconds. Default to empty.</value>
+  </data>
+  <data name="PollingInterval_Label" xml:space="preserve">
+    <value>Polling Interval</value>
+  </data>
 </root>
