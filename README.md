@@ -376,7 +376,7 @@ Admin and STS can be customized without editing code in `appsettings.json` under
 
 Ui can be customized using themes integrated from [bootswatch](https://bootswatch.com).
 
-From version 2.0.0 is possible to change theme from UI. 🎈
+It's possible to change theme from UI. 🎈
 
 By default, configuration value is null to use default theme. if you want to use a theme, just fill the lowercase theme name as configuration value of `Theme` key.
 
@@ -732,6 +732,7 @@ It is possible to define the configuration according the client type - by defaul
 
 ### 1.1.0
 - [x] Update to .NET 6
+- [x] Update to Duende IdentityServer v6
 
 ### 2.0.0
 - [ ] Connect Admin Api to the Admin UI ([#478](https://github.com/skoruba/IdentityServer4.Admin/issues/478))
