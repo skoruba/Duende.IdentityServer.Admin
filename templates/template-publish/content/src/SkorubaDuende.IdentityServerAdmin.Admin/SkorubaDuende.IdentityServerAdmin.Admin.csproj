@@ -1,68 +1,58 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-    <PropertyGroup>
-	    <TargetFramework>net6.0</TargetFramework>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
 		<UserSecretsId>8fe260ca-ef4c-4fa3-9364-029146f8d339</UserSecretsId>
-        <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
-        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <DockerfileContext>..\..</DockerfileContext>
-    </PropertyGroup>
+		<DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerfileContext>..\..</DockerfileContext>
+	</PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="AspNetCore.HealthChecks.MySql" Version="5.0.1" />
-        <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="5.0.2" />
-        <PackageReference Include="AspNetCore.HealthChecks.OpenIdConnectServer" Version="5.0.1" />
-        <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="5.0.3" />
-        <PackageReference Include="AspNetCore.HealthChecks.UI" Version="5.0.1" />
-        <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="5.0.1" />
-        <PackageReference Include="Duende.IdentityServer.EntityFramework" Version="5.2.3" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.12" />
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="5.0.12" />
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="5.0.12" />
+	<ItemGroup>
+		<PackageReference Include="AspNetCore.HealthChecks.UI" Version="6.0.2" />
+		<PackageReference Include="AutoMapper" Version="11.0.0" />
+		<PackageReference Include="Duende.IdentityServer.EntityFramework" Version="6.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.3" />
+		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.1" />
+		<PackageReference Include="Serilog" Version="2.10.0" />
+		<PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.0" />
+		<PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
+		<PackageReference Include="Serilog.Extensions.Hosting" Version="4.2.0" />
+		<PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
+		<PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
+		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+		<PackageReference Include="Serilog.Sinks.MSSqlServer" Version="5.6.1" />
+		<PackageReference Include="Serilog.Sinks.Seq" Version="5.1.1" />
+		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.BusinessLogic" Version="1.1.0-rc3" />
+		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity" Version="1.1.0-rc3" />
+		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.UI" Version="1.1.0-rc3" />
+	</ItemGroup>
 
-        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.12" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.12" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.12" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.12" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.12">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="AutoMapper" Version="10.1.1" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.3" />
-        <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
-        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
-        <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
-        <PackageReference Include="Serilog" Version="2.10.0" />
-        <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
-        <PackageReference Include="Serilog.Extensions.Hosting" Version="4.2.0" />
-        <PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.0" />
-        <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
-        <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0" />
-        <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-        <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="5.6.1" />
-        <PackageReference Include="Serilog.Sinks.Seq" Version="5.0.1" />
-        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.BusinessLogic" Version="1.0.1" />
-        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity" Version="1.0.1" />
-        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.UI" Version="1.0.1" />
-    </ItemGroup>
+	<ItemGroup>
+		<DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+	</ItemGroup>
 
-    <ItemGroup>
-        <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
-    </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql.csproj" />
+		<ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL.csproj" />
+		<ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer.csproj" />
+		<ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Shared\SkorubaDuende.IdentityServerAdmin.Shared.csproj" />
+	</ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql.csproj" />
-        <ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL.csproj" />
-        <ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.csproj" />
-        <ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer.csproj" />
-        <ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Shared\SkorubaDuende.IdentityServerAdmin.Shared.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Helpers\" />
-    </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Helpers\" />
+	</ItemGroup>
 
 </Project>
 

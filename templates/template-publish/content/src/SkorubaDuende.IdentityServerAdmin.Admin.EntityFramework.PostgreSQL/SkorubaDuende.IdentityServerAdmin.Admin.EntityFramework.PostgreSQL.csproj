@@ -6,14 +6,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10" />
-        <PackageReference Include="Duende.IdentityServer.EntityFramework.Storage" Version="5.2.3" />
-        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework" Version="1.0.1" />
-        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity" Version="1.0.1" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.2" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.csproj" />
+	    <ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.csproj" />
     </ItemGroup>
 
 </Project>
