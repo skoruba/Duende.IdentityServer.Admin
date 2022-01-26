@@ -20,6 +20,7 @@ namespace Skoruba.Duende.IdentityServer.Admin
 	public class Program
     {
         private const string SeedArgs = "/seed";
+        private const string MigrateOnlyArgs = "/migrateonly";
 
         public static async Task Main(string[] args)
         {
@@ -35,9 +36,10 @@ namespace Skoruba.Duende.IdentityServer.Admin
 
                 var host = CreateHostBuilder(args).Build();
 
-                await ApplyDbMigrationsWithDataSeedAsync(args, configuration, host);
+                var migrationComplete = await ApplyDbMigrationsWithDataSeedAsync(args, configuration, host);
+                if (await MigrateOnlyOperationAsync(args, host, migrationComplete)) return;
 
-                host.Run();
+                await host.RunAsync();
             }
             catch (Exception ex)
             {
@@ -49,7 +51,24 @@ namespace Skoruba.Duende.IdentityServer.Admin
             }
         }
 
-        private static async Task ApplyDbMigrationsWithDataSeedAsync(string[] args, IConfiguration configuration, IHost host)
+        private static async Task<bool> MigrateOnlyOperationAsync(string[] args, IHost host, bool migrationComplete)
+        {
+            if (args.Any(x => x == MigrateOnlyArgs))
+            {
+                await host.StopAsync();
+
+                if (!migrationComplete)
+                {
+                    Environment.ExitCode = -1;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private static async Task<bool> ApplyDbMigrationsWithDataSeedAsync(string[] args, IConfiguration configuration, IHost host)
         {
             var applyDbMigrationWithDataSeedFromProgramArguments = args.Any(x => x == SeedArgs);
             if (applyDbMigrationWithDataSeedFromProgramArguments) args = args.Except(new[] { SeedArgs }).ToArray();
@@ -58,7 +77,7 @@ namespace Skoruba.Duende.IdentityServer.Admin
             var databaseMigrationsConfiguration = configuration.GetSection(nameof(DatabaseMigrationsConfiguration))
                 .Get<DatabaseMigrationsConfiguration>();
 
-            await DbMigrationHelpers
+            return await DbMigrationHelpers
                 .ApplyDbMigrationsWithDataSeedAsync<IdentityServerConfigurationDbContext, AdminIdentityDbContext,
                     IdentityServerPersistedGrantDbContext, AdminLogDbContext, AdminAuditLogDbContext,
                     IdentityServerDataProtectionDbContext, UserIdentity, UserIdentityRole>(host,
@@ -79,7 +98,7 @@ namespace Skoruba.Duende.IdentityServer.Admin
 
             if (isDevelopment)
             {
-                configurationBuilder.AddUserSecrets<Startup>();
+                configurationBuilder.AddUserSecrets<Startup>(true);
             }
 
             var configuration = configurationBuilder.Build();
@@ -110,7 +129,7 @@ namespace Skoruba.Duende.IdentityServer.Admin
 
                      if (env.IsDevelopment())
                      {
-                         configApp.AddUserSecrets<Startup>();
+                         configApp.AddUserSecrets<Startup>(true);
                      }
 
                      configurationRoot.AddAzureKeyVaultConfiguration(configApp);

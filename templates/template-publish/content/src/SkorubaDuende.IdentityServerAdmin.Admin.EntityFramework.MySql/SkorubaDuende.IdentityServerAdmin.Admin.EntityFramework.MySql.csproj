@@ -1,16 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<Description>Entity Framework layer for the administration of the Duende IdentityServer and Asp.Net Core Identity with MySql support</Description>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Duende.IdentityServer.EntityFramework.Storage" Version="5.2.3" />
-		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.2" />
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.1" />
 		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2" />
-		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework" Version="1.0.1" />
-		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity" Version="1.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>

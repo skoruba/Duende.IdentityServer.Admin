@@ -20,7 +20,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             identityResourceDto.Should().NotBeNull();
 
-            identityResourceApiDto.ShouldBeEquivalentTo(identityResourceDto);
+            identityResourceDto.Should().BeEquivalentTo(identityResourceApiDto);
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             var identityResourceApiDto = identityResourceDto.ToIdentityResourceApiModel<IdentityResourceApiDto>();
 
-            identityResourceDto.ShouldBeEquivalentTo(identityResourceApiDto, options => options
+            identityResourceApiDto.Should().BeEquivalentTo(identityResourceDto, options => options
                 .Excluding(x => x.UserClaimsItems));
         }
 
@@ -43,7 +43,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             identityResourcePropertyApiDto.Id.Should().Be(identityResourcePropertiesDto.IdentityResourcePropertyId);
 
-            identityResourcePropertyApiDto.ShouldBeEquivalentTo(identityResourcePropertiesDto, options => options.Excluding(x => x.Id));
+            identityResourcePropertiesDto.Should().BeEquivalentTo(identityResourcePropertyApiDto, options => options.Excluding(x => x.Id));
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             identityResourcePropertyDto.IdentityResourcePropertyId.Should().Be(identityResourcePropertyApiDto.Id);
 
-            identityResourcePropertyDto.ShouldBeEquivalentTo(identityResourcePropertyApiDto, options =>
+            identityResourcePropertyApiDto.Should().BeEquivalentTo(identityResourcePropertyDto, options =>
                 options.Excluding(x => x.IdentityResourceId)
                     .Excluding(x => x.IdentityResourceName)
                     .Excluding(x => x.PageSize)

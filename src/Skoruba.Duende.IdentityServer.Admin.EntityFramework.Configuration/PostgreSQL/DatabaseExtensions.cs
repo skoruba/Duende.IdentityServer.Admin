@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
 // Licensed under the Apache License, Version 2.0.
 
+using System;
 using System.Reflection;
 using Duende.IdentityServer.EntityFramework.Storage;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
@@ -24,6 +25,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Post
         /// <typeparam name="TLogDbContext"></typeparam>
         /// <typeparam name="TIdentityDbContext"></typeparam>
         /// <typeparam name="TAuditLoggingDbContext"></typeparam>
+        /// <typeparam name="TDataProtectionDbContext"></typeparam>
         /// <param name="services"></param>
         /// <param name="connectionStrings"></param>
         /// <param name="databaseMigrations"></param>
@@ -40,6 +42,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Post
             where TAuditLog : AuditLog
         {
             var migrationsAssembly = typeof(DatabaseExtensions).GetTypeInfo().Assembly.GetName().Name;
+
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
             // Config DB for identity
             services.AddDbContext<TIdentityDbContext>(options =>
@@ -90,6 +94,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Post
             where TDataProtectionDbContext : DbContext, IDataProtectionKeyContext
         {
             var migrationsAssembly = typeof(DatabaseExtensions).GetTypeInfo().Assembly.GetName().Name;
+
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
             // Config DB for identity
             services.AddDbContext<TIdentityDbContext>(options => options.UseNpgsql(identityConnectionString, sql => sql.MigrationsAssembly(migrationsAssembly)));

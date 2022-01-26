@@ -13,11 +13,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
                 .RuleFor(o => o.Id, id)
                 .RuleFor(o => o.Algorithm, Guid.NewGuid().ToString())
                 .RuleFor(o => o.Created, f => f.Date.Future())
-                .RuleFor(o => o.DataProtected, f => f.Random.Bool())
                 .RuleFor(o => o.Version, f => f.Random.Int(0))
                 .RuleFor(o => o.IsX509Certificate, f => f.Random.Bool())
-                .RuleFor(o => o.Use, Guid.NewGuid().ToString())
-                .RuleFor(o => o.Data, Guid.NewGuid().ToString());
+                .RuleFor(o => o.Use, Guid.NewGuid().ToString());
 
             return keyFaker;
         }

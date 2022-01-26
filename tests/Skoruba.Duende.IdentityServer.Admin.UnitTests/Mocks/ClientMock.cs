@@ -86,6 +86,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
                 .RuleFor(o => o.BackChannelLogoutUri, f => f.Internet.Url())
                 .RuleFor(o => o.BackChannelLogoutSessionRequired, f => f.Random.Bool())
                 .RuleFor(o => o.IdentityTokenLifetime, f => f.Random.Number(int.MaxValue))
+                .RuleFor(o => o.CibaLifetime, f => f.Random.Number(int.MaxValue))
+                .RuleFor(o => o.PollingInterval, f => f.Random.Number(int.MaxValue))
                 .RuleFor(o => o.AuthorizationCodeLifetime, f => f.Random.Number(int.MaxValue))
                 .RuleFor(o => o.ConsentLifetime, f => f.Random.Number(int.MaxValue))
                 .RuleFor(o => o.SlidingRefreshTokenLifetime, f => f.Random.Number(int.MaxValue))

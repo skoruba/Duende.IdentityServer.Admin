@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Duende.IdentityServer.EntityFramework.Options;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Skoruba.AuditLogging.Services;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Resources;
@@ -24,25 +25,29 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
     {
         public PersistedGrantServiceTests()
         {
-            var databaseName = Guid.NewGuid().ToString();
             var identityDatabaseName = Guid.NewGuid().ToString();
-
-            _dbContextOptions = new DbContextOptionsBuilder<IdentityServerPersistedGrantDbContext>()
-                .UseInMemoryDatabase(databaseName)
-                .Options;
 
             _identityDbContextOptions = new DbContextOptionsBuilder<AdminIdentityDbContext>()
                 .UseInMemoryDatabase(identityDatabaseName)
                 .Options;
-
-            _storeOptions = new ConfigurationStoreOptions();
-            _operationalStore = new OperationalStoreOptions();
         }
 
         private readonly DbContextOptions<AdminIdentityDbContext> _identityDbContextOptions;
-        private readonly DbContextOptions<IdentityServerPersistedGrantDbContext> _dbContextOptions;
-        private readonly ConfigurationStoreOptions _storeOptions;
-        private readonly OperationalStoreOptions _operationalStore;
+
+        private IdentityServerPersistedGrantDbContext GetDbContext()
+        {
+            var serviceCollection = new ServiceCollection();
+
+            serviceCollection.AddSingleton(new ConfigurationStoreOptions());
+            serviceCollection.AddSingleton(new OperationalStoreOptions());
+
+            serviceCollection.AddDbContext<IdentityServerPersistedGrantDbContext>(builder => builder.UseInMemoryDatabase(Guid.NewGuid().ToString()));
+
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            var context = serviceProvider.GetService<IdentityServerPersistedGrantDbContext>();
+
+            return context;
+        }
 
         private IPersistedGrantAspNetIdentityRepository GetPersistedGrantRepository(AdminIdentityDbContext identityDbContext, IdentityServerPersistedGrantDbContext context)
         {
@@ -63,7 +68,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task GetPersistedGrantAsync()
         {
-            using (var context = new IdentityServerPersistedGrantDbContext(_dbContextOptions, _operationalStore))
+            using (var context = GetDbContext())
             {
                 using (var identityDbContext = new AdminIdentityDbContext(_identityDbContextOptions))
                 {
@@ -89,7 +94,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                     var persistedGrantAdded = await persistedGrantService.GetPersistedGrantAsync(persistedGrantKey);
 
                     //Assert
-                    persistedGrant.ShouldBeEquivalentTo(persistedGrantAdded);
+                    persistedGrantAdded.Should().BeEquivalentTo(persistedGrant);
                 }
             }
         }
@@ -97,7 +102,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task DeletePersistedGrantAsync()
         {
-            using (var context = new IdentityServerPersistedGrantDbContext(_dbContextOptions, _operationalStore))
+            using (var context = GetDbContext())
             {
                 using (var identityDbContext = new AdminIdentityDbContext(_identityDbContextOptions))
                 {
@@ -133,7 +138,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task DeletePersistedGrantsAsync()
         {
-            using (var context = new IdentityServerPersistedGrantDbContext(_dbContextOptions, _operationalStore))
+            using (var context = GetDbContext())
             {
                 using (var identityDbContext = new AdminIdentityDbContext(_identityDbContextOptions))
                 {

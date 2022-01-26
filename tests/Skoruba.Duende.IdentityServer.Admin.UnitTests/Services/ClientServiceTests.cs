@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Duende.IdentityServer.EntityFramework.Options;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Skoruba.AuditLogging.Services;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Mappers;
@@ -23,21 +24,20 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 {
     public class ClientServiceTests
     {
-        public ClientServiceTests()
+        private IdentityServerConfigurationDbContext GetDbContext()
         {
-            var databaseName = Guid.NewGuid().ToString();
+            var serviceCollection = new ServiceCollection();
 
-            _dbContextOptions = new DbContextOptionsBuilder<IdentityServerConfigurationDbContext>()
-                .UseInMemoryDatabase(databaseName)
-                .Options;
+            serviceCollection.AddSingleton(new ConfigurationStoreOptions());
+            serviceCollection.AddSingleton(new OperationalStoreOptions());
 
-            _storeOptions = new ConfigurationStoreOptions();
-            _operationalStore = new OperationalStoreOptions();
+            serviceCollection.AddDbContext<IdentityServerConfigurationDbContext>(builder => builder.UseInMemoryDatabase(Guid.NewGuid().ToString()));
+
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            var context = serviceProvider.GetService<IdentityServerConfigurationDbContext>();
+
+            return context;
         }
-
-        private readonly DbContextOptions<IdentityServerConfigurationDbContext> _dbContextOptions;
-        private readonly ConfigurationStoreOptions _storeOptions;
-        private readonly OperationalStoreOptions _operationalStore;
 
         private IClientRepository GetClientRepository(IdentityServerConfigurationDbContext context)
         {
@@ -71,7 +71,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task AddClientAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -87,7 +87,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 var clientDto = await clientService.GetClientAsync(clientEntity.Id);
 
                 //Assert new client
-                client.ShouldBeEquivalentTo(clientDto, options => options.Excluding(o => o.Id));
+                clientDto.Should().BeEquivalentTo(client, options => options.Excluding(o => o.Id));
             }
         }
 
@@ -96,7 +96,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         {
             int clonedClientId;
 
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 //Generate random new client
                 var clientDto = ClientDtoMock.GenerateRandomClient(0);
@@ -141,7 +141,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                     .Where(x => x.Id == clientDtoToClone.Id).SingleOrDefaultAsync();
 
                 //Assert cloned client
-                cloneClientEntity.ShouldBeEquivalentTo(clientToCompare,
+                clientToCompare.Should().BeEquivalentTo(cloneClientEntity,
                     options => options.Excluding(o => o.Id)
                         .Excluding(o => o.ClientSecrets)
                         .Excluding(o => o.ClientId)
@@ -162,49 +162,49 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 
 
                 //New client relations have new id's and client relations therefore is required ignore them
-                cloneClientEntity.AllowedGrantTypes.ShouldBeEquivalentTo(clientToCompare.AllowedGrantTypes,
-                    option => option.Excluding(x => x.SelectedMemberPath.EndsWith("Id"))
-                        .Excluding(x => x.SelectedMemberPath.EndsWith("Client")));
+                clientToCompare.AllowedGrantTypes.Should().BeEquivalentTo(cloneClientEntity.AllowedGrantTypes,
+                    option => option.Excluding(x => x.Path.EndsWith("Id"))
+                        .Excluding(x => x.Path.EndsWith("Client")));
 
-                cloneClientEntity.AllowedCorsOrigins.ShouldBeEquivalentTo(clientToCompare.AllowedCorsOrigins,
-                    option => option.Excluding(x => x.SelectedMemberPath.EndsWith("Id"))
-                        .Excluding(x => x.SelectedMemberPath.EndsWith("Client")));
+                clientToCompare.AllowedCorsOrigins.Should().BeEquivalentTo(cloneClientEntity.AllowedCorsOrigins,
+                    option => option.Excluding(x => x.Path.EndsWith("Id"))
+                        .Excluding(x => x.Path.EndsWith("Client")));
 
-                cloneClientEntity.RedirectUris.ShouldBeEquivalentTo(clientToCompare.RedirectUris,
-                    option => option.Excluding(x => x.SelectedMemberPath.EndsWith("Id"))
-                        .Excluding(x => x.SelectedMemberPath.EndsWith("Client")));
+                clientToCompare.RedirectUris.Should().BeEquivalentTo(cloneClientEntity.RedirectUris,
+                    option => option.Excluding(x => x.Path.EndsWith("Id"))
+                        .Excluding(x => x.Path.EndsWith("Client")));
 
-                cloneClientEntity.PostLogoutRedirectUris.ShouldBeEquivalentTo(clientToCompare.PostLogoutRedirectUris,
-                    option => option.Excluding(x => x.SelectedMemberPath.EndsWith("Id"))
-                        .Excluding(x => x.SelectedMemberPath.EndsWith("Client")));
+                clientToCompare.PostLogoutRedirectUris.Should().BeEquivalentTo(cloneClientEntity.PostLogoutRedirectUris,
+                    option => option.Excluding(x => x.Path.EndsWith("Id"))
+                        .Excluding(x => x.Path.EndsWith("Client")));
 
-                cloneClientEntity.AllowedScopes.ShouldBeEquivalentTo(clientToCompare.AllowedScopes,
-                    option => option.Excluding(x => x.SelectedMemberPath.EndsWith("Id"))
-                        .Excluding(x => x.SelectedMemberPath.EndsWith("Client")));
+                clientToCompare.AllowedScopes.Should().BeEquivalentTo(cloneClientEntity.AllowedScopes,
+                    option => option.Excluding(x => x.Path.EndsWith("Id"))
+                        .Excluding(x => x.Path.EndsWith("Client")));
 
-                cloneClientEntity.ClientSecrets.ShouldBeEquivalentTo(clientToCompare.ClientSecrets,
-                    option => option.Excluding(x => x.SelectedMemberPath.EndsWith("Id"))
-                        .Excluding(x => x.SelectedMemberPath.EndsWith("Client")));
+                clientToCompare.ClientSecrets.Should().BeEquivalentTo(cloneClientEntity.ClientSecrets,
+                    option => option.Excluding(x => x.Path.EndsWith("Id"))
+                        .Excluding(x => x.Path.EndsWith("Client")));
 
-                cloneClientEntity.Claims.ShouldBeEquivalentTo(clientToCompare.Claims,
-                    option => option.Excluding(x => x.SelectedMemberPath.EndsWith("Id"))
-                        .Excluding(x => x.SelectedMemberPath.EndsWith("Client")));
+                clientToCompare.Claims.Should().BeEquivalentTo(cloneClientEntity.Claims,
+                    option => option.Excluding(x => x.Path.EndsWith("Id"))
+                        .Excluding(x => x.Path.EndsWith("Client")));
 
-                cloneClientEntity.IdentityProviderRestrictions.ShouldBeEquivalentTo(
+                clientToCompare.IdentityProviderRestrictions.Should().BeEquivalentTo(
                     clientToCompare.IdentityProviderRestrictions,
-                    option => option.Excluding(x => x.SelectedMemberPath.EndsWith("Id"))
-                        .Excluding(x => x.SelectedMemberPath.EndsWith("Client")));
+                    option => option.Excluding(x => x.Path.EndsWith("Id"))
+                        .Excluding(x => x.Path.EndsWith("Client")));
 
-                cloneClientEntity.Properties.ShouldBeEquivalentTo(clientToCompare.Properties,
-                    option => option.Excluding(x => x.SelectedMemberPath.EndsWith("Id"))
-                        .Excluding(x => x.SelectedMemberPath.EndsWith("Client")));
+                clientToCompare.Properties.Should().BeEquivalentTo(cloneClientEntity.Properties,
+                    option => option.Excluding(x => x.Path.EndsWith("Id"))
+                        .Excluding(x => x.Path.EndsWith("Client")));
             }
         }
 
         [Fact]
         public async Task UpdateClientAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -221,7 +221,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 var clientDto = await clientService.GetClientAsync(clientEntity.Id);
 
                 //Assert new client
-                client.ShouldBeEquivalentTo(clientDto, options => options.Excluding(o => o.Id));
+                clientDto.Should().BeEquivalentTo(client, options => options.Excluding(o => o.Id));
 
                 //Detached the added item
                 context.Entry(clientEntity).State = EntityState.Detached;
@@ -238,14 +238,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 var updatedClientDto = await clientService.GetClientAsync(updatedClientEntity.Id);
 
                 //Assert updated client
-                updatedClient.ShouldBeEquivalentTo(updatedClientDto, options => options.Excluding(o => o.Id));
+                updatedClientDto.Should().BeEquivalentTo(updatedClient, options => options.Excluding(o => o.Id));
             }
         }
 
         [Fact]
         public async Task RemoveClientAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -262,7 +262,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 var clientDto = await clientService.GetClientAsync(clientEntity.Id);
 
                 //Assert new client
-                client.ShouldBeEquivalentTo(clientDto, options => options.Excluding(o => o.Id));
+                clientDto.Should().BeEquivalentTo(client, options => options.Excluding(o => o.Id));
 
                 //Detached the added item
                 context.Entry(clientEntity).State = EntityState.Detached;
@@ -282,7 +282,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task GetClientAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -298,14 +298,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 var clientDto = await clientService.GetClientAsync(clientEntity.Id);
 
                 //Assert new client
-                client.ShouldBeEquivalentTo(clientDto, options => options.Excluding(o => o.Id));
+                clientDto.Should().BeEquivalentTo(client, options => options.Excluding(o => o.Id));
             }
         }
 
         [Fact]
         public async Task AddClientClaimAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -321,7 +321,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 var clientDto = await clientService.GetClientAsync(clientEntity.Id);
 
                 //Assert new client
-                client.ShouldBeEquivalentTo(clientDto, options => options.Excluding(o => o.Id));
+                clientDto.Should().BeEquivalentTo(client, options => options.Excluding(o => o.Id));
 
                 //Generate random new Client Claim
                 var clientClaim = ClientDtoMock.GenerateRandomClientClaim(0, clientEntity.Id);
@@ -340,7 +340,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 var clientClaimsDto = await clientService.GetClientClaimAsync(claim.Id);
 
                 //Assert
-                clientClaimsDto.ShouldBeEquivalentTo(claimsDto, options =>
+                claimsDto.Should().BeEquivalentTo(clientClaimsDto, options =>
                     options.Excluding(o => o.ClientClaimId)
                            .Excluding(o => o.ClientName));
             }
@@ -349,7 +349,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task DeleteClientClaimAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -365,7 +365,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 var clientDto = await clientService.GetClientAsync(clientEntity.Id);
 
                 //Assert new client
-                client.ShouldBeEquivalentTo(clientDto, options => options.Excluding(o => o.Id));
+                clientDto.Should().BeEquivalentTo(client, options => options.Excluding(o => o.Id));
 
                 //Generate random new Client Claim
                 var clientClaim = ClientDtoMock.GenerateRandomClientClaim(0, clientEntity.Id);
@@ -384,7 +384,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 var clientClaimsDto = await clientService.GetClientClaimAsync(claim.Id);
 
                 //Assert
-                clientClaimsDto.ShouldBeEquivalentTo(claimsDto, options => options.Excluding(o => o.ClientClaimId)
+                claimsDto.Should().BeEquivalentTo(clientClaimsDto, options => options.Excluding(o => o.ClientClaimId)
                                 .Excluding(o => o.ClientName));
 
                 //Delete client claim
@@ -401,7 +401,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task GetClientClaimAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -417,7 +417,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 var clientDto = await clientService.GetClientAsync(clientEntity.Id);
 
                 //Assert new client
-                client.ShouldBeEquivalentTo(clientDto, options => options.Excluding(o => o.Id));
+                clientDto.Should().BeEquivalentTo(client, options => options.Excluding(o => o.Id));
 
                 //Generate random new Client Claim
                 var clientClaim = ClientDtoMock.GenerateRandomClientClaim(0, clientEntity.Id);
@@ -436,7 +436,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 var clientClaimsDto = await clientService.GetClientClaimAsync(claim.Id);
 
                 //Assert
-                clientClaimsDto.ShouldBeEquivalentTo(claimsDto, options => options.Excluding(o => o.ClientClaimId)
+                claimsDto.Should().BeEquivalentTo(clientClaimsDto, options => options.Excluding(o => o.ClientClaimId)
                     .Excluding(o => o.ClientName));
             }
         }
@@ -444,7 +444,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task AddClientPropertyAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -460,7 +460,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 var clientDto = await clientService.GetClientAsync(clientEntity.Id);
 
                 //Assert new client
-                client.ShouldBeEquivalentTo(clientDto, options => options.Excluding(o => o.Id));
+                clientDto.Should().BeEquivalentTo(client, options => options.Excluding(o => o.Id));
 
                 //Generate random new Client property
                 var clicentProperty = ClientDtoMock.GenerateRandomClientProperty(0, clientEntity.Id);
@@ -479,7 +479,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 var clientPropertiesDto = await clientService.GetClientPropertyAsync(property.Id);
 
                 //Assert
-                clientPropertiesDto.ShouldBeEquivalentTo(propertyDto, options => 
+                propertyDto.Should().BeEquivalentTo(clientPropertiesDto, options => 
                     options.Excluding(o => o.ClientPropertyId)
                            .Excluding(o => o.ClientName));
             }
@@ -488,7 +488,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task GetClientPropertyAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -504,7 +504,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 var clientDto = await clientService.GetClientAsync(clientEntity.Id);
 
                 //Assert new client
-                client.ShouldBeEquivalentTo(clientDto, options => options.Excluding(o => o.Id));
+                clientDto.Should().BeEquivalentTo(client, options => options.Excluding(o => o.Id));
 
                 //Generate random new Client property
                 var clicentProperty = ClientDtoMock.GenerateRandomClientProperty(0, clientEntity.Id);
@@ -523,7 +523,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 var clientPropertiesDto = await clientService.GetClientPropertyAsync(property.Id);
 
                 //Assert
-                clientPropertiesDto.ShouldBeEquivalentTo(propertyDto, options => options.Excluding(o => o.ClientPropertyId)
+                propertyDto.Should().BeEquivalentTo(clientPropertiesDto, options => options.Excluding(o => o.ClientPropertyId)
                     .Excluding(o => o.ClientName));
             }
         }
@@ -531,7 +531,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task DeleteClientPropertyAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -547,7 +547,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 var clientDto = await clientService.GetClientAsync(clientEntity.Id);
 
                 //Assert new client
-                client.ShouldBeEquivalentTo(clientDto, options => options.Excluding(o => o.Id));
+                clientDto.Should().BeEquivalentTo(client, options => options.Excluding(o => o.Id));
 
                 //Generate random new Client Property
                 var clientProperty = ClientDtoMock.GenerateRandomClientProperty(0, clientEntity.Id);
@@ -566,7 +566,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 var clientPropertiesDto = await clientService.GetClientPropertyAsync(property.Id);
 
                 //Assert
-                clientPropertiesDto.ShouldBeEquivalentTo(propertiesDto, options => options.Excluding(o => o.ClientPropertyId)
+                propertiesDto.Should().BeEquivalentTo(clientPropertiesDto, options => options.Excluding(o => o.ClientPropertyId)
                     .Excluding(o => o.ClientName));
 
                 //Delete client Property
@@ -583,7 +583,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task AddClientSecretAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -599,7 +599,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 var clientDto = await clientService.GetClientAsync(clientEntity.Id);
 
                 //Assert new client
-                client.ShouldBeEquivalentTo(clientDto, options => options.Excluding(o => o.Id));
+                clientDto.Should().BeEquivalentTo(client, options => options.Excluding(o => o.Id));
 
                 //Generate random new Client secret
                 var clientSecret = ClientDtoMock.GenerateRandomClientSecret(0, clientEntity.Id);
@@ -620,7 +620,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 clientSecretsDto.Value.Should().Be(clientSecret.Value);
 
                 //Assert
-                secretsDto.ShouldBeEquivalentTo(clientSecretsDto, options => 
+                clientSecretsDto.Should().BeEquivalentTo(secretsDto, options => 
                     options.Excluding(o => o.ClientSecretId)
                            .Excluding(o => o.ClientName)
                            .Excluding(o => o.Value));
@@ -630,7 +630,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task GetClientSecretAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
 
@@ -646,7 +646,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 var clientDto = await clientService.GetClientAsync(clientEntity.Id);
 
                 //Assert new client
-                client.ShouldBeEquivalentTo(clientDto, options => options.Excluding(o => o.Id));
+                clientDto.Should().BeEquivalentTo(client, options => options.Excluding(o => o.Id));
 
                 //Generate random new Client secret
                 var clientSecret = ClientDtoMock.GenerateRandomClientSecret(0, clientEntity.Id);
@@ -667,7 +667,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 clientSecretsDto.Value.Should().Be(clientSecret.Value);
 
                 //Assert
-                secretsDto.ShouldBeEquivalentTo(clientSecretsDto, options => options.Excluding(o => o.ClientSecretId)
+                clientSecretsDto.Should().BeEquivalentTo(secretsDto, options => options.Excluding(o => o.ClientSecretId)
                     .Excluding(o => o.ClientName)
                     .Excluding(o => o.Value));
             }
@@ -676,7 +676,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
         [Fact]
         public async Task DeleteClientSecretAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var clientService = GetClientService(context);
                 
@@ -692,7 +692,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 var clientDto = await clientService.GetClientAsync(clientEntity.Id);
 
                 //Assert new client
-                client.ShouldBeEquivalentTo(clientDto, options => options.Excluding(o => o.Id));
+                clientDto.Should().BeEquivalentTo(client, options => options.Excluding(o => o.Id));
 
                 //Generate random new Client secret
                 var clientSecret = ClientDtoMock.GenerateRandomClientSecret(0, clientEntity.Id);
@@ -711,7 +711,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                 var clientSecretsDto = await clientService.GetClientSecretAsync(secret.Id);
 
                 //Assert
-                clientSecretsDto.ShouldBeEquivalentTo(secretsDto, options => options.Excluding(o => o.ClientSecretId)
+                secretsDto.Should().BeEquivalentTo(clientSecretsDto, options => options.Excluding(o => o.ClientSecretId)
                     .Excluding(o => o.ClientName)
                     .Excluding(o => o.Value));
 

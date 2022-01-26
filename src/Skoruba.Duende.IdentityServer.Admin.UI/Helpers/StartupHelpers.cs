@@ -417,14 +417,17 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Helpers
             context.Properties.IsPersistent = true;
             context.Properties.ExpiresUtc = new DateTimeOffset(DateTime.Now.AddHours(adminConfiguration.IdentityAdminCookieExpiresUtcHours));
 
-            return Task.FromResult(0);
+            return Task.CompletedTask;
         }
 
-        private static Task OnRedirectToIdentityProvider(RedirectContext n, AdminConfiguration adminConfiguration)
+        private static Task OnRedirectToIdentityProvider(RedirectContext context, AdminConfiguration adminConfiguration)
         {
-            n.ProtocolMessage.RedirectUri = adminConfiguration.IdentityAdminRedirectUri;
+            if (!string.IsNullOrEmpty(adminConfiguration.IdentityAdminRedirectUri))
+            {
+                context.ProtocolMessage.RedirectUri = adminConfiguration.IdentityAdminRedirectUri;
+            }
 
-            return Task.FromResult(0);
+            return Task.CompletedTask;
         }
 
         public static void AddIdSHealthChecks<TConfigurationDbContext, TPersistedGrantDbContext, TIdentityDbContext,

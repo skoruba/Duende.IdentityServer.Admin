@@ -1,19 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<Description>Business Logic layer for the administration of the Asp.Net Core Identity and Duende IdentityServer</Description>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Duende.IdentityServer.EntityFramework" Version="5.2.3" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.12" />
+		<PackageReference Include="Duende.IdentityServer.EntityFramework" Version="6.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared.csproj" />
 		<ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.csproj" />
-		<ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework\Skoruba.Duende.IdentityServer.Admin.EntityFramework.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

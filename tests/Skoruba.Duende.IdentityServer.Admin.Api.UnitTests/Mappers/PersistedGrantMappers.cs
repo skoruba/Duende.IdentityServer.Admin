@@ -21,7 +21,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             var persistedGrantSubjectsApiDto = persistedGrantsDto.ToPersistedGrantApiModel<PersistedGrantSubjectsApiDto>();
 
-            persistedGrantsDto.ShouldBeEquivalentTo(persistedGrantSubjectsApiDto, options => options.Excluding(x=> x.SubjectId));
+            persistedGrantSubjectsApiDto.Should().BeEquivalentTo(persistedGrantsDto, options => options.Excluding(x=> x.SubjectId));
         }
 
         [Fact]
@@ -35,7 +35,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             var persistedGrantsApiDto = persistedGrantsDto.ToPersistedGrantApiModel<PersistedGrantsApiDto>();
 
-            persistedGrantsDto.ShouldBeEquivalentTo(persistedGrantsApiDto, options => options.Excluding(x => x.SubjectId));
+            persistedGrantsApiDto.Should().BeEquivalentTo(persistedGrantsDto, options => options.Excluding(x => x.SubjectId));
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             var persistedGrantApiDto = persistedGrantDto.ToPersistedGrantApiModel<PersistedGrantApiDto>();
 
-            persistedGrantDto.ShouldBeEquivalentTo(persistedGrantApiDto, options => options.Excluding(x => x.SubjectId));
+            persistedGrantApiDto.Should().BeEquivalentTo(persistedGrantDto, options => options.Excluding(x => x.SubjectId));
         }
     }
 }

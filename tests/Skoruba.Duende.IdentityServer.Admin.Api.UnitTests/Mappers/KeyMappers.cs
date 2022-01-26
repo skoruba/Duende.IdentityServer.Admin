@@ -18,7 +18,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             var keyApi = keyDto.ToKeyApiModel<KeyApiDto>();
 
-            keyDto.ShouldBeEquivalentTo(keyApi);
+            keyApi.Should().BeEquivalentTo(keyDto);
         }
 
         [Fact]
@@ -28,7 +28,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             var keyDto = keyApiDto.ToKeyApiModel<KeyDto>();
 
-            keyApiDto.ShouldBeEquivalentTo(keyDto);
+            keyDto.Should().BeEquivalentTo(keyApiDto);
         }
     }
 }

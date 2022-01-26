@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Duende.IdentityServer.EntityFramework.Options;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
@@ -17,20 +18,19 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
 {
     public class ApiResourceRepositoryTests
     {
-        private readonly DbContextOptions<IdentityServerConfigurationDbContext> _dbContextOptions;
-        private readonly ConfigurationStoreOptions _storeOptions;
-        private readonly OperationalStoreOptions _operationalStore;
-
-        public ApiResourceRepositoryTests()
+        private IdentityServerConfigurationDbContext GetDbContext()
         {
-            var databaseName = Guid.NewGuid().ToString();
+            var serviceCollection = new ServiceCollection();
 
-            _dbContextOptions = new DbContextOptionsBuilder<IdentityServerConfigurationDbContext>()
-                .UseInMemoryDatabase(databaseName)
-                .Options;
+            serviceCollection.AddSingleton(new ConfigurationStoreOptions());
+            serviceCollection.AddSingleton(new OperationalStoreOptions());
 
-            _storeOptions = new ConfigurationStoreOptions();
-            _operationalStore = new OperationalStoreOptions();
+            serviceCollection.AddDbContext<IdentityServerConfigurationDbContext>(builder => builder.UseInMemoryDatabase(Guid.NewGuid().ToString()));
+
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            var context = serviceProvider.GetService<IdentityServerConfigurationDbContext>();
+
+            return context;
         }
 
         private IApiResourceRepository GetApiResourceRepository(IdentityServerConfigurationDbContext context)
@@ -44,7 +44,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
         [Fact]
         public async Task AddApiResourceAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var apiResourceRepository = GetApiResourceRepository(context);
 
@@ -58,14 +58,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 var newApiResource = await context.ApiResources.Where(x => x.Id == apiResource.Id).SingleAsync();
 
                 //Assert new api resource
-                newApiResource.ShouldBeEquivalentTo(apiResource, options => options.Excluding(o => o.Id));
+                apiResource.Should().BeEquivalentTo(newApiResource, options => options.Excluding(o => o.Id));
             }
         }
 
         [Fact]
         public async Task GetApiResourceAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var apiResourceRepository = GetApiResourceRepository(context);
 
@@ -79,20 +79,20 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 var newApiResource = await apiResourceRepository.GetApiResourceAsync(apiResource.Id);
 
                 //Assert new api resource
-                newApiResource.ShouldBeEquivalentTo(apiResource, options => options.Excluding(o => o.Id).Excluding(o => o.Secrets)
+                apiResource.Should().BeEquivalentTo(newApiResource, options => options.Excluding(o => o.Id).Excluding(o => o.Secrets)
                     .Excluding(o => o.Scopes)
                     .Excluding(o => o.UserClaims));
 
-                newApiResource.UserClaims.ShouldBeEquivalentTo(apiResource.UserClaims,
-                    option => option.Excluding(x => x.SelectedMemberPath.EndsWith("Id"))
-                        .Excluding(x => x.SelectedMemberPath.EndsWith("ApiResource")));
+                apiResource.UserClaims.Should().BeEquivalentTo(newApiResource.UserClaims,
+                    option => option.Excluding(x => x.Path.EndsWith("Id"))
+                        .Excluding(x => x.Path.EndsWith("ApiResource")));
             }
         }
 
         [Fact]
         public async Task DeleteApiResourceAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var apiResourceRepository = GetApiResourceRepository(context);
 
@@ -106,7 +106,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 var newApiResource = await context.ApiResources.Where(x => x.Id == apiResource.Id).SingleAsync();
 
                 //Assert new api resource
-                newApiResource.ShouldBeEquivalentTo(apiResource, options => options.Excluding(o => o.Id));
+                apiResource.Should().BeEquivalentTo(newApiResource, options => options.Excluding(o => o.Id));
 
                 //Delete api resource
                 await apiResourceRepository.DeleteApiResourceAsync(newApiResource);
@@ -122,7 +122,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
         [Fact]
         public async Task UpdateApiResourceAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var apiResourceRepository = GetApiResourceRepository(context);
 
@@ -136,7 +136,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 var newApiResource = await context.ApiResources.Where(x => x.Id == apiResource.Id).SingleOrDefaultAsync();
 
                 //Assert new api resource
-                newApiResource.ShouldBeEquivalentTo(apiResource, options => options.Excluding(o => o.Id));
+                apiResource.Should().BeEquivalentTo(newApiResource, options => options.Excluding(o => o.Id));
 
                 //Detached the added item
                 context.Entry(newApiResource).State = EntityState.Detached;
@@ -151,14 +151,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 var updatedApiResourceEntity = await context.ApiResources.Where(x => x.Id == updatedApiResource.Id).SingleAsync();
 
                 //Assert updated api resource
-                updatedApiResource.ShouldBeEquivalentTo(updatedApiResourceEntity);
+                updatedApiResourceEntity.Should().BeEquivalentTo(updatedApiResource);
             }
         }
 
         [Fact]
         public async Task AddApiSecretAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var apiResourceRepository = GetApiResourceRepository(context);
 
@@ -178,14 +178,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 var newApiSecret = await context.ApiSecrets.Where(x => x.Id == apiSecret.Id).SingleAsync();
 
                 //Assert new api secret
-                newApiSecret.ShouldBeEquivalentTo(apiSecret, options => options.Excluding(o => o.Id));
+                apiSecret.Should().BeEquivalentTo(newApiSecret, options => options.Excluding(o => o.Id));
             }
         }
 
         [Fact]
         public async Task DeleteApiSecretAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var apiResourceRepository = GetApiResourceRepository(context);
 
@@ -205,7 +205,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 var newApiSecret = await context.ApiSecrets.Where(x => x.Id == apiSecret.Id).SingleOrDefaultAsync();
 
                 //Assert new api resource
-                newApiSecret.ShouldBeEquivalentTo(apiSecret, options => options.Excluding(o => o.Id));
+                apiSecret.Should().BeEquivalentTo(newApiSecret, options => options.Excluding(o => o.Id));
 
                 //Try delete it
                 await apiResourceRepository.DeleteApiSecretAsync(newApiSecret);
@@ -221,7 +221,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
         [Fact]
         public async Task GetApiSecretAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var apiResourceRepository = GetApiResourceRepository(context);
 
@@ -241,7 +241,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 var newApiSecret = await apiResourceRepository.GetApiSecretAsync(apiSecret.Id);
 
                 //Assert new api secret
-                newApiSecret.ShouldBeEquivalentTo(apiSecret, options => options.Excluding(o => o.Id)
+                apiSecret.Should().BeEquivalentTo(newApiSecret, options => options.Excluding(o => o.Id)
                     .Excluding(o => o.ApiResource.Secrets)
                     .Excluding(o => o.ApiResource.UserClaims)
                     .Excluding(o => o.ApiResource.Scopes));
@@ -251,7 +251,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
         [Fact]
         public async Task AddApiResourcePropertyAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var apiResourceRepository = GetApiResourceRepository(context);
 
@@ -265,14 +265,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 var resource = await apiResourceRepository.GetApiResourceAsync(apiResource.Id);
 
                 //Assert new api resource
-                resource.ShouldBeEquivalentTo(apiResource, options => options.Excluding(o => o.Id)
+                apiResource.Should().BeEquivalentTo(resource, options => options.Excluding(o => o.Id)
                     .Excluding(o => o.Secrets)
                     .Excluding(o => o.Scopes)
                     .Excluding(o => o.UserClaims));
 
-                resource.UserClaims.ShouldBeEquivalentTo(apiResource.UserClaims,
-                    option => option.Excluding(x => x.SelectedMemberPath.EndsWith("Id"))
-                        .Excluding(x => x.SelectedMemberPath.EndsWith("ApiResource")));
+                apiResource.UserClaims.Should().BeEquivalentTo(resource.UserClaims,
+                    option => option.Excluding(x => x.Path.EndsWith("Id"))
+                        .Excluding(x => x.Path.EndsWith("ApiResource")));
 
                 //Generate random new api resource property
                 var apiResourceProperty = ApiResourceMock.GenerateRandomApiResourceProperty(0);
@@ -284,7 +284,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 var resourceProperty = await context.ApiResourceProperties.Where(x => x.Id == apiResourceProperty.Id)
                     .SingleOrDefaultAsync();
 
-                resourceProperty.ShouldBeEquivalentTo(apiResourceProperty,
+                apiResourceProperty.Should().BeEquivalentTo(resourceProperty,
                     options => options.Excluding(o => o.Id).Excluding(x => x.ApiResource));
             }
         }
@@ -292,7 +292,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
         [Fact]
         public async Task DeleteApiResourcePropertyAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var apiResourceRepository = GetApiResourceRepository(context);
 
@@ -306,14 +306,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 var resource = await apiResourceRepository.GetApiResourceAsync(apiResource.Id);
 
                 //Assert new api resource
-                resource.ShouldBeEquivalentTo(apiResource, options => options.Excluding(o => o.Id)
+                apiResource.Should().BeEquivalentTo(resource, options => options.Excluding(o => o.Id)
                     .Excluding(o => o.Secrets)
                     .Excluding(o => o.Scopes)
                     .Excluding(o => o.UserClaims));
 
-                resource.UserClaims.ShouldBeEquivalentTo(apiResource.UserClaims,
-                    option => option.Excluding(x => x.SelectedMemberPath.EndsWith("Id"))
-                        .Excluding(x => x.SelectedMemberPath.EndsWith("ApiResource")));
+                apiResource.UserClaims.Should().BeEquivalentTo(resource.UserClaims,
+                    option => option.Excluding(x => x.Path.EndsWith("Id"))
+                        .Excluding(x => x.Path.EndsWith("ApiResource")));
 
                 //Generate random new api resource property
                 var apiResourceProperty = ApiResourceMock.GenerateRandomApiResourceProperty(0);
@@ -326,7 +326,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                     .SingleOrDefaultAsync();
 
                 //Assert
-                property.ShouldBeEquivalentTo(apiResourceProperty,
+                apiResourceProperty.Should().BeEquivalentTo(property,
                     options => options.Excluding(o => o.Id).Excluding(x => x.ApiResource));
 
                 //Try delete it
@@ -344,7 +344,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
         [Fact]
         public async Task GetApiResourcePropertyAsync()
         {
-            using (var context = new IdentityServerConfigurationDbContext(_dbContextOptions, _storeOptions))
+            using (var context = GetDbContext())
             {
                 var apiResourceRepository = GetApiResourceRepository(context);
 
@@ -358,14 +358,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 var resource = await apiResourceRepository.GetApiResourceAsync(apiResource.Id);
 
                 //Assert new api resource
-                resource.ShouldBeEquivalentTo(apiResource, options => options.Excluding(o => o.Id)
+                apiResource.Should().BeEquivalentTo(resource, options => options.Excluding(o => o.Id)
                     .Excluding(o => o.Secrets)
                     .Excluding(o => o.Scopes)
                     .Excluding(o => o.UserClaims));
 
-                resource.UserClaims.ShouldBeEquivalentTo(apiResource.UserClaims,
-                    option => option.Excluding(x => x.SelectedMemberPath.EndsWith("Id"))
-                        .Excluding(x => x.SelectedMemberPath.EndsWith("ApiResource")));
+                apiResource.UserClaims.Should().BeEquivalentTo(resource.UserClaims,
+                    option => option.Excluding(x => x.Path.EndsWith("Id"))
+                        .Excluding(x => x.Path.EndsWith("ApiResource")));
 
                 //Generate random new api resource property
                 var apiResourceProperty = ApiResourceMock.GenerateRandomApiResourceProperty(0);
@@ -376,7 +376,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 //Get new api resource property
                 var resourceProperty = await apiResourceRepository.GetApiResourcePropertyAsync(apiResourceProperty.Id);
 
-                resourceProperty.ShouldBeEquivalentTo(apiResourceProperty,
+                apiResourceProperty.Should().BeEquivalentTo(resourceProperty,
                     options => options.Excluding(o => o.Id).Excluding(x => x.ApiResource));
             }
         }

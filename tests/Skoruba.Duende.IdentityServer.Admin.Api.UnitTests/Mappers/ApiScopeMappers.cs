@@ -17,7 +17,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             var apiScopeDto = apiScopeApiDto.ToApiScopeApiModel<ApiScopeDto>();
 
-            apiScopeApiDto.ShouldBeEquivalentTo(apiScopeDto, options => options.Excluding(x=> x.ApiScopeProperties));
+            apiScopeDto.Should().BeEquivalentTo(apiScopeApiDto, options => options.Excluding(x=> x.ApiScopeProperties));
         }
         
         [Fact]
@@ -27,7 +27,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             var apiScopeApiDto = apiScopeDto.ToApiScopeApiModel<ApiScopeApiDto>();
 
-            apiScopeDto.ShouldBeEquivalentTo(apiScopeApiDto, options => options
+            apiScopeApiDto.Should().BeEquivalentTo(apiScopeDto, options => options
                 .Excluding(x => x.ApiScopeProperties)
                 .Excluding(x=> x.UserClaimsItems));
         }
@@ -39,7 +39,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             var apiScopePropertyDto = apiScopePropertyApiDto.ToApiScopeApiModel<ApiScopePropertyDto>();
 
-            apiScopePropertyApiDto.ShouldBeEquivalentTo(apiScopePropertyDto);
+            apiScopePropertyDto.Should().BeEquivalentTo(apiScopePropertyApiDto);
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             var apiScopePropertyApiDto = apiScopePropertyDto.ToApiScopeApiModel<ApiScopePropertyApiDto>();
 
-            apiScopePropertyDto.ShouldBeEquivalentTo(apiScopePropertyApiDto, options =>
+            apiScopePropertyApiDto.Should().BeEquivalentTo(apiScopePropertyDto, options =>
                 options.Excluding(x => x.ApiScopeId)
                     .Excluding(x => x.ApiScopeName)
                     .Excluding(x => x.PageSize)

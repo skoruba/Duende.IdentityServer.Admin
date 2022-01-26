@@ -23,7 +23,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mappers
             //Assert
             identityResourceDto.Should().NotBeNull();
 
-            identityResource.ShouldBeEquivalentTo(identityResourceDto, options =>
+            identityResourceDto.Should().BeEquivalentTo(identityResource, options =>
                 options.Excluding(o => o.UserClaims)
 		            .Excluding(o => o.Properties)
 		            .Excluding(o => o.Created)
@@ -31,7 +31,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mappers
 		            .Excluding(o => o.NonEditable));
 
             //Assert collection
-            identityResource.UserClaims.Select(x => x.Type).ShouldBeEquivalentTo(identityResourceDto.UserClaims);
+            identityResourceDto.UserClaims.Should().BeEquivalentTo(identityResource.UserClaims.Select(x => x.Type));
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mappers
 
             identityResource.Should().NotBeNull();
 
-            identityResource.ShouldBeEquivalentTo(identityResourceDto, options =>
+            identityResourceDto.Should().BeEquivalentTo(identityResource, options =>
                 options.Excluding(o => o.UserClaims)
 				.Excluding(o => o.Properties)
 		            .Excluding(o => o.Created)
@@ -53,7 +53,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mappers
 		            .Excluding(o => o.NonEditable));
 
             //Assert collection
-            identityResource.UserClaims.Select(x => x.Type).ShouldBeEquivalentTo(identityResourceDto.UserClaims);
+            identityResourceDto.UserClaims.Should().BeEquivalentTo(identityResource.UserClaims.Select(x => x.Type));
         }
     }
 }

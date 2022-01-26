@@ -19,7 +19,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             apiResourceDto.Should().NotBeNull();
 
-            apiResourceApiDto.ShouldBeEquivalentTo(apiResourceDto);
+            apiResourceDto.Should().BeEquivalentTo(apiResourceApiDto);
         }
         
         [Fact]
@@ -29,7 +29,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             var apiResourceApiDto = apiResourceDto.ToApiResourceApiModel<ApiResourceApiDto>();
 
-            apiResourceDto.ShouldBeEquivalentTo(apiResourceApiDto, options => options
+            apiResourceApiDto.Should().BeEquivalentTo(apiResourceDto, options => options
                 .Excluding(x => x.AllowedAccessTokenSigningAlgorithmsItems)
                 .Excluding(x=> x.ScopesItems)
                 .Excluding(x=> x.UserClaimsItems));
@@ -44,7 +44,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             apiSecretApiDto.Id.Should().Be(apiSecretsDto.ApiSecretId);
 
-            apiSecretApiDto.ShouldBeEquivalentTo(apiSecretsDto, options => options.Excluding(x=> x.Id));
+            apiSecretsDto.Should().BeEquivalentTo(apiSecretApiDto, options => options.Excluding(x=> x.Id));
         }
 
         [Fact]
@@ -56,7 +56,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             apiResourceSecret.ApiResourceId.Should().Be(apiResourceApiDto.Id);
 
-            apiResourceSecret.ShouldBeEquivalentTo(apiResourceApiDto, options =>
+            apiResourceApiDto.Should().BeEquivalentTo(apiResourceSecret, options =>
                 options.Excluding(x => x.ApiResourceId)
                     .Excluding(x => x.ApiSecrets)
                     .Excluding(x => x.ApiResourceName)
@@ -77,7 +77,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             apiResourcePropertyApiDto.Id.Should().Be(apiResourcePropertiesDto.ApiResourcePropertyId);
 
-            apiResourcePropertyApiDto.ShouldBeEquivalentTo(apiResourcePropertiesDto, options => options.Excluding(x=> x.Id));
+            apiResourcePropertiesDto.Should().BeEquivalentTo(apiResourcePropertyApiDto, options => options.Excluding(x=> x.Id));
         }
 
         [Fact]
@@ -89,7 +89,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             apiResourcePropertyDto.ApiResourcePropertyId.Should().Be(apiResourcePropertyApiDto.Id);
 
-            apiResourcePropertyDto.ShouldBeEquivalentTo(apiResourcePropertyApiDto, options =>
+            apiResourcePropertyApiDto.Should().BeEquivalentTo(apiResourcePropertyDto, options =>
                 options.Excluding(x => x.ApiResourceId)
                     .Excluding(x => x.ApiResourceName)
                     .Excluding(x => x.PageSize)

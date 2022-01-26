@@ -118,10 +118,13 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Helpers
             {
                 app.UseCsp(csp =>
                 {
+                    var imagesSources = new List<string> { "data:" };
+                    imagesSources.AddRange(cspTrustedDomains);
+
                     csp.ImageSources(options =>
                     {
                         options.SelfSrc = true;
-                        options.CustomSources = cspTrustedDomains;
+                        options.CustomSources = imagesSources;
                         options.Enabled = true;
                     });
                     csp.FontSources(options =>
@@ -144,11 +147,35 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Helpers
                         options.Enabled = true;
                         options.UnsafeInlineSrc = true;
                     });
-                    csp.DefaultSources(options =>
+                    csp.Sandbox(options =>
+                    {
+                        options.AllowForms()
+                            .AllowSameOrigin()
+                            .AllowScripts();
+                    });
+                    csp.FrameAncestors(option =>
+                    {
+                        option.NoneSrc = true;
+                        option.Enabled = true;
+                    });
+
+                    csp.BaseUris(options =>
                     {
                         options.SelfSrc = true;
-                        options.CustomSources = cspTrustedDomains;
                         options.Enabled = true;
+                    });
+
+                    csp.ObjectSources(options =>
+                    {
+                        options.NoneSrc = true;
+                        options.Enabled = true;
+                    });
+
+                    csp.DefaultSources(options =>
+                    {
+                        options.Enabled = true;
+                        options.SelfSrc = true;
+                        options.CustomSources = cspTrustedDomains;
                     });
                 });
             }
@@ -333,7 +360,7 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Helpers
             var configurationSection = configuration.GetSection(nameof(IdentityServerOptions));
 
             var identityServerOptions = configurationSection.Get<IdentityServerOptions>();
-            
+
             var builder = services.AddIdentityServer(options => configurationSection.Bind(options))
                 .AddConfigurationStore<TConfigurationDbContext>()
                 .AddOperationalStore<TPersistedGrantDbContext>()
@@ -344,7 +371,7 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Helpers
                 builder.AddCustomSigningCredential(configuration);
                 builder.AddCustomValidationKey(configuration);
             }
-            
+
             builder.AddExtensionGrantValidator<DelegationGrantValidator>();
 
             return builder;
