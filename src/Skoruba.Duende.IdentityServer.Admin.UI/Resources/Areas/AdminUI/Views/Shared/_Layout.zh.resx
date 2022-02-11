@@ -141,6 +141,9 @@
   <data name="LinkIdentityResources" xml:space="preserve">
     <value>身份资源</value>
   </data>
+  <data name="LinkIdentityProviders" xml:space="preserve">
+    <value>Identity Providers</value>
+  </data>
   <data name="LinkLogout" xml:space="preserve">
     <value>注销</value>
   </data>
