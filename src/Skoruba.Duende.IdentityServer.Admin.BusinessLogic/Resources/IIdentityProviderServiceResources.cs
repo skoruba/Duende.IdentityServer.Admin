@@ -13,7 +13,5 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Resources
 
         ResourceMessage IdentityProviderExistsValue();
 
-        ResourceMessage IdentityProviderPropertyExistsKey();
-
     }
 }

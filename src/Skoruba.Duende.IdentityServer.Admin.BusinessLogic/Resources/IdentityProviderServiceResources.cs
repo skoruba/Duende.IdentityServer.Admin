@@ -33,15 +33,6 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Resources
                 Description = IdentityProviderServiceResource.IdentityProviderExistsValue
             };
         }
-
-        public virtual ResourceMessage IdentityProviderPropertyExistsKey()
-        {
-            return new ResourceMessage()
-            {
-                Code = nameof(IdentityProviderPropertyExistsKey),
-                Description = IdentityProviderServiceResource.IdentityProviderPropertyExistsKey
-            };
-        }
         
     }
 }

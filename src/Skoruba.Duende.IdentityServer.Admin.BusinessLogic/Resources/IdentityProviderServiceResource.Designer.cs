@@ -87,14 +87,5 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Resources {
                 return ResourceManager.GetString("IdentityProviderExistsValue", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Property {0} already exists.
-        /// </summary>
-        internal static string IdentityProviderPropertyExistsKey {
-            get {
-                return ResourceManager.GetString("IdentityProviderPropertyExistsKey", resourceCulture);
-            }
-        }
     }
 }

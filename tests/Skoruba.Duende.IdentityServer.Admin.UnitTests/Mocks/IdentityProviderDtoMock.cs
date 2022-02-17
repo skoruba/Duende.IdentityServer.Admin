@@ -19,7 +19,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
                 .RuleFor(o => o.DisplayName, f => f.Random.Words(f.Random.Number(1, 5)))
                 .RuleFor(o => o.Id, id)
                 .RuleFor(o => o.Enabled, f => f.Random.Bool())
-                .RuleFor(o => o.IdentityProviderProperties, f =>  Enumerable.Range(1, f.Random.Int(1, 10)).Select(x => new {Key = f.Random.Words(f.Random.Number(1, 5)), Value = f.Random.Words(f.Random.Number(1, 5))}).ToDictionary(arg => arg.Key, result => result.Value));
+                .RuleFor(o => o.Properties, f =>  Enumerable.Range(1, f.Random.Int(1, 10)).ToDictionary(x=>x, x => new IdentityProviderPropertyDto{Name= f.Random.Words(f.Random.Number(1, 5)), Value = f.Random.Words(f.Random.Number(1, 5))}));
 
             return fakerIdentityResource;
         }

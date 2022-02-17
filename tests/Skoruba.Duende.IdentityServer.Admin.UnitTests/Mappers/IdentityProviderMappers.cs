@@ -33,7 +33,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mappers
                     .Excluding(o => o.LastAccessed)
             );
             //Assert collection
-            identityProviderDto.IdentityProviderProperties.Should().BeEquivalentTo(System.Text.Json.JsonSerializer.Deserialize<Dictionary<string,string>>(identityProvider.Properties));
+            identityProviderDto.Properties.Values.Should().BeEquivalentTo(System.Text.Json.JsonSerializer
+                .Deserialize<Dictionary<string, string>>(identityProvider.Properties)
+                .Select(x => new IdentityProviderPropertyDto { Name = x.Key, Value = x.Value }));
         }
 
         [Fact]
@@ -56,7 +58,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mappers
                 );
 
             //Assert collection
-            identityProviderDto.IdentityProviderProperties.Should().BeEquivalentTo(System.Text.Json.JsonSerializer.Deserialize<Dictionary<string,string>>(identityProvider.Properties));
+            identityProviderDto.Properties.Values.Should().BeEquivalentTo(System.Text.Json.JsonSerializer.Deserialize<Dictionary<string,string>>(identityProvider.Properties)
+                .Select(x=>new IdentityProviderPropertyDto {Name=x.Key, Value = x.Value}));
 
         }
     }

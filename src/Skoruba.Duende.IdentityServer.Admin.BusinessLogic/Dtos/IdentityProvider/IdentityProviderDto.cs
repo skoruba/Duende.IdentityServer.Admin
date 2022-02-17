@@ -11,7 +11,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.IdentityProvide
 		public IdentityProviderDto()
 		{
 		}
-		
+
+        [Required]
 		public string Type { get; set; }
 		
 		public int Id { get; set; }
@@ -23,6 +24,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.IdentityProvide
 
         public bool Enabled { get; set; } = true;
 
-        public Dictionary<string, string> IdentityProviderProperties { get; set; }
-	}
+        public Dictionary<int, IdentityProviderPropertyDto> Properties { get; set; } = new();
+    }
+	
 }

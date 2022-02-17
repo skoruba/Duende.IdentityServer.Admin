@@ -124,13 +124,19 @@
     <value>Scheme</value>
   </data>
   <data name="DisplayName_Info" xml:space="preserve">
-    <value>This value will be used for displaying the provider choice.</value>
+    <value>This value will be used to display the provider choice (e.g. on a login screen).</value>
   </data>
   <data name="DisplayName_Label" xml:space="preserve">
     <value>Display Name</value>
   </data>
   <data name="Enabled_Info" xml:space="preserve">
     <value>Indicates if this identity provider is enabled and can be used. Defaults to true.</value>
+  </data>
+  <data name="Type_Label" xml:space="preserve">
+    <value>Protocol type</value>
+  </data>
+  <data name="Type_Info" xml:space="preserve">
+    <value>Indicates the protocol type for the identity provider (Duende only supports 'oidc' out of the box).</value>
   </data>
   <data name="Enabled_Label" xml:space="preserve">
     <value>Enabled</value>

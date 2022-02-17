@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using FluentAssertions;
 using Skoruba.Duende.IdentityServer.Admin.Api.Dtos.IdentityProvider;
 using Skoruba.Duende.IdentityServer.Admin.Api.Mappers;
 using Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mocks;
@@ -19,7 +20,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             IdentityProviderDto.Should().NotBeNull();
 
-            IdentityProviderDto.Should().BeEquivalentTo(IdentityProviderApiDto);
+            IdentityProviderDto.Should().BeEquivalentTo(IdentityProviderApiDto, options => options
+                .Excluding(x => x.IdentityProviderProperties));
+
+            IdentityProviderDto.Properties.Values.Should().BeEquivalentTo(
+                IdentityProviderApiDto.IdentityProviderProperties.Select(p => new IdentityProviderPropertyDto
+                    { Name = p.Key, Value = p.Value }));
         }
 
         [Fact]
@@ -30,8 +36,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
             var IdentityProviderApiDto = IdentityProviderDto.ToIdentityProviderApiModel<IdentityProviderApiDto>();
 
             IdentityProviderApiDto.Should().BeEquivalentTo(IdentityProviderDto, options => options
-                .Excluding(x => x.IdentityProviderProperties));
+                .Excluding(x => x.Properties));
+
+            IdentityProviderApiDto.IdentityProviderProperties.Should().BeEquivalentTo(
+                IdentityProviderDto.Properties.Values.ToDictionary(p=>p.Name, p=>p.Value));
+
         }
-        
+
     }
 }

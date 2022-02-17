@@ -57,6 +57,24 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Areas.AdminUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> IdentityProvider(IdentityProviderDto identityProvider)
         {
+            //TODO: check validate properties: key not null, etc.
+            // they are honored, but not 'properly' messaged on..
+            
+            // also: we check for duplicate keys:
+            var dupGroups = identityProvider.Properties.GroupBy(s => s.Value.Name).Where(g => g.Count() > 1).ToArray();
+            if (dupGroups.Length > 0)
+            {
+                foreach (var dupGroup in dupGroups)
+                {
+                    foreach (var d in dupGroup)
+                    {
+                        //duplicate key = not allowed
+                        ModelState.AddModelError($"{nameof(IdentityProviderDto.Properties)}[{d.Key}].{nameof(IdentityProviderPropertyDto.Name)}", $"duplicate name ({d.Value.Name})");
+                    }
+                }
+                return View(identityProvider);
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(identityProvider);
@@ -100,6 +118,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Areas.AdminUI.Controllers
             if (id == default)
             {
                 var identityProviderDto = new IdentityProviderDto();
+                identityProviderDto.Type = "oidc";
                 return View(identityProviderDto);
             }
 
@@ -108,56 +127,6 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Areas.AdminUI.Controllers
 
             return View(identityProvider);
         }
-
-
-        [HttpGet]
-        public async Task<IActionResult> IdentityProviderProperties(int id, int? page)
-        {
-            if (id == 0) return NotFound();
-
-            var properties = await _identityProviderService.GetIdentityProviderPropertiesAsync(id, page ?? 1);
-
-            return View(properties);
-        }
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> IdentityProviderProperties(IdentityProviderPropertiesDto identityProviderProperty)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(identityProviderProperty);
-            }
-
-            await _identityProviderService.AddIdentityProviderPropertyAsync(identityProviderProperty);
-            SuccessNotification(string.Format(_localizer["SuccessAddIdentityProviderProperty"], identityProviderProperty.Key, identityProviderProperty.IdentityProviderScheme), _localizer["SuccessTitle"]);
-
-            return RedirectToAction(nameof(IdentityProviderProperties), new { Id = identityProviderProperty.IdentityProviderId });
-        }
-
-
-        [HttpGet]
-        public async Task<IActionResult> IdentityProviderPropertyDelete(int id, string key)
-        {
-            if (id == 0) return NotFound();
-
-            var identityProviderProperty = await _identityProviderService.GetIdentityProviderPropertyAsync(id, key);
-
-            return View(nameof(IdentityProviderPropertyDelete), identityProviderProperty);
-        }
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> IdentityProviderPropertyDelete(IdentityProviderPropertiesDto identityProviderProperty)
-        {
-            await _identityProviderService.DeleteIdentityProviderPropertyAsync(identityProviderProperty);
-            SuccessNotification(_localizer["SuccessDeleteIdentityProviderProperty"], _localizer["SuccessTitle"]);
-
-            return RedirectToAction(nameof(IdentityProviderProperties), new { Id = identityProviderProperty.IdentityProviderId });
-        }
-
-
+        
     }
 }

@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.IdentityProvider
 @using Skoruba.Duende.IdentityServer.Admin.UI.Configuration.Constants
 @model Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.IdentityProvider.IdentityProviderDto
 @inject IViewLocalizer Localizer
@@ -60,7 +61,8 @@
 					@await Html.PartialAsync("IdentityProvider/Section/Label", "Type")
 				</label>
 				<div class="col-sm-9">
-					<input type="text" class="form-control" asp-for="Type">
+                    <input type="text" required class="form-control" asp-for="Type">
+                    <span asp-validation-for="Type" class="text-danger"></span>
 				</div>
 			</div>
 
@@ -76,32 +78,36 @@
 				</div>
 			</div>
 			
-			<!-- todo -- properties als k/v list-->
-			
-            @*<!--Input - text -->
             <div class="form-group row">
-                <label asp-for="IdentityProviderProperties" class="col-sm-3 col-form-label">
+                <label asp-for="Properties" class="col-sm-3 col-form-label">
                     @await Html.PartialAsync("IdentityProvider/Section/Label", "Properties")
                 </label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" asp-for="IdentityProviderProperties">
+                    <div class="row">
+                        <div class="col-sm">
+                            @await Html.PartialAsync("IdentityProvider/Section/Label", "PropertyKey")
+                        </div>
+                        <div class="col-sm">
+                            @await Html.PartialAsync("IdentityProvider/Section/Label", "PropertyValue")
+                        </div>
+                        <div class="col-sm-1">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col" id="property-list">
+                            @foreach (var key in Model.Properties.Keys)
+                        {
+                            @Html.EditorFor(m => m.Properties[key])
+                        }
+                        </div>
+                    </div>
+                    <div class="row">
+                       <a href="#" class="add-property oi oi-plus">add property</a>
+                    </div>
                 </div>
-            </div>*@
-
-            @if (Model.Id != 0)
-			{
-				<!--Button-->
-				<div class="form-group row">
-					<label class="col-sm-3 col-form-label">
-						@await Html.PartialAsync("IdentityProvider/Section/Label", "Properties")
-					</label>
-					<div class="col-sm-9">
-						<a asp-area="@CommonConsts.AdminUIArea" asp-action="IdentityProviderProperties" asp-route-id="@Model.Id" class="btn btn-primary">@Localizer["ButtonManageProperties"]</a>
-					</div>
-				</div>
-			}
-
-			<!--Button-->
+            </div>
+			
+            <!--Button-->
 			<div class="form-group row">
 				<label class="col-sm-3 col-form-label">
 				</label>
@@ -123,8 +129,36 @@
 	<script>
 		$(function () {
 
+            var propertyCount = @Model.Properties.Count;
+
 			//Disable enter for this form
 			FormMvc.disableEnter($('#identity-provider-form'));
+			
+            //$("#add").click(function (e) { 
+            $("body").on("click", ".add-property", function (e) {
+                e.preventDefault();
+                var i = propertyCount;
+                var propertyTemplate = 
+                    '<div class="property row">' +
+                    '    <div class="col-sm">' +
+                    '        <input type="text" required class="form-control" id="Properties_' + i + '__Name" name="Properties[' + i + '].Name" />' +
+                    '        <span class="text-danger field-validation-error" data-valmsg-for="Properties[' + i + '].Name" data-valmsg-replace="true"></span>' +
+                    '    </div>' +
+                    '    <div class="col-sm">' +
+                    '        <input type="text" class="form-control" id="Properties_' + i + '__Value" name="Properties[' + i + '].Value" />' +
+                    '    </div>' +
+                    '    <div class="col-sm-1 col-xs-1"><span class="remove-property oi oi-trash"></span></div>' +
+                    '</div>';
+
+                $("#property-list").append(propertyTemplate);
+                propertyCount++;
+            });
+            $("body").on("click", ".remove-property", function (e) {
+                e.preventDefault();
+                $(e.target).closest(".property").remove();
+            });
+
+
 		});
-	</script>
+    </script>
 }

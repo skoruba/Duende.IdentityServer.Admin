@@ -91,10 +91,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services
 
             var originalIdentityProvider = await GetIdentityProviderAsync(identityProvider.Id);
 
-            if (identityProvider.IdentityProviderProperties == null)
-            {
-                identityProvider.IdentityProviderProperties = new Dictionary<string, string>(originalIdentityProvider.IdentityProviderProperties);
-            }
+            //if (identityProvider.Properties == null)
+            //{
+            //    identityProvider.Properties = new List<IdentityProviderPropertyDto>(originalIdentityProvider.Properties);
+            //}
 
             var entity = identityProvider.ToEntity();
 
@@ -126,78 +126,6 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services
 
             return identityProvider;
         }
-
-        public async Task<IdentityProviderPropertiesDto> GetIdentityProviderPropertiesAsync(int identityProviderId, int page = 1, int pageSize = 10)
-        {
-            var identityProvider = await IdentityProviderRepository.GetIdentityProviderAsync(identityProviderId);
-            if (identityProvider.Scheme == null) throw new UserFriendlyErrorPageException(string.Format(IdentityProviderServiceResources.IdentityProviderDoesNotExist().Description, identityProviderId));
-            
-            var identityProviderPropertiesDto = Map(identityProvider, (page - 1) * pageSize, pageSize);
-
-            return identityProviderPropertiesDto;
-
-        }
-
-        private IdentityProviderPropertiesDto Map(IdentityProvider identityProvider, int skip = 0, int take = 10, string key = null)
-        {
-            var props = JsonSerializer.Deserialize<Dictionary<string, string>>(identityProvider.Properties ?? "{}");
-            props.TryGetValue(key ?? "", out var value);
-
-            var result = new IdentityProviderPropertiesDto
-            {
-                Key = key, //nothing selected yet
-                Value = value,
-                PageSize = 10,
-                TotalCount = props.Count,
-                IdentityProviderProperties = props.Skip(skip).Take(take).Select(p =>
-                    new IdentityProviderPropertyDto { Id = p.Key, Key = p.Key, Value = p.Value }).ToList(),
-                IdentityProviderId = identityProvider.Id,
-                IdentityProviderScheme = identityProvider.Scheme
-            };
-
-            return result;
-        }
-
-        public async Task<IdentityProviderPropertiesDto> GetIdentityProviderPropertyAsync(int identityProviderId, string key)
-        {
-            var identityProvider = await IdentityProviderRepository.GetIdentityProviderAsync(identityProviderId);
-            if (identityProvider.Scheme == null) throw new UserFriendlyErrorPageException(string.Format(IdentityProviderServiceResources.IdentityProviderDoesNotExist().Description, identityProviderId));
-
-            var identityProviderPropertiesDto = Map(identityProvider, key:key); //?
-
-            return identityProviderPropertiesDto;
-        }
-
-        public async Task<int> AddIdentityProviderPropertyAsync(IdentityProviderPropertiesDto identityProviderProperties)
-        {
-            var identityProviderId = identityProviderProperties.IdentityProviderId;
-            var identityProvider = await IdentityProviderRepository.GetIdentityProviderAsync(identityProviderId);
-            if (identityProvider.Scheme == null) throw new UserFriendlyErrorPageException(string.Format(IdentityProviderServiceResources.IdentityProviderDoesNotExist().Description, identityProviderId));
-
-            var props = JsonSerializer.Deserialize<Dictionary<string, string>>(identityProvider.Properties ?? "{}") ?? new Dictionary<string, string>();
-            if (!props.TryAdd(identityProviderProperties.Key, identityProviderProperties.Value))
-            {
-                //error
-                throw new UserFriendlyErrorPageException(string.Format(IdentityProviderServiceResources.IdentityProviderPropertyExistsKey().Description, identityProviderProperties.Key));
-            }
-            else
-            {
-                identityProvider.Properties = JsonSerializer.Serialize(props);
-                return await UpdateIdentityProviderAsync(identityProvider.ToModel());
-            }
-        }
-
-        public async Task<int> DeleteIdentityProviderPropertyAsync(IdentityProviderPropertiesDto identityProviderProperties)
-        {
-            var identityProviderId = identityProviderProperties.IdentityProviderId;
-            var identityProvider = await IdentityProviderRepository.GetIdentityProviderAsync(identityProviderId);
-            if (identityProvider.Scheme == null) throw new UserFriendlyErrorPageException(string.Format(IdentityProviderServiceResources.IdentityProviderDoesNotExist().Description, identityProviderId));
-
-            var props = JsonSerializer.Deserialize<Dictionary<string, string>>(identityProvider.Properties ?? "{}") ?? new Dictionary<string, string>();
-            props.Remove(identityProviderProperties.Key, out var value);
-
-            identityProvider.Properties = JsonSerializer.Serialize(props);
-            return await UpdateIdentityProviderAsync(identityProvider.ToModel());
-        }
+        
     }
 }

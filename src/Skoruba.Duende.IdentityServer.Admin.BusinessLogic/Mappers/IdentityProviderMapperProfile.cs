@@ -11,6 +11,7 @@ using Duende.IdentityServer.EntityFramework.Entities;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.IdentityProvider;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Common;
 using System.Text.Json;
+using Microsoft.JSInterop.Infrastructure;
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Mappers
 {
@@ -20,7 +21,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Mappers
         {
             // entity to model
             CreateMap<IdentityProvider, IdentityProviderDto>(MemberList.Destination)
-                .ForMember(x => x.IdentityProviderProperties,
+                .ForMember(x => x.Properties,
                     opts => opts.ConvertUsing(PropertiesConverter.Converter, x => x.Properties));
 
             CreateMap<PagedList<IdentityProvider>, IdentityProvidersDto>(MemberList.Destination)
@@ -29,27 +30,33 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Mappers
             
             // model to entity
             CreateMap<IdentityProviderDto, IdentityProvider>(MemberList.Source)
-                .ForMember(x => x.Properties, opts => opts.ConvertUsing(PropertiesConverter.Converter, x => x.IdentityProviderProperties));
+                .ForMember(x => x.Properties, opts => opts.ConvertUsing(PropertiesConverter.Converter, x => x.Properties));
         }
 
         class PropertiesConverter :
-            IValueConverter<Dictionary<string, string>, string>,
-            IValueConverter<string, Dictionary<string, string>>
+            IValueConverter<Dictionary<int, IdentityProviderPropertyDto>, string>,
+            IValueConverter<string, Dictionary<int, IdentityProviderPropertyDto>>
         {
             public static PropertiesConverter Converter = new PropertiesConverter();
 
-            public string Convert(Dictionary<string, string> sourceMember, ResolutionContext context)
+            public string Convert(Dictionary<int, IdentityProviderPropertyDto> sourceMember, ResolutionContext context)
             {
-                return JsonSerializer.Serialize(sourceMember);
+                var dict = sourceMember.ToDictionary(x => x.Value.Name, dto => dto.Value.Value);
+                return JsonSerializer.Serialize(dict);
             }
 
-            public Dictionary<string, string> Convert(string sourceMember, ResolutionContext context)
+            public Dictionary<int, IdentityProviderPropertyDto> Convert(string sourceMember, ResolutionContext context)
             {
                 if (string.IsNullOrWhiteSpace(sourceMember))
                 {
-                    return new Dictionary<string, string>();
+                    return new Dictionary<int, IdentityProviderPropertyDto>();
                 }
-                return JsonSerializer.Deserialize<Dictionary<string, string>>(sourceMember);
+                var index = 0;
+                var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(sourceMember);
+                //.Select(i => new IdentityProviderPropertyDto { Name = i.Key, Value = i.Value })
+                return dict
+                    .ToDictionary(item => index++,
+                        item => new IdentityProviderPropertyDto { Name = item.Key, Value = item.Value });
             }
         }
         

@@ -21,12 +21,6 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces
         Task<int> DeleteIdentityProviderAsync(IdentityProviderDto identityProvider);
 
         IdentityProviderDto BuildIdentityProviderViewModel(IdentityProviderDto identityProvider);
-
-
-        Task<IdentityProviderPropertiesDto> GetIdentityProviderPropertiesAsync(int identityProviderId, int page = 1, int pageSize = 10);
-        Task<IdentityProviderPropertiesDto> GetIdentityProviderPropertyAsync(int identityProviderId, string key);
-        Task<int> AddIdentityProviderPropertyAsync(IdentityProviderPropertiesDto identityProviderProperties);
-        Task<int> DeleteIdentityProviderPropertyAsync(IdentityProviderPropertiesDto identityProviderProperty);
         
     }
 }

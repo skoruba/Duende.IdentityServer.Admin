@@ -1,0 +1,13 @@
+@model  Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.IdentityProvider.IdentityProviderPropertyDto
+@* NOTE: the add-property javascript 'propertyTemplate' in the IdentityProvider.cshml file needs to match the rendered end-result for whatever is in this editor template! *@
+<div class="property row">
+    <div class="col-sm">
+        <input type="text" required class="form-control" asp-for="Name"/>
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="col-sm">
+        <input type="text" class="form-control" asp-for="Value"/>
+    </div>    
+    <div class="col-sm-1 col-xs-1"><span class="remove-property oi oi-trash"></span></div>
+    
+</div>
