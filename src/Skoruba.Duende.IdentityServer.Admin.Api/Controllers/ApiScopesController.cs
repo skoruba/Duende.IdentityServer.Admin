@@ -69,10 +69,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.Controllers
                 return BadRequest(_errorResources.CannotSetId());
             }
 
-            var id = await _apiScopeService.AddApiScopeAsync(apiScope);
-            apiScope.Id = id;
+            var apiScopeId = await _apiScopeService.AddApiScopeAsync(apiScope);
+            apiScope.Id = apiScopeId;
 
-            return CreatedAtAction(nameof(GetScope), new {scopeId = id}, apiScope);
+            return CreatedAtAction(nameof(GetScope), new {id = apiScopeId}, apiScope);
         }
 
         [HttpPost("{id}/Properties")]
