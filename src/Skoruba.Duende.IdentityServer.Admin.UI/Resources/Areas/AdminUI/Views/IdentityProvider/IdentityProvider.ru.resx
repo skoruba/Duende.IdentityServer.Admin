@@ -117,40 +117,43 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ButtonApiResources" xml:space="preserve">
-    <value>Api ресурсы</value>
+  <data name="ButtonDelete" xml:space="preserve">
+    <value>Delete Identity Provider</value>
   </data>
-  <data name="ButtonApiScopes" xml:space="preserve">
-    <value>Api Scopes</value>
+  <data name="ButtonManageProperties" xml:space="preserve">
+    <value>Manage Identity Provider Properties</value>
   </data>
-  <data name="ButtonAuditLogs" xml:space="preserve">
-    <value>Audit Logs</value>
+  <data name="ButtonSave" xml:space="preserve">
+    <value>Save Identity Provider</value>
   </data>
-  <data name="ButtonClients" xml:space="preserve">
-    <value>Клиенты</value>
-  </data>
-  <data name="ButtonIdentityClients" xml:space="preserve">
-    <value>Ресурсы идентификации</value>
-  </data>
-  <data name="ButtonIdentityProviders" xml:space="preserve">
+  <data name="NavigationIdentityProviders" xml:space="preserve">
     <value>Identity Providers</value>
   </data>
-  <data name="ButtonManage" xml:space="preserve">
-    <value>Изменить</value>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Identity Provider</value>
   </data>
-  <data name="ButtonPersistedGrants" xml:space="preserve">
-    <value>Постоянные права</value>
+  <data name="PanelTitle" xml:space="preserve">
+    <value>Identity Provider</value>
   </data>
-  <data name="ButtonRoles" xml:space="preserve">
-    <value>Роли</value>
+  <data name="PickerItemAlreadySelectedTitle" xml:space="preserve">
+    <value>item already selected</value>
   </data>
-  <data name="ButtonUsers" xml:space="preserve">
-    <value>Пользователи</value>
+  <data name="PickerNoItemSelectedTitle" xml:space="preserve">
+    <value>No item/s selected</value>
   </data>
-  <data name="Keys" xml:space="preserve">
-    <value>Keys</value>
+  <data name="PickerSearchItemPlaceholder" xml:space="preserve">
+    <value>Enter 2 and more characters</value>
   </data>
-  <data name="PageSubTitle" xml:space="preserve">
-    <value>Управление для Duende IdentityServer и Asp.Net Core Identity</value>
+  <data name="PickerSearchResultTitle" xml:space="preserve">
+    <value>Search result: (click on the item to select)</value>
+  </data>
+  <data name="PickerSelectedItemsTitle" xml:space="preserve">
+    <value>Selected item/s: </value>
+  </data>
+  <data name="PickerShowAllItemsTitle" xml:space="preserve">
+    <value>more</value>
+  </data>
+  <data name="PickerSuggestedItemsTitle" xml:space="preserve">
+    <value>Suggested items: </value>
   </data>
 </root>

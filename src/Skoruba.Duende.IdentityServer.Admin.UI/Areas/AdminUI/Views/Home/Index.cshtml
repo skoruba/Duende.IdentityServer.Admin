@@ -56,7 +56,7 @@
     <!-- Identity Providers -->
     <div class="card mb-4 box-shadow">
         <div class="card-header">
-            <h4 class="my-0 font-weight-normal">@Localizer["IdentityProviders"]</h4>
+            <h4 class="my-0 font-weight-normal">@Localizer["ButtonIdentityProviders"]</h4>
         </div>
         <div class="card-body">
             <h1 class="card-title">
@@ -108,22 +108,23 @@
         </div>
     </div>
 
-</div>
-
-<div class="card-deck mb-3 text-center">
-
-    <!-- Persisted Grants -->
+     <!-- Persisted Grants -->
     <div class="card mb-4 box-shadow">
         <div class="card-header">
             <h4 class="my-0 font-weight-normal">@Localizer["ButtonPersistedGrants"]</h4>
         </div>
         <div class="card-body">
             <h1 class="card-title">
-                <span class="oi oi-thumb-up" title="Persisted Grants" aria-hidden="true"></span>
+                <span class="oi oi oi-key" title="Persisted Grants" aria-hidden="true"></span>
             </h1>
             <a asp-area="@CommonConsts.AdminUIArea" asp-controller="Grant" asp-action="PersistedGrants" class="btn btn-lg btn-block btn-primary">@Localizer["ButtonManage"]</a>
         </div>
     </div>
+</div>
+
+<div class="card-deck mb-3 text-center">
+
+   
 
     <!-- Keys -->
     <div class="card mb-4 box-shadow">
