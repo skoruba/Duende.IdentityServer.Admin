@@ -361,7 +361,13 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
 
             var identityServerOptions = configurationSection.Get<IdentityServerOptions>();
 
-            var builder = services.AddIdentityServer(options => configurationSection.Bind(options))
+            var builder = services.AddIdentityServer(options =>
+                {
+                    configurationSection.Bind(options);
+
+                    options.DynamicProviders.SignInScheme = IdentityConstants.ExternalScheme;
+                    options.DynamicProviders.SignOutScheme = IdentityConstants.ApplicationScheme;
+                })
                 .AddConfigurationStore<TConfigurationDbContext>()
                 .AddOperationalStore<TPersistedGrantDbContext>()
                 .AddAspNetIdentity<TUserIdentity>();
