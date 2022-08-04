@@ -46,6 +46,7 @@ function processScripts() {
             './Scripts/App/pages/ErrorsLog.js',
             './Scripts/App/pages/AuditLog.js',
             './Scripts/App/pages/Secrets.js',
+            './Scripts/App/pages/IdentityProviders.js',
             './Scripts/App/components/DatePicker.js'
         ])
         .pipe(concat('bundle.min.js'))
