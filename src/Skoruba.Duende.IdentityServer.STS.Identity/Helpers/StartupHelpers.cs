@@ -34,6 +34,7 @@ using Skoruba.Duende.IdentityServer.STS.Identity.Configuration.ApplicationParts;
 using Skoruba.Duende.IdentityServer.STS.Identity.Configuration.Constants;
 using Skoruba.Duende.IdentityServer.STS.Identity.Configuration.Interfaces;
 using Skoruba.Duende.IdentityServer.STS.Identity.Helpers.Localization;
+using Skoruba.Duende.IdentityServer.STS.Identity.Services;
 
 namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
 {
@@ -294,6 +295,8 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
                 options.OnDeleteCookie = cookieContext =>
                     AuthenticationHelpers.CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
             });
+
+            services.ConfigureOptions<OpenIdClaimsMappingConfig>();
 
             services.Configure<IISOptions>(iis =>
             {
