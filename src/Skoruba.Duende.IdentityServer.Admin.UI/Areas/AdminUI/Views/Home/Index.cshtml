@@ -53,7 +53,15 @@
         </div>
     </div>
 
-    <!-- Api Scopes -->
+  
+
+
+</div>
+
+
+<div class="card-deck mb-3 text-center">
+
+      <!-- Api Scopes -->
     <div class="card mb-4 box-shadow">
         <div class="card-header">
             <h4 class="my-0 font-weight-normal">@Localizer["ButtonApiScopes"]</h4>
@@ -65,14 +73,6 @@
             <a asp-area="@CommonConsts.AdminUIArea" asp-controller="Configuration" asp-action="ApiScopes" class="btn btn-lg btn-block btn-outline-primary">@Localizer["ButtonManage"]</a>
         </div>
     </div>
-
-
-</div>
-
-
-<div class="card-deck mb-3 text-center">
-
-
 
     <!-- Users -->
     <div class="card mb-4 box-shadow">
@@ -99,7 +99,14 @@
         </div>
     </div>
 
-    <!-- Persisted Grants -->
+   
+
+
+</div>
+
+<div class="card-deck mb-3 text-center">
+
+     <!-- Persisted Grants -->
     <div class="card mb-4 box-shadow">
         <div class="card-header">
             <h4 class="my-0 font-weight-normal">@Localizer["ButtonPersistedGrants"]</h4>
@@ -111,12 +118,6 @@
             <a asp-area="@CommonConsts.AdminUIArea" asp-controller="Grant" asp-action="PersistedGrants" class="btn btn-lg btn-block btn-primary">@Localizer["ButtonManage"]</a>
         </div>
     </div>
-
-
-</div>
-
-<div class="card-deck mb-3 text-center">
-
 
     <!-- Identity Providers -->
     <div class="card mb-4 box-shadow">
@@ -141,19 +142,6 @@
                 <span class="oi oi-eye" title="Audit Logging" aria-hidden="true"></span>
             </h1>
             <a asp-area="@CommonConsts.AdminUIArea" asp-controller="Log" asp-action="AuditLog" class="btn btn-lg btn-block btn-primary">@Localizer["ButtonManage"]</a>
-        </div>
-    </div>
-
-    <!-- Keys -->
-    <div class="card mb-4 box-shadow">
-        <div class="card-header">
-            <h4 class="my-0 font-weight-normal">@Localizer["Keys"]</h4>
-        </div>
-        <div class="card-body">
-            <h1 class="card-title">
-                <span class="oi oi-key" title="Keys" aria-hidden="true"></span>
-            </h1>
-            <a asp-area="@CommonConsts.AdminUIArea" asp-controller="Key" asp-action="Keys" class="btn btn-lg btn-block btn-outline-primary">@Localizer["ButtonManage"]</a>
         </div>
     </div>
 
