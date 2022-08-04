@@ -141,6 +141,9 @@
   <data name="LinkIdentityResources" xml:space="preserve">
     <value>Identity Resources</value>
   </data>
+  <data name="LinkIdentityProviders" xml:space="preserve">
+    <value>Identity Providers</value>
+  </data>
   <data name="LinkLogout" xml:space="preserve">
     <value>Déconnexion</value>
   </data>

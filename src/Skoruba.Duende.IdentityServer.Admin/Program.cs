@@ -138,7 +138,8 @@ namespace Skoruba.Duende.IdentityServer.Admin
                      configApp.AddCommandLine(args);
                  })
                 .ConfigureWebHostDefaults(webBuilder =>
-                {
+                { 
+                    webBuilder.UseStaticWebAssets();
                     webBuilder.ConfigureKestrel(options => options.AddServerHeader = false);
                     webBuilder.UseStartup<Startup>();
                 })
