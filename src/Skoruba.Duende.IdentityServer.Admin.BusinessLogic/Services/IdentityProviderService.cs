@@ -115,17 +115,5 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services
 
             return deleted;
         }
-
-
-#warning TODO
-
-        public virtual IdentityProviderDto BuildIdentityProviderViewModel(IdentityProviderDto identityProvider)
-        {
-            //TODO: make similar:
-            //ComboBoxHelpers.PopulateValuesToList(identityResource.UserClaimsItems, identityResource.UserClaims);
-
-            return identityProvider;
-        }
-        
     }
 }

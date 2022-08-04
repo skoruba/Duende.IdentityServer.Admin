@@ -6,25 +6,25 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.IdentityProvider
 {
-	public class IdentityProviderDto
-	{
-		public IdentityProviderDto()
-		{
-		}
+    public class IdentityProviderDto
+    {
+        public IdentityProviderDto()
+        {
+        }
 
         [Required]
-		public string Type { get; set; }
-		
-		public int Id { get; set; }
+        public string Type { get; set; } = "oidc";
+
+        public int Id { get; set; }
 
         [Required]
         public string Scheme { get; set; }
-		
-		public string DisplayName { get; set; }
+
+        public string DisplayName { get; set; }
 
         public bool Enabled { get; set; } = true;
 
         public Dictionary<int, IdentityProviderPropertyDto> Properties { get; set; } = new();
     }
-	
+
 }

@@ -57,18 +57,13 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Areas.AdminUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> IdentityProvider(IdentityProviderDto identityProvider)
         {
-            //TODO: check validate properties: key not null, etc.
-            // they are honored, but not 'properly' messaged on..
-            
-            // also: we check for duplicate keys:
-            var dupGroups = identityProvider.Properties.GroupBy(s => s.Value.Name).Where(g => g.Count() > 1).ToArray();
-            if (dupGroups.Length > 0)
+            var duplicatesKeys = identityProvider.Properties.GroupBy(s => s.Value.Name).Where(g => g.Count() > 1).ToArray();
+            if (duplicatesKeys.Length > 0)
             {
-                foreach (var dupGroup in dupGroups)
+                foreach (var dupGroup in duplicatesKeys)
                 {
                     foreach (var d in dupGroup)
                     {
-                        //duplicate key = not allowed
                         ModelState.AddModelError($"{nameof(IdentityProviderDto.Properties)}[{d.Key}].{nameof(IdentityProviderPropertyDto.Name)}", $"duplicate name ({d.Value.Name})");
                     }
                 }
@@ -79,9 +74,6 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Areas.AdminUI.Controllers
             {
                 return View(identityProvider);
             }
-
-            identityProvider = _identityProviderService.BuildIdentityProviderViewModel(identityProvider);
-
             int identityResourceId;
 
             if (identityProvider.Id == 0)
@@ -118,7 +110,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Areas.AdminUI.Controllers
             if (id == default)
             {
                 var identityProviderDto = new IdentityProviderDto();
-                identityProviderDto.Type = "oidc";
+
                 return View(identityProviderDto);
             }
 
@@ -127,6 +119,6 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Areas.AdminUI.Controllers
 
             return View(identityProvider);
         }
-        
+
     }
 }
