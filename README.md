@@ -19,7 +19,7 @@ The application is written in the **Asp.Net Core MVC - using .NET 6.0**
 
 - Install the dotnet new template:
 
-- 🔒 **NOTE:** The project uses the default database migrations which affect your database therefore double check the migrations according to your database provider and create a database backup
+- 🔒 **NOTE:** The project uses the default database migrations which affect your database, therefore double check the migrations according to your database provider and create a database backup
 
 ```sh
 dotnet new -i Skoruba.Duende.IdentityServer.Admin.Templates::1.1.0
@@ -374,11 +374,11 @@ Admin and STS can be customized without editing code in `appsettings.json` under
 
 #### Themes
 
-Ui can be customized using themes integrated from [bootswatch](https://bootswatch.com).
+UI can be customized using themes integrated from [bootswatch](https://bootswatch.com).
 
 It's possible to change theme from UI. 🎈
 
-By default, configuration value is null to use default theme. if you want to use a theme, just fill the lowercase theme name as configuration value of `Theme` key.
+By default, configuration value is null to use default theme. If you want to use a theme, just fill the lowercase theme name as configuration value of `Theme` key.
 
 You can also use your custom theme by integrating it in your project or hosting css on your place to pass the url in `CustomThemeCss` key. (Note that custom theme override standard theme)
 
@@ -759,10 +759,10 @@ This repository is licensed under the terms of the [**Apache License 2.0**](LICE
 
 **Duende.IdentityServer** is available under both a **FOSS (RPL) and a commercial** license. 
 
-For the production environment is necesarry to get the specific license. For more information about licencing of Duende.IdentityServer - please check [this link](https://duendesoftware.com/products/identityserver#pricing).
+For the production environment is necessary to get the specific license. For more information about licensing of Duende.IdentityServer - please check [this link](https://duendesoftware.com/products/identityserver#pricing).
 
 This repository uses the source code from https://github.com/DuendeSoftware/IdentityServer.Quickstart.UI which is under the terms of the following
-[**lincense**](https://github.com/DuendeSoftware/IdentityServer.Quickstart.UI/blob/main/LICENSE).
+[**license**](https://github.com/DuendeSoftware/IdentityServer.Quickstart.UI/blob/main/LICENSE).
 
 
 ## Acknowledgements
