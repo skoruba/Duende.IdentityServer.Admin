@@ -73,6 +73,10 @@
         <None Include="Areas\AdminUI\Views\Identity\UserRolesDelete.cshtml" />
         <None Include="Areas\AdminUI\Views\Identity\Users.cshtml" />
         <None Include="Areas\AdminUI\Views\Identity\User\Section\Label.cshtml" />
+		<None Include="Areas\AdminUI\Views\IdentityProvider\IdentityProvider\Section\Label.cshtml" />
+		<None Include="Areas\AdminUI\Views\IdentityProvider\IdentityProvider.cshtml" />
+		<None Include="Areas\AdminUI\Views\IdentityProvider\IdentityProviderDelete.cshtml" />
+		<None Include="Areas\AdminUI\Views\IdentityProvider\IdentityProviders.cshtml" />
         <None Include="Areas\AdminUI\Views\Log\AuditLog.cshtml" />
         <None Include="Areas\AdminUI\Views\Log\ErrorsLog.cshtml" />
         <None Include="Areas\AdminUI\Views\Shared\Common\ApplicationVersion.cshtml" />
