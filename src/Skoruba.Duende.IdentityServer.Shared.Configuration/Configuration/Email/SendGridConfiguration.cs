@@ -9,5 +9,7 @@ namespace Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration.Email
         public string SourceEmail { get; set; }
         public string SourceName { get; set; }
         public bool EnableClickTracking { get; set; } = false;
+        public string? IpPoolName { get; set; }
+
     }
 }
