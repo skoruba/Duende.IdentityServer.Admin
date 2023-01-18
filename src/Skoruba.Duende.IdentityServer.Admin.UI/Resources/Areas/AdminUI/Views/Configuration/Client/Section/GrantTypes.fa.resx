@@ -117,37 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ButtonManageClientProperties" xml:space="preserve">
-    <value>Gerenciar propriedades do sistema</value>
-  </data>
-  <data name="ButtonManageClientSecrets" xml:space="preserve">
-    <value>Gerenciar segredos dos sistemas</value>
-  </data>
   <data name="NotRecommendedGrantTypes" xml:space="preserve">
     <value>It is not recommended to use the Implicit Flow (implicit) and Resource Owner Password Flow (password).</value>
   </data>
   <data name="PanelTitle" xml:space="preserve">
-    <value>Básicos</value>
+    <value>Grant Types</value>
   </data>
   <data name="PickerItemAlreadySelectedTitle" xml:space="preserve">
-    <value>Item já selecionado</value>
+    <value>مورد انتخاب شده است</value>
   </data>
   <data name="PickerNoItemSelectedTitle" xml:space="preserve">
-    <value>Nenhum item/s selecionado</value>
+    <value>هیچ مورد/مواردی انتخاب نشده است</value>
   </data>
   <data name="PickerSearchItemPlaceholder" xml:space="preserve">
-    <value>Digite 2 ou mais caracteres</value>
+    <value>حداقل 2 کاراکتر وارد کنید</value>
   </data>
   <data name="PickerSearchResultTitle" xml:space="preserve">
-    <value>Resultado da pesquisa: (clique no item para selecionar)</value>
+    <value>نتیجه جستجو: (بر روی مورد برای انتخاب کلیک کنید)</value>
   </data>
   <data name="PickerSelectedItemsTitle" xml:space="preserve">
-    <value>Item/s selecionado: </value>
+    <value>عنوان/عناوین انتخاب شده:</value>
   </data>
   <data name="PickerShowAllItemsTitle" xml:space="preserve">
-    <value>mais</value>
+    <value>بیشتر</value>
   </data>
   <data name="PickerSuggestedItemsTitle" xml:space="preserve">
-    <value>Itens sugeridos: </value>
+    <value>موارد پیشنهادی:</value>
   </data>
 </root>

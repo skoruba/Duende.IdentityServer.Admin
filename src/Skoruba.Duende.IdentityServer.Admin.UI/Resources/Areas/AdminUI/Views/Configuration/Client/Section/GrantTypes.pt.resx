@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,37 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ButtonManageClientProperties" xml:space="preserve">
-    <value>Beheer Client Properties</value>
-  </data>
-  <data name="ButtonManageClientSecrets" xml:space="preserve">
-    <value>Beheer Client Secrets</value>
-  </data>
   <data name="NotRecommendedGrantTypes" xml:space="preserve">
     <value>It is not recommended to use the Implicit Flow (implicit) and Resource Owner Password Flow (password).</value>
   </data>
   <data name="PanelTitle" xml:space="preserve">
-    <value>Basis</value>
+    <value>Grant Types</value>
   </data>
   <data name="PickerItemAlreadySelectedTitle" xml:space="preserve">
-    <value>item is al geselecteerd</value>
+    <value>Item já selecionado</value>
   </data>
   <data name="PickerNoItemSelectedTitle" xml:space="preserve">
-    <value>Geen item geselecteerd</value>
+    <value>Nenhum item/s selecionado</value>
   </data>
   <data name="PickerSearchItemPlaceholder" xml:space="preserve">
-    <value>Voer minstens 2 tekens in</value>
+    <value>Digite 2 ou mais caracteres</value>
   </data>
   <data name="PickerSearchResultTitle" xml:space="preserve">
-    <value>Zoekresultaat: (klik op het item om te selecteren)</value>
+    <value>Resultado da pesquisa: (clique no item para selecionar)</value>
   </data>
   <data name="PickerSelectedItemsTitle" xml:space="preserve">
-    <value>Geselecteerde item(s):</value>
+    <value>Item/s selecionado: </value>
   </data>
   <data name="PickerShowAllItemsTitle" xml:space="preserve">
-    <value>meer</value>
+    <value>mais</value>
   </data>
   <data name="PickerSuggestedItemsTitle" xml:space="preserve">
-    <value>Voorgestelde items:</value>
+    <value>Itens sugeridos: </value>
   </data>
 </root>

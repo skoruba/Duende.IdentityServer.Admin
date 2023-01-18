@@ -121,38 +121,7 @@
     <value>Gérer les propriétés client</value>
     <comment>Gérer les propriétés du client</comment>
   </data>
-  <data name="ButtonManageClientSecrets" xml:space="preserve">
-    <value>Gérer les secrets client</value>
-    <comment>Gérer les secrets du client</comment>
-  </data>
-  <data name="NotRecommendedGrantTypes" xml:space="preserve">
-    <value>It is not recommended to use the Implicit Flow (implicit) and Resource Owner Password Flow (password).</value>
-  </data>
   <data name="PanelTitle" xml:space="preserve">
-    <value>Notions de base</value>
-    <comment>Notions élémentaires, Les bases</comment>
-  </data>
-  <data name="PickerItemAlreadySelectedTitle" xml:space="preserve">
-    <value>élément déjà sélectionné</value>
-  </data>
-  <data name="PickerNoItemSelectedTitle" xml:space="preserve">
-    <value>Aucun(s) élément(s) sélectionné(s)</value>
-    <comment>Aucun élément sélectionné</comment>
-  </data>
-  <data name="PickerSearchItemPlaceholder" xml:space="preserve">
-    <value>Entrez 2 caractères et plus</value>
-  </data>
-  <data name="PickerSearchResultTitle" xml:space="preserve">
-    <value>Résultat de la recherche : (cliquez sur l'élément pour le sélectionner)</value>
-  </data>
-  <data name="PickerSelectedItemsTitle" xml:space="preserve">
-    <value>Élément(s) sélectionné(s) :</value>
-  </data>
-  <data name="PickerShowAllItemsTitle" xml:space="preserve">
-    <value>plus</value>
-    <comment>voir plus</comment>
-  </data>
-  <data name="PickerSuggestedItemsTitle" xml:space="preserve">
-    <value>Éléments suggérés :</value>
+    <value>Client Properties</value>
   </data>
 </root>

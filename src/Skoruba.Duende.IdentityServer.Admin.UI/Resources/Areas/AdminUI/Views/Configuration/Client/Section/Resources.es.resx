@@ -118,36 +118,33 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ButtonManageClientProperties" xml:space="preserve">
-    <value>Hantera klientegenskaper</value>
+    <value>Administrar propiedades de cliente</value>
   </data>
   <data name="ButtonManageClientSecrets" xml:space="preserve">
-    <value>Hantera klienthemligheter</value>
-  </data>
-  <data name="NotRecommendedGrantTypes" xml:space="preserve">
-    <value>It is not recommended to use the Implicit Flow (implicit) and Resource Owner Password Flow (password).</value>
+    <value>Administrar secretos de cliente</value>
   </data>
   <data name="PanelTitle" xml:space="preserve">
-    <value>Grunder</value>
+    <value>Resources &amp; Secrets</value>
   </data>
   <data name="PickerItemAlreadySelectedTitle" xml:space="preserve">
-    <value>posten är redan vald</value>
+    <value>Elemento ya seleccionado</value>
   </data>
   <data name="PickerNoItemSelectedTitle" xml:space="preserve">
-    <value>Antal valda poster</value>
+    <value>No hay elementos seleccionados</value>
   </data>
   <data name="PickerSearchItemPlaceholder" xml:space="preserve">
-    <value>Ange minst två tecken</value>
+    <value>Ingresa dos o más caracteres</value>
   </data>
   <data name="PickerSearchResultTitle" xml:space="preserve">
-    <value>Sökresultat: (klicka på posten för att välja den)</value>
+    <value>Resultado de la busqueda: (has clic en un elemento para seleccionarlo)</value>
   </data>
   <data name="PickerSelectedItemsTitle" xml:space="preserve">
-    <value>Valda poster:</value>
+    <value>Elementos seleccionados: </value>
   </data>
   <data name="PickerShowAllItemsTitle" xml:space="preserve">
-    <value>mer</value>
+    <value>más</value>
   </data>
   <data name="PickerSuggestedItemsTitle" xml:space="preserve">
-    <value>Föreslagna poster:</value>
+    <value>Elementos sugeridos: </value>
   </data>
 </root>

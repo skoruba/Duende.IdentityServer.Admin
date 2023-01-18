@@ -117,37 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ButtonManageClientProperties" xml:space="preserve">
-    <value>管理客户端属性</value>
+  <data name="NavAuthentication" xml:space="preserve">
+    <value>Authentication/Logout</value>
   </data>
-  <data name="ButtonManageClientSecrets" xml:space="preserve">
-    <value>管理客户端密钥</value>
+  <data name="NavClientProperties" xml:space="preserve">
+    <value>Client Properties</value>
   </data>
-  <data name="NotRecommendedGrantTypes" xml:space="preserve">
-    <value>It is not recommended to use the Implicit Flow (implicit) and Resource Owner Password Flow (password).</value>
+  <data name="NavConsent" xml:space="preserve">
+    <value>Consent Screen</value>
+  </data>
+  <data name="NavDeviceFlow" xml:space="preserve">
+    <value>Device Flow</value>
+  </data>
+  <data name="NavGrantTypes" xml:space="preserve">
+    <value>Grant Types</value>
+  </data>
+  <data name="NavToken" xml:space="preserve">
+    <value>Token</value>
+  </data>
+  <data name="NavUrls" xml:space="preserve">
+    <value>Urls</value>
   </data>
   <data name="PanelTitle" xml:space="preserve">
-    <value>基本</value>
-  </data>
-  <data name="PickerItemAlreadySelectedTitle" xml:space="preserve">
-    <value>项已被选中</value>
-  </data>
-  <data name="PickerNoItemSelectedTitle" xml:space="preserve">
-    <value>没有选择项</value>
-  </data>
-  <data name="PickerSearchItemPlaceholder" xml:space="preserve">
-    <value>输入 2 个以上字符</value>
-  </data>
-  <data name="PickerSearchResultTitle" xml:space="preserve">
-    <value>搜索结果:(点击选择)</value>
-  </data>
-  <data name="PickerSelectedItemsTitle" xml:space="preserve">
-    <value>选中项:</value>
-  </data>
-  <data name="PickerShowAllItemsTitle" xml:space="preserve">
-    <value>更多</value>
-  </data>
-  <data name="PickerSuggestedItemsTitle" xml:space="preserve">
-    <value>建议项:</value>
+    <value>Advanced</value>
   </data>
 </root>

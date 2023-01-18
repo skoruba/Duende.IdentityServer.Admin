@@ -118,36 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ButtonManageClientProperties" xml:space="preserve">
-    <value>Manage Client Properties</value>
-  </data>
-  <data name="ButtonManageClientSecrets" xml:space="preserve">
-    <value>Manage Client Secrets</value>
-  </data>
-  <data name="NotRecommendedGrantTypes" xml:space="preserve">
-    <value>It is not recommended to use the Implicit Flow (implicit) and Resource Owner Password Flow (password).</value>
+    <value>Gerenciar propriedades do sistema</value>
   </data>
   <data name="PanelTitle" xml:space="preserve">
-    <value>Basics</value>
-  </data>
-  <data name="PickerItemAlreadySelectedTitle" xml:space="preserve">
-    <value>item already selected</value>
-  </data>
-  <data name="PickerNoItemSelectedTitle" xml:space="preserve">
-    <value>No item/s selected</value>
-  </data>
-  <data name="PickerSearchItemPlaceholder" xml:space="preserve">
-    <value>Enter 2 and more characters</value>
-  </data>
-  <data name="PickerSearchResultTitle" xml:space="preserve">
-    <value>Search result: (click on the item to select)</value>
-  </data>
-  <data name="PickerSelectedItemsTitle" xml:space="preserve">
-    <value>Selected item/s: </value>
-  </data>
-  <data name="PickerShowAllItemsTitle" xml:space="preserve">
-    <value>more</value>
-  </data>
-  <data name="PickerSuggestedItemsTitle" xml:space="preserve">
-    <value>Suggested items: </value>
+    <value>Client Properties</value>
   </data>
 </root>

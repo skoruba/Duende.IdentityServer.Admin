@@ -8,6 +8,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Content Remove="Areas\AdminUI\Views\Configuration\Client\Section\ClientProperties.cshtml" />
+      <Content Remove="Areas\AdminUI\Views\Configuration\Client\Section\GrantTypes.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
         <FrameworkReference Include="Microsoft.AspNetCore.App" />
     </ItemGroup>
 
@@ -35,11 +40,15 @@
         <None Include="Areas\AdminUI\Views\Configuration\ClientSecrets.cshtml" />
         <None Include="Areas\AdminUI\Views\Configuration\Client\Section\ActionButtons.cshtml" />
         <None Include="Areas\AdminUI\Views\Configuration\Client\Section\Authentication.cshtml" />
-        <None Include="Areas\AdminUI\Views\Configuration\Client\Section\Basics.cshtml" />
         <None Include="Areas\AdminUI\Views\Configuration\Client\Section\Consent.cshtml" />
+        <None Include="Areas\AdminUI\Views\Configuration\Client\Section\ClientProperties.cshtml" />
+        <None Include="Areas\AdminUI\Views\Configuration\Client\Section\GrantTypes.cshtml" />
         <None Include="Areas\AdminUI\Views\Configuration\Client\Section\DeviceFlow.cshtml" />
         <None Include="Areas\AdminUI\Views\Configuration\Client\Section\Label.cshtml" />
         <None Include="Areas\AdminUI\Views\Configuration\Client\Section\Name.cshtml" />
+        <None Include="Areas\AdminUI\Views\Configuration\Client\Section\Advanced.cshtml" />
+        <None Include="Areas\AdminUI\Views\Configuration\Client\Section\Urls.cshtml" />
+        <None Include="Areas\AdminUI\Views\Configuration\Client\Section\Resources.cshtml" />
         <None Include="Areas\AdminUI\Views\Configuration\Client\Section\Token.cshtml" />
         <None Include="Areas\AdminUI\Views\Configuration\Client\Settings.cshtml" />
         <None Include="Areas\AdminUI\Views\Configuration\IdentityResource.cshtml" />
@@ -112,6 +121,111 @@
         <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.csproj" />
         <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.csproj" />
         <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Shared.Configuration\Skoruba.Duende.IdentityServer.Shared.Configuration.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\GrantTypes.zh.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\GrantTypes.sv.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\GrantTypes.ru.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\GrantTypes.pt.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\GrantTypes.nl.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\GrantTypes.fr.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\GrantTypes.fi.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\GrantTypes.fa.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\GrantTypes.es.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\GrantTypes.de.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\GrantTypes.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Urls.zh.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Urls.sv.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Urls.ru.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Urls.pt.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Urls.nl.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Urls.fr.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Urls.fi.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Urls.fa.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Urls.es.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Urls.de.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Urls.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Advanced.zh.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Advanced.sv.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Advanced.ru.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Advanced.pt.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Advanced.nl.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Advanced.fr.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Advanced.fi.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Advanced.fa.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Advanced.es.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Advanced.de.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Advanced.da.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Areas\AdminUI\Views\Configuration\Client\Section\Advanced.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
     </ItemGroup>
 
 </Project>

@@ -117,37 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ButtonManageClientProperties" xml:space="preserve">
-    <value>Hallitse asiakasominaisuuksia</value>
-  </data>
-  <data name="ButtonManageClientSecrets" xml:space="preserve">
-    <value>Hallitse asiakassalaisuuksia</value>
-  </data>
   <data name="NotRecommendedGrantTypes" xml:space="preserve">
     <value>It is not recommended to use the Implicit Flow (implicit) and Resource Owner Password Flow (password).</value>
   </data>
   <data name="PanelTitle" xml:space="preserve">
-    <value>Perustiedot</value>
+    <value>Grant Types</value>
   </data>
   <data name="PickerItemAlreadySelectedTitle" xml:space="preserve">
-    <value>Kohde on jo valittu</value>
+    <value>项已被选中</value>
   </data>
   <data name="PickerNoItemSelectedTitle" xml:space="preserve">
-    <value>Kohteita ei ole valittu</value>
+    <value>没有选择项</value>
   </data>
   <data name="PickerSearchItemPlaceholder" xml:space="preserve">
-    <value>Kirjoita vähintään 2 merkkiä</value>
+    <value>输入 2 个以上字符</value>
   </data>
   <data name="PickerSearchResultTitle" xml:space="preserve">
-    <value>Hakutulos: (napsauta tuotetta valitaksesi)</value>
+    <value>搜索结果:(点击选择)</value>
   </data>
   <data name="PickerSelectedItemsTitle" xml:space="preserve">
-    <value>Valitut kohteet:</value>
+    <value>选中项:</value>
   </data>
   <data name="PickerShowAllItemsTitle" xml:space="preserve">
-    <value>Lisää</value>
+    <value>更多</value>
   </data>
   <data name="PickerSuggestedItemsTitle" xml:space="preserve">
-    <value>Ehdotetut tuotteet:</value>
+    <value>建议项:</value>
   </data>
 </root>

@@ -29,6 +29,31 @@
 			</div>
 		</div>
 
+		@if (Model.Id != default)
+		{
+		<!--Input - text -->
+		<div class="form-group row">
+			<label asp-for="Description" class="col-sm-3 col-form-label">
+				@await Html.PartialAsync("Client/Section/Label", "Description")
+			</label>
+			<div class="col-sm-9">
+				<input type="text" class="form-control" asp-for="Description">
+			</div>
+		</div>
+
+		<!--Checkbox-->
+		<div class="form-group row">
+			<label asp-for="Enabled" class="col-sm-3 col-form-label">
+				@await Html.PartialAsync("Client/Section/Label", "Enabled")
+			</label>
+			<div class="col-sm-9">
+				<toggle-button>
+					<input asp-for="Enabled" type="checkbox">
+				</toggle-button>
+			</div>
+		</div>
+		}
+
 		@if (Model.Id == 0)
 		{
 			<div class="card-deck mb-3 text-center">

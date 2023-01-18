@@ -117,37 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ButtonManageClientProperties" xml:space="preserve">
-    <value>Administrer Client Egenskaber</value>
-  </data>
-  <data name="ButtonManageClientSecrets" xml:space="preserve">
-    <value>Administrer Client Secrets</value>
-  </data>
   <data name="NotRecommendedGrantTypes" xml:space="preserve">
     <value>It is not recommended to use the Implicit Flow (implicit) and Resource Owner Password Flow (password).</value>
   </data>
   <data name="PanelTitle" xml:space="preserve">
-    <value>Grundlæggende</value>
+    <value>Grant Types</value>
   </data>
   <data name="PickerItemAlreadySelectedTitle" xml:space="preserve">
-    <value>valget er allerede valgt</value>
+    <value>item is al geselecteerd</value>
   </data>
   <data name="PickerNoItemSelectedTitle" xml:space="preserve">
-    <value>Ingen valg valgt</value>
+    <value>Geen item geselecteerd</value>
   </data>
   <data name="PickerSearchItemPlaceholder" xml:space="preserve">
-    <value>Indtast 2 og flere tegn</value>
+    <value>Voer minstens 2 tekens in</value>
   </data>
   <data name="PickerSearchResultTitle" xml:space="preserve">
-    <value>Søgeresultat: (klik på det valg, du vil vælge)</value>
+    <value>Zoekresultaat: (klik op het item om te selecteren)</value>
   </data>
   <data name="PickerSelectedItemsTitle" xml:space="preserve">
-    <value>Valgte valg:</value>
+    <value>Geselecteerde item(s):</value>
   </data>
   <data name="PickerShowAllItemsTitle" xml:space="preserve">
-    <value>flere</value>
+    <value>meer</value>
   </data>
   <data name="PickerSuggestedItemsTitle" xml:space="preserve">
-    <value>Foreslåede valg:</value>
+    <value>Voorgestelde items:</value>
   </data>
 </root>
