@@ -22,7 +22,7 @@ The application is written in the **Asp.Net Core MVC - using .NET 6.0**
 - 🔒 **NOTE:** The project uses the default database migrations which affect your database therefore double check the migrations according to your database provider and create a database backup
 
 ```sh
-dotnet new -i Skoruba.Duende.IdentityServer.Admin.Templates::1.1.0
+dotnet new -i Skoruba.Duende.IdentityServer.Admin.Templates::1.2.0
 ```
 
 ### Create new project:
