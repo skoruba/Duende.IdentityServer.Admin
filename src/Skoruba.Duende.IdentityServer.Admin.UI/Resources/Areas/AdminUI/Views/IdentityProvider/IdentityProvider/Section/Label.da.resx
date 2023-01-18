@@ -117,19 +117,46 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="SuccessDeleteIdentityProvider" xml:space="preserve">
-    <value>Identity Provider is successfully deleted!</value>
+  <data name="Scheme_Info" xml:space="preserve">
+    <value>This value will be used as the authentication scheme. This needs to be globally unique.</value>
   </data>
-  <data name="SuccessAddIdentityProvider" xml:space="preserve">
-    <value>Identity Provider is successfully saved!</value>
+  <data name="Scheme_Label" xml:space="preserve">
+    <value>Scheme</value>
   </data>
-  <data name="SuccessAddIdentityProviderProperty" xml:space="preserve">
-    <value>Property {0} for Identity Provider {1} is successfully saved!</value>
+  <data name="DisplayName_Info" xml:space="preserve">
+    <value>This value will be used to display the provider choice (e.g. on a login screen).</value>
   </data>
-  <data name="SuccessDeleteIdentityProviderProperty" xml:space="preserve">
-    <value>Identity Provider property is successfully deleted!</value>
+  <data name="DisplayName_Label" xml:space="preserve">
+    <value>Display Name</value>
   </data>
-  <data name="SuccessTitle" xml:space="preserve">
-    <value>Success</value>
+  <data name="Enabled_Info" xml:space="preserve">
+    <value>Indicates if this identity provider is enabled and can be used. Defaults to true.</value>
+  </data>
+  <data name="Type_Label" xml:space="preserve">
+    <value>Protocol type</value>
+  </data>
+  <data name="Type_Info" xml:space="preserve">
+    <value>Indicates the protocol type for the identity provider (Duende only supports 'oidc' out of the box).</value>
+  </data>
+  <data name="Enabled_Label" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="Properties_Info" xml:space="preserve">
+    <value>The properties that define the Identity Provider - see ASPNET OIDC docs.</value>
+  </data>
+  <data name="Properties_Label" xml:space="preserve">
+    <value>Properties</value>
+  </data>
+  <data name="PropertyKey_Info" xml:space="preserve">
+    <value>Key</value>
+  </data>
+  <data name="PropertyKey_Label" xml:space="preserve">
+    <value>Key</value>
+  </data>
+  <data name="PropertyValue_Info" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="PropertyValue_Label" xml:space="preserve">
+    <value>Value</value>
   </data>
 </root>

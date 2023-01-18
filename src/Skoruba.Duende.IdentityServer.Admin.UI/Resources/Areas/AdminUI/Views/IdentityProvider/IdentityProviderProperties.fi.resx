@@ -117,19 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="SuccessDeleteIdentityProvider" xml:space="preserve">
-    <value>Identity Provider is successfully deleted!</value>
+  <data name="ButtonAddProperty" xml:space="preserve">
+    <value>Add Identity Provider Property</value>
   </data>
-  <data name="SuccessAddIdentityProvider" xml:space="preserve">
-    <value>Identity Provider is successfully saved!</value>
+  <data name="NavigationIdentityProviderProperties" xml:space="preserve">
+    <value>Identity Provider Properties</value>
   </data>
-  <data name="SuccessAddIdentityProviderProperty" xml:space="preserve">
-    <value>Property {0} for Identity Provider {1} is successfully saved!</value>
+  <data name="NavigationIdentityProvider" xml:space="preserve">
+    <value>Identity Providers</value>
   </data>
-  <data name="SuccessDeleteIdentityProviderProperty" xml:space="preserve">
-    <value>Identity Provider property is successfully deleted!</value>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Identity Provider Properties</value>
   </data>
-  <data name="SuccessTitle" xml:space="preserve">
-    <value>Success</value>
+  <data name="PanelTitle" xml:space="preserve">
+    <value>Identity Provider Properties</value>
+  </data>
+  <data name="PanelTitleNew" xml:space="preserve">
+    <value>Identity Provider Property</value>
+  </data>
+  <data name="TableButtonRemove" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="TableKey" xml:space="preserve">
+    <value>Key</value>
+  </data>
+  <data name="TableValue" xml:space="preserve">
+    <value>Value</value>
   </data>
 </root>
