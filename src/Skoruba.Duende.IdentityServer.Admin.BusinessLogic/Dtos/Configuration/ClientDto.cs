@@ -86,6 +86,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration
         public bool RequirePkce { get; set; }
         public bool UpdateAccessTokenClaimsOnRefresh { get; set; }
 
+        public bool CoordinateLifetimeWithUserSession { get; set; }
+
         public List<string> PostLogoutRedirectUris { get; set; }
         public string PostLogoutRedirectUrisItems { get; set; }
 
