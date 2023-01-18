@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Duende.IdentityServer.Hosting.DynamicProviders;
 using Duende.IdentityServer.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Http;
 using Skoruba.Duende.IdentityServer.STS.Identity.Helpers;
 using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Skoruba.Duende.IdentityServer.STS.Identity.Services;
 
@@ -19,12 +21,10 @@ public class OpenIdClaimsMappingConfig : ConfigureAuthenticationOptions<OpenIdCo
     {
         var oidcProvider = context.IdentityProvider;
 
-        var claimMappingName = oidcProvider.Properties
-            .SingleOrDefault(x => x.Key == "ClaimActions.NameIdentifier");
+        context.IdentityProvider.Properties.TryGetValue("MapInboundClaims", out var resultMapInboundClaims);
 
-        if (!claimMappingName.IsDefault())
-        {
-            context.AuthenticationOptions.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, claimMappingName.Value);
-        }
+        var mapInboundClaims = resultMapInboundClaims == null || "true".Equals(resultMapInboundClaims);
+
+        context.AuthenticationOptions.MapInboundClaims = mapInboundClaims;
     }
 }

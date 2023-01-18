@@ -21,6 +21,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
+using Microsoft.IdentityModel.Tokens;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySql;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.PostgreSQL;
@@ -296,7 +297,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
                     AuthenticationHelpers.CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
             });
 
-            services.ConfigureOptions<OpenIdClaimsMappingConfig>();
+            
 
             services.Configure<IISOptions>(iis =>
             {
@@ -374,6 +375,8 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
                 .AddConfigurationStore<TConfigurationDbContext>()
                 .AddOperationalStore<TPersistedGrantDbContext>()
                 .AddAspNetIdentity<TUserIdentity>();
+
+            services.ConfigureOptions<OpenIdClaimsMappingConfig>();
 
             if (!identityServerOptions.KeyManagement.Enabled)
             {
