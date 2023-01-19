@@ -9,66 +9,6 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.Migrations.I
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropIndex(
-                name: "IX_IdentityResourceProperties_IdentityResourceId",
-                table: "IdentityResourceProperties");
-
-            migrationBuilder.DropIndex(
-                name: "IX_IdentityResourceClaims_IdentityResourceId",
-                table: "IdentityResourceClaims");
-
-            migrationBuilder.DropIndex(
-                name: "IX_ClientScopes_ClientId",
-                table: "ClientScopes");
-
-            migrationBuilder.DropIndex(
-                name: "IX_ClientRedirectUris_ClientId",
-                table: "ClientRedirectUris");
-
-            migrationBuilder.DropIndex(
-                name: "IX_ClientProperties_ClientId",
-                table: "ClientProperties");
-
-            migrationBuilder.DropIndex(
-                name: "IX_ClientPostLogoutRedirectUris_ClientId",
-                table: "ClientPostLogoutRedirectUris");
-
-            migrationBuilder.DropIndex(
-                name: "IX_ClientIdPRestrictions_ClientId",
-                table: "ClientIdPRestrictions");
-
-            migrationBuilder.DropIndex(
-                name: "IX_ClientGrantTypes_ClientId",
-                table: "ClientGrantTypes");
-
-            migrationBuilder.DropIndex(
-                name: "IX_ClientCorsOrigins_ClientId",
-                table: "ClientCorsOrigins");
-
-            migrationBuilder.DropIndex(
-                name: "IX_ClientClaims_ClientId",
-                table: "ClientClaims");
-
-            migrationBuilder.DropIndex(
-                name: "IX_ApiScopeProperties_ScopeId",
-                table: "ApiScopeProperties");
-
-            migrationBuilder.DropIndex(
-                name: "IX_ApiScopeClaims_ScopeId",
-                table: "ApiScopeClaims");
-
-            migrationBuilder.DropIndex(
-                name: "IX_ApiResourceScopes_ApiResourceId",
-                table: "ApiResourceScopes");
-
-            migrationBuilder.DropIndex(
-                name: "IX_ApiResourceProperties_ApiResourceId",
-                table: "ApiResourceProperties");
-
-            migrationBuilder.DropIndex(
-                name: "IX_ApiResourceClaims_ApiResourceId",
-                table: "ApiResourceClaims");
-
             migrationBuilder.AddColumn<DateTime>(
                 name: "Created",
                 table: "IdentityProviders",
@@ -163,6 +103,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.Migrations.I
                 columns: new[] { "IdentityResourceId", "Key" },
                 unique: true);
 
+            migrationBuilder.DropIndex(
+                name: "IX_IdentityResourceProperties_IdentityResourceId",
+                table: "IdentityResourceProperties");
+
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityResourceClaims_IdentityResourceId_Type",
                 table: "IdentityResourceClaims",
@@ -252,6 +196,62 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.Migrations.I
                 table: "ApiResourceClaims",
                 columns: new[] { "ApiResourceId", "Type" },
                 unique: true);
+
+            migrationBuilder.DropIndex(
+                name: "IX_IdentityResourceClaims_IdentityResourceId",
+                table: "IdentityResourceClaims");
+
+            migrationBuilder.DropIndex(
+                name: "IX_ClientScopes_ClientId",
+                table: "ClientScopes");
+
+            migrationBuilder.DropIndex(
+                name: "IX_ClientRedirectUris_ClientId",
+                table: "ClientRedirectUris");
+
+            migrationBuilder.DropIndex(
+                name: "IX_ClientProperties_ClientId",
+                table: "ClientProperties");
+
+            migrationBuilder.DropIndex(
+                name: "IX_ClientPostLogoutRedirectUris_ClientId",
+                table: "ClientPostLogoutRedirectUris");
+
+            migrationBuilder.DropIndex(
+                name: "IX_ClientIdPRestrictions_ClientId",
+                table: "ClientIdPRestrictions");
+
+            migrationBuilder.DropIndex(
+                name: "IX_ClientGrantTypes_ClientId",
+                table: "ClientGrantTypes");
+
+            migrationBuilder.DropIndex(
+                name: "IX_ClientCorsOrigins_ClientId",
+                table: "ClientCorsOrigins");
+
+            migrationBuilder.DropIndex(
+                name: "IX_ClientClaims_ClientId",
+                table: "ClientClaims");
+
+            migrationBuilder.DropIndex(
+                name: "IX_ApiScopeProperties_ScopeId",
+                table: "ApiScopeProperties");
+
+            migrationBuilder.DropIndex(
+                name: "IX_ApiScopeClaims_ScopeId",
+                table: "ApiScopeClaims");
+
+            migrationBuilder.DropIndex(
+                name: "IX_ApiResourceScopes_ApiResourceId",
+                table: "ApiResourceScopes");
+
+            migrationBuilder.DropIndex(
+                name: "IX_ApiResourceProperties_ApiResourceId",
+                table: "ApiResourceProperties");
+
+            migrationBuilder.DropIndex(
+                name: "IX_ApiResourceClaims_ApiResourceId",
+                table: "ApiResourceClaims");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

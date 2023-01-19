@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.Migrations.IdentityServerGrants
 {
-    public partial class UpdateToIS61 : Migration
+    public partial class UpdateToIS621 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

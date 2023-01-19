@@ -11,8 +11,8 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.Migrations.IdentityServerGrants
 {
     [DbContext(typeof(IdentityServerPersistedGrantDbContext))]
-    [Migration("20230119113811_UpdateToIS61")]
-    partial class UpdateToIS61
+    [Migration("20230119113811_UpdateToIS621")]
+    partial class UpdateToIS621
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
