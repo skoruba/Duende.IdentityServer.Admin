@@ -38,9 +38,9 @@
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 		<PackageReference Include="Serilog.Sinks.MSSqlServer" Version="5.7.1" />
 		<PackageReference Include="Serilog.Sinks.Seq" Version="5.1.1" />
-		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.BusinessLogic" Version="1.2.0-rc2" />
-		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity" Version="1.2.0-rc2" />
-		<PackageReference Include="Skoruba.Duende.IdentityServer.Shared.Configuration" Version="1.2.0-rc2" />
+		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.BusinessLogic" Version="1.2.0" />
+		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity" Version="1.2.0" />
+		<PackageReference Include="Skoruba.Duende.IdentityServer.Shared.Configuration" Version="1.2.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.4.0" />
     </ItemGroup>
