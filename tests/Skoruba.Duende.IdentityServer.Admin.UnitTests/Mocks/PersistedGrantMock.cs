@@ -22,6 +22,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
             var persistedGrantFaker = new Faker<PersistedGrant>()
                 .StrictMode(true)
                 .RuleFor(o => o.Key, key)
+                .RuleFor(o => o.Id, f => f.Random.Number(0, int.MaxValue))
                 .RuleFor(o => o.ClientId, Guid.NewGuid().ToString)
                 .RuleFor(o => o.CreationTime, f => f.Date.Past())
                 .RuleFor(o => o.Data, f => f.Random.Words(f.Random.Number(1, 10)))

@@ -29,8 +29,8 @@
 		<PackageReference Include="Microsoft.Identity.Web" Version="1.25.1" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.16.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.7" />
-        <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="6.1.2" />
-        <PackageReference Include="Duende.IdentityServer.EntityFramework" Version="6.1.2" />
+        <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="6.2.1" />
+        <PackageReference Include="Duende.IdentityServer.EntityFramework" Version="6.2.1" />
 		<PackageReference Include="Serilog" Version="2.11.0" />
 		<PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.0" />
 		<PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
@@ -40,7 +40,7 @@
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 		<PackageReference Include="Serilog.Sinks.MSSqlServer" Version="5.7.1" />
 		<PackageReference Include="Serilog.Sinks.Seq" Version="5.1.1" />
-		<PackageReference Include="Skoruba.AuditLogging.EntityFramework" Version="1.0.0" />
+		<PackageReference Include="Skoruba.AuditLogging.EntityFramework" Version="1.1.0" />
 		<PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
     </ItemGroup>
 

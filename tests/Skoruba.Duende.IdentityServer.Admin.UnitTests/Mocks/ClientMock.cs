@@ -56,6 +56,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
                 .RuleFor(o => o.ClientId, f => Guid.NewGuid().ToString())
                 .RuleFor(o => o.ClientName, f => Guid.NewGuid().ToString())
                 .RuleFor(o => o.Id, id)
+                .RuleFor(o => o.CoordinateLifetimeWithUserSession, f => f.Random.Bool())
                 .RuleFor(o => o.AbsoluteRefreshTokenLifetime, f => f.Random.Number(int.MaxValue))
                 .RuleFor(o => o.AccessTokenLifetime, f => f.Random.Number(int.MaxValue))
                 .RuleFor(o => o.AccessTokenType, f => f.Random.Number(0, 1))
