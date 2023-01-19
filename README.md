@@ -22,7 +22,7 @@ The application is written in the **Asp.Net Core MVC - using .NET 6.0**
 - 🔒 **NOTE:** The project uses the default database migrations which affect your database therefore double check the migrations according to your database provider and create a database backup
 
 ```sh
-dotnet new -i Skoruba.Duende.IdentityServer.Admin.Templates::1.1.0
+dotnet new -i Skoruba.Duende.IdentityServer.Admin.Templates::1.2.0
 ```
 
 ### Create new project:
@@ -733,6 +733,10 @@ It is possible to define the configuration according the client type - by defaul
 ### 1.1.0
 - [x] Update to .NET 6
 - [x] Update to Duende IdentityServer v6
+
+### 1.2.0
+- [x] Update to Duende IdentityServer 6.2.1
+- [x] Add support for Dynamic Identity Providers
 
 ### 2.0.0
 - [ ] Connect Admin Api to the Admin UI ([#478](https://github.com/skoruba/IdentityServer4.Admin/issues/478))
