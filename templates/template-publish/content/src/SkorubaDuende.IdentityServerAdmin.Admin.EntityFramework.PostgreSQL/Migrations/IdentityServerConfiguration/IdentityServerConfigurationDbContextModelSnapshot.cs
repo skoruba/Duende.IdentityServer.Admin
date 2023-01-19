@@ -17,7 +17,7 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL.Mig
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -368,6 +368,9 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL.Mig
 
                     b.Property<int?>("ConsentLifetime")
                         .HasColumnType("integer");
+
+                    b.Property<bool?>("CoordinateLifetimeWithUserSession")
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp without time zone");

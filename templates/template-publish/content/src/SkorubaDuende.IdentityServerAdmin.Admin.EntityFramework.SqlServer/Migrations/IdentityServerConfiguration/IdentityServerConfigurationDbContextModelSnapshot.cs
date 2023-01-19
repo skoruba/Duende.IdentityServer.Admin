@@ -17,7 +17,7 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer.Migr
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -368,6 +368,9 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer.Migr
 
                     b.Property<int?>("ConsentLifetime")
                         .HasColumnType("int");
+
+                    b.Property<bool?>("CoordinateLifetimeWithUserSession")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");

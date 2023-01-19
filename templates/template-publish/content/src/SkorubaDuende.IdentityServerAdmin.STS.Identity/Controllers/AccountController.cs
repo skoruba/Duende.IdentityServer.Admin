@@ -51,6 +51,7 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Controllers
         private readonly RegisterConfiguration _registerConfiguration;
         private readonly IdentityOptions _identityOptions;
         private readonly ILogger<AccountController<TUser, TKey>> _logger;
+        private readonly IIdentityProviderStore _identityProviderStore;
 
         public AccountController(
             UserResolver<TUser> userResolver,
@@ -65,7 +66,8 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Controllers
             LoginConfiguration loginConfiguration,
             RegisterConfiguration registerConfiguration,
             IdentityOptions identityOptions,
-            ILogger<AccountController<TUser, TKey>> logger)
+            ILogger<AccountController<TUser, TKey>> logger,
+            IIdentityProviderStore identityProviderStore)
         {
             _userResolver = userResolver;
             _userManager = userManager;
@@ -80,6 +82,7 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Controllers
             _registerConfiguration = registerConfiguration;
             _identityOptions = identityOptions;
             _logger = logger;
+            _identityProviderStore = identityProviderStore;
         }
 
         /// <summary>
@@ -727,6 +730,16 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Controllers
                     DisplayName = x.DisplayName ?? x.Name,
                     AuthenticationScheme = x.Name
                 }).ToList();
+
+            var dynamicSchemes = (await _identityProviderStore.GetAllSchemeNamesAsync())
+                .Where(x => x.Enabled)
+                .Select(x => new ExternalProvider
+                {
+                    AuthenticationScheme = x.Scheme,
+                    DisplayName = x.DisplayName
+                });
+
+            providers.AddRange(dynamicSchemes);
 
             var allowLocal = true;
             if (context?.Client.ClientId != null)
