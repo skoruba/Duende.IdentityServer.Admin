@@ -7,14 +7,12 @@
 		<h3>@Localizer["Title"]</h3>
 		<nav>
 			<div class="nav nav-tabs mt-3" id="nav-tab" role="tablist">
-				<a class="nav-item nav-link active" id="nav-name-tab" data-toggle="tab" href="#nav-name" role="tab" aria-controls="nav-name" aria-selected="true">@Localizer["NavName"]</a>
+				<a class="nav-item nav-link active" id="nav-name-tab" data-toggle="tab" href="#nav-name" role="tab" aria-controls="nav-name" aria-selected="true">@Localizer["NavBasics"]</a>
 				@if (Model.Id != 0)
 				{
-					<a class="nav-item nav-link" id="nav-basics-tab" data-toggle="tab" href="#nav-basics" role="tab" aria-controls="nav-basics" aria-selected="false">@Localizer["NavBasics"]</a>
-					<a class="nav-item nav-link" id="nav-authentication-tab" data-toggle="tab" href="#nav-authentication" role="tab" aria-controls="nav-authentication" aria-selected="false">@Localizer["NavAuthentication"]</a>
-					<a class="nav-item nav-link" id="nav-token-tab" data-toggle="tab" href="#nav-token" role="tab" aria-controls="nav-token" aria-selected="false">@Localizer["NavToken"]</a>
-					<a class="nav-item nav-link" id="nav-consent-tab" data-toggle="tab" href="#nav-consent" role="tab" aria-controls="nav-consent" aria-selected="false">@Localizer["NavConsent"]</a>
-					<a class="nav-item nav-link" id="nav-deviceflow-tab" data-toggle="tab" href="#nav-deviceflow" role="tab" aria-controls="nav-deviceflow" aria-selected="false">@Localizer["NavDeviceFlow"]</a>
+					<a class="nav-item nav-link" id="nav-urls-tab" data-toggle="tab" href="#nav-urls" role="tab" aria-controls="nav-urls" aria-selected="false">@Localizer["NavUrls"]</a>
+					<a class="nav-item nav-link" id="nav-resources-tab" data-toggle="tab" href="#nav-resources" role="tab" aria-controls="nav-resources" aria-selected="false">@Localizer["NavResources"]</a>
+					<a class="nav-item nav-link" id="nav-advanced-tab" data-toggle="tab" href="#nav-advanced" role="tab" aria-controls="nav-advanced" aria-selected="false">@Localizer["NavAdvanced"]</a>
 				}
 			</div>
 		</nav>
@@ -25,21 +23,14 @@
 
 			@if (Model.Id != 0)
 			{
-				<div class="tab-pane" id="nav-basics" role="tabpanel" aria-labelledby="nav-basics-tab">
-					@await Html.PartialAsync("Client/Section/Basics")
+				<div class="tab-pane" id="nav-urls" role="tabpanel" aria-labelledby="nav-authentication-tab">
+					@await Html.PartialAsync("Client/Section/Urls")
 				</div>
-
-				<div class="tab-pane" id="nav-authentication" role="tabpanel" aria-labelledby="nav-authentication-tab">
-					@await Html.PartialAsync("Client/Section/Authentication")
+				<div class="tab-pane" id="nav-resources" role="tabpanel" aria-labelledby="nav-token-tab">
+					@await Html.PartialAsync("Client/Section/Resources")
 				</div>
-				<div class="tab-pane" id="nav-token" role="tabpanel" aria-labelledby="nav-token-tab">
-					@await Html.PartialAsync("Client/Section/Token")
-				</div>
-				<div class="tab-pane" id="nav-consent" role="tabpanel" aria-labelledby="nav-consent-tab">
-					@await Html.PartialAsync("Client/Section/Consent")
-				</div>
-				<div class="tab-pane" id="nav-deviceflow" role="tabpanel" aria-labelledby="nav-deviceflow-tab">
-					@await Html.PartialAsync("Client/Section/DeviceFlow")
+				<div class="tab-pane" id="nav-advanced" role="tabpanel" aria-labelledby="nav-consent-tab">
+					@await Html.PartialAsync("Client/Section/Advanced")
 				</div>
 			}
 		</div>

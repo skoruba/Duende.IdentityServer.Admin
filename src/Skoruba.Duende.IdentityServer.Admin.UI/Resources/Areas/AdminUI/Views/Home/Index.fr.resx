@@ -132,6 +132,9 @@
   <data name="ButtonIdentityClients" xml:space="preserve">
     <value>Identity Resources</value>
   </data>
+  <data name="ButtonIdentityProviders" xml:space="preserve">
+    <value>Identity Providers</value>
+  </data>
   <data name="ButtonManage" xml:space="preserve">
     <value>Gérer</value>
   </data>

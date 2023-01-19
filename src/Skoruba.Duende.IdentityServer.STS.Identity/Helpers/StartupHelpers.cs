@@ -21,6 +21,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
+using Microsoft.IdentityModel.Tokens;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySql;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.PostgreSQL;
@@ -34,6 +35,7 @@ using Skoruba.Duende.IdentityServer.STS.Identity.Configuration.ApplicationParts;
 using Skoruba.Duende.IdentityServer.STS.Identity.Configuration.Constants;
 using Skoruba.Duende.IdentityServer.STS.Identity.Configuration.Interfaces;
 using Skoruba.Duende.IdentityServer.STS.Identity.Helpers.Localization;
+using Skoruba.Duende.IdentityServer.STS.Identity.Services;
 
 namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
 {
@@ -295,6 +297,8 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
                     AuthenticationHelpers.CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
             });
 
+            
+
             services.Configure<IISOptions>(iis =>
             {
                 iis.AuthenticationDisplayName = "Windows";
@@ -361,10 +365,18 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
 
             var identityServerOptions = configurationSection.Get<IdentityServerOptions>();
 
-            var builder = services.AddIdentityServer(options => configurationSection.Bind(options))
+            var builder = services.AddIdentityServer(options =>
+                {
+                    configurationSection.Bind(options);
+
+                    options.DynamicProviders.SignInScheme = IdentityConstants.ExternalScheme;
+                    options.DynamicProviders.SignOutScheme = IdentityConstants.ApplicationScheme;
+                })
                 .AddConfigurationStore<TConfigurationDbContext>()
                 .AddOperationalStore<TPersistedGrantDbContext>()
                 .AddAspNetIdentity<TUserIdentity>();
+
+            services.ConfigureOptions<OpenIdClaimsMappingConfig>();
 
             if (!identityServerOptions.KeyManagement.Enabled)
             {

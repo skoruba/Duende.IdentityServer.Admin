@@ -5,13 +5,13 @@
 @inject IViewLocalizer Localizer
 
 @{
-	ViewBag.Title = AdminConfiguration.PageTitle;
-	Layout = "_Layout";
+    ViewBag.Title = AdminConfiguration.PageTitle;
+    Layout = "_Layout";
 }
 
 <div class="welcome-block px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-	<h1 class="display-4">@AdminConfiguration.PageTitle</h1>
-	<p class="lead">@Localizer["PageSubTitle"]</p>
+    <h1 class="display-4">@AdminConfiguration.PageTitle</h1>
+    <p class="lead">@Localizer["PageSubTitle"]</p>
 </div>
 
 <!-- Cards -->
@@ -52,13 +52,16 @@
             <a asp-area="@CommonConsts.AdminUIArea" asp-controller="Configuration" asp-action="ApiResources" class="btn btn-lg btn-block btn-primary">@Localizer["ButtonManage"]</a>
         </div>
     </div>
-    
+
+  
+
+
 </div>
 
 
 <div class="card-deck mb-3 text-center">
 
-    <!-- Api Scopes -->
+      <!-- Api Scopes -->
     <div class="card mb-4 box-shadow">
         <div class="card-header">
             <h4 class="my-0 font-weight-normal">@Localizer["ButtonApiScopes"]</h4>
@@ -96,33 +99,36 @@
         </div>
     </div>
 
+   
+
+
 </div>
 
 <div class="card-deck mb-3 text-center">
 
-    <!-- Persisted Grants -->
+     <!-- Persisted Grants -->
     <div class="card mb-4 box-shadow">
         <div class="card-header">
             <h4 class="my-0 font-weight-normal">@Localizer["ButtonPersistedGrants"]</h4>
         </div>
         <div class="card-body">
             <h1 class="card-title">
-                <span class="oi oi-key" title="Persisted Grants" aria-hidden="true"></span>
+                <span class="oi oi oi-key" title="Persisted Grants" aria-hidden="true"></span>
             </h1>
             <a asp-area="@CommonConsts.AdminUIArea" asp-controller="Grant" asp-action="PersistedGrants" class="btn btn-lg btn-block btn-primary">@Localizer["ButtonManage"]</a>
         </div>
     </div>
 
-    <!-- Keys -->
+    <!-- Identity Providers -->
     <div class="card mb-4 box-shadow">
         <div class="card-header">
-            <h4 class="my-0 font-weight-normal">@Localizer["Keys"]</h4>
+            <h4 class="my-0 font-weight-normal">@Localizer["ButtonIdentityProviders"]</h4>
         </div>
         <div class="card-body">
             <h1 class="card-title">
-                <span class="oi oi-key" title="Keys" aria-hidden="true"></span>
+                <span class="oi oi-shield" title="Identity Providers" aria-hidden="true"></span>
             </h1>
-            <a asp-area="@CommonConsts.AdminUIArea" asp-controller="Key" asp-action="Keys" class="btn btn-lg btn-block btn-outline-primary">@Localizer["ButtonManage"]</a>
+            <a asp-area="@CommonConsts.AdminUIArea" asp-controller="IdentityProvider" asp-action="IdentityProviders" class="btn btn-lg btn-block btn-outline-primary">@Localizer["ButtonManage"]</a>
         </div>
     </div>
 
@@ -138,4 +144,6 @@
             <a asp-area="@CommonConsts.AdminUIArea" asp-controller="Log" asp-action="AuditLog" class="btn btn-lg btn-block btn-primary">@Localizer["ButtonManage"]</a>
         </div>
     </div>
+
+
 </div>

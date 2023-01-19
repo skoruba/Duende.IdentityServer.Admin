@@ -103,6 +103,8 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api.Dtos.Clients
         public int? CibaLifetime { get; set; }
         public int? PollingInterval { get; set; }
 
+        public bool CoordinateLifetimeWithUserSession { get; set; }
+
 
         public List<string> AllowedIdentityTokenSigningAlgorithms { get; set; }
 

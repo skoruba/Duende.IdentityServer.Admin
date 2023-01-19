@@ -6,7 +6,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Duende.IdentityServer.EntityFramework" Version="6.0.2" />
+		<PackageReference Include="Duende.IdentityServer.EntityFramework" Version="6.2.1" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -30,6 +30,11 @@
 			<AutoGen>True</AutoGen>
 			<DependentUpon>ApiScopeServiceResource.resx</DependentUpon>
 		</Compile>
+		<Compile Update="Resources\IdentityProviderServiceResource.Designer.cs">
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		  <DependentUpon>IdentityProviderServiceResource.resx</DependentUpon>
+		</Compile>
 		<Compile Update="Resources\IdentityResourceServiceResource.Designer.cs">
 			<DesignTime>True</DesignTime>
 			<AutoGen>True</AutoGen>
@@ -50,6 +55,10 @@
 		<EmbeddedResource Update="Resources\ApiScopeServiceResource.resx">
 			<Generator>PublicResXFileCodeGenerator</Generator>
 			<LastGenOutput>ApiScopeServiceResource.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\IdentityProviderServiceResource.resx">
+		  <Generator>ResXFileCodeGenerator</Generator>
+		  <LastGenOutput>IdentityProviderServiceResource.Designer.cs</LastGenOutput>
 		</EmbeddedResource>
 		<EmbeddedResource Update="Resources\IdentityResourceServiceResource.resx">
 			<Generator>ResXFileCodeGenerator</Generator>

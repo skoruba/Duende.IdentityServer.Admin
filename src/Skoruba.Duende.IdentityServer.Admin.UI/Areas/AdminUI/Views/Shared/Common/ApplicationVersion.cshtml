@@ -1,8 +1,11 @@
 ﻿@using System.Reflection
 @using Skoruba.Duende.IdentityServer.Admin
+@using Skoruba.Duende.IdentityServer.Admin.UI.Helpers
 
 @{
-    var runtimeVersion = Assembly.GetExecutingAssembly()
+    var runtimeVersion = typeof(StartupHelpers)
+        .GetTypeInfo()
+        .Assembly
         .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
 }
 

@@ -57,7 +57,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Constants
                 "hybrid",
                 "password",
                 "urn:ietf:params:oauth:grant-type:device_code",
-                "delegation"
+                "delegation",
+                "urn:openid:params:grant-type:ciba"
             };
 
             return allowedGrantypes;
