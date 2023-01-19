@@ -8,11 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Content Remove="Areas\AdminUI\Views\Configuration\Client\Section\ClientProperties.cshtml" />
-      <Content Remove="Areas\AdminUI\Views\Configuration\Client\Section\GrantTypes.cshtml" />
-    </ItemGroup>
-
-    <ItemGroup>
         <FrameworkReference Include="Microsoft.AspNetCore.App" />
     </ItemGroup>
 
