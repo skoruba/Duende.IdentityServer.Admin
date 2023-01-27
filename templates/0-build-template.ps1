@@ -116,8 +116,10 @@ Remove-Item ./$templateTests -Force -recurse
 
 Get-Location
 
+Set-Location "/templates"
+
 # Step 2
-$templateNuspecPath = "templates/template-build/Skoruba.Duende.IdentityServer.Admin.Templates.nuspec"
+$templateNuspecPath = "template-build/Skoruba.Duende.IdentityServer.Admin.Templates.nuspec"
 nuget pack ./$templateNuspecPath -NoDefaultExcludes
 
 ######################################
@@ -138,7 +140,7 @@ dotnet new skoruba.duende.isadmin --name SkorubaDuende.IdentityServerAdmin --tit
 
 CleanBinObjFolders
 
-$templateFiles = Get-ChildItem ./templates/SkorubaDuende.IdentityServerAdmin/src -include *.cs, *.csproj, *.cshtml -Recurse
+$templateFiles = Get-ChildItem ./SkorubaDuende.IdentityServerAdmin/src -include *.cs, *.csproj, *.cshtml -Recurse
 foreach ($file in $templateFiles) {
     Write-Host $file.PSPath
 
