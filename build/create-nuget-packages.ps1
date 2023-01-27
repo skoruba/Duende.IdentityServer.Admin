@@ -1,3 +1,6 @@
+$currentPath = Get-Location
+Set-Location $currentPath/build
+
 $packagesOutput = ".\packages"
 
 # Business Logic
