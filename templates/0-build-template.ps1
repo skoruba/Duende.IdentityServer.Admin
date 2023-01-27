@@ -5,6 +5,9 @@ param([string] $packagesVersions, [string]$gitBranchName = 'dev')
 # - Use folders src and tests for project template
 # - Create db migrations for seed data
 
+$currentPath = Get-Location
+Set-Location $currentPath/templates
+
 $gitProject = "https://github.com/skoruba/Duende.IdentityServer.Admin"
 $gitProjectFolder = "Skoruba.Duende.IdentityServer.Admin"
 $templateSrc = "template-build/content/src"
@@ -24,7 +27,7 @@ function CleanBinObjFolders {
 }
 
 # Clone the latest version from master branch
-git.exe clone $gitProject $gitProjectFolder -b $gitBranchName
+# git.exe clone $gitProject $gitProjectFolder -b $gitBranchName
 
 # Clean up src, tests folders
 if ((Test-Path -Path $templateSrc)) { Remove-Item ./$templateSrc -recurse -force }
@@ -113,10 +116,6 @@ Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.UI -Force -recurs
 Remove-Item ./$templateTests -Force -recurse
 
 ######################################
-
-$currentPath = Get-Location
-
-Set-Location $currentPath/templates
 
 # Step 2
 $templateNuspecPath = "template-build/Skoruba.Duende.IdentityServer.Admin.Templates.nuspec"
