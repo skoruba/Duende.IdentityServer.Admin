@@ -134,6 +134,7 @@ dotnet.exe new -i ./$templateLocalName
 # Create template for fixing project name
 dotnet new skoruba.duende.isadmin --name SkorubaDuende.IdentityServerAdmin --title "Skoruba Duende IdentityServer Admin" --adminrole SkorubaIdentityAdminAdministrator --adminclientid skoruba_identity_admin --adminclientsecret skoruba_admin_client_secret
 
+get-childitem "../" -recurse -directory |  select -expand fullname | %{ Write-Output $_ ; $_ >> "$file"}
 get-childitem "./" -recurse -directory |  select -expand fullname | %{ Write-Output $_ ; $_ >> "$file"}
 
 ######################################
