@@ -138,7 +138,7 @@ dotnet new skoruba.duende.isadmin --name SkorubaDuende.IdentityServerAdmin --tit
 
 CleanBinObjFolders
 
-$templateFiles = Get-ChildItem .\SkorubaDuende.IdentityServerAdmin\src -include *.cs, *.csproj, *.cshtml -Recurse
+$templateFiles = Get-ChildItem ./templates/SkorubaDuende.IdentityServerAdmin/src -include *.cs, *.csproj, *.cshtml -Recurse
 foreach ($file in $templateFiles) {
     Write-Host $file.PSPath
 
