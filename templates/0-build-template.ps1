@@ -4,9 +4,6 @@ param([string] $packagesVersions, [string]$gitBranchName = 'dev')
 # - Download latest version of Skoruba.Duende.IdentityServer.Admin from git repository
 # - Use folders src and tests for project template
 
-$currentPath = Get-Location
-Set-Location $currentPath/templates
-
 $gitProject = "https://github.com/skoruba/Duende.IdentityServer.Admin"
 $gitProjectFolder = "Skoruba.Duende.IdentityServer.Admin"
 $templateSrc = "template-build/content/src"
