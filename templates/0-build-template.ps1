@@ -12,6 +12,8 @@ $templateRoot = "template-build/content"
 $templateTests = "template-build/content/tests"
 $templateAdminProject = "template-build/content/src/Skoruba.Duende.IdentityServer.Admin"
 
+Get-Location
+
 function CleanBinObjFolders { 
 
     # Clean up after migrations
@@ -111,6 +113,9 @@ Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.UI -Force -recurs
 Remove-Item ./$templateTests -Force -recurse
 
 ######################################
+
+Get-Location
+
 # Step 2
 $templateNuspecPath = "template-build/Skoruba.Duende.IdentityServer.Admin.Templates.nuspec"
 nuget pack ./$templateNuspecPath -NoDefaultExcludes
