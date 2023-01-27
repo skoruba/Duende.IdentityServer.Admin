@@ -117,7 +117,7 @@ Remove-Item ./$templateTests -Force -recurse
 Get-Location
 
 # Step 2
-$templateNuspecPath = "template-build/Skoruba.Duende.IdentityServer.Admin.Templates.nuspec"
+$templateNuspecPath = "templates/template-build/Skoruba.Duende.IdentityServer.Admin.Templates.nuspec"
 nuget pack ./$templateNuspecPath -NoDefaultExcludes
 
 ######################################
