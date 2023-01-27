@@ -27,7 +27,7 @@ function CleanBinObjFolders {
 }
 
 # Clone the latest version from master branch
-# git.exe clone $gitProject $gitProjectFolder -b $gitBranchName
+git.exe clone $gitProject $gitProjectFolder -b $gitBranchName
 
 # Clean up src, tests folders
 if ((Test-Path -Path $templateSrc)) { Remove-Item ./$templateSrc -recurse -force }
