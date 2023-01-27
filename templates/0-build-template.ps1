@@ -113,14 +113,14 @@ Remove-Item ./$templateTests -Force -recurse
 ######################################
 # Step 2
 $templateNuspecPath = "template-build/Skoruba.Duende.IdentityServer.Admin.Templates.nuspec"
-nuget pack $templateNuspecPath -NoDefaultExcludes
+nuget pack ./$templateNuspecPath -NoDefaultExcludes
 
 ######################################
 # Step 3
 $templateLocalName = "Skoruba.Duende.IdentityServer.Admin.Templates.$packagesVersions.nupkg"
 
 dotnet.exe new --uninstall Skoruba.Duende.IdentityServer.Admin.Templates
-dotnet.exe new -i $templateLocalName
+dotnet.exe new -i ./$templateLocalName
 
 ######################################
 # Step 4
