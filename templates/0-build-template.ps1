@@ -114,9 +114,9 @@ Remove-Item ./$templateTests -Force -recurse
 
 ######################################
 
-Get-Location
+$currentPath = Get-Location
 
-Set-Location "/templates"
+Set-Location $currentPath/templates
 
 # Step 2
 $templateNuspecPath = "template-build/Skoruba.Duende.IdentityServer.Admin.Templates.nuspec"
