@@ -3,7 +3,6 @@ param([string] $packagesVersions, [string]$gitBranchName = 'dev')
 # This script contains following steps:
 # - Download latest version of Skoruba.Duende.IdentityServer.Admin from git repository
 # - Use folders src and tests for project template
-# - Create db migrations for seed data
 
 $currentPath = Get-Location
 Set-Location $currentPath/templates
@@ -132,9 +131,6 @@ dotnet.exe new -i ./$templateLocalName
 # Step 4
 # Create template for fixing project name
 dotnet new skoruba.duende.isadmin --name SkorubaDuende.IdentityServerAdmin --title "Skoruba Duende IdentityServer Admin" --adminrole SkorubaIdentityAdminAdministrator --adminclientid skoruba_identity_admin --adminclientsecret skoruba_admin_client_secret
-
-get-childitem "../" -recurse -directory |  select -expand fullname | %{ Write-Output $_ ; $_ >> "$file"}
-get-childitem "./" -recurse -directory |  select -expand fullname | %{ Write-Output $_ ; $_ >> "$file"}
 
 ######################################
 # Step 5
