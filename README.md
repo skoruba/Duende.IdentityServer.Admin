@@ -219,7 +219,7 @@ The following Gulp commands are available:
 > It is possible to switch the database provider via `appsettings.json`:
 ```
 "DatabaseProviderConfiguration": {
-        "ProviderType": "SqlServer" 
+        "ProviderType": "MySql" 
     }
 ```
         
