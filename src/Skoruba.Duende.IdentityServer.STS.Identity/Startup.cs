@@ -54,7 +54,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity
             // Add authorization policies for MVC
             RegisterAuthorization(services);
 
-            services.AddIdSHealthChecks<IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext, AdminIdentityDbContext, IdentityServerDataProtectionDbContext>(Configuration);
+            services.AddIdSHealthChecks<IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext, AdminIdentityDbContext, IdentityServerDataProtectionDbContext, UserIdentity>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
