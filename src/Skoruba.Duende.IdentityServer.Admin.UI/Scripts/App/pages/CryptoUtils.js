@@ -1,8 +1,8 @@
 ﻿$(function () {
 
-    var adminSecrets = {
+    var cryptoUtils = {
 
-        generateSecret: function (byteLength) {
+        generateHexString: function (byteLength) {
             var randomValues = new Uint8Array(byteLength);
             crypto.getRandomValues(randomValues);
             return Array.prototype.map.call(randomValues, function (b) {
@@ -11,19 +11,22 @@
         },
 
         eventHandlers: function () {
+            $("#generate-clientid-button").click(function () {
+                $("#clientid-input").val(cryptoUtils.generateHexString(16));
+            });
             $("#generate-secret-button").click(function () {
-                $("#secret-input").val('secret_' + adminSecrets.generateSecret(32));
+                $("#secret-input").val('secret_' + cryptoUtils.generateHexString(32));
             });
         },
 
         init: function () {
 
-            adminSecrets.eventHandlers();
+            cryptoUtils.eventHandlers();
 
         }
 
     };
 
-    adminSecrets.init();
+    cryptoUtils.init();
 
 });
