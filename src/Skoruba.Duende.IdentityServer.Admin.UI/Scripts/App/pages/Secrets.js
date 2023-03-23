@@ -2,23 +2,21 @@
 
     var adminSecrets = {
 
-        guid: function () {
-            return "ss-s-s-s-sss".replace(/s/g, adminSecrets.s4);
+        generateSecret: function (byteLength) {
+            var randomValues = new Uint8Array(byteLength);
+            crypto.getRandomValues(randomValues);
+            return Array.prototype.map.call(randomValues, function (b) {
+                return ('0' + b.toString(16)).slice(-2);
+            }).join('');
         },
 
-        s4: function () {
-            return Math.floor((1 + Math.random()) * 0x10000)
-                .toString(16)
-                .substring(1);
-        },
-
-        eventHandlers: function() {
-            $("#generate-guid-button").click(function() {
-                $("#secret-input").val(adminSecrets.guid());
+        eventHandlers: function () {
+            $("#generate-secret-button").click(function () {
+                $("#secret-input").val('secret_' + adminSecrets.generateSecret(32));
             });
         },
 
-        init: function() {
+        init: function () {
 
             adminSecrets.eventHandlers();
 
@@ -26,7 +24,6 @@
 
     };
 
-
     adminSecrets.init();
 
-})
+});
