@@ -11,9 +11,9 @@ defaults:
     working-directory: src
 
 jobs:
-  release:
+  checkout:
 
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
@@ -30,6 +30,11 @@ jobs:
           echo "Release version: version"
           echo "RELEASE_VERSION=version" >> $Env:GITHUB_ENV
 
+  build:
+
+    runs-on: windows-latest
+
+    steps:
     - name: Build
       run: |
           dotnet nuget add source https://nuget.pkg.github.com/FreemarketFX/index.json --name GitHub-FreemarketFX --username PersonalAccessToken --password ${{ secrets.ADMIN_READ_NUGET_TOKEN }} --store-password-in-clear-text
