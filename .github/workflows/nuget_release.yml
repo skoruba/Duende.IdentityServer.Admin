@@ -32,7 +32,7 @@ jobs:
 
     - name: Build
       run: |
-          dotnet nuget add source https://nuget.pkg.github.com/FreemarketFX/index.json --name GitHub-FreemarketFX --username PersonalAccessToken --password ${{ secrets.ADMIN_READ_NUGET_TOKEN }} --store-password-in-clear-text
+          dotnet nuget add source https://nuget.pkg.github.com/FreemarketFX/index.json --name GitHub-FreemarketFX --store-password-in-clear-text --username PersonalAccessToken --password ${{ secrets.ADMIN_READ_NUGET_TOKEN }}
           dotnet pack Skoruba.Duende.IdentityServer.Admin.UI\Skoruba.Duende.IdentityServer.Admin.UI.csproj --configuration Release /p:Version=$Env:RELEASE_VERSION
           dotnet pack Skoruba.Duende.IdentityServer.Admin.BusinessLogic\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.csproj --configuration Release /p:Version=$Env:RELEASE_VERSION
           dotnet pack Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.csproj --configuration Release /p:Version=$Env:RELEASE_VERSION
