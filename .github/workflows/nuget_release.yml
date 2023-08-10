@@ -32,9 +32,9 @@ jobs:
 
     - name: Get release version
       run: |
-          set version = '${{ github.event.inputs.version }}'
-          echo "Release version: version"
-          echo "RELEASE_VERSION=version" >> $Env:GITHUB_ENV
+          $version = '${{ github.event.inputs.version }}'
+          echo "Release version: $version"
+          echo "RELEASE_VERSION=$version" >> $Env:GITHUB_ENV
 
     - name: Build
       run: |
