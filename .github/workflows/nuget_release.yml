@@ -17,8 +17,8 @@ jobs:
 
     steps:
     - name: Longpaths
-      run: |
-          git config --system core.longpaths true
+      run: git config --system core.longpaths true
+      working-directory: /
 
     - name: Checkout
       uses: actions/checkout@v3
