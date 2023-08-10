@@ -18,8 +18,10 @@ jobs:
     steps:
 
     - name: Allow longpaths
-      run: git config --system core.longpaths true
-      shell: pwsh
+      run: gh config --system core.longpaths true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ISSUE: ${{ github.event.issue.html_url }}
 
     - name: Checkout
       uses: actions/checkout@v3
