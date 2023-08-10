@@ -19,6 +19,7 @@ jobs:
 
     - name: Allow longpaths
       run: git config --system core.longpaths true
+      shell: pwsh
 
     - name: Checkout
       uses: actions/checkout@v3
