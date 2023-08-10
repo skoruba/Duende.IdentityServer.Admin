@@ -13,19 +13,14 @@ defaults:
 jobs:
   checkout:
 
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      with: 
-        path: 'D:\a\'
-
-  build:
-
     runs-on: windows-latest
 
     steps:
+    - name: Longpaths
+      run: git config --system core.longpaths true
+
+    - name: Checkout
+      uses: actions/checkout@v3
 
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v3
