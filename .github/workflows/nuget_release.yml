@@ -16,13 +16,6 @@ jobs:
     runs-on: windows-latest
 
     steps:
-
-    - name: Allow longpaths
-      run: gh config --system core.longpaths true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        ISSUE: ${{ github.event.issue.html_url }}
-
     - name: Checkout
       uses: actions/checkout@v3
 
@@ -33,9 +26,9 @@ jobs:
 
     - name: Get release version
       run: |
-          $version = '${{ github.event.inputs.version }}'
-          echo "Release version: $version"
-          echo "RELEASE_VERSION=$version" >> $Env:GITHUB_ENV
+          set version = '${{ github.event.inputs.version }}'
+          echo "Release version: version"
+          echo "RELEASE_VERSION=version" >> $Env:GITHUB_ENV
 
     - name: Build
       run: |
