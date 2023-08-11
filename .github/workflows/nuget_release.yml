@@ -43,4 +43,6 @@ jobs:
 
     - name: Push artifacts
       run: |
-           dotnet nuget push D:\a\Duende.IdentityServer.Admin\Duende.IdentityServer.Admin\src\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity\bin\Release\*.nupkg --source https://nuget.pkg.github.com/FreemarketFX/index.json --api-key ${{ secrets.ADMIN_PUBLISH_NUGET_TOKEN }} --skip-duplicate
+           dotnet nuget push D:\a\Duende.IdentityServer.Admin\Duende.IdentityServer.Admin\src\Skoruba.Duende.IdentityServer.Admin.UI\bin\Release\Skoruba.Duende.IdentityServer.Admin.UI.*.nupkg --source https://nuget.pkg.github.com/FreemarketFX/index.json --api-key ${{ secrets.ADMIN_PUBLISH_NUGET_TOKEN }} --skip-duplicate
+           dotnet nuget push D:\a\Duende.IdentityServer.Admin\Duende.IdentityServer.Admin\src\Skoruba.Duende.IdentityServer.Admin.BusinessLogic\bin\Release\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.*.nupkg --source https://nuget.pkg.github.com/FreemarketFX/index.json --api-key ${{ secrets.ADMIN_PUBLISH_NUGET_TOKEN }} --skip-duplicate
+           dotnet nuget push D:\a\Duende.IdentityServer.Admin\Duende.IdentityServer.Admin\src\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity\bin\Release\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.*.nupkg --source https://nuget.pkg.github.com/FreemarketFX/index.json --api-key ${{ secrets.ADMIN_PUBLISH_NUGET_TOKEN }} --skip-duplicate
