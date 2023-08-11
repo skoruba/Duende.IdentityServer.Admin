@@ -11,7 +11,7 @@ defaults:
     working-directory: src
 
 jobs:
-  checkout:
+  Build_Release:
 
     runs-on: windows-latest
 
