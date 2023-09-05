@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
 // Licensed under the Apache License, Version 2.0.
 
+using System.Collections.Generic;
+
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared.Dtos.Common
 {
 	public class Pager
@@ -16,5 +18,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared.Dtos.Common
 	    public bool EnableSearch { get; set; } = false;
 
 	    public int MaxPages { get; set; } = 10;
+
+	    public Dictionary<string, string> AdditionalParameters { get; } = new();
 	}
 }
