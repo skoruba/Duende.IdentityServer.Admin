@@ -154,6 +154,18 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.Helpers
             var databaseMigrations = configuration.GetSection(nameof(DatabaseMigrationsConfiguration)).Get<DatabaseMigrationsConfiguration>() ?? new DatabaseMigrationsConfiguration();
             var connectionStrings = configuration.GetSection("ConnectionStrings").Get<ConnectionStringsConfiguration>();
 
+            // If connections strings are not configured, check if they are found in Azure key vault
+            if (connectionStrings == null)
+            {
+                connectionStrings = new ConnectionStringsConfiguration();
+                // For each value in connectionStrings, set the property of connectionString to the value
+                foreach (var connectionString in configuration.GetChildren())
+                {
+                    connectionStrings.GetType().GetProperty(connectionString.Key)?.SetValue(connectionStrings, connectionString.Value);
+                }
+
+            }
+
             switch (databaseProvider.ProviderType)
             {
                 case DatabaseProviderType.SqlServer:

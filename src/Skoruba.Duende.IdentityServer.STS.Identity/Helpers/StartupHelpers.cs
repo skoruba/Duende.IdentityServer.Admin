@@ -201,25 +201,58 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
             where TDataProtectionDbContext : DbContext, IDataProtectionKeyContext
         {
             var databaseProvider = configuration.GetSection(nameof(DatabaseProviderConfiguration)).Get<DatabaseProviderConfiguration>();
+            var connectionStrings = configuration.GetSection("ConnectionStrings").Get<ConnectionStringsConfiguration>();
 
-            var identityConnectionString = configuration.GetConnectionString(ConfigurationConsts.IdentityDbConnectionStringKey);
-            var configurationConnectionString = configuration.GetConnectionString(ConfigurationConsts.ConfigurationDbConnectionStringKey);
-            var persistedGrantsConnectionString = configuration.GetConnectionString(ConfigurationConsts.PersistedGrantDbConnectionStringKey);
-            var dataProtectionConnectionString = configuration.GetConnectionString(ConfigurationConsts.DataProtectionDbConnectionStringKey);
+            // If connections strings are not configured, check if they are found in Azure key vault
+            if (connectionStrings == null)
+            {
+                connectionStrings = new ConnectionStringsConfiguration();
+                // For each value in connectionStrings, set the property of connectionString to the value
+                foreach (var connectionString in configuration.GetChildren())
+                {
+                    connectionStrings.GetType().GetProperty(connectionString.Key)?.SetValue(connectionStrings, connectionString.Value);
+                }
+
+            }
 
             switch (databaseProvider.ProviderType)
             {
                 case DatabaseProviderType.SqlServer:
-                    services.RegisterSqlServerDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TDataProtectionDbContext>(identityConnectionString, configurationConnectionString, persistedGrantsConnectionString, dataProtectionConnectionString);
+                    services.RegisterSqlServerDbContexts<
+                        TIdentityDbContext,
+                        TConfigurationDbContext,
+                        TPersistedGrantDbContext,
+                        TDataProtectionDbContext>(
+                        connectionStrings.IdentityDbConnection,
+                        connectionStrings.ConfigurationDbConnection,
+                        connectionStrings.PersistedGrantDbConnection,
+                        connectionStrings.DataProtectionDbConnection);
                     break;
                 case DatabaseProviderType.PostgreSQL:
-                    services.RegisterNpgSqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TDataProtectionDbContext>(identityConnectionString, configurationConnectionString, persistedGrantsConnectionString, dataProtectionConnectionString);
+                    services.RegisterNpgSqlDbContexts<
+                        TIdentityDbContext,
+                        TConfigurationDbContext,
+                        TPersistedGrantDbContext,
+                        TDataProtectionDbContext>(
+                        connectionStrings.IdentityDbConnection,
+                        connectionStrings.ConfigurationDbConnection,
+                        connectionStrings.PersistedGrantDbConnection,
+                        connectionStrings.DataProtectionDbConnection);
                     break;
                 case DatabaseProviderType.MySql:
-                    services.RegisterMySqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TDataProtectionDbContext>(identityConnectionString, configurationConnectionString, persistedGrantsConnectionString, dataProtectionConnectionString);
+                    services.RegisterMySqlDbContexts<
+                        TIdentityDbContext,
+                        TConfigurationDbContext,
+                        TPersistedGrantDbContext,
+                        TDataProtectionDbContext>(
+                        connectionStrings.IdentityDbConnection,
+                        connectionStrings.ConfigurationDbConnection,
+                        connectionStrings.PersistedGrantDbConnection,
+                        connectionStrings.DataProtectionDbConnection);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(databaseProvider.ProviderType), $@"The value needs to be one of {string.Join(", ", Enum.GetNames(typeof(DatabaseProviderType)))}.");
+                    throw new ArgumentOutOfRangeException(nameof(databaseProvider.ProviderType),
+                        $@"The value needs to be one of {string.Join(", ", Enum.GetNames(typeof(DatabaseProviderType)))}.");
             }
         }
 
@@ -297,7 +330,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
                     AuthenticationHelpers.CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
             });
 
-            
+
 
             services.Configure<IISOptions>(iis =>
             {
