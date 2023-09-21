@@ -7,8 +7,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Configuration
 {
     public class CultureConfiguration
     {
-        public static readonly string[] AvailableCultures = { "en", "fa", "fr", "ru", "sv", "zh", "es", "da", "de", "nl", "fi", "pt" };
-        public static readonly string DefaultRequestCulture = "en";
+        public static readonly string[] AvailableCultures = { "en", "nb", "fa", "fr", "ru", "sv", "zh", "es", "da", "de", "nl", "fi", "pt" };
+        public static readonly string DefaultRequestCulture = "nb";
 
         public List<string> Cultures { get; set; }
         public string DefaultCulture { get; set; } = DefaultRequestCulture;
