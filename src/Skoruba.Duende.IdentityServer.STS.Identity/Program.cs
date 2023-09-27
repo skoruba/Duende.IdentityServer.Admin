@@ -77,9 +77,9 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity
                          configApp.AddUserSecrets<Startup>(true);
                      }
 
+                     configApp.AddEnvironmentVariables();
                      configurationRoot.AddAzureKeyVaultConfiguration(configApp);
 
-                     configApp.AddEnvironmentVariables();
                      configApp.AddCommandLine(args);
                  })
                 .ConfigureWebHostDefaults(webBuilder =>

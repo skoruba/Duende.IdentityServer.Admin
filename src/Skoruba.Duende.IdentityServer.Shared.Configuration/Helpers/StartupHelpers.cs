@@ -82,27 +82,34 @@ namespace Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers
 
         public static void AddAzureKeyVaultConfiguration(this IConfiguration configuration, IConfigurationBuilder configurationBuilder)
         {
-            if (configuration.GetSection(nameof(AzureKeyVaultConfiguration)).Exists())
+            if (!configuration.GetSection(nameof(AzureKeyVaultConfiguration)).Exists()) return;
+            var azureKeyVaultConfiguration = configuration.GetSection(nameof(AzureKeyVaultConfiguration)).Get<AzureKeyVaultConfiguration>();
+
+            if (!azureKeyVaultConfiguration.ReadConfigurationFromKeyVault) return;
+            if (azureKeyVaultConfiguration.UseClientCredentials)
             {
-                var azureKeyVaultConfiguration = configuration.GetSection(nameof(AzureKeyVaultConfiguration)).Get<AzureKeyVaultConfiguration>();
-
-                if (azureKeyVaultConfiguration.ReadConfigurationFromKeyVault)
+                // Check environment variables if client secret is not provided
+                if (string.IsNullOrWhiteSpace(azureKeyVaultConfiguration.ClientSecret))
                 {
-                    if (azureKeyVaultConfiguration.UseClientCredentials)
-                    {
-                        configurationBuilder.AddAzureKeyVault(azureKeyVaultConfiguration.AzureKeyVaultEndpoint,
-                            azureKeyVaultConfiguration.ClientId, azureKeyVaultConfiguration.ClientSecret);
-                    }
-                    else
-                    {
-                        var keyVaultClient = new KeyVaultClient(
-                            new KeyVaultClient.AuthenticationCallback(new AzureServiceTokenProvider()
-                                .KeyVaultTokenCallback));
-
-                        configurationBuilder.AddAzureKeyVault(azureKeyVaultConfiguration.AzureKeyVaultEndpoint,
-                            keyVaultClient, new DefaultKeyVaultSecretManager());
-                    }
+                    azureKeyVaultConfiguration.ClientSecret = Environment.GetEnvironmentVariable("AZURE_CLIENT_SECRET");
                 }
+
+                // Handle error if client secret is not provided
+                if (string.IsNullOrWhiteSpace(azureKeyVaultConfiguration.ClientSecret))
+                {
+                    throw new Exception("Azure Key Vault Client Secret is not provided. Please provide it in secrets.json or in environment variables.");
+                }
+                configurationBuilder.AddAzureKeyVault(azureKeyVaultConfiguration.AzureKeyVaultEndpoint,
+                    azureKeyVaultConfiguration.ClientId, azureKeyVaultConfiguration.ClientSecret);
+            }
+            else
+            {
+                var keyVaultClient = new KeyVaultClient(
+                    new KeyVaultClient.AuthenticationCallback(new AzureServiceTokenProvider()
+                        .KeyVaultTokenCallback));
+
+                configurationBuilder.AddAzureKeyVault(azureKeyVaultConfiguration.AzureKeyVaultEndpoint,
+                    keyVaultClient, new DefaultKeyVaultSecretManager());
             }
         }
     }
