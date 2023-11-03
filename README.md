@@ -7,7 +7,9 @@
 ## Project Status
 
 [![Build status](https://ci.appveyor.com/api/projects/status/563ug5gcxk904m6g/branch/main?svg=true)](https://ci.appveyor.com/project/JanSkoruba/duende-identityserver-admin/branch/main)
-[![Join the chat at https://gitter.im/skoruba/IdentityServer4.Admin](https://badges.gitter.im/skoruba/IdentityServer4.Admin.svg)](https://gitter.im/skoruba/IdentityServer4.Admin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build status](https://img.shields.io/badge/Discord-Skoruba-%235865F2)](https://discord.gg/qTqQCSKWkX)
+
+
 
 The application is written in the **Asp.Net Core MVC - using .NET 6.0**
 
@@ -738,20 +740,17 @@ It is possible to define the configuration according the client type - by defaul
 - [x] Update to Duende IdentityServer 6.2.1
 - [x] Add support for Dynamic Identity Providers
 
+### 1.3.0
+- [ ] Update to .NET 8 ([#180](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/180))
+- [ ] Update to IdentityServer v7 ([#181](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/181))
+
 ### 2.0.0
-- [ ] Connect Admin Api to the Admin UI ([#478](https://github.com/skoruba/IdentityServer4.Admin/issues/478))
-
-### 3.0.0:
-
-- [ ] Create a project template using dotnet CLI - `dotnet new template`
-  - [ ] Second template: The administration of the Duende.IdentityServer (without Asp.Net Core Identity) ([#79](https://github.com/skoruba/IdentityServer4.Admin/issues/79))
-- [ ] Add windows authentication ([#479](https://github.com/skoruba/IdentityServer4.Admin/issues/479))
+- [ ] New UI in React and Typescript ([#182](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/182))
+- [ ] Add management for claims ([#22](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/22))
+- [ ] Add wizard for client registration ([#18](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/18))
 
 
 ### Future:
-
-- Add UI tests ([#97](https://github.com/skoruba/IdentityServer4.Admin/issues/97), [#116](https://github.com/skoruba/IdentityServer4.Admin/issues/116))
-- Extend administration for another protocols
 - Multitenancy support
 
 
