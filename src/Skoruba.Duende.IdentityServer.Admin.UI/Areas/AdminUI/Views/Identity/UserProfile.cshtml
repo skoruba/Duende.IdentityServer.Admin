@@ -36,8 +36,9 @@
                 <a asp-area="@CommonConsts.AdminUIArea" asp-action="UserRoles" asp-route-id="@Model.Id" class="btn btn-outline-primary">@Localizer["ButtonManageUserRoles"]</a>
                 <a asp-area="@CommonConsts.AdminUIArea" asp-action="UserProviders" asp-route-id="@Model.Id" class="btn btn-outline-primary">@Localizer["ButtonManageUserExternalProviders"]</a>
                 <a asp-area="@CommonConsts.AdminUIArea" asp-action="AuditLog" asp-controller="Log" asp-route-subjectIdentifier="@Model.Id" class="btn btn-primary">@Localizer["Audit Log"]</a>
-                <a asp-area="@CommonConsts.AdminUIArea" asp-action="UserChangePassword" asp-route-id="@Model.Id" class="btn btn-dark">@Localizer["ButtonChangePassword"]</a>
-                <a asp-area="@CommonConsts.AdminUIArea" asp-action="UserDelete" asp-route-id="@Model.Id" class="btn btn-danger">@Localizer["ButtonDeleteUser"]</a>
+                <!--https://freemarketfx.atlassian.net/browse/FMFX-6745, https://freemarketfx.atlassian.net/browse/FMFX-6349 -->
+                @*<a asp-area="@CommonConsts.AdminUIArea" asp-action="UserChangePassword" asp-route-id="@Model.Id" class="btn btn-dark">@Localizer["ButtonChangePassword"]</a>*@
+                @*<a asp-area="@CommonConsts.AdminUIArea" asp-action="UserDelete" asp-route-id="@Model.Id" class="btn btn-danger">@Localizer["ButtonDeleteUser"]</a>*@
             </div>
         </div>
     }
@@ -60,7 +61,7 @@
                             @await Html.PartialAsync("User/Section/Label", "UserUserName")
                         </label>
                         <div class="col-sm-9">
-                            <input type="text" required class="form-control" asp-for="UserName">
+                            <input type="text" required readonly class="form-control" asp-for="UserName">
                             <span asp-validation-for="UserName" class="text-danger"></span>
                         </div>
                     </div>
@@ -71,7 +72,7 @@
                             @await Html.PartialAsync("User/Section/Label", "UserEmail")
                         </label>
                         <div class="col-sm-9">
-                            <input type="email" required class="form-control" asp-for="Email">
+                            <input type="email" required readonly class="form-control" asp-for="Email">
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
                     </div>
@@ -94,7 +95,7 @@
                             @await Html.PartialAsync("User/Section/Label", "UserPhoneNumber")
                         </label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" asp-for="PhoneNumber">
+                            <input type="text" readonly class="form-control" asp-for="PhoneNumber">
                         </div>
                     </div>
 
