@@ -36,8 +36,9 @@
                 <a asp-area="@CommonConsts.AdminUIArea" asp-action="UserRoles" asp-route-id="@Model.Id" class="btn btn-outline-primary">@Localizer["ButtonManageUserRoles"]</a>
                 <a asp-area="@CommonConsts.AdminUIArea" asp-action="UserProviders" asp-route-id="@Model.Id" class="btn btn-outline-primary">@Localizer["ButtonManageUserExternalProviders"]</a>
                 <a asp-area="@CommonConsts.AdminUIArea" asp-action="AuditLog" asp-controller="Log" asp-route-subjectIdentifier="@Model.Id" class="btn btn-primary">@Localizer["Audit Log"]</a>
-                <a asp-area="@CommonConsts.AdminUIArea" asp-action="UserChangePassword" asp-route-id="@Model.Id" class="btn btn-dark">@Localizer["ButtonChangePassword"]</a>
-                <a asp-area="@CommonConsts.AdminUIArea" asp-action="UserDelete" asp-route-id="@Model.Id" class="btn btn-danger">@Localizer["ButtonDeleteUser"]</a>
+                <!--https://freemarketfx.atlassian.net/browse/FMFX-6745, https://freemarketfx.atlassian.net/browse/FMFX-6349 -->
+                @*<a asp-area="@CommonConsts.AdminUIArea" asp-action="UserChangePassword" asp-route-id="@Model.Id" class="btn btn-dark">@Localizer["ButtonChangePassword"]</a>*@
+                @*<a asp-area="@CommonConsts.AdminUIArea" asp-action="UserDelete" asp-route-id="@Model.Id" class="btn btn-danger">@Localizer["ButtonDeleteUser"]</a>*@
             </div>
         </div>
     }
