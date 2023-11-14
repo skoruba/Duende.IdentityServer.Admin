@@ -55,9 +55,10 @@
                             <td class="align-middle">@user.Id</td>
                             <td class="align-middle">@user.UserName</td>
                             <td class="align-middle">@user.Email</td>
-                            <td class="align-middle">
+                            <!--https://freemarketfx.atlassian.net/browse/FMFX-6745, https://freemarketfx.atlassian.net/browse/FMFX-6349 -->
+                            <!--<td class="align-middle">
                                 <a asp-area="@CommonConsts.AdminUIArea" class="btn btn-danger" asp-action="UserDelete" asp-route-id="@user.Id"><span class="oi oi-x"></span></a>
-                            </td>
+                            </td>-->
                         </tr>
                     }
                 </tbody>
