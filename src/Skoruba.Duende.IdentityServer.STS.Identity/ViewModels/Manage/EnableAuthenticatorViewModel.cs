@@ -12,9 +12,9 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.ViewModels.Manage
         public string Code { get; set; }
 
         [BindNever]
-        public string SharedKey { get; set; }
+        public string? SharedKey { get; set; }
 
         [BindNever]
-        public string AuthenticatorUri { get; set; }
+        public string? AuthenticatorUri { get; set; }
     }
 }
