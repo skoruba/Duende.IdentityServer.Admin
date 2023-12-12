@@ -103,6 +103,7 @@ namespace Skoruba.Duende.IdentityServer.Admin
 
             var configuration = configurationBuilder.Build();
 
+            configurationBuilder.AddEnvironmentVariables();
             configuration.AddAzureKeyVaultConfiguration(configurationBuilder);
 
             configurationBuilder.AddCommandLine(args);
@@ -132,9 +133,9 @@ namespace Skoruba.Duende.IdentityServer.Admin
                          configApp.AddUserSecrets<Startup>(true);
                      }
 
+                     configApp.AddEnvironmentVariables();
                      configurationRoot.AddAzureKeyVaultConfiguration(configApp);
 
-                     configApp.AddEnvironmentVariables();
                      configApp.AddCommandLine(args);
                  })
                 .ConfigureWebHostDefaults(webBuilder =>

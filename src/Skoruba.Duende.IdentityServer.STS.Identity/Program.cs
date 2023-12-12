@@ -50,12 +50,12 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity
                 configurationBuilder.AddUserSecrets<Startup>(true);
             }
 
+            configurationBuilder.AddEnvironmentVariables();
             var configuration = configurationBuilder.Build();
-
+            
             configuration.AddAzureKeyVaultConfiguration(configurationBuilder);
 
             configurationBuilder.AddCommandLine(args);
-            configurationBuilder.AddEnvironmentVariables();
 
             return configurationBuilder.Build();
         }

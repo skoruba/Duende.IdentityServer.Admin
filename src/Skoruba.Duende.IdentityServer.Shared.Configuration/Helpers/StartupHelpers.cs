@@ -91,13 +91,13 @@ namespace Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers
                 // Check environment variables if client secret is not provided
                 if (string.IsNullOrWhiteSpace(azureKeyVaultConfiguration.ClientSecret))
                 {
-                    azureKeyVaultConfiguration.ClientSecret = Environment.GetEnvironmentVariable("AZURE_CLIENT_SECRET");
-                }
-
-                // Handle error if client secret is not provided
-                if (string.IsNullOrWhiteSpace(azureKeyVaultConfiguration.ClientSecret))
-                {
-                    throw new Exception("Azure Key Vault Client Secret is not provided. Please provide it in secrets.json or in environment variables.");
+                    var clientSecret = Environment.GetEnvironmentVariable("AZURE_CLIENT_SECRET");
+                    // Throw an exception if client secret is not provided
+                    if (string.IsNullOrWhiteSpace(clientSecret))
+                    {
+                        throw new Exception("Azure Key Vault Client Secret is not provided. Please provide it in secrets.json or in environment variables.");
+                    }
+                    azureKeyVaultConfiguration.ClientSecret = clientSecret;
                 }
                 configurationBuilder.AddAzureKeyVault(azureKeyVaultConfiguration.AzureKeyVaultEndpoint,
                     azureKeyVaultConfiguration.ClientId, azureKeyVaultConfiguration.ClientSecret);
