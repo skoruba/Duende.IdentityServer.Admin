@@ -27,7 +27,7 @@ stages:
           cd src
           pwd
           ls -l
-          ls -l src/Skoruba.Duende.IdentityServer.STS.Identity/
+          ls -l Skoruba.Duende.IdentityServer.STS.Identity/
     - task: Docker@2
       displayName: Build an image
       inputs:
