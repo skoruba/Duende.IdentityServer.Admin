@@ -20,6 +20,12 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: |
+          pwd
+          ls -l
     - task: Docker@2
       displayName: Build an image
       inputs:
