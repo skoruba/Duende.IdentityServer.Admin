@@ -32,6 +32,6 @@ stages:
       displayName: Build an image
       inputs:
         command: build
-        dockerfile: './src/Skoruba.Duende.IdentityServer.STS.Identity/Dockerfile'
+        dockerfile: '**/src/Skoruba.Duende.IdentityServer.STS.Identity/Dockerfile'
         tags: |
           $(tag)
