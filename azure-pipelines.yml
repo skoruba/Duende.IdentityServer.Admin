@@ -20,18 +20,18 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    - task: Bash@3
-      inputs:
-        targetType: 'inline'
-        script: |
-          cd src
-          pwd
-          ls -l
-          ls -l Skoruba.Duende.IdentityServer.STS.Identity/
+    # - task: Bash@3
+    #   inputs:
+    #     targetType: 'inline'
+    #     script: |
+    #       cd src
+    #       pwd
+    #       ls -l
+    #       ls -l Skoruba.Duende.IdentityServer.STS.Identity/
     - task: Docker@2
       displayName: Build an image
       inputs:
         command: build
-        dockerfile: '$(Build.SourcesDirectory)/src/Skoruba.Duende.IdentityServer.STS.Identity/Dockerfile'
+        dockerfile: '/src/Skoruba.Duende.IdentityServer.STS.Identity/Dockerfile'
         tags: |
           $(tag)
