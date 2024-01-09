@@ -9,7 +9,8 @@ resources:
 - repo: self
 
 variables:
-  tag: '$(Build.BuildId)'
+  #tag: '$(Build.BuildId)'
+  tag: 'test'
 
 stages:
 - stage: Build
@@ -36,3 +37,9 @@ stages:
         dockerfile: '**/src/Skoruba.Duende.IdentityServer.STS.Identity/Dockerfile'
         tags: |
           $(tag)
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'artsdatabanken/identity-duende'
+        command: 'push'
+        tags: 'test'
