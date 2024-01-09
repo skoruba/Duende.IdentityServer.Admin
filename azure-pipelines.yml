@@ -30,7 +30,7 @@ stages:
     #       ls -l
     #       ls -l Skoruba.Duende.IdentityServer.STS.Identity/
     - task: Docker@2
-      displayName: Build an image
+      displayName: Build frontend
       inputs:
         containerRegistry: 'Dockerhub'
         repository: 'artsdatabanken/identity-duende'
@@ -44,3 +44,19 @@ stages:
         repository: 'artsdatabanken/identity-duende'
         command: 'push'
         tags: 'test'
+    
+    - task: Docker@2
+      displayName: Build admin panel
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'artsdatabanken/identity-duende'
+        command: 'build'
+        Dockerfile: '**/src/Skoruba.Duende.IdentityServer.Admin/Dockerfile'
+        buildContext: '$(Build.SourcesDirectory)'
+        tags: 'admin-test'
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'artsdatabanken/identity-duende'
+        command: 'push'
+        tags: 'admin-test'
