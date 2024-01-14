@@ -1,9 +1,9 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Skoruba.Duende.IdentityServer.Admin.Api.Dtos.PersistedGrants;
 using Skoruba.Duende.IdentityServer.Admin.Api.Mappers;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Grant;
 using Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks;
+using System;
 using Xunit;
 
 namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
@@ -16,12 +16,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
             var persistedGrantDto = PersistedGrantDtoMock.GenerateRandomPersistedGrant(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
 
             var persistedGrantsDto = new PersistedGrantsDto();
-            
+
             persistedGrantsDto.PersistedGrants.Add(persistedGrantDto);
 
             var persistedGrantSubjectsApiDto = persistedGrantsDto.ToPersistedGrantApiModel<PersistedGrantSubjectsApiDto>();
 
-            persistedGrantSubjectsApiDto.Should().BeEquivalentTo(persistedGrantsDto, options => options.Excluding(x=> x.SubjectId));
+            persistedGrantSubjectsApiDto.Should().BeEquivalentTo(persistedGrantsDto, options => options.ExcludingMissingMembers());
         }
 
         [Fact]
@@ -35,7 +35,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             var persistedGrantsApiDto = persistedGrantsDto.ToPersistedGrantApiModel<PersistedGrantsApiDto>();
 
-            persistedGrantsApiDto.Should().BeEquivalentTo(persistedGrantsDto, options => options.Excluding(x => x.SubjectId));
+            persistedGrantsApiDto.Should().BeEquivalentTo(persistedGrantsDto, options => options.ExcludingMissingMembers());
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
 
             var persistedGrantApiDto = persistedGrantDto.ToPersistedGrantApiModel<PersistedGrantApiDto>();
 
-            persistedGrantApiDto.Should().BeEquivalentTo(persistedGrantDto, options => options.Excluding(x => x.SubjectId));
+            persistedGrantApiDto.Should().BeEquivalentTo(persistedGrantDto, options => options.ExcludingMissingMembers());
         }
     }
 }
