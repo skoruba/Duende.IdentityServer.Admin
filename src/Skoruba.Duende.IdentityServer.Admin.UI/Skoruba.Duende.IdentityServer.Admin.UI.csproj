@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
-	    <TargetFramework>net6.0</TargetFramework>
+	    <TargetFramework>net8.0</TargetFramework>
 	    <Description>The package with UI for the administration of the Duende IdentityServer</Description>
         <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
         <StaticWebAssetBasePath Condition="$(StaticWebAssetBasePath) == ''">/</StaticWebAssetBasePath>
@@ -100,14 +100,14 @@
     </ItemGroup>
 
     <ItemGroup>
-	    <PackageReference Include="AspNetCore.HealthChecks.MySql" Version="6.0.2" />
-        <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="6.0.2" />
-        <PackageReference Include="AspNetCore.HealthChecks.OpenIdConnectServer" Version="6.0.2" />
-        <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="6.0.2" />
-        <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.7" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.7" />
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="6.0.7" />
+	    <PackageReference Include="AspNetCore.HealthChecks.MySql" Version="8.0.0" />
+        <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="8.0.0" />
+        <PackageReference Include="AspNetCore.HealthChecks.OpenIdConnectServer" Version="8.0.0" />
+        <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.0" />
+        <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.1" />
         <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
     </ItemGroup>
 
