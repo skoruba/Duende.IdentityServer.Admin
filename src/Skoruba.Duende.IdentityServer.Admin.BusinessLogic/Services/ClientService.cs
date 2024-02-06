@@ -132,6 +132,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services
                     RefreshTokenExpirations = GetTokenExpirations(),
                     RefreshTokenUsages = GetTokenUsage(),
                     ProtocolTypes = GetProtocolTypes(),
+                    DPoPValidationModes = GetDPoPValidationModes(),
                     Id = 0
                 };
 
@@ -142,6 +143,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services
             client.RefreshTokenExpirations = GetTokenExpirations();
             client.RefreshTokenUsages = GetTokenUsage();
             client.ProtocolTypes = GetProtocolTypes();
+            client.DPoPValidationModes = GetDPoPValidationModes();
 
             PopulateClientRelations(client);
 
@@ -268,6 +270,13 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services
             var grantTypes = ClientRepository.GetGrantTypes(grant, limit);
 
             return grantTypes;
+        }
+        
+        public virtual List<SelectItemDto> GetDPoPValidationModes()
+        {
+            var modes = ClientRepository.GetDPoPValidationModes().ToModel();
+
+            return modes;
         }
 
         public virtual List<SelectItemDto> GetAccessTokenTypes()

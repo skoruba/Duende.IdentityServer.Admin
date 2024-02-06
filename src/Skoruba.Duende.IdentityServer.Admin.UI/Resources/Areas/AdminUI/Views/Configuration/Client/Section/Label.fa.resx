@@ -489,4 +489,40 @@
   <data name="CoordinateLifetimeWithUserSession_Label" xml:space="preserve">
     <value>Coordinate Lifetime With User Session</value>
   </data>
+  <data name="RequireDPoP_Label" xml:space="preserve">
+    <value>Require DPoP</value>
+  </data>
+  <data name="RequireDPoP_Info" xml:space="preserve">
+    <value>Specifies whether a DPoP (Demonstrating Proof-of-Possession) token is requied to be used by this client. Defaults to false.</value>
+  </data>
+  <data name="DPoPClockSkew_Label" xml:space="preserve">
+    <value>DPoP Clock Skew</value>
+  </data>
+  <data name="DPoPClockSkew_Info" xml:space="preserve">
+    <value>Clock skew used in validating the client’s DPoP proof token ‘iat’ claim value. Defaults to 5 minutes.</value>
+  </data>
+  <data name="DPoPValidationMode_Label" xml:space="preserve">
+    <value>DPoP Validation Mode</value>
+  </data>
+  <data name="DPoPValidationMode_Info" xml:space="preserve">
+    <value>Enum setting to control validation for the DPoP proof token expiration. This supports both the client generated ‘iat’ value and/or the server generated ’nonce’ value. Defaults to DPoPTokenExpirationValidationMode.Iat, which only validates the ‘iat’ value.</value>
+  </data>
+  <data name="InitiateLoginUri_Label" xml:space="preserve">
+    <value>Initiate Login Uri</value>
+  </data>
+  <data name="InitiateLoginUri_Info" xml:space="preserve">
+    <value>An optional URI that can be used to initiate login from the IdentityServer host or a third party. This is most commonly used to create a client application portal within the IdentityServer host. Defaults to null.</value>
+  </data>
+  <data name="RequirePushedAuthorization_Label" xml:space="preserve">
+    <value>Require Pushed Authorization</value>
+  </data>
+  <data name="RequirePushedAuthorization_Info" xml:space="preserve">
+    <value>Controls if this client requires PAR. PAR is required if either the global configuration is enabled or if the client’s flag is enabled (this can’t be used to opt out of the global configuration). This defaults to false, which means the global configuration will be used.</value>
+  </data>
+  <data name="PushedAuthorizationLifetime_Label" xml:space="preserve">
+    <value>Pushed Authorization Lifetime</value>
+  </data>
+  <data name="PushedAuthorizationLifetime_Info" xml:space="preserve">
+    <value>Controls the lifetime of pushed authorization requests for a client. If this lifetime is set, it takes precedence over the global configuration. This defaults to null, which means the global configuration is used.</value>
+  </data>
 </root>

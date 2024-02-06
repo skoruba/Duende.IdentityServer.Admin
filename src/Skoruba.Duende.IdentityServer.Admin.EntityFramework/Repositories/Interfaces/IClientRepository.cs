@@ -78,6 +78,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Inter
 
         List<string> GetSigningAlgorithms(string algorithm, int limit = 0);
 
+        List<SelectItem> GetDPoPValidationModes();
+
         Task<int> SaveAllChangesAsync();
 
         bool AutoSaveChanges { get; set; }
