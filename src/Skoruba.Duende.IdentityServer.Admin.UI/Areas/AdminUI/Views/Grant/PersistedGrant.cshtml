@@ -56,7 +56,7 @@
                     {
                         <tr>
                             <td><a class="btn btn-danger" asp-area="@CommonConsts.AdminUIArea" asp-action="PersistedGrantDelete" asp-route-id="@UrlHelpers.QueryStringSafeHash(persistedGrant.Key)"><span class="oi oi-x"></span></a></td>
-                            <td>@persistedGrant.SubjectId</td>
+                            <td><code>@persistedGrant.SubjectId</code></td>
                             <td>@persistedGrant.Type</td>
                             <td>@persistedGrant.Expiration</td>
                             <td>@persistedGrant.Data</td>

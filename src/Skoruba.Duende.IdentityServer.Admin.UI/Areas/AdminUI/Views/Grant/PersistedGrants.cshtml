@@ -37,7 +37,7 @@
 				{
 					<tr>
 						<th scope="row"><a asp-area="@CommonConsts.AdminUIArea" class="btn btn-primary" asp-action="PersistedGrant" asp-route-id="@persistedGrant.SubjectId">@Localizer["TableButtonDetail"]</a></th>
-						<td>@persistedGrant.SubjectId</td>
+						<td><code>@persistedGrant.SubjectId</code></td>
 						<td>@persistedGrant.SubjectName</td>
 					</tr>
 				}
