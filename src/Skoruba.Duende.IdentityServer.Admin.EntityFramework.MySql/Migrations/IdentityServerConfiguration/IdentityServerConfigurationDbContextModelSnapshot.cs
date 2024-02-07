@@ -16,7 +16,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.Migrations.I
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.7")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ApiResource", b =>
@@ -354,6 +354,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.Migrations.I
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<TimeSpan>("DPoPClockSkew")
+                        .HasColumnType("time(6)");
+
+                    b.Property<int>("DPoPValidationMode")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
                         .HasColumnType("varchar(1000)");
@@ -380,6 +386,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.Migrations.I
                     b.Property<bool>("IncludeJwtId")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<string>("InitiateLoginUri")
+                        .HasMaxLength(2000)
+                        .HasColumnType("varchar(2000)");
+
                     b.Property<DateTime?>("LastAccessed")
                         .HasColumnType("datetime(6)");
 
@@ -402,6 +412,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.Migrations.I
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
 
+                    b.Property<int?>("PushedAuthorizationLifetime")
+                        .HasColumnType("int");
+
                     b.Property<int>("RefreshTokenExpiration")
                         .HasColumnType("int");
 
@@ -414,7 +427,13 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.Migrations.I
                     b.Property<bool>("RequireConsent")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<bool>("RequireDPoP")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<bool>("RequirePkce")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("RequirePushedAuthorization")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("RequireRequestObject")

@@ -124,7 +124,7 @@
     <value>Slet Rolle</value>
   </data>
   <data name="ActionRoleUsers" xml:space="preserve">
-    <value>Brugerer</value>
+    <value>Brugere</value>
   </data>
   <data name="ActionSaveRole" xml:space="preserve">
     <value>Gem Rolle</value>

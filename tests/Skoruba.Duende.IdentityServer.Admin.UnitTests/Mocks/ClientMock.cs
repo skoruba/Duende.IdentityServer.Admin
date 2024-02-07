@@ -6,7 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Bogus;
 using Duende.IdentityServer.EntityFramework.Entities;
+using Duende.IdentityServer.Models;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Constants;
+using Client = Duende.IdentityServer.EntityFramework.Entities.Client;
+using ClientClaim = Duende.IdentityServer.EntityFramework.Entities.ClientClaim;
 
 namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
 {
@@ -63,6 +66,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
                 .RuleFor(o => o.AllowAccessTokensViaBrowser, f => f.Random.Bool())
                 .RuleFor(o => o.AllowOfflineAccess, f => f.Random.Bool())
                 .RuleFor(o => o.AllowPlainTextPkce, f => f.Random.Bool())
+                .RuleFor(o => o.DPoPClockSkew, f => f.Date.Timespan())
+                .RuleFor(o => o.RequireDPoP, f => f.Random.Bool())
+                .RuleFor(o => o.InitiateLoginUri, f => f.Internet.Url())
+                .RuleFor(o => o.DPoPValidationMode, DPoPTokenExpirationValidationMode.Custom)
+                .RuleFor(o => o.PushedAuthorizationLifetime, f => f.Random.Int())
+                .RuleFor(o => o.RequirePushedAuthorization, f => f.Random.Bool())
                 .RuleFor(o => o.AllowRememberConsent, f => f.Random.Bool())
                 .RuleFor(o => o.AllowedCorsOrigins, f => GetClientCorsOriginFaker().Generate(f.Random.Number(10)))
                 .RuleFor(o => o.AllowedGrantTypes, f => ClientGrantTypesFaker().Generate(1))

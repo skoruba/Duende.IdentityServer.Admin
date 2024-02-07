@@ -31,7 +31,10 @@ namespace Skoruba.Duende.IdentityServer.Shared.Configuration.Email
                   null,
                   htmlMessage
              );
-
+            if (_configuration.IpPoolName != null)
+            {
+                message.SetIpPoolName(_configuration.IpPoolName);
+            }
             // More information about click tracking: https://sendgrid.com/docs/ui/account-and-settings/tracking/
             message.SetClickTracking(_configuration.EnableClickTracking, _configuration.EnableClickTracking);
 
