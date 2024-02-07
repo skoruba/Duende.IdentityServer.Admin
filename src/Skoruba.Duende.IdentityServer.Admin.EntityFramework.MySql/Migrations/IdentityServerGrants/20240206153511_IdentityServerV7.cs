@@ -12,36 +12,23 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.Migrations.I
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropPrimaryKey("PK_ServerSideSessions", "ServerSideSessions");
-            
-            migrationBuilder.AlterColumn<long>(
-                name: "Id",
-                table: "ServerSideSessions",
-                type: "bigint",
-                nullable: false,
-                oldClrType: typeof(int),
-                oldType: "int")
-                .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
-                .OldAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
-
-            migrationBuilder.AddPrimaryKey("PK_ServerSideSessions", "ServerSideSessions", "Id");
+            migrationBuilder.Sql(@"ALTER TABLE ServerSideSessions MODIFY id INT NOT NULL;
+            ALTER TABLE ServerSideSessions DROP PRIMARY KEY;
+            ALTER TABLE ServerSideSessions MODIFY Id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT;");
             
             migrationBuilder.CreateTable(
-                name: "PushedAuthorizationRequests",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ReferenceValueHash = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ExpiresAtUtc = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Parameters = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PushedAuthorizationRequests", x => x.Id);
-                })
+                    name: "PushedAuthorizationRequests",
+                    columns: table => new
+                    {
+                        Id = table.Column<long>(type: "bigint", nullable: false)
+                            .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        ReferenceValueHash = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: false)
+                            .Annotation("MySql:CharSet", "utf8mb4"),
+                        ExpiresAtUtc = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                        Parameters = table.Column<string>(type: "longtext", nullable: false)
+                            .Annotation("MySql:CharSet", "utf8mb4")
+                    },
+                    constraints: table => { table.PrimaryKey("PK_PushedAuthorizationRequests", x => x.Id); })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
@@ -62,15 +49,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.Migrations.I
             migrationBuilder.DropTable(
                 name: "PushedAuthorizationRequests");
 
-            migrationBuilder.AlterColumn<int>(
-                name: "Id",
-                table: "ServerSideSessions",
-                type: "int",
-                nullable: false,
-                oldClrType: typeof(long),
-                oldType: "bigint")
-                .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
-                .OldAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
+            migrationBuilder.Sql(@"ALTER TABLE ServerSideSessions MODIFY id BIGINT NOT NULL;
+            ALTER TABLE ServerSideSessions DROP PRIMARY KEY;
+            ALTER TABLE ServerSideSessions MODIFY Id INT NOT NULL PRIMARY KEY AUTO_INCREMENT;");
         }
     }
 }
