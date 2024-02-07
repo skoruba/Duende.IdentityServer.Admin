@@ -190,7 +190,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Helpers.DependencyInjection
             var healthChecksBuilder = options.HealthChecksBuilderFactory?.Invoke(services) ?? services.AddHealthChecks();
             healthChecksBuilder.AddIdSHealthChecks<TIdentityServerDbContext, TPersistedGrantDbContext,
                 TIdentityDbContext, TLogDbContext, TAuditLogDbContext,
-                TDataProtectionDbContext, TAuditLog>(options.Admin, options.ConnectionStrings, options.DatabaseProvider);
+                TDataProtectionDbContext, TAuditLog, TUser>(options.Admin);
 
             // Adds a startup filter for further middleware configuration.
             services.AddSingleton(options.Testing);

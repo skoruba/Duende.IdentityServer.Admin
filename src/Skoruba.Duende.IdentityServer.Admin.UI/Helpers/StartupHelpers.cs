@@ -38,7 +38,6 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configur
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySql;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.PostgreSQL;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.SqlServer;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Helpers;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Interfaces;
@@ -431,9 +430,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Helpers
         }
 
         public static void AddIdSHealthChecks<TConfigurationDbContext, TPersistedGrantDbContext, TIdentityDbContext,
-            TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAuditLog>
-            (this IHealthChecksBuilder healthChecksBuilder, AdminConfiguration adminConfiguration,
-            ConnectionStringsConfiguration connectionStringsConfiguration, DatabaseProviderConfiguration databaseProviderConfiguration)
+            TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAuditLog, TUser>
+            (this IHealthChecksBuilder healthChecksBuilder, AdminConfiguration adminConfiguration)
             where TConfigurationDbContext : DbContext, IAdminConfigurationDbContext
             where TPersistedGrantDbContext : DbContext, IAdminPersistedGrantDbContext
             where TIdentityDbContext : DbContext
@@ -441,81 +439,17 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Helpers
             where TAuditLoggingDbContext : DbContext, IAuditLoggingDbContext<TAuditLog>
             where TDataProtectionDbContext : DbContext, IDataProtectionKeyContext
             where TAuditLog : AuditLog
+            where TUser : class
         {
-            var configurationDbConnectionString = connectionStringsConfiguration.ConfigurationDbConnection;
-            var persistedGrantsDbConnectionString = connectionStringsConfiguration.PersistedGrantDbConnection;
-            var identityDbConnectionString = connectionStringsConfiguration.IdentityDbConnection;
-            var logDbConnectionString = connectionStringsConfiguration.AdminLogDbConnection;
-            var auditLogDbConnectionString = connectionStringsConfiguration.AdminAuditLogDbConnection;
-            var dataProtectionDbConnectionString = connectionStringsConfiguration.DataProtectionDbConnection;
-
             var identityServerUri = adminConfiguration.IdentityServerBaseUrl;
-            healthChecksBuilder = healthChecksBuilder
-                .AddDbContextCheck<TConfigurationDbContext>("ConfigurationDbContext")
-                .AddDbContextCheck<TPersistedGrantDbContext>("PersistedGrantsDbContext")
-                .AddDbContextCheck<TIdentityDbContext>("IdentityDbContext")
-                .AddDbContextCheck<TLogDbContext>("LogDbContext")
-                .AddDbContextCheck<TAuditLoggingDbContext>("AuditLogDbContext")
-                .AddDbContextCheck<TDataProtectionDbContext>("DataProtectionDbContext")
-
-                .AddIdentityServer(new Uri(identityServerUri), "Identity Server");
-
-            var serviceProvider = healthChecksBuilder.Services.BuildServiceProvider();
-            var scopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
-            using (var scope = scopeFactory.CreateScope())
-            {
-                var configurationTableName = DbContextHelpers.GetEntityTable<TConfigurationDbContext>(scope.ServiceProvider);
-                var persistedGrantTableName = DbContextHelpers.GetEntityTable<TPersistedGrantDbContext>(scope.ServiceProvider);
-                var identityTableName = DbContextHelpers.GetEntityTable<TIdentityDbContext>(scope.ServiceProvider);
-                var logTableName = DbContextHelpers.GetEntityTable<TLogDbContext>(scope.ServiceProvider);
-                var auditLogTableName = DbContextHelpers.GetEntityTable<TAuditLoggingDbContext>(scope.ServiceProvider);
-                var dataProtectionTableName = DbContextHelpers.GetEntityTable<TDataProtectionDbContext>(scope.ServiceProvider);
-
-                switch (databaseProviderConfiguration.ProviderType)
-                {
-                    case DatabaseProviderType.SqlServer:
-                        healthChecksBuilder
-                            .AddSqlServer(configurationDbConnectionString, name: "ConfigurationDb",
-                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{configurationTableName}]")
-                            .AddSqlServer(persistedGrantsDbConnectionString, name: "PersistentGrantsDb",
-                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{persistedGrantTableName}]")
-                            .AddSqlServer(identityDbConnectionString, name: "IdentityDb",
-                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{identityTableName}]")
-                            .AddSqlServer(logDbConnectionString, name: "LogDb",
-                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{logTableName}]")
-                            .AddSqlServer(auditLogDbConnectionString, name: "AuditLogDb",
-                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{auditLogTableName}]")
-                            .AddSqlServer(dataProtectionDbConnectionString, name: "DataProtectionDb",
-                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{dataProtectionTableName}]");
-                        break;
-                    case DatabaseProviderType.PostgreSQL:
-                        healthChecksBuilder
-                            .AddNpgSql(configurationDbConnectionString, name: "ConfigurationDb",
-                                healthQuery: $"SELECT * FROM \"{configurationTableName}\" LIMIT 1")
-                            .AddNpgSql(persistedGrantsDbConnectionString, name: "PersistentGrantsDb",
-                                healthQuery: $"SELECT * FROM \"{persistedGrantTableName}\" LIMIT 1")
-                            .AddNpgSql(identityDbConnectionString, name: "IdentityDb",
-                                healthQuery: $"SELECT * FROM \"{identityTableName}\" LIMIT 1")
-                            .AddNpgSql(logDbConnectionString, name: "LogDb",
-                                healthQuery: $"SELECT * FROM \"{logTableName}\" LIMIT 1")
-                            .AddNpgSql(auditLogDbConnectionString, name: "AuditLogDb",
-                                healthQuery: $"SELECT * FROM \"{auditLogTableName}\"  LIMIT 1")
-                            .AddNpgSql(dataProtectionDbConnectionString, name: "DataProtectionDb",
-                                healthQuery: $"SELECT * FROM \"{dataProtectionTableName}\"  LIMIT 1");
-                        break;
-                    case DatabaseProviderType.MySql:
-                        healthChecksBuilder
-                            .AddMySql(configurationDbConnectionString, name: "ConfigurationDb")
-                            .AddMySql(persistedGrantsDbConnectionString, name: "PersistentGrantsDb")
-                            .AddMySql(identityDbConnectionString, name: "IdentityDb")
-                            .AddMySql(logDbConnectionString, name: "LogDb")
-                            .AddMySql(auditLogDbConnectionString, name: "AuditLogDb")
-                            .AddMySql(dataProtectionDbConnectionString, name: "DataProtectionDb");
-                        break;
-                    default:
-                        throw new NotImplementedException($"Health checks not defined for database provider {databaseProviderConfiguration.ProviderType}");
-                }
-            }
+            healthChecksBuilder
+                .AddDbContextCheck<TConfigurationDbContext>(customTestQuery: (context, token) => context.Clients.AnyAsync(token), tags: new []{ "database"} )
+                .AddDbContextCheck<TPersistedGrantDbContext>(customTestQuery: (context, token) => context.Keys.AnyAsync(token), tags: new[] { "database" })
+                .AddDbContextCheck<TIdentityDbContext>(customTestQuery: (context, token) => context.Set<TUser>().AnyAsync(token), tags: new[] { "database" })
+                .AddDbContextCheck<TLogDbContext>(customTestQuery: (context, token) => context.Logs.AnyAsync(token), tags: new[] { "database" })
+                .AddDbContextCheck<TAuditLoggingDbContext>(customTestQuery: (context, token) => context.AuditLog.AnyAsync(token), tags: new[] { "database" })
+                .AddDbContextCheck<TDataProtectionDbContext>(customTestQuery: (context, token) => context.DataProtectionKeys.AnyAsync(token), tags: new[] { "database" })
+                .AddIdentityServer(new Uri(identityServerUri), "Identity Server", tags: new []{ "identity" });
         }
 
         /// <summary>
