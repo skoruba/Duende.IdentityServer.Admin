@@ -31,9 +31,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mappers
                        .Excluding(o => o.AllowedGrantTypes)
                        .Excluding(o => o.AllowedScopes)
 					   .Excluding(o => o.Created)
+                       .Excluding(o => o.DPoPValidationMode)
                        .Excluding(o => o.AllowedIdentityTokenSigningAlgorithms)
                        .Excluding(o => o.IdentityProviderRestrictions));
 
+            clientDto.DPoPValidationMode.Should().Be((int)client.DPoPValidationMode);
+            
             //Assert collection
             clientDto.AllowedCorsOrigins.Should().BeEquivalentTo(client.AllowedCorsOrigins.Select(x => x.Origin));
             clientDto.RedirectUris.Should().BeEquivalentTo(client.RedirectUris.Select(x => x.RedirectUri));
@@ -64,7 +67,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mappers
                     .Excluding(o => o.AllowedScopes)
                     .Excluding(o => o.AllowedIdentityTokenSigningAlgorithms)
                     .Excluding(o => o.Created)
+                    .Excluding(o => o.DPoPValidationMode)
 					.Excluding(o => o.IdentityProviderRestrictions));
+
+            clientDto.DPoPValidationMode.Should().Be((int)client.DPoPValidationMode);
 
             //Assert collection
             clientDto.AllowedCorsOrigins.Should().BeEquivalentTo(client.AllowedCorsOrigins.Select(x => x.Origin));
