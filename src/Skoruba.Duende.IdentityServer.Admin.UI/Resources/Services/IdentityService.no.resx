@@ -1,0 +1,74 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="IdentityErrorKey" xml:space="preserve">
+        <value>Feil</value>
+    </data>
+    <data name="RoleClaimDoesNotExist" xml:space="preserve">
+        <value>Rollekrav med ID {0} eksisterer ikke</value>
+    </data>
+    <data name="RoleClaimsCreateFailed" xml:space="preserve">
+        <value>Rolekrav oppretting mislyktes</value>
+    </data>
+    <data name="RoleClaimsDeleteFailed" xml:space="preserve">
+        <value>Rollekrav slette mislyktes</value>
+    </data>
+    <data name="RoleCreateFailed" xml:space="preserve">
+        <value>Rolle oppretting mislyktes</value>
+    </data>
+    <data name="RoleDeleteFailed" xml:space="preserve">
+        <value>Rolle sletting mislyktes</value>
+    </data>
+    <data name="RoleDoesNotExist" xml:space="preserve">
+        <value>Roll med id {0} eksisterer ikke</value>
+    </data>
+    <data name="RoleUpdateFailed" xml:space="preserve">
+        <value>Rolle oppdatering mislyktes</value>
+    </data>
+    <data name="UserChangePasswordFailed" xml:space="preserve">
+        <value>Brukerendringspassord mislyktes</value>
+    </data>
+    <data name="UserClaimDoesNotExist" xml:space="preserve">
+        <value>Brukerkrav med ID {0} eksisterer ikke</value>
+    </data>
+    <data name="UserClaimsCreateFailed" xml:space="preserve">
+        <value>Oppretting av brukerkrav mislyktes</value>
+    </data>
+    <data name="UserClaimsDeleteFailed" xml:space="preserve">
+        <value>Sletting av brukerkrav mislyktes</value>
+    </data>
+    <data name="UserCreateFailed" xml:space="preserve">
+        <value>Brukeroppretting mislyktes</value>
+    </data>
+    <data name="UserDeleteFailed" xml:space="preserve">
+        <value>Sletting av bruker mislyktes</value>
+    </data>
+    <data name="UserDoesNotExist" xml:space="preserve">
+        <value>Bruker med ID {0} eksisterer ikke</value>
+    </data>
+    <data name="UserProviderDeleteFailed" xml:space="preserve">
+        <value>Sletting av brukerleverandør mislyktes</value>
+    </data>
+    <data name="UserProviderDoesNotExist" xml:space="preserve">
+        <value>Brukerleverandør med ID {0} eksisterer ikke</value>
+    </data>
+    <data name="UserRoleCreateFailed" xml:space="preserve">
+        <value>Oppretting av brukerrollen mislyktes</value>
+    </data>
+    <data name="UserRoleDeleteFailed" xml:space="preserve">
+        <value>Sletting av brukerrollen mislyktes</value>
+    </data>
+    <data name="UserUpdateFailed" xml:space="preserve">
+        <value>Brukeroppdatering mislyktes</value>
+    </data>
+</root>

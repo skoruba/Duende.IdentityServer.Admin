@@ -1,0 +1,38 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ApiGrants" xml:space="preserve">
+        <value>API tilskudd</value>
+    </data>
+    <data name="Created" xml:space="preserve">
+        <value>Laget:</value>
+    </data>
+    <data name="Expires" xml:space="preserve">
+        <value>Utløper:</value>
+    </data>
+    <data name="IdentityGrants" xml:space="preserve">
+        <value>Identitetstilskudd</value>
+    </data>
+    <data name="NoGrants" xml:space="preserve">
+        <value>Du har ikke gitt tilgang til noen applikasjoner</value>
+    </data>
+    <data name="RevokeAccess" xml:space="preserve">
+        <value>Oppheve tilgangen</value>
+    </data>
+    <data name="SubTitle" xml:space="preserve">
+        <value>Nedenfor er listen over applikasjoner du har gitt tilgang til og navnene på ressursene de har tilgang til.</value>
+    </data>
+    <data name="Title" xml:space="preserve">
+        <value>Klientapplikasjonstilgang</value>
+    </data>
+</root>
