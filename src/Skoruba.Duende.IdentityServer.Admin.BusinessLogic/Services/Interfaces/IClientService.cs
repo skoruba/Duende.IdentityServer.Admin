@@ -73,5 +73,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces
         List<string> GetSigningAlgorithms(string algorithm, int limit = 0);
 
         List<SelectItemDto> GetProtocolTypes();
+
+        List<SelectItemDto> GetDPoPValidationModes();
     }
 }

@@ -17,7 +17,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.7")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -375,6 +375,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<TimeSpan>("DPoPClockSkew")
+                        .HasColumnType("interval");
+
+                    b.Property<int>("DPoPValidationMode")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
@@ -401,6 +407,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                     b.Property<bool>("IncludeJwtId")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("InitiateLoginUri")
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
                     b.Property<DateTime?>("LastAccessed")
                         .HasColumnType("timestamp without time zone");
 
@@ -423,6 +433,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
+                    b.Property<int?>("PushedAuthorizationLifetime")
+                        .HasColumnType("integer");
+
                     b.Property<int>("RefreshTokenExpiration")
                         .HasColumnType("integer");
 
@@ -435,7 +448,13 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                     b.Property<bool>("RequireConsent")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("RequireDPoP")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("RequirePkce")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("RequirePushedAuthorization")
                         .HasColumnType("boolean");
 
                     b.Property<bool>("RequireRequestObject")

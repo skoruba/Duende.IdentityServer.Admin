@@ -1,4 +1,4 @@
-﻿// Based on the IdentityServer4.EntityFramework - authors - Brock Allen & Dominick Baier.
+// Based on the IdentityServer4.EntityFramework - authors - Brock Allen & Dominick Baier.
 // https://github.com/IdentityServer/IdentityServer4.EntityFramework
 
 // Modified by Jan Škoruba

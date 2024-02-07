@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql.Migrations.DataProtection

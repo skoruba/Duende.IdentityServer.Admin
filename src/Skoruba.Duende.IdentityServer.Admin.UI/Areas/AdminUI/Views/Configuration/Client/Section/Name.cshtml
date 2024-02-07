@@ -24,8 +24,15 @@
                 @await Html.PartialAsync("Client/Section/Label", "ClientId")
             </label>
             <div class="col-sm-9">
-                <input type="text" required class="form-control" asp-for="ClientId">
-                <span asp-validation-for="ClientId" class="text-danger"></span>
+                <div class="input-group mb-3">
+                    <input id="clientid-input" type="text" required class="form-control" asp-for="ClientId">
+                    <span asp-validation-for="ClientId" class="text-danger"></span>
+                    <div class="input-group-append">
+                        <button type="button" id="generate-clientid-button" class="btn btn-primary">
+                            <span class="oi oi-random"></span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 

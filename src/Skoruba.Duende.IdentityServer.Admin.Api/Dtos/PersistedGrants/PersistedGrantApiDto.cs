@@ -7,6 +7,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.Dtos.PersistedGrants
 {
     public class PersistedGrantApiDto
     {
+        public long Id { get; set; }
         public string Key { get; set; }
         public string Type { get; set; }
         public string SubjectId { get; set; }

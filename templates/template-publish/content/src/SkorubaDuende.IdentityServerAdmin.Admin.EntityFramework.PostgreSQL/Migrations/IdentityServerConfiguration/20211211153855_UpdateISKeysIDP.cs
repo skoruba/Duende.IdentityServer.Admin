@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL.Migrations.IdentityServerConfiguration

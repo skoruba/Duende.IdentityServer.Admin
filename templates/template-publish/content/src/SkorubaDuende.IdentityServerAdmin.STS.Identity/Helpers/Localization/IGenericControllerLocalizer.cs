@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Microsoft.Extensions.Localization;
 
 namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Helpers.Localization

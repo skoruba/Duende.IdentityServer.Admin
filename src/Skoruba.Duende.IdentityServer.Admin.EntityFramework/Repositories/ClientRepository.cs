@@ -146,6 +146,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
             var hashTypes = EnumHelpers.ToSelectList<HashType>();
             return hashTypes;
         }
+        
+        public virtual List<SelectItem> GetDPoPValidationModes()
+        {
+            var modes = EnumHelpers.ToSelectList<DPoPTokenExpirationValidationMode>();
+            return modes;
+        }
 
         public virtual async Task<int> AddClientSecretAsync(int clientId, ClientSecret clientSecret)
         {

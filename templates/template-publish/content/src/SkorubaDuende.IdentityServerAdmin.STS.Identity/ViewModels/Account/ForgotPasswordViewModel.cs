@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration.Identity;
 
 namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.ViewModels.Account
