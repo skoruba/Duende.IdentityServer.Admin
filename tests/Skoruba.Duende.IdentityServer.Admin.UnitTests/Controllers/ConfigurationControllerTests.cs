@@ -90,6 +90,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Controllers
                 .Excluding(x => x.AccessTokenTypes)
                 .Excluding(x => x.ProtocolTypes)
                 .Excluding(x => x.RefreshTokenExpirations)
+                .Excluding(x => x.DPoPValidationModes)
                 .Excluding(x => x.RefreshTokenUsages));
         }
 
@@ -123,6 +124,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Controllers
                 .Excluding(x => x.AccessTokenTypes)
                 .Excluding(x => x.ProtocolTypes)
                 .Excluding(x => x.RefreshTokenExpirations)
+                .Excluding(o => o.DPoPValidationModes)
                 .Excluding(x => x.RefreshTokenUsages));
         }
 

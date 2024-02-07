@@ -4,251 +4,317 @@
 @inject IViewLocalizer Localizer
 
 <div class="card mt-3">
-    <h5 class="card-header">@Localizer["PanelTitle"]</h5>
-    <div class="card-body">
-        <!--Input - number -->
-        <div class="form-group row">
-            <label asp-for="IdentityTokenLifetime" class="col-sm-3 col-form-label">
-                @await Html.PartialAsync("Client/Section/Label", "IdentityTokenLifetime")
-            </label>
-            <div class="col-sm-9">
-                <input type="number" class="form-control" asp-for="IdentityTokenLifetime">
-            </div>
-        </div>
-
-        <!--Select with tags-->
-        <div class="form-group row">
-            <label asp-for="AllowedIdentityTokenSigningAlgorithms" class="col-sm-3 col-form-label">
-                @await Html.PartialAsync("Client/Section/Label", "SigningAlgorithms")
-            </label>
-            <div class="col-sm-9">
-                <picker id="AllowedIdentityTokenSigningAlgorithmsItems" multiple-select="true" min-search-text="2"
-                        selected-items="@Model.AllowedIdentityTokenSigningAlgorithms" url="@Url.Action("SearchSigningAlgorithms","Configuration")?algorithm"
-                        search-input-placeholder="@Localizer["PickerSearchItemPlaceholder"].Value"
-                        selected-items-title="@Localizer["PickerSelectedItemsTitle"].Value"
-                        search-result-title="@Localizer["PickerSearchResultTitle"].Value"
-                        suggested-items-title="@Localizer["PickerSuggestedItemsTitle"].Value"
-                        no-item-selected-title="@Localizer["PickerNoItemSelectedTitle"].Value"
-                        show-all-items-title="@Localizer["PickerShowAllItemsTitle"].Value"
-                        item-already-selected-title="@Localizer["PickerItemAlreadySelectedTitle"].Value">
-                </picker>
-            </div>
-        </div>
-
-        <!--Input - number -->
-        <div class="form-group row">
-            <label asp-for="AccessTokenLifetime" class="col-sm-3 col-form-label">
-                @await Html.PartialAsync("Client/Section/Label", "AccessTokenLifetime")
-            </label>
-            <div class="col-sm-9">
-                <input type="number" class="form-control" asp-for="AccessTokenLifetime">
-            </div>
-        </div>
-
-        <!--Checkbox-->
-        <div class="form-group row">
-            <label asp-for="AllowAccessTokensViaBrowser" class="col-sm-3 col-form-label">
-                @await Html.PartialAsync("Client/Section/Label", "AllowAccessTokensViaBrowser")
-            </label>
-            <div class="col-sm-9">
-                <toggle-button>
-                    <input asp-for="AllowAccessTokensViaBrowser" type="checkbox">
-                </toggle-button>
-            </div>
-        </div>
-
-        <!--Select-->
-        <div class="form-group row">
-            <label asp-for="AccessTokenTypes" class="col-sm-3 col-form-label">
-                @await Html.PartialAsync("Client/Section/Label", "AccessTokenTypes")
-            </label>
-            <div class="col-sm-9">
-                <select asp-for="AccessTokenType" asp-items="@(new SelectList(Model.AccessTokenTypes,"Id","Text"))" class="form-control single-select"></select>
-            </div>
-        </div>
-
-        <!--Input - number -->
-        <div class="form-group row">
-            <label asp-for="AuthorizationCodeLifetime" class="col-sm-3 col-form-label">
-                @await Html.PartialAsync("Client/Section/Label", "AuthorizationCodeLifetime")
-            </label>
-            <div class="col-sm-9">
-                <input type="number" class="form-control" asp-for="AuthorizationCodeLifetime">
-            </div>
-        </div>
-
-        <!--Checkbox-->
-        <div class="form-group row">
-            <label asp-for="RequireRequestObject" class="col-sm-3 col-form-label">
-                @await Html.PartialAsync("Client/Section/Label", "RequireRequestObject")
-            </label>
-            <div class="col-sm-9">
-                <toggle-button>
-                    <input asp-for="RequireRequestObject" type="checkbox">
-                </toggle-button>
-            </div>
-        </div>
-
-        <!--Checkbox-->
-        <div class="form-group row">
-            <label asp-for="RequirePkce" class="col-sm-3 col-form-label">
-                @await Html.PartialAsync("Client/Section/Label", "RequirePkce")
-            </label>
-            <div class="col-sm-9">
-                <toggle-button>
-                    <input asp-for="RequirePkce" type="checkbox">
-                </toggle-button>
-            </div>
-        </div>
-
-        <!--Checkbox-->
-        <div class="form-group row">
-            <label asp-for="AllowPlainTextPkce" class="col-sm-3 col-form-label">
-                @await Html.PartialAsync("Client/Section/Label", "AllowPlainTextPkce")
-            </label>
-            <div class="col-sm-9">
-                <toggle-button>
-                    <input asp-for="AllowPlainTextPkce" type="checkbox">
-                </toggle-button>
-            </div>
-        </div>
-
-        <!--Input - number-->
-        <div class="form-group row">
-            <label asp-for="AbsoluteRefreshTokenLifetime" class="col-sm-3 col-form-label">
-                @await Html.PartialAsync("Client/Section/Label", "AbsoluteRefreshTokenLifetime")
-            </label>
-            <div class="col-sm-9">
-                <input type="number" class="form-control" asp-for="AbsoluteRefreshTokenLifetime">
-            </div>
-        </div>
-
-        <!--Input - number -->
-        <div class="form-group row">
-            <label asp-for="SlidingRefreshTokenLifetime" class="col-sm-3 col-form-label">
-                @await Html.PartialAsync("Client/Section/Label", "SlidingRefreshTokenLifetime")
-            </label>
-            <div class="col-sm-9">
-                <input type="number" class="form-control" asp-for="SlidingRefreshTokenLifetime">
-            </div>
-        </div>
-
-        <!--Input - number -->
-        <div class="form-group row">
-            <label asp-for="CibaLifetime" class="col-sm-3 col-form-label">
-                @await Html.PartialAsync("Client/Section/Label", "CibaLifetime")
-            </label>
-            <div class="col-sm-9">
-                <input type="number" class="form-control" asp-for="CibaLifetime">
-            </div>
-        </div>
-
-        <!--Input - number -->
-        <div class="form-group row">
-            <label asp-for="PollingInterval" class="col-sm-3 col-form-label">
-                @await Html.PartialAsync("Client/Section/Label", "PollingInterval")
-            </label>
-            <div class="col-sm-9">
-                <input type="number" class="form-control" asp-for="PollingInterval">
-            </div>
-        </div>
-
-        <!--Select-->
-        <div class="form-group row">
-            <label asp-for="RefreshTokenUsage" class="col-sm-3 col-form-label">
-                @await Html.PartialAsync("Client/Section/Label", "RefreshTokenUsage")
-            </label>
-            <div class="col-sm-9">
-                <select asp-for="RefreshTokenUsage" asp-items="@(new SelectList(Model.RefreshTokenUsages,"Id","Text"))" class="form-control single-select"></select>
-            </div>
-        </div>
-
-        <!--Select-->
-        <div class="form-group row">
-            <label asp-for="RefreshTokenExpiration" class="col-sm-3 col-form-label">
-                @await Html.PartialAsync("Client/Section/Label", "RefreshTokenExpiration")
-            </label>
-            <div class="col-sm-9">
-                <select asp-for="RefreshTokenExpiration" asp-items="@(new SelectList(Model.RefreshTokenExpirations,"Id","Text"))" class="form-control single-select"></select>
-            </div>
-        </div>
-
-        <!--Checkbox-->
-        <div class="form-group row">
-            <label asp-for="UpdateAccessTokenClaimsOnRefresh" class="col-sm-3 col-form-label">
-                @await Html.PartialAsync("Client/Section/Label", "UpdateAccessTokenClaimsOnRefresh")
-            </label>
-            <div class="col-sm-9">
-                <toggle-button>
-                    <input asp-for="UpdateAccessTokenClaimsOnRefresh" type="checkbox">
-                </toggle-button>
-            </div>
-        </div>
-
-        <!--Checkbox-->
-        <div class="form-group row">
-            <label asp-for="IncludeJwtId" class="col-sm-3 col-form-label">
-                @await Html.PartialAsync("Client/Section/Label", "IncludeJwtId")
-            </label>
-            <div class="col-sm-9">
-                <toggle-button>
-                    <input asp-for="IncludeJwtId" type="checkbox">
-                </toggle-button>
-            </div>
-        </div>
-
-        <!--Checkbox-->
-        <div class="form-group row">
-            <label asp-for="AlwaysSendClientClaims" class="col-sm-3 col-form-label">
-                @await Html.PartialAsync("Client/Section/Label", "AlwaysSendClientClaims")
-            </label>
-            <div class="col-sm-9">
-                <toggle-button>
-                    <input asp-for="AlwaysSendClientClaims" type="checkbox">
-                </toggle-button>
-            </div>
-        </div>
-
-        <!--Checkbox-->
-        <div class="form-group row">
-            <label asp-for="AlwaysIncludeUserClaimsInIdToken" class="col-sm-3 col-form-label">
-                @await Html.PartialAsync("Client/Section/Label", "AlwaysIncludeUserClaimsInIdToken")
-            </label>
-            <div class="col-sm-9">
-                <toggle-button>
-                    <input asp-for="AlwaysIncludeUserClaimsInIdToken" type="checkbox">
-                </toggle-button>
-            </div>
-        </div>
-
-        <!--Input - text -->
-        <div class="form-group row">
-            <label asp-for="ClientClaimsPrefix" class="col-sm-3 col-form-label">
-                @await Html.PartialAsync("Client/Section/Label", "ClientClaimsPrefix")
-            </label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" asp-for="ClientClaimsPrefix">
-            </div>
-        </div>
-
-        <!--Input - text -->
-        <div class="form-group row">
-            <label asp-for="PairWiseSubjectSalt" class="col-sm-3 col-form-label">
-                @await Html.PartialAsync("Client/Section/Label", "PairWiseSubjectSalt")
-            </label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" asp-for="PairWiseSubjectSalt">
-            </div>
-        </div>
-
-        <!--Button-->
-        <div class="form-group row">
-            <label class="col-sm-3 col-form-label">
-                @await Html.PartialAsync("Client/Section/Label", "Claims")
-            </label>
-            <div class="col-sm-9">
-                <a asp-area="@CommonConsts.AdminUIArea" asp-action="ClientClaims" asp-route-id="@Model.Id" target="_blank" class="btn btn-primary">@Localizer["ButtonManageClientClaims"]</a>
-            </div>
-        </div>
+<h5 class="card-header">@Localizer["PanelTitle"]</h5>
+<div class="card-body">
+<!--Input - number -->
+<div class="form-group row">
+    <label asp-for="IdentityTokenLifetime" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "IdentityTokenLifetime")
+    </label>
+    <div class="col-sm-9">
+        <input type="number" class="form-control" asp-for="IdentityTokenLifetime">
     </div>
+</div>
+
+<!--Select with tags-->
+<div class="form-group row">
+    <label asp-for="AllowedIdentityTokenSigningAlgorithms" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "SigningAlgorithms")
+    </label>
+    <div class="col-sm-9">
+        <picker id="AllowedIdentityTokenSigningAlgorithmsItems" multiple-select="true" min-search-text="2"
+                selected-items="@Model.AllowedIdentityTokenSigningAlgorithms" url="@Url.Action("SearchSigningAlgorithms", "Configuration")?algorithm"
+                search-input-placeholder="@Localizer["PickerSearchItemPlaceholder"].Value"
+                selected-items-title="@Localizer["PickerSelectedItemsTitle"].Value"
+                search-result-title="@Localizer["PickerSearchResultTitle"].Value"
+                suggested-items-title="@Localizer["PickerSuggestedItemsTitle"].Value"
+                no-item-selected-title="@Localizer["PickerNoItemSelectedTitle"].Value"
+                show-all-items-title="@Localizer["PickerShowAllItemsTitle"].Value"
+                item-already-selected-title="@Localizer["PickerItemAlreadySelectedTitle"].Value">
+        </picker>
+    </div>
+</div>
+
+<!--Input - number -->
+<div class="form-group row">
+    <label asp-for="AccessTokenLifetime" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "AccessTokenLifetime")
+    </label>
+    <div class="col-sm-9">
+        <input type="number" class="form-control" asp-for="AccessTokenLifetime">
+    </div>
+</div>
+
+<!--Checkbox-->
+<div class="form-group row">
+    <label asp-for="AllowAccessTokensViaBrowser" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "AllowAccessTokensViaBrowser")
+    </label>
+    <div class="col-sm-9">
+        <toggle-button>
+            <input asp-for="AllowAccessTokensViaBrowser" type="checkbox">
+        </toggle-button>
+    </div>
+</div>
+
+<!--Select-->
+<div class="form-group row">
+    <label asp-for="AccessTokenTypes" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "AccessTokenTypes")
+    </label>
+    <div class="col-sm-9">
+        <select asp-for="AccessTokenType" asp-items="@(new SelectList(Model.AccessTokenTypes, "Id", "Text"))" class="form-control single-select"></select>
+    </div>
+</div>
+
+<!--Input - number -->
+<div class="form-group row">
+    <label asp-for="AuthorizationCodeLifetime" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "AuthorizationCodeLifetime")
+    </label>
+    <div class="col-sm-9">
+        <input type="number" class="form-control" asp-for="AuthorizationCodeLifetime">
+    </div>
+</div>
+
+<!--Checkbox-->
+<div class="form-group row">
+    <label asp-for="RequireRequestObject" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "RequireRequestObject")
+    </label>
+    <div class="col-sm-9">
+        <toggle-button>
+            <input asp-for="RequireRequestObject" type="checkbox">
+        </toggle-button>
+    </div>
+</div>
+
+<!--Checkbox-->
+<div class="form-group row">
+    <label asp-for="RequirePkce" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "RequirePkce")
+    </label>
+    <div class="col-sm-9">
+        <toggle-button>
+            <input asp-for="RequirePkce" type="checkbox">
+        </toggle-button>
+    </div>
+</div>
+
+<!--Checkbox-->
+<div class="form-group row">
+    <label asp-for="AllowPlainTextPkce" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "AllowPlainTextPkce")
+    </label>
+    <div class="col-sm-9">
+        <toggle-button>
+            <input asp-for="AllowPlainTextPkce" type="checkbox">
+        </toggle-button>
+    </div>
+</div>
+
+<!--Input - number-->
+<div class="form-group row">
+    <label asp-for="AbsoluteRefreshTokenLifetime" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "AbsoluteRefreshTokenLifetime")
+    </label>
+    <div class="col-sm-9">
+        <input type="number" class="form-control" asp-for="AbsoluteRefreshTokenLifetime">
+    </div>
+</div>
+
+<!--Input - number -->
+<div class="form-group row">
+    <label asp-for="SlidingRefreshTokenLifetime" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "SlidingRefreshTokenLifetime")
+    </label>
+    <div class="col-sm-9">
+        <input type="number" class="form-control" asp-for="SlidingRefreshTokenLifetime">
+    </div>
+</div>
+
+<!--Input - number -->
+<div class="form-group row">
+    <label asp-for="CibaLifetime" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "CibaLifetime")
+    </label>
+    <div class="col-sm-9">
+        <input type="number" class="form-control" asp-for="CibaLifetime">
+    </div>
+</div>
+
+<!--Input - number -->
+<div class="form-group row">
+    <label asp-for="PollingInterval" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "PollingInterval")
+    </label>
+    <div class="col-sm-9">
+        <input type="number" class="form-control" asp-for="PollingInterval">
+    </div>
+</div>
+
+<!--Select-->
+<div class="form-group row">
+    <label asp-for="RefreshTokenUsage" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "RefreshTokenUsage")
+    </label>
+    <div class="col-sm-9">
+        <select asp-for="RefreshTokenUsage" asp-items="@(new SelectList(Model.RefreshTokenUsages, "Id", "Text"))" class="form-control single-select"></select>
+    </div>
+</div>
+
+<!--Select-->
+<div class="form-group row">
+    <label asp-for="RefreshTokenExpiration" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "RefreshTokenExpiration")
+    </label>
+    <div class="col-sm-9">
+        <select asp-for="RefreshTokenExpiration" asp-items="@(new SelectList(Model.RefreshTokenExpirations, "Id", "Text"))" class="form-control single-select"></select>
+    </div>
+</div>
+
+<!--Checkbox-->
+<div class="form-group row">
+    <label asp-for="UpdateAccessTokenClaimsOnRefresh" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "UpdateAccessTokenClaimsOnRefresh")
+    </label>
+    <div class="col-sm-9">
+        <toggle-button>
+            <input asp-for="UpdateAccessTokenClaimsOnRefresh" type="checkbox">
+        </toggle-button>
+    </div>
+</div>
+
+<!--Checkbox-->
+<div class="form-group row">
+    <label asp-for="IncludeJwtId" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "IncludeJwtId")
+    </label>
+    <div class="col-sm-9">
+        <toggle-button>
+            <input asp-for="IncludeJwtId" type="checkbox">
+        </toggle-button>
+    </div>
+</div>
+
+<!--Checkbox-->
+<div class="form-group row">
+    <label asp-for="AlwaysSendClientClaims" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "AlwaysSendClientClaims")
+    </label>
+    <div class="col-sm-9">
+        <toggle-button>
+            <input asp-for="AlwaysSendClientClaims" type="checkbox">
+        </toggle-button>
+    </div>
+</div>
+
+<!--Checkbox-->
+<div class="form-group row">
+    <label asp-for="AlwaysIncludeUserClaimsInIdToken" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "AlwaysIncludeUserClaimsInIdToken")
+    </label>
+    <div class="col-sm-9">
+        <toggle-button>
+            <input asp-for="AlwaysIncludeUserClaimsInIdToken" type="checkbox">
+        </toggle-button>
+    </div>
+</div>
+
+<!--Input - text -->
+<div class="form-group row">
+    <label asp-for="ClientClaimsPrefix" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "ClientClaimsPrefix")
+    </label>
+    <div class="col-sm-9">
+        <input type="text" class="form-control" asp-for="ClientClaimsPrefix">
+    </div>
+</div>
+
+<!--Input - text -->
+<div class="form-group row">
+    <label asp-for="PairWiseSubjectSalt" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "PairWiseSubjectSalt")
+    </label>
+    <div class="col-sm-9">
+        <input type="text" class="form-control" asp-for="PairWiseSubjectSalt">
+    </div>
+</div>
+
+<!--Checkbox-->
+<div class="form-group row">
+    <label asp-for="RequireDPoP" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "RequireDPoP")
+    </label>
+    <div class="col-sm-9">
+        <toggle-button>
+            <input asp-for="RequireDPoP" type="checkbox">
+        </toggle-button>
+    </div>
+</div>
+
+<!--Input - time -->
+<div class="form-group row">
+    <label asp-for="DPoPClockSkew" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "DPoPClockSkew")
+    </label>
+    <div class="col-sm-9">
+        <input type="time" class="form-control" step="1" asp-for="DPoPClockSkew">
+    </div>
+</div>
+
+<!--Select-->
+<div class="form-group row">
+    <label asp-for="DPoPValidationMode" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "DPoPValidationMode")
+    </label>
+    <div class="col-sm-9">
+        <select asp-for="DPoPValidationMode" asp-items="@(new SelectList(Model.DPoPValidationModes, "Id", "Text"))" class="form-control single-select"></select>
+    </div>
+</div>
+
+
+<!--Checkbox-->
+<div class="form-group row">
+    <label asp-for="RequirePushedAuthorization" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "RequirePushedAuthorization")
+    </label>
+    <div class="col-sm-9">
+        <toggle-button>
+            <input asp-for="RequirePushedAuthorization" type="checkbox">
+        </toggle-button>
+    </div>
+</div>
+
+<!--Input - number -->
+<div class="form-group row">
+    <label asp-for="PushedAuthorizationLifetime" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "PushedAuthorizationLifetime")
+    </label>
+    <div class="col-sm-9">
+        <input type="number" class="form-control" asp-for="PushedAuthorizationLifetime">
+    </div>
+</div>
+
+<!--Input - text -->
+<div class="form-group row">
+    <label asp-for="InitiateLoginUri" class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "InitiateLoginUri")
+    </label>
+    <div class="col-sm-9">
+        <input type="text" class="form-control" asp-for="InitiateLoginUri">
+    </div>
+</div>
+
+
+<!--Button-->
+<div class="form-group row">
+    <label class="col-sm-3 col-form-label">
+        @await Html.PartialAsync("Client/Section/Label", "Claims")
+    </label>
+    <div class="col-sm-9">
+        <a asp-area="@CommonConsts.AdminUIArea" asp-action="ClientClaims" asp-route-id="@Model.Id" target="_blank" class="btn btn-primary">@Localizer["ButtonManageClientClaims"]</a>
+    </div>
+</div>
+</div>
 </div>

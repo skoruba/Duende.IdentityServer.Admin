@@ -3,7 +3,6 @@ param([string] $packagesVersions, [string]$gitBranchName = 'dev')
 # This script contains following steps:
 # - Download latest version of Skoruba.Duende.IdentityServer.Admin from git repository
 # - Use folders src and tests for project template
-# - Create db migrations for seed data
 
 $gitProject = "https://github.com/skoruba/Duende.IdentityServer.Admin"
 $gitProjectFolder = "Skoruba.Duende.IdentityServer.Admin"
@@ -12,17 +11,19 @@ $templateRoot = "template-build/content"
 $templateTests = "template-build/content/tests"
 $templateAdminProject = "template-build/content/src/Skoruba.Duende.IdentityServer.Admin"
 
+Get-Location
+
 function CleanBinObjFolders { 
 
     # Clean up after migrations
-    dotnet.exe clean $templateAdminProject
+    dotnet clean $templateAdminProject
 
     # Clean up bin, obj
     Get-ChildItem .\ -include bin, obj -Recurse | ForEach-Object ($_) { Remove-Item $_.fullname -Force -Recurse }    
 }
 
 # Clone the latest version from master branch
-git.exe clone $gitProject $gitProjectFolder -b $gitBranchName
+git clone $gitProject $gitProjectFolder -b $gitBranchName
 
 # Clean up src, tests folders
 if ((Test-Path -Path $templateSrc)) { Remove-Item ./$templateSrc -recurse -force }
@@ -56,44 +57,44 @@ CleanBinObjFolders
 # Remove references
 
 # API
-dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.csproj
-dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.csproj
-dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj reference ..\Skoruba.Duende.IdentityServer.Shared.Configuration\Skoruba.Duende.IdentityServer.Shared.Configuration.csproj
+dotnet remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.csproj
+dotnet remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.csproj
+dotnet remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj reference ..\Skoruba.Duende.IdentityServer.Shared.Configuration\Skoruba.Duende.IdentityServer.Shared.Configuration.csproj
 
 # Admin
-dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.csproj
-dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.UI\Skoruba.Duende.IdentityServer.Admin.UI.csproj
+dotnet remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.csproj
+dotnet remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.UI\Skoruba.Duende.IdentityServer.Admin.UI.csproj
 
 # STS
-dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.STS.Identity/Skoruba.Duende.IdentityServer.STS.Identity.csproj reference ..\Skoruba.Duende.IdentityServer.Shared.Configuration\Skoruba.Duende.IdentityServer.Shared.Configuration.csproj
-dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.STS.Identity/Skoruba.Duende.IdentityServer.STS.Identity.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.csproj
+dotnet remove ./$templateSrc/Skoruba.Duende.IdentityServer.STS.Identity/Skoruba.Duende.IdentityServer.STS.Identity.csproj reference ..\Skoruba.Duende.IdentityServer.Shared.Configuration\Skoruba.Duende.IdentityServer.Shared.Configuration.csproj
+dotnet remove ./$templateSrc/Skoruba.Duende.IdentityServer.STS.Identity/Skoruba.Duende.IdentityServer.STS.Identity.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.csproj
 
 # EF Shared
-dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.csproj
+dotnet remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.csproj
 
 # Shared
-dotnet.exe remove ./$templateSrc/Skoruba.Duende.IdentityServer.Shared/Skoruba.Duende.IdentityServer.Shared.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.csproj
+dotnet remove ./$templateSrc/Skoruba.Duende.IdentityServer.Shared/Skoruba.Duende.IdentityServer.Shared.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.csproj
 
 # Add nuget packages
 # Admin
-dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj package Skoruba.Duende.IdentityServer.Admin.BusinessLogic -v $packagesVersions
-dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj package Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity -v $packagesVersions
-dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj package Skoruba.Duende.IdentityServer.Admin.UI -v $packagesVersions
+dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj package Skoruba.Duende.IdentityServer.Admin.BusinessLogic -v $packagesVersions
+dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj package Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity -v $packagesVersions
+dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj package Skoruba.Duende.IdentityServer.Admin.UI -v $packagesVersions
 
 # STS
-dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.STS.Identity/Skoruba.Duende.IdentityServer.STS.Identity.csproj package Skoruba.Duende.IdentityServer.Shared.Configuration -v $packagesVersions
-dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.STS.Identity/Skoruba.Duende.IdentityServer.STS.Identity.csproj package Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration -v $packagesVersions
+dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.STS.Identity/Skoruba.Duende.IdentityServer.STS.Identity.csproj package Skoruba.Duende.IdentityServer.Shared.Configuration -v $packagesVersions
+dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.STS.Identity/Skoruba.Duende.IdentityServer.STS.Identity.csproj package Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration -v $packagesVersions
 
 # API
-dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj package Skoruba.Duende.IdentityServer.Admin.BusinessLogic -v $packagesVersions
-dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj package Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity -v $packagesVersions
-dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj package Skoruba.Duende.IdentityServer.Shared.Configuration -v $packagesVersions
+dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj package Skoruba.Duende.IdentityServer.Admin.BusinessLogic -v $packagesVersions
+dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj package Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity -v $packagesVersions
+dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj package Skoruba.Duende.IdentityServer.Shared.Configuration -v $packagesVersions
 
 # EF Shared
-dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj package Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration -v $packagesVersions
+dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj package Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration -v $packagesVersions
 
 # Shared
-dotnet.exe add ./$templateSrc/Skoruba.Duende.IdentityServer.Shared/Skoruba.Duende.IdentityServer.Shared.csproj package Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity -v $packagesVersions
+dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.Shared/Skoruba.Duende.IdentityServer.Shared.csproj package Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity -v $packagesVersions
 
 # Clean solution and folders bin, obj
 CleanBinObjFolders
@@ -111,16 +112,17 @@ Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.UI -Force -recurs
 Remove-Item ./$templateTests -Force -recurse
 
 ######################################
+
 # Step 2
 $templateNuspecPath = "template-build/Skoruba.Duende.IdentityServer.Admin.Templates.nuspec"
-nuget pack $templateNuspecPath -NoDefaultExcludes
+nuget pack ./$templateNuspecPath -NoDefaultExcludes
 
 ######################################
 # Step 3
 $templateLocalName = "Skoruba.Duende.IdentityServer.Admin.Templates.$packagesVersions.nupkg"
 
-dotnet.exe new --uninstall Skoruba.Duende.IdentityServer.Admin.Templates
-dotnet.exe new -i $templateLocalName
+dotnet new --uninstall Skoruba.Duende.IdentityServer.Admin.Templates
+dotnet new -i ./$templateLocalName
 
 ######################################
 # Step 4
@@ -133,7 +135,7 @@ dotnet new skoruba.duende.isadmin --name SkorubaDuende.IdentityServerAdmin --tit
 
 CleanBinObjFolders
 
-$templateFiles = Get-ChildItem .\SkorubaDuende.IdentityServerAdmin\src -include *.cs, *.csproj, *.cshtml -Recurse
+$templateFiles = Get-ChildItem ./SkorubaDuende.IdentityServerAdmin/src -include *.cs, *.csproj, *.cshtml -Recurse
 foreach ($file in $templateFiles) {
     Write-Host $file.PSPath
 
