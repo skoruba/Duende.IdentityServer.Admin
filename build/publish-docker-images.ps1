@@ -1,6 +1,6 @@
 param([string] $version)
 
-Set-Location "../"
+Set-Location "..\"
 
 # build docker images according to docker-compose
 docker-compose -f docker-compose.yml build
