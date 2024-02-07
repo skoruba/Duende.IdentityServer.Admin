@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>    
-    <Version>2.0.0-rc1</Version>
+    <Version>2.0.0</Version>
     <Authors>Jan Škoruba</Authors>
     <PackageTags>Duende IdentityServer Admin OpenIDConnect OAuth2 Identity</PackageTags>
     <PackageLicenseUrl>https://github.com/skoruba/Duende.IdentityServer.Admin/blob/main/LICENSE</PackageLicenseUrl>
