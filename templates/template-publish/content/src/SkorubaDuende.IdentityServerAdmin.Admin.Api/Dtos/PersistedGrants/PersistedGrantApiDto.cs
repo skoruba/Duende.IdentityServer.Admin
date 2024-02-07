@@ -1,4 +1,4 @@
-﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
+// Copyright (c) Jan Škoruba. All Rights Reserved.
 // Licensed under the Apache License, Version 2.0.
 
 using System;
@@ -7,6 +7,7 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api.Dtos.PersistedGrants
 {
     public class PersistedGrantApiDto
     {
+        public long Id { get; set; }
         public string Key { get; set; }
         public string Type { get; set; }
         public string SubjectId { get; set; }

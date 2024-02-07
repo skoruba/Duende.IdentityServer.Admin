@@ -1,4 +1,4 @@
-﻿namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Helpers;
+namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Helpers;
 
 public class IdentityProvidersHelpers
 {

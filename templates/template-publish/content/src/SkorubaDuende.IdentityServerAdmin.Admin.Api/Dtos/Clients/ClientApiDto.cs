@@ -1,4 +1,4 @@
-﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
+// Copyright (c) Jan Škoruba. All Rights Reserved.
 // Licensed under the Apache License, Version 2.0.
 
 using System;
@@ -105,7 +105,14 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api.Dtos.Clients
 
         public bool CoordinateLifetimeWithUserSession { get; set; }
 
+        public bool RequireDPoP { get; set; }
+        public int DPoPValidationMode { get; set; }
+        public TimeSpan DPoPClockSkew { get; set; } = TimeSpan.FromMinutes(5);
 
+        public int? PushedAuthorizationLifetime { get; set; }
+        public bool RequirePushedAuthorization { get; set; }
+        public string InitiateLoginUri { get; set; }
+        
         public List<string> AllowedIdentityTokenSigningAlgorithms { get; set; }
 
         public bool NonEditable { get; set; }
