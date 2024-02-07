@@ -129,12 +129,12 @@ We also need certificates in order to serve on HTTPS. We'll make our own self-si
 
 Use [mkcert](https://github.com/FiloSottile/mkcert) to generate local self-signed certificates.
 
-On windows `mkcert -install` must be executed under elevated Administrator privileges. Then copy over the CA Root certificate over to the project as we want to mount this in later into the containers without using an environment variable.
+On windows `mkcert -install` must be executed under elevated Administrator privileges. Then copy over the CA Root certificate over to the project as we want to mount this in later into the containers without using an environment variable. Use PowerShell to run the commands.
 
 ```bash
 cd shared/nginx/certs
 mkcert --install
-copy $env:LOCALAPPDATA\mkcert\rootCA.pem ./cacerts.pem
+copy $env:LOCALAPPDATA\mkcert\rootCA-key.pem ./cacerts.pem
 copy $env:LOCALAPPDATA\mkcert\rootCA.pem ./cacerts.crt
 ```
 
