@@ -10,6 +10,7 @@
 		@if (Model.Id != 0)
 		{
 			<a asp-area="@CommonConsts.AdminUIArea" asp-action="ClientClone" asp-route-id="@Model.Id" target="_blank" class="btn btn-outline-primary">@Localizer["ButtonClone"]</a>
+			<a asp-area="@CommonConsts.AdminUIArea" asp-action="ClientExport" asp-route-id="@Model.Id" class="btn btn-outline-secondary">@Localizer["ButtonExport"]</a>
 			<a asp-area="@CommonConsts.AdminUIArea" asp-action="ClientDelete" asp-route-id="@Model.Id" class="btn btn-danger">@Localizer["ButtonDelete"]</a>
 		}
 	</div>

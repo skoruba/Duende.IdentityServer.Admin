@@ -126,4 +126,7 @@
   <data name="ButtonSave" xml:space="preserve">
     <value>Tallenna Sovellus</value>
   </data>
+  <data name="ButtonExport" xml:space="preserve">
+    <value>Vie Sovellus</value>
+  </data>
 </root>

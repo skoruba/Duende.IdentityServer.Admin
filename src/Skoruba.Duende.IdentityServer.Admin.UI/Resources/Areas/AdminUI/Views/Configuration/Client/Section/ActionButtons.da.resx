@@ -126,4 +126,7 @@
   <data name="ButtonSave" xml:space="preserve">
     <value>Gem Client</value>
   </data>
+  <data name="ButtonExport" xml:space="preserve">
+    <value>Eksporter Client</value>
+   </data>
 </root>
