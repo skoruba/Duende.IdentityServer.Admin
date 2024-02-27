@@ -10,7 +10,7 @@ resources:
 
 variables:
   #tag: '$(Build.BuildId)'
-  tag: 'test'
+  tag: 'latest'
 
 stages:
 - stage: Build
@@ -43,7 +43,7 @@ stages:
         containerRegistry: 'Dockerhub'
         repository: 'artsdatabanken/identity-duende'
         command: 'push'
-        tags: 'test'
+        tags: $(tag)
     
     - task: Docker@2
       displayName: Build admin panel
@@ -53,10 +53,10 @@ stages:
         command: 'build'
         Dockerfile: '**/src/Skoruba.Duende.IdentityServer.Admin/Dockerfile'
         buildContext: '$(Build.SourcesDirectory)'
-        tags: 'admin-test'
+        tags: 'admin'
     - task: Docker@2
       inputs:
         containerRegistry: 'Dockerhub'
         repository: 'artsdatabanken/identity-duende'
         command: 'push'
-        tags: 'admin-test'
+        tags: 'admin'
