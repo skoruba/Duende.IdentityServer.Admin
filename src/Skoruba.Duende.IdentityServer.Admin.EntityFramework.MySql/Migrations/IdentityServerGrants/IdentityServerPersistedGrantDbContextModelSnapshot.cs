@@ -16,7 +16,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.Migrations.I
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.7")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.DeviceFlowCodes", b =>
@@ -167,11 +167,39 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.Migrations.I
                     b.ToTable("PersistedGrants", (string)null);
                 });
 
+            modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.PushedAuthorizationRequest", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("ExpiresAtUtc")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Parameters")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ReferenceValueHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExpiresAtUtc");
+
+                    b.HasIndex("ReferenceValueHash")
+                        .IsUnique();
+
+                    b.ToTable("PushedAuthorizationRequests", (string)null);
+                });
+
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.ServerSideSession", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime(6)");

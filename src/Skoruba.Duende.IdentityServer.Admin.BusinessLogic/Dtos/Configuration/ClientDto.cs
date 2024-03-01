@@ -119,7 +119,16 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration
         public bool NonEditable { get; set; }
 
         public bool RequireRequestObject { get; set; }
+        
+        public bool RequireDPoP { get; set; }
+        public int DPoPValidationMode { get; set; }
+        public List<SelectItemDto> DPoPValidationModes { get; set; }
+        public TimeSpan DPoPClockSkew { get; set; } = TimeSpan.FromMinutes(5);
 
+        public int? PushedAuthorizationLifetime { get; set; }
+        public bool RequirePushedAuthorization { get; set; }
+        public string InitiateLoginUri { get; set; }
+        
         public List<string> AllowedIdentityTokenSigningAlgorithms { get; set; }
 
         public string AllowedIdentityTokenSigningAlgorithmsItems { get; set; }

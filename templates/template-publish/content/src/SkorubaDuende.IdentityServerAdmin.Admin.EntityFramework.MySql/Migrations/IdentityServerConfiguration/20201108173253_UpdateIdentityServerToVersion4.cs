@@ -1,4 +1,4 @@
-﻿// Original SQL scripts for database migration come from: https://github.com/RockSolidKnowledge/IdentityServer4.Migration.Scripts/blob/master/MySql/ConfigurationDbContext.sql
+// Original SQL scripts for database migration come from: https://github.com/RockSolidKnowledge/IdentityServer4.Migration.Scripts/blob/master/MySql/ConfigurationDbContext.sql
 // Modified by Jan Škoruba
 
 using System;

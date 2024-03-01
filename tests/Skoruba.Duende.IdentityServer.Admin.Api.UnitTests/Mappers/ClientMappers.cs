@@ -41,7 +41,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mappers
                     .Excluding(o => o.IdentityProviderRestrictionsItems)
                     .Excluding(o => o.PostLogoutRedirectUrisItems)
                     .Excluding(o => o.RedirectUrisItems)
-
+                    .Excluding(o => o.DPoPValidationModes)
                     .Excluding(o => o.ClientSecrets)
                     .Excluding(o => o.RefreshTokenExpirations)
                     .Excluding(o => o.RefreshTokenUsages)
