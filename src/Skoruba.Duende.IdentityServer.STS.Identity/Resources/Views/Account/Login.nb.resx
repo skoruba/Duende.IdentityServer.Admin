@@ -1,0 +1,53 @@
+﻿<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Cancel" xml:space="preserve">
+        <value>Tilbake</value>
+    </data>
+    <data name="Email" xml:space="preserve">
+        <value>Email</value>
+    </data>
+    <data name="ExternalLogin" xml:space="preserve">
+        <value>Ekstern innlogging</value>
+    </data>
+    <data name="Forgot" xml:space="preserve">
+        <value>Glemt passord</value>
+    </data>
+    <data name="InvalidRequest" xml:space="preserve">
+        <value>Ugyldig innlogging</value>
+    </data>
+    <data name="LocalLogin" xml:space="preserve">
+        <value>Lokal innlogging</value>
+    </data>
+    <data name="Login" xml:space="preserve">
+        <value>Log inn</value>
+    </data>
+    <data name="Password" xml:space="preserve">
+        <value>Passord</value>
+    </data>
+    <data name="Register" xml:space="preserve">
+        <value>Registrer</value>
+    </data>
+    <data name="Remember" xml:space="preserve">
+        <value>Husk inlogging</value>
+    </data>
+    <data name="Title" xml:space="preserve">
+        <value>Log inn</value>
+    </data>
+    <data name="Username" xml:space="preserve">
+        <value>Brukernavn</value>
+    </data>
+    <data name="NoSchema" xml:space="preserve">
+        <value>Det er ingen inloggings sjemaer konfigurert for denne klienten.</value>
+    </data>
+</root>
