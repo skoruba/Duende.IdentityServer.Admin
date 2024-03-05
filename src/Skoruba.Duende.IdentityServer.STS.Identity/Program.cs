@@ -52,7 +52,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity
 
             configurationBuilder.AddEnvironmentVariables();
             var configuration = configurationBuilder.Build();
-            
+
             configuration.AddAzureKeyVaultConfiguration(configurationBuilder);
 
             configurationBuilder.AddCommandLine(args);
@@ -62,26 +62,26 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                 .ConfigureAppConfiguration((hostContext, configApp) =>
-                 {
-                     var configurationRoot = configApp.Build();
-
-                     configApp.AddJsonFile("serilog.json", optional: true, reloadOnChange: true);
-
-                     var env = hostContext.HostingEnvironment;
-
-                     configApp.AddJsonFile($"serilog.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
-
-                     if (env.IsDevelopment())
-                     {
-                         configApp.AddUserSecrets<Startup>(true);
-                     }
-
-                     configApp.AddEnvironmentVariables();
-                     configurationRoot.AddAzureKeyVaultConfiguration(configApp);
-
-                     configApp.AddCommandLine(args);
-                 })
+                 // .ConfigureAppConfiguration((hostContext, configApp) =>
+                 // {
+                 //     // var configurationRoot = configApp.Build();
+                 //     //
+                 //     // configApp.AddJsonFile("serilog.json", optional: true, reloadOnChange: true);
+                 //     //
+                 //     // var env = hostContext.HostingEnvironment;
+                 //     //
+                 //     // configApp.AddJsonFile($"serilog.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                 //     //
+                 //     // if (env.IsDevelopment())
+                 //     // {
+                 //     //     configApp.AddUserSecrets<Startup>(true);
+                 //     // }
+                 //     //
+                 //     // configApp.AddEnvironmentVariables();
+                 //     // configurationRoot.AddAzureKeyVaultConfiguration(configApp);
+                 //     //
+                 //     // configApp.AddCommandLine(args);
+                 // })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.ConfigureKestrel(options => options.AddServerHeader = false);
