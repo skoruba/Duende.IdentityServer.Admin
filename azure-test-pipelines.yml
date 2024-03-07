@@ -86,6 +86,6 @@ stages:
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: "$(Build.ArtifactStagingDirectory)"
-        ArtifactName: "rodlisteNaturtyper"
+        ArtifactName: "identityserver"
         publishLocation: "Container"
 
