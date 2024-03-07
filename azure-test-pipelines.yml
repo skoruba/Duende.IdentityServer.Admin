@@ -26,7 +26,7 @@ stages:
 
     variables:
       buildConfiguration: "Release"
-      solutionPath: "**/*.csproj"
+      solutionPath: "**/*.sln"
 
     steps:
 
