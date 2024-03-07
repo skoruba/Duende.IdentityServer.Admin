@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+EXPOSE 8080
+EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
@@ -27,4 +27,6 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENV ASPNETCORE_FORWARDEDHEADERS_ENABLED=true
+ENV ASPNETCORE_HTTP_PORTS=8080
+ENV ASPNETCORE_HTTPS_PORTS=8081
 ENTRYPOINT ["dotnet", "Skoruba.Duende.IdentityServer.STS.Identity.dll"]
