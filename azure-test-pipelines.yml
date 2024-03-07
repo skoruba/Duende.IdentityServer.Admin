@@ -63,4 +63,23 @@ stages:
         repository: 'artsdatabanken/identity-duende'
         command: 'push'
         tags: 'admin-test'
+    - task: DotNetCoreCLI@2
+      displayName: "Build"
+      inputs:
+        command: "build"
+        projects: $(solutionPath)
+        configuration: $(buildConfiguration)
+    - task: DotNetCoreCLI@2
+      displayName: "Publish and zip"
+      inputs:
+        command: publish
+        publishWebProjects: False
+        projects: $(solutionPath)
+        arguments: "--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)"
+        zipAfterPublish: True
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+        ArtifactName: "rodlisteNaturtyper"
+        publishLocation: "Container"
 
