@@ -98,6 +98,7 @@
         <None Include="Areas\AdminUI\Views\Shared\_Layout.cshtml" />
         <None Include="Areas\AdminUI\Views\_ViewImports.cshtml" />
         <None Include="Areas\AdminUI\Views\_ViewStart.cshtml" />
+        <None Include="wwwroot\dist\js\CryptoUtils.js" />
     </ItemGroup>
 
     <ItemGroup>

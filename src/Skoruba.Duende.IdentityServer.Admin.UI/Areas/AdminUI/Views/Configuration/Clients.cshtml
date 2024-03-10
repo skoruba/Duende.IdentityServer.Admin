@@ -29,8 +29,8 @@
 				<thead>
 					<tr>
 						<th></th>
-						<th>@Localizer["TableClientId"]</th>
 						<th>@Localizer["TableClientName"]</th>
+						<th>@Localizer["TableClientId"]</th>
 						<th></th>
 					</tr>
 				</thead>
@@ -39,8 +39,8 @@
 					{
 						<tr>
 							<th><a asp-area="@CommonConsts.AdminUIArea" class="btn btn-primary" asp-action="Client" asp-route-id="@client.Id">@Localizer["TableButtonEdit"]</a></th>
-							<td>@client.ClientId</td>
 							<td>@client.ClientName</td>
+							<td><code>@client.ClientId</code></td>
 							<td>
 								<a asp-area="@CommonConsts.AdminUIArea" class="btn btn-danger" asp-action="ClientDelete" asp-route-id="@client.Id"><span class="oi oi-x"></span></a>
 							</td>

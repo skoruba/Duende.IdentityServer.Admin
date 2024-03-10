@@ -7,7 +7,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Helpers
     {
         public static string GetClientName(string clientId, string clientName)
         {
-            return $"{clientId} ({clientName})";
+            return $"{clientName} ({clientId})";
         }
     }
 }

@@ -45,7 +45,7 @@ function processScripts() {
             './Scripts/App/helpers/DateTimeHelpers.js',
             './Scripts/App/pages/ErrorsLog.js',
             './Scripts/App/pages/AuditLog.js',
-            './Scripts/App/pages/Secrets.js',
+            './Scripts/App/pages/CryptoUtils.js',
             './Scripts/App/pages/IdentityProviders.js',
             './Scripts/App/components/DatePicker.js'
         ])

@@ -142,7 +142,7 @@
     <value>Allow Access Token Via Browser</value>
   </data>
   <data name="AllowOfflineAccess_Info" xml:space="preserve">
-    <value>Specifies whether this client can request refresh tokens (be requesting the offline_access scope)</value>
+    <value>Specifies whether this client can request refresh tokens (by requesting the offline_access scope)</value>
   </data>
   <data name="AllowOfflineAccess_Label" xml:space="preserve">
     <value>Allow Offline Access</value>
