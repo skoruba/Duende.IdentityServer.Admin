@@ -126,4 +126,7 @@
   <data name="ButtonSave" xml:space="preserve">
     <value>Сохранить Клиента</value>
   </data>
+  <data name="ButtonExport" xml:space="preserve">
+    <value>Экспорт Клиента</value>
+  </data>
 </root>

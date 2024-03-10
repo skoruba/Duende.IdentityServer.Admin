@@ -127,4 +127,7 @@
     <value>Enregistrer Client</value>
     <comment>Sauvegarder Client</comment>
   </data>
+  <data name="ButtonExport" xml:space="preserve">
+    <value>Exporter Client</value>
+  </data>
 </root>
