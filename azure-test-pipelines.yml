@@ -80,12 +80,12 @@ stages:
       inputs:
         command: publish
         publishWebProjects: False
-        projects: src\Skoruba.Duende.IdentityServer.STS.Identity\Skoruba.Duende.IdentityServer.STS.Identity.csproj
-        arguments: "--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)\\Identity"
+        projects: '**/src/Skoruba.Duende.IdentityServer.STS.Identity/Skoruba.Duende.IdentityServer.STS.Identity.csproj'
+        arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
         zipAfterPublish: True
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: "$(Build.ArtifactStagingDirectory)"
-        ArtifactName: "rodlisteNaturtyper"
+        ArtifactName: "identityserver"
         publishLocation: "Container"
 
