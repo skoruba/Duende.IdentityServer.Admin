@@ -62,12 +62,12 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            var value = Configuration.GetValue<string>("IdentityServerOptions:IssuerUri");
+            var value = Configuration.GetValue<string>("IssuerUri");
             if (!string.IsNullOrWhiteSpace(value)) app.Use(
                 async (ctx, next) =>
             {
                 ctx.Request.Scheme = "https";
-                ctx.Request.Host = new HostString(value[8..]);
+                ctx.Request.Host = new HostString(value);
 
                 await next();
             });
