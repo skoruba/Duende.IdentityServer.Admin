@@ -1,8 +1,10 @@
 using System;
+using System.Configuration;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -52,12 +54,6 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity
             // If you want to change primary keys or use another db model for Asp.Net Core Identity:
             services.AddMvcWithLocalization<UserIdentity, string>(Configuration);
 
-            services.Configure<ForwardedHeadersOptions>(options =>
-            {
-                options.ForwardedHeaders =
-                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-            });
-
             // Add authorization policies for MVC
             RegisterAuthorization(services);
 
@@ -66,7 +62,15 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseForwardedHeaders();
+            var value = Configuration.GetValue<string>("IdentityServerOptions:IssuerUri");
+            if (!string.IsNullOrWhiteSpace(value)) app.Use(
+                async (ctx, next) =>
+            {
+                ctx.Request.Scheme = "https";
+                ctx.Request.Host = new HostString(value[8..]);
+
+                await next();
+            });
 
             app.UseCookiePolicy();
 
