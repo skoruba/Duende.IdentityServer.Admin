@@ -20,6 +20,11 @@ stages:
     displayName: Build
     pool:
       vmImage: ubuntu-latest
+
+    variables:
+      buildConfiguration: "Release"
+      solutionPath: "**/*.sln"
+
     steps:
     # - task: Bash@3
     #   inputs:
@@ -29,34 +34,61 @@ stages:
     #       pwd
     #       ls -l
     #       ls -l Skoruba.Duende.IdentityServer.STS.Identity/
-    - task: Docker@2
-      displayName: Build frontend
-      inputs:
-        containerRegistry: 'Dockerhub'
-        repository: 'artsdatabanken/identity-duende'
-        command: 'build'
-        Dockerfile: '**/src/Skoruba.Duende.IdentityServer.STS.Identity/Dockerfile'
-        buildContext: '$(Build.SourcesDirectory)'
-        tags: '$(tag)'
-    - task: Docker@2
-      inputs:
-        containerRegistry: 'Dockerhub'
-        repository: 'artsdatabanken/identity-duende'
-        command: 'push'
-        tags: $(tag)
+    # - task: Docker@2
+    #   displayName: Build frontend
+    #   inputs:
+    #     containerRegistry: 'Dockerhub'
+    #     repository: 'artsdatabanken/identity-duende'
+    #     command: 'build'
+    #     Dockerfile: '**/src/Skoruba.Duende.IdentityServer.STS.Identity/Dockerfile'
+    #     buildContext: '$(Build.SourcesDirectory)'
+    #     tags: '$(tag)'
+    # - task: Docker@2
+    #   inputs:
+    #     containerRegistry: 'Dockerhub'
+    #     repository: 'artsdatabanken/identity-duende'
+    #     command: 'push'
+    #     tags: $(tag)
     
-    - task: Docker@2
-      displayName: Build admin panel
+    # - task: Docker@2
+    #   displayName: Build admin panel
+    #   inputs:
+    #     containerRegistry: 'Dockerhub'
+    #     repository: 'artsdatabanken/identity-duende'
+    #     command: 'build'
+    #     Dockerfile: '**/src/Skoruba.Duende.IdentityServer.Admin/Dockerfile'
+    #     buildContext: '$(Build.SourcesDirectory)'
+    #     tags: 'admin'
+    # - task: Docker@2
+    #   inputs:
+    #     containerRegistry: 'Dockerhub'
+    #     repository: 'artsdatabanken/identity-duende'
+    #     command: 'push'
+    #     tags: 'admin'
+    - task: DotNetCoreCLI@2
+      displayName: "Build"
       inputs:
-        containerRegistry: 'Dockerhub'
-        repository: 'artsdatabanken/identity-duende'
-        command: 'build'
-        Dockerfile: '**/src/Skoruba.Duende.IdentityServer.Admin/Dockerfile'
-        buildContext: '$(Build.SourcesDirectory)'
-        tags: 'admin'
-    - task: Docker@2
+        command: "build"
+        projects: $(solutionPath)
+        configuration: $(buildConfiguration)
+    - task: DotNetCoreCLI@2
+      displayName: "Publish and zip"
       inputs:
-        containerRegistry: 'Dockerhub'
-        repository: 'artsdatabanken/identity-duende'
-        command: 'push'
-        tags: 'admin'
+        command: publish
+        publishWebProjects: False
+        projects: '**/src/Skoruba.Duende.IdentityServer.STS.Identity/Skoruba.Duende.IdentityServer.STS.Identity.csproj'
+        arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        zipAfterPublish: True
+    - task: DotNetCoreCLI@2
+      displayName: "Publish and zip admin"
+      inputs:
+        command: publish
+        publishWebProjects: False
+        projects: '**/src/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj'
+        arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        zipAfterPublish: True
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+        ArtifactName: "identityserver"
+        publishLocation: "Container"
