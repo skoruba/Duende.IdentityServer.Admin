@@ -22,6 +22,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySql;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.PostgreSQL;
@@ -202,10 +203,11 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
         {
             var databaseProvider = configuration.GetSection(nameof(DatabaseProviderConfiguration)).Get<DatabaseProviderConfiguration>();
             var connectionStrings = configuration.GetSection("ConnectionStrings").Get<ConnectionStringsConfiguration>();
-
+            Log.Information("DatabaseProvider: " + databaseProvider.ProviderType);
             // If connections strings are not configured, check if they are found in Azure key vault
             if (connectionStrings == null)
             {
+                Log.Information("ConnectionStrings Not Found in appsettings or so far!");
                 connectionStrings = new ConnectionStringsConfiguration();
                 // For each value in connectionStrings, set the property of connectionString to the value
                 foreach (var connectionString in configuration.GetChildren())

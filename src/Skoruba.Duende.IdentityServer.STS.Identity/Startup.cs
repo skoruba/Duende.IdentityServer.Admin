@@ -1,8 +1,11 @@
 using System;
+using System.Configuration;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -59,6 +62,16 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var value = Configuration.GetValue<string>("IssuerUri");
+            if (!string.IsNullOrWhiteSpace(value)) app.Use(
+                async (ctx, next) =>
+            {
+                ctx.Request.Scheme = "https";
+                ctx.Request.Host = new HostString(value);
+
+                await next();
+            });
+
             app.UseCookiePolicy();
 
             if (env.IsDevelopment())
