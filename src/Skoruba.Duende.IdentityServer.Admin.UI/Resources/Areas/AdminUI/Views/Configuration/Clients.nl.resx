@@ -14,6 +14,9 @@
   <data name="ButtonAddNewClient" xml:space="preserve">
     <value>Voeg Client toe</value>
   </data>
+  <data name="ButtonExportSelectedClients" xml:space="preserve">
+    <value>Exporteer geselecteerde Clients</value>
+  </data>
   <data name="PageTitle" xml:space="preserve">
     <value>Clients</value>
   </data>

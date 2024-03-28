@@ -1,11 +1,6 @@
 ﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
 // Licensed under the Apache License, Version 2.0.
 
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
@@ -16,6 +11,13 @@ using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.UI.Configuration.Constants;
 using Skoruba.Duende.IdentityServer.Admin.UI.ExceptionHandling;
 using Skoruba.Duende.IdentityServer.Admin.UI.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace Skoruba.Duende.IdentityServer.Admin.UI.Areas.AdminUI.Controllers
 {
@@ -136,6 +138,37 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Areas.AdminUI.Controllers
 
 			return File(Encoding.UTF8.GetBytes(jsonString), "application/json", fileName);
 		}
+
+		[HttpGet]
+		public async Task<IActionResult> ClientsExport([FromQuery] List<int> clientIds)
+		{
+			if (clientIds == null || clientIds.Count == 0)
+			{
+				return BadRequest("No client IDs provided.");
+			}
+
+			var clients = new List<ClientDto>();
+			foreach (var id in clientIds)
+			{
+				clients.Add(await _clientService.GetClientAsync(id));
+			}
+
+
+			if (clients == null || clients.Count == 0) return NotFound("Clients not found.");
+
+			var options = new JsonSerializerOptions
+			{
+				WriteIndented = true,
+				DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+			};
+
+			string jsonString = JsonSerializer.Serialize(clients, options);
+
+			var fileName = $"Clients_Export_{DateTime.UtcNow:yyyyMMddHHmmss}.json";
+
+			return File(Encoding.UTF8.GetBytes(jsonString), "application/json", fileName);
+		}
+
 
 		[HttpGet]
 		public async Task<IActionResult> ClientDelete(int id)

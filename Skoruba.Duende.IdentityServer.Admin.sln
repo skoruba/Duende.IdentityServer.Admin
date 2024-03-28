@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28803.452
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34601.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "admin", "admin", "{588205D4-3A30-4DA4-849D-C7422C396DAA}"
 EndProject
@@ -57,7 +57,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Shared.Configuration", "src\Skoruba.Duende.IdentityServer.Shared.Configuration\Skoruba.Duende.IdentityServer.Shared.Configuration.csproj", "{D49A2D61-AEEB-457C-B3BA-D1322EB2F4EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skoruba.Duende.IdentityServer.Admin.Api.UnitTests", "tests\Skoruba.Duende.IdentityServer.Admin.Api.UnitTests\Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.csproj", "{976197B1-8657-4A14-8083-F933073BC550}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skoruba.Duende.IdentityServer.Admin.Api.UnitTests", "tests\Skoruba.Duende.IdentityServer.Admin.Api.UnitTests\Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.csproj", "{976197B1-8657-4A14-8083-F933073BC550}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,5 @@
-﻿@using Microsoft.AspNetCore.Mvc.Localization
+﻿
+@using Microsoft.AspNetCore.Mvc.Localization
 @using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared.Dtos.Common
 @using Skoruba.Duende.IdentityServer.Admin.UI.Configuration.Constants
 @model Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration.ClientsDto
@@ -16,7 +17,9 @@
 
 	<div class="col-12">
 		<a asp-area="@CommonConsts.AdminUIArea" asp-action="Client" class="btn btn-outline-primary mb-3"><span class="oi oi-plus"></span> @Localizer["ButtonAddNewClient"]</a>
+		<button asp-area="@CommonConsts.AdminUIArea" id="export-clients-button" class="btn btn-outline-secondary mb-3"><span class="oi oi-share-boxed"></span> @Localizer["ButtonExportSelectedClients"]</button>
 	</div>
+	
 
 	<div class="col-12">
 		@await Html.PartialAsync("Common/Search", new Search() { Action = "Clients", Controller = "Configuration" })
@@ -28,6 +31,9 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
+						<th class="checkboxContainer">
+								<input type="checkbox" class="checkbox" id="toggleAllCheckbox">
+						</th>
 						<th></th>
 						<th>@Localizer["TableClientId"]</th>
 						<th>@Localizer["TableClientName"]</th>
@@ -38,11 +44,16 @@
 					@foreach (var client in Model.Clients)
 					{
 						<tr>
-							<th><a asp-area="@CommonConsts.AdminUIArea" class="btn btn-primary" asp-action="Client" asp-route-id="@client.Id">@Localizer["TableButtonEdit"]</a></th>
+							<th class="checkboxContainer">
+								<input type="checkbox" id="checkbox_@client.Id" value="@client.Id" />
+							</th>
+							<td>
+								<a asp-area="@CommonConsts.AdminUIArea" class="btn btn-primary" asp-action="Client" asp-route-id="@client.Id">@Localizer["TableButtonEdit"]</a>
+							</td>
 							<td>@client.ClientId</td>
 							<td>@client.ClientName</td>
 							<td>
-								<a asp-area="@CommonConsts.AdminUIArea" class="btn btn-danger" asp-action="ClientDelete" asp-route-id="@client.Id"><span class="oi oi-x"></span></a>
+								<a asp-area="@CommonConsts.AdminUIArea" class="btn btn-danger" asp-action="ClientDelete" asp-route-id="@client.Id"><span class="oi oi-trash"></span></a>
 							</td>
 						</tr>
 					}
