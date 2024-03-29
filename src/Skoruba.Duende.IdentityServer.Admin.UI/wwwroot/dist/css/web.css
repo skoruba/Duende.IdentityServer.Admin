@@ -501,6 +501,10 @@ label.radio-img > h3, label > h4 {
 .client .action-butons {
   margin: 20px 0 20px 0; }
 
+.table th.checkboxContainer {
+  vertical-align: middle;
+  text-align: center; }
+
 .audit-log-container .modal-dialog {
   overflow-y: initial !important; }
 
