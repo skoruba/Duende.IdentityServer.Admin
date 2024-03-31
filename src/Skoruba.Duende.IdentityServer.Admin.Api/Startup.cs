@@ -35,7 +35,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api
     {
         public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
             HostingEnvironment = env;
             Configuration = configuration;
         }
