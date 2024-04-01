@@ -20,4 +20,7 @@
   <data name="ButtonSave" xml:space="preserve">
     <value>Sla Client op</value>
   </data>
+  <data name="ButtonExport" xml:space="preserve">
+    <value>Exporteer Client</value>
+  </data>
 </root>

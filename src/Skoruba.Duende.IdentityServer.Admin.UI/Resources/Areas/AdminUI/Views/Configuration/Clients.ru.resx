@@ -120,6 +120,9 @@
   <data name="ButtonAddNewClient" xml:space="preserve">
     <value>Добавить клиента</value>
   </data>
+  <data name="ButtonExportSelectedClients" xml:space="preserve">
+	<value>Экспорт выбранных клиентов</value>
+  </data>
   <data name="PageTitle" xml:space="preserve">
     <value>Клиенты</value>
   </data>

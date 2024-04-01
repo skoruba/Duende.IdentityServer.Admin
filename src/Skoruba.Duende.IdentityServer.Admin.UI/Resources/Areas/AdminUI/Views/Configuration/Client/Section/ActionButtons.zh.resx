@@ -126,4 +126,7 @@
   <data name="ButtonSave" xml:space="preserve">
     <value>保存客户端</value>
   </data>
+  <data name="ButtonExport" xml:space="preserve">
+    <value>导出客户端</value>
+  </data>
 </root>

@@ -120,6 +120,9 @@
   <data name="ButtonAddNewClient" xml:space="preserve">
     <value>Lägg till klient</value>
   </data>
+  <data name="ButtonExportSelectedClients" xml:space="preserve">
+	<value>Exportera valda klienter</value>
+  </data>
   <data name="PageTitle" xml:space="preserve">
     <value>Klienter</value>
   </data>

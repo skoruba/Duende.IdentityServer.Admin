@@ -120,6 +120,9 @@
   <data name="ButtonAddNewClient" xml:space="preserve">
     <value>Lisää Sovellus</value>
   </data>
+  <data name="ButtonExportSelectedClients" xml:space="preserve">
+    <value>Vie Valitut Sovellukset</value>
+  </data>
   <data name="PageTitle" xml:space="preserve">
     <value>Sovellukset</value>
   </data>
