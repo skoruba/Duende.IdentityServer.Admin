@@ -762,7 +762,8 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
                 EnableLocalLogin = allowLocal && AccountOptions.AllowLocalLogin,
                 ReturnUrl = returnUrl,
                 Username = context?.LoginHint,
-                ExternalProviders = providers.ToArray()
+                ExternalProviders = providers.ToArray(),
+                LoginResolutionPolicy = _loginConfiguration.ResolutionPolicy
             };
         }
 
@@ -771,6 +772,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
             var vm = await BuildLoginViewModelAsync(model.ReturnUrl);
             vm.Username = model.Username;
             vm.RememberLogin = model.RememberLogin;
+            vm.LoginResolutionPolicy = _loginConfiguration.ResolutionPolicy;
             return vm;
         }
 
