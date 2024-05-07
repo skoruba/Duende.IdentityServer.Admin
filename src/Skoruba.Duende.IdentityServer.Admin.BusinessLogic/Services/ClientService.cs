@@ -265,9 +265,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services
             return scopes;
         }
 
-        public virtual List<string> GetGrantTypes(string grant, int limit = 0)
+        public virtual List<SelectItemDto> GetGrantTypes(string grant, bool includeObsoleteGrants, int limit = 0)
         {
-            var grantTypes = ClientRepository.GetGrantTypes(grant, limit);
+            var grantTypes = ClientRepository.GetGrantTypes(grant,includeObsoleteGrants, limit).ToModel();
 
             return grantTypes;
         }

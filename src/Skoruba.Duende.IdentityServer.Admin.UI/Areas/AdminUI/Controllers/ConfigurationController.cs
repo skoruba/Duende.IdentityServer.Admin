@@ -437,7 +437,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Areas.AdminUI.Controllers
         [HttpGet]
         public IActionResult SearchGrantTypes(string grant, int limit = 0)
         {
-            var grants = _clientService.GetGrantTypes(grant, limit);
+            var grants = _clientService.GetGrantTypes(grant, true, limit).Select(x => x.Id).ToList();
 
             return Ok(grants);
         }

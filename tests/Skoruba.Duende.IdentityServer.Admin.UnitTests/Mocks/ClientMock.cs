@@ -198,7 +198,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks
         public static Faker<ClientGrantType> ClientGrantTypesFaker()
         {
             var fakerClientGrantTypes = new Faker<ClientGrantType>()
-                .RuleFor(o => o.GrantType, f => f.PickRandom(ClientConsts.GetGrantTypes()));
+                .RuleFor(o => o.GrantType, f => f.PickRandom(ClientConsts.GetGrantTypes(true).Select(x => x.Id).ToList()));
 
             return fakerClientGrantTypes;
         }

@@ -79,11 +79,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
             return scopes;
         }
 
-        public virtual List<string> GetGrantTypes(string grant, int limit = 0)
+        public virtual List<SelectItem> GetGrantTypes(string grant, bool includeObsoleteGrants, int limit = 0)
         {
-            var filteredGrants = ClientConsts.GetGrantTypes()
-                .WhereIf(!string.IsNullOrWhiteSpace(grant), x => x.Contains(grant))
+            var filteredGrants = ClientConsts.GetGrantTypes(includeObsoleteGrants)
+                .WhereIf(!string.IsNullOrWhiteSpace(grant), x => x.Id.Contains(grant) || x.Label.Contains(grant))
                 .TakeIf(x => x, limit > 0, limit)
+                .Select(x => new SelectItem(x.Id, x.Label))
                 .ToList();
 
             return filteredGrants;
