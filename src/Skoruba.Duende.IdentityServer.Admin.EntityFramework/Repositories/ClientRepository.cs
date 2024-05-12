@@ -85,6 +85,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
                 .WhereIf(!string.IsNullOrWhiteSpace(grant), x => x.Id.Contains(grant) || x.Label.Contains(grant))
                 .TakeIf(x => x, limit > 0, limit)
                 .Select(x => new SelectItem(x.Id, x.Label))
+                .OrderBy(x => x.Id)
                 .ToList();
 
             return filteredGrants;
