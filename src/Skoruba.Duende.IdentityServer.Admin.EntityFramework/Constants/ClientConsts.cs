@@ -53,6 +53,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Constants
         {
             var allowedGrantypes = new List<(string Id, string Label, bool Deprecated)>
             {
+                ("authorization_code", "Authorization Code", false),
                 ("implicit", "Implicit", true),
                 ("client_credentials", "Client Credentials", false),
                 ("hybrid", "Hybrid", false),
