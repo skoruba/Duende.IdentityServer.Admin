@@ -120,7 +120,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mocks
                .RuleFor(o => o.AllowPlainTextPkce, f => f.Random.Bool())
                .RuleFor(o => o.AllowRememberConsent, f => f.Random.Bool())
                .RuleFor(o => o.AllowedCorsOrigins, f => Enumerable.Range(1, f.Random.Int(1, 10)).Select(x => f.PickRandom(f.Internet.Url())).ToList())
-               .RuleFor(o => o.AllowedGrantTypes, f => Enumerable.Range(1, f.Random.Int(1, 10)).Select(x => f.PickRandom(ClientConsts.GetGrantTypes())).ToList())
+               .RuleFor(o => o.AllowedGrantTypes, f => Enumerable.Range(1, f.Random.Int(1, 10)).Select(x => f.PickRandom(ClientConsts.GetGrantTypes(true).Select(grant => grant.Id).ToList())).ToList())
                .RuleFor(o => o.AllowedScopes, f => Enumerable.Range(1, f.Random.Int(1, 10)).Select(x => f.PickRandom(GetScopes())).ToList())
                .RuleFor(o => o.AlwaysIncludeUserClaimsInIdToken, f => f.Random.Bool())
                .RuleFor(o => o.Enabled, f => f.Random.Bool())

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
 // Licensed under the Apache License, Version 2.0.
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using Skoruba.Duende.IdentityServer.Admin.Api.Mappers;
 using Skoruba.Duende.IdentityServer.Admin.Api.Resources;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared.Dtos.Common;
 
 namespace Skoruba.Duende.IdentityServer.Admin.Api.Controllers
 {
@@ -48,6 +50,106 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.Controllers
             return Ok(clientApiDto);
         }
 
+        [HttpGet(nameof(GetAccessTokenTypes))]
+        public ActionResult<List<SelectItemDto>> GetAccessTokenTypes()
+        {
+            var accessTokenTypes = _clientService.GetAccessTokenTypes();
+
+            return accessTokenTypes;
+        }
+        
+        [HttpGet(nameof(GetTokenExpirations))]
+        public ActionResult<List<SelectItemDto>> GetTokenExpirations()
+        {
+            var tokenExpirations = _clientService.GetTokenExpirations();
+
+            return tokenExpirations;
+        }
+        
+        [HttpGet(nameof(GetTokenUsage))]
+        public ActionResult<List<SelectItemDto>> GetTokenUsage()
+        {
+            var tokenUsage = _clientService.GetTokenUsage();
+
+            return tokenUsage;
+        }
+        
+        [HttpGet(nameof(GetProtocolTypes))]
+        public ActionResult<List<SelectItemDto>> GetProtocolTypes()
+        {
+            var protocolTypes = _clientService.GetProtocolTypes();
+
+            return protocolTypes;
+        }
+        
+        [HttpGet(nameof(GetDPoPValidationModes))]
+        public ActionResult<List<SelectItemDto>> GetDPoPValidationModes()
+        {
+            var dPoPValidationModes = _clientService.GetDPoPValidationModes();
+
+            return dPoPValidationModes;
+        }
+        
+        [HttpGet(nameof(GetScopes))]
+        public async Task<ActionResult<List<string>>> GetScopes(string scope, int limit = 0)
+        {
+            var scopes = await _clientService.GetScopesAsync(scope, limit);
+
+            return scopes;
+        }
+        
+        [HttpGet(nameof(GetGrantTypes))]
+        public ActionResult<List<SelectItemDto>> GetGrantTypes(string grant, bool includeObsoleteGrants, int limit = 0)
+        {
+            var grants = _clientService.GetGrantTypes(grant, includeObsoleteGrants, limit);
+
+            return grants;
+        }
+        
+        [HttpGet(nameof(GetHashTypes))]
+        public ActionResult<List<SelectItemDto>> GetHashTypes()
+        {
+            var hashTypes = _clientService.GetHashTypes();
+
+            return hashTypes;
+        }
+        
+        [HttpGet(nameof(GetSecretTypes))]
+        public ActionResult<List<SelectItemDto>> GetSecretTypes()
+        {
+            var secretTypes = _clientService.GetSecretTypes();
+
+            return secretTypes;
+        }
+        
+        [HttpGet(nameof(GetStandardClaims))]
+        public ActionResult<List<string>> GetStandardClaims(string claim, int limit = 0)
+        {
+            var standardClaims = _clientService.GetStandardClaims(claim, limit);
+
+            return standardClaims;
+        }
+        
+        [HttpGet(nameof(GetSigningAlgorithms))]
+        public ActionResult<List<string>> GetSigningAlgorithms(string algorithm, int limit = 0)
+        {
+            var signingAlgorithms = _clientService.GetSigningAlgorithms(algorithm, limit);
+
+            return signingAlgorithms;
+        }
+        
+        [HttpGet(nameof(CanInsertClient))]
+        public async Task<ActionResult<bool>> CanInsertClient(int id, string clientId, bool isCloned)
+        {
+            var clientExists = await _clientService.CanInsertClientAsync(new ClientDto()
+            {
+               Id = id,
+               ClientId = clientId,
+            }, isCloned);
+
+            return clientExists;
+        }
+      
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]

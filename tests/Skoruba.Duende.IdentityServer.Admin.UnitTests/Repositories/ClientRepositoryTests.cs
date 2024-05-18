@@ -771,8 +771,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 //Try get some existing grant
                 var randomClientGrantType = ClientMock.GenerateRandomClientGrantType();
 
-                var grantTypes = clientRepository.GetGrantTypes(randomClientGrantType.GrantType);
-                grantTypes[0].Should().Be(randomClientGrantType.GrantType);
+                var grantTypes = clientRepository.GetGrantTypes(randomClientGrantType.GrantType, true);
+                grantTypes[0].Id.Should().Be(randomClientGrantType.GrantType);
             }
         }
 
