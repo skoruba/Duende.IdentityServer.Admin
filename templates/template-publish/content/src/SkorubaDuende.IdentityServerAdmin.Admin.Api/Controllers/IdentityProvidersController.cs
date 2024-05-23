@@ -38,6 +38,18 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api.Controllers
 
             return Ok(identityProvidersApiDto);
         }
+        
+        [HttpGet(nameof(CanInsertIdentityProvider))]
+        public async Task<ActionResult<bool>> CanInsertIdentityProvider(int id, string schema)
+        {
+            var exists = await _identityProviderService.CanInsertIdentityProviderAsync(new IdentityProviderDto
+            {
+                Id = id,
+                Scheme = schema
+            });
+
+            return exists;
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<IdentityProviderApiDto>> Get(int id)

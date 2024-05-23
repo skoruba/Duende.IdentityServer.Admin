@@ -38,6 +38,30 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api.Controllers
 
             return Ok(apiScopesApiDto);
         }
+        
+        [HttpGet(nameof(CanInsertApiScope))]
+        public async Task<ActionResult<bool>> CanInsertApiScope(int id, string name)
+        {
+            var exists = await _apiScopeService.CanInsertApiScopeAsync(new ApiScopeDto()
+            {
+                Id = id,
+                Name = name
+            });
+
+            return exists;
+        }
+        
+        [HttpGet(nameof(CanInsertApiScopeProperty))]
+        public async Task<ActionResult<bool>> CanInsertApiScopeProperty(int id, string key)
+        {
+            var exists = await _apiScopeService.CanInsertApiScopePropertyAsync(new ApiScopePropertiesDto()
+            {
+                ApiScopePropertyId = id,
+                Key = key
+            });
+
+            return exists;
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ApiScopeApiDto>> GetScope(int id)

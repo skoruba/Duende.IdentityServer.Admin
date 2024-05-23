@@ -47,6 +47,30 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api.Controllers
 
             return Ok(identityResourceApiModel);
         }
+        
+        [HttpGet(nameof(CanInsertIdentityResource))]
+        public async Task<ActionResult<bool>> CanInsertIdentityResource(int id, string name)
+        {
+            var exists = await _identityResourceService.CanInsertIdentityResourceAsync(new IdentityResourceDto
+            {
+                Id = id,
+                Name = name
+            });
+
+            return exists;
+        }
+        
+        [HttpGet(nameof(CanInsertIdentityResourceProperty))]
+        public async Task<ActionResult<bool>> CanInsertIdentityResourceProperty(int id, string key)
+        {
+            var exists = await _identityResourceService.CanInsertIdentityResourcePropertyAsync(new IdentityResourcePropertiesDto()
+            {
+                IdentityResourcePropertyId = id,
+                Key = key
+            });
+
+            return exists;
+        }
 
         [HttpPost]
         [ProducesResponseType(201)]
