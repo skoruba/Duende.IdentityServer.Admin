@@ -22,7 +22,7 @@ The application is written in the **Asp.Net Core MVC - using .NET 8.0**
 - 🔒 **NOTE:** The project uses the default database migrations which affect your database, therefore double check the migrations according to your database provider and create a database backup
 
 ```sh
-dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::2.0.0
+dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::2.1.0
 ```
 
 ### Create new project:
@@ -755,6 +755,14 @@ It is possible to define the configuration according the client type - by defaul
 
 - [x] Update to .NET 8 ([#180](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/180))
 - [x] Update to IdentityServer v7 ([#181](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/181))
+
+### 2.1.0
+
+- [x] Role users pagination ([#169](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/169))
+- [x] Add secure secret generation with 'secret\_' prefix ([#153](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/153))
+- [x] Increase client name prominence ([#154](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/154))
+- [x] Added support for generation typescript client definition for API endpoints ([#215](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/215))
+- [x] Add new endpoints to API for client, api resource, api scopes validations and lists ([#213](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/213))
 
 ### 3.0.0
 

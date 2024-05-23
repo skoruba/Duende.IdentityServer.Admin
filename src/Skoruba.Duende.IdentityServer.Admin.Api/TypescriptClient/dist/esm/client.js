@@ -3,57 +3,17 @@
 //     Generated using the NSwag toolchain v14.0.7.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0)) (http://NSwag.org)
 // </auto-generated>
 //----------------------
-
 /* tslint:disable */
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
-
-import dayjs from 'dayjs'
-
-export interface IApiResourcesClient {
-
-    get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ApiResourcesApiDto>;
-
-    post(apiResourceApi: ApiResourceApiDto): Promise<void>;
-
-    put(apiResourceApi: ApiResourceApiDto): Promise<FileResponse>;
-
-    canInsertApiResource(id: number | undefined, name: string | null | undefined): Promise<boolean>;
-
-    canInsertApiResourceProperty(id: number | undefined, key: string | null | undefined): Promise<boolean>;
-
-    get2(id: number): Promise<ApiResourceApiDto>;
-
-    delete(id: number): Promise<FileResponse>;
-
-    getSecrets(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiSecretsApiDto>;
-
-    postSecret(id: number, clientSecretApi: ApiSecretApiDto): Promise<void>;
-
-    getSecret(secretId: number): Promise<ApiSecretApiDto>;
-
-    deleteSecret(secretId: number): Promise<FileResponse>;
-
-    getProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiResourcePropertiesApiDto>;
-
-    postProperty(id: number, apiPropertyApi: ApiResourcePropertyApiDto): Promise<void>;
-
-    getProperty(propertyId: number): Promise<ApiResourcePropertyApiDto>;
-
-    deleteProperty(propertyId: number): Promise<FileResponse>;
-}
-
-export class ApiResourcesClient implements IApiResourcesClient {
-    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-        this.http = http ? http : window as any;
-        this.baseUrl = baseUrl ?? "";
+import dayjs from 'dayjs';
+export class ApiResourcesClient {
+    constructor(baseUrl, http) {
+        this.jsonParseReviver = undefined;
+        this.http = http ? http : window;
+        this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
     }
-
-    get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ApiResourcesApiDto> {
+    get(searchText, page, pageSize) {
         let url_ = this.baseUrl + "/api/ApiResources?";
         if (searchText !== undefined && searchText !== null)
             url_ += "searchText=" + encodeURIComponent("" + searchText) + "&";
@@ -66,101 +26,105 @@ export class ApiResourcesClient implements IApiResourcesClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGet(_response);
         });
     }
-
-    protected processGet(response: Response): Promise<ApiResourcesApiDto> {
+    processGet(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ApiResourcesApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ApiResourcesApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<ApiResourcesApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    post(apiResourceApi: ApiResourceApiDto): Promise<void> {
+    post(apiResourceApi) {
         let url_ = this.baseUrl + "/api/ApiResources";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(apiResourceApi);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPost(_response);
         });
     }
-
-    protected processPost(response: Response): Promise<void> {
+    processPost(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return;
             });
         }
-        return Promise.resolve<void>(null as any);
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    put(apiResourceApi: ApiResourceApiDto): Promise<FileResponse> {
+    put(apiResourceApi) {
         let url_ = this.baseUrl + "/api/ApiResources";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(apiResourceApi);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "PUT",
             headers: {
@@ -168,43 +132,48 @@ export class ApiResourcesClient implements IApiResourcesClient {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPut(_response);
         });
     }
-
-    protected processPut(response: Response): Promise<FileResponse> {
+    processPut(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    canInsertApiResource(id: number | undefined, name: string | null | undefined): Promise<boolean> {
+    canInsertApiResource(id, name) {
         let url_ = this.baseUrl + "/api/ApiResources/CanInsertApiResource?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
@@ -213,47 +182,49 @@ export class ApiResourcesClient implements IApiResourcesClient {
         if (name !== undefined && name !== null)
             url_ += "name=" + encodeURIComponent("" + name) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processCanInsertApiResource(_response);
         });
     }
-
-    protected processCanInsertApiResource(response: Response): Promise<boolean> {
+    processCanInsertApiResource(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null;
+                return result200;
             });
         }
-        return Promise.resolve<boolean>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    canInsertApiResourceProperty(id: number | undefined, key: string | null | undefined): Promise<boolean> {
+    canInsertApiResourceProperty(id, key) {
         let url_ = this.baseUrl + "/api/ApiResources/CanInsertApiResourceProperty?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
@@ -262,141 +233,150 @@ export class ApiResourcesClient implements IApiResourcesClient {
         if (key !== undefined && key !== null)
             url_ += "key=" + encodeURIComponent("" + key) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processCanInsertApiResourceProperty(_response);
         });
     }
-
-    protected processCanInsertApiResourceProperty(response: Response): Promise<boolean> {
+    processCanInsertApiResourceProperty(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null;
+                return result200;
             });
         }
-        return Promise.resolve<boolean>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    get2(id: number): Promise<ApiResourceApiDto> {
+    get2(id) {
         let url_ = this.baseUrl + "/api/ApiResources/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGet2(_response);
         });
     }
-
-    protected processGet2(response: Response): Promise<ApiResourceApiDto> {
+    processGet2(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ApiResourceApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ApiResourceApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<ApiResourceApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    delete(id: number): Promise<FileResponse> {
+    delete(id) {
         let url_ = this.baseUrl + "/api/ApiResources/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "DELETE",
             headers: {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processDelete(_response);
         });
     }
-
-    protected processDelete(response: Response): Promise<FileResponse> {
+    processDelete(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getSecrets(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiSecretsApiDto> {
+    getSecrets(id, page, pageSize) {
         let url_ = this.baseUrl + "/api/ApiResources/{id}/Secrets?";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -410,192 +390,205 @@ export class ApiResourcesClient implements IApiResourcesClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetSecrets(_response);
         });
     }
-
-    protected processGetSecrets(response: Response): Promise<ApiSecretsApiDto> {
+    processGetSecrets(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ApiSecretsApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ApiSecretsApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<ApiSecretsApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    postSecret(id: number, clientSecretApi: ApiSecretApiDto): Promise<void> {
+    postSecret(id, clientSecretApi) {
         let url_ = this.baseUrl + "/api/ApiResources/{id}/Secrets";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(clientSecretApi);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPostSecret(_response);
         });
     }
-
-    protected processPostSecret(response: Response): Promise<void> {
+    processPostSecret(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return;
             });
         }
-        return Promise.resolve<void>(null as any);
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getSecret(secretId: number): Promise<ApiSecretApiDto> {
+    getSecret(secretId) {
         let url_ = this.baseUrl + "/api/ApiResources/Secrets/{secretId}";
         if (secretId === undefined || secretId === null)
             throw new Error("The parameter 'secretId' must be defined.");
         url_ = url_.replace("{secretId}", encodeURIComponent("" + secretId));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetSecret(_response);
         });
     }
-
-    protected processGetSecret(response: Response): Promise<ApiSecretApiDto> {
+    processGetSecret(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ApiSecretApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ApiSecretApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<ApiSecretApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    deleteSecret(secretId: number): Promise<FileResponse> {
+    deleteSecret(secretId) {
         let url_ = this.baseUrl + "/api/ApiResources/Secrets/{secretId}";
         if (secretId === undefined || secretId === null)
             throw new Error("The parameter 'secretId' must be defined.");
         url_ = url_.replace("{secretId}", encodeURIComponent("" + secretId));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "DELETE",
             headers: {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processDeleteSecret(_response);
         });
     }
-
-    protected processDeleteSecret(response: Response): Promise<FileResponse> {
+    processDeleteSecret(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiResourcePropertiesApiDto> {
+    getProperties(id, page, pageSize) {
         let url_ = this.baseUrl + "/api/ApiResources/{id}/Properties?";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -609,228 +602,212 @@ export class ApiResourcesClient implements IApiResourcesClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetProperties(_response);
         });
     }
-
-    protected processGetProperties(response: Response): Promise<ApiResourcePropertiesApiDto> {
+    processGetProperties(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ApiResourcePropertiesApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ApiResourcePropertiesApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<ApiResourcePropertiesApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    postProperty(id: number, apiPropertyApi: ApiResourcePropertyApiDto): Promise<void> {
+    postProperty(id, apiPropertyApi) {
         let url_ = this.baseUrl + "/api/ApiResources/{id}/Properties";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(apiPropertyApi);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPostProperty(_response);
         });
     }
-
-    protected processPostProperty(response: Response): Promise<void> {
+    processPostProperty(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return;
             });
         }
-        return Promise.resolve<void>(null as any);
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getProperty(propertyId: number): Promise<ApiResourcePropertyApiDto> {
+    getProperty(propertyId) {
         let url_ = this.baseUrl + "/api/ApiResources/Properties/{propertyId}";
         if (propertyId === undefined || propertyId === null)
             throw new Error("The parameter 'propertyId' must be defined.");
         url_ = url_.replace("{propertyId}", encodeURIComponent("" + propertyId));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetProperty(_response);
         });
     }
-
-    protected processGetProperty(response: Response): Promise<ApiResourcePropertyApiDto> {
+    processGetProperty(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ApiResourcePropertyApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ApiResourcePropertyApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<ApiResourcePropertyApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    deleteProperty(propertyId: number): Promise<FileResponse> {
+    deleteProperty(propertyId) {
         let url_ = this.baseUrl + "/api/ApiResources/Properties/{propertyId}";
         if (propertyId === undefined || propertyId === null)
             throw new Error("The parameter 'propertyId' must be defined.");
         url_ = url_.replace("{propertyId}", encodeURIComponent("" + propertyId));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "DELETE",
             headers: {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processDeleteProperty(_response);
         });
     }
-
-    protected processDeleteProperty(response: Response): Promise<FileResponse> {
+    processDeleteProperty(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
 }
-
-export interface IApiScopesClient {
-
-    getScopes(search: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ApiScopesApiDto>;
-
-    postScope(apiScopeApi: ApiScopeApiDto): Promise<void>;
-
-    putScope(apiScopeApi: ApiScopeApiDto): Promise<FileResponse>;
-
-    canInsertApiScope(id: number | undefined, name: string | null | undefined): Promise<boolean>;
-
-    canInsertApiScopeProperty(id: number | undefined, key: string | null | undefined): Promise<boolean>;
-
-    getScope(id: number): Promise<ApiScopeApiDto>;
-
-    deleteScope(id: number): Promise<FileResponse>;
-
-    getScopeProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiScopePropertiesApiDto>;
-
-    postProperty(id: number, apiScopePropertyApi: ApiScopePropertyApiDto): Promise<void>;
-
-    getProperty(propertyId: number): Promise<ApiScopePropertyApiDto>;
-
-    deleteProperty(propertyId: number): Promise<FileResponse>;
-}
-
-export class ApiScopesClient implements IApiScopesClient {
-    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-        this.http = http ? http : window as any;
-        this.baseUrl = baseUrl ?? "";
+export class ApiScopesClient {
+    constructor(baseUrl, http) {
+        this.jsonParseReviver = undefined;
+        this.http = http ? http : window;
+        this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
     }
-
-    getScopes(search: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ApiScopesApiDto> {
+    getScopes(search, page, pageSize) {
         let url_ = this.baseUrl + "/api/ApiScopes?";
         if (search !== undefined && search !== null)
             url_ += "search=" + encodeURIComponent("" + search) + "&";
@@ -843,101 +820,105 @@ export class ApiScopesClient implements IApiScopesClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetScopes(_response);
         });
     }
-
-    protected processGetScopes(response: Response): Promise<ApiScopesApiDto> {
+    processGetScopes(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ApiScopesApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ApiScopesApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<ApiScopesApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    postScope(apiScopeApi: ApiScopeApiDto): Promise<void> {
+    postScope(apiScopeApi) {
         let url_ = this.baseUrl + "/api/ApiScopes";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(apiScopeApi);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPostScope(_response);
         });
     }
-
-    protected processPostScope(response: Response): Promise<void> {
+    processPostScope(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return;
             });
         }
-        return Promise.resolve<void>(null as any);
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    putScope(apiScopeApi: ApiScopeApiDto): Promise<FileResponse> {
+    putScope(apiScopeApi) {
         let url_ = this.baseUrl + "/api/ApiScopes";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(apiScopeApi);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "PUT",
             headers: {
@@ -945,43 +926,48 @@ export class ApiScopesClient implements IApiScopesClient {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPutScope(_response);
         });
     }
-
-    protected processPutScope(response: Response): Promise<FileResponse> {
+    processPutScope(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    canInsertApiScope(id: number | undefined, name: string | null | undefined): Promise<boolean> {
+    canInsertApiScope(id, name) {
         let url_ = this.baseUrl + "/api/ApiScopes/CanInsertApiScope?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
@@ -990,47 +976,49 @@ export class ApiScopesClient implements IApiScopesClient {
         if (name !== undefined && name !== null)
             url_ += "name=" + encodeURIComponent("" + name) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processCanInsertApiScope(_response);
         });
     }
-
-    protected processCanInsertApiScope(response: Response): Promise<boolean> {
+    processCanInsertApiScope(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null;
+                return result200;
             });
         }
-        return Promise.resolve<boolean>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    canInsertApiScopeProperty(id: number | undefined, key: string | null | undefined): Promise<boolean> {
+    canInsertApiScopeProperty(id, key) {
         let url_ = this.baseUrl + "/api/ApiScopes/CanInsertApiScopeProperty?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
@@ -1039,141 +1027,150 @@ export class ApiScopesClient implements IApiScopesClient {
         if (key !== undefined && key !== null)
             url_ += "key=" + encodeURIComponent("" + key) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processCanInsertApiScopeProperty(_response);
         });
     }
-
-    protected processCanInsertApiScopeProperty(response: Response): Promise<boolean> {
+    processCanInsertApiScopeProperty(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null;
+                return result200;
             });
         }
-        return Promise.resolve<boolean>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getScope(id: number): Promise<ApiScopeApiDto> {
+    getScope(id) {
         let url_ = this.baseUrl + "/api/ApiScopes/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetScope(_response);
         });
     }
-
-    protected processGetScope(response: Response): Promise<ApiScopeApiDto> {
+    processGetScope(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ApiScopeApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ApiScopeApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<ApiScopeApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    deleteScope(id: number): Promise<FileResponse> {
+    deleteScope(id) {
         let url_ = this.baseUrl + "/api/ApiScopes/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "DELETE",
             headers: {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processDeleteScope(_response);
         });
     }
-
-    protected processDeleteScope(response: Response): Promise<FileResponse> {
+    processDeleteScope(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getScopeProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiScopePropertiesApiDto> {
+    getScopeProperties(id, page, pageSize) {
         let url_ = this.baseUrl + "/api/ApiScopes/{id}/Properties?";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1187,266 +1184,212 @@ export class ApiScopesClient implements IApiScopesClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetScopeProperties(_response);
         });
     }
-
-    protected processGetScopeProperties(response: Response): Promise<ApiScopePropertiesApiDto> {
+    processGetScopeProperties(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ApiScopePropertiesApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ApiScopePropertiesApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<ApiScopePropertiesApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    postProperty(id: number, apiScopePropertyApi: ApiScopePropertyApiDto): Promise<void> {
+    postProperty(id, apiScopePropertyApi) {
         let url_ = this.baseUrl + "/api/ApiScopes/{id}/Properties";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(apiScopePropertyApi);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPostProperty(_response);
         });
     }
-
-    protected processPostProperty(response: Response): Promise<void> {
+    processPostProperty(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return;
             });
         }
-        return Promise.resolve<void>(null as any);
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getProperty(propertyId: number): Promise<ApiScopePropertyApiDto> {
+    getProperty(propertyId) {
         let url_ = this.baseUrl + "/api/ApiScopes/Properties/{propertyId}";
         if (propertyId === undefined || propertyId === null)
             throw new Error("The parameter 'propertyId' must be defined.");
         url_ = url_.replace("{propertyId}", encodeURIComponent("" + propertyId));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetProperty(_response);
         });
     }
-
-    protected processGetProperty(response: Response): Promise<ApiScopePropertyApiDto> {
+    processGetProperty(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ApiScopePropertyApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ApiScopePropertyApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<ApiScopePropertyApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    deleteProperty(propertyId: number): Promise<FileResponse> {
+    deleteProperty(propertyId) {
         let url_ = this.baseUrl + "/api/ApiScopes/Properties/{propertyId}";
         if (propertyId === undefined || propertyId === null)
             throw new Error("The parameter 'propertyId' must be defined.");
         url_ = url_.replace("{propertyId}", encodeURIComponent("" + propertyId));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "DELETE",
             headers: {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processDeleteProperty(_response);
         });
     }
-
-    protected processDeleteProperty(response: Response): Promise<FileResponse> {
+    processDeleteProperty(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
 }
-
-export interface IClientsClient {
-
-    get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ClientsApiDto>;
-
-    post(client: ClientApiDto): Promise<void>;
-
-    put(client: ClientApiDto): Promise<FileResponse>;
-
-    get2(id: number): Promise<ClientApiDto>;
-
-    delete(id: number): Promise<FileResponse>;
-
-    getAccessTokenTypes(): Promise<SelectItemDto[]>;
-
-    getTokenExpirations(): Promise<SelectItemDto[]>;
-
-    getTokenUsage(): Promise<SelectItemDto[]>;
-
-    getProtocolTypes(): Promise<SelectItemDto[]>;
-
-    getDPoPValidationModes(): Promise<SelectItemDto[]>;
-
-    getScopes(scope: string | null | undefined, limit: number | undefined): Promise<string[]>;
-
-    getGrantTypes(grant: string | null | undefined, includeObsoleteGrants: boolean | undefined, limit: number | undefined): Promise<SelectItemDto[]>;
-
-    getHashTypes(): Promise<SelectItemDto[]>;
-
-    getSecretTypes(): Promise<SelectItemDto[]>;
-
-    getStandardClaims(claim: string | null | undefined, limit: number | undefined): Promise<string[]>;
-
-    getSigningAlgorithms(algorithm: string | null | undefined, limit: number | undefined): Promise<string[]>;
-
-    canInsertClient(id: number | undefined, clientId: string | null | undefined, isCloned: boolean | undefined): Promise<boolean>;
-
-    postClientClone(client: ClientCloneApiDto): Promise<void>;
-
-    getSecrets(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientSecretsApiDto>;
-
-    postSecret(id: number, clientSecretApi: ClientSecretApiDto): Promise<void>;
-
-    getSecret(secretId: number): Promise<ClientSecretApiDto>;
-
-    deleteSecret(secretId: number): Promise<FileResponse>;
-
-    getProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientPropertiesApiDto>;
-
-    postProperty(id: number, clientPropertyApi: ClientPropertyApiDto): Promise<void>;
-
-    getProperty(propertyId: number): Promise<ClientPropertyApiDto>;
-
-    deleteProperty(propertyId: number): Promise<FileResponse>;
-
-    getClaims(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientClaimsApiDto>;
-
-    postClaim(id: number, clientClaimApiDto: ClientClaimApiDto): Promise<void>;
-
-    getClaim(claimId: number): Promise<ClientClaimApiDto>;
-
-    deleteClaim(claimId: number): Promise<FileResponse>;
-}
-
-export class ClientsClient implements IClientsClient {
-    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-        this.http = http ? http : window as any;
-        this.baseUrl = baseUrl ?? "";
+export class ClientsClient {
+    constructor(baseUrl, http) {
+        this.jsonParseReviver = undefined;
+        this.http = http ? http : window;
+        this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
     }
-
-    get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ClientsApiDto> {
+    get(searchText, page, pageSize) {
         let url_ = this.baseUrl + "/api/Clients?";
         if (searchText !== undefined && searchText !== null)
             url_ += "searchText=" + encodeURIComponent("" + searchText) + "&";
@@ -1459,101 +1402,105 @@ export class ClientsClient implements IClientsClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGet(_response);
         });
     }
-
-    protected processGet(response: Response): Promise<ClientsApiDto> {
+    processGet(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ClientsApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ClientsApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<ClientsApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    post(client: ClientApiDto): Promise<void> {
+    post(client) {
         let url_ = this.baseUrl + "/api/Clients";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(client);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPost(_response);
         });
     }
-
-    protected processPost(response: Response): Promise<void> {
+    processPost(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return;
             });
         }
-        return Promise.resolve<void>(null as any);
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    put(client: ClientApiDto): Promise<FileResponse> {
+    put(client) {
         let url_ = this.baseUrl + "/api/Clients";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(client);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "PUT",
             headers: {
@@ -1561,382 +1508,409 @@ export class ClientsClient implements IClientsClient {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPut(_response);
         });
     }
-
-    protected processPut(response: Response): Promise<FileResponse> {
+    processPut(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    get2(id: number): Promise<ClientApiDto> {
+    get2(id) {
         let url_ = this.baseUrl + "/api/Clients/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGet2(_response);
         });
     }
-
-    protected processGet2(response: Response): Promise<ClientApiDto> {
+    processGet2(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ClientApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ClientApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<ClientApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    delete(id: number): Promise<FileResponse> {
+    delete(id) {
         let url_ = this.baseUrl + "/api/Clients/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "DELETE",
             headers: {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processDelete(_response);
         });
     }
-
-    protected processDelete(response: Response): Promise<FileResponse> {
+    processDelete(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getAccessTokenTypes(): Promise<SelectItemDto[]> {
+    getAccessTokenTypes() {
         let url_ = this.baseUrl + "/api/Clients/GetAccessTokenTypes";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetAccessTokenTypes(_response);
         });
     }
-
-    protected processGetAccessTokenTypes(response: Response): Promise<SelectItemDto[]> {
+    processGetAccessTokenTypes(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(SelectItemDto.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [];
+                    for (let item of resultData200)
+                        result200.push(SelectItemDto.fromJS(item));
+                }
+                else {
+                    result200 = null;
+                }
+                return result200;
             });
         }
-        return Promise.resolve<SelectItemDto[]>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getTokenExpirations(): Promise<SelectItemDto[]> {
+    getTokenExpirations() {
         let url_ = this.baseUrl + "/api/Clients/GetTokenExpirations";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetTokenExpirations(_response);
         });
     }
-
-    protected processGetTokenExpirations(response: Response): Promise<SelectItemDto[]> {
+    processGetTokenExpirations(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(SelectItemDto.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [];
+                    for (let item of resultData200)
+                        result200.push(SelectItemDto.fromJS(item));
+                }
+                else {
+                    result200 = null;
+                }
+                return result200;
             });
         }
-        return Promise.resolve<SelectItemDto[]>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getTokenUsage(): Promise<SelectItemDto[]> {
+    getTokenUsage() {
         let url_ = this.baseUrl + "/api/Clients/GetTokenUsage";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetTokenUsage(_response);
         });
     }
-
-    protected processGetTokenUsage(response: Response): Promise<SelectItemDto[]> {
+    processGetTokenUsage(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(SelectItemDto.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [];
+                    for (let item of resultData200)
+                        result200.push(SelectItemDto.fromJS(item));
+                }
+                else {
+                    result200 = null;
+                }
+                return result200;
             });
         }
-        return Promise.resolve<SelectItemDto[]>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getProtocolTypes(): Promise<SelectItemDto[]> {
+    getProtocolTypes() {
         let url_ = this.baseUrl + "/api/Clients/GetProtocolTypes";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetProtocolTypes(_response);
         });
     }
-
-    protected processGetProtocolTypes(response: Response): Promise<SelectItemDto[]> {
+    processGetProtocolTypes(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(SelectItemDto.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [];
+                    for (let item of resultData200)
+                        result200.push(SelectItemDto.fromJS(item));
+                }
+                else {
+                    result200 = null;
+                }
+                return result200;
             });
         }
-        return Promise.resolve<SelectItemDto[]>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getDPoPValidationModes(): Promise<SelectItemDto[]> {
+    getDPoPValidationModes() {
         let url_ = this.baseUrl + "/api/Clients/GetDPoPValidationModes";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetDPoPValidationModes(_response);
         });
     }
-
-    protected processGetDPoPValidationModes(response: Response): Promise<SelectItemDto[]> {
+    processGetDPoPValidationModes(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(SelectItemDto.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [];
+                    for (let item of resultData200)
+                        result200.push(SelectItemDto.fromJS(item));
+                }
+                else {
+                    result200 = null;
+                }
+                return result200;
             });
         }
-        return Promise.resolve<SelectItemDto[]>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getScopes(scope: string | null | undefined, limit: number | undefined): Promise<string[]> {
+    getScopes(scope, limit) {
         let url_ = this.baseUrl + "/api/Clients/GetScopes?";
         if (scope !== undefined && scope !== null)
             url_ += "scope=" + encodeURIComponent("" + scope) + "&";
@@ -1945,53 +1919,56 @@ export class ClientsClient implements IClientsClient {
         else if (limit !== undefined)
             url_ += "limit=" + encodeURIComponent("" + limit) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetScopes(_response);
         });
     }
-
-    protected processGetScopes(response: Response): Promise<string[]> {
+    processGetScopes(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(item);
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [];
+                    for (let item of resultData200)
+                        result200.push(item);
+                }
+                else {
+                    result200 = null;
+                }
+                return result200;
             });
         }
-        return Promise.resolve<string[]>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getGrantTypes(grant: string | null | undefined, includeObsoleteGrants: boolean | undefined, limit: number | undefined): Promise<SelectItemDto[]> {
+    getGrantTypes(grant, includeObsoleteGrants, limit) {
         let url_ = this.baseUrl + "/api/Clients/GetGrantTypes?";
         if (grant !== undefined && grant !== null)
             url_ += "grant=" + encodeURIComponent("" + grant) + "&";
@@ -2004,151 +1981,160 @@ export class ClientsClient implements IClientsClient {
         else if (limit !== undefined)
             url_ += "limit=" + encodeURIComponent("" + limit) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetGrantTypes(_response);
         });
     }
-
-    protected processGetGrantTypes(response: Response): Promise<SelectItemDto[]> {
+    processGetGrantTypes(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(SelectItemDto.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [];
+                    for (let item of resultData200)
+                        result200.push(SelectItemDto.fromJS(item));
+                }
+                else {
+                    result200 = null;
+                }
+                return result200;
             });
         }
-        return Promise.resolve<SelectItemDto[]>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getHashTypes(): Promise<SelectItemDto[]> {
+    getHashTypes() {
         let url_ = this.baseUrl + "/api/Clients/GetHashTypes";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetHashTypes(_response);
         });
     }
-
-    protected processGetHashTypes(response: Response): Promise<SelectItemDto[]> {
+    processGetHashTypes(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(SelectItemDto.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [];
+                    for (let item of resultData200)
+                        result200.push(SelectItemDto.fromJS(item));
+                }
+                else {
+                    result200 = null;
+                }
+                return result200;
             });
         }
-        return Promise.resolve<SelectItemDto[]>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getSecretTypes(): Promise<SelectItemDto[]> {
+    getSecretTypes() {
         let url_ = this.baseUrl + "/api/Clients/GetSecretTypes";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetSecretTypes(_response);
         });
     }
-
-    protected processGetSecretTypes(response: Response): Promise<SelectItemDto[]> {
+    processGetSecretTypes(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(SelectItemDto.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [];
+                    for (let item of resultData200)
+                        result200.push(SelectItemDto.fromJS(item));
+                }
+                else {
+                    result200 = null;
+                }
+                return result200;
             });
         }
-        return Promise.resolve<SelectItemDto[]>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getStandardClaims(claim: string | null | undefined, limit: number | undefined): Promise<string[]> {
+    getStandardClaims(claim, limit) {
         let url_ = this.baseUrl + "/api/Clients/GetStandardClaims?";
         if (claim !== undefined && claim !== null)
             url_ += "claim=" + encodeURIComponent("" + claim) + "&";
@@ -2157,53 +2143,56 @@ export class ClientsClient implements IClientsClient {
         else if (limit !== undefined)
             url_ += "limit=" + encodeURIComponent("" + limit) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetStandardClaims(_response);
         });
     }
-
-    protected processGetStandardClaims(response: Response): Promise<string[]> {
+    processGetStandardClaims(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(item);
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [];
+                    for (let item of resultData200)
+                        result200.push(item);
+                }
+                else {
+                    result200 = null;
+                }
+                return result200;
             });
         }
-        return Promise.resolve<string[]>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getSigningAlgorithms(algorithm: string | null | undefined, limit: number | undefined): Promise<string[]> {
+    getSigningAlgorithms(algorithm, limit) {
         let url_ = this.baseUrl + "/api/Clients/GetSigningAlgorithms?";
         if (algorithm !== undefined && algorithm !== null)
             url_ += "algorithm=" + encodeURIComponent("" + algorithm) + "&";
@@ -2212,53 +2201,56 @@ export class ClientsClient implements IClientsClient {
         else if (limit !== undefined)
             url_ += "limit=" + encodeURIComponent("" + limit) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetSigningAlgorithms(_response);
         });
     }
-
-    protected processGetSigningAlgorithms(response: Response): Promise<string[]> {
+    processGetSigningAlgorithms(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(item);
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [];
+                    for (let item of resultData200)
+                        result200.push(item);
+                }
+                else {
+                    result200 = null;
+                }
+                return result200;
             });
         }
-        return Promise.resolve<string[]>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    canInsertClient(id: number | undefined, clientId: string | null | undefined, isCloned: boolean | undefined): Promise<boolean> {
+    canInsertClient(id, clientId, isCloned) {
         let url_ = this.baseUrl + "/api/Clients/CanInsertClient?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
@@ -2271,96 +2263,101 @@ export class ClientsClient implements IClientsClient {
         else if (isCloned !== undefined)
             url_ += "isCloned=" + encodeURIComponent("" + isCloned) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processCanInsertClient(_response);
         });
     }
-
-    protected processCanInsertClient(response: Response): Promise<boolean> {
+    processCanInsertClient(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null;
+                return result200;
             });
         }
-        return Promise.resolve<boolean>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    postClientClone(client: ClientCloneApiDto): Promise<void> {
+    postClientClone(client) {
         let url_ = this.baseUrl + "/api/Clients/Clone";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(client);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPostClientClone(_response);
         });
     }
-
-    protected processPostClientClone(response: Response): Promise<void> {
+    processPostClientClone(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return;
             });
         }
-        return Promise.resolve<void>(null as any);
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getSecrets(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientSecretsApiDto> {
+    getSecrets(id, page, pageSize) {
         let url_ = this.baseUrl + "/api/Clients/{id}/Secrets?";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2374,192 +2371,205 @@ export class ClientsClient implements IClientsClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetSecrets(_response);
         });
     }
-
-    protected processGetSecrets(response: Response): Promise<ClientSecretsApiDto> {
+    processGetSecrets(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ClientSecretsApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ClientSecretsApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<ClientSecretsApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    postSecret(id: number, clientSecretApi: ClientSecretApiDto): Promise<void> {
+    postSecret(id, clientSecretApi) {
         let url_ = this.baseUrl + "/api/Clients/{id}/Secrets";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(clientSecretApi);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPostSecret(_response);
         });
     }
-
-    protected processPostSecret(response: Response): Promise<void> {
+    processPostSecret(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return;
             });
         }
-        return Promise.resolve<void>(null as any);
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getSecret(secretId: number): Promise<ClientSecretApiDto> {
+    getSecret(secretId) {
         let url_ = this.baseUrl + "/api/Clients/Secrets/{secretId}";
         if (secretId === undefined || secretId === null)
             throw new Error("The parameter 'secretId' must be defined.");
         url_ = url_.replace("{secretId}", encodeURIComponent("" + secretId));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetSecret(_response);
         });
     }
-
-    protected processGetSecret(response: Response): Promise<ClientSecretApiDto> {
+    processGetSecret(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ClientSecretApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ClientSecretApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<ClientSecretApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    deleteSecret(secretId: number): Promise<FileResponse> {
+    deleteSecret(secretId) {
         let url_ = this.baseUrl + "/api/Clients/Secrets/{secretId}";
         if (secretId === undefined || secretId === null)
             throw new Error("The parameter 'secretId' must be defined.");
         url_ = url_.replace("{secretId}", encodeURIComponent("" + secretId));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "DELETE",
             headers: {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processDeleteSecret(_response);
         });
     }
-
-    protected processDeleteSecret(response: Response): Promise<FileResponse> {
+    processDeleteSecret(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientPropertiesApiDto> {
+    getProperties(id, page, pageSize) {
         let url_ = this.baseUrl + "/api/Clients/{id}/Properties?";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2573,192 +2583,205 @@ export class ClientsClient implements IClientsClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetProperties(_response);
         });
     }
-
-    protected processGetProperties(response: Response): Promise<ClientPropertiesApiDto> {
+    processGetProperties(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ClientPropertiesApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ClientPropertiesApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<ClientPropertiesApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    postProperty(id: number, clientPropertyApi: ClientPropertyApiDto): Promise<void> {
+    postProperty(id, clientPropertyApi) {
         let url_ = this.baseUrl + "/api/Clients/{id}/Properties";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(clientPropertyApi);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPostProperty(_response);
         });
     }
-
-    protected processPostProperty(response: Response): Promise<void> {
+    processPostProperty(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return;
             });
         }
-        return Promise.resolve<void>(null as any);
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getProperty(propertyId: number): Promise<ClientPropertyApiDto> {
+    getProperty(propertyId) {
         let url_ = this.baseUrl + "/api/Clients/Properties/{propertyId}";
         if (propertyId === undefined || propertyId === null)
             throw new Error("The parameter 'propertyId' must be defined.");
         url_ = url_.replace("{propertyId}", encodeURIComponent("" + propertyId));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetProperty(_response);
         });
     }
-
-    protected processGetProperty(response: Response): Promise<ClientPropertyApiDto> {
+    processGetProperty(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ClientPropertyApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ClientPropertyApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<ClientPropertyApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    deleteProperty(propertyId: number): Promise<FileResponse> {
+    deleteProperty(propertyId) {
         let url_ = this.baseUrl + "/api/Clients/Properties/{propertyId}";
         if (propertyId === undefined || propertyId === null)
             throw new Error("The parameter 'propertyId' must be defined.");
         url_ = url_.replace("{propertyId}", encodeURIComponent("" + propertyId));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "DELETE",
             headers: {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processDeleteProperty(_response);
         });
     }
-
-    protected processDeleteProperty(response: Response): Promise<FileResponse> {
+    processDeleteProperty(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getClaims(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientClaimsApiDto> {
+    getClaims(id, page, pageSize) {
         let url_ = this.baseUrl + "/api/Clients/{id}/Claims?";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2772,218 +2795,212 @@ export class ClientsClient implements IClientsClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetClaims(_response);
         });
     }
-
-    protected processGetClaims(response: Response): Promise<ClientClaimsApiDto> {
+    processGetClaims(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ClientClaimsApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ClientClaimsApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<ClientClaimsApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    postClaim(id: number, clientClaimApiDto: ClientClaimApiDto): Promise<void> {
+    postClaim(id, clientClaimApiDto) {
         let url_ = this.baseUrl + "/api/Clients/{id}/Claims";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(clientClaimApiDto);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPostClaim(_response);
         });
     }
-
-    protected processPostClaim(response: Response): Promise<void> {
+    processPostClaim(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return;
             });
         }
-        return Promise.resolve<void>(null as any);
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getClaim(claimId: number): Promise<ClientClaimApiDto> {
+    getClaim(claimId) {
         let url_ = this.baseUrl + "/api/Clients/Claims/{claimId}";
         if (claimId === undefined || claimId === null)
             throw new Error("The parameter 'claimId' must be defined.");
         url_ = url_.replace("{claimId}", encodeURIComponent("" + claimId));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetClaim(_response);
         });
     }
-
-    protected processGetClaim(response: Response): Promise<ClientClaimApiDto> {
+    processGetClaim(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ClientClaimApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ClientClaimApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<ClientClaimApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    deleteClaim(claimId: number): Promise<FileResponse> {
+    deleteClaim(claimId) {
         let url_ = this.baseUrl + "/api/Clients/Claims/{claimId}";
         if (claimId === undefined || claimId === null)
             throw new Error("The parameter 'claimId' must be defined.");
         url_ = url_.replace("{claimId}", encodeURIComponent("" + claimId));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "DELETE",
             headers: {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processDeleteClaim(_response);
         });
     }
-
-    protected processDeleteClaim(response: Response): Promise<FileResponse> {
+    processDeleteClaim(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
 }
-
-export interface IIdentityProvidersClient {
-
-    get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<IdentityProvidersApiDto>;
-
-    post(identityProviderApi: IdentityProviderApiDto): Promise<void>;
-
-    put(identityProviderApi: IdentityProviderApiDto): Promise<FileResponse>;
-
-    canInsertIdentityProvider(id: number | undefined, schema: string | null | undefined): Promise<boolean>;
-
-    get2(id: number): Promise<IdentityProviderApiDto>;
-
-    delete(id: number): Promise<FileResponse>;
-}
-
-export class IdentityProvidersClient implements IIdentityProvidersClient {
-    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-        this.http = http ? http : window as any;
-        this.baseUrl = baseUrl ?? "";
+export class IdentityProvidersClient {
+    constructor(baseUrl, http) {
+        this.jsonParseReviver = undefined;
+        this.http = http ? http : window;
+        this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
     }
-
-    get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<IdentityProvidersApiDto> {
+    get(searchText, page, pageSize) {
         let url_ = this.baseUrl + "/api/IdentityProviders?";
         if (searchText !== undefined && searchText !== null)
             url_ += "searchText=" + encodeURIComponent("" + searchText) + "&";
@@ -2996,101 +3013,105 @@ export class IdentityProvidersClient implements IIdentityProvidersClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGet(_response);
         });
     }
-
-    protected processGet(response: Response): Promise<IdentityProvidersApiDto> {
+    processGet(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = IdentityProvidersApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = IdentityProvidersApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<IdentityProvidersApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    post(identityProviderApi: IdentityProviderApiDto): Promise<void> {
+    post(identityProviderApi) {
         let url_ = this.baseUrl + "/api/IdentityProviders";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(identityProviderApi);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPost(_response);
         });
     }
-
-    protected processPost(response: Response): Promise<void> {
+    processPost(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return;
             });
         }
-        return Promise.resolve<void>(null as any);
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    put(identityProviderApi: IdentityProviderApiDto): Promise<FileResponse> {
+    put(identityProviderApi) {
         let url_ = this.baseUrl + "/api/IdentityProviders";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(identityProviderApi);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "PUT",
             headers: {
@@ -3098,43 +3119,48 @@ export class IdentityProvidersClient implements IIdentityProvidersClient {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPut(_response);
         });
     }
-
-    protected processPut(response: Response): Promise<FileResponse> {
+    processPut(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    canInsertIdentityProvider(id: number | undefined, schema: string | null | undefined): Promise<boolean> {
+    canInsertIdentityProvider(id, schema) {
         let url_ = this.baseUrl + "/api/IdentityProviders/CanInsertIdentityProvider?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
@@ -3143,177 +3169,157 @@ export class IdentityProvidersClient implements IIdentityProvidersClient {
         if (schema !== undefined && schema !== null)
             url_ += "schema=" + encodeURIComponent("" + schema) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processCanInsertIdentityProvider(_response);
         });
     }
-
-    protected processCanInsertIdentityProvider(response: Response): Promise<boolean> {
+    processCanInsertIdentityProvider(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null;
+                return result200;
             });
         }
-        return Promise.resolve<boolean>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    get2(id: number): Promise<IdentityProviderApiDto> {
+    get2(id) {
         let url_ = this.baseUrl + "/api/IdentityProviders/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGet2(_response);
         });
     }
-
-    protected processGet2(response: Response): Promise<IdentityProviderApiDto> {
+    processGet2(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = IdentityProviderApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = IdentityProviderApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<IdentityProviderApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    delete(id: number): Promise<FileResponse> {
+    delete(id) {
         let url_ = this.baseUrl + "/api/IdentityProviders/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "DELETE",
             headers: {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processDelete(_response);
         });
     }
-
-    protected processDelete(response: Response): Promise<FileResponse> {
+    processDelete(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
 }
-
-export interface IIdentityResourcesClient {
-
-    get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<IdentityResourcesApiDto>;
-
-    post(identityResourceApi: IdentityResourceApiDto): Promise<void>;
-
-    put(identityResourceApi: IdentityResourceApiDto): Promise<FileResponse>;
-
-    get2(id: number): Promise<IdentityResourceApiDto>;
-
-    delete(id: number): Promise<FileResponse>;
-
-    canInsertIdentityResource(id: number | undefined, name: string | null | undefined): Promise<boolean>;
-
-    canInsertIdentityResourceProperty(id: number | undefined, key: string | null | undefined): Promise<boolean>;
-
-    getProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<IdentityResourcePropertiesApiDto>;
-
-    postProperty(id: number, identityResourcePropertyApi: IdentityResourcePropertyApiDto): Promise<void>;
-
-    getProperty(propertyId: number): Promise<IdentityResourcePropertyApiDto>;
-
-    deleteProperty(propertyId: number): Promise<FileResponse>;
-}
-
-export class IdentityResourcesClient implements IIdentityResourcesClient {
-    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-        this.http = http ? http : window as any;
-        this.baseUrl = baseUrl ?? "";
+export class IdentityResourcesClient {
+    constructor(baseUrl, http) {
+        this.jsonParseReviver = undefined;
+        this.http = http ? http : window;
+        this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
     }
-
-    get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<IdentityResourcesApiDto> {
+    get(searchText, page, pageSize) {
         let url_ = this.baseUrl + "/api/IdentityResources?";
         if (searchText !== undefined && searchText !== null)
             url_ += "searchText=" + encodeURIComponent("" + searchText) + "&";
@@ -3326,101 +3332,105 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGet(_response);
         });
     }
-
-    protected processGet(response: Response): Promise<IdentityResourcesApiDto> {
+    processGet(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = IdentityResourcesApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = IdentityResourcesApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<IdentityResourcesApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    post(identityResourceApi: IdentityResourceApiDto): Promise<void> {
+    post(identityResourceApi) {
         let url_ = this.baseUrl + "/api/IdentityResources";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(identityResourceApi);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPost(_response);
         });
     }
-
-    protected processPost(response: Response): Promise<void> {
+    processPost(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return;
             });
         }
-        return Promise.resolve<void>(null as any);
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    put(identityResourceApi: IdentityResourceApiDto): Promise<FileResponse> {
+    put(identityResourceApi) {
         let url_ = this.baseUrl + "/api/IdentityResources";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(identityResourceApi);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "PUT",
             headers: {
@@ -3428,137 +3438,149 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPut(_response);
         });
     }
-
-    protected processPut(response: Response): Promise<FileResponse> {
+    processPut(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    get2(id: number): Promise<IdentityResourceApiDto> {
+    get2(id) {
         let url_ = this.baseUrl + "/api/IdentityResources/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGet2(_response);
         });
     }
-
-    protected processGet2(response: Response): Promise<IdentityResourceApiDto> {
+    processGet2(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = IdentityResourceApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = IdentityResourceApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<IdentityResourceApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    delete(id: number): Promise<FileResponse> {
+    delete(id) {
         let url_ = this.baseUrl + "/api/IdentityResources/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "DELETE",
             headers: {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processDelete(_response);
         });
     }
-
-    protected processDelete(response: Response): Promise<FileResponse> {
+    processDelete(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    canInsertIdentityResource(id: number | undefined, name: string | null | undefined): Promise<boolean> {
+    canInsertIdentityResource(id, name) {
         let url_ = this.baseUrl + "/api/IdentityResources/CanInsertIdentityResource?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
@@ -3567,47 +3589,49 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
         if (name !== undefined && name !== null)
             url_ += "name=" + encodeURIComponent("" + name) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processCanInsertIdentityResource(_response);
         });
     }
-
-    protected processCanInsertIdentityResource(response: Response): Promise<boolean> {
+    processCanInsertIdentityResource(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null;
+                return result200;
             });
         }
-        return Promise.resolve<boolean>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    canInsertIdentityResourceProperty(id: number | undefined, key: string | null | undefined): Promise<boolean> {
+    canInsertIdentityResourceProperty(id, key) {
         let url_ = this.baseUrl + "/api/IdentityResources/CanInsertIdentityResourceProperty?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
@@ -3616,47 +3640,49 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
         if (key !== undefined && key !== null)
             url_ += "key=" + encodeURIComponent("" + key) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processCanInsertIdentityResourceProperty(_response);
         });
     }
-
-    protected processCanInsertIdentityResourceProperty(response: Response): Promise<boolean> {
+    processCanInsertIdentityResourceProperty(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null;
+                return result200;
             });
         }
-        return Promise.resolve<boolean>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<IdentityResourcePropertiesApiDto> {
+    getProperties(id, page, pageSize) {
         let url_ = this.baseUrl + "/api/IdentityResources/{id}/Properties?";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3670,212 +3696,212 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetProperties(_response);
         });
     }
-
-    protected processGetProperties(response: Response): Promise<IdentityResourcePropertiesApiDto> {
+    processGetProperties(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = IdentityResourcePropertiesApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = IdentityResourcePropertiesApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<IdentityResourcePropertiesApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    postProperty(id: number, identityResourcePropertyApi: IdentityResourcePropertyApiDto): Promise<void> {
+    postProperty(id, identityResourcePropertyApi) {
         let url_ = this.baseUrl + "/api/IdentityResources/{id}/Properties";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(identityResourcePropertyApi);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPostProperty(_response);
         });
     }
-
-    protected processPostProperty(response: Response): Promise<void> {
+    processPostProperty(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return;
             });
         }
-        return Promise.resolve<void>(null as any);
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getProperty(propertyId: number): Promise<IdentityResourcePropertyApiDto> {
+    getProperty(propertyId) {
         let url_ = this.baseUrl + "/api/IdentityResources/Properties/{propertyId}";
         if (propertyId === undefined || propertyId === null)
             throw new Error("The parameter 'propertyId' must be defined.");
         url_ = url_.replace("{propertyId}", encodeURIComponent("" + propertyId));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetProperty(_response);
         });
     }
-
-    protected processGetProperty(response: Response): Promise<IdentityResourcePropertyApiDto> {
+    processGetProperty(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = IdentityResourcePropertyApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = IdentityResourcePropertyApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<IdentityResourcePropertyApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    deleteProperty(propertyId: number): Promise<FileResponse> {
+    deleteProperty(propertyId) {
         let url_ = this.baseUrl + "/api/IdentityResources/Properties/{propertyId}";
         if (propertyId === undefined || propertyId === null)
             throw new Error("The parameter 'propertyId' must be defined.");
         url_ = url_.replace("{propertyId}", encodeURIComponent("" + propertyId));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "DELETE",
             headers: {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processDeleteProperty(_response);
         });
     }
-
-    protected processDeleteProperty(response: Response): Promise<FileResponse> {
+    processDeleteProperty(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
 }
-
-export interface IKeysClient {
-
-    get(page: number | undefined, pageSize: number | undefined): Promise<KeysApiDto>;
-
-    get2(id: string): Promise<KeyApiDto>;
-
-    delete(id: string): Promise<FileResponse>;
-}
-
-export class KeysClient implements IKeysClient {
-    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-        this.http = http ? http : window as any;
-        this.baseUrl = baseUrl ?? "";
+export class KeysClient {
+    constructor(baseUrl, http) {
+        this.jsonParseReviver = undefined;
+        this.http = http ? http : window;
+        this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
     }
-
-    get(page: number | undefined, pageSize: number | undefined): Promise<KeysApiDto> {
+    get(page, pageSize) {
         let url_ = this.baseUrl + "/api/Keys?";
         if (page === null)
             throw new Error("The parameter 'page' cannot be null.");
@@ -3886,164 +3912,157 @@ export class KeysClient implements IKeysClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGet(_response);
         });
     }
-
-    protected processGet(response: Response): Promise<KeysApiDto> {
+    processGet(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = KeysApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = KeysApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<KeysApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    get2(id: string): Promise<KeyApiDto> {
+    get2(id) {
         let url_ = this.baseUrl + "/api/Keys/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGet2(_response);
         });
     }
-
-    protected processGet2(response: Response): Promise<KeyApiDto> {
+    processGet2(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = KeyApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = KeyApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<KeyApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    delete(id: string): Promise<FileResponse> {
+    delete(id) {
         let url_ = this.baseUrl + "/api/Keys/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "DELETE",
             headers: {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processDelete(_response);
         });
     }
-
-    protected processDelete(response: Response): Promise<FileResponse> {
+    processDelete(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
 }
-
-export interface IPersistedGrantsClient {
-
-    get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<PersistedGrantSubjectsApiDto>;
-
-    get2(id: string): Promise<PersistedGrantApiDto>;
-
-    delete(id: string): Promise<FileResponse>;
-
-    getBySubject(subjectId: string, page: number | undefined, pageSize: number | undefined): Promise<PersistedGrantsApiDto>;
-
-    deleteBySubject(subjectId: string): Promise<FileResponse>;
-}
-
-export class PersistedGrantsClient implements IPersistedGrantsClient {
-    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-        this.http = http ? http : window as any;
-        this.baseUrl = baseUrl ?? "";
+export class PersistedGrantsClient {
+    constructor(baseUrl, http) {
+        this.jsonParseReviver = undefined;
+        this.http = http ? http : window;
+        this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
     }
-
-    get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<PersistedGrantSubjectsApiDto> {
+    get(searchText, page, pageSize) {
         let url_ = this.baseUrl + "/api/PersistedGrants/Subjects?";
         if (searchText !== undefined && searchText !== null)
             url_ += "searchText=" + encodeURIComponent("" + searchText) + "&";
@@ -4056,140 +4075,150 @@ export class PersistedGrantsClient implements IPersistedGrantsClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGet(_response);
         });
     }
-
-    protected processGet(response: Response): Promise<PersistedGrantSubjectsApiDto> {
+    processGet(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = PersistedGrantSubjectsApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = PersistedGrantSubjectsApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<PersistedGrantSubjectsApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    get2(id: string): Promise<PersistedGrantApiDto> {
+    get2(id) {
         let url_ = this.baseUrl + "/api/PersistedGrants/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGet2(_response);
         });
     }
-
-    protected processGet2(response: Response): Promise<PersistedGrantApiDto> {
+    processGet2(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = PersistedGrantApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = PersistedGrantApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<PersistedGrantApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    delete(id: string): Promise<FileResponse> {
+    delete(id) {
         let url_ = this.baseUrl + "/api/PersistedGrants/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "DELETE",
             headers: {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processDelete(_response);
         });
     }
-
-    protected processDelete(response: Response): Promise<FileResponse> {
+    processDelete(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getBySubject(subjectId: string, page: number | undefined, pageSize: number | undefined): Promise<PersistedGrantsApiDto> {
+    getBySubject(subjectId, page, pageSize) {
         let url_ = this.baseUrl + "/api/PersistedGrants/Subjects/{subjectId}?";
         if (subjectId === undefined || subjectId === null)
             throw new Error("The parameter 'subjectId' must be defined.");
@@ -4203,223 +4232,210 @@ export class PersistedGrantsClient implements IPersistedGrantsClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetBySubject(_response);
         });
     }
-
-    protected processGetBySubject(response: Response): Promise<PersistedGrantsApiDto> {
+    processGetBySubject(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = PersistedGrantsApiDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = PersistedGrantsApiDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<PersistedGrantsApiDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    deleteBySubject(subjectId: string): Promise<FileResponse> {
+    deleteBySubject(subjectId) {
         let url_ = this.baseUrl + "/api/PersistedGrants/Subjects/{subjectId}";
         if (subjectId === undefined || subjectId === null)
             throw new Error("The parameter 'subjectId' must be defined.");
         url_ = url_.replace("{subjectId}", encodeURIComponent("" + subjectId));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "DELETE",
             headers: {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processDeleteBySubject(_response);
         });
     }
-
-    protected processDeleteBySubject(response: Response): Promise<FileResponse> {
+    processDeleteBySubject(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
 }
-
-export interface IRolesClient {
-
-    get(id: string): Promise<IdentityRoleDto>;
-
-    delete(id: string): Promise<FileResponse>;
-
-    get2(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<IdentityRolesDto>;
-
-    post(role: IdentityRoleDto): Promise<IdentityRoleDto>;
-
-    put(role: IdentityRoleDto): Promise<FileResponse>;
-
-    getRoleUsers(id: string, searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<IdentityUsersDto>;
-
-    getRoleClaims(id: string, page: number | undefined, pageSize: number | undefined): Promise<RoleClaimsApiDtoOfString>;
-
-    deleteRoleClaims(id: string, claimId: number | undefined): Promise<FileResponse>;
-
-    postRoleClaims(roleClaims: RoleClaimApiDtoOfString): Promise<FileResponse>;
-
-    putRoleClaims(roleClaims: RoleClaimApiDtoOfString): Promise<FileResponse>;
-}
-
-export class RolesClient implements IRolesClient {
-    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-        this.http = http ? http : window as any;
-        this.baseUrl = baseUrl ?? "";
+export class RolesClient {
+    constructor(baseUrl, http) {
+        this.jsonParseReviver = undefined;
+        this.http = http ? http : window;
+        this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
     }
-
-    get(id: string): Promise<IdentityRoleDto> {
+    get(id) {
         let url_ = this.baseUrl + "/api/Roles/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGet(_response);
         });
     }
-
-    protected processGet(response: Response): Promise<IdentityRoleDto> {
+    processGet(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = IdentityRoleDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = IdentityRoleDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<IdentityRoleDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    delete(id: string): Promise<FileResponse> {
+    delete(id) {
         let url_ = this.baseUrl + "/api/Roles/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "DELETE",
             headers: {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processDelete(_response);
         });
     }
-
-    protected processDelete(response: Response): Promise<FileResponse> {
+    processDelete(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    get2(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<IdentityRolesDto> {
+    get2(searchText, page, pageSize) {
         let url_ = this.baseUrl + "/api/Roles?";
         if (searchText !== undefined && searchText !== null)
             url_ += "searchText=" + encodeURIComponent("" + searchText) + "&";
@@ -4432,52 +4448,53 @@ export class RolesClient implements IRolesClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGet2(_response);
         });
     }
-
-    protected processGet2(response: Response): Promise<IdentityRolesDto> {
+    processGet2(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = IdentityRolesDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = IdentityRolesDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<IdentityRolesDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    post(role: IdentityRoleDto): Promise<IdentityRoleDto> {
+    post(role) {
         let url_ = this.baseUrl + "/api/Roles";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(role);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "POST",
             headers: {
@@ -4485,52 +4502,55 @@ export class RolesClient implements IRolesClient {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPost(_response);
         });
     }
-
-    protected processPost(response: Response): Promise<IdentityRoleDto> {
+    processPost(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-            let result201: any = null;
-            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result201 = IdentityRoleDto.fromJS(resultData201);
-            return result201;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result201 = null;
+                let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = IdentityRoleDto.fromJS(resultData201);
+                return result201;
             });
         }
-        return Promise.resolve<IdentityRoleDto>(null as any);
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    put(role: IdentityRoleDto): Promise<FileResponse> {
+    put(role) {
         let url_ = this.baseUrl + "/api/Roles";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(role);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "PUT",
             headers: {
@@ -4538,43 +4558,48 @@ export class RolesClient implements IRolesClient {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPut(_response);
         });
     }
-
-    protected processPut(response: Response): Promise<FileResponse> {
+    processPut(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getRoleUsers(id: string, searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<IdentityUsersDto> {
+    getRoleUsers(id, searchText, page, pageSize) {
         let url_ = this.baseUrl + "/api/Roles/{id}/Users?";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -4590,46 +4615,49 @@ export class RolesClient implements IRolesClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetRoleUsers(_response);
         });
     }
-
-    protected processGetRoleUsers(response: Response): Promise<IdentityUsersDto> {
+    processGetRoleUsers(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = IdentityUsersDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = IdentityUsersDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<IdentityUsersDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getRoleClaims(id: string, page: number | undefined, pageSize: number | undefined): Promise<RoleClaimsApiDtoOfString> {
+    getRoleClaims(id, page, pageSize) {
         let url_ = this.baseUrl + "/api/Roles/{id}/Claims?";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -4643,46 +4671,49 @@ export class RolesClient implements IRolesClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetRoleClaims(_response);
         });
     }
-
-    protected processGetRoleClaims(response: Response): Promise<RoleClaimsApiDtoOfString> {
+    processGetRoleClaims(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = RoleClaimsApiDtoOfString.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = RoleClaimsApiDtoOfString.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<RoleClaimsApiDtoOfString>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    deleteRoleClaims(id: string, claimId: number | undefined): Promise<FileResponse> {
+    deleteRoleClaims(id, claimId) {
         let url_ = this.baseUrl + "/api/Roles/{id}/Claims?";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -4692,56 +4723,58 @@ export class RolesClient implements IRolesClient {
         else if (claimId !== undefined)
             url_ += "claimId=" + encodeURIComponent("" + claimId) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "DELETE",
             headers: {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processDeleteRoleClaims(_response);
         });
     }
-
-    protected processDeleteRoleClaims(response: Response): Promise<FileResponse> {
+    processDeleteRoleClaims(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    postRoleClaims(roleClaims: RoleClaimApiDtoOfString): Promise<FileResponse> {
+    postRoleClaims(roleClaims) {
         let url_ = this.baseUrl + "/api/Roles/Claims";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(roleClaims);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "POST",
             headers: {
@@ -4749,49 +4782,52 @@ export class RolesClient implements IRolesClient {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPostRoleClaims(_response);
         });
     }
-
-    protected processPostRoleClaims(response: Response): Promise<FileResponse> {
+    processPostRoleClaims(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    putRoleClaims(roleClaims: RoleClaimApiDtoOfString): Promise<FileResponse> {
+    putRoleClaims(roleClaims) {
         let url_ = this.baseUrl + "/api/Roles/Claims";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(roleClaims);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "PUT",
             headers: {
@@ -4799,187 +4835,156 @@ export class RolesClient implements IRolesClient {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPutRoleClaims(_response);
         });
     }
-
-    protected processPutRoleClaims(response: Response): Promise<FileResponse> {
+    processPutRoleClaims(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
 }
-
-export interface IUsersClient {
-
-    get(id: string): Promise<IdentityUserDto>;
-
-    delete(id: string): Promise<FileResponse>;
-
-    get2(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<IdentityUsersDto>;
-
-    post(user: IdentityUserDto): Promise<IdentityUserDto>;
-
-    put(user: IdentityUserDto): Promise<FileResponse>;
-
-    getUserRoles(id: string, page: number | undefined, pageSize: number | undefined): Promise<UserRolesApiDtoOfIdentityRoleDto>;
-
-    postUserRoles(role: UserRoleApiDtoOfString): Promise<FileResponse>;
-
-    deleteUserRoles(role: UserRoleApiDtoOfString): Promise<FileResponse>;
-
-    getUserClaims(id: string, page: number | undefined, pageSize: number | undefined): Promise<UserClaimsApiDtoOfString>;
-
-    deleteUserClaims(id: string, claimId: number | undefined): Promise<FileResponse>;
-
-    postUserClaims(claim: UserClaimApiDtoOfString): Promise<FileResponse>;
-
-    putUserClaims(claim: UserClaimApiDtoOfString): Promise<FileResponse>;
-
-    getUserProviders(id: string): Promise<UserProvidersApiDtoOfString>;
-
-    deleteUserProviders(provider: UserProviderDeleteApiDtoOfString): Promise<FileResponse>;
-
-    postChangePassword(password: UserChangePasswordApiDtoOfString): Promise<FileResponse>;
-
-    getRoleClaims(id: string, claimSearchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<RoleClaimsApiDtoOfString>;
-
-    getClaimUsers(claimType: string, claimValue: string, page: number | undefined, pageSize: number | undefined): Promise<IdentityUsersDto>;
-
-    getClaimUsers2(claimType: string, page: number | undefined, pageSize: number | undefined): Promise<IdentityUsersDto>;
-}
-
-export class UsersClient implements IUsersClient {
-    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-        this.http = http ? http : window as any;
-        this.baseUrl = baseUrl ?? "";
+export class UsersClient {
+    constructor(baseUrl, http) {
+        this.jsonParseReviver = undefined;
+        this.http = http ? http : window;
+        this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
     }
-
-    get(id: string): Promise<IdentityUserDto> {
+    get(id) {
         let url_ = this.baseUrl + "/api/Users/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGet(_response);
         });
     }
-
-    protected processGet(response: Response): Promise<IdentityUserDto> {
+    processGet(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = IdentityUserDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = IdentityUserDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<IdentityUserDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    delete(id: string): Promise<FileResponse> {
+    delete(id) {
         let url_ = this.baseUrl + "/api/Users/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "DELETE",
             headers: {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processDelete(_response);
         });
     }
-
-    protected processDelete(response: Response): Promise<FileResponse> {
+    processDelete(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    get2(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<IdentityUsersDto> {
+    get2(searchText, page, pageSize) {
         let url_ = this.baseUrl + "/api/Users?";
         if (searchText !== undefined && searchText !== null)
             url_ += "searchText=" + encodeURIComponent("" + searchText) + "&";
@@ -4992,52 +4997,53 @@ export class UsersClient implements IUsersClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGet2(_response);
         });
     }
-
-    protected processGet2(response: Response): Promise<IdentityUsersDto> {
+    processGet2(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = IdentityUsersDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = IdentityUsersDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<IdentityUsersDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    post(user: IdentityUserDto): Promise<IdentityUserDto> {
+    post(user) {
         let url_ = this.baseUrl + "/api/Users";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(user);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "POST",
             headers: {
@@ -5045,52 +5051,55 @@ export class UsersClient implements IUsersClient {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPost(_response);
         });
     }
-
-    protected processPost(response: Response): Promise<IdentityUserDto> {
+    processPost(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-            let result201: any = null;
-            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result201 = IdentityUserDto.fromJS(resultData201);
-            return result201;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = ProblemDetails.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result201 = null;
+                let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = IdentityUserDto.fromJS(resultData201);
+                return result201;
             });
         }
-        return Promise.resolve<IdentityUserDto>(null as any);
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    put(user: IdentityUserDto): Promise<FileResponse> {
+    put(user) {
         let url_ = this.baseUrl + "/api/Users";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(user);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "PUT",
             headers: {
@@ -5098,43 +5107,48 @@ export class UsersClient implements IUsersClient {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPut(_response);
         });
     }
-
-    protected processPut(response: Response): Promise<FileResponse> {
+    processPut(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getUserRoles(id: string, page: number | undefined, pageSize: number | undefined): Promise<UserRolesApiDtoOfIdentityRoleDto> {
+    getUserRoles(id, page, pageSize) {
         let url_ = this.baseUrl + "/api/Users/{id}/Roles?";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -5148,52 +5162,53 @@ export class UsersClient implements IUsersClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetUserRoles(_response);
         });
     }
-
-    protected processGetUserRoles(response: Response): Promise<UserRolesApiDtoOfIdentityRoleDto> {
+    processGetUserRoles(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = UserRolesApiDtoOfIdentityRoleDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = UserRolesApiDtoOfIdentityRoleDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<UserRolesApiDtoOfIdentityRoleDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    postUserRoles(role: UserRoleApiDtoOfString): Promise<FileResponse> {
+    postUserRoles(role) {
         let url_ = this.baseUrl + "/api/Users/Roles";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(role);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "POST",
             headers: {
@@ -5201,49 +5216,52 @@ export class UsersClient implements IUsersClient {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPostUserRoles(_response);
         });
     }
-
-    protected processPostUserRoles(response: Response): Promise<FileResponse> {
+    processPostUserRoles(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    deleteUserRoles(role: UserRoleApiDtoOfString): Promise<FileResponse> {
+    deleteUserRoles(role) {
         let url_ = this.baseUrl + "/api/Users/Roles";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(role);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "DELETE",
             headers: {
@@ -5251,43 +5269,48 @@ export class UsersClient implements IUsersClient {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processDeleteUserRoles(_response);
         });
     }
-
-    protected processDeleteUserRoles(response: Response): Promise<FileResponse> {
+    processDeleteUserRoles(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getUserClaims(id: string, page: number | undefined, pageSize: number | undefined): Promise<UserClaimsApiDtoOfString> {
+    getUserClaims(id, page, pageSize) {
         let url_ = this.baseUrl + "/api/Users/{id}/Claims?";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -5301,46 +5324,49 @@ export class UsersClient implements IUsersClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetUserClaims(_response);
         });
     }
-
-    protected processGetUserClaims(response: Response): Promise<UserClaimsApiDtoOfString> {
+    processGetUserClaims(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = UserClaimsApiDtoOfString.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = UserClaimsApiDtoOfString.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<UserClaimsApiDtoOfString>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    deleteUserClaims(id: string, claimId: number | undefined): Promise<FileResponse> {
+    deleteUserClaims(id, claimId) {
         let url_ = this.baseUrl + "/api/Users/{id}/Claims?";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -5350,56 +5376,58 @@ export class UsersClient implements IUsersClient {
         else if (claimId !== undefined)
             url_ += "claimId=" + encodeURIComponent("" + claimId) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "DELETE",
             headers: {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processDeleteUserClaims(_response);
         });
     }
-
-    protected processDeleteUserClaims(response: Response): Promise<FileResponse> {
+    processDeleteUserClaims(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    postUserClaims(claim: UserClaimApiDtoOfString): Promise<FileResponse> {
+    postUserClaims(claim) {
         let url_ = this.baseUrl + "/api/Users/Claims";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(claim);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "POST",
             headers: {
@@ -5407,49 +5435,52 @@ export class UsersClient implements IUsersClient {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPostUserClaims(_response);
         });
     }
-
-    protected processPostUserClaims(response: Response): Promise<FileResponse> {
+    processPostUserClaims(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    putUserClaims(claim: UserClaimApiDtoOfString): Promise<FileResponse> {
+    putUserClaims(claim) {
         let url_ = this.baseUrl + "/api/Users/Claims";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(claim);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "PUT",
             headers: {
@@ -5457,94 +5488,100 @@ export class UsersClient implements IUsersClient {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPutUserClaims(_response);
         });
     }
-
-    protected processPutUserClaims(response: Response): Promise<FileResponse> {
+    processPutUserClaims(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getUserProviders(id: string): Promise<UserProvidersApiDtoOfString> {
+    getUserProviders(id) {
         let url_ = this.baseUrl + "/api/Users/{id}/Providers";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetUserProviders(_response);
         });
     }
-
-    protected processGetUserProviders(response: Response): Promise<UserProvidersApiDtoOfString> {
+    processGetUserProviders(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = UserProvidersApiDtoOfString.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = UserProvidersApiDtoOfString.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<UserProvidersApiDtoOfString>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    deleteUserProviders(provider: UserProviderDeleteApiDtoOfString): Promise<FileResponse> {
+    deleteUserProviders(provider) {
         let url_ = this.baseUrl + "/api/Users/Providers";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(provider);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "DELETE",
             headers: {
@@ -5552,49 +5589,52 @@ export class UsersClient implements IUsersClient {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processDeleteUserProviders(_response);
         });
     }
-
-    protected processDeleteUserProviders(response: Response): Promise<FileResponse> {
+    processDeleteUserProviders(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    postChangePassword(password: UserChangePasswordApiDtoOfString): Promise<FileResponse> {
+    postChangePassword(password) {
         let url_ = this.baseUrl + "/api/Users/ChangePassword";
         url_ = url_.replace(/[?&]$/, "");
-
         const content_ = JSON.stringify(password);
-
-        let options_: RequestInit = {
+        let options_ = {
             body: content_,
             method: "POST",
             headers: {
@@ -5602,43 +5642,48 @@ export class UsersClient implements IUsersClient {
                 "Accept": "application/octet-stream"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processPostChangePassword(_response);
         });
     }
-
-    protected processPostChangePassword(response: Response): Promise<FileResponse> {
+    processPostChangePassword(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200 || status === 206) {
             const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
             let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
             let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
             if (fileName) {
                 fileName = decodeURIComponent(fileName);
-            } else {
+            }
+            else {
                 fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
                 fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
             }
             return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
+        }
+        else if (status === 401) {
             return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("Unauthorized", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getRoleClaims(id: string, claimSearchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<RoleClaimsApiDtoOfString> {
+    getRoleClaims(id, claimSearchText, page, pageSize) {
         let url_ = this.baseUrl + "/api/Users/{id}/RoleClaims?";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -5654,46 +5699,49 @@ export class UsersClient implements IUsersClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetRoleClaims(_response);
         });
     }
-
-    protected processGetRoleClaims(response: Response): Promise<RoleClaimsApiDtoOfString> {
+    processGetRoleClaims(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = RoleClaimsApiDtoOfString.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = RoleClaimsApiDtoOfString.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<RoleClaimsApiDtoOfString>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getClaimUsers(claimType: string, claimValue: string, page: number | undefined, pageSize: number | undefined): Promise<IdentityUsersDto> {
+    getClaimUsers(claimType, claimValue, page, pageSize) {
         let url_ = this.baseUrl + "/api/Users/ClaimType/{claimType}/ClaimValue/{claimValue}?";
         if (claimType === undefined || claimType === null)
             throw new Error("The parameter 'claimType' must be defined.");
@@ -5710,46 +5758,49 @@ export class UsersClient implements IUsersClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetClaimUsers(_response);
         });
     }
-
-    protected processGetClaimUsers(response: Response): Promise<IdentityUsersDto> {
+    processGetClaimUsers(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = IdentityUsersDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = IdentityUsersDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<IdentityUsersDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
-
-    getClaimUsers2(claimType: string, page: number | undefined, pageSize: number | undefined): Promise<IdentityUsersDto> {
+    getClaimUsers2(claimType, page, pageSize) {
         let url_ = this.baseUrl + "/api/Users/ClaimType/{claimType}?";
         if (claimType === undefined || claimType === null)
             throw new Error("The parameter 'claimType' must be defined.");
@@ -5763,80 +5814,76 @@ export class UsersClient implements IUsersClient {
         else if (pageSize !== undefined)
             url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
+        let options_ = {
             method: "GET",
             headers: {
                 "Accept": "application/json"
             }
         };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.http.fetch(url_, options_).then((_response) => {
             return this.processGetClaimUsers2(_response);
         });
     }
-
-    protected processGetClaimUsers2(response: Response): Promise<IdentityUsersDto> {
+    processGetClaimUsers2(response) {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = IdentityUsersDto.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = IdentityUsersDto.fromJS(resultData200);
+                return result200;
             });
         }
-        return Promise.resolve<IdentityUsersDto>(null as any);
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
 }
-
-export class ApiResourcesApiDto implements IApiResourcesApiDto {
-    pageSize!: number;
-    totalCount!: number;
-    apiResources!: ApiResourceApiDto[] | undefined;
-
-    constructor(data?: IApiResourcesApiDto) {
+export class ApiResourcesApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.pageSize = _data["pageSize"];
             this.totalCount = _data["totalCount"];
             if (Array.isArray(_data["apiResources"])) {
-                this.apiResources = [] as any;
+                this.apiResources = [];
                 for (let item of _data["apiResources"])
-                    this.apiResources!.push(ApiResourceApiDto.fromJS(item));
+                    this.apiResources.push(ApiResourceApiDto.fromJS(item));
             }
         }
     }
-
-    static fromJS(data: any): ApiResourcesApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new ApiResourcesApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["pageSize"] = this.pageSize;
         data["totalCount"] = this.totalCount;
@@ -5848,35 +5895,16 @@ export class ApiResourcesApiDto implements IApiResourcesApiDto {
         return data;
     }
 }
-
-export interface IApiResourcesApiDto {
-    pageSize: number;
-    totalCount: number;
-    apiResources: ApiResourceApiDto[] | undefined;
-}
-
-export class ApiResourceApiDto implements IApiResourceApiDto {
-    id!: number;
-    name!: string;
-    displayName!: string | undefined;
-    description!: string | undefined;
-    enabled!: boolean;
-    showInDiscoveryDocument!: boolean;
-    requireResourceIndicator!: boolean;
-    userClaims!: string[] | undefined;
-    allowedAccessTokenSigningAlgorithms!: string[] | undefined;
-    scopes!: string[] | undefined;
-
-    constructor(data?: IApiResourceApiDto) {
+export class ApiResourceApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.id = _data["id"];
             this.name = _data["name"];
@@ -5886,31 +5914,29 @@ export class ApiResourceApiDto implements IApiResourceApiDto {
             this.showInDiscoveryDocument = _data["showInDiscoveryDocument"];
             this.requireResourceIndicator = _data["requireResourceIndicator"];
             if (Array.isArray(_data["userClaims"])) {
-                this.userClaims = [] as any;
+                this.userClaims = [];
                 for (let item of _data["userClaims"])
-                    this.userClaims!.push(item);
+                    this.userClaims.push(item);
             }
             if (Array.isArray(_data["allowedAccessTokenSigningAlgorithms"])) {
-                this.allowedAccessTokenSigningAlgorithms = [] as any;
+                this.allowedAccessTokenSigningAlgorithms = [];
                 for (let item of _data["allowedAccessTokenSigningAlgorithms"])
-                    this.allowedAccessTokenSigningAlgorithms!.push(item);
+                    this.allowedAccessTokenSigningAlgorithms.push(item);
             }
             if (Array.isArray(_data["scopes"])) {
-                this.scopes = [] as any;
+                this.scopes = [];
                 for (let item of _data["scopes"])
-                    this.scopes!.push(item);
+                    this.scopes.push(item);
             }
         }
     }
-
-    static fromJS(data: any): ApiResourceApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new ApiResourceApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["name"] = this.name;
@@ -5937,39 +5963,16 @@ export class ApiResourceApiDto implements IApiResourceApiDto {
         return data;
     }
 }
-
-export interface IApiResourceApiDto {
-    id: number;
-    name: string;
-    displayName: string | undefined;
-    description: string | undefined;
-    enabled: boolean;
-    showInDiscoveryDocument: boolean;
-    requireResourceIndicator: boolean;
-    userClaims: string[] | undefined;
-    allowedAccessTokenSigningAlgorithms: string[] | undefined;
-    scopes: string[] | undefined;
-}
-
-export class ProblemDetails implements IProblemDetails {
-    type!: string | undefined;
-    title!: string | undefined;
-    status!: number | undefined;
-    detail!: string | undefined;
-    instance!: string | undefined;
-
-    [key: string]: any;
-
-    constructor(data?: IProblemDetails) {
+export class ProblemDetails {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             for (var property in _data) {
                 if (_data.hasOwnProperty(property))
@@ -5982,15 +5985,13 @@ export class ProblemDetails implements IProblemDetails {
             this.instance = _data["instance"];
         }
     }
-
-    static fromJS(data: any): ProblemDetails {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new ProblemDetails();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         for (var property in this) {
             if (this.hasOwnProperty(property))
@@ -6004,51 +6005,33 @@ export class ProblemDetails implements IProblemDetails {
         return data;
     }
 }
-
-export interface IProblemDetails {
-    type: string | undefined;
-    title: string | undefined;
-    status: number | undefined;
-    detail: string | undefined;
-    instance: string | undefined;
-
-    [key: string]: any;
-}
-
-export class ApiSecretsApiDto implements IApiSecretsApiDto {
-    totalCount!: number;
-    pageSize!: number;
-    apiSecrets!: ApiSecretApiDto[] | undefined;
-
-    constructor(data?: IApiSecretsApiDto) {
+export class ApiSecretsApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.totalCount = _data["totalCount"];
             this.pageSize = _data["pageSize"];
             if (Array.isArray(_data["apiSecrets"])) {
-                this.apiSecrets = [] as any;
+                this.apiSecrets = [];
                 for (let item of _data["apiSecrets"])
-                    this.apiSecrets!.push(ApiSecretApiDto.fromJS(item));
+                    this.apiSecrets.push(ApiSecretApiDto.fromJS(item));
             }
         }
     }
-
-    static fromJS(data: any): ApiSecretsApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new ApiSecretsApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["totalCount"] = this.totalCount;
         data["pageSize"] = this.pageSize;
@@ -6060,103 +6043,69 @@ export class ApiSecretsApiDto implements IApiSecretsApiDto {
         return data;
     }
 }
-
-export interface IApiSecretsApiDto {
-    totalCount: number;
-    pageSize: number;
-    apiSecrets: ApiSecretApiDto[] | undefined;
-}
-
-export class ApiSecretApiDto implements IApiSecretApiDto {
-    type!: string;
-    id!: number;
-    description!: string | undefined;
-    value!: string;
-    hashType!: string | undefined;
-    expiration!: dayjs.Dayjs | undefined;
-
-    constructor(data?: IApiSecretApiDto) {
+export class ApiSecretApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.type = _data["type"];
             this.id = _data["id"];
             this.description = _data["description"];
             this.value = _data["value"];
             this.hashType = _data["hashType"];
-            this.expiration = _data["expiration"] ? dayjs(_data["expiration"].toString()) : <any>undefined;
+            this.expiration = _data["expiration"] ? dayjs(_data["expiration"].toString()) : undefined;
         }
     }
-
-    static fromJS(data: any): ApiSecretApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new ApiSecretApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["type"] = this.type;
         data["id"] = this.id;
         data["description"] = this.description;
         data["value"] = this.value;
         data["hashType"] = this.hashType;
-        data["expiration"] = this.expiration ? this.expiration.toISOString() : <any>undefined;
+        data["expiration"] = this.expiration ? this.expiration.toISOString() : undefined;
         return data;
     }
 }
-
-export interface IApiSecretApiDto {
-    type: string;
-    id: number;
-    description: string | undefined;
-    value: string;
-    hashType: string | undefined;
-    expiration: dayjs.Dayjs | undefined;
-}
-
-export class ApiResourcePropertiesApiDto implements IApiResourcePropertiesApiDto {
-    apiResourceProperties!: ApiResourcePropertyApiDto[] | undefined;
-    totalCount!: number;
-    pageSize!: number;
-
-    constructor(data?: IApiResourcePropertiesApiDto) {
+export class ApiResourcePropertiesApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             if (Array.isArray(_data["apiResourceProperties"])) {
-                this.apiResourceProperties = [] as any;
+                this.apiResourceProperties = [];
                 for (let item of _data["apiResourceProperties"])
-                    this.apiResourceProperties!.push(ApiResourcePropertyApiDto.fromJS(item));
+                    this.apiResourceProperties.push(ApiResourcePropertyApiDto.fromJS(item));
             }
             this.totalCount = _data["totalCount"];
             this.pageSize = _data["pageSize"];
         }
     }
-
-    static fromJS(data: any): ApiResourcePropertiesApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new ApiResourcePropertiesApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         if (Array.isArray(this.apiResourceProperties)) {
             data["apiResourceProperties"] = [];
@@ -6168,43 +6117,29 @@ export class ApiResourcePropertiesApiDto implements IApiResourcePropertiesApiDto
         return data;
     }
 }
-
-export interface IApiResourcePropertiesApiDto {
-    apiResourceProperties: ApiResourcePropertyApiDto[] | undefined;
-    totalCount: number;
-    pageSize: number;
-}
-
-export class ApiResourcePropertyApiDto implements IApiResourcePropertyApiDto {
-    id!: number;
-    key!: string | undefined;
-    value!: string | undefined;
-
-    constructor(data?: IApiResourcePropertyApiDto) {
+export class ApiResourcePropertyApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.id = _data["id"];
             this.key = _data["key"];
             this.value = _data["value"];
         }
     }
-
-    static fromJS(data: any): ApiResourcePropertyApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new ApiResourcePropertyApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["key"] = this.key;
@@ -6212,47 +6147,33 @@ export class ApiResourcePropertyApiDto implements IApiResourcePropertyApiDto {
         return data;
     }
 }
-
-export interface IApiResourcePropertyApiDto {
-    id: number;
-    key: string | undefined;
-    value: string | undefined;
-}
-
-export class ApiScopesApiDto implements IApiScopesApiDto {
-    pageSize!: number;
-    totalCount!: number;
-    scopes!: ApiScopeApiDto[] | undefined;
-
-    constructor(data?: IApiScopesApiDto) {
+export class ApiScopesApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.pageSize = _data["pageSize"];
             this.totalCount = _data["totalCount"];
             if (Array.isArray(_data["scopes"])) {
-                this.scopes = [] as any;
+                this.scopes = [];
                 for (let item of _data["scopes"])
-                    this.scopes!.push(ApiScopeApiDto.fromJS(item));
+                    this.scopes.push(ApiScopeApiDto.fromJS(item));
             }
         }
     }
-
-    static fromJS(data: any): ApiScopesApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new ApiScopesApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["pageSize"] = this.pageSize;
         data["totalCount"] = this.totalCount;
@@ -6264,35 +6185,16 @@ export class ApiScopesApiDto implements IApiScopesApiDto {
         return data;
     }
 }
-
-export interface IApiScopesApiDto {
-    pageSize: number;
-    totalCount: number;
-    scopes: ApiScopeApiDto[] | undefined;
-}
-
-export class ApiScopeApiDto implements IApiScopeApiDto {
-    showInDiscoveryDocument!: boolean;
-    id!: number;
-    name!: string;
-    displayName!: string | undefined;
-    description!: string | undefined;
-    required!: boolean;
-    emphasize!: boolean;
-    enabled!: boolean;
-    userClaims!: string[] | undefined;
-    apiScopeProperties!: ApiScopePropertyApiDto[] | undefined;
-
-    constructor(data?: IApiScopeApiDto) {
+export class ApiScopeApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.showInDiscoveryDocument = _data["showInDiscoveryDocument"];
             this.id = _data["id"];
@@ -6303,26 +6205,24 @@ export class ApiScopeApiDto implements IApiScopeApiDto {
             this.emphasize = _data["emphasize"];
             this.enabled = _data["enabled"];
             if (Array.isArray(_data["userClaims"])) {
-                this.userClaims = [] as any;
+                this.userClaims = [];
                 for (let item of _data["userClaims"])
-                    this.userClaims!.push(item);
+                    this.userClaims.push(item);
             }
             if (Array.isArray(_data["apiScopeProperties"])) {
-                this.apiScopeProperties = [] as any;
+                this.apiScopeProperties = [];
                 for (let item of _data["apiScopeProperties"])
-                    this.apiScopeProperties!.push(ApiScopePropertyApiDto.fromJS(item));
+                    this.apiScopeProperties.push(ApiScopePropertyApiDto.fromJS(item));
             }
         }
     }
-
-    static fromJS(data: any): ApiScopeApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new ApiScopeApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["showInDiscoveryDocument"] = this.showInDiscoveryDocument;
         data["id"] = this.id;
@@ -6345,50 +6245,29 @@ export class ApiScopeApiDto implements IApiScopeApiDto {
         return data;
     }
 }
-
-export interface IApiScopeApiDto {
-    showInDiscoveryDocument: boolean;
-    id: number;
-    name: string;
-    displayName: string | undefined;
-    description: string | undefined;
-    required: boolean;
-    emphasize: boolean;
-    enabled: boolean;
-    userClaims: string[] | undefined;
-    apiScopeProperties: ApiScopePropertyApiDto[] | undefined;
-}
-
-export class ApiScopePropertyApiDto implements IApiScopePropertyApiDto {
-    id!: number;
-    key!: string | undefined;
-    value!: string | undefined;
-
-    constructor(data?: IApiScopePropertyApiDto) {
+export class ApiScopePropertyApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.id = _data["id"];
             this.key = _data["key"];
             this.value = _data["value"];
         }
     }
-
-    static fromJS(data: any): ApiScopePropertyApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new ApiScopePropertyApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["key"] = this.key;
@@ -6396,47 +6275,33 @@ export class ApiScopePropertyApiDto implements IApiScopePropertyApiDto {
         return data;
     }
 }
-
-export interface IApiScopePropertyApiDto {
-    id: number;
-    key: string | undefined;
-    value: string | undefined;
-}
-
-export class ApiScopePropertiesApiDto implements IApiScopePropertiesApiDto {
-    apiScopeProperties!: ApiScopePropertyApiDto[] | undefined;
-    totalCount!: number;
-    pageSize!: number;
-
-    constructor(data?: IApiScopePropertiesApiDto) {
+export class ApiScopePropertiesApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             if (Array.isArray(_data["apiScopeProperties"])) {
-                this.apiScopeProperties = [] as any;
+                this.apiScopeProperties = [];
                 for (let item of _data["apiScopeProperties"])
-                    this.apiScopeProperties!.push(ApiScopePropertyApiDto.fromJS(item));
+                    this.apiScopeProperties.push(ApiScopePropertyApiDto.fromJS(item));
             }
             this.totalCount = _data["totalCount"];
             this.pageSize = _data["pageSize"];
         }
     }
-
-    static fromJS(data: any): ApiScopePropertiesApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new ApiScopePropertiesApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         if (Array.isArray(this.apiScopeProperties)) {
             data["apiScopeProperties"] = [];
@@ -6448,47 +6313,33 @@ export class ApiScopePropertiesApiDto implements IApiScopePropertiesApiDto {
         return data;
     }
 }
-
-export interface IApiScopePropertiesApiDto {
-    apiScopeProperties: ApiScopePropertyApiDto[] | undefined;
-    totalCount: number;
-    pageSize: number;
-}
-
-export class ClientsApiDto implements IClientsApiDto {
-    clients!: ClientApiDto[] | undefined;
-    totalCount!: number;
-    pageSize!: number;
-
-    constructor(data?: IClientsApiDto) {
+export class ClientsApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             if (Array.isArray(_data["clients"])) {
-                this.clients = [] as any;
+                this.clients = [];
                 for (let item of _data["clients"])
-                    this.clients!.push(ClientApiDto.fromJS(item));
+                    this.clients.push(ClientApiDto.fromJS(item));
             }
             this.totalCount = _data["totalCount"];
             this.pageSize = _data["pageSize"];
         }
     }
-
-    static fromJS(data: any): ClientsApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new ClientsApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         if (Array.isArray(this.clients)) {
             data["clients"] = [];
@@ -6500,85 +6351,16 @@ export class ClientsApiDto implements IClientsApiDto {
         return data;
     }
 }
-
-export interface IClientsApiDto {
-    clients: ClientApiDto[] | undefined;
-    totalCount: number;
-    pageSize: number;
-}
-
-export class ClientApiDto implements IClientApiDto {
-    absoluteRefreshTokenLifetime!: number;
-    accessTokenLifetime!: number;
-    consentLifetime!: number | undefined;
-    accessTokenType!: number;
-    allowAccessTokensViaBrowser!: boolean;
-    allowOfflineAccess!: boolean;
-    allowPlainTextPkce!: boolean;
-    allowRememberConsent!: boolean;
-    alwaysIncludeUserClaimsInIdToken!: boolean;
-    alwaysSendClientClaims!: boolean;
-    authorizationCodeLifetime!: number;
-    frontChannelLogoutUri!: string | undefined;
-    frontChannelLogoutSessionRequired!: boolean;
-    backChannelLogoutUri!: string | undefined;
-    backChannelLogoutSessionRequired!: boolean;
-    clientId!: string;
-    clientName!: string;
-    clientUri!: string | undefined;
-    description!: string | undefined;
-    enabled!: boolean;
-    enableLocalLogin!: boolean;
-    id!: number;
-    identityTokenLifetime!: number;
-    includeJwtId!: boolean;
-    logoUri!: string | undefined;
-    clientClaimsPrefix!: string | undefined;
-    pairWiseSubjectSalt!: string | undefined;
-    protocolType!: string | undefined;
-    refreshTokenExpiration!: number;
-    refreshTokenUsage!: number;
-    slidingRefreshTokenLifetime!: number;
-    requireClientSecret!: boolean;
-    requireConsent!: boolean;
-    requirePkce!: boolean;
-    updateAccessTokenClaimsOnRefresh!: boolean;
-    postLogoutRedirectUris!: string[] | undefined;
-    identityProviderRestrictions!: string[] | undefined;
-    redirectUris!: string[] | undefined;
-    allowedCorsOrigins!: string[] | undefined;
-    allowedGrantTypes!: string[] | undefined;
-    allowedScopes!: string[] | undefined;
-    claims!: ClientClaimApiDto[] | undefined;
-    properties!: ClientPropertyApiDto[] | undefined;
-    updated!: dayjs.Dayjs | undefined;
-    lastAccessed!: dayjs.Dayjs | undefined;
-    userSsoLifetime!: number | undefined;
-    userCodeType!: string | undefined;
-    deviceCodeLifetime!: number;
-    requireRequestObject!: boolean;
-    cibaLifetime!: number | undefined;
-    pollingInterval!: number | undefined;
-    coordinateLifetimeWithUserSession!: boolean;
-    requireDPoP!: boolean;
-    dPoPValidationMode!: number;
-    dPoPClockSkew!: dayjs.Dayjs;
-    pushedAuthorizationLifetime!: number | undefined;
-    requirePushedAuthorization!: boolean;
-    initiateLoginUri!: string | undefined;
-    allowedIdentityTokenSigningAlgorithms!: string[] | undefined;
-    nonEditable!: boolean;
-
-    constructor(data?: IClientApiDto) {
+export class ClientApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.absoluteRefreshTokenLifetime = _data["absoluteRefreshTokenLifetime"];
             this.accessTokenLifetime = _data["accessTokenLifetime"];
@@ -6616,47 +6398,47 @@ export class ClientApiDto implements IClientApiDto {
             this.requirePkce = _data["requirePkce"];
             this.updateAccessTokenClaimsOnRefresh = _data["updateAccessTokenClaimsOnRefresh"];
             if (Array.isArray(_data["postLogoutRedirectUris"])) {
-                this.postLogoutRedirectUris = [] as any;
+                this.postLogoutRedirectUris = [];
                 for (let item of _data["postLogoutRedirectUris"])
-                    this.postLogoutRedirectUris!.push(item);
+                    this.postLogoutRedirectUris.push(item);
             }
             if (Array.isArray(_data["identityProviderRestrictions"])) {
-                this.identityProviderRestrictions = [] as any;
+                this.identityProviderRestrictions = [];
                 for (let item of _data["identityProviderRestrictions"])
-                    this.identityProviderRestrictions!.push(item);
+                    this.identityProviderRestrictions.push(item);
             }
             if (Array.isArray(_data["redirectUris"])) {
-                this.redirectUris = [] as any;
+                this.redirectUris = [];
                 for (let item of _data["redirectUris"])
-                    this.redirectUris!.push(item);
+                    this.redirectUris.push(item);
             }
             if (Array.isArray(_data["allowedCorsOrigins"])) {
-                this.allowedCorsOrigins = [] as any;
+                this.allowedCorsOrigins = [];
                 for (let item of _data["allowedCorsOrigins"])
-                    this.allowedCorsOrigins!.push(item);
+                    this.allowedCorsOrigins.push(item);
             }
             if (Array.isArray(_data["allowedGrantTypes"])) {
-                this.allowedGrantTypes = [] as any;
+                this.allowedGrantTypes = [];
                 for (let item of _data["allowedGrantTypes"])
-                    this.allowedGrantTypes!.push(item);
+                    this.allowedGrantTypes.push(item);
             }
             if (Array.isArray(_data["allowedScopes"])) {
-                this.allowedScopes = [] as any;
+                this.allowedScopes = [];
                 for (let item of _data["allowedScopes"])
-                    this.allowedScopes!.push(item);
+                    this.allowedScopes.push(item);
             }
             if (Array.isArray(_data["claims"])) {
-                this.claims = [] as any;
+                this.claims = [];
                 for (let item of _data["claims"])
-                    this.claims!.push(ClientClaimApiDto.fromJS(item));
+                    this.claims.push(ClientClaimApiDto.fromJS(item));
             }
             if (Array.isArray(_data["properties"])) {
-                this.properties = [] as any;
+                this.properties = [];
                 for (let item of _data["properties"])
-                    this.properties!.push(ClientPropertyApiDto.fromJS(item));
+                    this.properties.push(ClientPropertyApiDto.fromJS(item));
             }
-            this.updated = _data["updated"] ? dayjs(_data["updated"].toString()) : <any>undefined;
-            this.lastAccessed = _data["lastAccessed"] ? dayjs(_data["lastAccessed"].toString()) : <any>undefined;
+            this.updated = _data["updated"] ? dayjs(_data["updated"].toString()) : undefined;
+            this.lastAccessed = _data["lastAccessed"] ? dayjs(_data["lastAccessed"].toString()) : undefined;
             this.userSsoLifetime = _data["userSsoLifetime"];
             this.userCodeType = _data["userCodeType"];
             this.deviceCodeLifetime = _data["deviceCodeLifetime"];
@@ -6666,27 +6448,25 @@ export class ClientApiDto implements IClientApiDto {
             this.coordinateLifetimeWithUserSession = _data["coordinateLifetimeWithUserSession"];
             this.requireDPoP = _data["requireDPoP"];
             this.dPoPValidationMode = _data["dPoPValidationMode"];
-            this.dPoPClockSkew = _data["dPoPClockSkew"] ? dayjs(_data["dPoPClockSkew"].toString()) : <any>undefined;
+            this.dPoPClockSkew = _data["dPoPClockSkew"] ? dayjs(_data["dPoPClockSkew"].toString()) : undefined;
             this.pushedAuthorizationLifetime = _data["pushedAuthorizationLifetime"];
             this.requirePushedAuthorization = _data["requirePushedAuthorization"];
             this.initiateLoginUri = _data["initiateLoginUri"];
             if (Array.isArray(_data["allowedIdentityTokenSigningAlgorithms"])) {
-                this.allowedIdentityTokenSigningAlgorithms = [] as any;
+                this.allowedIdentityTokenSigningAlgorithms = [];
                 for (let item of _data["allowedIdentityTokenSigningAlgorithms"])
-                    this.allowedIdentityTokenSigningAlgorithms!.push(item);
+                    this.allowedIdentityTokenSigningAlgorithms.push(item);
             }
             this.nonEditable = _data["nonEditable"];
         }
     }
-
-    static fromJS(data: any): ClientApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new ClientApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["absoluteRefreshTokenLifetime"] = this.absoluteRefreshTokenLifetime;
         data["accessTokenLifetime"] = this.accessTokenLifetime;
@@ -6763,8 +6543,8 @@ export class ClientApiDto implements IClientApiDto {
             for (let item of this.properties)
                 data["properties"].push(item.toJSON());
         }
-        data["updated"] = this.updated ? this.updated.toISOString() : <any>undefined;
-        data["lastAccessed"] = this.lastAccessed ? this.lastAccessed.toISOString() : <any>undefined;
+        data["updated"] = this.updated ? this.updated.toISOString() : undefined;
+        data["lastAccessed"] = this.lastAccessed ? this.lastAccessed.toISOString() : undefined;
         data["userSsoLifetime"] = this.userSsoLifetime;
         data["userCodeType"] = this.userCodeType;
         data["deviceCodeLifetime"] = this.deviceCodeLifetime;
@@ -6774,7 +6554,7 @@ export class ClientApiDto implements IClientApiDto {
         data["coordinateLifetimeWithUserSession"] = this.coordinateLifetimeWithUserSession;
         data["requireDPoP"] = this.requireDPoP;
         data["dPoPValidationMode"] = this.dPoPValidationMode;
-        data["dPoPClockSkew"] = this.dPoPClockSkew ? this.dPoPClockSkew.format('d.hh:mm:ss.SSS') : <any>undefined;
+        data["dPoPClockSkew"] = this.dPoPClockSkew ? this.dPoPClockSkew.format('d.hh:mm:ss.SSS') : undefined;
         data["pushedAuthorizationLifetime"] = this.pushedAuthorizationLifetime;
         data["requirePushedAuthorization"] = this.requirePushedAuthorization;
         data["initiateLoginUri"] = this.initiateLoginUri;
@@ -6787,100 +6567,29 @@ export class ClientApiDto implements IClientApiDto {
         return data;
     }
 }
-
-export interface IClientApiDto {
-    absoluteRefreshTokenLifetime: number;
-    accessTokenLifetime: number;
-    consentLifetime: number | undefined;
-    accessTokenType: number;
-    allowAccessTokensViaBrowser: boolean;
-    allowOfflineAccess: boolean;
-    allowPlainTextPkce: boolean;
-    allowRememberConsent: boolean;
-    alwaysIncludeUserClaimsInIdToken: boolean;
-    alwaysSendClientClaims: boolean;
-    authorizationCodeLifetime: number;
-    frontChannelLogoutUri: string | undefined;
-    frontChannelLogoutSessionRequired: boolean;
-    backChannelLogoutUri: string | undefined;
-    backChannelLogoutSessionRequired: boolean;
-    clientId: string;
-    clientName: string;
-    clientUri: string | undefined;
-    description: string | undefined;
-    enabled: boolean;
-    enableLocalLogin: boolean;
-    id: number;
-    identityTokenLifetime: number;
-    includeJwtId: boolean;
-    logoUri: string | undefined;
-    clientClaimsPrefix: string | undefined;
-    pairWiseSubjectSalt: string | undefined;
-    protocolType: string | undefined;
-    refreshTokenExpiration: number;
-    refreshTokenUsage: number;
-    slidingRefreshTokenLifetime: number;
-    requireClientSecret: boolean;
-    requireConsent: boolean;
-    requirePkce: boolean;
-    updateAccessTokenClaimsOnRefresh: boolean;
-    postLogoutRedirectUris: string[] | undefined;
-    identityProviderRestrictions: string[] | undefined;
-    redirectUris: string[] | undefined;
-    allowedCorsOrigins: string[] | undefined;
-    allowedGrantTypes: string[] | undefined;
-    allowedScopes: string[] | undefined;
-    claims: ClientClaimApiDto[] | undefined;
-    properties: ClientPropertyApiDto[] | undefined;
-    updated: dayjs.Dayjs | undefined;
-    lastAccessed: dayjs.Dayjs | undefined;
-    userSsoLifetime: number | undefined;
-    userCodeType: string | undefined;
-    deviceCodeLifetime: number;
-    requireRequestObject: boolean;
-    cibaLifetime: number | undefined;
-    pollingInterval: number | undefined;
-    coordinateLifetimeWithUserSession: boolean;
-    requireDPoP: boolean;
-    dPoPValidationMode: number;
-    dPoPClockSkew: dayjs.Dayjs;
-    pushedAuthorizationLifetime: number | undefined;
-    requirePushedAuthorization: boolean;
-    initiateLoginUri: string | undefined;
-    allowedIdentityTokenSigningAlgorithms: string[] | undefined;
-    nonEditable: boolean;
-}
-
-export class ClientClaimApiDto implements IClientClaimApiDto {
-    id!: number;
-    type!: string;
-    value!: string;
-
-    constructor(data?: IClientClaimApiDto) {
+export class ClientClaimApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.id = _data["id"];
             this.type = _data["type"];
             this.value = _data["value"];
         }
     }
-
-    static fromJS(data: any): ClientClaimApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new ClientClaimApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["type"] = this.type;
@@ -6888,43 +6597,29 @@ export class ClientClaimApiDto implements IClientClaimApiDto {
         return data;
     }
 }
-
-export interface IClientClaimApiDto {
-    id: number;
-    type: string;
-    value: string;
-}
-
-export class ClientPropertyApiDto implements IClientPropertyApiDto {
-    id!: number;
-    key!: string | undefined;
-    value!: string | undefined;
-
-    constructor(data?: IClientPropertyApiDto) {
+export class ClientPropertyApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.id = _data["id"];
             this.key = _data["key"];
             this.value = _data["value"];
         }
     }
-
-    static fromJS(data: any): ClientPropertyApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new ClientPropertyApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["key"] = this.key;
@@ -6932,76 +6627,44 @@ export class ClientPropertyApiDto implements IClientPropertyApiDto {
         return data;
     }
 }
-
-export interface IClientPropertyApiDto {
-    id: number;
-    key: string | undefined;
-    value: string | undefined;
-}
-
-export class SelectItemDto implements ISelectItemDto {
-    id!: string | undefined;
-    text!: string | undefined;
-
-    constructor(data?: ISelectItemDto) {
+export class SelectItemDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.id = _data["id"];
             this.text = _data["text"];
         }
     }
-
-    static fromJS(data: any): SelectItemDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new SelectItemDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["text"] = this.text;
         return data;
     }
 }
-
-export interface ISelectItemDto {
-    id: string | undefined;
-    text: string | undefined;
-}
-
-export class ClientCloneApiDto implements IClientCloneApiDto {
-    id!: number;
-    clientId!: string;
-    clientName!: string;
-    cloneClientCorsOrigins!: boolean;
-    cloneClientRedirectUris!: boolean;
-    cloneClientIdPRestrictions!: boolean;
-    cloneClientPostLogoutRedirectUris!: boolean;
-    cloneClientGrantTypes!: boolean;
-    cloneClientScopes!: boolean;
-    cloneClientClaims!: boolean;
-    cloneClientProperties!: boolean;
-
-    constructor(data?: IClientCloneApiDto) {
+export class ClientCloneApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.id = _data["id"];
             this.clientId = _data["clientId"];
@@ -7016,15 +6679,13 @@ export class ClientCloneApiDto implements IClientCloneApiDto {
             this.cloneClientProperties = _data["cloneClientProperties"];
         }
     }
-
-    static fromJS(data: any): ClientCloneApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new ClientCloneApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["clientId"] = this.clientId;
@@ -7040,55 +6701,33 @@ export class ClientCloneApiDto implements IClientCloneApiDto {
         return data;
     }
 }
-
-export interface IClientCloneApiDto {
-    id: number;
-    clientId: string;
-    clientName: string;
-    cloneClientCorsOrigins: boolean;
-    cloneClientRedirectUris: boolean;
-    cloneClientIdPRestrictions: boolean;
-    cloneClientPostLogoutRedirectUris: boolean;
-    cloneClientGrantTypes: boolean;
-    cloneClientScopes: boolean;
-    cloneClientClaims: boolean;
-    cloneClientProperties: boolean;
-}
-
-export class ClientSecretsApiDto implements IClientSecretsApiDto {
-    totalCount!: number;
-    pageSize!: number;
-    clientSecrets!: ClientSecretApiDto[] | undefined;
-
-    constructor(data?: IClientSecretsApiDto) {
+export class ClientSecretsApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.totalCount = _data["totalCount"];
             this.pageSize = _data["pageSize"];
             if (Array.isArray(_data["clientSecrets"])) {
-                this.clientSecrets = [] as any;
+                this.clientSecrets = [];
                 for (let item of _data["clientSecrets"])
-                    this.clientSecrets!.push(ClientSecretApiDto.fromJS(item));
+                    this.clientSecrets.push(ClientSecretApiDto.fromJS(item));
             }
         }
     }
-
-    static fromJS(data: any): ClientSecretsApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new ClientSecretsApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["totalCount"] = this.totalCount;
         data["pageSize"] = this.pageSize;
@@ -7100,103 +6739,69 @@ export class ClientSecretsApiDto implements IClientSecretsApiDto {
         return data;
     }
 }
-
-export interface IClientSecretsApiDto {
-    totalCount: number;
-    pageSize: number;
-    clientSecrets: ClientSecretApiDto[] | undefined;
-}
-
-export class ClientSecretApiDto implements IClientSecretApiDto {
-    type!: string;
-    id!: number;
-    description!: string | undefined;
-    value!: string;
-    hashType!: string | undefined;
-    expiration!: dayjs.Dayjs | undefined;
-
-    constructor(data?: IClientSecretApiDto) {
+export class ClientSecretApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.type = _data["type"];
             this.id = _data["id"];
             this.description = _data["description"];
             this.value = _data["value"];
             this.hashType = _data["hashType"];
-            this.expiration = _data["expiration"] ? dayjs(_data["expiration"].toString()) : <any>undefined;
+            this.expiration = _data["expiration"] ? dayjs(_data["expiration"].toString()) : undefined;
         }
     }
-
-    static fromJS(data: any): ClientSecretApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new ClientSecretApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["type"] = this.type;
         data["id"] = this.id;
         data["description"] = this.description;
         data["value"] = this.value;
         data["hashType"] = this.hashType;
-        data["expiration"] = this.expiration ? this.expiration.toISOString() : <any>undefined;
+        data["expiration"] = this.expiration ? this.expiration.toISOString() : undefined;
         return data;
     }
 }
-
-export interface IClientSecretApiDto {
-    type: string;
-    id: number;
-    description: string | undefined;
-    value: string;
-    hashType: string | undefined;
-    expiration: dayjs.Dayjs | undefined;
-}
-
-export class ClientPropertiesApiDto implements IClientPropertiesApiDto {
-    clientProperties!: ClientPropertyApiDto[] | undefined;
-    totalCount!: number;
-    pageSize!: number;
-
-    constructor(data?: IClientPropertiesApiDto) {
+export class ClientPropertiesApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             if (Array.isArray(_data["clientProperties"])) {
-                this.clientProperties = [] as any;
+                this.clientProperties = [];
                 for (let item of _data["clientProperties"])
-                    this.clientProperties!.push(ClientPropertyApiDto.fromJS(item));
+                    this.clientProperties.push(ClientPropertyApiDto.fromJS(item));
             }
             this.totalCount = _data["totalCount"];
             this.pageSize = _data["pageSize"];
         }
     }
-
-    static fromJS(data: any): ClientPropertiesApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new ClientPropertiesApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         if (Array.isArray(this.clientProperties)) {
             data["clientProperties"] = [];
@@ -7208,47 +6813,33 @@ export class ClientPropertiesApiDto implements IClientPropertiesApiDto {
         return data;
     }
 }
-
-export interface IClientPropertiesApiDto {
-    clientProperties: ClientPropertyApiDto[] | undefined;
-    totalCount: number;
-    pageSize: number;
-}
-
-export class ClientClaimsApiDto implements IClientClaimsApiDto {
-    clientClaims!: ClientClaimApiDto[] | undefined;
-    totalCount!: number;
-    pageSize!: number;
-
-    constructor(data?: IClientClaimsApiDto) {
+export class ClientClaimsApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             if (Array.isArray(_data["clientClaims"])) {
-                this.clientClaims = [] as any;
+                this.clientClaims = [];
                 for (let item of _data["clientClaims"])
-                    this.clientClaims!.push(ClientClaimApiDto.fromJS(item));
+                    this.clientClaims.push(ClientClaimApiDto.fromJS(item));
             }
             this.totalCount = _data["totalCount"];
             this.pageSize = _data["pageSize"];
         }
     }
-
-    static fromJS(data: any): ClientClaimsApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new ClientClaimsApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         if (Array.isArray(this.clientClaims)) {
             data["clientClaims"] = [];
@@ -7260,47 +6851,33 @@ export class ClientClaimsApiDto implements IClientClaimsApiDto {
         return data;
     }
 }
-
-export interface IClientClaimsApiDto {
-    clientClaims: ClientClaimApiDto[] | undefined;
-    totalCount: number;
-    pageSize: number;
-}
-
-export class IdentityProvidersApiDto implements IIdentityProvidersApiDto {
-    pageSize!: number;
-    totalCount!: number;
-    identityProviders!: IdentityProviderApiDto[] | undefined;
-
-    constructor(data?: IIdentityProvidersApiDto) {
+export class IdentityProvidersApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.pageSize = _data["pageSize"];
             this.totalCount = _data["totalCount"];
             if (Array.isArray(_data["identityProviders"])) {
-                this.identityProviders = [] as any;
+                this.identityProviders = [];
                 for (let item of _data["identityProviders"])
-                    this.identityProviders!.push(IdentityProviderApiDto.fromJS(item));
+                    this.identityProviders.push(IdentityProviderApiDto.fromJS(item));
             }
         }
     }
-
-    static fromJS(data: any): IdentityProvidersApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new IdentityProvidersApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["pageSize"] = this.pageSize;
         data["totalCount"] = this.totalCount;
@@ -7312,31 +6889,16 @@ export class IdentityProvidersApiDto implements IIdentityProvidersApiDto {
         return data;
     }
 }
-
-export interface IIdentityProvidersApiDto {
-    pageSize: number;
-    totalCount: number;
-    identityProviders: IdentityProviderApiDto[] | undefined;
-}
-
-export class IdentityProviderApiDto implements IIdentityProviderApiDto {
-    type!: string | undefined;
-    id!: number;
-    scheme!: string;
-    displayName!: string | undefined;
-    enabled!: boolean;
-    identityProviderProperties!: { [key: string]: string; } | undefined;
-
-    constructor(data?: IIdentityProviderApiDto) {
+export class IdentityProviderApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.type = _data["type"];
             this.id = _data["id"];
@@ -7344,23 +6906,21 @@ export class IdentityProviderApiDto implements IIdentityProviderApiDto {
             this.displayName = _data["displayName"];
             this.enabled = _data["enabled"];
             if (_data["identityProviderProperties"]) {
-                this.identityProviderProperties = {} as any;
+                this.identityProviderProperties = {};
                 for (let key in _data["identityProviderProperties"]) {
                     if (_data["identityProviderProperties"].hasOwnProperty(key))
-                        (<any>this.identityProviderProperties)![key] = _data["identityProviderProperties"][key];
+                        this.identityProviderProperties[key] = _data["identityProviderProperties"][key];
                 }
             }
         }
     }
-
-    static fromJS(data: any): IdentityProviderApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new IdentityProviderApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["type"] = this.type;
         data["id"] = this.id;
@@ -7371,56 +6931,39 @@ export class IdentityProviderApiDto implements IIdentityProviderApiDto {
             data["identityProviderProperties"] = {};
             for (let key in this.identityProviderProperties) {
                 if (this.identityProviderProperties.hasOwnProperty(key))
-                    (<any>data["identityProviderProperties"])[key] = (<any>this.identityProviderProperties)[key];
+                    data["identityProviderProperties"][key] = this.identityProviderProperties[key];
             }
         }
         return data;
     }
 }
-
-export interface IIdentityProviderApiDto {
-    type: string | undefined;
-    id: number;
-    scheme: string;
-    displayName: string | undefined;
-    enabled: boolean;
-    identityProviderProperties: { [key: string]: string; } | undefined;
-}
-
-export class IdentityResourcesApiDto implements IIdentityResourcesApiDto {
-    pageSize!: number;
-    totalCount!: number;
-    identityResources!: IdentityResourceApiDto[] | undefined;
-
-    constructor(data?: IIdentityResourcesApiDto) {
+export class IdentityResourcesApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.pageSize = _data["pageSize"];
             this.totalCount = _data["totalCount"];
             if (Array.isArray(_data["identityResources"])) {
-                this.identityResources = [] as any;
+                this.identityResources = [];
                 for (let item of _data["identityResources"])
-                    this.identityResources!.push(IdentityResourceApiDto.fromJS(item));
+                    this.identityResources.push(IdentityResourceApiDto.fromJS(item));
             }
         }
     }
-
-    static fromJS(data: any): IdentityResourcesApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new IdentityResourcesApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["pageSize"] = this.pageSize;
         data["totalCount"] = this.totalCount;
@@ -7432,34 +6975,16 @@ export class IdentityResourcesApiDto implements IIdentityResourcesApiDto {
         return data;
     }
 }
-
-export interface IIdentityResourcesApiDto {
-    pageSize: number;
-    totalCount: number;
-    identityResources: IdentityResourceApiDto[] | undefined;
-}
-
-export class IdentityResourceApiDto implements IIdentityResourceApiDto {
-    id!: number;
-    name!: string;
-    displayName!: string | undefined;
-    description!: string | undefined;
-    enabled!: boolean;
-    showInDiscoveryDocument!: boolean;
-    required!: boolean;
-    emphasize!: boolean;
-    userClaims!: string[] | undefined;
-
-    constructor(data?: IIdentityResourceApiDto) {
+export class IdentityResourceApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.id = _data["id"];
             this.name = _data["name"];
@@ -7470,21 +6995,19 @@ export class IdentityResourceApiDto implements IIdentityResourceApiDto {
             this.required = _data["required"];
             this.emphasize = _data["emphasize"];
             if (Array.isArray(_data["userClaims"])) {
-                this.userClaims = [] as any;
+                this.userClaims = [];
                 for (let item of _data["userClaims"])
-                    this.userClaims!.push(item);
+                    this.userClaims.push(item);
             }
         }
     }
-
-    static fromJS(data: any): IdentityResourceApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new IdentityResourceApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["name"] = this.name;
@@ -7502,53 +7025,33 @@ export class IdentityResourceApiDto implements IIdentityResourceApiDto {
         return data;
     }
 }
-
-export interface IIdentityResourceApiDto {
-    id: number;
-    name: string;
-    displayName: string | undefined;
-    description: string | undefined;
-    enabled: boolean;
-    showInDiscoveryDocument: boolean;
-    required: boolean;
-    emphasize: boolean;
-    userClaims: string[] | undefined;
-}
-
-export class IdentityResourcePropertiesApiDto implements IIdentityResourcePropertiesApiDto {
-    totalCount!: number;
-    pageSize!: number;
-    identityResourceProperties!: IdentityResourcePropertyApiDto[] | undefined;
-
-    constructor(data?: IIdentityResourcePropertiesApiDto) {
+export class IdentityResourcePropertiesApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.totalCount = _data["totalCount"];
             this.pageSize = _data["pageSize"];
             if (Array.isArray(_data["identityResourceProperties"])) {
-                this.identityResourceProperties = [] as any;
+                this.identityResourceProperties = [];
                 for (let item of _data["identityResourceProperties"])
-                    this.identityResourceProperties!.push(IdentityResourcePropertyApiDto.fromJS(item));
+                    this.identityResourceProperties.push(IdentityResourcePropertyApiDto.fromJS(item));
             }
         }
     }
-
-    static fromJS(data: any): IdentityResourcePropertiesApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new IdentityResourcePropertiesApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["totalCount"] = this.totalCount;
         data["pageSize"] = this.pageSize;
@@ -7560,43 +7063,29 @@ export class IdentityResourcePropertiesApiDto implements IIdentityResourceProper
         return data;
     }
 }
-
-export interface IIdentityResourcePropertiesApiDto {
-    totalCount: number;
-    pageSize: number;
-    identityResourceProperties: IdentityResourcePropertyApiDto[] | undefined;
-}
-
-export class IdentityResourcePropertyApiDto implements IIdentityResourcePropertyApiDto {
-    id!: number;
-    key!: string | undefined;
-    value!: string | undefined;
-
-    constructor(data?: IIdentityResourcePropertyApiDto) {
+export class IdentityResourcePropertyApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.id = _data["id"];
             this.key = _data["key"];
             this.value = _data["value"];
         }
     }
-
-    static fromJS(data: any): IdentityResourcePropertyApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new IdentityResourcePropertyApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["key"] = this.key;
@@ -7604,47 +7093,33 @@ export class IdentityResourcePropertyApiDto implements IIdentityResourceProperty
         return data;
     }
 }
-
-export interface IIdentityResourcePropertyApiDto {
-    id: number;
-    key: string | undefined;
-    value: string | undefined;
-}
-
-export class KeysApiDto implements IKeysApiDto {
-    keys!: KeyApiDto[] | undefined;
-    totalCount!: number;
-    pageSize!: number;
-
-    constructor(data?: IKeysApiDto) {
+export class KeysApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             if (Array.isArray(_data["keys"])) {
-                this.keys = [] as any;
+                this.keys = [];
                 for (let item of _data["keys"])
-                    this.keys!.push(KeyApiDto.fromJS(item));
+                    this.keys.push(KeyApiDto.fromJS(item));
             }
             this.totalCount = _data["totalCount"];
             this.pageSize = _data["pageSize"];
         }
     }
-
-    static fromJS(data: any): KeysApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new KeysApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         if (Array.isArray(this.keys)) {
             data["keys"] = [];
@@ -7656,103 +7131,69 @@ export class KeysApiDto implements IKeysApiDto {
         return data;
     }
 }
-
-export interface IKeysApiDto {
-    keys: KeyApiDto[] | undefined;
-    totalCount: number;
-    pageSize: number;
-}
-
-export class KeyApiDto implements IKeyApiDto {
-    id!: string | undefined;
-    version!: number;
-    created!: dayjs.Dayjs;
-    use!: string | undefined;
-    algorithm!: string | undefined;
-    isX509Certificate!: boolean;
-
-    constructor(data?: IKeyApiDto) {
+export class KeyApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.id = _data["id"];
             this.version = _data["version"];
-            this.created = _data["created"] ? dayjs(_data["created"].toString()) : <any>undefined;
+            this.created = _data["created"] ? dayjs(_data["created"].toString()) : undefined;
             this.use = _data["use"];
             this.algorithm = _data["algorithm"];
             this.isX509Certificate = _data["isX509Certificate"];
         }
     }
-
-    static fromJS(data: any): KeyApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new KeyApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["version"] = this.version;
-        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
+        data["created"] = this.created ? this.created.toISOString() : undefined;
         data["use"] = this.use;
         data["algorithm"] = this.algorithm;
         data["isX509Certificate"] = this.isX509Certificate;
         return data;
     }
 }
-
-export interface IKeyApiDto {
-    id: string | undefined;
-    version: number;
-    created: dayjs.Dayjs;
-    use: string | undefined;
-    algorithm: string | undefined;
-    isX509Certificate: boolean;
-}
-
-export class PersistedGrantSubjectsApiDto implements IPersistedGrantSubjectsApiDto {
-    totalCount!: number;
-    pageSize!: number;
-    persistedGrants!: PersistedGrantSubjectApiDto[] | undefined;
-
-    constructor(data?: IPersistedGrantSubjectsApiDto) {
+export class PersistedGrantSubjectsApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.totalCount = _data["totalCount"];
             this.pageSize = _data["pageSize"];
             if (Array.isArray(_data["persistedGrants"])) {
-                this.persistedGrants = [] as any;
+                this.persistedGrants = [];
                 for (let item of _data["persistedGrants"])
-                    this.persistedGrants!.push(PersistedGrantSubjectApiDto.fromJS(item));
+                    this.persistedGrants.push(PersistedGrantSubjectApiDto.fromJS(item));
             }
         }
     }
-
-    static fromJS(data: any): PersistedGrantSubjectsApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new PersistedGrantSubjectsApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["totalCount"] = this.totalCount;
         data["pageSize"] = this.pageSize;
@@ -7764,37 +7205,16 @@ export class PersistedGrantSubjectsApiDto implements IPersistedGrantSubjectsApiD
         return data;
     }
 }
-
-export interface IPersistedGrantSubjectsApiDto {
-    totalCount: number;
-    pageSize: number;
-    persistedGrants: PersistedGrantSubjectApiDto[] | undefined;
-}
-
-export class PersistedGrantSubjectApiDto implements IPersistedGrantSubjectApiDto {
-    id!: number;
-    key!: string | undefined;
-    type!: string | undefined;
-    subjectId!: string | undefined;
-    subjectName!: string | undefined;
-    clientId!: string | undefined;
-    creationTime!: dayjs.Dayjs;
-    expiration!: dayjs.Dayjs | undefined;
-    data!: string | undefined;
-    consumedTime!: dayjs.Dayjs | undefined;
-    sessionId!: string | undefined;
-    description!: string | undefined;
-
-    constructor(data?: IPersistedGrantSubjectApiDto) {
+export class PersistedGrantSubjectApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.id = _data["id"];
             this.key = _data["key"];
@@ -7802,23 +7222,21 @@ export class PersistedGrantSubjectApiDto implements IPersistedGrantSubjectApiDto
             this.subjectId = _data["subjectId"];
             this.subjectName = _data["subjectName"];
             this.clientId = _data["clientId"];
-            this.creationTime = _data["creationTime"] ? dayjs(_data["creationTime"].toString()) : <any>undefined;
-            this.expiration = _data["expiration"] ? dayjs(_data["expiration"].toString()) : <any>undefined;
+            this.creationTime = _data["creationTime"] ? dayjs(_data["creationTime"].toString()) : undefined;
+            this.expiration = _data["expiration"] ? dayjs(_data["expiration"].toString()) : undefined;
             this.data = _data["data"];
-            this.consumedTime = _data["consumedTime"] ? dayjs(_data["consumedTime"].toString()) : <any>undefined;
+            this.consumedTime = _data["consumedTime"] ? dayjs(_data["consumedTime"].toString()) : undefined;
             this.sessionId = _data["sessionId"];
             this.description = _data["description"];
         }
     }
-
-    static fromJS(data: any): PersistedGrantSubjectApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new PersistedGrantSubjectApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["key"] = this.key;
@@ -7826,55 +7244,25 @@ export class PersistedGrantSubjectApiDto implements IPersistedGrantSubjectApiDto
         data["subjectId"] = this.subjectId;
         data["subjectName"] = this.subjectName;
         data["clientId"] = this.clientId;
-        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
-        data["expiration"] = this.expiration ? this.expiration.toISOString() : <any>undefined;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : undefined;
+        data["expiration"] = this.expiration ? this.expiration.toISOString() : undefined;
         data["data"] = this.data;
-        data["consumedTime"] = this.consumedTime ? this.consumedTime.toISOString() : <any>undefined;
+        data["consumedTime"] = this.consumedTime ? this.consumedTime.toISOString() : undefined;
         data["sessionId"] = this.sessionId;
         data["description"] = this.description;
         return data;
     }
 }
-
-export interface IPersistedGrantSubjectApiDto {
-    id: number;
-    key: string | undefined;
-    type: string | undefined;
-    subjectId: string | undefined;
-    subjectName: string | undefined;
-    clientId: string | undefined;
-    creationTime: dayjs.Dayjs;
-    expiration: dayjs.Dayjs | undefined;
-    data: string | undefined;
-    consumedTime: dayjs.Dayjs | undefined;
-    sessionId: string | undefined;
-    description: string | undefined;
-}
-
-export class PersistedGrantApiDto implements IPersistedGrantApiDto {
-    id!: number;
-    key!: string | undefined;
-    type!: string | undefined;
-    subjectId!: string | undefined;
-    subjectName!: string | undefined;
-    clientId!: string | undefined;
-    creationTime!: dayjs.Dayjs;
-    expiration!: dayjs.Dayjs | undefined;
-    data!: string | undefined;
-    consumedTime!: dayjs.Dayjs | undefined;
-    sessionId!: string | undefined;
-    description!: string | undefined;
-
-    constructor(data?: IPersistedGrantApiDto) {
+export class PersistedGrantApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.id = _data["id"];
             this.key = _data["key"];
@@ -7882,23 +7270,21 @@ export class PersistedGrantApiDto implements IPersistedGrantApiDto {
             this.subjectId = _data["subjectId"];
             this.subjectName = _data["subjectName"];
             this.clientId = _data["clientId"];
-            this.creationTime = _data["creationTime"] ? dayjs(_data["creationTime"].toString()) : <any>undefined;
-            this.expiration = _data["expiration"] ? dayjs(_data["expiration"].toString()) : <any>undefined;
+            this.creationTime = _data["creationTime"] ? dayjs(_data["creationTime"].toString()) : undefined;
+            this.expiration = _data["expiration"] ? dayjs(_data["expiration"].toString()) : undefined;
             this.data = _data["data"];
-            this.consumedTime = _data["consumedTime"] ? dayjs(_data["consumedTime"].toString()) : <any>undefined;
+            this.consumedTime = _data["consumedTime"] ? dayjs(_data["consumedTime"].toString()) : undefined;
             this.sessionId = _data["sessionId"];
             this.description = _data["description"];
         }
     }
-
-    static fromJS(data: any): PersistedGrantApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new PersistedGrantApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["key"] = this.key;
@@ -7906,65 +7292,42 @@ export class PersistedGrantApiDto implements IPersistedGrantApiDto {
         data["subjectId"] = this.subjectId;
         data["subjectName"] = this.subjectName;
         data["clientId"] = this.clientId;
-        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
-        data["expiration"] = this.expiration ? this.expiration.toISOString() : <any>undefined;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : undefined;
+        data["expiration"] = this.expiration ? this.expiration.toISOString() : undefined;
         data["data"] = this.data;
-        data["consumedTime"] = this.consumedTime ? this.consumedTime.toISOString() : <any>undefined;
+        data["consumedTime"] = this.consumedTime ? this.consumedTime.toISOString() : undefined;
         data["sessionId"] = this.sessionId;
         data["description"] = this.description;
         return data;
     }
 }
-
-export interface IPersistedGrantApiDto {
-    id: number;
-    key: string | undefined;
-    type: string | undefined;
-    subjectId: string | undefined;
-    subjectName: string | undefined;
-    clientId: string | undefined;
-    creationTime: dayjs.Dayjs;
-    expiration: dayjs.Dayjs | undefined;
-    data: string | undefined;
-    consumedTime: dayjs.Dayjs | undefined;
-    sessionId: string | undefined;
-    description: string | undefined;
-}
-
-export class PersistedGrantsApiDto implements IPersistedGrantsApiDto {
-    totalCount!: number;
-    pageSize!: number;
-    persistedGrants!: PersistedGrantApiDto[] | undefined;
-
-    constructor(data?: IPersistedGrantsApiDto) {
+export class PersistedGrantsApiDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.totalCount = _data["totalCount"];
             this.pageSize = _data["pageSize"];
             if (Array.isArray(_data["persistedGrants"])) {
-                this.persistedGrants = [] as any;
+                this.persistedGrants = [];
                 for (let item of _data["persistedGrants"])
-                    this.persistedGrants!.push(PersistedGrantApiDto.fromJS(item));
+                    this.persistedGrants.push(PersistedGrantApiDto.fromJS(item));
             }
         }
     }
-
-    static fromJS(data: any): PersistedGrantsApiDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new PersistedGrantsApiDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["totalCount"] = this.totalCount;
         data["pageSize"] = this.pageSize;
@@ -7976,153 +7339,108 @@ export class PersistedGrantsApiDto implements IPersistedGrantsApiDto {
         return data;
     }
 }
-
-export interface IPersistedGrantsApiDto {
-    totalCount: number;
-    pageSize: number;
-    persistedGrants: PersistedGrantApiDto[] | undefined;
-}
-
-export class BaseRoleDtoOfString implements IBaseRoleDtoOfString {
-    id!: string | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIBaseRoleDtoId!: any | undefined;
-
-    constructor(data?: IBaseRoleDtoOfString) {
+export class BaseRoleDtoOfString {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.id = _data["id"];
             this.skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIBaseRoleDtoId = _data["skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Identity.Interfaces.IBaseRoleDto.Id"];
         }
     }
-
-    static fromJS(data: any): BaseRoleDtoOfString {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new BaseRoleDtoOfString();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Identity.Interfaces.IBaseRoleDto.Id"] = this.skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIBaseRoleDtoId;
         return data;
     }
 }
-
-export interface IBaseRoleDtoOfString {
-    id: string | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIBaseRoleDtoId: any | undefined;
-}
-
-export class RoleDtoOfString extends BaseRoleDtoOfString implements IRoleDtoOfString {
-    name!: string;
-
-    constructor(data?: IRoleDtoOfString) {
+export class RoleDtoOfString extends BaseRoleDtoOfString {
+    constructor(data) {
         super(data);
     }
-
-    init(_data?: any) {
+    init(_data) {
         super.init(_data);
         if (_data) {
             this.name = _data["name"];
         }
     }
-
-    static fromJS(data: any): RoleDtoOfString {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new RoleDtoOfString();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
         super.toJSON(data);
         return data;
     }
 }
-
-export interface IRoleDtoOfString extends IBaseRoleDtoOfString {
-    name: string;
-}
-
-export class IdentityRoleDto extends RoleDtoOfString implements IIdentityRoleDto {
-
-    constructor(data?: IIdentityRoleDto) {
+export class IdentityRoleDto extends RoleDtoOfString {
+    constructor(data) {
         super(data);
     }
-
-    init(_data?: any) {
+    init(_data) {
         super.init(_data);
     }
-
-    static fromJS(data: any): IdentityRoleDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new IdentityRoleDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         super.toJSON(data);
         return data;
     }
 }
-
-export interface IIdentityRoleDto extends IRoleDtoOfString {
-}
-
-export class RolesDtoOfIdentityRoleDtoAndString implements IRolesDtoOfIdentityRoleDtoAndString {
-    pageSize!: number;
-    totalCount!: number;
-    roles!: IdentityRoleDto[] | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIRolesDtoRoles!: IRoleDto[] | undefined;
-
-    constructor(data?: IRolesDtoOfIdentityRoleDtoAndString) {
+export class RolesDtoOfIdentityRoleDtoAndString {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.pageSize = _data["pageSize"];
             this.totalCount = _data["totalCount"];
             if (Array.isArray(_data["roles"])) {
-                this.roles = [] as any;
+                this.roles = [];
                 for (let item of _data["roles"])
-                    this.roles!.push(IdentityRoleDto.fromJS(item));
+                    this.roles.push(IdentityRoleDto.fromJS(item));
             }
             if (Array.isArray(_data["skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Identity.Interfaces.IRolesDto.Roles"])) {
-                this.skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIRolesDtoRoles = [] as any;
+                this.skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIRolesDtoRoles = [];
                 for (let item of _data["skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Identity.Interfaces.IRolesDto.Roles"])
-                    this.skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIRolesDtoRoles!.push(IRoleDto.fromJS(item));
+                    this.skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIRolesDtoRoles.push(IRoleDto.fromJS(item));
             }
         }
     }
-
-    static fromJS(data: any): RolesDtoOfIdentityRoleDtoAndString {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new RolesDtoOfIdentityRoleDtoAndString();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["pageSize"] = this.pageSize;
         data["totalCount"] = this.totalCount;
@@ -8139,115 +7457,81 @@ export class RolesDtoOfIdentityRoleDtoAndString implements IRolesDtoOfIdentityRo
         return data;
     }
 }
-
-export interface IRolesDtoOfIdentityRoleDtoAndString {
-    pageSize: number;
-    totalCount: number;
-    roles: IdentityRoleDto[] | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIRolesDtoRoles: IRoleDto[] | undefined;
-}
-
-export class IdentityRolesDto extends RolesDtoOfIdentityRoleDtoAndString implements IIdentityRolesDto {
-
-    constructor(data?: IIdentityRolesDto) {
+export class IdentityRolesDto extends RolesDtoOfIdentityRoleDtoAndString {
+    constructor(data) {
         super(data);
     }
-
-    init(_data?: any) {
+    init(_data) {
         super.init(_data);
     }
-
-    static fromJS(data: any): IdentityRolesDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new IdentityRolesDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         super.toJSON(data);
         return data;
     }
 }
-
-export interface IIdentityRolesDto extends IRolesDtoOfIdentityRoleDtoAndString {
-}
-
-export abstract class IRoleDto implements IIRoleDto {
-    name!: string | undefined;
-
-    constructor(data?: IIRoleDto) {
+export class IRoleDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.name = _data["name"];
         }
     }
-
-    static fromJS(data: any): IRoleDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         throw new Error("The abstract class 'IRoleDto' cannot be instantiated.");
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
         return data;
     }
 }
-
-export interface IIRoleDto {
-    name: string | undefined;
-}
-
-export class UsersDtoOfIdentityUserDtoAndString implements IUsersDtoOfIdentityUserDtoAndString {
-    pageSize!: number;
-    totalCount!: number;
-    users!: IdentityUserDto[] | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIUsersDtoUsers!: IUserDto[] | undefined;
-
-    constructor(data?: IUsersDtoOfIdentityUserDtoAndString) {
+export class UsersDtoOfIdentityUserDtoAndString {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.pageSize = _data["pageSize"];
             this.totalCount = _data["totalCount"];
             if (Array.isArray(_data["users"])) {
-                this.users = [] as any;
+                this.users = [];
                 for (let item of _data["users"])
-                    this.users!.push(IdentityUserDto.fromJS(item));
+                    this.users.push(IdentityUserDto.fromJS(item));
             }
             if (Array.isArray(_data["skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Identity.Interfaces.IUsersDto.Users"])) {
-                this.skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIUsersDtoUsers = [] as any;
+                this.skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIUsersDtoUsers = [];
                 for (let item of _data["skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Identity.Interfaces.IUsersDto.Users"])
-                    this.skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIUsersDtoUsers!.push(IUserDto.fromJS(item));
+                    this.skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIUsersDtoUsers.push(IUserDto.fromJS(item));
             }
         }
     }
-
-    static fromJS(data: any): UsersDtoOfIdentityUserDtoAndString {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new UsersDtoOfIdentityUserDtoAndString();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["pageSize"] = this.pageSize;
         data["totalCount"] = this.totalCount;
@@ -8264,97 +7548,58 @@ export class UsersDtoOfIdentityUserDtoAndString implements IUsersDtoOfIdentityUs
         return data;
     }
 }
-
-export interface IUsersDtoOfIdentityUserDtoAndString {
-    pageSize: number;
-    totalCount: number;
-    users: IdentityUserDto[] | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIUsersDtoUsers: IUserDto[] | undefined;
-}
-
-export class IdentityUsersDto extends UsersDtoOfIdentityUserDtoAndString implements IIdentityUsersDto {
-
-    constructor(data?: IIdentityUsersDto) {
+export class IdentityUsersDto extends UsersDtoOfIdentityUserDtoAndString {
+    constructor(data) {
         super(data);
     }
-
-    init(_data?: any) {
+    init(_data) {
         super.init(_data);
     }
-
-    static fromJS(data: any): IdentityUsersDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new IdentityUsersDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         super.toJSON(data);
         return data;
     }
 }
-
-export interface IIdentityUsersDto extends IUsersDtoOfIdentityUserDtoAndString {
-}
-
-export class BaseUserDtoOfString implements IBaseUserDtoOfString {
-    id!: string | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIBaseUserDtoId!: any | undefined;
-
-    constructor(data?: IBaseUserDtoOfString) {
+export class BaseUserDtoOfString {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.id = _data["id"];
             this.skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIBaseUserDtoId = _data["skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Identity.Interfaces.IBaseUserDto.Id"];
         }
     }
-
-    static fromJS(data: any): BaseUserDtoOfString {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new BaseUserDtoOfString();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Identity.Interfaces.IBaseUserDto.Id"] = this.skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIBaseUserDtoId;
         return data;
     }
 }
-
-export interface IBaseUserDtoOfString {
-    id: string | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIBaseUserDtoId: any | undefined;
-}
-
-export class UserDtoOfString extends BaseUserDtoOfString implements IUserDtoOfString {
-    userName!: string;
-    email!: string;
-    emailConfirmed!: boolean;
-    phoneNumber!: string | undefined;
-    phoneNumberConfirmed!: boolean;
-    lockoutEnabled!: boolean;
-    twoFactorEnabled!: boolean;
-    accessFailedCount!: number;
-    lockoutEnd!: dayjs.Dayjs | undefined;
-
-    constructor(data?: IUserDtoOfString) {
+export class UserDtoOfString extends BaseUserDtoOfString {
+    constructor(data) {
         super(data);
     }
-
-    init(_data?: any) {
+    init(_data) {
         super.init(_data);
         if (_data) {
             this.userName = _data["userName"];
@@ -8365,18 +7610,16 @@ export class UserDtoOfString extends BaseUserDtoOfString implements IUserDtoOfSt
             this.lockoutEnabled = _data["lockoutEnabled"];
             this.twoFactorEnabled = _data["twoFactorEnabled"];
             this.accessFailedCount = _data["accessFailedCount"];
-            this.lockoutEnd = _data["lockoutEnd"] ? dayjs(_data["lockoutEnd"].toString()) : <any>undefined;
+            this.lockoutEnd = _data["lockoutEnd"] ? dayjs(_data["lockoutEnd"].toString()) : undefined;
         }
     }
-
-    static fromJS(data: any): UserDtoOfString {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new UserDtoOfString();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["userName"] = this.userName;
         data["email"] = this.email;
@@ -8386,72 +7629,40 @@ export class UserDtoOfString extends BaseUserDtoOfString implements IUserDtoOfSt
         data["lockoutEnabled"] = this.lockoutEnabled;
         data["twoFactorEnabled"] = this.twoFactorEnabled;
         data["accessFailedCount"] = this.accessFailedCount;
-        data["lockoutEnd"] = this.lockoutEnd ? this.lockoutEnd.toISOString() : <any>undefined;
+        data["lockoutEnd"] = this.lockoutEnd ? this.lockoutEnd.toISOString() : undefined;
         super.toJSON(data);
         return data;
     }
 }
-
-export interface IUserDtoOfString extends IBaseUserDtoOfString {
-    userName: string;
-    email: string;
-    emailConfirmed: boolean;
-    phoneNumber: string | undefined;
-    phoneNumberConfirmed: boolean;
-    lockoutEnabled: boolean;
-    twoFactorEnabled: boolean;
-    accessFailedCount: number;
-    lockoutEnd: dayjs.Dayjs | undefined;
-}
-
-export class IdentityUserDto extends UserDtoOfString implements IIdentityUserDto {
-
-    constructor(data?: IIdentityUserDto) {
+export class IdentityUserDto extends UserDtoOfString {
+    constructor(data) {
         super(data);
     }
-
-    init(_data?: any) {
+    init(_data) {
         super.init(_data);
     }
-
-    static fromJS(data: any): IdentityUserDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new IdentityUserDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         super.toJSON(data);
         return data;
     }
 }
-
-export interface IIdentityUserDto extends IUserDtoOfString {
-}
-
-export abstract class IUserDto implements IIUserDto {
-    userName!: string | undefined;
-    email!: string | undefined;
-    emailConfirmed!: boolean;
-    phoneNumber!: string | undefined;
-    phoneNumberConfirmed!: boolean;
-    lockoutEnabled!: boolean;
-    twoFactorEnabled!: boolean;
-    accessFailedCount!: number;
-    lockoutEnd!: dayjs.Dayjs | undefined;
-
-    constructor(data?: IIUserDto) {
+export class IUserDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.userName = _data["userName"];
             this.email = _data["email"];
@@ -8461,16 +7672,14 @@ export abstract class IUserDto implements IIUserDto {
             this.lockoutEnabled = _data["lockoutEnabled"];
             this.twoFactorEnabled = _data["twoFactorEnabled"];
             this.accessFailedCount = _data["accessFailedCount"];
-            this.lockoutEnd = _data["lockoutEnd"] ? dayjs(_data["lockoutEnd"].toString()) : <any>undefined;
+            this.lockoutEnd = _data["lockoutEnd"] ? dayjs(_data["lockoutEnd"].toString()) : undefined;
         }
     }
-
-    static fromJS(data: any): IUserDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         throw new Error("The abstract class 'IUserDto' cannot be instantiated.");
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["userName"] = this.userName;
         data["email"] = this.email;
@@ -8480,57 +7689,37 @@ export abstract class IUserDto implements IIUserDto {
         data["lockoutEnabled"] = this.lockoutEnabled;
         data["twoFactorEnabled"] = this.twoFactorEnabled;
         data["accessFailedCount"] = this.accessFailedCount;
-        data["lockoutEnd"] = this.lockoutEnd ? this.lockoutEnd.toISOString() : <any>undefined;
+        data["lockoutEnd"] = this.lockoutEnd ? this.lockoutEnd.toISOString() : undefined;
         return data;
     }
 }
-
-export interface IIUserDto {
-    userName: string | undefined;
-    email: string | undefined;
-    emailConfirmed: boolean;
-    phoneNumber: string | undefined;
-    phoneNumberConfirmed: boolean;
-    lockoutEnabled: boolean;
-    twoFactorEnabled: boolean;
-    accessFailedCount: number;
-    lockoutEnd: dayjs.Dayjs | undefined;
-}
-
-export class RoleClaimsApiDtoOfString implements IRoleClaimsApiDtoOfString {
-    claims!: RoleClaimApiDtoOfString[] | undefined;
-    totalCount!: number;
-    pageSize!: number;
-
-    constructor(data?: IRoleClaimsApiDtoOfString) {
+export class RoleClaimsApiDtoOfString {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             if (Array.isArray(_data["claims"])) {
-                this.claims = [] as any;
+                this.claims = [];
                 for (let item of _data["claims"])
-                    this.claims!.push(RoleClaimApiDtoOfString.fromJS(item));
+                    this.claims.push(RoleClaimApiDtoOfString.fromJS(item));
             }
             this.totalCount = _data["totalCount"];
             this.pageSize = _data["pageSize"];
         }
     }
-
-    static fromJS(data: any): RoleClaimsApiDtoOfString {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new RoleClaimsApiDtoOfString();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         if (Array.isArray(this.claims)) {
             data["claims"] = [];
@@ -8542,29 +7731,16 @@ export class RoleClaimsApiDtoOfString implements IRoleClaimsApiDtoOfString {
         return data;
     }
 }
-
-export interface IRoleClaimsApiDtoOfString {
-    claims: RoleClaimApiDtoOfString[] | undefined;
-    totalCount: number;
-    pageSize: number;
-}
-
-export class RoleClaimApiDtoOfString implements IRoleClaimApiDtoOfString {
-    claimId!: number;
-    roleId!: string | undefined;
-    claimType!: string;
-    claimValue!: string;
-
-    constructor(data?: IRoleClaimApiDtoOfString) {
+export class RoleClaimApiDtoOfString {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.claimId = _data["claimId"];
             this.roleId = _data["roleId"];
@@ -8572,15 +7748,13 @@ export class RoleClaimApiDtoOfString implements IRoleClaimApiDtoOfString {
             this.claimValue = _data["claimValue"];
         }
     }
-
-    static fromJS(data: any): RoleClaimApiDtoOfString {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new RoleClaimApiDtoOfString();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["claimId"] = this.claimId;
         data["roleId"] = this.roleId;
@@ -8589,48 +7763,33 @@ export class RoleClaimApiDtoOfString implements IRoleClaimApiDtoOfString {
         return data;
     }
 }
-
-export interface IRoleClaimApiDtoOfString {
-    claimId: number;
-    roleId: string | undefined;
-    claimType: string;
-    claimValue: string;
-}
-
-export class UserRolesApiDtoOfIdentityRoleDto implements IUserRolesApiDtoOfIdentityRoleDto {
-    roles!: IdentityRoleDto[] | undefined;
-    pageSize!: number;
-    totalCount!: number;
-
-    constructor(data?: IUserRolesApiDtoOfIdentityRoleDto) {
+export class UserRolesApiDtoOfIdentityRoleDto {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             if (Array.isArray(_data["roles"])) {
-                this.roles = [] as any;
+                this.roles = [];
                 for (let item of _data["roles"])
-                    this.roles!.push(IdentityRoleDto.fromJS(item));
+                    this.roles.push(IdentityRoleDto.fromJS(item));
             }
             this.pageSize = _data["pageSize"];
             this.totalCount = _data["totalCount"];
         }
     }
-
-    static fromJS(data: any): UserRolesApiDtoOfIdentityRoleDto {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new UserRolesApiDtoOfIdentityRoleDto();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         if (Array.isArray(this.roles)) {
             data["roles"] = [];
@@ -8642,87 +7801,61 @@ export class UserRolesApiDtoOfIdentityRoleDto implements IUserRolesApiDtoOfIdent
         return data;
     }
 }
-
-export interface IUserRolesApiDtoOfIdentityRoleDto {
-    roles: IdentityRoleDto[] | undefined;
-    pageSize: number;
-    totalCount: number;
-}
-
-export class UserRoleApiDtoOfString implements IUserRoleApiDtoOfString {
-    userId!: string | undefined;
-    roleId!: string | undefined;
-
-    constructor(data?: IUserRoleApiDtoOfString) {
+export class UserRoleApiDtoOfString {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.userId = _data["userId"];
             this.roleId = _data["roleId"];
         }
     }
-
-    static fromJS(data: any): UserRoleApiDtoOfString {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new UserRoleApiDtoOfString();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["userId"] = this.userId;
         data["roleId"] = this.roleId;
         return data;
     }
 }
-
-export interface IUserRoleApiDtoOfString {
-    userId: string | undefined;
-    roleId: string | undefined;
-}
-
-export class UserClaimsApiDtoOfString implements IUserClaimsApiDtoOfString {
-    claims!: UserClaimApiDtoOfString[] | undefined;
-    totalCount!: number;
-    pageSize!: number;
-
-    constructor(data?: IUserClaimsApiDtoOfString) {
+export class UserClaimsApiDtoOfString {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             if (Array.isArray(_data["claims"])) {
-                this.claims = [] as any;
+                this.claims = [];
                 for (let item of _data["claims"])
-                    this.claims!.push(UserClaimApiDtoOfString.fromJS(item));
+                    this.claims.push(UserClaimApiDtoOfString.fromJS(item));
             }
             this.totalCount = _data["totalCount"];
             this.pageSize = _data["pageSize"];
         }
     }
-
-    static fromJS(data: any): UserClaimsApiDtoOfString {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new UserClaimsApiDtoOfString();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         if (Array.isArray(this.claims)) {
             data["claims"] = [];
@@ -8734,29 +7867,16 @@ export class UserClaimsApiDtoOfString implements IUserClaimsApiDtoOfString {
         return data;
     }
 }
-
-export interface IUserClaimsApiDtoOfString {
-    claims: UserClaimApiDtoOfString[] | undefined;
-    totalCount: number;
-    pageSize: number;
-}
-
-export class UserClaimApiDtoOfString implements IUserClaimApiDtoOfString {
-    claimId!: number;
-    userId!: string | undefined;
-    claimType!: string;
-    claimValue!: string;
-
-    constructor(data?: IUserClaimApiDtoOfString) {
+export class UserClaimApiDtoOfString {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.claimId = _data["claimId"];
             this.userId = _data["userId"];
@@ -8764,15 +7884,13 @@ export class UserClaimApiDtoOfString implements IUserClaimApiDtoOfString {
             this.claimValue = _data["claimValue"];
         }
     }
-
-    static fromJS(data: any): UserClaimApiDtoOfString {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new UserClaimApiDtoOfString();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["claimId"] = this.claimId;
         data["userId"] = this.userId;
@@ -8781,44 +7899,31 @@ export class UserClaimApiDtoOfString implements IUserClaimApiDtoOfString {
         return data;
     }
 }
-
-export interface IUserClaimApiDtoOfString {
-    claimId: number;
-    userId: string | undefined;
-    claimType: string;
-    claimValue: string;
-}
-
-export class UserProvidersApiDtoOfString implements IUserProvidersApiDtoOfString {
-    providers!: UserProviderApiDtoOfString[] | undefined;
-
-    constructor(data?: IUserProvidersApiDtoOfString) {
+export class UserProvidersApiDtoOfString {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             if (Array.isArray(_data["providers"])) {
-                this.providers = [] as any;
+                this.providers = [];
                 for (let item of _data["providers"])
-                    this.providers!.push(UserProviderApiDtoOfString.fromJS(item));
+                    this.providers.push(UserProviderApiDtoOfString.fromJS(item));
             }
         }
     }
-
-    static fromJS(data: any): UserProvidersApiDtoOfString {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new UserProvidersApiDtoOfString();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         if (Array.isArray(this.providers)) {
             data["providers"] = [];
@@ -8828,28 +7933,16 @@ export class UserProvidersApiDtoOfString implements IUserProvidersApiDtoOfString
         return data;
     }
 }
-
-export interface IUserProvidersApiDtoOfString {
-    providers: UserProviderApiDtoOfString[] | undefined;
-}
-
-export class UserProviderApiDtoOfString implements IUserProviderApiDtoOfString {
-    userId!: string | undefined;
-    userName!: string | undefined;
-    providerKey!: string | undefined;
-    loginProvider!: string | undefined;
-    providerDisplayName!: string | undefined;
-
-    constructor(data?: IUserProviderApiDtoOfString) {
+export class UserProviderApiDtoOfString {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.userId = _data["userId"];
             this.userName = _data["userName"];
@@ -8858,15 +7951,13 @@ export class UserProviderApiDtoOfString implements IUserProviderApiDtoOfString {
             this.providerDisplayName = _data["providerDisplayName"];
         }
     }
-
-    static fromJS(data: any): UserProviderApiDtoOfString {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new UserProviderApiDtoOfString();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["userId"] = this.userId;
         data["userName"] = this.userName;
@@ -8876,45 +7967,29 @@ export class UserProviderApiDtoOfString implements IUserProviderApiDtoOfString {
         return data;
     }
 }
-
-export interface IUserProviderApiDtoOfString {
-    userId: string | undefined;
-    userName: string | undefined;
-    providerKey: string | undefined;
-    loginProvider: string | undefined;
-    providerDisplayName: string | undefined;
-}
-
-export class UserProviderDeleteApiDtoOfString implements IUserProviderDeleteApiDtoOfString {
-    userId!: string | undefined;
-    providerKey!: string | undefined;
-    loginProvider!: string | undefined;
-
-    constructor(data?: IUserProviderDeleteApiDtoOfString) {
+export class UserProviderDeleteApiDtoOfString {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.userId = _data["userId"];
             this.providerKey = _data["providerKey"];
             this.loginProvider = _data["loginProvider"];
         }
     }
-
-    static fromJS(data: any): UserProviderDeleteApiDtoOfString {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new UserProviderDeleteApiDtoOfString();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["userId"] = this.userId;
         data["providerKey"] = this.providerKey;
@@ -8922,43 +7997,29 @@ export class UserProviderDeleteApiDtoOfString implements IUserProviderDeleteApiD
         return data;
     }
 }
-
-export interface IUserProviderDeleteApiDtoOfString {
-    userId: string | undefined;
-    providerKey: string | undefined;
-    loginProvider: string | undefined;
-}
-
-export class UserChangePasswordApiDtoOfString implements IUserChangePasswordApiDtoOfString {
-    userId!: string | undefined;
-    password!: string;
-    confirmPassword!: string;
-
-    constructor(data?: IUserChangePasswordApiDtoOfString) {
+export class UserChangePasswordApiDtoOfString {
+    constructor(data) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+                    this[property] = data[property];
             }
         }
     }
-
-    init(_data?: any) {
+    init(_data) {
         if (_data) {
             this.userId = _data["userId"];
             this.password = _data["password"];
             this.confirmPassword = _data["confirmPassword"];
         }
     }
-
-    static fromJS(data: any): UserChangePasswordApiDtoOfString {
+    static fromJS(data) {
         data = typeof data === 'object' ? data : {};
         let result = new UserChangePasswordApiDtoOfString();
         result.init(data);
         return result;
     }
-
-    toJSON(data?: any) {
+    toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["userId"] = this.userId;
         data["password"] = this.password;
@@ -8966,47 +8027,24 @@ export class UserChangePasswordApiDtoOfString implements IUserChangePasswordApiD
         return data;
     }
 }
-
-export interface IUserChangePasswordApiDtoOfString {
-    userId: string | undefined;
-    password: string;
-    confirmPassword: string;
-}
-
-export interface FileResponse {
-    data: Blob;
-    status: number;
-    fileName?: string;
-    headers?: { [name: string]: any };
-}
-
 export class SwaggerException extends Error {
-    message: string;
-    status: number;
-    response: string;
-    headers: { [key: string]: any; };
-    result: any;
-
-    constructor(message: string, status: number, response: string, headers: { [key: string]: any; }, result: any) {
+    constructor(message, status, response, headers, result) {
         super();
-
+        this.isSwaggerException = true;
         this.message = message;
         this.status = status;
         this.response = response;
         this.headers = headers;
         this.result = result;
     }
-
-    protected isSwaggerException = true;
-
-    static isSwaggerException(obj: any): obj is SwaggerException {
+    static isSwaggerException(obj) {
         return obj.isSwaggerException === true;
     }
 }
-
-function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): any {
+function throwException(message, status, response, headers, result) {
     if (result !== null && result !== undefined)
         throw result;
     else
         throw new SwaggerException(message, status, response, headers, null);
 }
+//# sourceMappingURL=client.js.map
