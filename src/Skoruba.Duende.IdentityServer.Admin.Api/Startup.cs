@@ -11,11 +11,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
+using NSwag;
+using NSwag.AspNetCore;
+using NSwag.Generation.Processors.Security;
 using Skoruba.AuditLogging.EntityFramework.Entities;
 using Skoruba.Duende.IdentityServer.Admin.Api.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.Api.Configuration.Authorization;
-using Skoruba.Duende.IdentityServer.Admin.Api.Configuration.Constants;
 using Skoruba.Duende.IdentityServer.Admin.Api.ExceptionHandling;
 using Skoruba.Duende.IdentityServer.Admin.Api.Helpers;
 using Skoruba.Duende.IdentityServer.Admin.Api.Mappers;
@@ -94,26 +95,31 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api
                 IdentityUserClaimsDto, IdentityUserProviderDto, IdentityUserProvidersDto, IdentityUserChangePasswordDto,
                 IdentityRoleClaimsDto, IdentityUserClaimDto, IdentityRoleClaimDto>();
 
-            services.AddSwaggerGen(options =>
+            services.AddEndpointsApiExplorer();
+            services.AddOpenApiDocument(configure =>
             {
-                options.SwaggerDoc(adminApiConfiguration.ApiVersion, new OpenApiInfo { Title = adminApiConfiguration.ApiName, Version = adminApiConfiguration.ApiVersion });
+                configure.Title = adminApiConfiguration.ApiName;
+                configure.Version = adminApiConfiguration.ApiVersion;
 
-                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                configure.AddSecurity("OAuth2", new OpenApiSecurityScheme
                 {
-                    Type = SecuritySchemeType.OAuth2,
+                    Type = OpenApiSecuritySchemeType.OAuth2,
                     Flows = new OpenApiOAuthFlows
                     {
                         AuthorizationCode = new OpenApiOAuthFlow
                         {
-                            AuthorizationUrl = new Uri($"{adminApiConfiguration.IdentityServerBaseUrl}/connect/authorize"),
-                            TokenUrl = new Uri($"{adminApiConfiguration.IdentityServerBaseUrl}/connect/token"),
-                            Scopes = new Dictionary<string, string> {
+                            AuthorizationUrl = $"{adminApiConfiguration.IdentityServerBaseUrl}/connect/authorize",
+                            TokenUrl = $"{adminApiConfiguration.IdentityServerBaseUrl}/connect/token",
+                            Scopes = new Dictionary<string, string>
+                            {
                                 { adminApiConfiguration.OidcApiName, adminApiConfiguration.ApiName }
                             }
                         }
                     }
                 });
-                options.OperationFilter<AuthorizeCheckOperationFilter>();
+
+                configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("OAuth2"));
+                configure.OperationProcessors.Add(new AuthorizeCheckOperationProcessor(adminApiConfiguration));
             });
 
             services.AddAuditEventLogging<AdminAuditLogDbContext, AuditLog>(Configuration);
@@ -130,14 +136,16 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
+            app.UseOpenApi();
+            app.UseSwaggerUi(settings =>
             {
-                c.SwaggerEndpoint($"{adminApiConfiguration.ApiBaseUrl}/swagger/v1/swagger.json", adminApiConfiguration.ApiName);
-
-                c.OAuthClientId(adminApiConfiguration.OidcSwaggerUIClientId);
-                c.OAuthAppName(adminApiConfiguration.ApiName);
-                c.OAuthUsePkce();
+                settings.OAuth2Client = new OAuth2ClientSettings
+                {
+                    ClientId = adminApiConfiguration.OidcSwaggerUIClientId,
+                    AppName = adminApiConfiguration.ApiName,
+                    UsePkceWithAuthorizationCodeGrant = true,
+                    ClientSecret = null
+                };
             });
 
             app.UseRouting();
