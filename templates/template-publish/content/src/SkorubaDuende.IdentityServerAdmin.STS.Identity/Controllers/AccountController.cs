@@ -517,6 +517,7 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Controllers
 
             if (result.Succeeded)
             {
+                await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName));
                 return LocalRedirect(string.IsNullOrEmpty(model.ReturnUrl) ? "~/" : model.ReturnUrl);
             }
 
@@ -573,6 +574,7 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Controllers
 
             if (result.Succeeded)
             {
+                await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName));
                 return LocalRedirect(string.IsNullOrEmpty(model.ReturnUrl) ? "~/" : model.ReturnUrl);
             }
 
