@@ -4,8 +4,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
-using Duende.IdentityServer.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +19,7 @@ using Skoruba.Duende.IdentityServer.Admin.UI.Helpers.Localization;
 
 namespace Skoruba.Duende.IdentityServer.Admin.UI.Areas.AdminUI.Controllers
 {
-    [Authorize(Policy = AuthorizationConsts.AdministrationPolicy)]
+	[Authorize(Policy = AuthorizationConsts.AdministrationPolicy)]
     [TypeFilter(typeof(ControllerExceptionFilterAttribute))]
     [Area(CommonConsts.AdminUIArea)]
     public class IdentityController<TUserDto, TRoleDto, TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken,
@@ -419,8 +419,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Areas.AdminUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UserDelete(TUserDto user)
         {
-            var currentUserId = User.GetSubjectId();
-            if (user.Id.ToString() == currentUserId)
+			var id = User.Identity as ClaimsIdentity;
+			var claim = id.FindFirst(ClaimTypes.NameIdentifier);
+            var currentUserId = claim.Value;
+			if (user.Id.ToString() == currentUserId)
             {
                 CreateNotification(Helpers.NotificationHelpers.AlertType.Warning, _localizer["ErrorDeleteUser_CannotSelfDelete"]);
                 return RedirectToAction(nameof(UserDelete), user.Id);
