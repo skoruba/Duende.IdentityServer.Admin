@@ -38,8 +38,16 @@
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 		<PackageReference Include="Serilog.Sinks.MSSqlServer" Version="6.5.1" />
 		<PackageReference Include="Serilog.Sinks.Seq" Version="6.0.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.5.0" />
+        <PackageReference Include="NSwag.CodeGeneration" Version="14.0.7" />
+        <PackageReference Include="NSwag.CodeGeneration.TypeScript" Version="14.0.7" />
+        <PackageReference Include="NSwag.Generation" Version="14.0.7" />
+        <PackageReference Include="NSwag.Generation.AspNetCore" Version="14.0.7" />
+        <PackageReference Include="NSwag.Generation.WebApi" Version="14.0.7" />
+        <PackageReference Include="NSwag.AspNetCore" Version="14.0.7" />
+        <PackageReference Include="NSwag.MSBuild" Version="14.0.7">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
@@ -70,6 +78,16 @@
     <ItemGroup>
       <Folder Include="Dtos\Key\" />
     </ItemGroup>
+
+    <Target Name="NSwag" BeforeTargets="AfterBuild" Condition="'$(Configuration)'=='Debug'">
+        <Exec ConsoleToMSBuild="true" ContinueOnError="true" Command="$(NSwagExe_Net80) run nswag.json /variables:Configuration=$(Configuration)">
+            <Output TaskParameter="ExitCode" PropertyName="NSwagExitCode" />
+            <Output TaskParameter="ConsoleOutput" PropertyName="NSwagOutput" />
+        </Exec>
+
+        <Message Text="$(NSwagOutput)" Condition="'$(NSwagExitCode)' == '0'" Importance="low" />
+        <Error Text="$(NSwagOutput)" Condition="'$(NSwagExitCode)' != '0'" />
+    </Target>
 
 </Project>
 

@@ -36,7 +36,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Inter
 
 		Task<List<string>> GetScopesAsync(string scope, int limit = 0);
 
-	    List<string> GetGrantTypes(string grant, int limit = 0);
+		List<SelectItem> GetGrantTypes(string grant, bool includeObsoleteGrants, int limit = 0);
 
 	    List<SelectItem> GetProtocolTypes();
 

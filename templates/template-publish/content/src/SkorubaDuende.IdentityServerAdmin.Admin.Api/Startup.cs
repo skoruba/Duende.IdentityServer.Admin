@@ -24,6 +24,7 @@ using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Extensions;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Extensions;
 using SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.DbContexts;
 using SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Entities.Identity;
+using SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Extensions;
 using Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers;
 using SkorubaDuende.IdentityServerAdmin.Shared.Dtos;
 using SkorubaDuende.IdentityServerAdmin.Shared.Dtos.Identity;
@@ -34,7 +35,7 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api
     {
         public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
             HostingEnvironment = env;
             Configuration = configuration;
         }
@@ -69,6 +70,11 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api
             {
                 typeof(IdentityMapperProfile<IdentityRoleDto, IdentityUserRolesDto, string, IdentityUserClaimsDto, IdentityUserClaimDto, IdentityUserProviderDto, IdentityUserProvidersDto, IdentityUserChangePasswordDto, IdentityRoleClaimDto, IdentityRoleClaimsDto>)
             };
+
+            services.ConfigureAdminAspNetIdentitySchema(options =>
+            {
+                Configuration.GetSection("IdentityTableConfiguration").Bind(options);
+            });
 
             services.AddAdminAspNetIdentityServices<AdminIdentityDbContext, IdentityServerPersistedGrantDbContext,
                 IdentityUserDto, IdentityRoleDto, UserIdentity, UserIdentityRole, string, UserIdentityUserClaim, UserIdentityUserRole,

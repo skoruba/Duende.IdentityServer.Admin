@@ -32,7 +32,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces
 
         Task<List<string>> GetScopesAsync(string scope, int limit = 0);
 
-        List<string> GetGrantTypes(string grant, int limit = 0);
+        List<SelectItemDto> GetGrantTypes(string grant, bool includeObsoleteGrants, int limit = 0);
 
         List<SelectItemDto> GetAccessTokenTypes();
 

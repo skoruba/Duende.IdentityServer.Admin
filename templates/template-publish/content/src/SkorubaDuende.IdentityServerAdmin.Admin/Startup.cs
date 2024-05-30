@@ -12,6 +12,7 @@ using Skoruba.AuditLogging.EntityFramework.Entities;
 using SkorubaDuende.IdentityServerAdmin.Admin.Configuration.Database;
 using SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.DbContexts;
 using SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Entities.Identity;
+using SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Extensions;
 using SkorubaDuende.IdentityServerAdmin.Admin.Helpers;
 using Skoruba.Duende.IdentityServer.Admin.UI.Helpers.ApplicationBuilder;
 using Skoruba.Duende.IdentityServer.Admin.UI.Helpers.DependencyInjection;
@@ -36,6 +37,11 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.ConfigureAdminAspNetIdentitySchema(options =>
+            {
+                Configuration.GetSection("IdentityTableConfiguration").Bind(options);
+            });
+
             // Adds the Duende IdentityServer Admin UI with custom options.
             services.AddIdentityServerAdminUI<AdminIdentityDbContext, IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext,
             AdminLogDbContext, AdminAuditLogDbContext, AuditLog, IdentityServerDataProtectionDbContext,

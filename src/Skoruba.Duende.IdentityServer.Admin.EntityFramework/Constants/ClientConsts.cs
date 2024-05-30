@@ -1,7 +1,9 @@
 ﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
 // Licensed under the Apache License, Version 2.0.
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Common;
 
 namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Constants
@@ -47,21 +49,23 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Constants
             return standardClaims;
         }
 
-        public static List<string> GetGrantTypes()
+        public static List<(string Id, string Label, bool Deprecated)> GetGrantTypes(bool includeObsoleteGrants)
         {
-            var allowedGrantypes = new List<string>
+            var allowedGrantypes = new List<(string Id, string Label, bool Deprecated)>
             {
-                "implicit",
-                "client_credentials",
-                "authorization_code",
-                "hybrid",
-                "password",
-                "urn:ietf:params:oauth:grant-type:device_code",
-                "delegation",
-                "urn:openid:params:grant-type:ciba"
+                ("authorization_code", "Authorization Code", false),
+                ("implicit", "Implicit", true),
+                ("client_credentials", "Client Credentials", false),
+                ("hybrid", "Hybrid", false),
+                ("password", "Password", true),
+                ("urn:ietf:params:oauth:grant-type:device_code", "Device", false),
+                ("delegation", "Delegation", false),
+                ("urn:openid:params:grant-type:ciba", "CIBA", false)
             };
 
-            return allowedGrantypes;
+            return includeObsoleteGrants == false ? 
+                allowedGrantypes.Where(x => x.Deprecated == false).ToList() : 
+                allowedGrantypes;
         }
 
         public static List<string> SigningAlgorithms()

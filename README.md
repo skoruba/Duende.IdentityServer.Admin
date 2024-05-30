@@ -22,7 +22,7 @@ The application is written in the **Asp.Net Core MVC - using .NET 8.0**
 - 🔒 **NOTE:** The project uses the default database migrations which affect your database, therefore double check the migrations according to your database provider and create a database backup
 
 ```sh
-dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::2.0.0
+dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::2.1.0
 ```
 
 ### Create new project:
@@ -129,12 +129,12 @@ We also need certificates in order to serve on HTTPS. We'll make our own self-si
 
 Use [mkcert](https://github.com/FiloSottile/mkcert) to generate local self-signed certificates.
 
-On windows `mkcert -install` must be executed under elevated Administrator privileges. Then copy over the CA Root certificate over to the project as we want to mount this in later into the containers without using an environment variable.
+On windows `mkcert -install` must be executed under elevated Administrator privileges. Then copy over the CA Root certificate over to the project as we want to mount this in later into the containers without using an environment variable. Use PowerShell to run the commands.
 
 ```bash
 cd shared/nginx/certs
 mkcert --install
-copy $env:LOCALAPPDATA\mkcert\rootCA.pem ./cacerts.pem
+copy $env:LOCALAPPDATA\mkcert\rootCA-key.pem ./cacerts.pem
 copy $env:LOCALAPPDATA\mkcert\rootCA.pem ./cacerts.crt
 ```
 
@@ -755,6 +755,18 @@ It is possible to define the configuration according the client type - by defaul
 
 - [x] Update to .NET 8 ([#180](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/180))
 - [x] Update to IdentityServer v7 ([#181](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/181))
+
+### 2.1.0
+
+- [x] Role users pagination ([#169](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/169))
+- [x] Add secure secret generation with 'secret\_' prefix ([#153](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/153))
+- [x] Increase client name prominence ([#154](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/154))
+- [x] Added support for generation typescript client definition for API endpoints ([#215](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/215))
+- [x] Add new endpoints to API for client, api resource, api scopes validations and lists ([#213](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/213))
+
+- [x] Use named arguments in .AddIdentityServer() healthchecks ([#201](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/201))
+- [x] Change the AdminIdentityDbContext tablenames to be derived from appsettings ([#196](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/196))
+- [x] Raise UserLoginSuccessEvent when logging in with 2fa or recovery code ([#202](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/202))
 
 ### 3.0.0
 
