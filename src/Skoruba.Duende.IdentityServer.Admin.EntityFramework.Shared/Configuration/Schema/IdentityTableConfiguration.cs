@@ -1,12 +1,16 @@
-namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Configuration.Schema;
+﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
 
-public class IdentityTableConfiguration
+namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Configuration.Schema
 {
-    public string Roles { get; set; }
-    public string RoleClaims { get; set; }
-    public string UserRoles { get; set; }
-    public string Users { get; set; }
-    public string UserLogins { get; set; }
-    public string UserClaims { get; set; }
-    public string UserTokens { get; set; }
+    public class IdentityTableConfiguration
+    {
+        public string IdentityRoles { get; set; } = "Roles";
+        public string IdentityRoleClaims { get; set; } = "RoleClaims";
+        public string IdentityUserRoles { get; set; } = "UserRoles";
+        public string IdentityUsers { get; set; } = "Users";
+        public string IdentityUserLogins { get; set; } = "UserLogins";
+        public string IdentityUserClaims { get; set; } = "UserClaims";
+        public string IdentityUserTokens { get; set; } = "UserTokens";
+    }
 }
