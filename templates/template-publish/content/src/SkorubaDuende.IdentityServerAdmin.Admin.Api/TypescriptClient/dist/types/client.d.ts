@@ -197,6 +197,22 @@ export declare class ClientsClient implements IClientsClient {
     deleteClaim(claimId: number): Promise<FileResponse>;
     protected processDeleteClaim(response: Response): Promise<FileResponse>;
 }
+export interface IDashboardClient {
+    getDashboardIdentityServer(auditLogsLastNumberOfDays: number | undefined): Promise<DashboardDto>;
+    getDashboardIdentity(): Promise<DashboardDto>;
+}
+export declare class DashboardClient implements IDashboardClient {
+    private http;
+    private baseUrl;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined;
+    constructor(baseUrl?: string, http?: {
+        fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
+    });
+    getDashboardIdentityServer(auditLogsLastNumberOfDays: number | undefined): Promise<DashboardDto>;
+    protected processGetDashboardIdentityServer(response: Response): Promise<DashboardDto>;
+    getDashboardIdentity(): Promise<DashboardDto>;
+    protected processGetDashboardIdentity(response: Response): Promise<DashboardDto>;
+}
 export interface IIdentityProvidersClient {
     get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<IdentityProvidersApiDto>;
     post(identityProviderApi: IdentityProviderApiDto): Promise<void>;
@@ -883,6 +899,38 @@ export interface IClientClaimsApiDto {
     clientClaims: ClientClaimApiDto[] | undefined;
     totalCount: number;
     pageSize: number;
+}
+export declare class DashboardDto implements IDashboardDto {
+    clientsTotal: number;
+    apiResourcesTotal: number;
+    apiScopesTotal: number;
+    identityResourcesTotal: number;
+    auditLogsAvg: number;
+    auditLogsPerDaysTotal: DashboardAuditLogDto[] | undefined;
+    constructor(data?: IDashboardDto);
+    init(_data?: any): void;
+    static fromJS(data: any): DashboardDto;
+    toJSON(data?: any): any;
+}
+export interface IDashboardDto {
+    clientsTotal: number;
+    apiResourcesTotal: number;
+    apiScopesTotal: number;
+    identityResourcesTotal: number;
+    auditLogsAvg: number;
+    auditLogsPerDaysTotal: DashboardAuditLogDto[] | undefined;
+}
+export declare class DashboardAuditLogDto implements IDashboardAuditLogDto {
+    total: number;
+    created: dayjs.Dayjs;
+    constructor(data?: IDashboardAuditLogDto);
+    init(_data?: any): void;
+    static fromJS(data: any): DashboardAuditLogDto;
+    toJSON(data?: any): any;
+}
+export interface IDashboardAuditLogDto {
+    total: number;
+    created: dayjs.Dayjs;
 }
 export declare class IdentityProvidersApiDto implements IIdentityProvidersApiDto {
     pageSize: number;

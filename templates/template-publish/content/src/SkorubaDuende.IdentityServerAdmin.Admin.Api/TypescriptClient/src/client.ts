@@ -8,7 +8,7 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 export interface IApiResourcesClient {
 
@@ -2955,6 +2955,112 @@ export class ClientsClient implements IClientsClient {
             });
         }
         return Promise.resolve<FileResponse>(null as any);
+    }
+}
+
+export interface IDashboardClient {
+
+    getDashboardIdentityServer(auditLogsLastNumberOfDays: number | undefined): Promise<DashboardDto>;
+
+    getDashboardIdentity(): Promise<DashboardDto>;
+}
+
+export class DashboardClient implements IDashboardClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    getDashboardIdentityServer(auditLogsLastNumberOfDays: number | undefined): Promise<DashboardDto> {
+        let url_ = this.baseUrl + "/api/Dashboard/GetDashboardIdentityServer?";
+        if (auditLogsLastNumberOfDays === null)
+            throw new Error("The parameter 'auditLogsLastNumberOfDays' cannot be null.");
+        else if (auditLogsLastNumberOfDays !== undefined)
+            url_ += "auditLogsLastNumberOfDays=" + encodeURIComponent("" + auditLogsLastNumberOfDays) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetDashboardIdentityServer(_response);
+        });
+    }
+
+    protected processGetDashboardIdentityServer(response: Response): Promise<DashboardDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = DashboardDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<DashboardDto>(null as any);
+    }
+
+    getDashboardIdentity(): Promise<DashboardDto> {
+        let url_ = this.baseUrl + "/api/Dashboard/GetDashboardIdentity";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetDashboardIdentity(_response);
+        });
+    }
+
+    protected processGetDashboardIdentity(response: Response): Promise<DashboardDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = DashboardDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<DashboardDto>(null as any);
     }
 }
 
@@ -7265,6 +7371,110 @@ export interface IClientClaimsApiDto {
     clientClaims: ClientClaimApiDto[] | undefined;
     totalCount: number;
     pageSize: number;
+}
+
+export class DashboardDto implements IDashboardDto {
+    clientsTotal!: number;
+    apiResourcesTotal!: number;
+    apiScopesTotal!: number;
+    identityResourcesTotal!: number;
+    auditLogsAvg!: number;
+    auditLogsPerDaysTotal!: DashboardAuditLogDto[] | undefined;
+
+    constructor(data?: IDashboardDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.clientsTotal = _data["clientsTotal"];
+            this.apiResourcesTotal = _data["apiResourcesTotal"];
+            this.apiScopesTotal = _data["apiScopesTotal"];
+            this.identityResourcesTotal = _data["identityResourcesTotal"];
+            this.auditLogsAvg = _data["auditLogsAvg"];
+            if (Array.isArray(_data["auditLogsPerDaysTotal"])) {
+                this.auditLogsPerDaysTotal = [] as any;
+                for (let item of _data["auditLogsPerDaysTotal"])
+                    this.auditLogsPerDaysTotal!.push(DashboardAuditLogDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): DashboardDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new DashboardDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["clientsTotal"] = this.clientsTotal;
+        data["apiResourcesTotal"] = this.apiResourcesTotal;
+        data["apiScopesTotal"] = this.apiScopesTotal;
+        data["identityResourcesTotal"] = this.identityResourcesTotal;
+        data["auditLogsAvg"] = this.auditLogsAvg;
+        if (Array.isArray(this.auditLogsPerDaysTotal)) {
+            data["auditLogsPerDaysTotal"] = [];
+            for (let item of this.auditLogsPerDaysTotal)
+                data["auditLogsPerDaysTotal"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IDashboardDto {
+    clientsTotal: number;
+    apiResourcesTotal: number;
+    apiScopesTotal: number;
+    identityResourcesTotal: number;
+    auditLogsAvg: number;
+    auditLogsPerDaysTotal: DashboardAuditLogDto[] | undefined;
+}
+
+export class DashboardAuditLogDto implements IDashboardAuditLogDto {
+    total!: number;
+    created!: dayjs.Dayjs;
+
+    constructor(data?: IDashboardAuditLogDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.total = _data["total"];
+            this.created = _data["created"] ? dayjs(_data["created"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): DashboardAuditLogDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new DashboardAuditLogDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["total"] = this.total;
+        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IDashboardAuditLogDto {
+    total: number;
+    created: dayjs.Dayjs;
 }
 
 export class IdentityProvidersApiDto implements IIdentityProvidersApiDto {

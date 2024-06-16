@@ -1,6 +1,6 @@
 {
     "name": "@skoruba/duende.identityserver.admin.api.client",
-    "version": "2.0.0",
+    "version": "2.2.2",
     "description": "Skoruba Duende IdentityServer Admin Api Client",
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",

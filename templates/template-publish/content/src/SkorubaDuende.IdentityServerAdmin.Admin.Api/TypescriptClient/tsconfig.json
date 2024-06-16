@@ -11,12 +11,13 @@
     "moduleResolution": "node",
     "noImplicitAny": true,
     "noUnusedLocals": true,
-    "outDir": "dist/esm",
+    "outDir": "./dist/esm", // Output directory for compiled files
     "sourceMap": true,
     "strict": true,
     "target": "es6",
-    "declarationDir": "dist/types",
+    "declarationDir": "./dist/types", // Output directory for declaration files
     "skipLibCheck": true
   },
-  "include": ["**/*.ts"]
+  "include": ["src/**/*.ts"], // Include all TypeScript files in src directory
+  "exclude": ["node_modules", "dist", "src/dayjs.ts"] // Exclude dist, node_modules, and specific file
 }

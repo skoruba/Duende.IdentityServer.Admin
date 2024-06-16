@@ -28,7 +28,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.UI.Api" Version="2.2.1" />
+        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.UI.Api" Version="2.2.2" />
     </ItemGroup>
     
     <Target Name="NSwag" BeforeTargets="AfterBuild" Condition="'$(Configuration)'=='Debug'">

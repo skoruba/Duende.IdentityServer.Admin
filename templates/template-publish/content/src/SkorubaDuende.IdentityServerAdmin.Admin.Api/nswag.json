@@ -92,14 +92,14 @@
       "typeStyle": "Class",
       "classTypes": [],
       "extendedClasses": [],
-      "extensionCode": "",
+      "extensionCode": "TypescriptClient/src/dayjs.ts",
       "generateDefaultValues": true,
       "excludedTypeNames": [],
       "excludedParameterNames": [],
       "handleReferences": false,
       "generateConstructorInterface": true,
       "convertConstructorInterfaceData": false,
-      "importRequiredTypes": true,
+      "importRequiredTypes": false,
       "useGetBaseUrlMethod": false,
       "baseUrlTokenName": "API_BASE_URL",
       "queryNullValue": "",
@@ -111,7 +111,7 @@
       "enumNameGeneratorType": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "TypescriptClient/client.ts"
+      "output": "TypescriptClient/src/client.ts"
     }
   }
 }

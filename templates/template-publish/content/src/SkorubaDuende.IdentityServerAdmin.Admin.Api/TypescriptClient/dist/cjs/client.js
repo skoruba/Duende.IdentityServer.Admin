@@ -8,8 +8,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IdentityUsersDto = exports.UsersDtoOfIdentityUserDtoAndString = exports.IRoleDto = exports.IdentityRolesDto = exports.RolesDtoOfIdentityRoleDtoAndString = exports.IdentityRoleDto = exports.RoleDtoOfString = exports.BaseRoleDtoOfString = exports.PersistedGrantsApiDto = exports.PersistedGrantApiDto = exports.PersistedGrantSubjectApiDto = exports.PersistedGrantSubjectsApiDto = exports.KeyApiDto = exports.KeysApiDto = exports.IdentityResourcePropertyApiDto = exports.IdentityResourcePropertiesApiDto = exports.IdentityResourceApiDto = exports.IdentityResourcesApiDto = exports.IdentityProviderApiDto = exports.IdentityProvidersApiDto = exports.ClientClaimsApiDto = exports.ClientPropertiesApiDto = exports.ClientSecretApiDto = exports.ClientSecretsApiDto = exports.ClientCloneApiDto = exports.SelectItemDto = exports.ClientPropertyApiDto = exports.ClientClaimApiDto = exports.ClientApiDto = exports.ClientsApiDto = exports.ApiScopePropertiesApiDto = exports.ApiScopePropertyApiDto = exports.ApiScopeApiDto = exports.ApiScopesApiDto = exports.ApiResourcePropertyApiDto = exports.ApiResourcePropertiesApiDto = exports.ApiSecretApiDto = exports.ApiSecretsApiDto = exports.ProblemDetails = exports.ApiResourceApiDto = exports.ApiResourcesApiDto = exports.UsersClient = exports.RolesClient = exports.PersistedGrantsClient = exports.KeysClient = exports.IdentityResourcesClient = exports.IdentityProvidersClient = exports.ClientsClient = exports.ApiScopesClient = exports.ApiResourcesClient = void 0;
-exports.SwaggerException = exports.UserChangePasswordApiDtoOfString = exports.UserProviderDeleteApiDtoOfString = exports.UserProviderApiDtoOfString = exports.UserProvidersApiDtoOfString = exports.UserClaimApiDtoOfString = exports.UserClaimsApiDtoOfString = exports.UserRoleApiDtoOfString = exports.UserRolesApiDtoOfIdentityRoleDto = exports.RoleClaimApiDtoOfString = exports.RoleClaimsApiDtoOfString = exports.IUserDto = exports.IdentityUserDto = exports.UserDtoOfString = exports.BaseUserDtoOfString = void 0;
+exports.IdentityRolesDto = exports.RolesDtoOfIdentityRoleDtoAndString = exports.IdentityRoleDto = exports.RoleDtoOfString = exports.BaseRoleDtoOfString = exports.PersistedGrantsApiDto = exports.PersistedGrantApiDto = exports.PersistedGrantSubjectApiDto = exports.PersistedGrantSubjectsApiDto = exports.KeyApiDto = exports.KeysApiDto = exports.IdentityResourcePropertyApiDto = exports.IdentityResourcePropertiesApiDto = exports.IdentityResourceApiDto = exports.IdentityResourcesApiDto = exports.IdentityProviderApiDto = exports.IdentityProvidersApiDto = exports.DashboardAuditLogDto = exports.DashboardDto = exports.ClientClaimsApiDto = exports.ClientPropertiesApiDto = exports.ClientSecretApiDto = exports.ClientSecretsApiDto = exports.ClientCloneApiDto = exports.SelectItemDto = exports.ClientPropertyApiDto = exports.ClientClaimApiDto = exports.ClientApiDto = exports.ClientsApiDto = exports.ApiScopePropertiesApiDto = exports.ApiScopePropertyApiDto = exports.ApiScopeApiDto = exports.ApiScopesApiDto = exports.ApiResourcePropertyApiDto = exports.ApiResourcePropertiesApiDto = exports.ApiSecretApiDto = exports.ApiSecretsApiDto = exports.ProblemDetails = exports.ApiResourceApiDto = exports.ApiResourcesApiDto = exports.UsersClient = exports.RolesClient = exports.PersistedGrantsClient = exports.KeysClient = exports.IdentityResourcesClient = exports.IdentityProvidersClient = exports.DashboardClient = exports.ClientsClient = exports.ApiScopesClient = exports.ApiResourcesClient = void 0;
+exports.SwaggerException = exports.UserChangePasswordApiDtoOfString = exports.UserProviderDeleteApiDtoOfString = exports.UserProviderApiDtoOfString = exports.UserProvidersApiDtoOfString = exports.UserClaimApiDtoOfString = exports.UserClaimsApiDtoOfString = exports.UserRoleApiDtoOfString = exports.UserRolesApiDtoOfIdentityRoleDto = exports.RoleClaimApiDtoOfString = exports.RoleClaimsApiDtoOfString = exports.IUserDto = exports.IdentityUserDto = exports.UserDtoOfString = exports.BaseUserDtoOfString = exports.IdentityUsersDto = exports.UsersDtoOfIdentityUserDtoAndString = exports.IRoleDto = void 0;
 /* tslint:disable */
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
@@ -3004,6 +3004,108 @@ class ClientsClient {
     }
 }
 exports.ClientsClient = ClientsClient;
+class DashboardClient {
+    constructor(baseUrl, http) {
+        this.jsonParseReviver = undefined;
+        this.http = http ? http : window;
+        this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
+    }
+    getDashboardIdentityServer(auditLogsLastNumberOfDays) {
+        let url_ = this.baseUrl + "/api/Dashboard/GetDashboardIdentityServer?";
+        if (auditLogsLastNumberOfDays === null)
+            throw new Error("The parameter 'auditLogsLastNumberOfDays' cannot be null.");
+        else if (auditLogsLastNumberOfDays !== undefined)
+            url_ += "auditLogsLastNumberOfDays=" + encodeURIComponent("" + auditLogsLastNumberOfDays) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+        return this.http.fetch(url_, options_).then((_response) => {
+            return this.processGetDashboardIdentityServer(_response);
+        });
+    }
+    processGetDashboardIdentityServer(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = DashboardDto.fromJS(resultData200);
+                return result200;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
+    }
+    getDashboardIdentity() {
+        let url_ = this.baseUrl + "/api/Dashboard/GetDashboardIdentity";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+        return this.http.fetch(url_, options_).then((_response) => {
+            return this.processGetDashboardIdentity(_response);
+        });
+    }
+    processGetDashboardIdentity(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = DashboardDto.fromJS(resultData200);
+                return result200;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
+    }
+}
+exports.DashboardClient = DashboardClient;
 class IdentityProvidersClient {
     constructor(baseUrl, http) {
         this.jsonParseReviver = undefined;
@@ -6888,6 +6990,80 @@ class ClientClaimsApiDto {
     }
 }
 exports.ClientClaimsApiDto = ClientClaimsApiDto;
+class DashboardDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            this.clientsTotal = _data["clientsTotal"];
+            this.apiResourcesTotal = _data["apiResourcesTotal"];
+            this.apiScopesTotal = _data["apiScopesTotal"];
+            this.identityResourcesTotal = _data["identityResourcesTotal"];
+            this.auditLogsAvg = _data["auditLogsAvg"];
+            if (Array.isArray(_data["auditLogsPerDaysTotal"])) {
+                this.auditLogsPerDaysTotal = [];
+                for (let item of _data["auditLogsPerDaysTotal"])
+                    this.auditLogsPerDaysTotal.push(DashboardAuditLogDto.fromJS(item));
+            }
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new DashboardDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        data["clientsTotal"] = this.clientsTotal;
+        data["apiResourcesTotal"] = this.apiResourcesTotal;
+        data["apiScopesTotal"] = this.apiScopesTotal;
+        data["identityResourcesTotal"] = this.identityResourcesTotal;
+        data["auditLogsAvg"] = this.auditLogsAvg;
+        if (Array.isArray(this.auditLogsPerDaysTotal)) {
+            data["auditLogsPerDaysTotal"] = [];
+            for (let item of this.auditLogsPerDaysTotal)
+                data["auditLogsPerDaysTotal"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+exports.DashboardDto = DashboardDto;
+class DashboardAuditLogDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            this.total = _data["total"];
+            this.created = _data["created"] ? (0, dayjs_1.default)(_data["created"].toString()) : undefined;
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new DashboardAuditLogDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        data["total"] = this.total;
+        data["created"] = this.created ? this.created.toISOString() : undefined;
+        return data;
+    }
+}
+exports.DashboardAuditLogDto = DashboardAuditLogDto;
 class IdentityProvidersApiDto {
     constructor(data) {
         if (data) {
