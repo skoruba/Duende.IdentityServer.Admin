@@ -4,8 +4,8 @@
 using System;
 using System.Linq;
 using Bogus;
-using Skoruba.Duende.IdentityServer.Admin.Api.Dtos.IdentityProvider;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Constants;
+using Skoruba.Duende.IdentityServer.Admin.UI.Api.Dtos.IdentityProvider;
 
 namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mocks
 {

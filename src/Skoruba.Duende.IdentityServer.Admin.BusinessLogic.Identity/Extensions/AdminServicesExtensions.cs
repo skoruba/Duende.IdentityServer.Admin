@@ -7,6 +7,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Identity;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Mappers.Configuration;
@@ -16,6 +17,9 @@ using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Services.Interf
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.Repositories;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.Repositories.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Configuration.Schema;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Extensions;
+using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Extensions
 {
@@ -175,6 +179,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Extensions
                 .AddProfilesType(profileTypes);
 
             return services;
+        }
+
+        public static void AddConfigureAdminAspNetIdentitySchema(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.ConfigureAdminAspNetIdentitySchema(options =>
+            {
+                configuration.GetSection(nameof(IdentityTableConfiguration)).Bind(options);
+            });
         }
     }
 }

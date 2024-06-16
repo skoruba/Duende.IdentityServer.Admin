@@ -5,8 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Bogus;
-using Skoruba.Duende.IdentityServer.Admin.Api.Dtos.Clients;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Constants;
+using Skoruba.Duende.IdentityServer.Admin.UI.Api.Dtos.Clients;
 
 namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mocks
 {

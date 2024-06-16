@@ -8,7 +8,7 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 
 export interface IApiResourcesClient {
 
