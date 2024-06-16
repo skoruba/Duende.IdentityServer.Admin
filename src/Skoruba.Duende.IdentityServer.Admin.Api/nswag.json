@@ -92,7 +92,7 @@
       "typeStyle": "Class",
       "classTypes": [],
       "extendedClasses": [],
-      "extensionCode": "TypescriptClient/dayjs.ts",
+      "extensionCode": "TypescriptClient/src/dayjs.ts",
       "generateDefaultValues": true,
       "excludedTypeNames": [],
       "excludedParameterNames": [],
@@ -111,7 +111,7 @@
       "enumNameGeneratorType": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "TypescriptClient/client.ts"
+      "output": "TypescriptClient/src/client.ts"
     }
   }
 }
