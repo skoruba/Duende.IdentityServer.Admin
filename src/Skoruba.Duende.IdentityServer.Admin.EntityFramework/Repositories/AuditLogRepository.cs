@@ -2,11 +2,14 @@
 // Licensed under the Apache License, Version 2.0.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Skoruba.AuditLogging.EntityFramework.DbContexts;
 using Skoruba.AuditLogging.EntityFramework.Entities;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Entities;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Common;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Enums;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Extensions;
@@ -23,6 +26,37 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
         public AuditLogRepository(TDbContext dbContext)
         {
             DbContext = dbContext;
+        }
+        
+        public async Task<List<DashboardAuditLogDataView>> GetDashboardAuditLogsAsync(int lastNumberOfDays, CancellationToken cancellationToken = default)
+        {
+            var logs = await DbContext.AuditLog
+                .Where(x => x.Created > DateTime.Now.AddDays(-lastNumberOfDays))
+                .GroupBy(x => x.Created.Date)
+                .Select(x => new DashboardAuditLogDataView
+                {
+                    Created = x.Key,
+                    Total = x.Count()
+                })
+                .ToListAsync(cancellationToken);
+
+            return logs;
+        }
+    
+        public async Task<int> GetDashboardAuditLogsAverageAsync(int lastNumberOfDays, CancellationToken cancellationToken = default)
+        {
+            var dailyCounts = await DbContext.AuditLog
+                .Where(a => a.Created >= DateTime.Now.AddDays(-lastNumberOfDays))
+                .GroupBy(a => a.Created.Date)
+                .Select(g => g.Count())
+                .ToListAsync(cancellationToken: cancellationToken);
+
+            if (dailyCounts.Count > 0)
+            {
+                return (int)dailyCounts.Average();
+            }
+
+            return 0;
         }
 
         public async Task<PagedList<TAuditLog>> GetAsync(string @event, string source, string category, DateTime? created, string subjectIdentifier, string subjectName, int page = 1, int pageSize = 10)
