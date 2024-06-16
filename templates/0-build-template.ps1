@@ -57,9 +57,7 @@ CleanBinObjFolders
 # Remove references
 
 # API
-dotnet remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.csproj
-dotnet remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.csproj
-dotnet remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj reference ..\Skoruba.Duende.IdentityServer.Shared.Configuration\Skoruba.Duende.IdentityServer.Shared.Configuration.csproj
+dotnet remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.UI.Api\Skoruba.Duende.IdentityServer.Admin.UI.Api.csproj
 
 # Admin
 dotnet remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.csproj
@@ -86,9 +84,7 @@ dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.STS.Identity/Skoruba.Due
 dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.STS.Identity/Skoruba.Duende.IdentityServer.STS.Identity.csproj package Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration -v $packagesVersions
 
 # API
-dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj package Skoruba.Duende.IdentityServer.Admin.BusinessLogic -v $packagesVersions
-dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj package Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity -v $packagesVersions
-dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj package Skoruba.Duende.IdentityServer.Shared.Configuration -v $packagesVersions
+dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj package Skoruba.Duende.IdentityServer.Admin.UI.Api -v $packagesVersions
 
 # EF Shared
 dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj package Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration -v $packagesVersions
@@ -109,6 +105,7 @@ Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.E
 Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration -Force -recurse
 Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Shared.Configuration -Force -recurse
 Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.UI -Force -recurse
+Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.UI.Api -Force -recurse
 Remove-Item ./$templateTests -Force -recurse
 
 ######################################
@@ -146,6 +143,10 @@ foreach ($file in $templateFiles) {
 
     (Get-Content $file.PSPath -raw -Encoding UTF8) |
     Foreach-Object { $_ -replace "SkorubaDuende.IdentityServerAdmin.Admin.UI", "Skoruba.Duende.IdentityServer.Admin.UI" } |
+    Set-Content $file.PSPath -Encoding UTF8
+
+    (Get-Content $file.PSPath -raw -Encoding UTF8) |
+    Foreach-Object { $_ -replace "SkorubaDuende.IdentityServerAdmin.Admin.UI.Api", "Skoruba.Duende.IdentityServer.Admin.UI.Api" } |
     Set-Content $file.PSPath -Encoding UTF8
 
     (Get-Content $file.PSPath -raw -Encoding UTF8) |
