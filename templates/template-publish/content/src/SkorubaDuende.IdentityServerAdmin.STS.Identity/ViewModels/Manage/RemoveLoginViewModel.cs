@@ -6,11 +6,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.ViewModels.Manage
         public string ProviderKey { get; set; }
     }
 }
-
-
-
-
-
-
-
-

@@ -2,8 +2,12 @@
 // Licensed under the Apache License, Version 2.0.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Skoruba.AuditLogging.EntityFramework.Entities;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Dashboard;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Log;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Mappers;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces;
@@ -32,6 +36,22 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services
         public virtual async Task DeleteLogsOlderThanAsync(DateTime deleteOlderThan)
         {
             await AuditLogRepository.DeleteLogsOlderThanAsync(deleteOlderThan);
+        }
+
+        public virtual Task<int> GetDashboardAuditLogsAverageAsync(int lastNumberOfDays, CancellationToken cancellationToken = default)
+        {
+            return AuditLogRepository.GetDashboardAuditLogsAverageAsync(lastNumberOfDays, cancellationToken);
+        }
+
+        public virtual async Task<List<DashboardAuditLogDto>> GetDashboardAuditLogsAsync(int lastNumberOfDays, CancellationToken cancellationToken = default)
+        {
+           var auditLogs = await AuditLogRepository.GetDashboardAuditLogsAsync(lastNumberOfDays, cancellationToken);
+
+           return auditLogs.Select(auditLog => new DashboardAuditLogDto
+           {
+               Created = auditLog.Created,
+               Total = auditLog.Total
+           }).ToList();
         }
     }
 }

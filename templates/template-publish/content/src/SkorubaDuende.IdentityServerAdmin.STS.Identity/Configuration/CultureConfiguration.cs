@@ -14,11 +14,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Configuration
         public string DefaultCulture { get; set; } = DefaultRequestCulture;
     }
 }
-
-
-
-
-
-
-
-

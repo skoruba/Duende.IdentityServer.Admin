@@ -13,10 +13,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.ViewModels.Device
         public string UserCode { get; set; }
     }
 }
-
-
-
-
-
-
-

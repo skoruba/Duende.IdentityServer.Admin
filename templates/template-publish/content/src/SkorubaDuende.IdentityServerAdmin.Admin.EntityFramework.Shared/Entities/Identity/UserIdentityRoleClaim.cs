@@ -10,10 +10,3 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Entitie
         
     }
 }
-
-
-
-
-
-
-

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Configuration.Schema;
 using Skoruba.Duende.IdentityServer.Admin.UI.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.UI.Configuration.Constants;
 using Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration.Common;
@@ -89,6 +90,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Helpers.DependencyInjection
 		/// </summary>
 		public Func<IServiceCollection, IHealthChecksBuilder> HealthChecksBuilderFactory { get; set; }
 
+
+		public IdentityTableConfiguration IdentityTableConfiguration { get; set; } = new IdentityTableConfiguration();
+
 		/// <summary>
 		/// Applies configuration parsed from an appsettings file into these options.
 		/// </summary>
@@ -109,6 +113,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Helpers.DependencyInjection
 			configuration.GetSection(nameof(HttpConfiguration)).Bind(Http);
 			configuration.GetSection(nameof(IdentityServerData)).Bind(IdentityServerData);
 			configuration.GetSection(nameof(IdentityData)).Bind(IdentityData);
+			configuration.GetSection(nameof(IdentityTableConfiguration)).Bind(IdentityTableConfiguration);
 		}
 	}
 }

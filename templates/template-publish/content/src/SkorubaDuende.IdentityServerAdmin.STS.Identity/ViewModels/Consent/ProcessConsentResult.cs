@@ -21,10 +21,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.ViewModels.Consent
         public string ValidationError { get; set; }
     }
 }
-
-
-
-
-
-
-

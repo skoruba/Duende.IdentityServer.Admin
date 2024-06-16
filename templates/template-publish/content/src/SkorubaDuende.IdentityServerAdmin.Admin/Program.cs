@@ -151,11 +151,3 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin
                 });
     }
 }
-
-
-
-
-
-
-
-

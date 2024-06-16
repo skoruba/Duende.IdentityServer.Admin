@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SkorubaDuende.IdentityServerAdmin.Admin.Api.Helpers;
-using SkorubaDuende.IdentityServerAdmin.Admin.Api.Middlewares;
 using SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.DbContexts;
 using SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Entities.Identity;
+using Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers;
+using Skoruba.Duende.IdentityServer.Admin.UI.Api.Middlewares;
 
 namespace SkorubaDuende.IdentityServerAdmin.Admin.Api.Configuration.Test
 {
@@ -54,10 +54,3 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api.Configuration.Test
         }
     }
 }
-
-
-
-
-
-
-

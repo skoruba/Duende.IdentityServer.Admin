@@ -19,11 +19,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Configuration
         public string AzureDomain { get; set; }
     }
 }
-
-
-
-
-
-
-
-

@@ -17,10 +17,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.ViewModels.Account
         public string ConfirmPassword { get; set; }
     }
 }
-
-
-
-
-
-
-

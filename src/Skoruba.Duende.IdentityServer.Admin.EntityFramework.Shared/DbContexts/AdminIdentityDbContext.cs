@@ -10,11 +10,11 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts
 {
     public class AdminIdentityDbContext : IdentityDbContext<UserIdentity, UserIdentityRole, string, UserIdentityUserClaim, UserIdentityUserRole, UserIdentityUserLogin, UserIdentityRoleClaim, UserIdentityUserToken>
     {
-        private readonly AdminIdentityDbSchemaConfiguration _schemaConfiguration;
+        private readonly IdentityTableConfiguration _schemaConfiguration;
 
-        public AdminIdentityDbContext(DbContextOptions<AdminIdentityDbContext> options, AdminIdentityDbSchemaConfiguration schemaConfiguration = null) : base(options)
+        public AdminIdentityDbContext(DbContextOptions<AdminIdentityDbContext> options, IdentityTableConfiguration schemaConfiguration = null) : base(options)
         {
-            _schemaConfiguration = schemaConfiguration ?? new AdminIdentityDbSchemaConfiguration();
+            _schemaConfiguration = schemaConfiguration ?? new IdentityTableConfiguration();
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

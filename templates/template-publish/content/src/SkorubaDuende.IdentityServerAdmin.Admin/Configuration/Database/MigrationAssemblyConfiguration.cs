@@ -26,10 +26,3 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Configuration.Database
         }
     }
 }
-
-
-
-
-
-
-

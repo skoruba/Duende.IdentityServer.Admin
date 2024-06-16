@@ -12,10 +12,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Configuration
         public RegisterConfiguration RegisterConfiguration { get; } = new RegisterConfiguration();
     }
 }
-
-
-
-
-
-
-

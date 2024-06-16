@@ -8,10 +8,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Configuration.Constants
         public const string AdministrationPolicy = "RequireAdministratorRole";
     }
 }
-
-
-
-
-
-
-

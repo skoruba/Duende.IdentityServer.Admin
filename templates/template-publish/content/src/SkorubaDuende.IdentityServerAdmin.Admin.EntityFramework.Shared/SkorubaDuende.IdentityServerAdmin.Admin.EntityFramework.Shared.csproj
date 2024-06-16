@@ -8,17 +8,9 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="8.0.1" />
 		<PackageReference Include="Skoruba.AuditLogging.EntityFramework" Version="1.1.0" />
-		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration" Version="2.1.0" />
+		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration" Version="2.2.2" />
 	</ItemGroup>
 </Project>
-
-
-
-
-
-
-
-
 
 
 

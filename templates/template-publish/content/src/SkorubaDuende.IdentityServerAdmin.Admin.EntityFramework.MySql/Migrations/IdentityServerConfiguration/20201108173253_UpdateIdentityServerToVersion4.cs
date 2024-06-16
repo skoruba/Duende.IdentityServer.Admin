@@ -562,11 +562,3 @@ SET asp.`ApiResourceId` = arc.`ApiResourceId`;");
         }
     }
 }
-
-
-
-
-
-
-
-

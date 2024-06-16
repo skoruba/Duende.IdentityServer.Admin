@@ -32,10 +32,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.ViewModels.Diagnostics
         public IEnumerable<string> Clients { get; } = new List<string>();
     }
 }
-
-
-
-
-
-
-

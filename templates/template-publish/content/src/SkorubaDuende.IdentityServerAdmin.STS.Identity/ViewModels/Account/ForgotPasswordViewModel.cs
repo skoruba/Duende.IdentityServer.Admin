@@ -14,11 +14,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.ViewModels.Account
         public string Username { get; set; }
     }
 }
-
-
-
-
-
-
-
-

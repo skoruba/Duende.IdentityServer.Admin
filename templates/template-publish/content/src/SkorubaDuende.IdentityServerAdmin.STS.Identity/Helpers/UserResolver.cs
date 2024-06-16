@@ -32,11 +32,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Helpers
         }
     }
 }
-
-
-
-
-
-
-
-

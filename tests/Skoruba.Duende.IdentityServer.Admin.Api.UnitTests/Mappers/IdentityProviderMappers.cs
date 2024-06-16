@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using FluentAssertions;
-using Skoruba.Duende.IdentityServer.Admin.Api.Dtos.IdentityProvider;
-using Skoruba.Duende.IdentityServer.Admin.Api.Mappers;
 using Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mocks;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.IdentityProvider;
+using Skoruba.Duende.IdentityServer.Admin.UI.Api.Dtos.IdentityProvider;
+using Skoruba.Duende.IdentityServer.Admin.UI.Api.Mappers;
 using Skoruba.Duende.IdentityServer.Admin.UnitTests.Mocks;
 using Xunit;
 

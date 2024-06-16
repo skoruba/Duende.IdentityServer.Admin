@@ -17,10 +17,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.ViewModels.Consent
         public string Description { get; set; }
     }
 }
-
-
-
-
-
-
-

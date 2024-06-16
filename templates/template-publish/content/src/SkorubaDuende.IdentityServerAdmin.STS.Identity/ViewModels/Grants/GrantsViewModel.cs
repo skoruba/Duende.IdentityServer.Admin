@@ -27,10 +27,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.ViewModels.Grants
         public IEnumerable<string> ApiGrantNames { get; set; }
     }
 }
-
-
-
-
-
-
-

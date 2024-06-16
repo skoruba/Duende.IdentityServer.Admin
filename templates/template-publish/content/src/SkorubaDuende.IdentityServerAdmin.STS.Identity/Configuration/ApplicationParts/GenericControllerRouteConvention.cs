@@ -22,10 +22,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Configuration.Applicati
         }
     }
 }
-
-
-
-
-
-
-

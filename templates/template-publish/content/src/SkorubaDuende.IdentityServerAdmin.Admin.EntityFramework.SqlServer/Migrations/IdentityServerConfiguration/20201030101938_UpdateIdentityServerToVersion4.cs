@@ -589,11 +589,3 @@ FROM ApiScopes asp
         }
     }
 }
-
-
-
-
-
-
-
-

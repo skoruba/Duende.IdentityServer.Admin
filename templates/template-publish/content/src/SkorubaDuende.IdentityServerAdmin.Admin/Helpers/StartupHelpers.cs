@@ -33,10 +33,3 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Helpers
         }
     }
 }
-
-
-
-
-
-
-

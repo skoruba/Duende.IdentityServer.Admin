@@ -7,7 +7,8 @@ using System.Net.Http;
 using System.Security.Claims;
 using IdentityModel;
 using Skoruba.Duende.IdentityServer.Admin.Api.Configuration;
-using Skoruba.Duende.IdentityServer.Admin.Api.Middlewares;
+using Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration;
+using Skoruba.Duende.IdentityServer.Admin.UI.Api.Middlewares;
 
 namespace Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Common
 {

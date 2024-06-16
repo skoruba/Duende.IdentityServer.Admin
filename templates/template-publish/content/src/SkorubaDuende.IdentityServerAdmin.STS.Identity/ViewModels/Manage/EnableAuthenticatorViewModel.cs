@@ -18,11 +18,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.ViewModels.Manage
         public string AuthenticatorUri { get; set; }
     }
 }
-
-
-
-
-
-
-
-

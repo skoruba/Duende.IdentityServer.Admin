@@ -16,10 +16,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.ViewModels.Consent
         public bool Checked { get; set; }
     }
 }
-
-
-
-
-
-
-

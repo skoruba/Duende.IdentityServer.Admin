@@ -99,10 +99,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Controllers
         }
     }
 }
-
-
-
-
-
-
-
