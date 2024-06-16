@@ -10,7 +10,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql\Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.csproj" />
+      <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL\Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.csproj" />
+      <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer\Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.csproj" />
       <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.UI.Api\Skoruba.Duende.IdentityServer.Admin.UI.Api.csproj" />
+      <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Shared\Skoruba.Duende.IdentityServer.Shared.csproj" />
     </ItemGroup>
 
     
