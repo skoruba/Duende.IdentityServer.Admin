@@ -770,8 +770,8 @@ It is possible to define the configuration according the client type - by defaul
 
 ### 2.2.2
 
-- [x] Create a New Project Skoruba.Duende.IdentityServer.Admin.UI.Api to be Shipped as a NuGet Package
-- [x] Fix DockerFile for All Projects for Multiplatform Builds (linux/amd64, linux/arm64)
+- [x] Create a New Project `Skoruba.Duende.IdentityServer.Admin.UI.Api` to be Shipped as a NuGet Package
+- [x] Fix DockerFile for All Projects for Multiplatform Builds `(linux/amd64, linux/arm64)`
 - [x] Add a New API Endpoint for Dashboard View
 - [x] Fix Import of dayjs for NSwag TypeScript Definition
 
