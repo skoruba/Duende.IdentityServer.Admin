@@ -20,11 +20,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Configuration
         public static string InvalidCredentialsErrorMessage = "Invalid username or password";
     }
 }
-
-
-
-
-
-
-
-

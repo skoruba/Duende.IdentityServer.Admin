@@ -48,10 +48,3 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.DbConte
         public DbSet<ApiResourceScope> ApiResourceScopes { get; set; }
     }
 }
-
-
-
-
-
-
-

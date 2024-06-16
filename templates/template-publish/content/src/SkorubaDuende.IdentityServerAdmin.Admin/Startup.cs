@@ -37,11 +37,6 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.ConfigureAdminAspNetIdentitySchema(options =>
-            {
-                Configuration.GetSection("IdentityTableConfiguration").Bind(options);
-            });
-
             // Adds the Duende IdentityServer Admin UI with custom options.
             services.AddIdentityServerAdminUI<AdminIdentityDbContext, IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext,
             AdminLogDbContext, AdminAuditLogDbContext, AuditLog, IdentityServerDataProtectionDbContext,
@@ -93,10 +88,3 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin
         }
     }
 }
-
-
-
-
-
-
-

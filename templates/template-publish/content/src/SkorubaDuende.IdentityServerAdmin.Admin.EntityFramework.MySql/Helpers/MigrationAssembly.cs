@@ -5,10 +5,3 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql.Helpers
         
     }
 }
-
-
-
-
-
-
-

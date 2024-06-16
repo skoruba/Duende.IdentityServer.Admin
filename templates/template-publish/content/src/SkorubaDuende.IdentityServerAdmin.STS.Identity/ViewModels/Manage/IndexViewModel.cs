@@ -50,11 +50,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.ViewModels.Manage
         public string Country { get; set; }
     }
 }
-
-
-
-
-
-
-
-

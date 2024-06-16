@@ -10,10 +10,3 @@ namespace SkorubaDuende.IdentityServerAdmin.Shared.Dtos
         
     }
 }
-
-
-
-
-
-
-

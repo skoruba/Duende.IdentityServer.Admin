@@ -7,14 +7,14 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Extensi
     public static class ConfigurationSchemaServicesExtensions
     {
         public static IServiceCollection ConfigureAdminAspNetIdentitySchema(this IServiceCollection services,
-            Action<AdminIdentityDbSchemaConfiguration> configureOptions)
+            Action<IdentityTableConfiguration> configureOptions)
         {
             if (configureOptions == null)
             {
                 throw new ArgumentNullException(nameof(configureOptions));
             }
 
-            var adminIdentitySchema = new AdminIdentityDbSchemaConfiguration();
+            var adminIdentitySchema = new IdentityTableConfiguration();
             configureOptions(adminIdentitySchema);
 
             services.AddSingleton(adminIdentitySchema);
@@ -23,10 +23,3 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Extensi
         }
     }
 }
-
-
-
-
-
-
-

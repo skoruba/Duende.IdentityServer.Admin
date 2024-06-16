@@ -12,10 +12,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.ViewModels.Account
         public string AuthenticationScheme { get; set; }
     }
 }
-
-
-
-
-
-
-

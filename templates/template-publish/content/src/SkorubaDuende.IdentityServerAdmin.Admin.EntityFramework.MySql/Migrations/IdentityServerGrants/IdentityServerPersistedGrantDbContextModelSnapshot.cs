@@ -256,11 +256,3 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql.Migratio
         }
     }
 }
-
-
-
-
-
-
-
-

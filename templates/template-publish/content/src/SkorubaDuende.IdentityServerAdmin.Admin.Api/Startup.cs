@@ -11,20 +11,22 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
+using NSwag;
+using NSwag.AspNetCore;
+using NSwag.Generation.Processors.Security;
 using Skoruba.AuditLogging.EntityFramework.Entities;
 using SkorubaDuende.IdentityServerAdmin.Admin.Api.Configuration;
-using SkorubaDuende.IdentityServerAdmin.Admin.Api.Configuration.Authorization;
-using SkorubaDuende.IdentityServerAdmin.Admin.Api.Configuration.Constants;
-using SkorubaDuende.IdentityServerAdmin.Admin.Api.ExceptionHandling;
-using SkorubaDuende.IdentityServerAdmin.Admin.Api.Helpers;
-using SkorubaDuende.IdentityServerAdmin.Admin.Api.Mappers;
-using SkorubaDuende.IdentityServerAdmin.Admin.Api.Resources;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Extensions;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Extensions;
 using SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.DbContexts;
 using SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Entities.Identity;
 using SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Extensions;
+using Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration;
+using Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration.Authorization;
+using Skoruba.Duende.IdentityServer.Admin.UI.Api.ExceptionHandling;
+using Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers;
+using Skoruba.Duende.IdentityServer.Admin.UI.Api.Mappers;
+using Skoruba.Duende.IdentityServer.Admin.UI.Api.Resources;
 using Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers;
 using SkorubaDuende.IdentityServerAdmin.Shared.Dtos;
 using SkorubaDuende.IdentityServerAdmin.Shared.Dtos.Identity;
@@ -48,76 +50,28 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api
         {
             var adminApiConfiguration = Configuration.GetSection(nameof(AdminApiConfiguration)).Get<AdminApiConfiguration>();
             services.AddSingleton(adminApiConfiguration);
-
+            
             // Add DbContexts
             RegisterDbContexts(services);
-
-            services.AddDataProtection<IdentityServerDataProtectionDbContext>(Configuration);
-
+            
             // Add email senders which is currently setup for SendGrid and SMTP
             services.AddEmailSenders(Configuration);
-
-            services.AddScoped<ControllerExceptionFilterAttribute>();
-            services.AddScoped<IApiErrorResources, ApiErrorResources>();
-
+   
             // Add authentication services
             RegisterAuthentication(services);
 
             // Add authorization services
             RegisterAuthorization(services);
-
-            var profileTypes = new HashSet<Type>
-            {
-                typeof(IdentityMapperProfile<IdentityRoleDto, IdentityUserRolesDto, string, IdentityUserClaimsDto, IdentityUserClaimDto, IdentityUserProviderDto, IdentityUserProvidersDto, IdentityUserChangePasswordDto, IdentityRoleClaimDto, IdentityRoleClaimsDto>)
-            };
-
-            services.ConfigureAdminAspNetIdentitySchema(options =>
-            {
-                Configuration.GetSection("IdentityTableConfiguration").Bind(options);
-            });
-
-            services.AddAdminAspNetIdentityServices<AdminIdentityDbContext, IdentityServerPersistedGrantDbContext,
+            
+            services.AddIdentityServerAdminApi<AdminIdentityDbContext, IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext, IdentityServerDataProtectionDbContext,AdminLogDbContext, AdminAuditLogDbContext, AuditLog,
                 IdentityUserDto, IdentityRoleDto, UserIdentity, UserIdentityRole, string, UserIdentityUserClaim, UserIdentityUserRole,
                 UserIdentityUserLogin, UserIdentityRoleClaim, UserIdentityUserToken,
                 IdentityUsersDto, IdentityRolesDto, IdentityUserRolesDto,
                 IdentityUserClaimsDto, IdentityUserProviderDto, IdentityUserProvidersDto, IdentityUserChangePasswordDto,
-                IdentityRoleClaimsDto, IdentityUserClaimDto, IdentityRoleClaimDto>(profileTypes);
+                IdentityRoleClaimsDto, IdentityUserClaimDto, IdentityRoleClaimDto>(Configuration, adminApiConfiguration);
 
-            services.AddAdminServices<IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext, AdminLogDbContext>();
-
-            services.AddAdminApiCors(adminApiConfiguration);
-
-            services.AddMvcServices<IdentityUserDto, IdentityRoleDto,
-                UserIdentity, UserIdentityRole, string, UserIdentityUserClaim, UserIdentityUserRole,
-                UserIdentityUserLogin, UserIdentityRoleClaim, UserIdentityUserToken,
-                IdentityUsersDto, IdentityRolesDto, IdentityUserRolesDto,
-                IdentityUserClaimsDto, IdentityUserProviderDto, IdentityUserProvidersDto, IdentityUserChangePasswordDto,
-                IdentityRoleClaimsDto, IdentityUserClaimDto, IdentityRoleClaimDto>();
-
-            services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc(adminApiConfiguration.ApiVersion, new OpenApiInfo { Title = adminApiConfiguration.ApiName, Version = adminApiConfiguration.ApiVersion });
-
-                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-                {
-                    Type = SecuritySchemeType.OAuth2,
-                    Flows = new OpenApiOAuthFlows
-                    {
-                        AuthorizationCode = new OpenApiOAuthFlow
-                        {
-                            AuthorizationUrl = new Uri($"{adminApiConfiguration.IdentityServerBaseUrl}/connect/authorize"),
-                            TokenUrl = new Uri($"{adminApiConfiguration.IdentityServerBaseUrl}/connect/token"),
-                            Scopes = new Dictionary<string, string> {
-                                { adminApiConfiguration.OidcApiName, adminApiConfiguration.ApiName }
-                            }
-                        }
-                    }
-                });
-                options.OperationFilter<AuthorizeCheckOperationFilter>();
-            });
-
-            services.AddAuditEventLogging<AdminAuditLogDbContext, AuditLog>(Configuration);
-
+            services.AddSwaggerServices(adminApiConfiguration);
+            
             services.AddIdSHealthChecks<IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext, AdminIdentityDbContext, AdminLogDbContext, AdminAuditLogDbContext, IdentityServerDataProtectionDbContext>(Configuration, adminApiConfiguration);
         }
 
@@ -130,14 +84,16 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
+            app.UseOpenApi();
+            app.UseSwaggerUi(settings =>
             {
-                c.SwaggerEndpoint($"{adminApiConfiguration.ApiBaseUrl}/swagger/v1/swagger.json", adminApiConfiguration.ApiName);
-
-                c.OAuthClientId(adminApiConfiguration.OidcSwaggerUIClientId);
-                c.OAuthAppName(adminApiConfiguration.ApiName);
-                c.OAuthUsePkce();
+                settings.OAuth2Client = new OAuth2ClientSettings
+                {
+                    ClientId = adminApiConfiguration.OidcSwaggerUIClientId,
+                    AppName = adminApiConfiguration.ApiName,
+                    UsePkceWithAuthorizationCodeGrant = true,
+                    ClientSecret = null
+                };
             });
 
             app.UseRouting();
@@ -176,11 +132,3 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api
         }
     }
 }
-
-
-
-
-
-
-
-

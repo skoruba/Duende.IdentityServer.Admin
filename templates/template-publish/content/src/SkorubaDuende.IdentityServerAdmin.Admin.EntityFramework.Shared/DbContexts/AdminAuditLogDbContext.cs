@@ -24,11 +24,3 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.DbConte
         public DbSet<AuditLog> AuditLog { get; set; }
     }
 }
-
-
-
-
-
-
-
-

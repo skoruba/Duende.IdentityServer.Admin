@@ -136,42 +136,42 @@ $templateFiles = Get-ChildItem ./SkorubaDuende.IdentityServerAdmin/src -include 
 foreach ($file in $templateFiles) {
     Write-Host $file.PSPath
 
-
     (Get-Content $file.PSPath -raw -Encoding UTF8) |
     Foreach-Object { $_ -replace "SkorubaDuende.IdentityServerAdmin.Shared.Configuration", "Skoruba.Duende.IdentityServer.Shared.Configuration" } |
-    Set-Content $file.PSPath -Encoding UTF8
+    Out-File $file.PSPath -Encoding UTF8 -NoNewline
 
     (Get-Content $file.PSPath -raw -Encoding UTF8) |
     Foreach-Object { $_ -replace "SkorubaDuende.IdentityServerAdmin.Admin.UI", "Skoruba.Duende.IdentityServer.Admin.UI" } |
-    Set-Content $file.PSPath -Encoding UTF8
+    Out-File $file.PSPath -Encoding UTF8 -NoNewline
 
     (Get-Content $file.PSPath -raw -Encoding UTF8) |
     Foreach-Object { $_ -replace "SkorubaDuende.IdentityServerAdmin.Admin.UI.Api", "Skoruba.Duende.IdentityServer.Admin.UI.Api" } |
-    Set-Content $file.PSPath -Encoding UTF8
+    Out-File $file.PSPath -Encoding UTF8 -NoNewline
 
     (Get-Content $file.PSPath -raw -Encoding UTF8) |
     Foreach-Object { $_ -replace "SkorubaDuende.IdentityServerAdmin.Admin.BusinessLogic", "Skoruba.Duende.IdentityServer.Admin.BusinessLogic" } |
-    Set-Content $file.PSPath -Encoding UTF8
+    Out-File $file.PSPath -Encoding UTF8 -NoNewline
 
     (Get-Content $file.PSPath -raw -Encoding UTF8) |
     Foreach-Object { $_ -replace "SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework", "Skoruba.Duende.IdentityServer.Admin.EntityFramework" } |
-    Set-Content $file.PSPath -Encoding UTF8
+    Out-File $file.PSPath -Encoding UTF8 -NoNewline
 
     (Get-Content $file.PSPath -raw -Encoding UTF8) |
     Foreach-Object { $_ -replace "Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared", "SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared" } |
-    Set-Content $file.PSPath -Encoding UTF8
+    Out-File $file.PSPath -Encoding UTF8 -NoNewline
 
     (Get-Content $file.PSPath -raw -Encoding UTF8) |
     Foreach-Object { $_ -replace "Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql", "SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql" } |
-    Set-Content $file.PSPath -Encoding UTF8
+    Out-File $file.PSPath -Encoding UTF8 -NoNewline
 
     (Get-Content $file.PSPath -raw -Encoding UTF8) |
     Foreach-Object { $_ -replace "Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL", "SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL" } |
-    Set-Content $file.PSPath -Encoding UTF8
+    Out-File $file.PSPath -Encoding UTF8 -NoNewline
 
     (Get-Content $file.PSPath -raw -Encoding UTF8) |
     Foreach-Object { $_ -replace "Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer", "SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer" } |
-    Set-Content $file.PSPath -Encoding UTF8
+    Out-File $file.PSPath -Encoding UTF8 -NoNewline
 }
+
 
 CleanBinObjFolders

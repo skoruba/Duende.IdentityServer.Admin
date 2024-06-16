@@ -73,11 +73,3 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer.Migr
         }
     }
 }
-
-
-
-
-
-
-
-

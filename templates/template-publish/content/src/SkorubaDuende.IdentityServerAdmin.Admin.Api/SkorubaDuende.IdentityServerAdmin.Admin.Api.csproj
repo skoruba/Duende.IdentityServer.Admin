@@ -10,76 +10,39 @@
     </PropertyGroup>
 
     <ItemGroup>
-		<PackageReference Include="AspNetCore.HealthChecks.MySql" Version="8.0.0" />
-		<PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="8.0.0" />
-		<PackageReference Include="AspNetCore.HealthChecks.OpenIdConnectServer" Version="8.0.0" />
-		<PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.0" />
-		<PackageReference Include="AspNetCore.HealthChecks.UI" Version="8.0.0" />
-		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.0" />
-		<PackageReference Include="AutoMapper" Version="13.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.1" />
-		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.1" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.1">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.1" />
-		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.1" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
-		<PackageReference Include="Serilog" Version="3.1.1" />
-		<PackageReference Include="Serilog.Enrichers.Environment" Version="2.3.0" />
-		<PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
-		<PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
-		<PackageReference Include="Serilog.Settings.Configuration" Version="8.0.0" />
-		<PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
-		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-		<PackageReference Include="Serilog.Sinks.MSSqlServer" Version="6.5.1" />
-		<PackageReference Include="Serilog.Sinks.Seq" Version="6.0.0" />
-		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.BusinessLogic" Version="2.1.0" />
-		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity" Version="2.1.0" />
-		<PackageReference Include="Skoruba.Duende.IdentityServer.Shared.Configuration" Version="2.1.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.5.0" />
+      <ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql.csproj" />
+      <ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL.csproj" />
+      <ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer.csproj" />
+      <ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Shared\SkorubaDuende.IdentityServerAdmin.Shared.csproj" />
     </ItemGroup>
 
+    
     <ItemGroup>
-        <ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql.csproj" />
-        <ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL.csproj" />
-        <ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer.csproj" />
-        <ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Shared\SkorubaDuende.IdentityServerAdmin.Shared.csproj" />
+        <PackageReference Include="NSwag.CodeGeneration" Version="14.0.7" />
+        <PackageReference Include="NSwag.CodeGeneration.TypeScript" Version="14.0.7" />
+        <PackageReference Include="NSwag.Generation" Version="14.0.7" />
+        <PackageReference Include="NSwag.Generation.AspNetCore" Version="14.0.7" />
+        <PackageReference Include="NSwag.Generation.WebApi" Version="14.0.7" />
+        <PackageReference Include="NSwag.AspNetCore" Version="14.0.7" />
+        <PackageReference Include="NSwag.MSBuild" Version="14.0.7">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.UI.Api" Version="2.2.1" />
     </ItemGroup>
+    
+    <Target Name="NSwag" BeforeTargets="AfterBuild" Condition="'$(Configuration)'=='Debug'">
+        <Exec ConsoleToMSBuild="true" ContinueOnError="true" Command="$(NSwagExe_Net80) run nswag.json /variables:Configuration=$(Configuration)">
+            <Output TaskParameter="ExitCode" PropertyName="NSwagExitCode" />
+            <Output TaskParameter="ConsoleOutput" PropertyName="NSwagOutput" />
+        </Exec>
 
-    <ItemGroup>
-        <Compile Update="Resources\ApiErrorResource.Designer.cs">
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>ApiErrorResource.resx</DependentUpon>
-        </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-        <EmbeddedResource Update="Resources\ApiErrorResource.resx">
-            <Generator>ResXFileCodeGenerator</Generator>
-            <LastGenOutput>ApiErrorResource.Designer.cs</LastGenOutput>
-        </EmbeddedResource>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Dtos\Key\" />
-    </ItemGroup>
+        <Message Text="$(NSwagOutput)" Condition="'$(NSwagExitCode)' == '0'" Importance="low" />
+        <Error Text="$(NSwagOutput)" Condition="'$(NSwagExitCode)' != '0'" />
+    </Target>
+    
 
 </Project>
-
-
-
-
-
-
-
-
 
 
 

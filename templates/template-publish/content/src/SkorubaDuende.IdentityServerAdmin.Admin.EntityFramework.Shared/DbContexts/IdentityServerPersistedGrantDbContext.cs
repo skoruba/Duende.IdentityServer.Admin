@@ -15,10 +15,3 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.DbConte
         }
     }
 }
-
-
-
-
-
-
-

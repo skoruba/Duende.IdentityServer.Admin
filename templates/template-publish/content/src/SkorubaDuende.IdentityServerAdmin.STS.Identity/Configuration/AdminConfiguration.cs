@@ -16,10 +16,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Configuration
         public string CustomThemeCss { get; set; }
     }
 }
-
-
-
-
-
-
-

@@ -29,10 +29,3 @@ public class OpenIdClaimsMappingConfig : ConfigureAuthenticationOptions<OpenIdCo
         context.AuthenticationOptions.MapInboundClaims = mapInboundClaims;
     }
 }
-
-
-
-
-
-
-

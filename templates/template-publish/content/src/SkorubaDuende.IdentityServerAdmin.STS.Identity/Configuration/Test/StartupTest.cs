@@ -21,10 +21,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Configuration.Test
         }
     }
 }
-
-
-
-
-
-
-

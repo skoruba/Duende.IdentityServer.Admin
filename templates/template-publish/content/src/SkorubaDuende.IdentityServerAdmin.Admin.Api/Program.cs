@@ -98,10 +98,3 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api
                 });
     }
 }
-
-
-
-
-
-
-

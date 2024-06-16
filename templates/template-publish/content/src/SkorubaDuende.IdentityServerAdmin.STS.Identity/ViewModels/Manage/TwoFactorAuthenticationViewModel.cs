@@ -11,11 +11,3 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.ViewModels.Manage
         public bool IsMachineRemembered { get; set; }
     }
 }
-
-
-
-
-
-
-
-
