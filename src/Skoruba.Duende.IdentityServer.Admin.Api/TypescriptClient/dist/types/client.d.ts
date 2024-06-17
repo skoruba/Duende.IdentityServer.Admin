@@ -199,7 +199,7 @@ export declare class ClientsClient implements IClientsClient {
 }
 export interface IDashboardClient {
     getDashboardIdentityServer(auditLogsLastNumberOfDays: number | undefined): Promise<DashboardDto>;
-    getDashboardIdentity(): Promise<DashboardDto>;
+    getDashboardIdentity(): Promise<DashboardIdentityDto>;
 }
 export declare class DashboardClient implements IDashboardClient {
     private http;
@@ -210,8 +210,8 @@ export declare class DashboardClient implements IDashboardClient {
     });
     getDashboardIdentityServer(auditLogsLastNumberOfDays: number | undefined): Promise<DashboardDto>;
     protected processGetDashboardIdentityServer(response: Response): Promise<DashboardDto>;
-    getDashboardIdentity(): Promise<DashboardDto>;
-    protected processGetDashboardIdentity(response: Response): Promise<DashboardDto>;
+    getDashboardIdentity(): Promise<DashboardIdentityDto>;
+    protected processGetDashboardIdentity(response: Response): Promise<DashboardIdentityDto>;
 }
 export interface IIdentityProvidersClient {
     get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<IdentityProvidersApiDto>;
@@ -905,6 +905,7 @@ export declare class DashboardDto implements IDashboardDto {
     apiResourcesTotal: number;
     apiScopesTotal: number;
     identityResourcesTotal: number;
+    identityProvidersTotal: number;
     auditLogsAvg: number;
     auditLogsPerDaysTotal: DashboardAuditLogDto[] | undefined;
     constructor(data?: IDashboardDto);
@@ -917,6 +918,7 @@ export interface IDashboardDto {
     apiResourcesTotal: number;
     apiScopesTotal: number;
     identityResourcesTotal: number;
+    identityProvidersTotal: number;
     auditLogsAvg: number;
     auditLogsPerDaysTotal: DashboardAuditLogDto[] | undefined;
 }
@@ -931,6 +933,18 @@ export declare class DashboardAuditLogDto implements IDashboardAuditLogDto {
 export interface IDashboardAuditLogDto {
     total: number;
     created: dayjs.Dayjs;
+}
+export declare class DashboardIdentityDto implements IDashboardIdentityDto {
+    usersTotal: number;
+    rolesTotal: number;
+    constructor(data?: IDashboardIdentityDto);
+    init(_data?: any): void;
+    static fromJS(data: any): DashboardIdentityDto;
+    toJSON(data?: any): any;
+}
+export interface IDashboardIdentityDto {
+    usersTotal: number;
+    rolesTotal: number;
 }
 export declare class IdentityProvidersApiDto implements IIdentityProvidersApiDto {
     pageSize: number;
@@ -1166,7 +1180,6 @@ export interface IPersistedGrantsApiDto {
 }
 export declare class BaseRoleDtoOfString implements IBaseRoleDtoOfString {
     id: string | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIBaseRoleDtoId: any | undefined;
     constructor(data?: IBaseRoleDtoOfString);
     init(_data?: any): void;
     static fromJS(data: any): BaseRoleDtoOfString;
@@ -1174,7 +1187,6 @@ export declare class BaseRoleDtoOfString implements IBaseRoleDtoOfString {
 }
 export interface IBaseRoleDtoOfString {
     id: string | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIBaseRoleDtoId: any | undefined;
 }
 export declare class RoleDtoOfString extends BaseRoleDtoOfString implements IRoleDtoOfString {
     name: string;
@@ -1198,7 +1210,6 @@ export declare class RolesDtoOfIdentityRoleDtoAndString implements IRolesDtoOfId
     pageSize: number;
     totalCount: number;
     roles: IdentityRoleDto[] | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIRolesDtoRoles: IRoleDto[] | undefined;
     constructor(data?: IRolesDtoOfIdentityRoleDtoAndString);
     init(_data?: any): void;
     static fromJS(data: any): RolesDtoOfIdentityRoleDtoAndString;
@@ -1208,7 +1219,6 @@ export interface IRolesDtoOfIdentityRoleDtoAndString {
     pageSize: number;
     totalCount: number;
     roles: IdentityRoleDto[] | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIRolesDtoRoles: IRoleDto[] | undefined;
 }
 export declare class IdentityRolesDto extends RolesDtoOfIdentityRoleDtoAndString implements IIdentityRolesDto {
     constructor(data?: IIdentityRolesDto);
@@ -1218,21 +1228,10 @@ export declare class IdentityRolesDto extends RolesDtoOfIdentityRoleDtoAndString
 }
 export interface IIdentityRolesDto extends IRolesDtoOfIdentityRoleDtoAndString {
 }
-export declare abstract class IRoleDto implements IIRoleDto {
-    name: string | undefined;
-    constructor(data?: IIRoleDto);
-    init(_data?: any): void;
-    static fromJS(data: any): IRoleDto;
-    toJSON(data?: any): any;
-}
-export interface IIRoleDto {
-    name: string | undefined;
-}
 export declare class UsersDtoOfIdentityUserDtoAndString implements IUsersDtoOfIdentityUserDtoAndString {
     pageSize: number;
     totalCount: number;
     users: IdentityUserDto[] | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIUsersDtoUsers: IUserDto[] | undefined;
     constructor(data?: IUsersDtoOfIdentityUserDtoAndString);
     init(_data?: any): void;
     static fromJS(data: any): UsersDtoOfIdentityUserDtoAndString;
@@ -1242,7 +1241,6 @@ export interface IUsersDtoOfIdentityUserDtoAndString {
     pageSize: number;
     totalCount: number;
     users: IdentityUserDto[] | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIUsersDtoUsers: IUserDto[] | undefined;
 }
 export declare class IdentityUsersDto extends UsersDtoOfIdentityUserDtoAndString implements IIdentityUsersDto {
     constructor(data?: IIdentityUsersDto);
@@ -1254,7 +1252,6 @@ export interface IIdentityUsersDto extends IUsersDtoOfIdentityUserDtoAndString {
 }
 export declare class BaseUserDtoOfString implements IBaseUserDtoOfString {
     id: string | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIBaseUserDtoId: any | undefined;
     constructor(data?: IBaseUserDtoOfString);
     init(_data?: any): void;
     static fromJS(data: any): BaseUserDtoOfString;
@@ -1262,7 +1259,6 @@ export declare class BaseUserDtoOfString implements IBaseUserDtoOfString {
 }
 export interface IBaseUserDtoOfString {
     id: string | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIBaseUserDtoId: any | undefined;
 }
 export declare class UserDtoOfString extends BaseUserDtoOfString implements IUserDtoOfString {
     userName: string;
@@ -1297,32 +1293,6 @@ export declare class IdentityUserDto extends UserDtoOfString implements IIdentit
     toJSON(data?: any): any;
 }
 export interface IIdentityUserDto extends IUserDtoOfString {
-}
-export declare abstract class IUserDto implements IIUserDto {
-    userName: string | undefined;
-    email: string | undefined;
-    emailConfirmed: boolean;
-    phoneNumber: string | undefined;
-    phoneNumberConfirmed: boolean;
-    lockoutEnabled: boolean;
-    twoFactorEnabled: boolean;
-    accessFailedCount: number;
-    lockoutEnd: dayjs.Dayjs | undefined;
-    constructor(data?: IIUserDto);
-    init(_data?: any): void;
-    static fromJS(data: any): IUserDto;
-    toJSON(data?: any): any;
-}
-export interface IIUserDto {
-    userName: string | undefined;
-    email: string | undefined;
-    emailConfirmed: boolean;
-    phoneNumber: string | undefined;
-    phoneNumberConfirmed: boolean;
-    lockoutEnabled: boolean;
-    twoFactorEnabled: boolean;
-    accessFailedCount: number;
-    lockoutEnd: dayjs.Dayjs | undefined;
 }
 export declare class RoleClaimsApiDtoOfString implements IRoleClaimsApiDtoOfString {
     claims: RoleClaimApiDtoOfString[] | undefined;

@@ -31,7 +31,8 @@ public class DashboardService : IDashboardService
             ApiScopesTotal = dashBoardData.ApiScopesTotal,
             IdentityResourcesTotal = dashBoardData.IdentityResourcesTotal,
             AuditLogsAvg = auditLogsAverage,
-            AuditLogsPerDaysTotal = auditLogs
+            AuditLogsPerDaysTotal = auditLogs,
+            IdentityProvidersTotal = dashBoardData.IdentityProvidersTotal
        };
     }
 }

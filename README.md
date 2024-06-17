@@ -22,7 +22,7 @@ The application is written in the **Asp.Net Core MVC - using .NET 8.0**
 - 🔒 **NOTE:** The project uses the default database migrations which affect your database, therefore double check the migrations according to your database provider and create a database backup
 
 ```sh
-dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::2.2.2
+dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::2.3.0
 ```
 
 ### Create new project:
@@ -774,6 +774,11 @@ It is possible to define the configuration according the client type - by defaul
 - [x] Fix DockerFile for All Projects for Multiplatform Builds `(linux/amd64, linux/arm64)` ([#194](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/194))
 - [x] Add a New API Endpoint for Dashboard View
 - [x] Fix Import of dayjs for NSwag TypeScript Definition
+
+### 2.3.0
+
+- [x] Fix Dashboard endpoint for getting Identity data
+- [x] Update solution to the latest version of all nuget packages, including `Duende.IdentityServer` version `7.0.5`
 
 ### 3.0.0
 
