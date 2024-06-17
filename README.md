@@ -778,6 +778,7 @@ It is possible to define the configuration according the client type - by defaul
 ### 2.3.0
 
 - [x] Fix Dashboard endpoint for getting Identity data
+- [x] Update solution to the latest version of all nuget packages, including `Duende.IdentityServer` version `7.0.5`
 
 ### 3.0.0
 
