@@ -6,8 +6,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AutoMapper" Version="13.0.0" />
-		<PackageReference Include="Duende.IdentityServer.EntityFramework" Version="7.0.0" />
+		<PackageReference Include="AutoMapper" Version="13.0.1" />
+		<PackageReference Include="Duende.IdentityServer.EntityFramework" Version="7.0.5" />
 	</ItemGroup>
 
 	<ItemGroup>

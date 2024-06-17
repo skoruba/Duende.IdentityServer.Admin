@@ -102,14 +102,14 @@
     </ItemGroup>
 
     <ItemGroup>
-	    <PackageReference Include="AspNetCore.HealthChecks.MySql" Version="8.0.0" />
-        <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="8.0.0" />
-        <PackageReference Include="AspNetCore.HealthChecks.OpenIdConnectServer" Version="8.0.0" />
-        <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.0" />
-        <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.1" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.1" />
+	    <PackageReference Include="AspNetCore.HealthChecks.MySql" Version="8.0.1" />
+        <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="8.0.1" />
+        <PackageReference Include="AspNetCore.HealthChecks.OpenIdConnectServer" Version="8.0.1" />
+        <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.2" />
+        <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.6" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.6" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.6" />
         <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
     </ItemGroup>
 

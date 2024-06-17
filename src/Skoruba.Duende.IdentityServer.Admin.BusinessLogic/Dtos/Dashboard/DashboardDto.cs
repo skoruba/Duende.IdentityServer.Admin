@@ -12,6 +12,8 @@ public class DashboardDto
 
     public int IdentityResourcesTotal { get; set; }
     
+    public int IdentityProvidersTotal { get; set; }
+    
     public long AuditLogsAvg { get; set; }
     
     public List<DashboardAuditLogDto> AuditLogsPerDaysTotal { get; set; }
