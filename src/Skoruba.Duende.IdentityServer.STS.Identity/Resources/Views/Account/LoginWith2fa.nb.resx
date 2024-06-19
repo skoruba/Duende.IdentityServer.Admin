@@ -15,13 +15,13 @@
         <value>Bekreftelseskode</value>
     </data>
     <data name="Info" xml:space="preserve">
-        <value>Din inlogging er beskyttet med en autentiseringsapp. Skriv inn autentiseringskoden nedenfor.</value>
+        <value>Din innlogging er beskyttet med en autentiseringsapp. Skriv inn autentiseringskoden nedenfor.</value>
     </data>
     <data name="LogIn" xml:space="preserve">
         <value>Logg inn</value>
     </data>
     <data name="LoginWithRecoveryCode" xml:space="preserve">
-        <value>logg inn med en gjennoprettingskode</value>
+        <value>Logg inn med en gjennopprettingskode</value>
     </data>
     <data name="Remember" xml:space="preserve">
         <value>Husk enheten</value>

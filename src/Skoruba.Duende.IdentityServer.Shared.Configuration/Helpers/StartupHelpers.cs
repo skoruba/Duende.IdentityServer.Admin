@@ -84,7 +84,7 @@ namespace Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers
         {
             if (!configuration.GetSection(nameof(AzureKeyVaultConfiguration)).Exists()) return;
             var azureKeyVaultConfiguration = configuration.GetSection(nameof(AzureKeyVaultConfiguration)).Get<AzureKeyVaultConfiguration>();
-
+            Console.WriteLine(azureKeyVaultConfiguration.ReadConfigurationFromKeyVault);
             if (!azureKeyVaultConfiguration.ReadConfigurationFromKeyVault) return;
             if (azureKeyVaultConfiguration.UseClientCredentials)
             {

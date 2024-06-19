@@ -15,7 +15,7 @@
         <value>Passord</value>
     </data>
     <data name="SubTitle" xml:space="preserve">
-        <value>Oprett ny konto</value>
+        <value>Opprett ny konto</value>
     </data>
     <data name="Title" xml:space="preserve">
         <value>Registrer</value>
@@ -24,7 +24,7 @@
         <value>Brukernavn</value>
     </data>
     <data name="Email" xml:space="preserve">
-        <value>Email</value>
+        <value>Epost</value>
     </data>
     <data name="ConfirmPassword" xml:space="preserve">
         <value>Bekreft passord</value>

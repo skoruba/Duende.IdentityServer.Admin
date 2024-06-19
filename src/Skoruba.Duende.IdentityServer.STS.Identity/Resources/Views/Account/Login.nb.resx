@@ -30,7 +30,7 @@
         <value>Lokal innlogging</value>
     </data>
     <data name="Login" xml:space="preserve">
-        <value>Log inn</value>
+        <value>Logg inn</value>
     </data>
     <data name="Password" xml:space="preserve">
         <value>Passord</value>
@@ -39,15 +39,15 @@
         <value>Registrer</value>
     </data>
     <data name="Remember" xml:space="preserve">
-        <value>Husk inlogging</value>
+        <value>Husk innlogging</value>
     </data>
     <data name="Title" xml:space="preserve">
-        <value>Log inn</value>
+        <value>Logg inn</value>
     </data>
     <data name="Username" xml:space="preserve">
         <value>Brukernavn</value>
     </data>
     <data name="NoSchema" xml:space="preserve">
-        <value>Det er ingen inloggings sjemaer konfigurert for denne klienten.</value>
+        <value>Det er ingen innloggings sjemaer konfigurert for denne klienten.</value>
     </data>
 </root>
