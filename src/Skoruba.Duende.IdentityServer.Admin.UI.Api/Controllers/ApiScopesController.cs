@@ -82,7 +82,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(201)]
+        [ProducesResponseType(typeof(ApiScopeDto), 201)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> PostScope([FromBody]ApiScopeApiDto apiScopeApi)
         {
@@ -100,7 +100,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpPost("{id}/Properties")]
-        [ProducesResponseType(201)]
+        [ProducesResponseType(typeof(ApiScopePropertyApiDto), 201)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> PostProperty(int id, [FromBody]ApiScopePropertyApiDto apiScopePropertyApi)
         {
@@ -128,6 +128,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpDelete("Properties/{propertyId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> DeleteProperty(int propertyId)
         {
             var apiScopePropertiesDto = new ApiScopePropertiesDto { ApiScopePropertyId = propertyId };
@@ -139,6 +141,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpPut]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> PutScope([FromBody]ApiScopeApiDto apiScopeApi)
         {
             var apiScope = apiScopeApi.ToApiScopeApiModel<ApiScopeDto>();
@@ -151,6 +155,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> DeleteScope(int id)
         {
             var apiScope = new ApiScopeDto { Id = id };

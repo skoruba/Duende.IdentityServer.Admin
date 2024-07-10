@@ -8,8 +8,6 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
-import dayjs from 'dayjs';
-
 export interface IApiResourcesClient {
 
     get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ApiResourcesApiDto>;
@@ -1377,7 +1375,7 @@ export interface IClientsClient {
 
     get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ClientsApiDto>;
 
-    post(client: ClientApiDto): Promise<void>;
+    post(client: ClientApiDto): Promise<ClientApiDto>;
 
     put(client: ClientApiDto): Promise<FileResponse>;
 
@@ -1498,7 +1496,7 @@ export class ClientsClient implements IClientsClient {
         return Promise.resolve<ClientsApiDto>(null as any);
     }
 
-    post(client: ClientApiDto): Promise<void> {
+    post(client: ClientApiDto): Promise<ClientApiDto> {
         let url_ = this.baseUrl + "/api/Clients";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1509,6 +1507,7 @@ export class ClientsClient implements IClientsClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -1517,12 +1516,15 @@ export class ClientsClient implements IClientsClient {
         });
     }
 
-    protected processPost(response: Response): Promise<void> {
+    protected processPost(response: Response): Promise<ClientApiDto> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 201) {
             return response.text().then((_responseText) => {
-            return;
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result201 = ClientApiDto.fromJS(resultData201);
+            return result201;
             });
         } else if (status === 400) {
             return response.text().then((_responseText) => {
@@ -1544,7 +1546,7 @@ export class ClientsClient implements IClientsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<ClientApiDto>(null as any);
     }
 
     put(client: ClientApiDto): Promise<FileResponse> {
@@ -6179,7 +6181,7 @@ export class ApiSecretApiDto implements IApiSecretApiDto {
     description!: string | undefined;
     value!: string;
     hashType!: string | undefined;
-    expiration!: dayjs.Dayjs | undefined;
+    expiration!: Date | undefined;
 
     constructor(data?: IApiSecretApiDto) {
         if (data) {
@@ -6197,7 +6199,7 @@ export class ApiSecretApiDto implements IApiSecretApiDto {
             this.description = _data["description"];
             this.value = _data["value"];
             this.hashType = _data["hashType"];
-            this.expiration = _data["expiration"] ? dayjs(_data["expiration"].toString()) : <any>undefined;
+            this.expiration = _data["expiration"] ? new Date(_data["expiration"].toString()) : <any>undefined;
         }
     }
 
@@ -6226,7 +6228,7 @@ export interface IApiSecretApiDto {
     description: string | undefined;
     value: string;
     hashType: string | undefined;
-    expiration: dayjs.Dayjs | undefined;
+    expiration: Date | undefined;
 }
 
 export class ApiResourcePropertiesApiDto implements IApiResourcePropertiesApiDto {
@@ -6657,8 +6659,8 @@ export class ClientApiDto implements IClientApiDto {
     allowedScopes!: string[] | undefined;
     claims!: ClientClaimApiDto[] | undefined;
     properties!: ClientPropertyApiDto[] | undefined;
-    updated!: dayjs.Dayjs | undefined;
-    lastAccessed!: dayjs.Dayjs | undefined;
+    updated!: Date | undefined;
+    lastAccessed!: Date | undefined;
     userSsoLifetime!: number | undefined;
     userCodeType!: string | undefined;
     deviceCodeLifetime!: number;
@@ -6668,7 +6670,7 @@ export class ClientApiDto implements IClientApiDto {
     coordinateLifetimeWithUserSession!: boolean;
     requireDPoP!: boolean;
     dPoPValidationMode!: number;
-    dPoPClockSkew!: dayjs.Dayjs;
+    dPoPClockSkew!: string;
     pushedAuthorizationLifetime!: number | undefined;
     requirePushedAuthorization!: boolean;
     initiateLoginUri!: string | undefined;
@@ -6761,8 +6763,8 @@ export class ClientApiDto implements IClientApiDto {
                 for (let item of _data["properties"])
                     this.properties!.push(ClientPropertyApiDto.fromJS(item));
             }
-            this.updated = _data["updated"] ? dayjs(_data["updated"].toString()) : <any>undefined;
-            this.lastAccessed = _data["lastAccessed"] ? dayjs(_data["lastAccessed"].toString()) : <any>undefined;
+            this.updated = _data["updated"] ? new Date(_data["updated"].toString()) : <any>undefined;
+            this.lastAccessed = _data["lastAccessed"] ? new Date(_data["lastAccessed"].toString()) : <any>undefined;
             this.userSsoLifetime = _data["userSsoLifetime"];
             this.userCodeType = _data["userCodeType"];
             this.deviceCodeLifetime = _data["deviceCodeLifetime"];
@@ -6772,7 +6774,7 @@ export class ClientApiDto implements IClientApiDto {
             this.coordinateLifetimeWithUserSession = _data["coordinateLifetimeWithUserSession"];
             this.requireDPoP = _data["requireDPoP"];
             this.dPoPValidationMode = _data["dPoPValidationMode"];
-            this.dPoPClockSkew = _data["dPoPClockSkew"] ? dayjs(_data["dPoPClockSkew"].toString()) : <any>undefined;
+            this.dPoPClockSkew = _data["dPoPClockSkew"];
             this.pushedAuthorizationLifetime = _data["pushedAuthorizationLifetime"];
             this.requirePushedAuthorization = _data["requirePushedAuthorization"];
             this.initiateLoginUri = _data["initiateLoginUri"];
@@ -6880,7 +6882,7 @@ export class ClientApiDto implements IClientApiDto {
         data["coordinateLifetimeWithUserSession"] = this.coordinateLifetimeWithUserSession;
         data["requireDPoP"] = this.requireDPoP;
         data["dPoPValidationMode"] = this.dPoPValidationMode;
-        data["dPoPClockSkew"] = this.dPoPClockSkew ? this.dPoPClockSkew.format('d.hh:mm:ss.SSS') : <any>undefined;
+        data["dPoPClockSkew"] = this.dPoPClockSkew;
         data["pushedAuthorizationLifetime"] = this.pushedAuthorizationLifetime;
         data["requirePushedAuthorization"] = this.requirePushedAuthorization;
         data["initiateLoginUri"] = this.initiateLoginUri;
@@ -6938,8 +6940,8 @@ export interface IClientApiDto {
     allowedScopes: string[] | undefined;
     claims: ClientClaimApiDto[] | undefined;
     properties: ClientPropertyApiDto[] | undefined;
-    updated: dayjs.Dayjs | undefined;
-    lastAccessed: dayjs.Dayjs | undefined;
+    updated: Date | undefined;
+    lastAccessed: Date | undefined;
     userSsoLifetime: number | undefined;
     userCodeType: string | undefined;
     deviceCodeLifetime: number;
@@ -6949,7 +6951,7 @@ export interface IClientApiDto {
     coordinateLifetimeWithUserSession: boolean;
     requireDPoP: boolean;
     dPoPValidationMode: number;
-    dPoPClockSkew: dayjs.Dayjs;
+    dPoPClockSkew: string;
     pushedAuthorizationLifetime: number | undefined;
     requirePushedAuthorization: boolean;
     initiateLoginUri: string | undefined;
@@ -7219,7 +7221,7 @@ export class ClientSecretApiDto implements IClientSecretApiDto {
     description!: string | undefined;
     value!: string;
     hashType!: string | undefined;
-    expiration!: dayjs.Dayjs | undefined;
+    expiration!: Date | undefined;
 
     constructor(data?: IClientSecretApiDto) {
         if (data) {
@@ -7237,7 +7239,7 @@ export class ClientSecretApiDto implements IClientSecretApiDto {
             this.description = _data["description"];
             this.value = _data["value"];
             this.hashType = _data["hashType"];
-            this.expiration = _data["expiration"] ? dayjs(_data["expiration"].toString()) : <any>undefined;
+            this.expiration = _data["expiration"] ? new Date(_data["expiration"].toString()) : <any>undefined;
         }
     }
 
@@ -7266,7 +7268,7 @@ export interface IClientSecretApiDto {
     description: string | undefined;
     value: string;
     hashType: string | undefined;
-    expiration: dayjs.Dayjs | undefined;
+    expiration: Date | undefined;
 }
 
 export class ClientPropertiesApiDto implements IClientPropertiesApiDto {
@@ -7443,7 +7445,7 @@ export interface IDashboardDto {
 
 export class DashboardAuditLogDto implements IDashboardAuditLogDto {
     total!: number;
-    created!: dayjs.Dayjs;
+    created!: Date;
 
     constructor(data?: IDashboardAuditLogDto) {
         if (data) {
@@ -7457,7 +7459,7 @@ export class DashboardAuditLogDto implements IDashboardAuditLogDto {
     init(_data?: any) {
         if (_data) {
             this.total = _data["total"];
-            this.created = _data["created"] ? dayjs(_data["created"].toString()) : <any>undefined;
+            this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
         }
     }
 
@@ -7478,7 +7480,7 @@ export class DashboardAuditLogDto implements IDashboardAuditLogDto {
 
 export interface IDashboardAuditLogDto {
     total: number;
-    created: dayjs.Dayjs;
+    created: Date;
 }
 
 export class DashboardIdentityDto implements IDashboardIdentityDto {
@@ -7920,7 +7922,7 @@ export interface IKeysApiDto {
 export class KeyApiDto implements IKeyApiDto {
     id!: string | undefined;
     version!: number;
-    created!: dayjs.Dayjs;
+    created!: Date;
     use!: string | undefined;
     algorithm!: string | undefined;
     isX509Certificate!: boolean;
@@ -7938,7 +7940,7 @@ export class KeyApiDto implements IKeyApiDto {
         if (_data) {
             this.id = _data["id"];
             this.version = _data["version"];
-            this.created = _data["created"] ? dayjs(_data["created"].toString()) : <any>undefined;
+            this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
             this.use = _data["use"];
             this.algorithm = _data["algorithm"];
             this.isX509Certificate = _data["isX509Certificate"];
@@ -7967,7 +7969,7 @@ export class KeyApiDto implements IKeyApiDto {
 export interface IKeyApiDto {
     id: string | undefined;
     version: number;
-    created: dayjs.Dayjs;
+    created: Date;
     use: string | undefined;
     algorithm: string | undefined;
     isX509Certificate: boolean;
@@ -8032,10 +8034,10 @@ export class PersistedGrantSubjectApiDto implements IPersistedGrantSubjectApiDto
     subjectId!: string | undefined;
     subjectName!: string | undefined;
     clientId!: string | undefined;
-    creationTime!: dayjs.Dayjs;
-    expiration!: dayjs.Dayjs | undefined;
+    creationTime!: Date;
+    expiration!: Date | undefined;
     data!: string | undefined;
-    consumedTime!: dayjs.Dayjs | undefined;
+    consumedTime!: Date | undefined;
     sessionId!: string | undefined;
     description!: string | undefined;
 
@@ -8056,10 +8058,10 @@ export class PersistedGrantSubjectApiDto implements IPersistedGrantSubjectApiDto
             this.subjectId = _data["subjectId"];
             this.subjectName = _data["subjectName"];
             this.clientId = _data["clientId"];
-            this.creationTime = _data["creationTime"] ? dayjs(_data["creationTime"].toString()) : <any>undefined;
-            this.expiration = _data["expiration"] ? dayjs(_data["expiration"].toString()) : <any>undefined;
+            this.creationTime = _data["creationTime"] ? new Date(_data["creationTime"].toString()) : <any>undefined;
+            this.expiration = _data["expiration"] ? new Date(_data["expiration"].toString()) : <any>undefined;
             this.data = _data["data"];
-            this.consumedTime = _data["consumedTime"] ? dayjs(_data["consumedTime"].toString()) : <any>undefined;
+            this.consumedTime = _data["consumedTime"] ? new Date(_data["consumedTime"].toString()) : <any>undefined;
             this.sessionId = _data["sessionId"];
             this.description = _data["description"];
         }
@@ -8097,10 +8099,10 @@ export interface IPersistedGrantSubjectApiDto {
     subjectId: string | undefined;
     subjectName: string | undefined;
     clientId: string | undefined;
-    creationTime: dayjs.Dayjs;
-    expiration: dayjs.Dayjs | undefined;
+    creationTime: Date;
+    expiration: Date | undefined;
     data: string | undefined;
-    consumedTime: dayjs.Dayjs | undefined;
+    consumedTime: Date | undefined;
     sessionId: string | undefined;
     description: string | undefined;
 }
@@ -8112,10 +8114,10 @@ export class PersistedGrantApiDto implements IPersistedGrantApiDto {
     subjectId!: string | undefined;
     subjectName!: string | undefined;
     clientId!: string | undefined;
-    creationTime!: dayjs.Dayjs;
-    expiration!: dayjs.Dayjs | undefined;
+    creationTime!: Date;
+    expiration!: Date | undefined;
     data!: string | undefined;
-    consumedTime!: dayjs.Dayjs | undefined;
+    consumedTime!: Date | undefined;
     sessionId!: string | undefined;
     description!: string | undefined;
 
@@ -8136,10 +8138,10 @@ export class PersistedGrantApiDto implements IPersistedGrantApiDto {
             this.subjectId = _data["subjectId"];
             this.subjectName = _data["subjectName"];
             this.clientId = _data["clientId"];
-            this.creationTime = _data["creationTime"] ? dayjs(_data["creationTime"].toString()) : <any>undefined;
-            this.expiration = _data["expiration"] ? dayjs(_data["expiration"].toString()) : <any>undefined;
+            this.creationTime = _data["creationTime"] ? new Date(_data["creationTime"].toString()) : <any>undefined;
+            this.expiration = _data["expiration"] ? new Date(_data["expiration"].toString()) : <any>undefined;
             this.data = _data["data"];
-            this.consumedTime = _data["consumedTime"] ? dayjs(_data["consumedTime"].toString()) : <any>undefined;
+            this.consumedTime = _data["consumedTime"] ? new Date(_data["consumedTime"].toString()) : <any>undefined;
             this.sessionId = _data["sessionId"];
             this.description = _data["description"];
         }
@@ -8177,10 +8179,10 @@ export interface IPersistedGrantApiDto {
     subjectId: string | undefined;
     subjectName: string | undefined;
     clientId: string | undefined;
-    creationTime: dayjs.Dayjs;
-    expiration: dayjs.Dayjs | undefined;
+    creationTime: Date;
+    expiration: Date | undefined;
     data: string | undefined;
-    consumedTime: dayjs.Dayjs | undefined;
+    consumedTime: Date | undefined;
     sessionId: string | undefined;
     description: string | undefined;
 }
@@ -8536,7 +8538,7 @@ export class UserDtoOfString extends BaseUserDtoOfString implements IUserDtoOfSt
     lockoutEnabled!: boolean;
     twoFactorEnabled!: boolean;
     accessFailedCount!: number;
-    lockoutEnd!: dayjs.Dayjs | undefined;
+    lockoutEnd!: Date | undefined;
 
     constructor(data?: IUserDtoOfString) {
         super(data);
@@ -8553,7 +8555,7 @@ export class UserDtoOfString extends BaseUserDtoOfString implements IUserDtoOfSt
             this.lockoutEnabled = _data["lockoutEnabled"];
             this.twoFactorEnabled = _data["twoFactorEnabled"];
             this.accessFailedCount = _data["accessFailedCount"];
-            this.lockoutEnd = _data["lockoutEnd"] ? dayjs(_data["lockoutEnd"].toString()) : <any>undefined;
+            this.lockoutEnd = _data["lockoutEnd"] ? new Date(_data["lockoutEnd"].toString()) : <any>undefined;
         }
     }
 
@@ -8589,7 +8591,7 @@ export interface IUserDtoOfString extends IBaseUserDtoOfString {
     lockoutEnabled: boolean;
     twoFactorEnabled: boolean;
     accessFailedCount: number;
-    lockoutEnd: dayjs.Dayjs | undefined;
+    lockoutEnd: Date | undefined;
 }
 
 export class IdentityUserDto extends UserDtoOfString implements IIdentityUserDto {

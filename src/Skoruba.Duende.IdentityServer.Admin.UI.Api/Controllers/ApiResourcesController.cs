@@ -91,6 +91,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpPut]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> Put([FromBody]ApiResourceApiDto apiResourceApi)
         {
             var apiResourceDto = apiResourceApi.ToApiResourceApiModel<ApiResourceDto>();
@@ -102,6 +104,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> Delete(int id)
         {
             var apiResourceDto = new ApiResourceDto { Id = id };
@@ -131,7 +135,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpPost("{id}/Secrets")]
-        [ProducesResponseType(201)]
+        [ProducesResponseType(typeof(ApiSecretApiDto), 201)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> PostSecret(int id, [FromBody]ApiSecretApiDto clientSecretApi)
         {
@@ -150,6 +154,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpDelete("Secrets/{secretId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> DeleteSecret(int secretId)
         {
             var apiSecret = new ApiSecretsDto { ApiSecretId = secretId };
@@ -161,6 +167,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpGet("{id}/Properties")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<ApiResourcePropertiesApiDto>> GetProperties(int id, int page = 1, int pageSize = 10)
         {
             var apiResourcePropertiesDto = await _apiResourceService.GetApiResourcePropertiesAsync(id, page, pageSize);
@@ -179,7 +187,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpPost("{id}/Properties")]
-        [ProducesResponseType(201)]
+        [ProducesResponseType(typeof(ApiResourcePropertyApiDto), 201)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> PostProperty(int id, [FromBody]ApiResourcePropertyApiDto apiPropertyApi)
         {
@@ -198,6 +206,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpDelete("Properties/{propertyId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> DeleteProperty(int propertyId)
         {
             var apiResourceProperty = new ApiResourcePropertiesDto { ApiResourcePropertyId = propertyId };
