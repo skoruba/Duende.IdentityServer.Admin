@@ -14,7 +14,7 @@ export interface IApiResourcesClient {
 
     post(apiResourceApi: ApiResourceApiDto): Promise<void>;
 
-    put(apiResourceApi: ApiResourceApiDto): Promise<FileResponse>;
+    put(apiResourceApi: ApiResourceApiDto): Promise<void>;
 
     canInsertApiResource(id: number | undefined, name: string | null | undefined): Promise<boolean>;
 
@@ -22,23 +22,23 @@ export interface IApiResourcesClient {
 
     get2(id: number): Promise<ApiResourceApiDto>;
 
-    delete(id: number): Promise<FileResponse>;
+    delete(id: number): Promise<void>;
 
     getSecrets(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiSecretsApiDto>;
 
-    postSecret(id: number, clientSecretApi: ApiSecretApiDto): Promise<void>;
+    postSecret(id: number, clientSecretApi: ApiSecretApiDto): Promise<ApiSecretApiDto>;
 
     getSecret(secretId: number): Promise<ApiSecretApiDto>;
 
-    deleteSecret(secretId: number): Promise<FileResponse>;
+    deleteSecret(secretId: number): Promise<void>;
 
     getProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiResourcePropertiesApiDto>;
 
-    postProperty(id: number, apiPropertyApi: ApiResourcePropertyApiDto): Promise<void>;
+    postProperty(id: number, apiPropertyApi: ApiResourcePropertyApiDto): Promise<ApiResourcePropertyApiDto>;
 
     getProperty(propertyId: number): Promise<ApiResourcePropertyApiDto>;
 
-    deleteProperty(propertyId: number): Promise<FileResponse>;
+    deleteProperty(propertyId: number): Promise<void>;
 }
 
 export class ApiResourcesClient implements IApiResourcesClient {
@@ -152,7 +152,7 @@ export class ApiResourcesClient implements IApiResourcesClient {
         return Promise.resolve<void>(null as any);
     }
 
-    put(apiResourceApi: ApiResourceApiDto): Promise<FileResponse> {
+    put(apiResourceApi: ApiResourceApiDto): Promise<void> {
         let url_ = this.baseUrl + "/api/ApiResources";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -163,7 +163,6 @@ export class ApiResourcesClient implements IApiResourcesClient {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/octet-stream"
             }
         };
 
@@ -172,20 +171,20 @@ export class ApiResourcesClient implements IApiResourcesClient {
         });
     }
 
-    protected processPut(response: Response): Promise<FileResponse> {
+    protected processPut(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            } else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         } else if (status === 401) {
             return response.text().then((_responseText) => {
             return throwException("Unauthorized", status, _responseText, _headers);
@@ -199,7 +198,7 @@ export class ApiResourcesClient implements IApiResourcesClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        return Promise.resolve<void>(null as any);
     }
 
     canInsertApiResource(id: number | undefined, name: string | null | undefined): Promise<boolean> {
@@ -345,7 +344,7 @@ export class ApiResourcesClient implements IApiResourcesClient {
         return Promise.resolve<ApiResourceApiDto>(null as any);
     }
 
-    delete(id: number): Promise<FileResponse> {
+    delete(id: number): Promise<void> {
         let url_ = this.baseUrl + "/api/ApiResources/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -355,7 +354,6 @@ export class ApiResourcesClient implements IApiResourcesClient {
         let options_: RequestInit = {
             method: "DELETE",
             headers: {
-                "Accept": "application/octet-stream"
             }
         };
 
@@ -364,20 +362,20 @@ export class ApiResourcesClient implements IApiResourcesClient {
         });
     }
 
-    protected processDelete(response: Response): Promise<FileResponse> {
+    protected processDelete(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            } else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         } else if (status === 401) {
             return response.text().then((_responseText) => {
             return throwException("Unauthorized", status, _responseText, _headers);
@@ -391,7 +389,7 @@ export class ApiResourcesClient implements IApiResourcesClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        return Promise.resolve<void>(null as any);
     }
 
     getSecrets(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiSecretsApiDto> {
@@ -447,7 +445,7 @@ export class ApiResourcesClient implements IApiResourcesClient {
         return Promise.resolve<ApiSecretsApiDto>(null as any);
     }
 
-    postSecret(id: number, clientSecretApi: ApiSecretApiDto): Promise<void> {
+    postSecret(id: number, clientSecretApi: ApiSecretApiDto): Promise<ApiSecretApiDto> {
         let url_ = this.baseUrl + "/api/ApiResources/{id}/Secrets";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -461,6 +459,7 @@ export class ApiResourcesClient implements IApiResourcesClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -469,12 +468,15 @@ export class ApiResourcesClient implements IApiResourcesClient {
         });
     }
 
-    protected processPostSecret(response: Response): Promise<void> {
+    protected processPostSecret(response: Response): Promise<ApiSecretApiDto> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 201) {
             return response.text().then((_responseText) => {
-            return;
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result201 = ApiSecretApiDto.fromJS(resultData201);
+            return result201;
             });
         } else if (status === 400) {
             return response.text().then((_responseText) => {
@@ -496,7 +498,7 @@ export class ApiResourcesClient implements IApiResourcesClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<ApiSecretApiDto>(null as any);
     }
 
     getSecret(secretId: number): Promise<ApiSecretApiDto> {
@@ -544,7 +546,7 @@ export class ApiResourcesClient implements IApiResourcesClient {
         return Promise.resolve<ApiSecretApiDto>(null as any);
     }
 
-    deleteSecret(secretId: number): Promise<FileResponse> {
+    deleteSecret(secretId: number): Promise<void> {
         let url_ = this.baseUrl + "/api/ApiResources/Secrets/{secretId}";
         if (secretId === undefined || secretId === null)
             throw new Error("The parameter 'secretId' must be defined.");
@@ -554,7 +556,6 @@ export class ApiResourcesClient implements IApiResourcesClient {
         let options_: RequestInit = {
             method: "DELETE",
             headers: {
-                "Accept": "application/octet-stream"
             }
         };
 
@@ -563,20 +564,20 @@ export class ApiResourcesClient implements IApiResourcesClient {
         });
     }
 
-    protected processDeleteSecret(response: Response): Promise<FileResponse> {
+    protected processDeleteSecret(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            } else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         } else if (status === 401) {
             return response.text().then((_responseText) => {
             return throwException("Unauthorized", status, _responseText, _headers);
@@ -590,7 +591,7 @@ export class ApiResourcesClient implements IApiResourcesClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        return Promise.resolve<void>(null as any);
     }
 
     getProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiResourcePropertiesApiDto> {
@@ -630,6 +631,13 @@ export class ApiResourcesClient implements IApiResourcesClient {
             result200 = ApiResourcePropertiesApiDto.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         } else if (status === 401) {
             return response.text().then((_responseText) => {
             return throwException("Unauthorized", status, _responseText, _headers);
@@ -646,7 +654,7 @@ export class ApiResourcesClient implements IApiResourcesClient {
         return Promise.resolve<ApiResourcePropertiesApiDto>(null as any);
     }
 
-    postProperty(id: number, apiPropertyApi: ApiResourcePropertyApiDto): Promise<void> {
+    postProperty(id: number, apiPropertyApi: ApiResourcePropertyApiDto): Promise<ApiResourcePropertyApiDto> {
         let url_ = this.baseUrl + "/api/ApiResources/{id}/Properties";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -660,6 +668,7 @@ export class ApiResourcesClient implements IApiResourcesClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -668,12 +677,15 @@ export class ApiResourcesClient implements IApiResourcesClient {
         });
     }
 
-    protected processPostProperty(response: Response): Promise<void> {
+    protected processPostProperty(response: Response): Promise<ApiResourcePropertyApiDto> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 201) {
             return response.text().then((_responseText) => {
-            return;
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result201 = ApiResourcePropertyApiDto.fromJS(resultData201);
+            return result201;
             });
         } else if (status === 400) {
             return response.text().then((_responseText) => {
@@ -695,7 +707,7 @@ export class ApiResourcesClient implements IApiResourcesClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<ApiResourcePropertyApiDto>(null as any);
     }
 
     getProperty(propertyId: number): Promise<ApiResourcePropertyApiDto> {
@@ -743,7 +755,7 @@ export class ApiResourcesClient implements IApiResourcesClient {
         return Promise.resolve<ApiResourcePropertyApiDto>(null as any);
     }
 
-    deleteProperty(propertyId: number): Promise<FileResponse> {
+    deleteProperty(propertyId: number): Promise<void> {
         let url_ = this.baseUrl + "/api/ApiResources/Properties/{propertyId}";
         if (propertyId === undefined || propertyId === null)
             throw new Error("The parameter 'propertyId' must be defined.");
@@ -753,7 +765,6 @@ export class ApiResourcesClient implements IApiResourcesClient {
         let options_: RequestInit = {
             method: "DELETE",
             headers: {
-                "Accept": "application/octet-stream"
             }
         };
 
@@ -762,20 +773,20 @@ export class ApiResourcesClient implements IApiResourcesClient {
         });
     }
 
-    protected processDeleteProperty(response: Response): Promise<FileResponse> {
+    protected processDeleteProperty(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            } else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         } else if (status === 401) {
             return response.text().then((_responseText) => {
             return throwException("Unauthorized", status, _responseText, _headers);
@@ -789,7 +800,7 @@ export class ApiResourcesClient implements IApiResourcesClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        return Promise.resolve<void>(null as any);
     }
 }
 
@@ -797,9 +808,9 @@ export interface IApiScopesClient {
 
     getScopes(search: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ApiScopesApiDto>;
 
-    postScope(apiScopeApi: ApiScopeApiDto): Promise<void>;
+    postScope(apiScopeApi: ApiScopeApiDto): Promise<ApiScopeDto>;
 
-    putScope(apiScopeApi: ApiScopeApiDto): Promise<FileResponse>;
+    putScope(apiScopeApi: ApiScopeApiDto): Promise<void>;
 
     canInsertApiScope(id: number | undefined, name: string | null | undefined): Promise<boolean>;
 
@@ -807,15 +818,15 @@ export interface IApiScopesClient {
 
     getScope(id: number): Promise<ApiScopeApiDto>;
 
-    deleteScope(id: number): Promise<FileResponse>;
+    deleteScope(id: number): Promise<void>;
 
     getScopeProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiScopePropertiesApiDto>;
 
-    postProperty(id: number, apiScopePropertyApi: ApiScopePropertyApiDto): Promise<void>;
+    postProperty(id: number, apiScopePropertyApi: ApiScopePropertyApiDto): Promise<ApiScopePropertyApiDto>;
 
     getProperty(propertyId: number): Promise<ApiScopePropertyApiDto>;
 
-    deleteProperty(propertyId: number): Promise<FileResponse>;
+    deleteProperty(propertyId: number): Promise<void>;
 }
 
 export class ApiScopesClient implements IApiScopesClient {
@@ -880,7 +891,7 @@ export class ApiScopesClient implements IApiScopesClient {
         return Promise.resolve<ApiScopesApiDto>(null as any);
     }
 
-    postScope(apiScopeApi: ApiScopeApiDto): Promise<void> {
+    postScope(apiScopeApi: ApiScopeApiDto): Promise<ApiScopeDto> {
         let url_ = this.baseUrl + "/api/ApiScopes";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -891,6 +902,7 @@ export class ApiScopesClient implements IApiScopesClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -899,10 +911,62 @@ export class ApiScopesClient implements IApiScopesClient {
         });
     }
 
-    protected processPostScope(response: Response): Promise<void> {
+    protected processPostScope(response: Response): Promise<ApiScopeDto> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 201) {
+            return response.text().then((_responseText) => {
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result201 = ApiScopeDto.fromJS(resultData201);
+            return result201;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ApiScopeDto>(null as any);
+    }
+
+    putScope(apiScopeApi: ApiScopeApiDto): Promise<void> {
+        let url_ = this.baseUrl + "/api/ApiScopes";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(apiScopeApi);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processPutScope(_response);
+        });
+    }
+
+    protected processPutScope(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
             return response.text().then((_responseText) => {
             return;
             });
@@ -927,56 +991,6 @@ export class ApiScopesClient implements IApiScopesClient {
             });
         }
         return Promise.resolve<void>(null as any);
-    }
-
-    putScope(apiScopeApi: ApiScopeApiDto): Promise<FileResponse> {
-        let url_ = this.baseUrl + "/api/ApiScopes";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(apiScopeApi);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/octet-stream"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processPutScope(_response);
-        });
-    }
-
-    protected processPutScope(response: Response): Promise<FileResponse> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            } else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<FileResponse>(null as any);
     }
 
     canInsertApiScope(id: number | undefined, name: string | null | undefined): Promise<boolean> {
@@ -1122,7 +1136,7 @@ export class ApiScopesClient implements IApiScopesClient {
         return Promise.resolve<ApiScopeApiDto>(null as any);
     }
 
-    deleteScope(id: number): Promise<FileResponse> {
+    deleteScope(id: number): Promise<void> {
         let url_ = this.baseUrl + "/api/ApiScopes/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1132,7 +1146,6 @@ export class ApiScopesClient implements IApiScopesClient {
         let options_: RequestInit = {
             method: "DELETE",
             headers: {
-                "Accept": "application/octet-stream"
             }
         };
 
@@ -1141,20 +1154,20 @@ export class ApiScopesClient implements IApiScopesClient {
         });
     }
 
-    protected processDeleteScope(response: Response): Promise<FileResponse> {
+    protected processDeleteScope(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            } else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         } else if (status === 401) {
             return response.text().then((_responseText) => {
             return throwException("Unauthorized", status, _responseText, _headers);
@@ -1168,7 +1181,7 @@ export class ApiScopesClient implements IApiScopesClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        return Promise.resolve<void>(null as any);
     }
 
     getScopeProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiScopePropertiesApiDto> {
@@ -1224,7 +1237,7 @@ export class ApiScopesClient implements IApiScopesClient {
         return Promise.resolve<ApiScopePropertiesApiDto>(null as any);
     }
 
-    postProperty(id: number, apiScopePropertyApi: ApiScopePropertyApiDto): Promise<void> {
+    postProperty(id: number, apiScopePropertyApi: ApiScopePropertyApiDto): Promise<ApiScopePropertyApiDto> {
         let url_ = this.baseUrl + "/api/ApiScopes/{id}/Properties";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1238,6 +1251,7 @@ export class ApiScopesClient implements IApiScopesClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -1246,12 +1260,15 @@ export class ApiScopesClient implements IApiScopesClient {
         });
     }
 
-    protected processPostProperty(response: Response): Promise<void> {
+    protected processPostProperty(response: Response): Promise<ApiScopePropertyApiDto> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 201) {
             return response.text().then((_responseText) => {
-            return;
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result201 = ApiScopePropertyApiDto.fromJS(resultData201);
+            return result201;
             });
         } else if (status === 400) {
             return response.text().then((_responseText) => {
@@ -1273,7 +1290,7 @@ export class ApiScopesClient implements IApiScopesClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<ApiScopePropertyApiDto>(null as any);
     }
 
     getProperty(propertyId: number): Promise<ApiScopePropertyApiDto> {
@@ -1321,7 +1338,7 @@ export class ApiScopesClient implements IApiScopesClient {
         return Promise.resolve<ApiScopePropertyApiDto>(null as any);
     }
 
-    deleteProperty(propertyId: number): Promise<FileResponse> {
+    deleteProperty(propertyId: number): Promise<void> {
         let url_ = this.baseUrl + "/api/ApiScopes/Properties/{propertyId}";
         if (propertyId === undefined || propertyId === null)
             throw new Error("The parameter 'propertyId' must be defined.");
@@ -1331,7 +1348,6 @@ export class ApiScopesClient implements IApiScopesClient {
         let options_: RequestInit = {
             method: "DELETE",
             headers: {
-                "Accept": "application/octet-stream"
             }
         };
 
@@ -1340,20 +1356,20 @@ export class ApiScopesClient implements IApiScopesClient {
         });
     }
 
-    protected processDeleteProperty(response: Response): Promise<FileResponse> {
+    protected processDeleteProperty(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            } else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         } else if (status === 401) {
             return response.text().then((_responseText) => {
             return throwException("Unauthorized", status, _responseText, _headers);
@@ -1367,7 +1383,7 @@ export class ApiScopesClient implements IApiScopesClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        return Promise.resolve<void>(null as any);
     }
 }
 
@@ -1377,11 +1393,11 @@ export interface IClientsClient {
 
     post(client: ClientApiDto): Promise<ClientApiDto>;
 
-    put(client: ClientApiDto): Promise<FileResponse>;
+    put(client: ClientApiDto): Promise<void>;
 
     get2(id: number): Promise<ClientApiDto>;
 
-    delete(id: number): Promise<FileResponse>;
+    delete(id: number): Promise<void>;
 
     getAccessTokenTypes(): Promise<SelectItemDto[]>;
 
@@ -1407,27 +1423,27 @@ export interface IClientsClient {
 
     canInsertClient(id: number | undefined, clientId: string | null | undefined, isCloned: boolean | undefined): Promise<boolean>;
 
-    postClientClone(client: ClientCloneApiDto): Promise<void>;
+    postClientClone(client: ClientCloneApiDto): Promise<ClientApiDto>;
 
     getSecrets(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientSecretsApiDto>;
 
-    postSecret(id: number, clientSecretApi: ClientSecretApiDto): Promise<void>;
+    postSecret(id: number, clientSecretApi: ClientSecretApiDto): Promise<ClientSecretApiDto>;
 
     getSecret(secretId: number): Promise<ClientSecretApiDto>;
 
-    deleteSecret(secretId: number): Promise<FileResponse>;
+    deleteSecret(secretId: number): Promise<void>;
 
     getProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientPropertiesApiDto>;
 
-    postProperty(id: number, clientPropertyApi: ClientPropertyApiDto): Promise<void>;
+    postProperty(id: number, clientPropertyApi: ClientPropertyApiDto): Promise<ClientPropertyApiDto>;
 
     getProperty(propertyId: number): Promise<ClientPropertyApiDto>;
 
-    deleteProperty(propertyId: number): Promise<FileResponse>;
+    deleteProperty(propertyId: number): Promise<void>;
 
     getClaims(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientClaimsApiDto>;
 
-    postClaim(id: number, clientClaimApiDto: ClientClaimApiDto): Promise<void>;
+    postClaim(id: number, clientClaimApiDto: ClientClaimApiDto): Promise<ClientClaimApiDto>;
 
     getClaim(claimId: number): Promise<ClientClaimApiDto>;
 
@@ -1549,7 +1565,7 @@ export class ClientsClient implements IClientsClient {
         return Promise.resolve<ClientApiDto>(null as any);
     }
 
-    put(client: ClientApiDto): Promise<FileResponse> {
+    put(client: ClientApiDto): Promise<void> {
         let url_ = this.baseUrl + "/api/Clients";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1560,7 +1576,6 @@ export class ClientsClient implements IClientsClient {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/octet-stream"
             }
         };
 
@@ -1569,20 +1584,20 @@ export class ClientsClient implements IClientsClient {
         });
     }
 
-    protected processPut(response: Response): Promise<FileResponse> {
+    protected processPut(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            } else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 201) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         } else if (status === 401) {
             return response.text().then((_responseText) => {
             return throwException("Unauthorized", status, _responseText, _headers);
@@ -1596,7 +1611,7 @@ export class ClientsClient implements IClientsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        return Promise.resolve<void>(null as any);
     }
 
     get2(id: number): Promise<ClientApiDto> {
@@ -1644,7 +1659,7 @@ export class ClientsClient implements IClientsClient {
         return Promise.resolve<ClientApiDto>(null as any);
     }
 
-    delete(id: number): Promise<FileResponse> {
+    delete(id: number): Promise<void> {
         let url_ = this.baseUrl + "/api/Clients/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1654,7 +1669,6 @@ export class ClientsClient implements IClientsClient {
         let options_: RequestInit = {
             method: "DELETE",
             headers: {
-                "Accept": "application/octet-stream"
             }
         };
 
@@ -1663,20 +1677,20 @@ export class ClientsClient implements IClientsClient {
         });
     }
 
-    protected processDelete(response: Response): Promise<FileResponse> {
+    protected processDelete(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            } else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 201) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         } else if (status === 401) {
             return response.text().then((_responseText) => {
             return throwException("Unauthorized", status, _responseText, _headers);
@@ -1690,7 +1704,7 @@ export class ClientsClient implements IClientsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        return Promise.resolve<void>(null as any);
     }
 
     getAccessTokenTypes(): Promise<SelectItemDto[]> {
@@ -2313,7 +2327,7 @@ export class ClientsClient implements IClientsClient {
         return Promise.resolve<boolean>(null as any);
     }
 
-    postClientClone(client: ClientCloneApiDto): Promise<void> {
+    postClientClone(client: ClientCloneApiDto): Promise<ClientApiDto> {
         let url_ = this.baseUrl + "/api/Clients/Clone";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2324,6 +2338,7 @@ export class ClientsClient implements IClientsClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -2332,12 +2347,15 @@ export class ClientsClient implements IClientsClient {
         });
     }
 
-    protected processPostClientClone(response: Response): Promise<void> {
+    protected processPostClientClone(response: Response): Promise<ClientApiDto> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 201) {
             return response.text().then((_responseText) => {
-            return;
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result201 = ClientApiDto.fromJS(resultData201);
+            return result201;
             });
         } else if (status === 400) {
             return response.text().then((_responseText) => {
@@ -2359,7 +2377,7 @@ export class ClientsClient implements IClientsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<ClientApiDto>(null as any);
     }
 
     getSecrets(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientSecretsApiDto> {
@@ -2415,7 +2433,7 @@ export class ClientsClient implements IClientsClient {
         return Promise.resolve<ClientSecretsApiDto>(null as any);
     }
 
-    postSecret(id: number, clientSecretApi: ClientSecretApiDto): Promise<void> {
+    postSecret(id: number, clientSecretApi: ClientSecretApiDto): Promise<ClientSecretApiDto> {
         let url_ = this.baseUrl + "/api/Clients/{id}/Secrets";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2429,6 +2447,7 @@ export class ClientsClient implements IClientsClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -2437,12 +2456,15 @@ export class ClientsClient implements IClientsClient {
         });
     }
 
-    protected processPostSecret(response: Response): Promise<void> {
+    protected processPostSecret(response: Response): Promise<ClientSecretApiDto> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 201) {
             return response.text().then((_responseText) => {
-            return;
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result201 = ClientSecretApiDto.fromJS(resultData201);
+            return result201;
             });
         } else if (status === 400) {
             return response.text().then((_responseText) => {
@@ -2464,7 +2486,7 @@ export class ClientsClient implements IClientsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<ClientSecretApiDto>(null as any);
     }
 
     getSecret(secretId: number): Promise<ClientSecretApiDto> {
@@ -2512,7 +2534,7 @@ export class ClientsClient implements IClientsClient {
         return Promise.resolve<ClientSecretApiDto>(null as any);
     }
 
-    deleteSecret(secretId: number): Promise<FileResponse> {
+    deleteSecret(secretId: number): Promise<void> {
         let url_ = this.baseUrl + "/api/Clients/Secrets/{secretId}";
         if (secretId === undefined || secretId === null)
             throw new Error("The parameter 'secretId' must be defined.");
@@ -2522,7 +2544,6 @@ export class ClientsClient implements IClientsClient {
         let options_: RequestInit = {
             method: "DELETE",
             headers: {
-                "Accept": "application/octet-stream"
             }
         };
 
@@ -2531,20 +2552,20 @@ export class ClientsClient implements IClientsClient {
         });
     }
 
-    protected processDeleteSecret(response: Response): Promise<FileResponse> {
+    protected processDeleteSecret(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            } else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         } else if (status === 401) {
             return response.text().then((_responseText) => {
             return throwException("Unauthorized", status, _responseText, _headers);
@@ -2558,7 +2579,7 @@ export class ClientsClient implements IClientsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        return Promise.resolve<void>(null as any);
     }
 
     getProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientPropertiesApiDto> {
@@ -2614,7 +2635,7 @@ export class ClientsClient implements IClientsClient {
         return Promise.resolve<ClientPropertiesApiDto>(null as any);
     }
 
-    postProperty(id: number, clientPropertyApi: ClientPropertyApiDto): Promise<void> {
+    postProperty(id: number, clientPropertyApi: ClientPropertyApiDto): Promise<ClientPropertyApiDto> {
         let url_ = this.baseUrl + "/api/Clients/{id}/Properties";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2628,6 +2649,7 @@ export class ClientsClient implements IClientsClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -2636,12 +2658,15 @@ export class ClientsClient implements IClientsClient {
         });
     }
 
-    protected processPostProperty(response: Response): Promise<void> {
+    protected processPostProperty(response: Response): Promise<ClientPropertyApiDto> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 201) {
             return response.text().then((_responseText) => {
-            return;
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result201 = ClientPropertyApiDto.fromJS(resultData201);
+            return result201;
             });
         } else if (status === 400) {
             return response.text().then((_responseText) => {
@@ -2663,7 +2688,7 @@ export class ClientsClient implements IClientsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<ClientPropertyApiDto>(null as any);
     }
 
     getProperty(propertyId: number): Promise<ClientPropertyApiDto> {
@@ -2711,7 +2736,7 @@ export class ClientsClient implements IClientsClient {
         return Promise.resolve<ClientPropertyApiDto>(null as any);
     }
 
-    deleteProperty(propertyId: number): Promise<FileResponse> {
+    deleteProperty(propertyId: number): Promise<void> {
         let url_ = this.baseUrl + "/api/Clients/Properties/{propertyId}";
         if (propertyId === undefined || propertyId === null)
             throw new Error("The parameter 'propertyId' must be defined.");
@@ -2721,7 +2746,6 @@ export class ClientsClient implements IClientsClient {
         let options_: RequestInit = {
             method: "DELETE",
             headers: {
-                "Accept": "application/octet-stream"
             }
         };
 
@@ -2730,20 +2754,20 @@ export class ClientsClient implements IClientsClient {
         });
     }
 
-    protected processDeleteProperty(response: Response): Promise<FileResponse> {
+    protected processDeleteProperty(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            } else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         } else if (status === 401) {
             return response.text().then((_responseText) => {
             return throwException("Unauthorized", status, _responseText, _headers);
@@ -2757,7 +2781,7 @@ export class ClientsClient implements IClientsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        return Promise.resolve<void>(null as any);
     }
 
     getClaims(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientClaimsApiDto> {
@@ -2813,7 +2837,7 @@ export class ClientsClient implements IClientsClient {
         return Promise.resolve<ClientClaimsApiDto>(null as any);
     }
 
-    postClaim(id: number, clientClaimApiDto: ClientClaimApiDto): Promise<void> {
+    postClaim(id: number, clientClaimApiDto: ClientClaimApiDto): Promise<ClientClaimApiDto> {
         let url_ = this.baseUrl + "/api/Clients/{id}/Claims";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2827,6 +2851,7 @@ export class ClientsClient implements IClientsClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -2835,12 +2860,15 @@ export class ClientsClient implements IClientsClient {
         });
     }
 
-    protected processPostClaim(response: Response): Promise<void> {
+    protected processPostClaim(response: Response): Promise<ClientClaimApiDto> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 201) {
             return response.text().then((_responseText) => {
-            return;
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result201 = ClientClaimApiDto.fromJS(resultData201);
+            return result201;
             });
         } else if (status === 400) {
             return response.text().then((_responseText) => {
@@ -2862,7 +2890,7 @@ export class ClientsClient implements IClientsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<ClientClaimApiDto>(null as any);
     }
 
     getClaim(claimId: number): Promise<ClientClaimApiDto> {
@@ -3390,13 +3418,13 @@ export interface IIdentityResourcesClient {
 
     get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<IdentityResourcesApiDto>;
 
-    post(identityResourceApi: IdentityResourceApiDto): Promise<void>;
+    post(identityResourceApi: IdentityResourceApiDto): Promise<IdentityResourceApiDto>;
 
-    put(identityResourceApi: IdentityResourceApiDto): Promise<FileResponse>;
+    put(identityResourceApi: IdentityResourceApiDto): Promise<void>;
 
     get2(id: number): Promise<IdentityResourceApiDto>;
 
-    delete(id: number): Promise<FileResponse>;
+    delete(id: number): Promise<void>;
 
     canInsertIdentityResource(id: number | undefined, name: string | null | undefined): Promise<boolean>;
 
@@ -3404,11 +3432,11 @@ export interface IIdentityResourcesClient {
 
     getProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<IdentityResourcePropertiesApiDto>;
 
-    postProperty(id: number, identityResourcePropertyApi: IdentityResourcePropertyApiDto): Promise<void>;
+    postProperty(id: number, identityResourcePropertyApi: IdentityResourcePropertyApiDto): Promise<IdentityResourcePropertyApiDto>;
 
     getProperty(propertyId: number): Promise<IdentityResourcePropertyApiDto>;
 
-    deleteProperty(propertyId: number): Promise<FileResponse>;
+    deleteProperty(propertyId: number): Promise<void>;
 }
 
 export class IdentityResourcesClient implements IIdentityResourcesClient {
@@ -3473,7 +3501,7 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
         return Promise.resolve<IdentityResourcesApiDto>(null as any);
     }
 
-    post(identityResourceApi: IdentityResourceApiDto): Promise<void> {
+    post(identityResourceApi: IdentityResourceApiDto): Promise<IdentityResourceApiDto> {
         let url_ = this.baseUrl + "/api/IdentityResources";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3484,6 +3512,7 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -3492,10 +3521,62 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
         });
     }
 
-    protected processPost(response: Response): Promise<void> {
+    protected processPost(response: Response): Promise<IdentityResourceApiDto> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 201) {
+            return response.text().then((_responseText) => {
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result201 = IdentityResourceApiDto.fromJS(resultData201);
+            return result201;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<IdentityResourceApiDto>(null as any);
+    }
+
+    put(identityResourceApi: IdentityResourceApiDto): Promise<void> {
+        let url_ = this.baseUrl + "/api/IdentityResources";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(identityResourceApi);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processPut(_response);
+        });
+    }
+
+    protected processPut(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
             return response.text().then((_responseText) => {
             return;
             });
@@ -3520,56 +3601,6 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
             });
         }
         return Promise.resolve<void>(null as any);
-    }
-
-    put(identityResourceApi: IdentityResourceApiDto): Promise<FileResponse> {
-        let url_ = this.baseUrl + "/api/IdentityResources";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(identityResourceApi);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/octet-stream"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processPut(_response);
-        });
-    }
-
-    protected processPut(response: Response): Promise<FileResponse> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            } else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<FileResponse>(null as any);
     }
 
     get2(id: number): Promise<IdentityResourceApiDto> {
@@ -3617,7 +3648,7 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
         return Promise.resolve<IdentityResourceApiDto>(null as any);
     }
 
-    delete(id: number): Promise<FileResponse> {
+    delete(id: number): Promise<void> {
         let url_ = this.baseUrl + "/api/IdentityResources/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3627,7 +3658,6 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
         let options_: RequestInit = {
             method: "DELETE",
             headers: {
-                "Accept": "application/octet-stream"
             }
         };
 
@@ -3636,20 +3666,20 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
         });
     }
 
-    protected processDelete(response: Response): Promise<FileResponse> {
+    protected processDelete(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            } else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         } else if (status === 401) {
             return response.text().then((_responseText) => {
             return throwException("Unauthorized", status, _responseText, _headers);
@@ -3663,7 +3693,7 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        return Promise.resolve<void>(null as any);
     }
 
     canInsertIdentityResource(id: number | undefined, name: string | null | undefined): Promise<boolean> {
@@ -3817,7 +3847,7 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
         return Promise.resolve<IdentityResourcePropertiesApiDto>(null as any);
     }
 
-    postProperty(id: number, identityResourcePropertyApi: IdentityResourcePropertyApiDto): Promise<void> {
+    postProperty(id: number, identityResourcePropertyApi: IdentityResourcePropertyApiDto): Promise<IdentityResourcePropertyApiDto> {
         let url_ = this.baseUrl + "/api/IdentityResources/{id}/Properties";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3831,6 +3861,7 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -3839,12 +3870,15 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
         });
     }
 
-    protected processPostProperty(response: Response): Promise<void> {
+    protected processPostProperty(response: Response): Promise<IdentityResourcePropertyApiDto> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 201) {
             return response.text().then((_responseText) => {
-            return;
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result201 = IdentityResourcePropertyApiDto.fromJS(resultData201);
+            return result201;
             });
         } else if (status === 400) {
             return response.text().then((_responseText) => {
@@ -3866,7 +3900,7 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<IdentityResourcePropertyApiDto>(null as any);
     }
 
     getProperty(propertyId: number): Promise<IdentityResourcePropertyApiDto> {
@@ -3914,7 +3948,7 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
         return Promise.resolve<IdentityResourcePropertyApiDto>(null as any);
     }
 
-    deleteProperty(propertyId: number): Promise<FileResponse> {
+    deleteProperty(propertyId: number): Promise<void> {
         let url_ = this.baseUrl + "/api/IdentityResources/Properties/{propertyId}";
         if (propertyId === undefined || propertyId === null)
             throw new Error("The parameter 'propertyId' must be defined.");
@@ -3924,7 +3958,6 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
         let options_: RequestInit = {
             method: "DELETE",
             headers: {
-                "Accept": "application/octet-stream"
             }
         };
 
@@ -3933,20 +3966,20 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
         });
     }
 
-    protected processDeleteProperty(response: Response): Promise<FileResponse> {
+    protected processDeleteProperty(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            } else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = ProblemDetails.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         } else if (status === 401) {
             return response.text().then((_responseText) => {
             return throwException("Unauthorized", status, _responseText, _headers);
@@ -3960,7 +3993,7 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse>(null as any);
+        return Promise.resolve<void>(null as any);
     }
 }
 
@@ -6561,6 +6594,142 @@ export interface IApiScopePropertiesApiDto {
     apiScopeProperties: ApiScopePropertyApiDto[] | undefined;
     totalCount: number;
     pageSize: number;
+}
+
+export class ApiScopeDto implements IApiScopeDto {
+    showInDiscoveryDocument!: boolean;
+    id!: number;
+    name!: string;
+    displayName!: string | undefined;
+    description!: string | undefined;
+    required!: boolean;
+    emphasize!: boolean;
+    userClaims!: string[] | undefined;
+    userClaimsItems!: string | undefined;
+    enabled!: boolean;
+    apiScopeProperties!: ApiScopePropertyDto[] | undefined;
+
+    constructor(data?: IApiScopeDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.showInDiscoveryDocument = _data["showInDiscoveryDocument"];
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.displayName = _data["displayName"];
+            this.description = _data["description"];
+            this.required = _data["required"];
+            this.emphasize = _data["emphasize"];
+            if (Array.isArray(_data["userClaims"])) {
+                this.userClaims = [] as any;
+                for (let item of _data["userClaims"])
+                    this.userClaims!.push(item);
+            }
+            this.userClaimsItems = _data["userClaimsItems"];
+            this.enabled = _data["enabled"];
+            if (Array.isArray(_data["apiScopeProperties"])) {
+                this.apiScopeProperties = [] as any;
+                for (let item of _data["apiScopeProperties"])
+                    this.apiScopeProperties!.push(ApiScopePropertyDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ApiScopeDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ApiScopeDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["showInDiscoveryDocument"] = this.showInDiscoveryDocument;
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["displayName"] = this.displayName;
+        data["description"] = this.description;
+        data["required"] = this.required;
+        data["emphasize"] = this.emphasize;
+        if (Array.isArray(this.userClaims)) {
+            data["userClaims"] = [];
+            for (let item of this.userClaims)
+                data["userClaims"].push(item);
+        }
+        data["userClaimsItems"] = this.userClaimsItems;
+        data["enabled"] = this.enabled;
+        if (Array.isArray(this.apiScopeProperties)) {
+            data["apiScopeProperties"] = [];
+            for (let item of this.apiScopeProperties)
+                data["apiScopeProperties"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IApiScopeDto {
+    showInDiscoveryDocument: boolean;
+    id: number;
+    name: string;
+    displayName: string | undefined;
+    description: string | undefined;
+    required: boolean;
+    emphasize: boolean;
+    userClaims: string[] | undefined;
+    userClaimsItems: string | undefined;
+    enabled: boolean;
+    apiScopeProperties: ApiScopePropertyDto[] | undefined;
+}
+
+export class ApiScopePropertyDto implements IApiScopePropertyDto {
+    id!: number;
+    key!: string | undefined;
+    value!: string | undefined;
+
+    constructor(data?: IApiScopePropertyDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.key = _data["key"];
+            this.value = _data["value"];
+        }
+    }
+
+    static fromJS(data: any): ApiScopePropertyDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ApiScopePropertyDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["key"] = this.key;
+        data["value"] = this.value;
+        return data;
+    }
+}
+
+export interface IApiScopePropertyDto {
+    id: number;
+    key: string | undefined;
+    value: string | undefined;
 }
 
 export class ClientsApiDto implements IClientsApiDto {
