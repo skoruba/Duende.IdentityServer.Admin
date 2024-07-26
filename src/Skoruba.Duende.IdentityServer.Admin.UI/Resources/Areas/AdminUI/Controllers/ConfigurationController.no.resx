@@ -1,0 +1,89 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="SuccessAddApiScopeProperty" xml:space="preserve">
+        <value>Api Scope property {0} for api scope {1} is successfully saved!</value>
+    </data>
+    <data name="SuccessAddApiResource" xml:space="preserve">
+        <value>Api ressurs {0} er lagret!</value>
+    </data>
+    <data name="SuccessAddApiResourceProperty" xml:space="preserve">
+        <value>Api ressursegenskap {0} for api-ressurs {1} er lagret!</value>
+    </data>
+    <data name="SuccessAddApiScope" xml:space="preserve">
+        <value>Api omfanget {0} er lagret!</value>
+    </data>
+    <data name="SuccessAddApiSecret" xml:space="preserve">
+        <value>Api hemmeligheten er opprettet!</value>
+    </data>
+    <data name="SuccessAddClient" xml:space="preserve">
+        <value>Klienten {0} er opprettet!</value>
+    </data>
+    <data name="SuccessAddClientClaim" xml:space="preserve">
+        <value>Kundekrav {0} for klient {1} er lagret!</value>
+    </data>
+    <data name="SuccessAddClientProperty" xml:space="preserve">
+        <value>Klientegenskapen {0} for klienten {1} er lagret!</value>
+    </data>
+    <data name="SuccessAddClientSecret" xml:space="preserve">
+        <value>Klienthemmelighet for klient {0} er lagret!</value>
+    </data>
+    <data name="SuccessAddIdentityResource" xml:space="preserve">
+        <value>Identitetsressursen {0} er lagret!</value>
+    </data>
+    <data name="SuccessAddIdentityResourceProperty" xml:space="preserve">
+        <value>Identitetsressursegenskapen {0} for API ressursen {1} er lagret!</value>
+    </data>
+    <data name="SuccessClientClone" xml:space="preserve">
+        <value>Klienten {0} er vellykket klonet!</value>
+    </data>
+    <data name="SuccessClientDelete" xml:space="preserve">
+        <value>Klienten er vellykket slettet!</value>
+    </data>
+    <data name="SuccessDeleteApiResource" xml:space="preserve">
+        <value>Api ressurs er slettet!</value>
+    </data>
+    <data name="SuccessDeleteApiResourceProperty" xml:space="preserve">
+        <value>Api ressursegenskap er slettet!</value>
+    </data>
+    <data name="SuccessDeleteApiScope" xml:space="preserve">
+        <value>Api omfang er slettet!</value>
+    </data>
+    <data name="SuccessDeleteApiScopeProperty" xml:space="preserve">
+        <value>Api scope-egenskap er slettet!</value>
+    </data>
+    <data name="SuccessDeleteApiSecret" xml:space="preserve">
+        <value>Api hemmeligheten er slettet!</value>
+    </data>
+    <data name="SuccessDeleteClientClaim" xml:space="preserve">
+        <value>Kundekrav er slettet!</value>
+    </data>
+    <data name="SuccessDeleteClientProperty" xml:space="preserve">
+        <value>Klientegenskap er slettet!</value>
+    </data>
+    <data name="SuccessDeleteClientSecret" xml:space="preserve">
+        <value>Klienthemmeligheten er slettet!</value>
+    </data>
+    <data name="SuccessDeleteIdentityResource" xml:space="preserve">
+        <value>Identitetsressurs er slettet!</value>
+    </data>
+    <data name="SuccessDeleteIdentityResourceProperty" xml:space="preserve">
+        <value>Identitetsressursegenskapen er slettet!</value>
+    </data>
+    <data name="SuccessTitle" xml:space="preserve">
+        <value>Suksess</value>
+    </data>
+    <data name="SuccessUpdateClient" xml:space="preserve">
+        <value>Klienten {0} er oppdatert!</value>
+    </data>
+</root>

@@ -1,0 +1,29 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Delete" xml:space="preserve">
+        <value>Slett</value>
+    </data>
+    <data name="Download" xml:space="preserve">
+        <value>Laste ned</value>
+    </data>
+    <data name="Info" xml:space="preserve">
+        <value>Kontoen din inneholder personopplysninger som du har gitt oss. Denne siden lar deg laste ned eller slette disse dataene.</value>
+    </data>
+    <data name="Title" xml:space="preserve">
+        <value>Personlig informasjon</value>
+    </data>
+    <data name="Warning" xml:space="preserve">
+        <value>Hvis du sletter disse dataene, fjernes kontoen din permanent, og dette kan ikke gjenopprettes.</value>
+    </data>
+</root>

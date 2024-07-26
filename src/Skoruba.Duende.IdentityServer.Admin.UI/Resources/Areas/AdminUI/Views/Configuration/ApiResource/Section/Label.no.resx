@@ -1,0 +1,98 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Description_Info" xml:space="preserve">
+        <value>Denne verdien kan brukes f.eks. på samtykke skjermen.</value>
+    </data>
+    <data name="Description_Label" xml:space="preserve">
+        <value>Beskrivelse</value>
+    </data>
+    <data name="DisplayName_Info" xml:space="preserve">
+        <value>Denne verdien kan brukes f.eks. på samtykke skjermen.</value>
+    </data>
+    <data name="DisplayName_Label" xml:space="preserve">
+        <value>Visningsnavn</value>
+    </data>
+    <data name="Enabled_Info" xml:space="preserve">
+        <value>Indikerer om denne ressursen er aktivert og kan be om. Standard er sant.</value>
+    </data>
+    <data name="Enabled_Label" xml:space="preserve">
+        <value>Aktivert</value>
+    </data>
+    <data name="Expiration_Info" xml:space="preserve">
+        <value>Utløp</value>
+    </data>
+    <data name="Expiration_Label" xml:space="preserve">
+        <value>Utløp</value>
+    </data>
+    <data name="Name_Info" xml:space="preserve">
+        <value>API-ets unike navn. Denne verdien brukes til autentisering med introspeksjon og vil bli lagt til publikum for utgående tilgangstoken.</value>
+    </data>
+    <data name="Name_Label" xml:space="preserve">
+        <value>Navn</value>
+    </data>
+    <data name="Properties_Info" xml:space="preserve">
+        <value>Liste for å holde eventuelle tilpassede klientspesifikke verdier etter behov.</value>
+    </data>
+    <data name="Properties_Label" xml:space="preserve">
+        <value>Egenskaper</value>
+    </data>
+    <data name="PropertyKey_Info" xml:space="preserve">
+        <value>Nøkkel</value>
+    </data>
+    <data name="PropertyKey_Label" xml:space="preserve">
+        <value>Nøkkel</value>
+    </data>
+    <data name="PropertyValue_Info" xml:space="preserve">
+        <value>Verdi</value>
+    </data>
+    <data name="PropertyValue_Label" xml:space="preserve">
+        <value>Verdi</value>
+    </data>
+    <data name="RequireResourceIndicator_Info" xml:space="preserve">
+        <value>Indicates if this API resource requires the resource indicator to request it, and expects access tokens issued to it will only ever contain this API resource as the audience.</value>
+    </data>
+    <data name="RequireResourceIndicator_Label" xml:space="preserve">
+        <value>Require Resource Indicator</value>
+    </data>
+    <data name="Scopes_Info" xml:space="preserve">
+        <value>En API må ha minst ett omfang. Hvert omfang kan ha forskjellige innstillinger.</value>
+    </data>
+    <data name="Scopes_Label" xml:space="preserve">
+        <value>Omfang</value>
+    </data>
+    <data name="SecretDescription_Info" xml:space="preserve">
+        <value>Beskrivelse</value>
+    </data>
+    <data name="SecretDescription_Label" xml:space="preserve">
+        <value>Beskrivelse</value>
+    </data>
+    <data name="Secrets_Info" xml:space="preserve">
+        <value>API hemmeligheten brukes til introspeksjonsendepunktet. API-et kan autentiseres med introspeksjon ved hjelp av API-navnet og hemmeligheten.</value>
+    </data>
+    <data name="Secrets_Label" xml:space="preserve">
+        <value>Hemmeligheter</value>
+    </data>
+    <data name="SigningAlgorithms_Info" xml:space="preserve">
+        <value>List of allowed signing algorithms for access token. If empty, will use the server default signing algorithm.</value>
+    </data>
+    <data name="SigningAlgorithms_Label" xml:space="preserve">
+        <value>Allowed Access Token Signing Algorithms</value>
+    </data>
+    <data name="UserClaims_Info" xml:space="preserve">
+        <value>Liste over tilknyttede brukerkravstyper som skal inkluderes i tilgangstokenet.</value>
+    </data>
+    <data name="UserClaims_Label" xml:space="preserve">
+        <value>Brukerkrav</value>
+    </data>
+</root>

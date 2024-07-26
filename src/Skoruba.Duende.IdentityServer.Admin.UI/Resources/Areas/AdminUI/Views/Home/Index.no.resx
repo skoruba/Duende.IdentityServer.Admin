@@ -1,0 +1,44 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ButtonApiResources" xml:space="preserve">
+        <value>Api ressurser</value>
+    </data>
+    <data name="ButtonApiScopes" xml:space="preserve">
+        <value>Api Scopes</value>
+    </data>
+    <data name="ButtonAuditLogs" xml:space="preserve">
+        <value>Audit Logs</value>
+    </data>
+    <data name="ButtonClients" xml:space="preserve">
+        <value>Klienter</value>
+    </data>
+    <data name="ButtonIdentityClients" xml:space="preserve">
+        <value>Identitetsressurser</value>
+    </data>
+    <data name="ButtonManage" xml:space="preserve">
+        <value>Administrer</value>
+    </data>
+    <data name="ButtonPersistedGrants" xml:space="preserve">
+        <value>Vedvarende tilskudd</value>
+    </data>
+    <data name="ButtonRoles" xml:space="preserve">
+        <value>Roller</value>
+    </data>
+    <data name="ButtonUsers" xml:space="preserve">
+        <value>Brukere</value>
+    </data>
+    <data name="PageSubTitle" xml:space="preserve">
+        <value>Administrasjonen for Duende IdentityServer og Asp.Net Core Identity</value>
+    </data>
+</root>
