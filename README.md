@@ -136,7 +136,7 @@ On windows `mkcert -install` must be executed under elevated Administrator privi
 ```bash
 cd shared/nginx/certs
 mkcert --install
-copy $env:LOCALAPPDATA\mkcert\rootCA.pem ./cacerts.pem
+copy $env:LOCALAPPDATA\mkcert\rootCA-key.pem ./cacerts.pem
 copy $env:LOCALAPPDATA\mkcert\rootCA.pem ./cacerts.crt
 ```
 ##### Create the `skoruba.local` certificates
