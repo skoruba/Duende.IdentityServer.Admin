@@ -65,7 +65,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         {
             var exists = await _identityResourceService.CanInsertIdentityResourcePropertyAsync(new IdentityResourcePropertiesDto()
             {
-                IdentityResourcePropertyId = id,
+                IdentityResourceId = id,
                 Key = key
             });
 
