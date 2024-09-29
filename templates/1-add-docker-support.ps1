@@ -1,4 +1,5 @@
 $templateSrc = "template-publish/content/src"
+$templateContent = "template-publish/content"
 $temporaryProjectFolder = "SkorubaDuende.IdentityServerAdmin"
 $templateDockerFolder = "template-docker"
 
@@ -7,6 +8,7 @@ if ((Test-Path -Path $templateSrc)) { Remove-Item ./$templateSrc -recurse -force
 
 # Copy new src folder
 Copy-Item ./$temporaryProjectFolder/src ./$templateSrc -recurse -force
+Copy-Item ./$temporaryProjectFolder/docker-compose.yml ./$templateContent/docker-compose.yml -recurse -force
 
 # Copy docker files for Admin, Api and STS
 Copy-Item ./$templateDockerFolder/SkorubaDuende.IdentityServerAdmin.Admin/* $templateSrc/SkorubaDuende.IdentityServerAdmin.Admin -recurse -force

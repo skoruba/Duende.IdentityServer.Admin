@@ -782,12 +782,12 @@ It is possible to define the configuration according the client type - by defaul
 
 ### 2.4.0
 
-- [x] Method CanInsert..Property of the controllers always return true #235
-- [x] Skoruba.Duende.IdentityServer.Shared.Configuration - replace deprecated Microsoft.Extensions.Configuration.AzureKeyVault package with Azure.Extensions.AspNetCore.Configuration.Secrets #234
-- [x] Can't update client because "Client Id _clientId_ already exists" #227
-- [x] Migrate from Microsoft.Azure.KeyVault to the new Azure Key Vault API #224
-- [x] Docker Compose NGINX targeting wrong port #222
-- [x] Update to the latest version of Duende IdentityServer (fixed [CVE-2024-39694](https://github.com/advisories/GHSA-ff4q-64jc-gx98))
+- [x] Method CanInsert..Property of the controllers always return true ([#235](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/235))
+- [x] Skoruba.Duende.IdentityServer.Shared.Configuration - replace deprecated Microsoft.Extensions.Configuration.AzureKeyVault package with Azure.Extensions.AspNetCore.Configuration.Secrets ([#234](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/234))
+- [x] Can't update client because "Client Id _clientId_ already exists" ([#227](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/227))
+- [x] Migrate from Microsoft.Azure.KeyVault to the new Azure Key Vault API ([#224](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/224))
+- [x] Docker Compose NGINX targeting wrong port ([#222](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/222))
+- [x] Update all nuget packages to the latest versions, including Duende IdentityServer version 7.0.7. - ([#236](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/236)) - (fixed [CVE-2024-39694](https://github.com/advisories/GHSA-ff4q-64jc-gx98))
 
 ### 3.0.0
 

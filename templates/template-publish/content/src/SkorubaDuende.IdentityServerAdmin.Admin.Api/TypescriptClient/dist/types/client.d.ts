@@ -1,20 +1,19 @@
-import dayjs from 'dayjs';
 export interface IApiResourcesClient {
     get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ApiResourcesApiDto>;
     post(apiResourceApi: ApiResourceApiDto): Promise<void>;
-    put(apiResourceApi: ApiResourceApiDto): Promise<FileResponse>;
+    put(apiResourceApi: ApiResourceApiDto): Promise<void>;
     canInsertApiResource(id: number | undefined, name: string | null | undefined): Promise<boolean>;
     canInsertApiResourceProperty(id: number | undefined, key: string | null | undefined): Promise<boolean>;
     get2(id: number): Promise<ApiResourceApiDto>;
-    delete(id: number): Promise<FileResponse>;
+    delete(id: number): Promise<void>;
     getSecrets(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiSecretsApiDto>;
-    postSecret(id: number, clientSecretApi: ApiSecretApiDto): Promise<void>;
+    postSecret(id: number, clientSecretApi: ApiSecretApiDto): Promise<ApiSecretApiDto>;
     getSecret(secretId: number): Promise<ApiSecretApiDto>;
-    deleteSecret(secretId: number): Promise<FileResponse>;
+    deleteSecret(secretId: number): Promise<void>;
     getProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiResourcePropertiesApiDto>;
-    postProperty(id: number, apiPropertyApi: ApiResourcePropertyApiDto): Promise<void>;
+    postProperty(id: number, apiPropertyApi: ApiResourcePropertyApiDto): Promise<ApiResourcePropertyApiDto>;
     getProperty(propertyId: number): Promise<ApiResourcePropertyApiDto>;
-    deleteProperty(propertyId: number): Promise<FileResponse>;
+    deleteProperty(propertyId: number): Promise<void>;
 }
 export declare class ApiResourcesClient implements IApiResourcesClient {
     private http;
@@ -27,45 +26,45 @@ export declare class ApiResourcesClient implements IApiResourcesClient {
     protected processGet(response: Response): Promise<ApiResourcesApiDto>;
     post(apiResourceApi: ApiResourceApiDto): Promise<void>;
     protected processPost(response: Response): Promise<void>;
-    put(apiResourceApi: ApiResourceApiDto): Promise<FileResponse>;
-    protected processPut(response: Response): Promise<FileResponse>;
+    put(apiResourceApi: ApiResourceApiDto): Promise<void>;
+    protected processPut(response: Response): Promise<void>;
     canInsertApiResource(id: number | undefined, name: string | null | undefined): Promise<boolean>;
     protected processCanInsertApiResource(response: Response): Promise<boolean>;
     canInsertApiResourceProperty(id: number | undefined, key: string | null | undefined): Promise<boolean>;
     protected processCanInsertApiResourceProperty(response: Response): Promise<boolean>;
     get2(id: number): Promise<ApiResourceApiDto>;
     protected processGet2(response: Response): Promise<ApiResourceApiDto>;
-    delete(id: number): Promise<FileResponse>;
-    protected processDelete(response: Response): Promise<FileResponse>;
+    delete(id: number): Promise<void>;
+    protected processDelete(response: Response): Promise<void>;
     getSecrets(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiSecretsApiDto>;
     protected processGetSecrets(response: Response): Promise<ApiSecretsApiDto>;
-    postSecret(id: number, clientSecretApi: ApiSecretApiDto): Promise<void>;
-    protected processPostSecret(response: Response): Promise<void>;
+    postSecret(id: number, clientSecretApi: ApiSecretApiDto): Promise<ApiSecretApiDto>;
+    protected processPostSecret(response: Response): Promise<ApiSecretApiDto>;
     getSecret(secretId: number): Promise<ApiSecretApiDto>;
     protected processGetSecret(response: Response): Promise<ApiSecretApiDto>;
-    deleteSecret(secretId: number): Promise<FileResponse>;
-    protected processDeleteSecret(response: Response): Promise<FileResponse>;
+    deleteSecret(secretId: number): Promise<void>;
+    protected processDeleteSecret(response: Response): Promise<void>;
     getProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiResourcePropertiesApiDto>;
     protected processGetProperties(response: Response): Promise<ApiResourcePropertiesApiDto>;
-    postProperty(id: number, apiPropertyApi: ApiResourcePropertyApiDto): Promise<void>;
-    protected processPostProperty(response: Response): Promise<void>;
+    postProperty(id: number, apiPropertyApi: ApiResourcePropertyApiDto): Promise<ApiResourcePropertyApiDto>;
+    protected processPostProperty(response: Response): Promise<ApiResourcePropertyApiDto>;
     getProperty(propertyId: number): Promise<ApiResourcePropertyApiDto>;
     protected processGetProperty(response: Response): Promise<ApiResourcePropertyApiDto>;
-    deleteProperty(propertyId: number): Promise<FileResponse>;
-    protected processDeleteProperty(response: Response): Promise<FileResponse>;
+    deleteProperty(propertyId: number): Promise<void>;
+    protected processDeleteProperty(response: Response): Promise<void>;
 }
 export interface IApiScopesClient {
     getScopes(search: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ApiScopesApiDto>;
-    postScope(apiScopeApi: ApiScopeApiDto): Promise<void>;
-    putScope(apiScopeApi: ApiScopeApiDto): Promise<FileResponse>;
+    postScope(apiScopeApi: ApiScopeApiDto): Promise<ApiScopeDto>;
+    putScope(apiScopeApi: ApiScopeApiDto): Promise<void>;
     canInsertApiScope(id: number | undefined, name: string | null | undefined): Promise<boolean>;
     canInsertApiScopeProperty(id: number | undefined, key: string | null | undefined): Promise<boolean>;
     getScope(id: number): Promise<ApiScopeApiDto>;
-    deleteScope(id: number): Promise<FileResponse>;
+    deleteScope(id: number): Promise<void>;
     getScopeProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiScopePropertiesApiDto>;
-    postProperty(id: number, apiScopePropertyApi: ApiScopePropertyApiDto): Promise<void>;
+    postProperty(id: number, apiScopePropertyApi: ApiScopePropertyApiDto): Promise<ApiScopePropertyApiDto>;
     getProperty(propertyId: number): Promise<ApiScopePropertyApiDto>;
-    deleteProperty(propertyId: number): Promise<FileResponse>;
+    deleteProperty(propertyId: number): Promise<void>;
 }
 export declare class ApiScopesClient implements IApiScopesClient {
     private http;
@@ -76,33 +75,33 @@ export declare class ApiScopesClient implements IApiScopesClient {
     });
     getScopes(search: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ApiScopesApiDto>;
     protected processGetScopes(response: Response): Promise<ApiScopesApiDto>;
-    postScope(apiScopeApi: ApiScopeApiDto): Promise<void>;
-    protected processPostScope(response: Response): Promise<void>;
-    putScope(apiScopeApi: ApiScopeApiDto): Promise<FileResponse>;
-    protected processPutScope(response: Response): Promise<FileResponse>;
+    postScope(apiScopeApi: ApiScopeApiDto): Promise<ApiScopeDto>;
+    protected processPostScope(response: Response): Promise<ApiScopeDto>;
+    putScope(apiScopeApi: ApiScopeApiDto): Promise<void>;
+    protected processPutScope(response: Response): Promise<void>;
     canInsertApiScope(id: number | undefined, name: string | null | undefined): Promise<boolean>;
     protected processCanInsertApiScope(response: Response): Promise<boolean>;
     canInsertApiScopeProperty(id: number | undefined, key: string | null | undefined): Promise<boolean>;
     protected processCanInsertApiScopeProperty(response: Response): Promise<boolean>;
     getScope(id: number): Promise<ApiScopeApiDto>;
     protected processGetScope(response: Response): Promise<ApiScopeApiDto>;
-    deleteScope(id: number): Promise<FileResponse>;
-    protected processDeleteScope(response: Response): Promise<FileResponse>;
+    deleteScope(id: number): Promise<void>;
+    protected processDeleteScope(response: Response): Promise<void>;
     getScopeProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiScopePropertiesApiDto>;
     protected processGetScopeProperties(response: Response): Promise<ApiScopePropertiesApiDto>;
-    postProperty(id: number, apiScopePropertyApi: ApiScopePropertyApiDto): Promise<void>;
-    protected processPostProperty(response: Response): Promise<void>;
+    postProperty(id: number, apiScopePropertyApi: ApiScopePropertyApiDto): Promise<ApiScopePropertyApiDto>;
+    protected processPostProperty(response: Response): Promise<ApiScopePropertyApiDto>;
     getProperty(propertyId: number): Promise<ApiScopePropertyApiDto>;
     protected processGetProperty(response: Response): Promise<ApiScopePropertyApiDto>;
-    deleteProperty(propertyId: number): Promise<FileResponse>;
-    protected processDeleteProperty(response: Response): Promise<FileResponse>;
+    deleteProperty(propertyId: number): Promise<void>;
+    protected processDeleteProperty(response: Response): Promise<void>;
 }
 export interface IClientsClient {
     get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ClientsApiDto>;
-    post(client: ClientApiDto): Promise<void>;
-    put(client: ClientApiDto): Promise<FileResponse>;
+    post(client: ClientApiDto): Promise<ClientApiDto>;
+    put(client: ClientApiDto): Promise<void>;
     get2(id: number): Promise<ClientApiDto>;
-    delete(id: number): Promise<FileResponse>;
+    delete(id: number): Promise<void>;
     getAccessTokenTypes(): Promise<SelectItemDto[]>;
     getTokenExpirations(): Promise<SelectItemDto[]>;
     getTokenUsage(): Promise<SelectItemDto[]>;
@@ -115,17 +114,17 @@ export interface IClientsClient {
     getStandardClaims(claim: string | null | undefined, limit: number | undefined): Promise<string[]>;
     getSigningAlgorithms(algorithm: string | null | undefined, limit: number | undefined): Promise<string[]>;
     canInsertClient(id: number | undefined, clientId: string | null | undefined, isCloned: boolean | undefined): Promise<boolean>;
-    postClientClone(client: ClientCloneApiDto): Promise<void>;
+    postClientClone(client: ClientCloneApiDto): Promise<ClientApiDto>;
     getSecrets(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientSecretsApiDto>;
-    postSecret(id: number, clientSecretApi: ClientSecretApiDto): Promise<void>;
+    postSecret(id: number, clientSecretApi: ClientSecretApiDto): Promise<ClientSecretApiDto>;
     getSecret(secretId: number): Promise<ClientSecretApiDto>;
-    deleteSecret(secretId: number): Promise<FileResponse>;
+    deleteSecret(secretId: number): Promise<void>;
     getProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientPropertiesApiDto>;
-    postProperty(id: number, clientPropertyApi: ClientPropertyApiDto): Promise<void>;
+    postProperty(id: number, clientPropertyApi: ClientPropertyApiDto): Promise<ClientPropertyApiDto>;
     getProperty(propertyId: number): Promise<ClientPropertyApiDto>;
-    deleteProperty(propertyId: number): Promise<FileResponse>;
+    deleteProperty(propertyId: number): Promise<void>;
     getClaims(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientClaimsApiDto>;
-    postClaim(id: number, clientClaimApiDto: ClientClaimApiDto): Promise<void>;
+    postClaim(id: number, clientClaimApiDto: ClientClaimApiDto): Promise<ClientClaimApiDto>;
     getClaim(claimId: number): Promise<ClientClaimApiDto>;
     deleteClaim(claimId: number): Promise<FileResponse>;
 }
@@ -138,14 +137,14 @@ export declare class ClientsClient implements IClientsClient {
     });
     get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ClientsApiDto>;
     protected processGet(response: Response): Promise<ClientsApiDto>;
-    post(client: ClientApiDto): Promise<void>;
-    protected processPost(response: Response): Promise<void>;
-    put(client: ClientApiDto): Promise<FileResponse>;
-    protected processPut(response: Response): Promise<FileResponse>;
+    post(client: ClientApiDto): Promise<ClientApiDto>;
+    protected processPost(response: Response): Promise<ClientApiDto>;
+    put(client: ClientApiDto): Promise<void>;
+    protected processPut(response: Response): Promise<void>;
     get2(id: number): Promise<ClientApiDto>;
     protected processGet2(response: Response): Promise<ClientApiDto>;
-    delete(id: number): Promise<FileResponse>;
-    protected processDelete(response: Response): Promise<FileResponse>;
+    delete(id: number): Promise<void>;
+    protected processDelete(response: Response): Promise<void>;
     getAccessTokenTypes(): Promise<SelectItemDto[]>;
     protected processGetAccessTokenTypes(response: Response): Promise<SelectItemDto[]>;
     getTokenExpirations(): Promise<SelectItemDto[]>;
@@ -170,28 +169,28 @@ export declare class ClientsClient implements IClientsClient {
     protected processGetSigningAlgorithms(response: Response): Promise<string[]>;
     canInsertClient(id: number | undefined, clientId: string | null | undefined, isCloned: boolean | undefined): Promise<boolean>;
     protected processCanInsertClient(response: Response): Promise<boolean>;
-    postClientClone(client: ClientCloneApiDto): Promise<void>;
-    protected processPostClientClone(response: Response): Promise<void>;
+    postClientClone(client: ClientCloneApiDto): Promise<ClientApiDto>;
+    protected processPostClientClone(response: Response): Promise<ClientApiDto>;
     getSecrets(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientSecretsApiDto>;
     protected processGetSecrets(response: Response): Promise<ClientSecretsApiDto>;
-    postSecret(id: number, clientSecretApi: ClientSecretApiDto): Promise<void>;
-    protected processPostSecret(response: Response): Promise<void>;
+    postSecret(id: number, clientSecretApi: ClientSecretApiDto): Promise<ClientSecretApiDto>;
+    protected processPostSecret(response: Response): Promise<ClientSecretApiDto>;
     getSecret(secretId: number): Promise<ClientSecretApiDto>;
     protected processGetSecret(response: Response): Promise<ClientSecretApiDto>;
-    deleteSecret(secretId: number): Promise<FileResponse>;
-    protected processDeleteSecret(response: Response): Promise<FileResponse>;
+    deleteSecret(secretId: number): Promise<void>;
+    protected processDeleteSecret(response: Response): Promise<void>;
     getProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientPropertiesApiDto>;
     protected processGetProperties(response: Response): Promise<ClientPropertiesApiDto>;
-    postProperty(id: number, clientPropertyApi: ClientPropertyApiDto): Promise<void>;
-    protected processPostProperty(response: Response): Promise<void>;
+    postProperty(id: number, clientPropertyApi: ClientPropertyApiDto): Promise<ClientPropertyApiDto>;
+    protected processPostProperty(response: Response): Promise<ClientPropertyApiDto>;
     getProperty(propertyId: number): Promise<ClientPropertyApiDto>;
     protected processGetProperty(response: Response): Promise<ClientPropertyApiDto>;
-    deleteProperty(propertyId: number): Promise<FileResponse>;
-    protected processDeleteProperty(response: Response): Promise<FileResponse>;
+    deleteProperty(propertyId: number): Promise<void>;
+    protected processDeleteProperty(response: Response): Promise<void>;
     getClaims(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientClaimsApiDto>;
     protected processGetClaims(response: Response): Promise<ClientClaimsApiDto>;
-    postClaim(id: number, clientClaimApiDto: ClientClaimApiDto): Promise<void>;
-    protected processPostClaim(response: Response): Promise<void>;
+    postClaim(id: number, clientClaimApiDto: ClientClaimApiDto): Promise<ClientClaimApiDto>;
+    protected processPostClaim(response: Response): Promise<ClientClaimApiDto>;
     getClaim(claimId: number): Promise<ClientClaimApiDto>;
     protected processGetClaim(response: Response): Promise<ClientClaimApiDto>;
     deleteClaim(claimId: number): Promise<FileResponse>;
@@ -199,7 +198,7 @@ export declare class ClientsClient implements IClientsClient {
 }
 export interface IDashboardClient {
     getDashboardIdentityServer(auditLogsLastNumberOfDays: number | undefined): Promise<DashboardDto>;
-    getDashboardIdentity(): Promise<DashboardDto>;
+    getDashboardIdentity(): Promise<DashboardIdentityDto>;
 }
 export declare class DashboardClient implements IDashboardClient {
     private http;
@@ -210,8 +209,8 @@ export declare class DashboardClient implements IDashboardClient {
     });
     getDashboardIdentityServer(auditLogsLastNumberOfDays: number | undefined): Promise<DashboardDto>;
     protected processGetDashboardIdentityServer(response: Response): Promise<DashboardDto>;
-    getDashboardIdentity(): Promise<DashboardDto>;
-    protected processGetDashboardIdentity(response: Response): Promise<DashboardDto>;
+    getDashboardIdentity(): Promise<DashboardIdentityDto>;
+    protected processGetDashboardIdentity(response: Response): Promise<DashboardIdentityDto>;
 }
 export interface IIdentityProvidersClient {
     get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<IdentityProvidersApiDto>;
@@ -243,16 +242,16 @@ export declare class IdentityProvidersClient implements IIdentityProvidersClient
 }
 export interface IIdentityResourcesClient {
     get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<IdentityResourcesApiDto>;
-    post(identityResourceApi: IdentityResourceApiDto): Promise<void>;
-    put(identityResourceApi: IdentityResourceApiDto): Promise<FileResponse>;
+    post(identityResourceApi: IdentityResourceApiDto): Promise<IdentityResourceApiDto>;
+    put(identityResourceApi: IdentityResourceApiDto): Promise<void>;
     get2(id: number): Promise<IdentityResourceApiDto>;
-    delete(id: number): Promise<FileResponse>;
+    delete(id: number): Promise<void>;
     canInsertIdentityResource(id: number | undefined, name: string | null | undefined): Promise<boolean>;
     canInsertIdentityResourceProperty(id: number | undefined, key: string | null | undefined): Promise<boolean>;
     getProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<IdentityResourcePropertiesApiDto>;
-    postProperty(id: number, identityResourcePropertyApi: IdentityResourcePropertyApiDto): Promise<void>;
+    postProperty(id: number, identityResourcePropertyApi: IdentityResourcePropertyApiDto): Promise<IdentityResourcePropertyApiDto>;
     getProperty(propertyId: number): Promise<IdentityResourcePropertyApiDto>;
-    deleteProperty(propertyId: number): Promise<FileResponse>;
+    deleteProperty(propertyId: number): Promise<void>;
 }
 export declare class IdentityResourcesClient implements IIdentityResourcesClient {
     private http;
@@ -263,26 +262,26 @@ export declare class IdentityResourcesClient implements IIdentityResourcesClient
     });
     get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<IdentityResourcesApiDto>;
     protected processGet(response: Response): Promise<IdentityResourcesApiDto>;
-    post(identityResourceApi: IdentityResourceApiDto): Promise<void>;
-    protected processPost(response: Response): Promise<void>;
-    put(identityResourceApi: IdentityResourceApiDto): Promise<FileResponse>;
-    protected processPut(response: Response): Promise<FileResponse>;
+    post(identityResourceApi: IdentityResourceApiDto): Promise<IdentityResourceApiDto>;
+    protected processPost(response: Response): Promise<IdentityResourceApiDto>;
+    put(identityResourceApi: IdentityResourceApiDto): Promise<void>;
+    protected processPut(response: Response): Promise<void>;
     get2(id: number): Promise<IdentityResourceApiDto>;
     protected processGet2(response: Response): Promise<IdentityResourceApiDto>;
-    delete(id: number): Promise<FileResponse>;
-    protected processDelete(response: Response): Promise<FileResponse>;
+    delete(id: number): Promise<void>;
+    protected processDelete(response: Response): Promise<void>;
     canInsertIdentityResource(id: number | undefined, name: string | null | undefined): Promise<boolean>;
     protected processCanInsertIdentityResource(response: Response): Promise<boolean>;
     canInsertIdentityResourceProperty(id: number | undefined, key: string | null | undefined): Promise<boolean>;
     protected processCanInsertIdentityResourceProperty(response: Response): Promise<boolean>;
     getProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<IdentityResourcePropertiesApiDto>;
     protected processGetProperties(response: Response): Promise<IdentityResourcePropertiesApiDto>;
-    postProperty(id: number, identityResourcePropertyApi: IdentityResourcePropertyApiDto): Promise<void>;
-    protected processPostProperty(response: Response): Promise<void>;
+    postProperty(id: number, identityResourcePropertyApi: IdentityResourcePropertyApiDto): Promise<IdentityResourcePropertyApiDto>;
+    protected processPostProperty(response: Response): Promise<IdentityResourcePropertyApiDto>;
     getProperty(propertyId: number): Promise<IdentityResourcePropertyApiDto>;
     protected processGetProperty(response: Response): Promise<IdentityResourcePropertyApiDto>;
-    deleteProperty(propertyId: number): Promise<FileResponse>;
-    protected processDeleteProperty(response: Response): Promise<FileResponse>;
+    deleteProperty(propertyId: number): Promise<void>;
+    protected processDeleteProperty(response: Response): Promise<void>;
 }
 export interface IKeysClient {
     get(page: number | undefined, pageSize: number | undefined): Promise<KeysApiDto>;
@@ -514,7 +513,7 @@ export declare class ApiSecretApiDto implements IApiSecretApiDto {
     description: string | undefined;
     value: string;
     hashType: string | undefined;
-    expiration: dayjs.Dayjs | undefined;
+    expiration: Date | undefined;
     constructor(data?: IApiSecretApiDto);
     init(_data?: any): void;
     static fromJS(data: any): ApiSecretApiDto;
@@ -526,7 +525,7 @@ export interface IApiSecretApiDto {
     description: string | undefined;
     value: string;
     hashType: string | undefined;
-    expiration: dayjs.Dayjs | undefined;
+    expiration: Date | undefined;
 }
 export declare class ApiResourcePropertiesApiDto implements IApiResourcePropertiesApiDto {
     apiResourceProperties: ApiResourcePropertyApiDto[] | undefined;
@@ -626,6 +625,50 @@ export interface IApiScopePropertiesApiDto {
     totalCount: number;
     pageSize: number;
 }
+export declare class ApiScopeDto implements IApiScopeDto {
+    showInDiscoveryDocument: boolean;
+    id: number;
+    name: string;
+    displayName: string | undefined;
+    description: string | undefined;
+    required: boolean;
+    emphasize: boolean;
+    userClaims: string[] | undefined;
+    userClaimsItems: string | undefined;
+    enabled: boolean;
+    apiScopeProperties: ApiScopePropertyDto[] | undefined;
+    constructor(data?: IApiScopeDto);
+    init(_data?: any): void;
+    static fromJS(data: any): ApiScopeDto;
+    toJSON(data?: any): any;
+}
+export interface IApiScopeDto {
+    showInDiscoveryDocument: boolean;
+    id: number;
+    name: string;
+    displayName: string | undefined;
+    description: string | undefined;
+    required: boolean;
+    emphasize: boolean;
+    userClaims: string[] | undefined;
+    userClaimsItems: string | undefined;
+    enabled: boolean;
+    apiScopeProperties: ApiScopePropertyDto[] | undefined;
+}
+export declare class ApiScopePropertyDto implements IApiScopePropertyDto {
+    id: number;
+    key: string | undefined;
+    value: string | undefined;
+    constructor(data?: IApiScopePropertyDto);
+    init(_data?: any): void;
+    static fromJS(data: any): ApiScopePropertyDto;
+    toJSON(data?: any): any;
+}
+export interface IApiScopePropertyDto {
+    id: number;
+    key: string | undefined;
+    value: string | undefined;
+}
 export declare class ClientsApiDto implements IClientsApiDto {
     clients: ClientApiDto[] | undefined;
     totalCount: number;
@@ -684,8 +727,8 @@ export declare class ClientApiDto implements IClientApiDto {
     allowedScopes: string[] | undefined;
     claims: ClientClaimApiDto[] | undefined;
     properties: ClientPropertyApiDto[] | undefined;
-    updated: dayjs.Dayjs | undefined;
-    lastAccessed: dayjs.Dayjs | undefined;
+    updated: Date | undefined;
+    lastAccessed: Date | undefined;
     userSsoLifetime: number | undefined;
     userCodeType: string | undefined;
     deviceCodeLifetime: number;
@@ -695,7 +738,7 @@ export declare class ClientApiDto implements IClientApiDto {
     coordinateLifetimeWithUserSession: boolean;
     requireDPoP: boolean;
     dPoPValidationMode: number;
-    dPoPClockSkew: dayjs.Dayjs;
+    dPoPClockSkew: string;
     pushedAuthorizationLifetime: number | undefined;
     requirePushedAuthorization: boolean;
     initiateLoginUri: string | undefined;
@@ -750,8 +793,8 @@ export interface IClientApiDto {
     allowedScopes: string[] | undefined;
     claims: ClientClaimApiDto[] | undefined;
     properties: ClientPropertyApiDto[] | undefined;
-    updated: dayjs.Dayjs | undefined;
-    lastAccessed: dayjs.Dayjs | undefined;
+    updated: Date | undefined;
+    lastAccessed: Date | undefined;
     userSsoLifetime: number | undefined;
     userCodeType: string | undefined;
     deviceCodeLifetime: number;
@@ -761,7 +804,7 @@ export interface IClientApiDto {
     coordinateLifetimeWithUserSession: boolean;
     requireDPoP: boolean;
     dPoPValidationMode: number;
-    dPoPClockSkew: dayjs.Dayjs;
+    dPoPClockSkew: string;
     pushedAuthorizationLifetime: number | undefined;
     requirePushedAuthorization: boolean;
     initiateLoginUri: string | undefined;
@@ -858,7 +901,7 @@ export declare class ClientSecretApiDto implements IClientSecretApiDto {
     description: string | undefined;
     value: string;
     hashType: string | undefined;
-    expiration: dayjs.Dayjs | undefined;
+    expiration: Date | undefined;
     constructor(data?: IClientSecretApiDto);
     init(_data?: any): void;
     static fromJS(data: any): ClientSecretApiDto;
@@ -870,7 +913,7 @@ export interface IClientSecretApiDto {
     description: string | undefined;
     value: string;
     hashType: string | undefined;
-    expiration: dayjs.Dayjs | undefined;
+    expiration: Date | undefined;
 }
 export declare class ClientPropertiesApiDto implements IClientPropertiesApiDto {
     clientProperties: ClientPropertyApiDto[] | undefined;
@@ -905,6 +948,7 @@ export declare class DashboardDto implements IDashboardDto {
     apiResourcesTotal: number;
     apiScopesTotal: number;
     identityResourcesTotal: number;
+    identityProvidersTotal: number;
     auditLogsAvg: number;
     auditLogsPerDaysTotal: DashboardAuditLogDto[] | undefined;
     constructor(data?: IDashboardDto);
@@ -917,12 +961,13 @@ export interface IDashboardDto {
     apiResourcesTotal: number;
     apiScopesTotal: number;
     identityResourcesTotal: number;
+    identityProvidersTotal: number;
     auditLogsAvg: number;
     auditLogsPerDaysTotal: DashboardAuditLogDto[] | undefined;
 }
 export declare class DashboardAuditLogDto implements IDashboardAuditLogDto {
     total: number;
-    created: dayjs.Dayjs;
+    created: Date;
     constructor(data?: IDashboardAuditLogDto);
     init(_data?: any): void;
     static fromJS(data: any): DashboardAuditLogDto;
@@ -930,7 +975,19 @@ export declare class DashboardAuditLogDto implements IDashboardAuditLogDto {
 }
 export interface IDashboardAuditLogDto {
     total: number;
-    created: dayjs.Dayjs;
+    created: Date;
+}
+export declare class DashboardIdentityDto implements IDashboardIdentityDto {
+    usersTotal: number;
+    rolesTotal: number;
+    constructor(data?: IDashboardIdentityDto);
+    init(_data?: any): void;
+    static fromJS(data: any): DashboardIdentityDto;
+    toJSON(data?: any): any;
+}
+export interface IDashboardIdentityDto {
+    usersTotal: number;
+    rolesTotal: number;
 }
 export declare class IdentityProvidersApiDto implements IIdentityProvidersApiDto {
     pageSize: number;
@@ -1055,7 +1112,7 @@ export interface IKeysApiDto {
 export declare class KeyApiDto implements IKeyApiDto {
     id: string | undefined;
     version: number;
-    created: dayjs.Dayjs;
+    created: Date;
     use: string | undefined;
     algorithm: string | undefined;
     isX509Certificate: boolean;
@@ -1067,7 +1124,7 @@ export declare class KeyApiDto implements IKeyApiDto {
 export interface IKeyApiDto {
     id: string | undefined;
     version: number;
-    created: dayjs.Dayjs;
+    created: Date;
     use: string | undefined;
     algorithm: string | undefined;
     isX509Certificate: boolean;
@@ -1093,10 +1150,10 @@ export declare class PersistedGrantSubjectApiDto implements IPersistedGrantSubje
     subjectId: string | undefined;
     subjectName: string | undefined;
     clientId: string | undefined;
-    creationTime: dayjs.Dayjs;
-    expiration: dayjs.Dayjs | undefined;
+    creationTime: Date;
+    expiration: Date | undefined;
     data: string | undefined;
-    consumedTime: dayjs.Dayjs | undefined;
+    consumedTime: Date | undefined;
     sessionId: string | undefined;
     description: string | undefined;
     constructor(data?: IPersistedGrantSubjectApiDto);
@@ -1111,10 +1168,10 @@ export interface IPersistedGrantSubjectApiDto {
     subjectId: string | undefined;
     subjectName: string | undefined;
     clientId: string | undefined;
-    creationTime: dayjs.Dayjs;
-    expiration: dayjs.Dayjs | undefined;
+    creationTime: Date;
+    expiration: Date | undefined;
     data: string | undefined;
-    consumedTime: dayjs.Dayjs | undefined;
+    consumedTime: Date | undefined;
     sessionId: string | undefined;
     description: string | undefined;
 }
@@ -1125,10 +1182,10 @@ export declare class PersistedGrantApiDto implements IPersistedGrantApiDto {
     subjectId: string | undefined;
     subjectName: string | undefined;
     clientId: string | undefined;
-    creationTime: dayjs.Dayjs;
-    expiration: dayjs.Dayjs | undefined;
+    creationTime: Date;
+    expiration: Date | undefined;
     data: string | undefined;
-    consumedTime: dayjs.Dayjs | undefined;
+    consumedTime: Date | undefined;
     sessionId: string | undefined;
     description: string | undefined;
     constructor(data?: IPersistedGrantApiDto);
@@ -1143,10 +1200,10 @@ export interface IPersistedGrantApiDto {
     subjectId: string | undefined;
     subjectName: string | undefined;
     clientId: string | undefined;
-    creationTime: dayjs.Dayjs;
-    expiration: dayjs.Dayjs | undefined;
+    creationTime: Date;
+    expiration: Date | undefined;
     data: string | undefined;
-    consumedTime: dayjs.Dayjs | undefined;
+    consumedTime: Date | undefined;
     sessionId: string | undefined;
     description: string | undefined;
 }
@@ -1166,7 +1223,6 @@ export interface IPersistedGrantsApiDto {
 }
 export declare class BaseRoleDtoOfString implements IBaseRoleDtoOfString {
     id: string | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIBaseRoleDtoId: any | undefined;
     constructor(data?: IBaseRoleDtoOfString);
     init(_data?: any): void;
     static fromJS(data: any): BaseRoleDtoOfString;
@@ -1174,7 +1230,6 @@ export declare class BaseRoleDtoOfString implements IBaseRoleDtoOfString {
 }
 export interface IBaseRoleDtoOfString {
     id: string | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIBaseRoleDtoId: any | undefined;
 }
 export declare class RoleDtoOfString extends BaseRoleDtoOfString implements IRoleDtoOfString {
     name: string;
@@ -1198,7 +1253,6 @@ export declare class RolesDtoOfIdentityRoleDtoAndString implements IRolesDtoOfId
     pageSize: number;
     totalCount: number;
     roles: IdentityRoleDto[] | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIRolesDtoRoles: IRoleDto[] | undefined;
     constructor(data?: IRolesDtoOfIdentityRoleDtoAndString);
     init(_data?: any): void;
     static fromJS(data: any): RolesDtoOfIdentityRoleDtoAndString;
@@ -1208,7 +1262,6 @@ export interface IRolesDtoOfIdentityRoleDtoAndString {
     pageSize: number;
     totalCount: number;
     roles: IdentityRoleDto[] | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIRolesDtoRoles: IRoleDto[] | undefined;
 }
 export declare class IdentityRolesDto extends RolesDtoOfIdentityRoleDtoAndString implements IIdentityRolesDto {
     constructor(data?: IIdentityRolesDto);
@@ -1218,21 +1271,10 @@ export declare class IdentityRolesDto extends RolesDtoOfIdentityRoleDtoAndString
 }
 export interface IIdentityRolesDto extends IRolesDtoOfIdentityRoleDtoAndString {
 }
-export declare abstract class IRoleDto implements IIRoleDto {
-    name: string | undefined;
-    constructor(data?: IIRoleDto);
-    init(_data?: any): void;
-    static fromJS(data: any): IRoleDto;
-    toJSON(data?: any): any;
-}
-export interface IIRoleDto {
-    name: string | undefined;
-}
 export declare class UsersDtoOfIdentityUserDtoAndString implements IUsersDtoOfIdentityUserDtoAndString {
     pageSize: number;
     totalCount: number;
     users: IdentityUserDto[] | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIUsersDtoUsers: IUserDto[] | undefined;
     constructor(data?: IUsersDtoOfIdentityUserDtoAndString);
     init(_data?: any): void;
     static fromJS(data: any): UsersDtoOfIdentityUserDtoAndString;
@@ -1242,7 +1284,6 @@ export interface IUsersDtoOfIdentityUserDtoAndString {
     pageSize: number;
     totalCount: number;
     users: IdentityUserDto[] | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIUsersDtoUsers: IUserDto[] | undefined;
 }
 export declare class IdentityUsersDto extends UsersDtoOfIdentityUserDtoAndString implements IIdentityUsersDto {
     constructor(data?: IIdentityUsersDto);
@@ -1254,7 +1295,6 @@ export interface IIdentityUsersDto extends IUsersDtoOfIdentityUserDtoAndString {
 }
 export declare class BaseUserDtoOfString implements IBaseUserDtoOfString {
     id: string | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIBaseUserDtoId: any | undefined;
     constructor(data?: IBaseUserDtoOfString);
     init(_data?: any): void;
     static fromJS(data: any): BaseUserDtoOfString;
@@ -1262,7 +1302,6 @@ export declare class BaseUserDtoOfString implements IBaseUserDtoOfString {
 }
 export interface IBaseUserDtoOfString {
     id: string | undefined;
-    skorubaDuendeIdentityServerAdminBusinessLogicIdentityDtosIdentityInterfacesIBaseUserDtoId: any | undefined;
 }
 export declare class UserDtoOfString extends BaseUserDtoOfString implements IUserDtoOfString {
     userName: string;
@@ -1273,7 +1312,7 @@ export declare class UserDtoOfString extends BaseUserDtoOfString implements IUse
     lockoutEnabled: boolean;
     twoFactorEnabled: boolean;
     accessFailedCount: number;
-    lockoutEnd: dayjs.Dayjs | undefined;
+    lockoutEnd: Date | undefined;
     constructor(data?: IUserDtoOfString);
     init(_data?: any): void;
     static fromJS(data: any): UserDtoOfString;
@@ -1288,7 +1327,7 @@ export interface IUserDtoOfString extends IBaseUserDtoOfString {
     lockoutEnabled: boolean;
     twoFactorEnabled: boolean;
     accessFailedCount: number;
-    lockoutEnd: dayjs.Dayjs | undefined;
+    lockoutEnd: Date | undefined;
 }
 export declare class IdentityUserDto extends UserDtoOfString implements IIdentityUserDto {
     constructor(data?: IIdentityUserDto);
@@ -1297,32 +1336,6 @@ export declare class IdentityUserDto extends UserDtoOfString implements IIdentit
     toJSON(data?: any): any;
 }
 export interface IIdentityUserDto extends IUserDtoOfString {
-}
-export declare abstract class IUserDto implements IIUserDto {
-    userName: string | undefined;
-    email: string | undefined;
-    emailConfirmed: boolean;
-    phoneNumber: string | undefined;
-    phoneNumberConfirmed: boolean;
-    lockoutEnabled: boolean;
-    twoFactorEnabled: boolean;
-    accessFailedCount: number;
-    lockoutEnd: dayjs.Dayjs | undefined;
-    constructor(data?: IIUserDto);
-    init(_data?: any): void;
-    static fromJS(data: any): IUserDto;
-    toJSON(data?: any): any;
-}
-export interface IIUserDto {
-    userName: string | undefined;
-    email: string | undefined;
-    emailConfirmed: boolean;
-    phoneNumber: string | undefined;
-    phoneNumberConfirmed: boolean;
-    lockoutEnabled: boolean;
-    twoFactorEnabled: boolean;
-    accessFailedCount: number;
-    lockoutEnd: dayjs.Dayjs | undefined;
 }
 export declare class RoleClaimsApiDtoOfString implements IRoleClaimsApiDtoOfString {
     claims: RoleClaimApiDtoOfString[] | undefined;
