@@ -787,7 +787,7 @@ It is possible to define the configuration according the client type - by defaul
 - [x] Can't update client because "Client Id _clientId_ already exists" ([#227](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/227))
 - [x] Migrate from Microsoft.Azure.KeyVault to the new Azure Key Vault API ([#224](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/224))
 - [x] Docker Compose NGINX targeting wrong port ([#222](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/222))
-- [x] Update all nuget packages to the latest versions, including Duende IdentityServer version 7.0.7. (fixed [CVE-2024-39694](https://github.com/advisories/GHSA-ff4q-64jc-gx98)) - ([#236](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/236)) -
+- [x] Update all nuget packages to the latest versions, including Duende IdentityServer version 7.0.7. (fixed [CVE-2024-39694](https://github.com/advisories/GHSA-ff4q-64jc-gx98)) - ([#236](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/236))
 
 ### 3.0.0
 
