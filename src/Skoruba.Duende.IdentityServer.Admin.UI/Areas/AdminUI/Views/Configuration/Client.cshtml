@@ -15,7 +15,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a asp-area="@CommonConsts.AdminUIArea" asp-controller="Configuration" asp-action="Clients">@Localizer["NavigationClients"]</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@Model.ClientName (@Model.ClientId)</li>
+                    <li class="breadcrumb-item active" aria-current="page">@Model.ClientName @(Model.ClientId == default ? string.Empty : $"({Model.ClientId})")</li>
                 </ol>
             </nav>
         </div>
