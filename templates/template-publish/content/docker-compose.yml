@@ -25,6 +25,7 @@ services:
       dockerfile: src/SkorubaDuende.IdentityServerAdmin.Admin/Dockerfile
     container_name: skoruba-duende-identityserver-admin
     environment:
+      - VIRTUAL_PORT=8080
       - VIRTUAL_HOST=admin.skoruba.local
       - 'ConnectionStrings__ConfigurationDbConnection=Server=db;Database=IdentityServerAdmin;User Id=sa;Password=${DB_PASSWORD:-Password_123};MultipleActiveResultSets=true'
       - 'ConnectionStrings__PersistedGrantDbConnection=Server=db;Database=IdentityServerAdmin;User Id=sa;Password=${DB_PASSWORD:-Password_123};MultipleActiveResultSets=true'
@@ -63,6 +64,7 @@ services:
       dockerfile: src/SkorubaDuende.IdentityServerAdmin.Admin.Api/Dockerfile
     container_name: skoruba-duende-identityserver-admin-api
     environment:
+      - VIRTUAL_PORT=8080
       - VIRTUAL_HOST=admin-api.skoruba.local
       - AdminApiConfiguration__RequireHttpsMetadata=false
       - 'AdminApiConfiguration__ApiBaseUrl=https://admin-api.skoruba.local'
@@ -87,13 +89,19 @@ services:
       dockerfile: src/SkorubaDuende.IdentityServerAdmin.STS.Identity/Dockerfile
     container_name: skoruba-duende-identityserver-sts-identity
     environment:
+      - VIRTUAL_PORT=8080
       - VIRTUAL_HOST=sts.skoruba.local
       - 'ConnectionStrings__ConfigurationDbConnection=Server=db;Database=IdentityServerAdmin;User Id=sa;Password=${DB_PASSWORD:-Password_123};MultipleActiveResultSets=true'
       - 'ConnectionStrings__PersistedGrantDbConnection=Server=db;Database=IdentityServerAdmin;User Id=sa;Password=${DB_PASSWORD:-Password_123};MultipleActiveResultSets=true'
       - 'ConnectionStrings__IdentityDbConnection=Server=db;Database=IdentityServerAdmin;User Id=sa;Password=${DB_PASSWORD:-Password_123};MultipleActiveResultSets=true'
       - 'ConnectionStrings__DataProtectionDbConnection=Server=db;Database=IdentityServerAdmin;User Id=sa;Password=${DB_PASSWORD:-Password_123};MultipleActiveResultSets=true'
       - 'AdminConfiguration__IdentityAdminBaseUrl=https://admin.skoruba.local'
-      - 'AdvancedConfiguration__IssuerUri=https://sts.skoruba.local'
+      - 'IdentityServerOptions__IssuerUri=https://sts.skoruba.local'
+      - IdentityServerOptions__KeyManagement__Enabled=true
+      - IdentityServerOptions__Events__RaiseErrorEvents=true
+      - IdentityServerOptions__Events__RaiseInformationEvents=true
+      - IdentityServerOptions__Events__RaiseFailureEvents=true
+      - IdentityServerOptions__Events__RaiseSuccessEvents=true
       - DockerConfiguration__UpdateCaCertificate=true
       - ASPNETCORE_ENVIRONMENT=Development
     depends_on:

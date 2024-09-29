@@ -3,10 +3,6 @@
 //     Generated using the NSwag toolchain v14.0.8.0 (NJsonSchema v11.0.1.0 (Newtonsoft.Json v13.0.0.0)) (http://NSwag.org)
 // </auto-generated>
 //----------------------
-/* tslint:disable */
-/* eslint-disable */
-// ReSharper disable InconsistentNaming
-import dayjs from 'dayjs';
 export class ApiResourcesClient {
     constructor(baseUrl, http) {
         this.jsonParseReviver = undefined;
@@ -129,7 +125,6 @@ export class ApiResourcesClient {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/octet-stream"
             }
         };
         return this.http.fetch(url_, options_).then((_response) => {
@@ -143,18 +138,18 @@ export class ApiResourcesClient {
             response.headers.forEach((v, k) => _headers[k] = v);
         }
         ;
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            }
-            else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                return;
+            });
+        }
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         }
         else if (status === 401) {
             return response.text().then((_responseText) => {
@@ -331,9 +326,7 @@ export class ApiResourcesClient {
         url_ = url_.replace(/[?&]$/, "");
         let options_ = {
             method: "DELETE",
-            headers: {
-                "Accept": "application/octet-stream"
-            }
+            headers: {}
         };
         return this.http.fetch(url_, options_).then((_response) => {
             return this.processDelete(_response);
@@ -346,18 +339,18 @@ export class ApiResourcesClient {
             response.headers.forEach((v, k) => _headers[k] = v);
         }
         ;
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            }
-            else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                return;
+            });
+        }
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         }
         else if (status === 401) {
             return response.text().then((_responseText) => {
@@ -444,6 +437,7 @@ export class ApiResourcesClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
         return this.http.fetch(url_, options_).then((_response) => {
@@ -459,7 +453,10 @@ export class ApiResourcesClient {
         ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-                return;
+                let result201 = null;
+                let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = ApiSecretApiDto.fromJS(resultData201);
+                return result201;
             });
         }
         else if (status === 400) {
@@ -543,9 +540,7 @@ export class ApiResourcesClient {
         url_ = url_.replace(/[?&]$/, "");
         let options_ = {
             method: "DELETE",
-            headers: {
-                "Accept": "application/octet-stream"
-            }
+            headers: {}
         };
         return this.http.fetch(url_, options_).then((_response) => {
             return this.processDeleteSecret(_response);
@@ -558,18 +553,18 @@ export class ApiResourcesClient {
             response.headers.forEach((v, k) => _headers[k] = v);
         }
         ;
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            }
-            else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                return;
+            });
+        }
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         }
         else if (status === 401) {
             return response.text().then((_responseText) => {
@@ -627,6 +622,14 @@ export class ApiResourcesClient {
                 return result200;
             });
         }
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        }
         else if (status === 401) {
             return response.text().then((_responseText) => {
                 return throwException("Unauthorized", status, _responseText, _headers);
@@ -656,6 +659,7 @@ export class ApiResourcesClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
         return this.http.fetch(url_, options_).then((_response) => {
@@ -671,7 +675,10 @@ export class ApiResourcesClient {
         ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-                return;
+                let result201 = null;
+                let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = ApiResourcePropertyApiDto.fromJS(resultData201);
+                return result201;
             });
         }
         else if (status === 400) {
@@ -755,9 +762,7 @@ export class ApiResourcesClient {
         url_ = url_.replace(/[?&]$/, "");
         let options_ = {
             method: "DELETE",
-            headers: {
-                "Accept": "application/octet-stream"
-            }
+            headers: {}
         };
         return this.http.fetch(url_, options_).then((_response) => {
             return this.processDeleteProperty(_response);
@@ -770,18 +775,18 @@ export class ApiResourcesClient {
             response.headers.forEach((v, k) => _headers[k] = v);
         }
         ;
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            }
-            else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                return;
+            });
+        }
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         }
         else if (status === 401) {
             return response.text().then((_responseText) => {
@@ -871,6 +876,7 @@ export class ApiScopesClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
         return this.http.fetch(url_, options_).then((_response) => {
@@ -886,7 +892,10 @@ export class ApiScopesClient {
         ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-                return;
+                let result201 = null;
+                let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = ApiScopeDto.fromJS(resultData201);
+                return result201;
             });
         }
         else if (status === 400) {
@@ -923,7 +932,6 @@ export class ApiScopesClient {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/octet-stream"
             }
         };
         return this.http.fetch(url_, options_).then((_response) => {
@@ -937,18 +945,18 @@ export class ApiScopesClient {
             response.headers.forEach((v, k) => _headers[k] = v);
         }
         ;
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            }
-            else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                return;
+            });
+        }
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         }
         else if (status === 401) {
             return response.text().then((_responseText) => {
@@ -1125,9 +1133,7 @@ export class ApiScopesClient {
         url_ = url_.replace(/[?&]$/, "");
         let options_ = {
             method: "DELETE",
-            headers: {
-                "Accept": "application/octet-stream"
-            }
+            headers: {}
         };
         return this.http.fetch(url_, options_).then((_response) => {
             return this.processDeleteScope(_response);
@@ -1140,18 +1146,18 @@ export class ApiScopesClient {
             response.headers.forEach((v, k) => _headers[k] = v);
         }
         ;
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            }
-            else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                return;
+            });
+        }
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         }
         else if (status === 401) {
             return response.text().then((_responseText) => {
@@ -1238,6 +1244,7 @@ export class ApiScopesClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
         return this.http.fetch(url_, options_).then((_response) => {
@@ -1253,7 +1260,10 @@ export class ApiScopesClient {
         ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-                return;
+                let result201 = null;
+                let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = ApiScopePropertyApiDto.fromJS(resultData201);
+                return result201;
             });
         }
         else if (status === 400) {
@@ -1337,9 +1347,7 @@ export class ApiScopesClient {
         url_ = url_.replace(/[?&]$/, "");
         let options_ = {
             method: "DELETE",
-            headers: {
-                "Accept": "application/octet-stream"
-            }
+            headers: {}
         };
         return this.http.fetch(url_, options_).then((_response) => {
             return this.processDeleteProperty(_response);
@@ -1352,18 +1360,18 @@ export class ApiScopesClient {
             response.headers.forEach((v, k) => _headers[k] = v);
         }
         ;
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            }
-            else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                return;
+            });
+        }
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         }
         else if (status === 401) {
             return response.text().then((_responseText) => {
@@ -1453,6 +1461,7 @@ export class ClientsClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
         return this.http.fetch(url_, options_).then((_response) => {
@@ -1468,7 +1477,10 @@ export class ClientsClient {
         ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-                return;
+                let result201 = null;
+                let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = ClientApiDto.fromJS(resultData201);
+                return result201;
             });
         }
         else if (status === 400) {
@@ -1505,7 +1517,6 @@ export class ClientsClient {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/octet-stream"
             }
         };
         return this.http.fetch(url_, options_).then((_response) => {
@@ -1519,18 +1530,18 @@ export class ClientsClient {
             response.headers.forEach((v, k) => _headers[k] = v);
         }
         ;
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            }
-            else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 201) {
+            return response.text().then((_responseText) => {
+                return;
+            });
+        }
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         }
         else if (status === 401) {
             return response.text().then((_responseText) => {
@@ -1605,9 +1616,7 @@ export class ClientsClient {
         url_ = url_.replace(/[?&]$/, "");
         let options_ = {
             method: "DELETE",
-            headers: {
-                "Accept": "application/octet-stream"
-            }
+            headers: {}
         };
         return this.http.fetch(url_, options_).then((_response) => {
             return this.processDelete(_response);
@@ -1620,18 +1629,18 @@ export class ClientsClient {
             response.headers.forEach((v, k) => _headers[k] = v);
         }
         ;
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            }
-            else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 201) {
+            return response.text().then((_responseText) => {
+                return;
+            });
+        }
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         }
         else if (status === 401) {
             return response.text().then((_responseText) => {
@@ -2314,6 +2323,7 @@ export class ClientsClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
         return this.http.fetch(url_, options_).then((_response) => {
@@ -2329,7 +2339,10 @@ export class ClientsClient {
         ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-                return;
+                let result201 = null;
+                let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = ClientApiDto.fromJS(resultData201);
+                return result201;
             });
         }
         else if (status === 400) {
@@ -2425,6 +2438,7 @@ export class ClientsClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
         return this.http.fetch(url_, options_).then((_response) => {
@@ -2440,7 +2454,10 @@ export class ClientsClient {
         ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-                return;
+                let result201 = null;
+                let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = ClientSecretApiDto.fromJS(resultData201);
+                return result201;
             });
         }
         else if (status === 400) {
@@ -2524,9 +2541,7 @@ export class ClientsClient {
         url_ = url_.replace(/[?&]$/, "");
         let options_ = {
             method: "DELETE",
-            headers: {
-                "Accept": "application/octet-stream"
-            }
+            headers: {}
         };
         return this.http.fetch(url_, options_).then((_response) => {
             return this.processDeleteSecret(_response);
@@ -2539,18 +2554,18 @@ export class ClientsClient {
             response.headers.forEach((v, k) => _headers[k] = v);
         }
         ;
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            }
-            else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                return;
+            });
+        }
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         }
         else if (status === 401) {
             return response.text().then((_responseText) => {
@@ -2637,6 +2652,7 @@ export class ClientsClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
         return this.http.fetch(url_, options_).then((_response) => {
@@ -2652,7 +2668,10 @@ export class ClientsClient {
         ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-                return;
+                let result201 = null;
+                let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = ClientPropertyApiDto.fromJS(resultData201);
+                return result201;
             });
         }
         else if (status === 400) {
@@ -2736,9 +2755,7 @@ export class ClientsClient {
         url_ = url_.replace(/[?&]$/, "");
         let options_ = {
             method: "DELETE",
-            headers: {
-                "Accept": "application/octet-stream"
-            }
+            headers: {}
         };
         return this.http.fetch(url_, options_).then((_response) => {
             return this.processDeleteProperty(_response);
@@ -2751,18 +2768,18 @@ export class ClientsClient {
             response.headers.forEach((v, k) => _headers[k] = v);
         }
         ;
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            }
-            else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                return;
+            });
+        }
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         }
         else if (status === 401) {
             return response.text().then((_responseText) => {
@@ -2849,6 +2866,7 @@ export class ClientsClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
         return this.http.fetch(url_, options_).then((_response) => {
@@ -2864,7 +2882,10 @@ export class ClientsClient {
         ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-                return;
+                let result201 = null;
+                let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = ClientClaimApiDto.fromJS(resultData201);
+                return result201;
             });
         }
         else if (status === 400) {
@@ -3484,6 +3505,7 @@ export class IdentityResourcesClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
         return this.http.fetch(url_, options_).then((_response) => {
@@ -3499,7 +3521,10 @@ export class IdentityResourcesClient {
         ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-                return;
+                let result201 = null;
+                let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = IdentityResourceApiDto.fromJS(resultData201);
+                return result201;
             });
         }
         else if (status === 400) {
@@ -3536,7 +3561,6 @@ export class IdentityResourcesClient {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/octet-stream"
             }
         };
         return this.http.fetch(url_, options_).then((_response) => {
@@ -3550,18 +3574,18 @@ export class IdentityResourcesClient {
             response.headers.forEach((v, k) => _headers[k] = v);
         }
         ;
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            }
-            else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                return;
+            });
+        }
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         }
         else if (status === 401) {
             return response.text().then((_responseText) => {
@@ -3636,9 +3660,7 @@ export class IdentityResourcesClient {
         url_ = url_.replace(/[?&]$/, "");
         let options_ = {
             method: "DELETE",
-            headers: {
-                "Accept": "application/octet-stream"
-            }
+            headers: {}
         };
         return this.http.fetch(url_, options_).then((_response) => {
             return this.processDelete(_response);
@@ -3651,18 +3673,18 @@ export class IdentityResourcesClient {
             response.headers.forEach((v, k) => _headers[k] = v);
         }
         ;
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            }
-            else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                return;
+            });
+        }
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         }
         else if (status === 401) {
             return response.text().then((_responseText) => {
@@ -3851,6 +3873,7 @@ export class IdentityResourcesClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
         return this.http.fetch(url_, options_).then((_response) => {
@@ -3866,7 +3889,10 @@ export class IdentityResourcesClient {
         ;
         if (status === 201) {
             return response.text().then((_responseText) => {
-                return;
+                let result201 = null;
+                let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = IdentityResourcePropertyApiDto.fromJS(resultData201);
+                return result201;
             });
         }
         else if (status === 400) {
@@ -3950,9 +3976,7 @@ export class IdentityResourcesClient {
         url_ = url_.replace(/[?&]$/, "");
         let options_ = {
             method: "DELETE",
-            headers: {
-                "Accept": "application/octet-stream"
-            }
+            headers: {}
         };
         return this.http.fetch(url_, options_).then((_response) => {
             return this.processDeleteProperty(_response);
@@ -3965,18 +3989,18 @@ export class IdentityResourcesClient {
             response.headers.forEach((v, k) => _headers[k] = v);
         }
         ;
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            }
-            else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                return;
+            });
+        }
+        else if (status === 400) {
+            return response.text().then((_responseText) => {
+                let result400 = null;
+                let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = ProblemDetails.fromJS(resultData400);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         }
         else if (status === 401) {
             return response.text().then((_responseText) => {
@@ -6160,7 +6184,7 @@ export class ApiSecretApiDto {
             this.description = _data["description"];
             this.value = _data["value"];
             this.hashType = _data["hashType"];
-            this.expiration = _data["expiration"] ? dayjs(_data["expiration"].toString()) : undefined;
+            this.expiration = _data["expiration"] ? new Date(_data["expiration"].toString()) : undefined;
         }
     }
     static fromJS(data) {
@@ -6414,6 +6438,98 @@ export class ApiScopePropertiesApiDto {
         return data;
     }
 }
+export class ApiScopeDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            this.showInDiscoveryDocument = _data["showInDiscoveryDocument"];
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.displayName = _data["displayName"];
+            this.description = _data["description"];
+            this.required = _data["required"];
+            this.emphasize = _data["emphasize"];
+            if (Array.isArray(_data["userClaims"])) {
+                this.userClaims = [];
+                for (let item of _data["userClaims"])
+                    this.userClaims.push(item);
+            }
+            this.userClaimsItems = _data["userClaimsItems"];
+            this.enabled = _data["enabled"];
+            if (Array.isArray(_data["apiScopeProperties"])) {
+                this.apiScopeProperties = [];
+                for (let item of _data["apiScopeProperties"])
+                    this.apiScopeProperties.push(ApiScopePropertyDto.fromJS(item));
+            }
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new ApiScopeDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        data["showInDiscoveryDocument"] = this.showInDiscoveryDocument;
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["displayName"] = this.displayName;
+        data["description"] = this.description;
+        data["required"] = this.required;
+        data["emphasize"] = this.emphasize;
+        if (Array.isArray(this.userClaims)) {
+            data["userClaims"] = [];
+            for (let item of this.userClaims)
+                data["userClaims"].push(item);
+        }
+        data["userClaimsItems"] = this.userClaimsItems;
+        data["enabled"] = this.enabled;
+        if (Array.isArray(this.apiScopeProperties)) {
+            data["apiScopeProperties"] = [];
+            for (let item of this.apiScopeProperties)
+                data["apiScopeProperties"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+export class ApiScopePropertyDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            this.id = _data["id"];
+            this.key = _data["key"];
+            this.value = _data["value"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new ApiScopePropertyDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["key"] = this.key;
+        data["value"] = this.value;
+        return data;
+    }
+}
 export class ClientsApiDto {
     constructor(data) {
         if (data) {
@@ -6538,8 +6654,8 @@ export class ClientApiDto {
                 for (let item of _data["properties"])
                     this.properties.push(ClientPropertyApiDto.fromJS(item));
             }
-            this.updated = _data["updated"] ? dayjs(_data["updated"].toString()) : undefined;
-            this.lastAccessed = _data["lastAccessed"] ? dayjs(_data["lastAccessed"].toString()) : undefined;
+            this.updated = _data["updated"] ? new Date(_data["updated"].toString()) : undefined;
+            this.lastAccessed = _data["lastAccessed"] ? new Date(_data["lastAccessed"].toString()) : undefined;
             this.userSsoLifetime = _data["userSsoLifetime"];
             this.userCodeType = _data["userCodeType"];
             this.deviceCodeLifetime = _data["deviceCodeLifetime"];
@@ -6549,7 +6665,7 @@ export class ClientApiDto {
             this.coordinateLifetimeWithUserSession = _data["coordinateLifetimeWithUserSession"];
             this.requireDPoP = _data["requireDPoP"];
             this.dPoPValidationMode = _data["dPoPValidationMode"];
-            this.dPoPClockSkew = _data["dPoPClockSkew"] ? dayjs(_data["dPoPClockSkew"].toString()) : undefined;
+            this.dPoPClockSkew = _data["dPoPClockSkew"];
             this.pushedAuthorizationLifetime = _data["pushedAuthorizationLifetime"];
             this.requirePushedAuthorization = _data["requirePushedAuthorization"];
             this.initiateLoginUri = _data["initiateLoginUri"];
@@ -6655,7 +6771,7 @@ export class ClientApiDto {
         data["coordinateLifetimeWithUserSession"] = this.coordinateLifetimeWithUserSession;
         data["requireDPoP"] = this.requireDPoP;
         data["dPoPValidationMode"] = this.dPoPValidationMode;
-        data["dPoPClockSkew"] = this.dPoPClockSkew ? this.dPoPClockSkew.format('d.hh:mm:ss.SSS') : undefined;
+        data["dPoPClockSkew"] = this.dPoPClockSkew;
         data["pushedAuthorizationLifetime"] = this.pushedAuthorizationLifetime;
         data["requirePushedAuthorization"] = this.requirePushedAuthorization;
         data["initiateLoginUri"] = this.initiateLoginUri;
@@ -6856,7 +6972,7 @@ export class ClientSecretApiDto {
             this.description = _data["description"];
             this.value = _data["value"];
             this.hashType = _data["hashType"];
-            this.expiration = _data["expiration"] ? dayjs(_data["expiration"].toString()) : undefined;
+            this.expiration = _data["expiration"] ? new Date(_data["expiration"].toString()) : undefined;
         }
     }
     static fromJS(data) {
@@ -7010,7 +7126,7 @@ export class DashboardAuditLogDto {
     init(_data) {
         if (_data) {
             this.total = _data["total"];
-            this.created = _data["created"] ? dayjs(_data["created"].toString()) : undefined;
+            this.created = _data["created"] ? new Date(_data["created"].toString()) : undefined;
         }
     }
     static fromJS(data) {
@@ -7347,7 +7463,7 @@ export class KeyApiDto {
         if (_data) {
             this.id = _data["id"];
             this.version = _data["version"];
-            this.created = _data["created"] ? dayjs(_data["created"].toString()) : undefined;
+            this.created = _data["created"] ? new Date(_data["created"].toString()) : undefined;
             this.use = _data["use"];
             this.algorithm = _data["algorithm"];
             this.isX509Certificate = _data["isX509Certificate"];
@@ -7425,10 +7541,10 @@ export class PersistedGrantSubjectApiDto {
             this.subjectId = _data["subjectId"];
             this.subjectName = _data["subjectName"];
             this.clientId = _data["clientId"];
-            this.creationTime = _data["creationTime"] ? dayjs(_data["creationTime"].toString()) : undefined;
-            this.expiration = _data["expiration"] ? dayjs(_data["expiration"].toString()) : undefined;
+            this.creationTime = _data["creationTime"] ? new Date(_data["creationTime"].toString()) : undefined;
+            this.expiration = _data["expiration"] ? new Date(_data["expiration"].toString()) : undefined;
             this.data = _data["data"];
-            this.consumedTime = _data["consumedTime"] ? dayjs(_data["consumedTime"].toString()) : undefined;
+            this.consumedTime = _data["consumedTime"] ? new Date(_data["consumedTime"].toString()) : undefined;
             this.sessionId = _data["sessionId"];
             this.description = _data["description"];
         }
@@ -7473,10 +7589,10 @@ export class PersistedGrantApiDto {
             this.subjectId = _data["subjectId"];
             this.subjectName = _data["subjectName"];
             this.clientId = _data["clientId"];
-            this.creationTime = _data["creationTime"] ? dayjs(_data["creationTime"].toString()) : undefined;
-            this.expiration = _data["expiration"] ? dayjs(_data["expiration"].toString()) : undefined;
+            this.creationTime = _data["creationTime"] ? new Date(_data["creationTime"].toString()) : undefined;
+            this.expiration = _data["expiration"] ? new Date(_data["expiration"].toString()) : undefined;
             this.data = _data["data"];
-            this.consumedTime = _data["consumedTime"] ? dayjs(_data["consumedTime"].toString()) : undefined;
+            this.consumedTime = _data["consumedTime"] ? new Date(_data["consumedTime"].toString()) : undefined;
             this.sessionId = _data["sessionId"];
             this.description = _data["description"];
         }
@@ -7765,7 +7881,7 @@ export class UserDtoOfString extends BaseUserDtoOfString {
             this.lockoutEnabled = _data["lockoutEnabled"];
             this.twoFactorEnabled = _data["twoFactorEnabled"];
             this.accessFailedCount = _data["accessFailedCount"];
-            this.lockoutEnd = _data["lockoutEnd"] ? dayjs(_data["lockoutEnd"].toString()) : undefined;
+            this.lockoutEnd = _data["lockoutEnd"] ? new Date(_data["lockoutEnd"].toString()) : undefined;
         }
     }
     static fromJS(data) {

@@ -161,8 +161,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
             clientSecret.Client = client;
 
             await DbContext.ClientSecrets.AddAsync(clientSecret);
-
-            return await AutoSaveChangesAsync();
+            
+            await AutoSaveChangesAsync();
+            return clientSecret.Id;
         }
 
         protected virtual async Task<int> AutoSaveChangesAsync()
@@ -185,7 +186,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
             clientClaim.Client = client;
             await DbContext.ClientClaims.AddAsync(clientClaim);
 
-            return await AutoSaveChangesAsync();
+            await AutoSaveChangesAsync();
+            return clientClaim.Id;
         }
 
         public virtual async Task<int> AddClientPropertyAsync(int clientId, ClientProperty clientProperty)
@@ -195,7 +197,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
             clientProperty.Client = client;
             await DbContext.ClientProperties.AddAsync(clientProperty);
 
-            return await AutoSaveChangesAsync();
+            await AutoSaveChangesAsync();
+            return clientProperty.Id;
         }
 
         public virtual async Task<(string ClientId, string ClientName)> GetClientIdAsync(int clientId)

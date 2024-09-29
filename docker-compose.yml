@@ -25,6 +25,7 @@ services:
       dockerfile: src/Skoruba.Duende.IdentityServer.Admin/Dockerfile
     container_name: skoruba-duende-identityserver-admin
     environment:
+      - VIRTUAL_PORT=8080
       - VIRTUAL_HOST=admin.skoruba.local
       - 'ConnectionStrings__ConfigurationDbConnection=Server=db;Database=IdentityServerAdmin;User Id=sa;Password=${DB_PASSWORD:-Password_123};MultipleActiveResultSets=true'
       - 'ConnectionStrings__PersistedGrantDbConnection=Server=db;Database=IdentityServerAdmin;User Id=sa;Password=${DB_PASSWORD:-Password_123};MultipleActiveResultSets=true'
@@ -63,6 +64,7 @@ services:
       dockerfile: src/Skoruba.Duende.IdentityServer.Admin.Api/Dockerfile
     container_name: skoruba-duende-identityserver-admin-api
     environment:
+      - VIRTUAL_PORT=8080
       - VIRTUAL_HOST=admin-api.skoruba.local
       - AdminApiConfiguration__RequireHttpsMetadata=false
       - 'AdminApiConfiguration__ApiBaseUrl=https://admin-api.skoruba.local'
@@ -87,6 +89,7 @@ services:
       dockerfile: src/Skoruba.Duende.IdentityServer.STS.Identity/Dockerfile
     container_name: skoruba-duende-identityserver-sts-identity
     environment:
+      - VIRTUAL_PORT=8080
       - VIRTUAL_HOST=sts.skoruba.local
       - 'ConnectionStrings__ConfigurationDbConnection=Server=db;Database=IdentityServerAdmin;User Id=sa;Password=${DB_PASSWORD:-Password_123};MultipleActiveResultSets=true'
       - 'ConnectionStrings__PersistedGrantDbConnection=Server=db;Database=IdentityServerAdmin;User Id=sa;Password=${DB_PASSWORD:-Password_123};MultipleActiveResultSets=true'
