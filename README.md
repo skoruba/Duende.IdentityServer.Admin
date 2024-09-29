@@ -22,7 +22,7 @@ The application is written in the **Asp.Net Core MVC - using .NET 8.0**
 - 🔒 **NOTE:** The project uses the default database migrations which affect your database, therefore double check the migrations according to your database provider and create a database backup
 
 ```sh
-dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::2.3.0
+dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::2.4.0
 ```
 
 ### Create new project:
@@ -779,6 +779,15 @@ It is possible to define the configuration according the client type - by defaul
 
 - [x] Fix Dashboard endpoint for getting Identity data
 - [x] Update solution to the latest version of all nuget packages, including `Duende.IdentityServer` version `7.0.5`
+
+### 2.4.0
+
+- [x] Method CanInsert..Property of the controllers always return true #235
+- [x] Skoruba.Duende.IdentityServer.Shared.Configuration - replace deprecated Microsoft.Extensions.Configuration.AzureKeyVault package with Azure.Extensions.AspNetCore.Configuration.Secrets #234
+- [x] Can't update client because "Client Id _clientId_ already exists" #227
+- [x] Migrate from Microsoft.Azure.KeyVault to the new Azure Key Vault API #224
+- [x] Docker Compose NGINX targeting wrong port #222
+- [x] Update to the latest version of Duende IdentityServer (fixed [CVE-2024-39694](https://github.com/advisories/GHSA-ff4q-64jc-gx98))
 
 ### 3.0.0
 
