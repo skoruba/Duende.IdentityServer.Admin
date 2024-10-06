@@ -22,7 +22,7 @@ The application is written in the **Asp.Net Core MVC - using .NET 8.0**
 - 🔒 **NOTE:** The project uses the default database migrations which affect your database, therefore double check the migrations according to your database provider and create a database backup
 
 ```sh
-dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::2.4.0
+dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::2.5.0
 ```
 
 ### Create new project:
@@ -788,6 +788,10 @@ It is possible to define the configuration according the client type - by defaul
 - [x] Migrate from Microsoft.Azure.KeyVault to the new Azure Key Vault API ([#224](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/224))
 - [x] Docker Compose NGINX targeting wrong port ([#222](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/222))
 - [x] Update all nuget packages to the latest versions, including Duende IdentityServer version 7.0.7. (fixed [CVE-2024-39694](https://github.com/advisories/GHSA-ff4q-64jc-gx98)) - ([#236](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/236))
+
+### 2.5.0
+
+- [x] Delete user from admin panel of admin app returns an error ([#214](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/214))
 
 ### 3.0.0
 
