@@ -95,6 +95,22 @@
                     </div>
                     <div class="row">
                         <div class="col" id="property-list">
+                            @foreach (var property in Model.Properties)
+                            {
+                                <div class="property row mt-1 mb-1">
+                                    <div class="col-sm">
+                                        <input type="text" required value="@property.Value.Name" class="form-control" id="Properties_@property.Key" name="Properties[@property.Key].Name" />
+                                        <span class="text-danger field-validation-error" data-valmsg-for="Properties[@property.Key].Name" data-valmsg-replace="true"></span>
+                                    </div>
+                                    <div class="col-sm">
+                                        <input type="text" required value="@property.Value.Value" class="form-control" id="Properties_@property.Value" name="Properties[@property.Key].Value" />
+                                        <span class="text-danger field-validation-error" data-valmsg-for="Properties[@property.Key].Value" data-valmsg-replace="true"></span>
+                                    </div>
+                                    <div class="col-sm-1 col-xs-1">
+                                        <span class="remove-property oi oi-trash btn btn-danger"></span>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                     <div class="row">
@@ -123,8 +139,8 @@
 </form>
 
 @section scripts
-	{
-<script>
-    IdentityProviders.init(@Model.Properties.Count, @Html.Raw(Json.Serialize(Model.Properties)));
-</script>
+{
+    <script>
+            IdentityProviders.init();
+    </script>
 }
