@@ -1409,7 +1409,7 @@ export interface IClientsClient {
 
     getDPoPValidationModes(): Promise<SelectItemDto[]>;
 
-    getScopes(scope: string | null | undefined, limit: number | undefined): Promise<string[]>;
+    getScopes(scope: string | null | undefined, limit: number | undefined, excludeIdentityResources: boolean | undefined, excludeApiScopes: boolean | undefined): Promise<string[]>;
 
     getGrantTypes(grant: string | null | undefined, includeObsoleteGrants: boolean | undefined, limit: number | undefined): Promise<SelectItemDto[]>;
 
@@ -1952,7 +1952,7 @@ export class ClientsClient implements IClientsClient {
         return Promise.resolve<SelectItemDto[]>(null as any);
     }
 
-    getScopes(scope: string | null | undefined, limit: number | undefined): Promise<string[]> {
+    getScopes(scope: string | null | undefined, limit: number | undefined, excludeIdentityResources: boolean | undefined, excludeApiScopes: boolean | undefined): Promise<string[]> {
         let url_ = this.baseUrl + "/api/Clients/GetScopes?";
         if (scope !== undefined && scope !== null)
             url_ += "scope=" + encodeURIComponent("" + scope) + "&";
@@ -1960,6 +1960,14 @@ export class ClientsClient implements IClientsClient {
             throw new Error("The parameter 'limit' cannot be null.");
         else if (limit !== undefined)
             url_ += "limit=" + encodeURIComponent("" + limit) + "&";
+        if (excludeIdentityResources === null)
+            throw new Error("The parameter 'excludeIdentityResources' cannot be null.");
+        else if (excludeIdentityResources !== undefined)
+            url_ += "excludeIdentityResources=" + encodeURIComponent("" + excludeIdentityResources) + "&";
+        if (excludeApiScopes === null)
+            throw new Error("The parameter 'excludeApiScopes' cannot be null.");
+        else if (excludeApiScopes !== undefined)
+            url_ += "excludeApiScopes=" + encodeURIComponent("" + excludeApiScopes) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -6215,6 +6223,7 @@ export class ApiSecretApiDto implements IApiSecretApiDto {
     value!: string;
     hashType!: string | undefined;
     expiration!: Date | undefined;
+    created!: Date;
 
     constructor(data?: IApiSecretApiDto) {
         if (data) {
@@ -6233,6 +6242,7 @@ export class ApiSecretApiDto implements IApiSecretApiDto {
             this.value = _data["value"];
             this.hashType = _data["hashType"];
             this.expiration = _data["expiration"] ? new Date(_data["expiration"].toString()) : <any>undefined;
+            this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
         }
     }
 
@@ -6251,6 +6261,7 @@ export class ApiSecretApiDto implements IApiSecretApiDto {
         data["value"] = this.value;
         data["hashType"] = this.hashType;
         data["expiration"] = this.expiration ? this.expiration.toISOString() : <any>undefined;
+        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
         return data;
     }
 }
@@ -6262,6 +6273,7 @@ export interface IApiSecretApiDto {
     value: string;
     hashType: string | undefined;
     expiration: Date | undefined;
+    created: Date;
 }
 
 export class ApiResourcePropertiesApiDto implements IApiResourcePropertiesApiDto {
@@ -7391,6 +7403,7 @@ export class ClientSecretApiDto implements IClientSecretApiDto {
     value!: string;
     hashType!: string | undefined;
     expiration!: Date | undefined;
+    created!: Date;
 
     constructor(data?: IClientSecretApiDto) {
         if (data) {
@@ -7409,6 +7422,7 @@ export class ClientSecretApiDto implements IClientSecretApiDto {
             this.value = _data["value"];
             this.hashType = _data["hashType"];
             this.expiration = _data["expiration"] ? new Date(_data["expiration"].toString()) : <any>undefined;
+            this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
         }
     }
 
@@ -7427,6 +7441,7 @@ export class ClientSecretApiDto implements IClientSecretApiDto {
         data["value"] = this.value;
         data["hashType"] = this.hashType;
         data["expiration"] = this.expiration ? this.expiration.toISOString() : <any>undefined;
+        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
         return data;
     }
 }
@@ -7438,6 +7453,7 @@ export interface IClientSecretApiDto {
     value: string;
     hashType: string | undefined;
     expiration: Date | undefined;
+    created: Date;
 }
 
 export class ClientPropertiesApiDto implements IClientPropertiesApiDto {

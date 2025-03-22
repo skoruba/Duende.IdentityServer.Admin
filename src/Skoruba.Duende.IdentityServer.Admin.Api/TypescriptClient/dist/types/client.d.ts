@@ -107,7 +107,7 @@ export interface IClientsClient {
     getTokenUsage(): Promise<SelectItemDto[]>;
     getProtocolTypes(): Promise<SelectItemDto[]>;
     getDPoPValidationModes(): Promise<SelectItemDto[]>;
-    getScopes(scope: string | null | undefined, limit: number | undefined): Promise<string[]>;
+    getScopes(scope: string | null | undefined, limit: number | undefined, excludeIdentityResources: boolean | undefined, excludeApiScopes: boolean | undefined): Promise<string[]>;
     getGrantTypes(grant: string | null | undefined, includeObsoleteGrants: boolean | undefined, limit: number | undefined): Promise<SelectItemDto[]>;
     getHashTypes(): Promise<SelectItemDto[]>;
     getSecretTypes(): Promise<SelectItemDto[]>;
@@ -155,7 +155,7 @@ export declare class ClientsClient implements IClientsClient {
     protected processGetProtocolTypes(response: Response): Promise<SelectItemDto[]>;
     getDPoPValidationModes(): Promise<SelectItemDto[]>;
     protected processGetDPoPValidationModes(response: Response): Promise<SelectItemDto[]>;
-    getScopes(scope: string | null | undefined, limit: number | undefined): Promise<string[]>;
+    getScopes(scope: string | null | undefined, limit: number | undefined, excludeIdentityResources: boolean | undefined, excludeApiScopes: boolean | undefined): Promise<string[]>;
     protected processGetScopes(response: Response): Promise<string[]>;
     getGrantTypes(grant: string | null | undefined, includeObsoleteGrants: boolean | undefined, limit: number | undefined): Promise<SelectItemDto[]>;
     protected processGetGrantTypes(response: Response): Promise<SelectItemDto[]>;
@@ -902,6 +902,7 @@ export declare class ClientSecretApiDto implements IClientSecretApiDto {
     value: string;
     hashType: string | undefined;
     expiration: Date | undefined;
+    created: Date;
     constructor(data?: IClientSecretApiDto);
     init(_data?: any): void;
     static fromJS(data: any): ClientSecretApiDto;
@@ -914,6 +915,7 @@ export interface IClientSecretApiDto {
     value: string;
     hashType: string | undefined;
     expiration: Date | undefined;
+    created: Date;
 }
 export declare class ClientPropertiesApiDto implements IClientPropertiesApiDto {
     clientProperties: ClientPropertyApiDto[] | undefined;

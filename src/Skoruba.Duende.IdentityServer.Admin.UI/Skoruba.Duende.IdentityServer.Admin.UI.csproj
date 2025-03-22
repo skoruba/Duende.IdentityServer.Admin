@@ -225,6 +225,16 @@
       </EmbeddedResource>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\dist\css\themes\morph\" />
+      <Folder Include="wwwroot\dist\css\themes\quartz\" />
+      <Folder Include="wwwroot\dist\css\themes\vapor\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="wwwroot\dist\css\themes\vapor\bootstrap.min.css" />
+    </ItemGroup>
+
 </Project>
 
 
