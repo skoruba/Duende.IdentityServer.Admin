@@ -2996,6 +2996,115 @@ export class ClientsClient implements IClientsClient {
     }
 }
 
+export interface IConfigurationIssuesClient {
+
+    get(): Promise<ConfigurationIssueDto[]>;
+
+    getSummary(): Promise<ConfigurationIssueSummaryDto>;
+}
+
+export class ConfigurationIssuesClient implements IConfigurationIssuesClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    get(): Promise<ConfigurationIssueDto[]> {
+        let url_ = this.baseUrl + "/api/ConfigurationIssues";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGet(_response);
+        });
+    }
+
+    protected processGet(response: Response): Promise<ConfigurationIssueDto[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ConfigurationIssueDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ConfigurationIssueDto[]>(null as any);
+    }
+
+    getSummary(): Promise<ConfigurationIssueSummaryDto> {
+        let url_ = this.baseUrl + "/api/ConfigurationIssues/GetSummary";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetSummary(_response);
+        });
+    }
+
+    protected processGetSummary(response: Response): Promise<ConfigurationIssueSummaryDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ConfigurationIssueSummaryDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ConfigurationIssueSummaryDto>(null as any);
+    }
+}
+
 export interface IDashboardClient {
 
     getDashboardIdentityServer(auditLogsLastNumberOfDays: number | undefined): Promise<DashboardDto>;
@@ -4166,6 +4275,84 @@ export class KeysClient implements IKeysClient {
             });
         }
         return Promise.resolve<FileResponse>(null as any);
+    }
+}
+
+export interface ILogsClient {
+
+    auditLog(event: string | null | undefined, source: string | null | undefined, category: string | null | undefined, createdDate: string | null | undefined, subjectIdentifier: string | null | undefined, subjectName: string | null | undefined, pageSize: number | undefined, page: number | undefined): Promise<AuditLogsDto>;
+}
+
+export class LogsClient implements ILogsClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    auditLog(event: string | null | undefined, source: string | null | undefined, category: string | null | undefined, createdDate: string | null | undefined, subjectIdentifier: string | null | undefined, subjectName: string | null | undefined, pageSize: number | undefined, page: number | undefined): Promise<AuditLogsDto> {
+        let url_ = this.baseUrl + "/api/Logs/AuditLog?";
+        if (event !== undefined && event !== null)
+            url_ += "Event=" + encodeURIComponent("" + event) + "&";
+        if (source !== undefined && source !== null)
+            url_ += "Source=" + encodeURIComponent("" + source) + "&";
+        if (category !== undefined && category !== null)
+            url_ += "Category=" + encodeURIComponent("" + category) + "&";
+        if (createdDate !== undefined && createdDate !== null)
+            url_ += "CreatedDate=" + encodeURIComponent("" + createdDate) + "&";
+        if (subjectIdentifier !== undefined && subjectIdentifier !== null)
+            url_ += "SubjectIdentifier=" + encodeURIComponent("" + subjectIdentifier) + "&";
+        if (subjectName !== undefined && subjectName !== null)
+            url_ += "SubjectName=" + encodeURIComponent("" + subjectName) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAuditLog(_response);
+        });
+    }
+
+    protected processAuditLog(response: Response): Promise<AuditLogsDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = AuditLogsDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<AuditLogsDto>(null as any);
     }
 }
 
@@ -7560,6 +7747,116 @@ export interface IClientClaimsApiDto {
     pageSize: number;
 }
 
+export class ConfigurationIssueDto implements IConfigurationIssueDto {
+    resourceId!: number;
+    resourceName!: string | undefined;
+    message!: ConfigurationIssueMessageEnum;
+    issueType!: ConfigurationIssueTypeView;
+    resourceType!: ConfigurationResourceType;
+
+    constructor(data?: IConfigurationIssueDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.resourceId = _data["resourceId"];
+            this.resourceName = _data["resourceName"];
+            this.message = _data["message"];
+            this.issueType = _data["issueType"];
+            this.resourceType = _data["resourceType"];
+        }
+    }
+
+    static fromJS(data: any): ConfigurationIssueDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ConfigurationIssueDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["resourceId"] = this.resourceId;
+        data["resourceName"] = this.resourceName;
+        data["message"] = this.message;
+        data["issueType"] = this.issueType;
+        data["resourceType"] = this.resourceType;
+        return data;
+    }
+}
+
+export interface IConfigurationIssueDto {
+    resourceId: number;
+    resourceName: string | undefined;
+    message: ConfigurationIssueMessageEnum;
+    issueType: ConfigurationIssueTypeView;
+    resourceType: ConfigurationResourceType;
+}
+
+export enum ConfigurationIssueMessageEnum {
+    ObsoleteImplicitGrant = 0,
+    ObsoletePasswordGrant = 1,
+    MissingPkce = 2,
+}
+
+export enum ConfigurationIssueTypeView {
+    Warning = 0,
+    Recommendation = 1,
+}
+
+export enum ConfigurationResourceType {
+    Client = 0,
+    IdentityResource = 1,
+    ApiResource = 2,
+    ApiScope = 3,
+}
+
+export class ConfigurationIssueSummaryDto implements IConfigurationIssueSummaryDto {
+    warnings!: number;
+    recommendations!: number;
+
+    constructor(data?: IConfigurationIssueSummaryDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.warnings = _data["warnings"];
+            this.recommendations = _data["recommendations"];
+        }
+    }
+
+    static fromJS(data: any): ConfigurationIssueSummaryDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ConfigurationIssueSummaryDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["warnings"] = this.warnings;
+        data["recommendations"] = this.recommendations;
+        return data;
+    }
+}
+
+export interface IConfigurationIssueSummaryDto {
+    warnings: number;
+    recommendations: number;
+}
+
 export class DashboardDto implements IDashboardDto {
     clientsTotal!: number;
     apiResourcesTotal!: number;
@@ -8158,6 +8455,138 @@ export interface IKeyApiDto {
     use: string | undefined;
     algorithm: string | undefined;
     isX509Certificate: boolean;
+}
+
+export class AuditLogsDto implements IAuditLogsDto {
+    deleteOlderThan!: Date;
+    logs!: AuditLogDto[] | undefined;
+    totalCount!: number;
+    pageSize!: number;
+
+    constructor(data?: IAuditLogsDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.deleteOlderThan = _data["deleteOlderThan"] ? new Date(_data["deleteOlderThan"].toString()) : <any>undefined;
+            if (Array.isArray(_data["logs"])) {
+                this.logs = [] as any;
+                for (let item of _data["logs"])
+                    this.logs!.push(AuditLogDto.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+            this.pageSize = _data["pageSize"];
+        }
+    }
+
+    static fromJS(data: any): AuditLogsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AuditLogsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["deleteOlderThan"] = this.deleteOlderThan ? this.deleteOlderThan.toISOString() : <any>undefined;
+        if (Array.isArray(this.logs)) {
+            data["logs"] = [];
+            for (let item of this.logs)
+                data["logs"].push(item.toJSON());
+        }
+        data["totalCount"] = this.totalCount;
+        data["pageSize"] = this.pageSize;
+        return data;
+    }
+}
+
+export interface IAuditLogsDto {
+    deleteOlderThan: Date;
+    logs: AuditLogDto[] | undefined;
+    totalCount: number;
+    pageSize: number;
+}
+
+export class AuditLogDto implements IAuditLogDto {
+    id!: number;
+    event!: string | undefined;
+    source!: string | undefined;
+    category!: string | undefined;
+    subjectIdentifier!: string | undefined;
+    subjectName!: string | undefined;
+    subjectType!: string | undefined;
+    subjectAdditionalData!: string | undefined;
+    action!: string | undefined;
+    data!: string | undefined;
+    created!: Date;
+
+    constructor(data?: IAuditLogDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.event = _data["event"];
+            this.source = _data["source"];
+            this.category = _data["category"];
+            this.subjectIdentifier = _data["subjectIdentifier"];
+            this.subjectName = _data["subjectName"];
+            this.subjectType = _data["subjectType"];
+            this.subjectAdditionalData = _data["subjectAdditionalData"];
+            this.action = _data["action"];
+            this.data = _data["data"];
+            this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): AuditLogDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AuditLogDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["event"] = this.event;
+        data["source"] = this.source;
+        data["category"] = this.category;
+        data["subjectIdentifier"] = this.subjectIdentifier;
+        data["subjectName"] = this.subjectName;
+        data["subjectType"] = this.subjectType;
+        data["subjectAdditionalData"] = this.subjectAdditionalData;
+        data["action"] = this.action;
+        data["data"] = this.data;
+        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IAuditLogDto {
+    id: number;
+    event: string | undefined;
+    source: string | undefined;
+    category: string | undefined;
+    subjectIdentifier: string | undefined;
+    subjectName: string | undefined;
+    subjectType: string | undefined;
+    subjectAdditionalData: string | undefined;
+    action: string | undefined;
+    data: string | undefined;
+    created: Date;
 }
 
 export class PersistedGrantSubjectsApiDto implements IPersistedGrantSubjectsApiDto {

@@ -5,8 +5,8 @@
 // </auto-generated>
 //----------------------
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RoleDtoOfString = exports.BaseRoleDtoOfString = exports.PersistedGrantsApiDto = exports.PersistedGrantApiDto = exports.PersistedGrantSubjectApiDto = exports.PersistedGrantSubjectsApiDto = exports.KeyApiDto = exports.KeysApiDto = exports.IdentityResourcePropertyApiDto = exports.IdentityResourcePropertiesApiDto = exports.IdentityResourceApiDto = exports.IdentityResourcesApiDto = exports.IdentityProviderApiDto = exports.IdentityProvidersApiDto = exports.DashboardIdentityDto = exports.DashboardAuditLogDto = exports.DashboardDto = exports.ClientClaimsApiDto = exports.ClientPropertiesApiDto = exports.ClientSecretApiDto = exports.ClientSecretsApiDto = exports.ClientCloneApiDto = exports.SelectItemDto = exports.ClientPropertyApiDto = exports.ClientClaimApiDto = exports.ClientApiDto = exports.ClientsApiDto = exports.ApiScopePropertyDto = exports.ApiScopeDto = exports.ApiScopePropertiesApiDto = exports.ApiScopePropertyApiDto = exports.ApiScopeApiDto = exports.ApiScopesApiDto = exports.ApiResourcePropertyApiDto = exports.ApiResourcePropertiesApiDto = exports.ApiSecretApiDto = exports.ApiSecretsApiDto = exports.ProblemDetails = exports.ApiResourceApiDto = exports.ApiResourcesApiDto = exports.UsersClient = exports.RolesClient = exports.PersistedGrantsClient = exports.KeysClient = exports.IdentityResourcesClient = exports.IdentityProvidersClient = exports.DashboardClient = exports.ClientsClient = exports.ApiScopesClient = exports.ApiResourcesClient = void 0;
-exports.SwaggerException = exports.UserChangePasswordApiDtoOfString = exports.UserProviderDeleteApiDtoOfString = exports.UserProviderApiDtoOfString = exports.UserProvidersApiDtoOfString = exports.UserClaimApiDtoOfString = exports.UserClaimsApiDtoOfString = exports.UserRoleApiDtoOfString = exports.UserRolesApiDtoOfIdentityRoleDto = exports.RoleClaimApiDtoOfString = exports.RoleClaimsApiDtoOfString = exports.IdentityUserDto = exports.UserDtoOfString = exports.BaseUserDtoOfString = exports.IdentityUsersDto = exports.UsersDtoOfIdentityUserDtoAndString = exports.IdentityRolesDto = exports.RolesDtoOfIdentityRoleDtoAndString = exports.IdentityRoleDto = void 0;
+exports.KeysApiDto = exports.IdentityResourcePropertyApiDto = exports.IdentityResourcePropertiesApiDto = exports.IdentityResourceApiDto = exports.IdentityResourcesApiDto = exports.IdentityProviderApiDto = exports.IdentityProvidersApiDto = exports.DashboardIdentityDto = exports.DashboardAuditLogDto = exports.DashboardDto = exports.ConfigurationIssueSummaryDto = exports.ConfigurationResourceType = exports.ConfigurationIssueTypeView = exports.ConfigurationIssueMessageEnum = exports.ConfigurationIssueDto = exports.ClientClaimsApiDto = exports.ClientPropertiesApiDto = exports.ClientSecretApiDto = exports.ClientSecretsApiDto = exports.ClientCloneApiDto = exports.SelectItemDto = exports.ClientPropertyApiDto = exports.ClientClaimApiDto = exports.ClientApiDto = exports.ClientsApiDto = exports.ApiScopePropertyDto = exports.ApiScopeDto = exports.ApiScopePropertiesApiDto = exports.ApiScopePropertyApiDto = exports.ApiScopeApiDto = exports.ApiScopesApiDto = exports.ApiResourcePropertyApiDto = exports.ApiResourcePropertiesApiDto = exports.ApiSecretApiDto = exports.ApiSecretsApiDto = exports.ProblemDetails = exports.ApiResourceApiDto = exports.ApiResourcesApiDto = exports.UsersClient = exports.RolesClient = exports.PersistedGrantsClient = exports.LogsClient = exports.KeysClient = exports.IdentityResourcesClient = exports.IdentityProvidersClient = exports.DashboardClient = exports.ConfigurationIssuesClient = exports.ClientsClient = exports.ApiScopesClient = exports.ApiResourcesClient = void 0;
+exports.SwaggerException = exports.UserChangePasswordApiDtoOfString = exports.UserProviderDeleteApiDtoOfString = exports.UserProviderApiDtoOfString = exports.UserProvidersApiDtoOfString = exports.UserClaimApiDtoOfString = exports.UserClaimsApiDtoOfString = exports.UserRoleApiDtoOfString = exports.UserRolesApiDtoOfIdentityRoleDto = exports.RoleClaimApiDtoOfString = exports.RoleClaimsApiDtoOfString = exports.IdentityUserDto = exports.UserDtoOfString = exports.BaseUserDtoOfString = exports.IdentityUsersDto = exports.UsersDtoOfIdentityUserDtoAndString = exports.IdentityRolesDto = exports.RolesDtoOfIdentityRoleDtoAndString = exports.IdentityRoleDto = exports.RoleDtoOfString = exports.BaseRoleDtoOfString = exports.PersistedGrantsApiDto = exports.PersistedGrantApiDto = exports.PersistedGrantSubjectApiDto = exports.PersistedGrantSubjectsApiDto = exports.AuditLogDto = exports.AuditLogsDto = exports.KeyApiDto = void 0;
 class ApiResourcesClient {
     constructor(baseUrl, http) {
         this.jsonParseReviver = undefined;
@@ -3030,6 +3030,111 @@ class ClientsClient {
     }
 }
 exports.ClientsClient = ClientsClient;
+class ConfigurationIssuesClient {
+    constructor(baseUrl, http) {
+        this.jsonParseReviver = undefined;
+        this.http = http ? http : window;
+        this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
+    }
+    get() {
+        let url_ = this.baseUrl + "/api/ConfigurationIssues";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+        return this.http.fetch(url_, options_).then((_response) => {
+            return this.processGet(_response);
+        });
+    }
+    processGet(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [];
+                    for (let item of resultData200)
+                        result200.push(ConfigurationIssueDto.fromJS(item));
+                }
+                else {
+                    result200 = null;
+                }
+                return result200;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
+    }
+    getSummary() {
+        let url_ = this.baseUrl + "/api/ConfigurationIssues/GetSummary";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+        return this.http.fetch(url_, options_).then((_response) => {
+            return this.processGetSummary(_response);
+        });
+    }
+    processGetSummary(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ConfigurationIssueSummaryDto.fromJS(resultData200);
+                return result200;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
+    }
+}
+exports.ConfigurationIssuesClient = ConfigurationIssuesClient;
 class DashboardClient {
     constructor(baseUrl, http) {
         this.jsonParseReviver = undefined;
@@ -4200,6 +4305,79 @@ class KeysClient {
     }
 }
 exports.KeysClient = KeysClient;
+class LogsClient {
+    constructor(baseUrl, http) {
+        this.jsonParseReviver = undefined;
+        this.http = http ? http : window;
+        this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
+    }
+    auditLog(event, source, category, createdDate, subjectIdentifier, subjectName, pageSize, page) {
+        let url_ = this.baseUrl + "/api/Logs/AuditLog?";
+        if (event !== undefined && event !== null)
+            url_ += "Event=" + encodeURIComponent("" + event) + "&";
+        if (source !== undefined && source !== null)
+            url_ += "Source=" + encodeURIComponent("" + source) + "&";
+        if (category !== undefined && category !== null)
+            url_ += "Category=" + encodeURIComponent("" + category) + "&";
+        if (createdDate !== undefined && createdDate !== null)
+            url_ += "CreatedDate=" + encodeURIComponent("" + createdDate) + "&";
+        if (subjectIdentifier !== undefined && subjectIdentifier !== null)
+            url_ += "SubjectIdentifier=" + encodeURIComponent("" + subjectIdentifier) + "&";
+        if (subjectName !== undefined && subjectName !== null)
+            url_ += "SubjectName=" + encodeURIComponent("" + subjectName) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+        return this.http.fetch(url_, options_).then((_response) => {
+            return this.processAuditLog(_response);
+        });
+    }
+    processAuditLog(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = AuditLogsDto.fromJS(resultData200);
+                return result200;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
+    }
+}
+exports.LogsClient = LogsClient;
 class PersistedGrantsClient {
     constructor(baseUrl, http) {
         this.jsonParseReviver = undefined;
@@ -6211,6 +6389,7 @@ class ApiSecretApiDto {
             this.value = _data["value"];
             this.hashType = _data["hashType"];
             this.expiration = _data["expiration"] ? new Date(_data["expiration"].toString()) : undefined;
+            this.created = _data["created"] ? new Date(_data["created"].toString()) : undefined;
         }
     }
     static fromJS(data) {
@@ -6227,6 +6406,7 @@ class ApiSecretApiDto {
         data["value"] = this.value;
         data["hashType"] = this.hashType;
         data["expiration"] = this.expiration ? this.expiration.toISOString() : undefined;
+        data["created"] = this.created ? this.created.toISOString() : undefined;
         return data;
     }
 }
@@ -7115,6 +7295,88 @@ class ClientClaimsApiDto {
     }
 }
 exports.ClientClaimsApiDto = ClientClaimsApiDto;
+class ConfigurationIssueDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            this.resourceId = _data["resourceId"];
+            this.resourceName = _data["resourceName"];
+            this.message = _data["message"];
+            this.issueType = _data["issueType"];
+            this.resourceType = _data["resourceType"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new ConfigurationIssueDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        data["resourceId"] = this.resourceId;
+        data["resourceName"] = this.resourceName;
+        data["message"] = this.message;
+        data["issueType"] = this.issueType;
+        data["resourceType"] = this.resourceType;
+        return data;
+    }
+}
+exports.ConfigurationIssueDto = ConfigurationIssueDto;
+var ConfigurationIssueMessageEnum;
+(function (ConfigurationIssueMessageEnum) {
+    ConfigurationIssueMessageEnum[ConfigurationIssueMessageEnum["ObsoleteImplicitGrant"] = 0] = "ObsoleteImplicitGrant";
+    ConfigurationIssueMessageEnum[ConfigurationIssueMessageEnum["ObsoletePasswordGrant"] = 1] = "ObsoletePasswordGrant";
+    ConfigurationIssueMessageEnum[ConfigurationIssueMessageEnum["MissingPkce"] = 2] = "MissingPkce";
+})(ConfigurationIssueMessageEnum || (exports.ConfigurationIssueMessageEnum = ConfigurationIssueMessageEnum = {}));
+var ConfigurationIssueTypeView;
+(function (ConfigurationIssueTypeView) {
+    ConfigurationIssueTypeView[ConfigurationIssueTypeView["Warning"] = 0] = "Warning";
+    ConfigurationIssueTypeView[ConfigurationIssueTypeView["Recommendation"] = 1] = "Recommendation";
+})(ConfigurationIssueTypeView || (exports.ConfigurationIssueTypeView = ConfigurationIssueTypeView = {}));
+var ConfigurationResourceType;
+(function (ConfigurationResourceType) {
+    ConfigurationResourceType[ConfigurationResourceType["Client"] = 0] = "Client";
+    ConfigurationResourceType[ConfigurationResourceType["IdentityResource"] = 1] = "IdentityResource";
+    ConfigurationResourceType[ConfigurationResourceType["ApiResource"] = 2] = "ApiResource";
+    ConfigurationResourceType[ConfigurationResourceType["ApiScope"] = 3] = "ApiScope";
+})(ConfigurationResourceType || (exports.ConfigurationResourceType = ConfigurationResourceType = {}));
+class ConfigurationIssueSummaryDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            this.warnings = _data["warnings"];
+            this.recommendations = _data["recommendations"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new ConfigurationIssueSummaryDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        data["warnings"] = this.warnings;
+        data["recommendations"] = this.recommendations;
+        return data;
+    }
+}
+exports.ConfigurationIssueSummaryDto = ConfigurationIssueSummaryDto;
 class DashboardDto {
     constructor(data) {
         if (data) {
@@ -7544,6 +7806,94 @@ class KeyApiDto {
     }
 }
 exports.KeyApiDto = KeyApiDto;
+class AuditLogsDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            this.deleteOlderThan = _data["deleteOlderThan"] ? new Date(_data["deleteOlderThan"].toString()) : undefined;
+            if (Array.isArray(_data["logs"])) {
+                this.logs = [];
+                for (let item of _data["logs"])
+                    this.logs.push(AuditLogDto.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+            this.pageSize = _data["pageSize"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new AuditLogsDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        data["deleteOlderThan"] = this.deleteOlderThan ? this.deleteOlderThan.toISOString() : undefined;
+        if (Array.isArray(this.logs)) {
+            data["logs"] = [];
+            for (let item of this.logs)
+                data["logs"].push(item.toJSON());
+        }
+        data["totalCount"] = this.totalCount;
+        data["pageSize"] = this.pageSize;
+        return data;
+    }
+}
+exports.AuditLogsDto = AuditLogsDto;
+class AuditLogDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            this.id = _data["id"];
+            this.event = _data["event"];
+            this.source = _data["source"];
+            this.category = _data["category"];
+            this.subjectIdentifier = _data["subjectIdentifier"];
+            this.subjectName = _data["subjectName"];
+            this.subjectType = _data["subjectType"];
+            this.subjectAdditionalData = _data["subjectAdditionalData"];
+            this.action = _data["action"];
+            this.data = _data["data"];
+            this.created = _data["created"] ? new Date(_data["created"].toString()) : undefined;
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new AuditLogDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["event"] = this.event;
+        data["source"] = this.source;
+        data["category"] = this.category;
+        data["subjectIdentifier"] = this.subjectIdentifier;
+        data["subjectName"] = this.subjectName;
+        data["subjectType"] = this.subjectType;
+        data["subjectAdditionalData"] = this.subjectAdditionalData;
+        data["action"] = this.action;
+        data["data"] = this.data;
+        data["created"] = this.created ? this.created.toISOString() : undefined;
+        return data;
+    }
+}
+exports.AuditLogDto = AuditLogDto;
 class PersistedGrantSubjectsApiDto {
     constructor(data) {
         if (data) {

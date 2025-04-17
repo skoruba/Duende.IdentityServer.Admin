@@ -13,7 +13,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Log
 
         public string Category { get; set; }
 
-        public DateTime? Created { get; set; }
+        public string CreatedDate { get; set; }
 
         public string SubjectIdentifier { get; set; }
 

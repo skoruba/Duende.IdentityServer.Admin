@@ -37,6 +37,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Extensions
             services.AddTransient<IKeyRepository, KeyRepository<TPersistedGrantDbContext>>();
             services.AddTransient<ILogRepository, LogRepository<TLogDbContext>>();
             services.AddTransient<IDashboardRepository, DashboardRepository<TConfigurationDbContext>>();
+            services.AddTransient<IConfigurationIssuesRepository, ConfigurationIssuesRepository<TConfigurationDbContext>>();
 
             //Services
             services.AddTransient<IClientService, ClientService>();
@@ -48,6 +49,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Extensions
             services.AddTransient<IKeyService, KeyService>();
             services.AddTransient<ILogService, LogService>();
             services.AddTransient<IDashboardService, DashboardService>();
+            services.AddTransient<IConfigurationIssuesService, ConfigurationIssuesService>();
 
             //Resources
             services.AddScoped<IApiResourceServiceResources, ApiResourceServiceResources>();

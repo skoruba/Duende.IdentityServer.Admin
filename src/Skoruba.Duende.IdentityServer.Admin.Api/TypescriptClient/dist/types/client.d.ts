@@ -196,6 +196,22 @@ export declare class ClientsClient implements IClientsClient {
     deleteClaim(claimId: number): Promise<FileResponse>;
     protected processDeleteClaim(response: Response): Promise<FileResponse>;
 }
+export interface IConfigurationIssuesClient {
+    get(): Promise<ConfigurationIssueDto[]>;
+    getSummary(): Promise<ConfigurationIssueSummaryDto>;
+}
+export declare class ConfigurationIssuesClient implements IConfigurationIssuesClient {
+    private http;
+    private baseUrl;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined;
+    constructor(baseUrl?: string, http?: {
+        fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
+    });
+    get(): Promise<ConfigurationIssueDto[]>;
+    protected processGet(response: Response): Promise<ConfigurationIssueDto[]>;
+    getSummary(): Promise<ConfigurationIssueSummaryDto>;
+    protected processGetSummary(response: Response): Promise<ConfigurationIssueSummaryDto>;
+}
 export interface IDashboardClient {
     getDashboardIdentityServer(auditLogsLastNumberOfDays: number | undefined): Promise<DashboardDto>;
     getDashboardIdentity(): Promise<DashboardIdentityDto>;
@@ -301,6 +317,19 @@ export declare class KeysClient implements IKeysClient {
     protected processGet2(response: Response): Promise<KeyApiDto>;
     delete(id: string): Promise<FileResponse>;
     protected processDelete(response: Response): Promise<FileResponse>;
+}
+export interface ILogsClient {
+    auditLog(event: string | null | undefined, source: string | null | undefined, category: string | null | undefined, createdDate: string | null | undefined, subjectIdentifier: string | null | undefined, subjectName: string | null | undefined, pageSize: number | undefined, page: number | undefined): Promise<AuditLogsDto>;
+}
+export declare class LogsClient implements ILogsClient {
+    private http;
+    private baseUrl;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined;
+    constructor(baseUrl?: string, http?: {
+        fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
+    });
+    auditLog(event: string | null | undefined, source: string | null | undefined, category: string | null | undefined, createdDate: string | null | undefined, subjectIdentifier: string | null | undefined, subjectName: string | null | undefined, pageSize: number | undefined, page: number | undefined): Promise<AuditLogsDto>;
+    protected processAuditLog(response: Response): Promise<AuditLogsDto>;
 }
 export interface IPersistedGrantsClient {
     get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<PersistedGrantSubjectsApiDto>;
@@ -514,6 +543,7 @@ export declare class ApiSecretApiDto implements IApiSecretApiDto {
     value: string;
     hashType: string | undefined;
     expiration: Date | undefined;
+    created: Date;
     constructor(data?: IApiSecretApiDto);
     init(_data?: any): void;
     static fromJS(data: any): ApiSecretApiDto;
@@ -526,6 +556,7 @@ export interface IApiSecretApiDto {
     value: string;
     hashType: string | undefined;
     expiration: Date | undefined;
+    created: Date;
 }
 export declare class ApiResourcePropertiesApiDto implements IApiResourcePropertiesApiDto {
     apiResourceProperties: ApiResourcePropertyApiDto[] | undefined;
@@ -945,6 +976,51 @@ export interface IClientClaimsApiDto {
     totalCount: number;
     pageSize: number;
 }
+export declare class ConfigurationIssueDto implements IConfigurationIssueDto {
+    resourceId: number;
+    resourceName: string | undefined;
+    message: ConfigurationIssueMessageEnum;
+    issueType: ConfigurationIssueTypeView;
+    resourceType: ConfigurationResourceType;
+    constructor(data?: IConfigurationIssueDto);
+    init(_data?: any): void;
+    static fromJS(data: any): ConfigurationIssueDto;
+    toJSON(data?: any): any;
+}
+export interface IConfigurationIssueDto {
+    resourceId: number;
+    resourceName: string | undefined;
+    message: ConfigurationIssueMessageEnum;
+    issueType: ConfigurationIssueTypeView;
+    resourceType: ConfigurationResourceType;
+}
+export declare enum ConfigurationIssueMessageEnum {
+    ObsoleteImplicitGrant = 0,
+    ObsoletePasswordGrant = 1,
+    MissingPkce = 2
+}
+export declare enum ConfigurationIssueTypeView {
+    Warning = 0,
+    Recommendation = 1
+}
+export declare enum ConfigurationResourceType {
+    Client = 0,
+    IdentityResource = 1,
+    ApiResource = 2,
+    ApiScope = 3
+}
+export declare class ConfigurationIssueSummaryDto implements IConfigurationIssueSummaryDto {
+    warnings: number;
+    recommendations: number;
+    constructor(data?: IConfigurationIssueSummaryDto);
+    init(_data?: any): void;
+    static fromJS(data: any): ConfigurationIssueSummaryDto;
+    toJSON(data?: any): any;
+}
+export interface IConfigurationIssueSummaryDto {
+    warnings: number;
+    recommendations: number;
+}
 export declare class DashboardDto implements IDashboardDto {
     clientsTotal: number;
     apiResourcesTotal: number;
@@ -1130,6 +1206,52 @@ export interface IKeyApiDto {
     use: string | undefined;
     algorithm: string | undefined;
     isX509Certificate: boolean;
+}
+export declare class AuditLogsDto implements IAuditLogsDto {
+    deleteOlderThan: Date;
+    logs: AuditLogDto[] | undefined;
+    totalCount: number;
+    pageSize: number;
+    constructor(data?: IAuditLogsDto);
+    init(_data?: any): void;
+    static fromJS(data: any): AuditLogsDto;
+    toJSON(data?: any): any;
+}
+export interface IAuditLogsDto {
+    deleteOlderThan: Date;
+    logs: AuditLogDto[] | undefined;
+    totalCount: number;
+    pageSize: number;
+}
+export declare class AuditLogDto implements IAuditLogDto {
+    id: number;
+    event: string | undefined;
+    source: string | undefined;
+    category: string | undefined;
+    subjectIdentifier: string | undefined;
+    subjectName: string | undefined;
+    subjectType: string | undefined;
+    subjectAdditionalData: string | undefined;
+    action: string | undefined;
+    data: string | undefined;
+    created: Date;
+    constructor(data?: IAuditLogDto);
+    init(_data?: any): void;
+    static fromJS(data: any): AuditLogDto;
+    toJSON(data?: any): any;
+}
+export interface IAuditLogDto {
+    id: number;
+    event: string | undefined;
+    source: string | undefined;
+    category: string | undefined;
+    subjectIdentifier: string | undefined;
+    subjectName: string | undefined;
+    subjectType: string | undefined;
+    subjectAdditionalData: string | undefined;
+    action: string | undefined;
+    data: string | undefined;
+    created: Date;
 }
 export declare class PersistedGrantSubjectsApiDto implements IPersistedGrantSubjectsApiDto {
     totalCount: number;

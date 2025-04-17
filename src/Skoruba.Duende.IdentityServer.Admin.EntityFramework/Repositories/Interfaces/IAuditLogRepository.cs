@@ -13,7 +13,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Inter
 {
     public interface IAuditLogRepository<TAuditLog> where TAuditLog : AuditLog
     {
-        Task<PagedList<TAuditLog>> GetAsync(string @event, string source, string category, DateTime? created, string subjectIdentifier, string subjectName, int page = 1, int pageSize = 10);
+        Task<PagedList<TAuditLog>> GetAsync(string @event, string source, string category, DateOnly? created, string subjectIdentifier, string subjectName, int page = 1, int pageSize = 10);
 
         Task<List<DashboardAuditLogDataView>> GetDashboardAuditLogsAsync(int lastNumberOfDays,
             CancellationToken cancellationToken = default);
