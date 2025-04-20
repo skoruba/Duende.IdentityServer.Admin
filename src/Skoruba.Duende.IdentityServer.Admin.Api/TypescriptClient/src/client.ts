@@ -8,6 +8,18 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
+export class WebApiClientBase {
+    protected async transformOptions(options: RequestInit): Promise<RequestInit> {
+        const headers = new Headers(options.headers);
+        headers.set("X-CSRF", "1");
+
+        return {
+            ...options,
+            headers,
+        };
+    }
+}
+
 export interface IApiResourcesClient {
 
     get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ApiResourcesApiDto>;
@@ -41,12 +53,13 @@ export interface IApiResourcesClient {
     deleteProperty(propertyId: number): Promise<void>;
 }
 
-export class ApiResourcesClient implements IApiResourcesClient {
+export class ApiResourcesClient extends WebApiClientBase implements IApiResourcesClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
         this.http = http ? http : window as any;
         this.baseUrl = baseUrl ?? "";
     }
@@ -72,7 +85,9 @@ export class ApiResourcesClient implements IApiResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGet(_response);
         });
     }
@@ -117,7 +132,9 @@ export class ApiResourcesClient implements IApiResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPost(_response);
         });
     }
@@ -166,7 +183,9 @@ export class ApiResourcesClient implements IApiResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPut(_response);
         });
     }
@@ -218,7 +237,9 @@ export class ApiResourcesClient implements IApiResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processCanInsertApiResource(_response);
         });
     }
@@ -267,7 +288,9 @@ export class ApiResourcesClient implements IApiResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processCanInsertApiResourceProperty(_response);
         });
     }
@@ -313,7 +336,9 @@ export class ApiResourcesClient implements IApiResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGet2(_response);
         });
     }
@@ -357,7 +382,9 @@ export class ApiResourcesClient implements IApiResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processDelete(_response);
         });
     }
@@ -414,7 +441,9 @@ export class ApiResourcesClient implements IApiResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetSecrets(_response);
         });
     }
@@ -463,7 +492,9 @@ export class ApiResourcesClient implements IApiResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPostSecret(_response);
         });
     }
@@ -515,7 +546,9 @@ export class ApiResourcesClient implements IApiResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetSecret(_response);
         });
     }
@@ -559,7 +592,9 @@ export class ApiResourcesClient implements IApiResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processDeleteSecret(_response);
         });
     }
@@ -616,7 +651,9 @@ export class ApiResourcesClient implements IApiResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetProperties(_response);
         });
     }
@@ -672,7 +709,9 @@ export class ApiResourcesClient implements IApiResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPostProperty(_response);
         });
     }
@@ -724,7 +763,9 @@ export class ApiResourcesClient implements IApiResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetProperty(_response);
         });
     }
@@ -768,7 +809,9 @@ export class ApiResourcesClient implements IApiResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processDeleteProperty(_response);
         });
     }
@@ -829,12 +872,13 @@ export interface IApiScopesClient {
     deleteProperty(propertyId: number): Promise<void>;
 }
 
-export class ApiScopesClient implements IApiScopesClient {
+export class ApiScopesClient extends WebApiClientBase implements IApiScopesClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
         this.http = http ? http : window as any;
         this.baseUrl = baseUrl ?? "";
     }
@@ -860,7 +904,9 @@ export class ApiScopesClient implements IApiScopesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetScopes(_response);
         });
     }
@@ -906,7 +952,9 @@ export class ApiScopesClient implements IApiScopesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPostScope(_response);
         });
     }
@@ -958,7 +1006,9 @@ export class ApiScopesClient implements IApiScopesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPutScope(_response);
         });
     }
@@ -1010,7 +1060,9 @@ export class ApiScopesClient implements IApiScopesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processCanInsertApiScope(_response);
         });
     }
@@ -1059,7 +1111,9 @@ export class ApiScopesClient implements IApiScopesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processCanInsertApiScopeProperty(_response);
         });
     }
@@ -1105,7 +1159,9 @@ export class ApiScopesClient implements IApiScopesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetScope(_response);
         });
     }
@@ -1149,7 +1205,9 @@ export class ApiScopesClient implements IApiScopesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processDeleteScope(_response);
         });
     }
@@ -1206,7 +1264,9 @@ export class ApiScopesClient implements IApiScopesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetScopeProperties(_response);
         });
     }
@@ -1255,7 +1315,9 @@ export class ApiScopesClient implements IApiScopesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPostProperty(_response);
         });
     }
@@ -1307,7 +1369,9 @@ export class ApiScopesClient implements IApiScopesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetProperty(_response);
         });
     }
@@ -1351,7 +1415,9 @@ export class ApiScopesClient implements IApiScopesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processDeleteProperty(_response);
         });
     }
@@ -1450,12 +1516,13 @@ export interface IClientsClient {
     deleteClaim(claimId: number): Promise<FileResponse>;
 }
 
-export class ClientsClient implements IClientsClient {
+export class ClientsClient extends WebApiClientBase implements IClientsClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
         this.http = http ? http : window as any;
         this.baseUrl = baseUrl ?? "";
     }
@@ -1481,7 +1548,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGet(_response);
         });
     }
@@ -1527,7 +1596,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPost(_response);
         });
     }
@@ -1579,7 +1650,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPut(_response);
         });
     }
@@ -1628,7 +1701,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGet2(_response);
         });
     }
@@ -1672,7 +1747,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processDelete(_response);
         });
     }
@@ -1718,7 +1795,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetAccessTokenTypes(_response);
         });
     }
@@ -1767,7 +1846,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetTokenExpirations(_response);
         });
     }
@@ -1816,7 +1897,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetTokenUsage(_response);
         });
     }
@@ -1865,7 +1948,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetProtocolTypes(_response);
         });
     }
@@ -1914,7 +1999,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetDPoPValidationModes(_response);
         });
     }
@@ -1977,7 +2064,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetScopes(_response);
         });
     }
@@ -2036,7 +2125,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetGrantTypes(_response);
         });
     }
@@ -2085,7 +2176,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetHashTypes(_response);
         });
     }
@@ -2134,7 +2227,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetSecretTypes(_response);
         });
     }
@@ -2189,7 +2284,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetStandardClaims(_response);
         });
     }
@@ -2244,7 +2341,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetSigningAlgorithms(_response);
         });
     }
@@ -2303,7 +2402,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processCanInsertClient(_response);
         });
     }
@@ -2350,7 +2451,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPostClientClone(_response);
         });
     }
@@ -2410,7 +2513,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetSecrets(_response);
         });
     }
@@ -2459,7 +2564,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPostSecret(_response);
         });
     }
@@ -2511,7 +2618,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetSecret(_response);
         });
     }
@@ -2555,7 +2664,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processDeleteSecret(_response);
         });
     }
@@ -2612,7 +2723,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetProperties(_response);
         });
     }
@@ -2661,7 +2774,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPostProperty(_response);
         });
     }
@@ -2713,7 +2828,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetProperty(_response);
         });
     }
@@ -2757,7 +2874,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processDeleteProperty(_response);
         });
     }
@@ -2814,7 +2933,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetClaims(_response);
         });
     }
@@ -2863,7 +2984,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPostClaim(_response);
         });
     }
@@ -2915,7 +3038,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetClaim(_response);
         });
     }
@@ -2960,7 +3085,9 @@ export class ClientsClient implements IClientsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processDeleteClaim(_response);
         });
     }
@@ -3003,12 +3130,13 @@ export interface IConfigurationIssuesClient {
     getSummary(): Promise<ConfigurationIssueSummaryDto>;
 }
 
-export class ConfigurationIssuesClient implements IConfigurationIssuesClient {
+export class ConfigurationIssuesClient extends WebApiClientBase implements IConfigurationIssuesClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
         this.http = http ? http : window as any;
         this.baseUrl = baseUrl ?? "";
     }
@@ -3024,7 +3152,9 @@ export class ConfigurationIssuesClient implements IConfigurationIssuesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGet(_response);
         });
     }
@@ -3073,7 +3203,9 @@ export class ConfigurationIssuesClient implements IConfigurationIssuesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetSummary(_response);
         });
     }
@@ -3112,12 +3244,13 @@ export interface IDashboardClient {
     getDashboardIdentity(): Promise<DashboardIdentityDto>;
 }
 
-export class DashboardClient implements IDashboardClient {
+export class DashboardClient extends WebApiClientBase implements IDashboardClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
         this.http = http ? http : window as any;
         this.baseUrl = baseUrl ?? "";
     }
@@ -3137,7 +3270,9 @@ export class DashboardClient implements IDashboardClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetDashboardIdentityServer(_response);
         });
     }
@@ -3179,7 +3314,9 @@ export class DashboardClient implements IDashboardClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetDashboardIdentity(_response);
         });
     }
@@ -3226,12 +3363,13 @@ export interface IIdentityProvidersClient {
     delete(id: number): Promise<FileResponse>;
 }
 
-export class IdentityProvidersClient implements IIdentityProvidersClient {
+export class IdentityProvidersClient extends WebApiClientBase implements IIdentityProvidersClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
         this.http = http ? http : window as any;
         this.baseUrl = baseUrl ?? "";
     }
@@ -3257,7 +3395,9 @@ export class IdentityProvidersClient implements IIdentityProvidersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGet(_response);
         });
     }
@@ -3302,7 +3442,9 @@ export class IdentityProvidersClient implements IIdentityProvidersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPost(_response);
         });
     }
@@ -3352,7 +3494,9 @@ export class IdentityProvidersClient implements IIdentityProvidersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPut(_response);
         });
     }
@@ -3404,7 +3548,9 @@ export class IdentityProvidersClient implements IIdentityProvidersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processCanInsertIdentityProvider(_response);
         });
     }
@@ -3450,7 +3596,9 @@ export class IdentityProvidersClient implements IIdentityProvidersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGet2(_response);
         });
     }
@@ -3495,7 +3643,9 @@ export class IdentityProvidersClient implements IIdentityProvidersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processDelete(_response);
         });
     }
@@ -3556,12 +3706,13 @@ export interface IIdentityResourcesClient {
     deleteProperty(propertyId: number): Promise<void>;
 }
 
-export class IdentityResourcesClient implements IIdentityResourcesClient {
+export class IdentityResourcesClient extends WebApiClientBase implements IIdentityResourcesClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
         this.http = http ? http : window as any;
         this.baseUrl = baseUrl ?? "";
     }
@@ -3587,7 +3738,9 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGet(_response);
         });
     }
@@ -3633,7 +3786,9 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPost(_response);
         });
     }
@@ -3685,7 +3840,9 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPut(_response);
         });
     }
@@ -3734,7 +3891,9 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGet2(_response);
         });
     }
@@ -3778,7 +3937,9 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processDelete(_response);
         });
     }
@@ -3830,7 +3991,9 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processCanInsertIdentityResource(_response);
         });
     }
@@ -3879,7 +4042,9 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processCanInsertIdentityResourceProperty(_response);
         });
     }
@@ -3933,7 +4098,9 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetProperties(_response);
         });
     }
@@ -3982,7 +4149,9 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPostProperty(_response);
         });
     }
@@ -4034,7 +4203,9 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetProperty(_response);
         });
     }
@@ -4078,7 +4249,9 @@ export class IdentityResourcesClient implements IIdentityResourcesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processDeleteProperty(_response);
         });
     }
@@ -4123,12 +4296,13 @@ export interface IKeysClient {
     delete(id: string): Promise<FileResponse>;
 }
 
-export class KeysClient implements IKeysClient {
+export class KeysClient extends WebApiClientBase implements IKeysClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
         this.http = http ? http : window as any;
         this.baseUrl = baseUrl ?? "";
     }
@@ -4152,7 +4326,9 @@ export class KeysClient implements IKeysClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGet(_response);
         });
     }
@@ -4197,7 +4373,9 @@ export class KeysClient implements IKeysClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGet2(_response);
         });
     }
@@ -4242,7 +4420,9 @@ export class KeysClient implements IKeysClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processDelete(_response);
         });
     }
@@ -4283,12 +4463,13 @@ export interface ILogsClient {
     auditLog(event: string | null | undefined, source: string | null | undefined, category: string | null | undefined, createdDate: string | null | undefined, subjectIdentifier: string | null | undefined, subjectName: string | null | undefined, pageSize: number | undefined, page: number | undefined): Promise<AuditLogsDto>;
 }
 
-export class LogsClient implements ILogsClient {
+export class LogsClient extends WebApiClientBase implements ILogsClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
         this.http = http ? http : window as any;
         this.baseUrl = baseUrl ?? "";
     }
@@ -4324,7 +4505,9 @@ export class LogsClient implements ILogsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processAuditLog(_response);
         });
     }
@@ -4369,12 +4552,13 @@ export interface IPersistedGrantsClient {
     deleteBySubject(subjectId: string): Promise<FileResponse>;
 }
 
-export class PersistedGrantsClient implements IPersistedGrantsClient {
+export class PersistedGrantsClient extends WebApiClientBase implements IPersistedGrantsClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
         this.http = http ? http : window as any;
         this.baseUrl = baseUrl ?? "";
     }
@@ -4400,7 +4584,9 @@ export class PersistedGrantsClient implements IPersistedGrantsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGet(_response);
         });
     }
@@ -4445,7 +4631,9 @@ export class PersistedGrantsClient implements IPersistedGrantsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGet2(_response);
         });
     }
@@ -4490,7 +4678,9 @@ export class PersistedGrantsClient implements IPersistedGrantsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processDelete(_response);
         });
     }
@@ -4547,7 +4737,9 @@ export class PersistedGrantsClient implements IPersistedGrantsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetBySubject(_response);
         });
     }
@@ -4592,7 +4784,9 @@ export class PersistedGrantsClient implements IPersistedGrantsClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processDeleteBySubject(_response);
         });
     }
@@ -4651,12 +4845,13 @@ export interface IRolesClient {
     putRoleClaims(roleClaims: RoleClaimApiDtoOfString): Promise<FileResponse>;
 }
 
-export class RolesClient implements IRolesClient {
+export class RolesClient extends WebApiClientBase implements IRolesClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
         this.http = http ? http : window as any;
         this.baseUrl = baseUrl ?? "";
     }
@@ -4675,7 +4870,9 @@ export class RolesClient implements IRolesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGet(_response);
         });
     }
@@ -4720,7 +4917,9 @@ export class RolesClient implements IRolesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processDelete(_response);
         });
     }
@@ -4776,7 +4975,9 @@ export class RolesClient implements IRolesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGet2(_response);
         });
     }
@@ -4822,7 +5023,9 @@ export class RolesClient implements IRolesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPost(_response);
         });
     }
@@ -4875,7 +5078,9 @@ export class RolesClient implements IRolesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPut(_response);
         });
     }
@@ -4934,7 +5139,9 @@ export class RolesClient implements IRolesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetRoleUsers(_response);
         });
     }
@@ -4987,7 +5194,9 @@ export class RolesClient implements IRolesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetRoleClaims(_response);
         });
     }
@@ -5036,7 +5245,9 @@ export class RolesClient implements IRolesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processDeleteRoleClaims(_response);
         });
     }
@@ -5086,7 +5297,9 @@ export class RolesClient implements IRolesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPostRoleClaims(_response);
         });
     }
@@ -5136,7 +5349,9 @@ export class RolesClient implements IRolesClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPutRoleClaims(_response);
         });
     }
@@ -5211,12 +5426,13 @@ export interface IUsersClient {
     getClaimUsers2(claimType: string, page: number | undefined, pageSize: number | undefined): Promise<IdentityUsersDto>;
 }
 
-export class UsersClient implements IUsersClient {
+export class UsersClient extends WebApiClientBase implements IUsersClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
         this.http = http ? http : window as any;
         this.baseUrl = baseUrl ?? "";
     }
@@ -5235,7 +5451,9 @@ export class UsersClient implements IUsersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGet(_response);
         });
     }
@@ -5280,7 +5498,9 @@ export class UsersClient implements IUsersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processDelete(_response);
         });
     }
@@ -5336,7 +5556,9 @@ export class UsersClient implements IUsersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGet2(_response);
         });
     }
@@ -5382,7 +5604,9 @@ export class UsersClient implements IUsersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPost(_response);
         });
     }
@@ -5435,7 +5659,9 @@ export class UsersClient implements IUsersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPut(_response);
         });
     }
@@ -5492,7 +5718,9 @@ export class UsersClient implements IUsersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetUserRoles(_response);
         });
     }
@@ -5538,7 +5766,9 @@ export class UsersClient implements IUsersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPostUserRoles(_response);
         });
     }
@@ -5588,7 +5818,9 @@ export class UsersClient implements IUsersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processDeleteUserRoles(_response);
         });
     }
@@ -5645,7 +5877,9 @@ export class UsersClient implements IUsersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetUserClaims(_response);
         });
     }
@@ -5694,7 +5928,9 @@ export class UsersClient implements IUsersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processDeleteUserClaims(_response);
         });
     }
@@ -5744,7 +5980,9 @@ export class UsersClient implements IUsersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPostUserClaims(_response);
         });
     }
@@ -5794,7 +6032,9 @@ export class UsersClient implements IUsersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPutUserClaims(_response);
         });
     }
@@ -5843,7 +6083,9 @@ export class UsersClient implements IUsersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetUserProviders(_response);
         });
     }
@@ -5889,7 +6131,9 @@ export class UsersClient implements IUsersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processDeleteUserProviders(_response);
         });
     }
@@ -5939,7 +6183,9 @@ export class UsersClient implements IUsersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPostChangePassword(_response);
         });
     }
@@ -5998,7 +6244,9 @@ export class UsersClient implements IUsersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetRoleClaims(_response);
         });
     }
@@ -6054,7 +6302,9 @@ export class UsersClient implements IUsersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetClaimUsers(_response);
         });
     }
@@ -6107,7 +6357,9 @@ export class UsersClient implements IUsersClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGetClaimUsers2(_response);
         });
     }

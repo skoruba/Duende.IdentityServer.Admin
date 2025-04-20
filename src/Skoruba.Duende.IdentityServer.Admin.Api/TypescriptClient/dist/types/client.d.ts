@@ -1,3 +1,6 @@
+export declare class WebApiClientBase {
+    protected transformOptions(options: RequestInit): Promise<RequestInit>;
+}
 export interface IApiResourcesClient {
     get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ApiResourcesApiDto>;
     post(apiResourceApi: ApiResourceApiDto): Promise<void>;
@@ -15,7 +18,7 @@ export interface IApiResourcesClient {
     getProperty(propertyId: number): Promise<ApiResourcePropertyApiDto>;
     deleteProperty(propertyId: number): Promise<void>;
 }
-export declare class ApiResourcesClient implements IApiResourcesClient {
+export declare class ApiResourcesClient extends WebApiClientBase implements IApiResourcesClient {
     private http;
     private baseUrl;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined;
@@ -66,7 +69,7 @@ export interface IApiScopesClient {
     getProperty(propertyId: number): Promise<ApiScopePropertyApiDto>;
     deleteProperty(propertyId: number): Promise<void>;
 }
-export declare class ApiScopesClient implements IApiScopesClient {
+export declare class ApiScopesClient extends WebApiClientBase implements IApiScopesClient {
     private http;
     private baseUrl;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined;
@@ -128,7 +131,7 @@ export interface IClientsClient {
     getClaim(claimId: number): Promise<ClientClaimApiDto>;
     deleteClaim(claimId: number): Promise<FileResponse>;
 }
-export declare class ClientsClient implements IClientsClient {
+export declare class ClientsClient extends WebApiClientBase implements IClientsClient {
     private http;
     private baseUrl;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined;
@@ -200,7 +203,7 @@ export interface IConfigurationIssuesClient {
     get(): Promise<ConfigurationIssueDto[]>;
     getSummary(): Promise<ConfigurationIssueSummaryDto>;
 }
-export declare class ConfigurationIssuesClient implements IConfigurationIssuesClient {
+export declare class ConfigurationIssuesClient extends WebApiClientBase implements IConfigurationIssuesClient {
     private http;
     private baseUrl;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined;
@@ -216,7 +219,7 @@ export interface IDashboardClient {
     getDashboardIdentityServer(auditLogsLastNumberOfDays: number | undefined): Promise<DashboardDto>;
     getDashboardIdentity(): Promise<DashboardIdentityDto>;
 }
-export declare class DashboardClient implements IDashboardClient {
+export declare class DashboardClient extends WebApiClientBase implements IDashboardClient {
     private http;
     private baseUrl;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined;
@@ -236,7 +239,7 @@ export interface IIdentityProvidersClient {
     get2(id: number): Promise<IdentityProviderApiDto>;
     delete(id: number): Promise<FileResponse>;
 }
-export declare class IdentityProvidersClient implements IIdentityProvidersClient {
+export declare class IdentityProvidersClient extends WebApiClientBase implements IIdentityProvidersClient {
     private http;
     private baseUrl;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined;
@@ -269,7 +272,7 @@ export interface IIdentityResourcesClient {
     getProperty(propertyId: number): Promise<IdentityResourcePropertyApiDto>;
     deleteProperty(propertyId: number): Promise<void>;
 }
-export declare class IdentityResourcesClient implements IIdentityResourcesClient {
+export declare class IdentityResourcesClient extends WebApiClientBase implements IIdentityResourcesClient {
     private http;
     private baseUrl;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined;
@@ -304,7 +307,7 @@ export interface IKeysClient {
     get2(id: string): Promise<KeyApiDto>;
     delete(id: string): Promise<FileResponse>;
 }
-export declare class KeysClient implements IKeysClient {
+export declare class KeysClient extends WebApiClientBase implements IKeysClient {
     private http;
     private baseUrl;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined;
@@ -321,7 +324,7 @@ export declare class KeysClient implements IKeysClient {
 export interface ILogsClient {
     auditLog(event: string | null | undefined, source: string | null | undefined, category: string | null | undefined, createdDate: string | null | undefined, subjectIdentifier: string | null | undefined, subjectName: string | null | undefined, pageSize: number | undefined, page: number | undefined): Promise<AuditLogsDto>;
 }
-export declare class LogsClient implements ILogsClient {
+export declare class LogsClient extends WebApiClientBase implements ILogsClient {
     private http;
     private baseUrl;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined;
@@ -338,7 +341,7 @@ export interface IPersistedGrantsClient {
     getBySubject(subjectId: string, page: number | undefined, pageSize: number | undefined): Promise<PersistedGrantsApiDto>;
     deleteBySubject(subjectId: string): Promise<FileResponse>;
 }
-export declare class PersistedGrantsClient implements IPersistedGrantsClient {
+export declare class PersistedGrantsClient extends WebApiClientBase implements IPersistedGrantsClient {
     private http;
     private baseUrl;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined;
@@ -368,7 +371,7 @@ export interface IRolesClient {
     postRoleClaims(roleClaims: RoleClaimApiDtoOfString): Promise<FileResponse>;
     putRoleClaims(roleClaims: RoleClaimApiDtoOfString): Promise<FileResponse>;
 }
-export declare class RolesClient implements IRolesClient {
+export declare class RolesClient extends WebApiClientBase implements IRolesClient {
     private http;
     private baseUrl;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined;
@@ -416,7 +419,7 @@ export interface IUsersClient {
     getClaimUsers(claimType: string, claimValue: string, page: number | undefined, pageSize: number | undefined): Promise<IdentityUsersDto>;
     getClaimUsers2(claimType: string, page: number | undefined, pageSize: number | undefined): Promise<IdentityUsersDto>;
 }
-export declare class UsersClient implements IUsersClient {
+export declare class UsersClient extends WebApiClientBase implements IUsersClient {
     private http;
     private baseUrl;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined;

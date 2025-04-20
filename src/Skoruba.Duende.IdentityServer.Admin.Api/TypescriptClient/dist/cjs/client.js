@@ -4,11 +4,34 @@
 //     Generated using the NSwag toolchain v14.1.0.0 (NJsonSchema v11.0.2.0 (Newtonsoft.Json v13.0.0.0)) (http://NSwag.org)
 // </auto-generated>
 //----------------------
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.KeysApiDto = exports.IdentityResourcePropertyApiDto = exports.IdentityResourcePropertiesApiDto = exports.IdentityResourceApiDto = exports.IdentityResourcesApiDto = exports.IdentityProviderApiDto = exports.IdentityProvidersApiDto = exports.DashboardIdentityDto = exports.DashboardAuditLogDto = exports.DashboardDto = exports.ConfigurationIssueSummaryDto = exports.ConfigurationResourceType = exports.ConfigurationIssueTypeView = exports.ConfigurationIssueMessageEnum = exports.ConfigurationIssueDto = exports.ClientClaimsApiDto = exports.ClientPropertiesApiDto = exports.ClientSecretApiDto = exports.ClientSecretsApiDto = exports.ClientCloneApiDto = exports.SelectItemDto = exports.ClientPropertyApiDto = exports.ClientClaimApiDto = exports.ClientApiDto = exports.ClientsApiDto = exports.ApiScopePropertyDto = exports.ApiScopeDto = exports.ApiScopePropertiesApiDto = exports.ApiScopePropertyApiDto = exports.ApiScopeApiDto = exports.ApiScopesApiDto = exports.ApiResourcePropertyApiDto = exports.ApiResourcePropertiesApiDto = exports.ApiSecretApiDto = exports.ApiSecretsApiDto = exports.ProblemDetails = exports.ApiResourceApiDto = exports.ApiResourcesApiDto = exports.UsersClient = exports.RolesClient = exports.PersistedGrantsClient = exports.LogsClient = exports.KeysClient = exports.IdentityResourcesClient = exports.IdentityProvidersClient = exports.DashboardClient = exports.ConfigurationIssuesClient = exports.ClientsClient = exports.ApiScopesClient = exports.ApiResourcesClient = void 0;
-exports.SwaggerException = exports.UserChangePasswordApiDtoOfString = exports.UserProviderDeleteApiDtoOfString = exports.UserProviderApiDtoOfString = exports.UserProvidersApiDtoOfString = exports.UserClaimApiDtoOfString = exports.UserClaimsApiDtoOfString = exports.UserRoleApiDtoOfString = exports.UserRolesApiDtoOfIdentityRoleDto = exports.RoleClaimApiDtoOfString = exports.RoleClaimsApiDtoOfString = exports.IdentityUserDto = exports.UserDtoOfString = exports.BaseUserDtoOfString = exports.IdentityUsersDto = exports.UsersDtoOfIdentityUserDtoAndString = exports.IdentityRolesDto = exports.RolesDtoOfIdentityRoleDtoAndString = exports.IdentityRoleDto = exports.RoleDtoOfString = exports.BaseRoleDtoOfString = exports.PersistedGrantsApiDto = exports.PersistedGrantApiDto = exports.PersistedGrantSubjectApiDto = exports.PersistedGrantSubjectsApiDto = exports.AuditLogDto = exports.AuditLogsDto = exports.KeyApiDto = void 0;
-class ApiResourcesClient {
+exports.IdentityResourcePropertyApiDto = exports.IdentityResourcePropertiesApiDto = exports.IdentityResourceApiDto = exports.IdentityResourcesApiDto = exports.IdentityProviderApiDto = exports.IdentityProvidersApiDto = exports.DashboardIdentityDto = exports.DashboardAuditLogDto = exports.DashboardDto = exports.ConfigurationIssueSummaryDto = exports.ConfigurationResourceType = exports.ConfigurationIssueTypeView = exports.ConfigurationIssueMessageEnum = exports.ConfigurationIssueDto = exports.ClientClaimsApiDto = exports.ClientPropertiesApiDto = exports.ClientSecretApiDto = exports.ClientSecretsApiDto = exports.ClientCloneApiDto = exports.SelectItemDto = exports.ClientPropertyApiDto = exports.ClientClaimApiDto = exports.ClientApiDto = exports.ClientsApiDto = exports.ApiScopePropertyDto = exports.ApiScopeDto = exports.ApiScopePropertiesApiDto = exports.ApiScopePropertyApiDto = exports.ApiScopeApiDto = exports.ApiScopesApiDto = exports.ApiResourcePropertyApiDto = exports.ApiResourcePropertiesApiDto = exports.ApiSecretApiDto = exports.ApiSecretsApiDto = exports.ProblemDetails = exports.ApiResourceApiDto = exports.ApiResourcesApiDto = exports.UsersClient = exports.RolesClient = exports.PersistedGrantsClient = exports.LogsClient = exports.KeysClient = exports.IdentityResourcesClient = exports.IdentityProvidersClient = exports.DashboardClient = exports.ConfigurationIssuesClient = exports.ClientsClient = exports.ApiScopesClient = exports.ApiResourcesClient = exports.WebApiClientBase = void 0;
+exports.SwaggerException = exports.UserChangePasswordApiDtoOfString = exports.UserProviderDeleteApiDtoOfString = exports.UserProviderApiDtoOfString = exports.UserProvidersApiDtoOfString = exports.UserClaimApiDtoOfString = exports.UserClaimsApiDtoOfString = exports.UserRoleApiDtoOfString = exports.UserRolesApiDtoOfIdentityRoleDto = exports.RoleClaimApiDtoOfString = exports.RoleClaimsApiDtoOfString = exports.IdentityUserDto = exports.UserDtoOfString = exports.BaseUserDtoOfString = exports.IdentityUsersDto = exports.UsersDtoOfIdentityUserDtoAndString = exports.IdentityRolesDto = exports.RolesDtoOfIdentityRoleDtoAndString = exports.IdentityRoleDto = exports.RoleDtoOfString = exports.BaseRoleDtoOfString = exports.PersistedGrantsApiDto = exports.PersistedGrantApiDto = exports.PersistedGrantSubjectApiDto = exports.PersistedGrantSubjectsApiDto = exports.AuditLogDto = exports.AuditLogsDto = exports.KeyApiDto = exports.KeysApiDto = void 0;
+/* tslint:disable */
+/* eslint-disable */
+// ReSharper disable InconsistentNaming
+class WebApiClientBase {
+    transformOptions(options) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const headers = new Headers(options.headers);
+            headers.set("X-CSRF", "1");
+            return Object.assign(Object.assign({}, options), { headers });
+        });
+    }
+}
+exports.WebApiClientBase = WebApiClientBase;
+class ApiResourcesClient extends WebApiClientBase {
     constructor(baseUrl, http) {
+        super();
         this.jsonParseReviver = undefined;
         this.http = http ? http : window;
         this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
@@ -32,7 +55,9 @@ class ApiResourcesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGet(_response);
         });
     }
@@ -79,7 +104,9 @@ class ApiResourcesClient {
                 "Content-Type": "application/json",
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPost(_response);
         });
     }
@@ -131,7 +158,9 @@ class ApiResourcesClient {
                 "Content-Type": "application/json",
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPut(_response);
         });
     }
@@ -187,7 +216,9 @@ class ApiResourcesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processCanInsertApiResource(_response);
         });
     }
@@ -238,7 +269,9 @@ class ApiResourcesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processCanInsertApiResourceProperty(_response);
         });
     }
@@ -286,7 +319,9 @@ class ApiResourcesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGet2(_response);
         });
     }
@@ -332,7 +367,9 @@ class ApiResourcesClient {
             method: "DELETE",
             headers: {}
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processDelete(_response);
         });
     }
@@ -393,7 +430,9 @@ class ApiResourcesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetSecrets(_response);
         });
     }
@@ -444,7 +483,9 @@ class ApiResourcesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPostSecret(_response);
         });
     }
@@ -500,7 +541,9 @@ class ApiResourcesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetSecret(_response);
         });
     }
@@ -546,7 +589,9 @@ class ApiResourcesClient {
             method: "DELETE",
             headers: {}
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processDeleteSecret(_response);
         });
     }
@@ -607,7 +652,9 @@ class ApiResourcesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetProperties(_response);
         });
     }
@@ -666,7 +713,9 @@ class ApiResourcesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPostProperty(_response);
         });
     }
@@ -722,7 +771,9 @@ class ApiResourcesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetProperty(_response);
         });
     }
@@ -768,7 +819,9 @@ class ApiResourcesClient {
             method: "DELETE",
             headers: {}
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processDeleteProperty(_response);
         });
     }
@@ -811,8 +864,9 @@ class ApiResourcesClient {
     }
 }
 exports.ApiResourcesClient = ApiResourcesClient;
-class ApiScopesClient {
+class ApiScopesClient extends WebApiClientBase {
     constructor(baseUrl, http) {
+        super();
         this.jsonParseReviver = undefined;
         this.http = http ? http : window;
         this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
@@ -836,7 +890,9 @@ class ApiScopesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetScopes(_response);
         });
     }
@@ -884,7 +940,9 @@ class ApiScopesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPostScope(_response);
         });
     }
@@ -939,7 +997,9 @@ class ApiScopesClient {
                 "Content-Type": "application/json",
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPutScope(_response);
         });
     }
@@ -995,7 +1055,9 @@ class ApiScopesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processCanInsertApiScope(_response);
         });
     }
@@ -1046,7 +1108,9 @@ class ApiScopesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processCanInsertApiScopeProperty(_response);
         });
     }
@@ -1094,7 +1158,9 @@ class ApiScopesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetScope(_response);
         });
     }
@@ -1140,7 +1206,9 @@ class ApiScopesClient {
             method: "DELETE",
             headers: {}
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processDeleteScope(_response);
         });
     }
@@ -1201,7 +1269,9 @@ class ApiScopesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetScopeProperties(_response);
         });
     }
@@ -1252,7 +1322,9 @@ class ApiScopesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPostProperty(_response);
         });
     }
@@ -1308,7 +1380,9 @@ class ApiScopesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetProperty(_response);
         });
     }
@@ -1354,7 +1428,9 @@ class ApiScopesClient {
             method: "DELETE",
             headers: {}
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processDeleteProperty(_response);
         });
     }
@@ -1397,8 +1473,9 @@ class ApiScopesClient {
     }
 }
 exports.ApiScopesClient = ApiScopesClient;
-class ClientsClient {
+class ClientsClient extends WebApiClientBase {
     constructor(baseUrl, http) {
+        super();
         this.jsonParseReviver = undefined;
         this.http = http ? http : window;
         this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
@@ -1422,7 +1499,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGet(_response);
         });
     }
@@ -1470,7 +1549,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPost(_response);
         });
     }
@@ -1525,7 +1606,9 @@ class ClientsClient {
                 "Content-Type": "application/json",
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPut(_response);
         });
     }
@@ -1578,7 +1661,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGet2(_response);
         });
     }
@@ -1624,7 +1709,9 @@ class ClientsClient {
             method: "DELETE",
             headers: {}
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processDelete(_response);
         });
     }
@@ -1674,7 +1761,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetAccessTokenTypes(_response);
         });
     }
@@ -1726,7 +1815,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetTokenExpirations(_response);
         });
     }
@@ -1778,7 +1869,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetTokenUsage(_response);
         });
     }
@@ -1830,7 +1923,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetProtocolTypes(_response);
         });
     }
@@ -1882,7 +1977,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetDPoPValidationModes(_response);
         });
     }
@@ -1948,7 +2045,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetScopes(_response);
         });
     }
@@ -2010,7 +2109,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetGrantTypes(_response);
         });
     }
@@ -2062,7 +2163,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetHashTypes(_response);
         });
     }
@@ -2114,7 +2217,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetSecretTypes(_response);
         });
     }
@@ -2172,7 +2277,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetStandardClaims(_response);
         });
     }
@@ -2230,7 +2337,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetSigningAlgorithms(_response);
         });
     }
@@ -2292,7 +2401,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processCanInsertClient(_response);
         });
     }
@@ -2340,7 +2451,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPostClientClone(_response);
         });
     }
@@ -2404,7 +2517,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetSecrets(_response);
         });
     }
@@ -2455,7 +2570,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPostSecret(_response);
         });
     }
@@ -2511,7 +2628,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetSecret(_response);
         });
     }
@@ -2557,7 +2676,9 @@ class ClientsClient {
             method: "DELETE",
             headers: {}
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processDeleteSecret(_response);
         });
     }
@@ -2618,7 +2739,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetProperties(_response);
         });
     }
@@ -2669,7 +2792,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPostProperty(_response);
         });
     }
@@ -2725,7 +2850,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetProperty(_response);
         });
     }
@@ -2771,7 +2898,9 @@ class ClientsClient {
             method: "DELETE",
             headers: {}
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processDeleteProperty(_response);
         });
     }
@@ -2832,7 +2961,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetClaims(_response);
         });
     }
@@ -2883,7 +3014,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPostClaim(_response);
         });
     }
@@ -2939,7 +3072,9 @@ class ClientsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetClaim(_response);
         });
     }
@@ -2987,7 +3122,9 @@ class ClientsClient {
                 "Accept": "application/octet-stream"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processDeleteClaim(_response);
         });
     }
@@ -3030,8 +3167,9 @@ class ClientsClient {
     }
 }
 exports.ClientsClient = ClientsClient;
-class ConfigurationIssuesClient {
+class ConfigurationIssuesClient extends WebApiClientBase {
     constructor(baseUrl, http) {
+        super();
         this.jsonParseReviver = undefined;
         this.http = http ? http : window;
         this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
@@ -3045,7 +3183,9 @@ class ConfigurationIssuesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGet(_response);
         });
     }
@@ -3097,7 +3237,9 @@ class ConfigurationIssuesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetSummary(_response);
         });
     }
@@ -3135,8 +3277,9 @@ class ConfigurationIssuesClient {
     }
 }
 exports.ConfigurationIssuesClient = ConfigurationIssuesClient;
-class DashboardClient {
+class DashboardClient extends WebApiClientBase {
     constructor(baseUrl, http) {
+        super();
         this.jsonParseReviver = undefined;
         this.http = http ? http : window;
         this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
@@ -3154,7 +3297,9 @@ class DashboardClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetDashboardIdentityServer(_response);
         });
     }
@@ -3199,7 +3344,9 @@ class DashboardClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetDashboardIdentity(_response);
         });
     }
@@ -3237,8 +3384,9 @@ class DashboardClient {
     }
 }
 exports.DashboardClient = DashboardClient;
-class IdentityProvidersClient {
+class IdentityProvidersClient extends WebApiClientBase {
     constructor(baseUrl, http) {
+        super();
         this.jsonParseReviver = undefined;
         this.http = http ? http : window;
         this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
@@ -3262,7 +3410,9 @@ class IdentityProvidersClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGet(_response);
         });
     }
@@ -3309,7 +3459,9 @@ class IdentityProvidersClient {
                 "Content-Type": "application/json",
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPost(_response);
         });
     }
@@ -3362,7 +3514,9 @@ class IdentityProvidersClient {
                 "Accept": "application/octet-stream"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPut(_response);
         });
     }
@@ -3418,7 +3572,9 @@ class IdentityProvidersClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processCanInsertIdentityProvider(_response);
         });
     }
@@ -3466,7 +3622,9 @@ class IdentityProvidersClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGet2(_response);
         });
     }
@@ -3514,7 +3672,9 @@ class IdentityProvidersClient {
                 "Accept": "application/octet-stream"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processDelete(_response);
         });
     }
@@ -3557,8 +3717,9 @@ class IdentityProvidersClient {
     }
 }
 exports.IdentityProvidersClient = IdentityProvidersClient;
-class IdentityResourcesClient {
+class IdentityResourcesClient extends WebApiClientBase {
     constructor(baseUrl, http) {
+        super();
         this.jsonParseReviver = undefined;
         this.http = http ? http : window;
         this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
@@ -3582,7 +3743,9 @@ class IdentityResourcesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGet(_response);
         });
     }
@@ -3630,7 +3793,9 @@ class IdentityResourcesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPost(_response);
         });
     }
@@ -3685,7 +3850,9 @@ class IdentityResourcesClient {
                 "Content-Type": "application/json",
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPut(_response);
         });
     }
@@ -3738,7 +3905,9 @@ class IdentityResourcesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGet2(_response);
         });
     }
@@ -3784,7 +3953,9 @@ class IdentityResourcesClient {
             method: "DELETE",
             headers: {}
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processDelete(_response);
         });
     }
@@ -3840,7 +4011,9 @@ class IdentityResourcesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processCanInsertIdentityResource(_response);
         });
     }
@@ -3891,7 +4064,9 @@ class IdentityResourcesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processCanInsertIdentityResourceProperty(_response);
         });
     }
@@ -3947,7 +4122,9 @@ class IdentityResourcesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetProperties(_response);
         });
     }
@@ -3998,7 +4175,9 @@ class IdentityResourcesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPostProperty(_response);
         });
     }
@@ -4054,7 +4233,9 @@ class IdentityResourcesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetProperty(_response);
         });
     }
@@ -4100,7 +4281,9 @@ class IdentityResourcesClient {
             method: "DELETE",
             headers: {}
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processDeleteProperty(_response);
         });
     }
@@ -4143,8 +4326,9 @@ class IdentityResourcesClient {
     }
 }
 exports.IdentityResourcesClient = IdentityResourcesClient;
-class KeysClient {
+class KeysClient extends WebApiClientBase {
     constructor(baseUrl, http) {
+        super();
         this.jsonParseReviver = undefined;
         this.http = http ? http : window;
         this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
@@ -4166,7 +4350,9 @@ class KeysClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGet(_response);
         });
     }
@@ -4214,7 +4400,9 @@ class KeysClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGet2(_response);
         });
     }
@@ -4262,7 +4450,9 @@ class KeysClient {
                 "Accept": "application/octet-stream"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processDelete(_response);
         });
     }
@@ -4305,8 +4495,9 @@ class KeysClient {
     }
 }
 exports.KeysClient = KeysClient;
-class LogsClient {
+class LogsClient extends WebApiClientBase {
     constructor(baseUrl, http) {
+        super();
         this.jsonParseReviver = undefined;
         this.http = http ? http : window;
         this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
@@ -4340,7 +4531,9 @@ class LogsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processAuditLog(_response);
         });
     }
@@ -4378,8 +4571,9 @@ class LogsClient {
     }
 }
 exports.LogsClient = LogsClient;
-class PersistedGrantsClient {
+class PersistedGrantsClient extends WebApiClientBase {
     constructor(baseUrl, http) {
+        super();
         this.jsonParseReviver = undefined;
         this.http = http ? http : window;
         this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
@@ -4403,7 +4597,9 @@ class PersistedGrantsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGet(_response);
         });
     }
@@ -4451,7 +4647,9 @@ class PersistedGrantsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGet2(_response);
         });
     }
@@ -4499,7 +4697,9 @@ class PersistedGrantsClient {
                 "Accept": "application/octet-stream"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processDelete(_response);
         });
     }
@@ -4560,7 +4760,9 @@ class PersistedGrantsClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetBySubject(_response);
         });
     }
@@ -4608,7 +4810,9 @@ class PersistedGrantsClient {
                 "Accept": "application/octet-stream"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processDeleteBySubject(_response);
         });
     }
@@ -4651,8 +4855,9 @@ class PersistedGrantsClient {
     }
 }
 exports.PersistedGrantsClient = PersistedGrantsClient;
-class RolesClient {
+class RolesClient extends WebApiClientBase {
     constructor(baseUrl, http) {
+        super();
         this.jsonParseReviver = undefined;
         this.http = http ? http : window;
         this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
@@ -4669,7 +4874,9 @@ class RolesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGet(_response);
         });
     }
@@ -4717,7 +4924,9 @@ class RolesClient {
                 "Accept": "application/octet-stream"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processDelete(_response);
         });
     }
@@ -4777,7 +4986,9 @@ class RolesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGet2(_response);
         });
     }
@@ -4825,7 +5036,9 @@ class RolesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPost(_response);
         });
     }
@@ -4881,7 +5094,9 @@ class RolesClient {
                 "Accept": "application/octet-stream"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPut(_response);
         });
     }
@@ -4944,7 +5159,9 @@ class RolesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetRoleUsers(_response);
         });
     }
@@ -5000,7 +5217,9 @@ class RolesClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetRoleClaims(_response);
         });
     }
@@ -5052,7 +5271,9 @@ class RolesClient {
                 "Accept": "application/octet-stream"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processDeleteRoleClaims(_response);
         });
     }
@@ -5105,7 +5326,9 @@ class RolesClient {
                 "Accept": "application/octet-stream"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPostRoleClaims(_response);
         });
     }
@@ -5158,7 +5381,9 @@ class RolesClient {
                 "Accept": "application/octet-stream"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPutRoleClaims(_response);
         });
     }
@@ -5201,8 +5426,9 @@ class RolesClient {
     }
 }
 exports.RolesClient = RolesClient;
-class UsersClient {
+class UsersClient extends WebApiClientBase {
     constructor(baseUrl, http) {
+        super();
         this.jsonParseReviver = undefined;
         this.http = http ? http : window;
         this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
@@ -5219,7 +5445,9 @@ class UsersClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGet(_response);
         });
     }
@@ -5267,7 +5495,9 @@ class UsersClient {
                 "Accept": "application/octet-stream"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processDelete(_response);
         });
     }
@@ -5327,7 +5557,9 @@ class UsersClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGet2(_response);
         });
     }
@@ -5375,7 +5607,9 @@ class UsersClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPost(_response);
         });
     }
@@ -5431,7 +5665,9 @@ class UsersClient {
                 "Accept": "application/octet-stream"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPut(_response);
         });
     }
@@ -5492,7 +5728,9 @@ class UsersClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetUserRoles(_response);
         });
     }
@@ -5540,7 +5778,9 @@ class UsersClient {
                 "Accept": "application/octet-stream"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPostUserRoles(_response);
         });
     }
@@ -5593,7 +5833,9 @@ class UsersClient {
                 "Accept": "application/octet-stream"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processDeleteUserRoles(_response);
         });
     }
@@ -5654,7 +5896,9 @@ class UsersClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetUserClaims(_response);
         });
     }
@@ -5706,7 +5950,9 @@ class UsersClient {
                 "Accept": "application/octet-stream"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processDeleteUserClaims(_response);
         });
     }
@@ -5759,7 +6005,9 @@ class UsersClient {
                 "Accept": "application/octet-stream"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPostUserClaims(_response);
         });
     }
@@ -5812,7 +6060,9 @@ class UsersClient {
                 "Accept": "application/octet-stream"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPutUserClaims(_response);
         });
     }
@@ -5865,7 +6115,9 @@ class UsersClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetUserProviders(_response);
         });
     }
@@ -5913,7 +6165,9 @@ class UsersClient {
                 "Accept": "application/octet-stream"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processDeleteUserProviders(_response);
         });
     }
@@ -5966,7 +6220,9 @@ class UsersClient {
                 "Accept": "application/octet-stream"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processPostChangePassword(_response);
         });
     }
@@ -6029,7 +6285,9 @@ class UsersClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetRoleClaims(_response);
         });
     }
@@ -6088,7 +6346,9 @@ class UsersClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetClaimUsers(_response);
         });
     }
@@ -6144,7 +6404,9 @@ class UsersClient {
                 "Accept": "application/json"
             }
         };
-        return this.http.fetch(url_, options_).then((_response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
             return this.processGetClaimUsers2(_response);
         });
     }
