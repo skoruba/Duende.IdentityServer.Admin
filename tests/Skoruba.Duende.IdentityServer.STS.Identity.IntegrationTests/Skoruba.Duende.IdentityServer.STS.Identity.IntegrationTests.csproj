@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <PreserveCompilationContext>true</PreserveCompilationContext>
         <IsPackable>false</IsPackable>
         <DebugType>Full</DebugType>
@@ -9,13 +9,13 @@
 
     <ItemGroup>
         <PackageReference Include="FluentAssertions" Version="6.12.1" />
-        <PackageReference Include="HtmlAgilityPack" Version="1.11.66" />
+        <PackageReference Include="HtmlAgilityPack" Version="1.12.1" />
         <PackageReference Include="IdentityModel" Version="7.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.8" />
-        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.8" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
-        <PackageReference Include="xunit" Version="2.9.1" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.4" />
+        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="9.0.4" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+        <PackageReference Include="xunit" Version="2.9.3" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>

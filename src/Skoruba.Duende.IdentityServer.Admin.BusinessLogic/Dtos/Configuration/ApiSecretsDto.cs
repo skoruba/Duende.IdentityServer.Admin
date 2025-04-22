@@ -45,5 +45,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration
 		public int PageSize { get; set; }
 
 		public List<ApiSecretDto> ApiSecrets { get; set; }
+
+		public DateTime Created { get; set; }
 	}
 }

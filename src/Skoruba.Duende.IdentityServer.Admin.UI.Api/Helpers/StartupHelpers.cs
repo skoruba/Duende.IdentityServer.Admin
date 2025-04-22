@@ -295,7 +295,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
                 .AddDbContextCheck<TLogDbContext>("LogDbContext")
                 .AddDbContextCheck<TAuditLoggingDbContext>("AuditLogDbContext")
                 .AddDbContextCheck<TDataProtectionDbContext>("DataProtectionDbContext")
-                .AddIdentityServer(idSvrUri: new Uri(identityServerUri), name: "Identity Server");
+                .AddOpenIdConnectServer(oidcSvrUri: new Uri(identityServerUri), name: "Identity Server");
 
             var serviceProvider = services.BuildServiceProvider();
             var scopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
