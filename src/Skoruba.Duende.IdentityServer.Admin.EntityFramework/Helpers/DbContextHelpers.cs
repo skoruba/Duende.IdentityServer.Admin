@@ -31,5 +31,28 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Helpers
 
             return null;
         }
+
+        /// <summary>
+        /// Get the table schema of an entity in the given DbContext
+        /// </summary>
+        /// <typeparam name="TDbContext"></typeparam>
+        /// <param name="serviceProvider"></param>
+        /// <param name="entityTypeName">If specified, the full name of the type of the entity. 
+        /// Otherwise, the first entity in the DbContext will be retrieved</param>
+        /// <param name="systemDefaultSchemaName">The default schema name of the RDBMS, for example `dbo` for SQL Server</param>
+        /// <returns></returns>
+        public static string GetEntityTableSchema<TDbContext>(IServiceProvider serviceProvider, string entityTypeName = null, string systemDefaultSchemaName = null)
+            where TDbContext : DbContext
+        {
+            var db = serviceProvider.GetService<TDbContext>();
+            if (db != null)
+            {
+                var entityType = entityTypeName != null ? db.Model.FindEntityType(entityTypeName) : db.Model.GetEntityTypes().OrderBy(x => x.Name).FirstOrDefault();
+                if (entityType != null)
+                    return entityType.GetSchema() ?? entityType.GetDefaultSchema() ?? systemDefaultSchemaName;
+            }
+
+            return null;
+        }
     }
 }
