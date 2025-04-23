@@ -91,9 +91,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
         
         [HttpGet(nameof(GetScopes))]
-        public async Task<ActionResult<List<string>>> GetScopes(string scope, int limit = 0)
+        public async Task<ActionResult<List<string>>> GetScopes(string scope, int limit = 0, bool excludeIdentityResources = false, bool excludeApiScopes = false)
         {
-            var scopes = await _clientService.GetScopesAsync(scope, limit);
+            var scopes = await _clientService.GetScopesAsync(scope, limit, excludeIdentityResources, excludeApiScopes);
 
             return scopes;
         }

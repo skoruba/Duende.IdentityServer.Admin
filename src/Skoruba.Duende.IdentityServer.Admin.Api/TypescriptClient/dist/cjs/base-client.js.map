@@ -1,0 +1,1 @@
+{"version":3,"file":"base-client.js","sourceRoot":"","sources":["../../src/base-client.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,MAAa,gBAAgB;IACT,gBAAgB,CAAC,OAAoB;;YACjD,MAAM,OAAO,GAAG,IAAI,OAAO,CAAC,OAAO,CAAC,OAAO,CAAC,CAAC;YAC7C,OAAO,CAAC,GAAG,CAAC,QAAQ,EAAE,GAAG,CAAC,CAAC;YAE3B,uCACO,OAAO,KACV,OAAO,IACT;QACN,CAAC;KAAA;CACJ;AAVD,4CAUC"}

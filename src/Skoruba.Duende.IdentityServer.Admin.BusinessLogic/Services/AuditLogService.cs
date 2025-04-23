@@ -27,7 +27,13 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services
 
         public async Task<AuditLogsDto> GetAsync(AuditLogFilterDto filters)
         {
-            var pagedList = await AuditLogRepository.GetAsync(filters.Event, filters.Source, filters.Category, filters.Created, filters.SubjectIdentifier, filters.SubjectName, filters.Page, filters.PageSize);
+            DateOnly? createdDate = null;
+            if (!string.IsNullOrWhiteSpace(filters.CreatedDate) && DateOnly.TryParse(filters.CreatedDate, out var parsedDate))
+            {
+                createdDate = parsedDate;
+            }
+            
+            var pagedList = await AuditLogRepository.GetAsync(filters.Event, filters.Source, filters.Category, createdDate, filters.SubjectIdentifier, filters.SubjectName, filters.Page, filters.PageSize);
             var auditLogsDto = pagedList.ToModel();
 
             return auditLogsDto;

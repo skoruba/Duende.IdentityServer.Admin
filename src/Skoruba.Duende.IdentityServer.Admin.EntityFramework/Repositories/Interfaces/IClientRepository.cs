@@ -34,7 +34,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Inter
 
         Task<PagedList<Client>> GetClientsAsync(string search = "", int page = 1, int pageSize = 10);
 
-		Task<List<string>> GetScopesAsync(string scope, int limit = 0);
+        Task<List<string>> GetScopesAsync(string scope, int limit = 0, bool excludeIdentityResources = false,
+	        bool excludeApiScopes = false);
 
 		List<SelectItem> GetGrantTypes(string grant, bool includeObsoleteGrants, int limit = 0);
 

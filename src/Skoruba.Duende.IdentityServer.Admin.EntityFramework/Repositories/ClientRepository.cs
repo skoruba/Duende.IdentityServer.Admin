@@ -62,7 +62,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
             return pagedList;
         }
 
-        public virtual async Task<List<string>> GetScopesAsync(string scope, int limit = 0)
+        public virtual async Task<List<string>> GetScopesAsync(string scope, int limit = 0, bool excludeIdentityResources = false, bool excludeApiScopes = false)
         {
             var identityResources = await DbContext.IdentityResources
                 .WhereIf(!string.IsNullOrEmpty(scope), x => x.Name.Contains(scope))
@@ -74,6 +74,16 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
                 .TakeIf(x => x.Id, limit > 0, limit)
                 .Select(x => x.Name).ToListAsync();
 
+            if (excludeIdentityResources)
+            {
+                return apiScopes;
+            }
+            
+            if (excludeApiScopes)
+            {
+                return identityResources;
+            }
+            
             var scopes = identityResources.Concat(apiScopes).TakeIf(x => x, limit > 0, limit).ToList();
 
             return scopes;

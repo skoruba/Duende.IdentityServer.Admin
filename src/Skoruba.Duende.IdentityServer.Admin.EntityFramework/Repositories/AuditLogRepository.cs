@@ -33,6 +33,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
             var logs = await DbContext.AuditLog
                 .Where(x => x.Created > DateTime.Now.AddDays(-lastNumberOfDays))
                 .GroupBy(x => x.Created.Date)
+                .OrderBy(x => x.Key)
                 .Select(x => new DashboardAuditLogDataView
                 {
                     Created = x.Key,
@@ -59,33 +60,45 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
             return 0;
         }
 
-        public async Task<PagedList<TAuditLog>> GetAsync(string @event, string source, string category, DateTime? created, string subjectIdentifier, string subjectName, int page = 1, int pageSize = 10)
+        public async Task<PagedList<TAuditLog>> GetAsync(
+            string @event,
+            string source,
+            string category,
+            DateOnly? created,
+            string subjectIdentifier,
+            string subjectName,
+            int page = 1,
+            int pageSize = 10)
         {
             var pagedList = new PagedList<TAuditLog>();
 
-            var auditLogs = await DbContext.AuditLog
+            var query = DbContext.AuditLog
                 .WhereIf(!string.IsNullOrEmpty(subjectIdentifier), log => log.SubjectIdentifier.Contains(subjectIdentifier))
                 .WhereIf(!string.IsNullOrEmpty(subjectName), log => log.SubjectName.Contains(subjectName))
                 .WhereIf(!string.IsNullOrEmpty(@event), log => log.Event.Contains(@event))
                 .WhereIf(!string.IsNullOrEmpty(source), log => log.Source.Contains(source))
-                .WhereIf(!string.IsNullOrEmpty(category), log => log.Category.Contains(category))
-                .WhereIf(created.HasValue, log => log.Created.Date == created.Value.Date)
+                .WhereIf(!string.IsNullOrEmpty(category), log => log.Category.Contains(category));
+
+            if (created.HasValue)
+            {
+                var from = created.Value.ToDateTime(TimeOnly.MinValue);
+                var to = created.Value.ToDateTime(TimeOnly.MaxValue);
+
+                query = query.Where(log => log.Created >= from && log.Created <= to);
+            }
+
+            pagedList.TotalCount = await query.CountAsync();
+
+            var auditLogs = await query
                 .PageBy(x => x.Id, page, pageSize)
                 .ToListAsync();
 
             pagedList.Data.AddRange(auditLogs);
             pagedList.PageSize = pageSize;
-            pagedList.TotalCount = await DbContext.AuditLog
-                .WhereIf(!string.IsNullOrEmpty(subjectIdentifier), log => log.SubjectIdentifier.Contains(subjectIdentifier))
-                .WhereIf(!string.IsNullOrEmpty(subjectName), log => log.SubjectName.Contains(subjectName))
-                .WhereIf(!string.IsNullOrEmpty(@event), log => log.Event.Contains(@event))
-                .WhereIf(!string.IsNullOrEmpty(source), log => log.Source.Contains(source))
-                .WhereIf(!string.IsNullOrEmpty(category), log => log.Category.Contains(category))
-                .WhereIf(created.HasValue, log => log.Created.Date == created.Value.Date)
-                .CountAsync();
-            
+
             return pagedList;
         }
+
 
         public virtual async Task DeleteLogsOlderThanAsync(DateTime deleteOlderThan)
         {
