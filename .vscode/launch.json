@@ -1,0 +1,52 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "IdentityServer",
+            "type": "coreclr",
+            "request": "launch",      
+            "preLaunchTask": "build",     
+            "program": "${workspaceFolder}/src/Skoruba.Duende.IdentityServer.STS.Identity/bin/Debug/net9.0/Skoruba.Duende.IdentityServer.STS.Identity.dll",
+            "cwd": "${workspaceFolder}/src/Skoruba.Duende.IdentityServer.STS.Identity",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/src/Skoruba.Duende.IdentityServer.STS.Identity/Views"
+            }
+        },
+        {
+            "name": "IdentityServerAdmin",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/Skoruba.Duende.IdentityServer.Admin/bin/Debug/net9.0/Skoruba.Duende.IdentityServer.Admin.dll",
+            "cwd": "${workspaceFolder}/src/Skoruba.Duende.IdentityServer.Admin",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",             
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/src/Skoruba.Duende.IdentityServer.Admin/Views"
+            }
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Run Both Projects",
+            "configurations": ["IdentityServer", "IdentityServerAdmin"]
+        }
+    ]
+}
