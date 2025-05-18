@@ -51,13 +51,28 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
 
         public virtual async Task<PagedList<Client>> GetClientsAsync(string search = "", int page = 1, int pageSize = 10)
         {
-            var pagedList = new PagedList<Client>();
+            var query = DbContext.Clients
+                .Include(x => x.Properties)
+                .AsQueryable();
 
-            Expression<Func<Client, bool>> searchCondition = x => x.ClientId.Contains(search) || x.ClientName.Contains(search);
-            var clients = await DbContext.Clients.WhereIf(!string.IsNullOrEmpty(search), searchCondition).PageBy(x => x.Id, page, pageSize).ToListAsync();
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(x => x.ClientId.Contains(search) || x.ClientName.Contains(search));
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var clients = await query
+                .PageBy(x => x.Id, page, pageSize)
+                .ToListAsync();
+
+            var pagedList = new PagedList<Client>
+            {
+                TotalCount = totalCount,
+                PageSize = pageSize
+            };
+
             pagedList.Data.AddRange(clients);
-            pagedList.TotalCount = await DbContext.Clients.WhereIf(!string.IsNullOrEmpty(search), searchCondition).CountAsync();
-            pagedList.PageSize = pageSize;
 
             return pagedList;
         }
