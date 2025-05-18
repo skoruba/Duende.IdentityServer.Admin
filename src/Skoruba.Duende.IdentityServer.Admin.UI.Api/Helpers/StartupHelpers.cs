@@ -433,15 +433,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
         {
             ArgumentNullException.ThrowIfNull(typeInAssembly);
 
-            var assembly = typeInAssembly.Assembly;
-            var attribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-            
-            if (attribute == null)
-            {
-                throw new InvalidOperationException($"Assembly {assembly.FullName} does not have an AssemblyInformationalVersionAttribute.");
-            }
-            
-            return attribute.InformationalVersion;
+            return typeInAssembly.Assembly.GetName().Version?.ToString() ?? string.Empty;
         }
     }
 }
