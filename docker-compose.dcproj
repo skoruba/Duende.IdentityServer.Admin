@@ -20,5 +20,6 @@
     </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
+    <None Include="src\SMSSenderInforU.Tests\SendSMSTests.cs" />
   </ItemGroup>
 </Project>

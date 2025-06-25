@@ -50,6 +50,7 @@
         <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj" />
         <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Shared.Configuration\Skoruba.Duende.IdentityServer.Shared.Configuration.csproj" />
         <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Shared\Skoruba.Duende.IdentityServer.Shared.csproj" />
+        <ProjectReference Include="..\SMSSender\SMSSender.csproj" />
     </ItemGroup>
 
     <ItemGroup>

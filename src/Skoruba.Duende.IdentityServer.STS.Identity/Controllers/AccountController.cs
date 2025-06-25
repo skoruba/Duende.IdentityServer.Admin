@@ -29,6 +29,7 @@ using Skoruba.Duende.IdentityServer.STS.Identity.Configuration;
 using Skoruba.Duende.IdentityServer.STS.Identity.Helpers;
 using Skoruba.Duende.IdentityServer.STS.Identity.Helpers.Localization;
 using Skoruba.Duende.IdentityServer.STS.Identity.ViewModels.Account;
+using SMSSender;
 
 namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
 {
@@ -45,7 +46,8 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
-        private readonly IEmailSender _emailSender;
+        private readonly IEmailSender _emailSender;        
+        private readonly ISMSSender _smsSender;
         private readonly IGenericControllerLocalizer<AccountController<TUser, TKey>> _localizer;
         private readonly LoginConfiguration _loginConfiguration;
         private readonly RegisterConfiguration _registerConfiguration;
@@ -62,6 +64,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
             IAuthenticationSchemeProvider schemeProvider,
             IEventService events,
             IEmailSender emailSender,
+            ISMSSender smsSender,
             IGenericControllerLocalizer<AccountController<TUser, TKey>> localizer,
             LoginConfiguration loginConfiguration,
             RegisterConfiguration registerConfiguration,
@@ -77,6 +80,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
             _schemeProvider = schemeProvider;
             _events = events;
             _emailSender = emailSender;
+            _smsSender = smsSender;
             _localizer = localizer;
             _loginConfiguration = loginConfiguration;
             _registerConfiguration = registerConfiguration;
@@ -326,6 +330,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
 
                 await _emailSender.SendEmailAsync(user.Email, _localizer["ResetPasswordTitle"], _localizer["ResetPasswordBody", HtmlEncoder.Default.Encode(callbackUrl)]);
 
+                await _smsSender.SendSMSAsync(user.PhoneNumber, HtmlEncoder.Default.Encode(callbackUrl));
                 return View("ForgotPasswordConfirmation");
             }
 

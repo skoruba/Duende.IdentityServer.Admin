@@ -40,6 +40,9 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity
             // Add email senders which is currently setup for SendGrid and SMTP
             services.AddEmailSenders(Configuration);
 
+            // Add SMS sender
+            services.AddSMSender(Configuration);
+
             // Add services for authentication, including Identity model and external providers
             RegisterAuthentication(services);
 
