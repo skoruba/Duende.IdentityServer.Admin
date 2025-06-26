@@ -479,15 +479,20 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
                 switch (databaseProvider.ProviderType)
                 {
                     case DatabaseProviderType.SqlServer:
+                        const string defaultSchemaName = "dbo";
+                        var configurationTableSchema = DbContextHelpers.GetEntityTableSchema<TConfigurationDbContext>(scope.ServiceProvider, systemDefaultSchemaName: defaultSchemaName);
+                        var persistedGrantTableSchema = DbContextHelpers.GetEntityTableSchema<TPersistedGrantDbContext>(scope.ServiceProvider, systemDefaultSchemaName: defaultSchemaName);
+                        var identityTableSchema = DbContextHelpers.GetEntityTableSchema<TIdentityDbContext>(scope.ServiceProvider, systemDefaultSchemaName: defaultSchemaName);
+                        var dataProtectionTableSchema = DbContextHelpers.GetEntityTableSchema<TDataProtectionDbContext>(scope.ServiceProvider, systemDefaultSchemaName: defaultSchemaName);
                         healthChecksBuilder
                             .AddSqlServer(configurationDbConnectionString, name: "ConfigurationDb",
-                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{configurationTableName}]")
+                                healthQuery: $"SELECT TOP 1 * FROM [{configurationTableSchema}].[{configurationTableName}]")
                             .AddSqlServer(persistedGrantsDbConnectionString, name: "PersistentGrantsDb",
-                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{persistedGrantTableName}]")
+                                healthQuery: $"SELECT TOP 1 * FROM [{persistedGrantTableSchema}].[{persistedGrantTableName}]")
                             .AddSqlServer(identityDbConnectionString, name: "IdentityDb",
-                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{identityTableName}]")
+                                healthQuery: $"SELECT TOP 1 * FROM [{identityTableSchema}].[{identityTableName}]")
                             .AddSqlServer(dataProtectionDbConnectionString, name: "DataProtectionDb",
-                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{dataProtectionTableName}]");
+                                healthQuery: $"SELECT TOP 1 * FROM [{dataProtectionTableSchema}].[{dataProtectionTableName}]");
 
                         break;
                     case DatabaseProviderType.PostgreSQL:
