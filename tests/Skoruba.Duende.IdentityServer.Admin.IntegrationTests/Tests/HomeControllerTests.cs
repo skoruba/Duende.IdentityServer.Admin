@@ -33,7 +33,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.IntegrationTests.Tests
         public async Task ReturnRedirectWithoutAdminRole()
         {
             //Remove
-           var client = Client.NoAuthClient()
+            var client = Client.NoAuthClient();
 
             // Act
             var response = await client.GetAsync("/home/index");

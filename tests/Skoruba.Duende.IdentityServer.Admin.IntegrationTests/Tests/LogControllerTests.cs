@@ -22,7 +22,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.IntegrationTests.Tests
         public async Task ReturnRedirectInErrorsLogWithoutAdminRole()
         {
             //Remove
-            var client = Client.NoAuthClient()
+            var client = Client.NoAuthClient();
 
             // Act
             var response = await client.GetAsync("/log/errorslog");
@@ -38,7 +38,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.IntegrationTests.Tests
         public async Task ReturnRedirectInAuditLogWithoutAdminRole()
         {
             //Remove
-            var client = Client.NoAuthClient()
+            var client = Client.NoAuthClient();
 
             // Act
             var response = await client.GetAsync("/log/auditlog");

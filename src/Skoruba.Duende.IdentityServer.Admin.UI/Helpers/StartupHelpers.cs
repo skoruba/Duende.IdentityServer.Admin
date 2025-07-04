@@ -433,6 +433,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Helpers
         public static void AddIdSHealthChecks<TConfigurationDbContext, TPersistedGrantDbContext, TIdentityDbContext,
             TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAuditLog>
             (this IHealthChecksBuilder healthChecksBuilder, AdminConfiguration adminConfiguration,
+            TestingConfiguration testingConfiguration,
             ConnectionStringsConfiguration connectionStringsConfiguration, DatabaseProviderConfiguration databaseProviderConfiguration)
             where TConfigurationDbContext : DbContext, IAdminConfigurationDbContext
             where TPersistedGrantDbContext : DbContext, IAdminPersistedGrantDbContext
