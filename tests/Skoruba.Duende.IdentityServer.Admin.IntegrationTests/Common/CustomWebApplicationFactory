@@ -1,0 +1,47 @@
+﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0.
+
+using System.Net.Http;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Skoruba.Duende.IdentityServer.Admin.Configuration.Test;
+
+namespace Skoruba.Duende.IdentityServer.Admin.IntegrationTests.Common
+{
+    public class CustomWebApplicationFactory : WebApplicationFactory<StartupTest>
+    {
+        builder
+             .UseEnvironment("Testing")
+             .ConfigureAppConfiguration((hostContext, configApp) =>
+             {
+                 configApp.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                 configApp.AddJsonFile("serilog.json", optional: true, reloadOnChange: true);
+        
+                 var env = hostContext.HostingEnvironment;
+        
+                 configApp.AddJsonFile($"serilog.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                 configApp.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+             })
+             .ConfigureTestServices(services =>
+             {
+                 services.PostConfigure<AuthenticationOptions>(options =>
+                 {
+                     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                     options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                 });
+             });
+    }
+
+     public static class CustomFactoryExtension
+     {
+         public static HttpClient Create(this CustomWebApplicationFactory factory)
+         {
+             var options = new WebApplicationFactoryClientOptions
+             {
+                 AllowAutoRedirect = false
+             };
+             return factory.CreateClient(options);
+         }
+     }
+}
