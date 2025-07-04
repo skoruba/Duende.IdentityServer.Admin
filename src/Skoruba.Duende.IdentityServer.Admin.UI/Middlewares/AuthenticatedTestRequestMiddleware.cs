@@ -13,6 +13,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Middlewares
     {
         private readonly RequestDelegate _next;
         public static readonly string TestAuthorizationHeader = "FakeAuthorization";
+        public static readonly string AddCustomeOverrideEnabled = "X-Test-Auth";
         public AuthenticatedTestRequestMiddleware(RequestDelegate next)
         {
             _next = next;
@@ -20,15 +21,23 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            if (context.Request.Headers.Keys.Contains(TestAuthorizationHeader))
+            bool isFakeAuthDisabled()
             {
-                var token = context.Request.Headers[TestAuthorizationHeader].Single();
-                var jwt = new JwtSecurityToken(token);
-                var claimsIdentity = new ClaimsIdentity(jwt.Claims, "Cookies");
-                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                context.User = claimsPrincipal;
+                return context.Request.Headers.TryGetValue(AddCustomeOverrideEnabled, out var authHeader) && !bool.Parse(authHeader);
             }
-
+            
+            var claims = new[]
+            {
+                new Claim(JwtClaimTypes.Subject, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Name, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Role, _adminConfiguration.AdministrationRole),
+            };
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);            
+            
+            if (!isFakeAuthDisabled())
+            {
+                context.User = new ClaimsPrincipal(claimsIdentity);
+            }       
             await _next(context);
         }
     }
