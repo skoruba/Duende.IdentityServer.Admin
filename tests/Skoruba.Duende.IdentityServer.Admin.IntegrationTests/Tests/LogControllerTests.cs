@@ -4,27 +4,28 @@
 using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Skoruba.Duende.IdentityServer.Admin.IntegrationTests.Tests.Base;
+using Skoruba.Duende.IdentityServer.Admin.IntegrationTests.Common;
 using Skoruba.Duende.IdentityServer.Admin.UI.Configuration.Constants;
 using Xunit;
 
 namespace Skoruba.Duende.IdentityServer.Admin.IntegrationTests.Tests
 {
-	public class LogControllerTests : BaseClassFixture
+	public class LogControllerTests: IClassFixture<CustomWebApplicationFactory>
     {
-        public LogControllerTests(TestFixture fixture)
-            : base(fixture)
+        private readonly HttpClient Client;
+        public LogControllerTests(CustomWebApplicationFactory factory)
         {
+            Client = factory.Create();
         }
 
         [Fact]
         public async Task ReturnRedirectInErrorsLogWithoutAdminRole()
         {
             //Remove
-            Client.DefaultRequestHeaders.Clear();
+            var client = Client.NoAuthClient()
 
             // Act
-            var response = await Client.GetAsync("/log/errorslog");
+            var response = await client.GetAsync("/log/errorslog");
 
             // Assert           
             response.StatusCode.Should().Be(HttpStatusCode.Redirect);
@@ -37,10 +38,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.IntegrationTests.Tests
         public async Task ReturnRedirectInAuditLogWithoutAdminRole()
         {
             //Remove
-            Client.DefaultRequestHeaders.Clear();
+            var client = Client.NoAuthClient()
 
             // Act
-            var response = await Client.GetAsync("/log/auditlog");
+            var response = await client.GetAsync("/log/auditlog");
 
             // Assert           
             response.StatusCode.Should().Be(HttpStatusCode.Redirect);
@@ -52,8 +53,6 @@ namespace Skoruba.Duende.IdentityServer.Admin.IntegrationTests.Tests
         [Fact]
         public async Task ReturnSuccessInErrorsLogWithAdminRole()
         {
-            SetupAdminClaimsViaHeaders();
-
             // Act
             var response = await Client.GetAsync("/log/errorslog");
 
@@ -64,9 +63,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.IntegrationTests.Tests
 
         [Fact]
         public async Task ReturnSuccessInAuditLogWithAdminRole()
-        {
-            SetupAdminClaimsViaHeaders();
-
+        {           
             // Act
             var response = await Client.GetAsync("/log/auditlog");
 

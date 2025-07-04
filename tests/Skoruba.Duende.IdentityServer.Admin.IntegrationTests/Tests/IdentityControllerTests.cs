@@ -5,24 +5,22 @@ using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Skoruba.Duende.IdentityServer.Admin.IntegrationTests.Common;
-using Skoruba.Duende.IdentityServer.Admin.IntegrationTests.Tests.Base;
 using Skoruba.Duende.IdentityServer.Admin.UI.Configuration.Constants;
 using Xunit;
 
 namespace Skoruba.Duende.IdentityServer.Admin.IntegrationTests.Tests
 {
-	public class IdentityControllerTests : BaseClassFixture
+	public class IdentityControllerTests: IClassFixture<CustomWebApplicationFactory>
     {
-        public IdentityControllerTests(TestFixture fixture)
-            : base(fixture)
+        private readonly HttpClient Client;
+        public IdentityControllerTests(CustomWebApplicationFactory factory)
         {
+            Client = factory.Create();
         }
 
         [Fact]
         public async Task ReturnSuccessWithAdminRole()
         {
-            SetupAdminClaimsViaHeaders();
-
             foreach (var route in RoutesConstants.GetIdentityRoutes())
             {
                 // Act
@@ -38,12 +36,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.IntegrationTests.Tests
         public async Task ReturnRedirectWithoutAdminRole()
         {
             //Remove
-            Client.DefaultRequestHeaders.Clear();
+            var client = Client.NoAuthClient()
 
             foreach (var route in RoutesConstants.GetIdentityRoutes())
             {
                 // Act
-                var response = await Client.GetAsync($"/Identity/{route}");
+                var response = await client.GetAsync($"/Identity/{route}");
 
                 // Assert           
                 response.StatusCode.Should().Be(HttpStatusCode.Redirect);
