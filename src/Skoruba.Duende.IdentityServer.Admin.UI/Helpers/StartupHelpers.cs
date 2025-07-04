@@ -442,6 +442,11 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Helpers
             where TDataProtectionDbContext : DbContext, IDataProtectionKeyContext
             where TAuditLog : AuditLog
         {
+            if (testingConfiguration.IsStaging)
+            {
+                return;
+            }
+                
             var configurationDbConnectionString = connectionStringsConfiguration.ConfigurationDbConnection;
             var persistedGrantsDbConnectionString = connectionStringsConfiguration.PersistedGrantDbConnection;
             var identityDbConnectionString = connectionStringsConfiguration.IdentityDbConnection;
@@ -616,11 +621,11 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Helpers
 
         public static void UseRoutingDependentMiddleware(this IApplicationBuilder app, TestingConfiguration testingConfiguration)
         {
-            app.UseAuthentication();
             if (testingConfiguration.IsStaging)
             {
                 app.UseMiddleware<AuthenticatedTestRequestMiddleware>();
             }
+            app.UseAuthentication();
 
             app.UseAuthorization();
         }
