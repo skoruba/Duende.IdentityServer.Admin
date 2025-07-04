@@ -1,10 +1,13 @@
 ﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
 // Licensed under the Apache License, Version 2.0.
 
-using System.Net.Http;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Skoruba.Duende.IdentityServer.Admin.Configuration.Test;
 
 namespace Skoruba.Duende.IdentityServer.Admin.IntegrationTests.Common
@@ -32,16 +35,4 @@ namespace Skoruba.Duende.IdentityServer.Admin.IntegrationTests.Common
                  });
              });
     }
-
-     public static class CustomFactoryExtension
-     {
-         public static HttpClient Create(this CustomWebApplicationFactory factory)
-         {
-             var options = new WebApplicationFactoryClientOptions
-             {
-                 AllowAutoRedirect = false
-             };
-             return factory.CreateClient(options);
-         }
-     }
 }
