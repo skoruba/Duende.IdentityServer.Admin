@@ -6,5 +6,6 @@ namespace Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration.Ident
     public class LoginConfiguration
     {
         public LoginResolutionPolicy ResolutionPolicy { get; set; } = LoginResolutionPolicy.Username;
+        public bool CaptchaEnabled { get; set; } = false;
     }
 }
