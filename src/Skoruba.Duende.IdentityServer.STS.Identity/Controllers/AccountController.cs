@@ -342,7 +342,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
                         break;
                 }
 
-                if (user == null || !await _userManager.IsEmailConfirmedAsync(user))
+                if (user == null || string.IsNullOrWhiteSpace(user.PhoneNumber))
                 {
                     // Don't reveal that the user does not exist
                     return View("ForgotPasswordConfirmation");
@@ -350,11 +350,9 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
 
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code }, HttpContext.Request.Scheme);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code }, HttpContext.Request.Scheme);                
 
-                await _emailSender.SendEmailAsync(user.Email, _localizer["ResetPasswordTitle"], _localizer["ResetPasswordBody", HtmlEncoder.Default.Encode(callbackUrl)]);
-
-                await _smsSender.SendSMSAsync(user.PhoneNumber, HtmlEncoder.Default.Encode(callbackUrl));
+                await _smsSender.SendSMSAsync(user.PhoneNumber, callbackUrl);
                 return View("ForgotPasswordConfirmation");
             }
 
