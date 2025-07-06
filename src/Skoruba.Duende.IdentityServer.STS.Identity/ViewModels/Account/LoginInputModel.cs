@@ -16,5 +16,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.ViewModels.Account
         public string Password { get; set; }
         public bool RememberLogin { get; set; }
         public string ReturnUrl { get; set; }
+
+        public string Captcha { get; set; } = string.Empty;
     }
 }

@@ -4,12 +4,6 @@
 // Original file: https://github.com/DuendeSoftware/IdentityServer.Quickstart.UI
 // Modified by Jan Škoruba
 
-using System;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Extensions;
@@ -19,17 +13,26 @@ using Duende.IdentityServer.Stores;
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using SixLaborsCaptcha.Core;
 using Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration.Identity;
 using Skoruba.Duende.IdentityServer.STS.Identity.Configuration;
 using Skoruba.Duende.IdentityServer.STS.Identity.Helpers;
 using Skoruba.Duende.IdentityServer.STS.Identity.Helpers.Localization;
 using Skoruba.Duende.IdentityServer.STS.Identity.ViewModels.Account;
 using SMSSender;
+using System;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
+using Extensions = SixLaborsCaptcha.Core.Extensions;
 
 namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
 {
@@ -89,6 +92,17 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
             _identityProviderStore = identityProviderStore;
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("[action]")]
+        public FileResult GetCaptchaImage([FromServices] ISixLaborsCaptchaModule sixLaborsCaptcha)
+        {
+            string key = Extensions.GetUniqueKey(6);
+            HttpContext.Session.SetString("VerificationCode", key);
+            var imgText = sixLaborsCaptcha.Generate(key);
+            return File(imgText, "Image/Png");
+        }
+
         /// <summary>
         /// Entry point into the login workflow
         /// </summary>
@@ -116,6 +130,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginInputModel model, string button)
         {
+            
             // check if we are in the context of an authorization request
             var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
 
@@ -145,7 +160,16 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
             }
 
             if (ModelState.IsValid)
-            {
+            {                
+                if (_loginConfiguration.CaptchaEnabled) {                     // check if the captcha is valid
+                    var captcha = HttpContext.Session.GetString("VerificationCode");
+                    if (captcha == null || !captcha.Equals(model.Captcha, StringComparison.OrdinalIgnoreCase))
+                    {
+                        ModelState.AddModelError(string.Empty, _localizer["InvalidCaptcha"]);
+                        return View(await BuildLoginViewModelAsync(model));
+                    }
+                }
+
                 var user = await _userResolver.GetUserAsync(model.Username);
                 if (user != default(TUser))
                 {
@@ -638,7 +662,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
                 await _emailSender.SendEmailAsync(model.Email, _localizer["ConfirmEmailTitle"], _localizer["ConfirmEmailBody", HtmlEncoder.Default.Encode(callbackUrl)]);
 
                 if (_identityOptions.SignIn.RequireConfirmedAccount)
-                {
+                {                    
                     return View("RegisterConfirmation");
                 }
                 else
@@ -769,7 +793,8 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
                 EnableLocalLogin = allowLocal && AccountOptions.AllowLocalLogin,
                 ReturnUrl = returnUrl,
                 Username = context?.LoginHint,
-                ExternalProviders = providers.ToArray()
+                ExternalProviders = providers.ToArray(),
+                LoginCaptchaEnabled = _loginConfiguration.CaptchaEnabled,
             };
         }
 

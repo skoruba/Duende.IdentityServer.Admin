@@ -49,6 +49,40 @@
                                         </div>
                                     </div>
                                 </div>
+                                @if (Model.LoginCaptchaEnabled)
+                                {
+                                    <div class="form-group row">
+                                        <div class="col-sm-12">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="input-captcha">
+                                                        <span class="oi oi-lock-locked" title="Lock" aria-hidden="true"></span>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control" placeholder="@Localizer["Captcha"]" aria-label="Captcha" aria-describedby="input-captcha" asp-for="Captcha" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                  <div class="form-group row">
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="text-center">	                    
+	                                                <img src='@Url.Action("GetCaptchaImage","Account")?v2' />
+	                                                <br />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <button class="btn btn-dark" onclick="document.getElementById('Captcha').value = ''; location.reload();">
+                                                <i class="fa fa-refresh"></i>
+                                                Refresh
+                                            </button>
+                                        </div>
+
+                                   </div>
+                                }
 
                                 @if (Model.AllowRememberLogin)
                                 {
