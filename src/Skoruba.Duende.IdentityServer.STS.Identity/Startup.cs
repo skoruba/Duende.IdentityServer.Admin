@@ -1,3 +1,4 @@
+using Duende.IdentityServer.Services;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -34,6 +35,8 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity
             services.AddSingleton(rootConfiguration);
             // Register DbContexts for IdentityServer and Identity
             RegisterDbContexts(services);
+
+            services.AddTransient<IEventSink, CustomEventSink>();
 
             // Save data protection keys to db, using a common application name shared between Admin and STS
             services.AddDataProtection<IdentityServerDataProtectionDbContext>(Configuration);

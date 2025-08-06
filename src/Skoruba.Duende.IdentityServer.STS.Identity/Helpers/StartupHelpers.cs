@@ -371,6 +371,13 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
 
                     options.DynamicProviders.SignInScheme = IdentityConstants.ExternalScheme;
                     options.DynamicProviders.SignOutScheme = IdentityConstants.ApplicationScheme;
+
+                    options.Events.RaiseSuccessEvents = true;
+                    options.Events.RaiseFailureEvents = true;
+                    options.Events.RaiseErrorEvents = true;                    
+                    options.Events.RaiseInformationEvents = true;
+                    
+
                 })
                 .AddConfigurationStore<TConfigurationDbContext>()
                 .AddOperationalStore<TPersistedGrantDbContext>()
