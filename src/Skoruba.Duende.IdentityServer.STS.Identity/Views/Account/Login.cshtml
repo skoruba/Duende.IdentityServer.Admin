@@ -68,14 +68,14 @@
                                         <div class="col-sm-6">
                                             <div class="input-group">
                                                 <div class="text-center">	                    
-	                                                <img src='@Url.Action("GetCaptchaImage","Account")?v2' />
+	                                                <img id="captchaImage" src='@Url.Action("GetCaptchaImage","Account")?v2' />
 	                                                <br />
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="col-sm-6">
-                                            <button class="btn btn-dark" onclick="document.getElementById('Captcha').value = ''; location.reload();">
+                                            <button class="btn btn-dark" onclick="refreshCaptcha()">
                                                 <i class="fa fa-refresh"></i>
                                                 Refresh
                                             </button>
@@ -150,3 +150,13 @@
         }
     </div>
 </div>
+
+@section Scripts {
+  <script>
+    function refreshCaptcha() {
+      const img = document.getElementById('captchaImage');
+      img.ariaValueMax = "";
+      img.src = '@Url.Action("GetCaptchaImage","Account")?v2';
+    }
+  </script>
+}
