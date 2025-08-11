@@ -75,7 +75,7 @@
                                         </div>
 
                                         <div class="col-sm-6">
-                                            <button class="btn btn-dark" onclick="refreshCaptcha()">
+                                            <button class="btn btn-dark" name="button" type="button" value="refresh" onclick="refreshCaptcha()">
                                                 <i class="fa fa-refresh"></i>
                                                 Refresh
                                             </button>
@@ -156,7 +156,7 @@
     function refreshCaptcha() {
       const img = document.getElementById('captchaImage');
       img.ariaValueMax = "";
-      img.src = '@Url.Action("GetCaptchaImage","Account")?v2';
+      img.src = '@Url.Action("GetCaptchaImage","Account")?v2&v='+ new Date().getTime();      
     }
   </script>
 }
