@@ -165,7 +165,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
                     var captcha = HttpContext.Session.GetString("VerificationCode");
                     if (captcha == null || !captcha.Equals(model.Captcha, StringComparison.OrdinalIgnoreCase))
                     {
-                        await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials", clientId: context?.Client.ClientId));
+                        await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials: captcha", clientId: context?.Client.ClientId));
                         ModelState.AddModelError(string.Empty, _localizer["InvalidCaptcha"]);
                         return View(await BuildLoginViewModelAsync(model));
                     }

@@ -18,20 +18,35 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
 
         public Task PersistAsync(Event evt)
         {
-            var eventData = JsonSerializer.Serialize(evt, new JsonSerializerOptions
+            // Log username for login events
+            switch (evt)
             {
-                WriteIndented = false,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull, // Updated to fix SYSLIB0020
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
+                case UserLoginSuccessEvent success:
+                    _logger.LogInformation("Login SUCCESS: Username={Username}, SubjectId={SubjectId}, ClientId={ClientId}, RemoteIpAddress={RemoteIpAddress}",
+                        success.Username, success.SubjectId, success.ClientId, success.RemoteIpAddress);
+                    break;
+                case UserLoginFailureEvent failure:
+                    _logger.LogWarning("Login FAILURE: Username={Username}, Error={Error}, ClientId={ClientId}, RemoteIpAddress={RemoteIpAddress}",
+                        failure.Username, failure.Message, failure.ClientId, failure.RemoteIpAddress);
+                    break;
+                default:
+                    // Fallback to generic event logging
+                    var eventData = JsonSerializer.Serialize(evt, new JsonSerializerOptions
+                    {
+                        WriteIndented = false,
+                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                    });
 
-            _logger.LogInformation("Duende Event: {EventType} | {Name} | {Category} | Client: {ClientId} | Subject: {SubjectId} | Details: {Data}",
-                evt.EventType,
-                evt.Name,
-                evt.Category,
-                evt.LocalIpAddress,
-                evt.RemoteIpAddress,
-                eventData);
+                    _logger.LogInformation("Duende Event: {EventType} | {Name} | {Category} | Client: {ClientId} | Subject: {SubjectId} | Details: {Data}",
+                        evt.EventType,
+                        evt.Name,
+                        evt.Category,
+                        evt.LocalIpAddress,
+                        evt.RemoteIpAddress,
+                        eventData);
+                    break;
+            }
 
             return Task.CompletedTask;
         }
