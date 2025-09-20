@@ -67,6 +67,10 @@ dotnet new skoruba.duende.isadmin \
 
 ![Admin-preview](docs/Images/dark.png)
 
+### Solution structure:
+
+![Project structe](./docs/Images/project-structure.png)
+
 ## Cloning
 
 ```sh
@@ -513,10 +517,6 @@ In the STS project (`appsettings.json`):
 - The solution contains unit and integration tests.
 
 ## Overview
-
-### Solution structure:
-
-![Project structe](./docs/Images/project-structure.png)
 
 - STS:
 
