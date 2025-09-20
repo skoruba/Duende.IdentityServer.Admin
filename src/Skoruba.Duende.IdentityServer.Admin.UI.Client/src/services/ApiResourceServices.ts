@@ -15,6 +15,7 @@ import {
 import { client } from "@skoruba/duende.identityserver.admin.api.client";
 import { useQuery } from "react-query";
 import { queryKeys } from "./QueryKeys";
+import { getNowForUnspecifiedDb } from "@/helpers/DateTimeHelper";
 
 export const getApiResources = async (
   searchTerms: string,
@@ -87,7 +88,7 @@ export const addApiResourceSecret = async (
     value: secret.secretValue,
     id: 0,
     hashType: secret.secretHashType,
-    created: new Date(),
+    created: getNowForUnspecifiedDb(),
   });
 };
 

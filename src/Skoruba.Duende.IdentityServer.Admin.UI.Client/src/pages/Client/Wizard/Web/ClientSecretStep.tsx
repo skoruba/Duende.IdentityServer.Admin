@@ -17,6 +17,7 @@ import { useClientWizard } from "@/contexts/ClientWizardContext";
 import { Trans, useTranslation } from "react-i18next";
 import { Tip } from "@/components/Tip/Tip";
 import { ClientType } from "@/models/Clients/ClientModels";
+import { combineDateTimeForUnspecifiedDb } from "@/helpers/DateTimeHelper";
 
 export const SecretStep = () => {
   const { t } = useTranslation();
@@ -37,13 +38,10 @@ export const SecretStep = () => {
   useDirtyFormState(form, "secret");
 
   const onSubmit: SubmitHandler<SecretsFormData> = (data) => {
-    const combinedExpiration = data.expiration
-      ? new Date(
-          `${data.expiration.toISOString().split("T")[0]}T${
-            data.expirationTime ?? "00:00"
-          }`
-        )
-      : null;
+    const combinedExpiration = combineDateTimeForUnspecifiedDb(
+      data.expiration,
+      data.expirationTime
+    );
 
     setFormData((prev: any) => ({
       ...prev,
