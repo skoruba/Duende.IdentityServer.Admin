@@ -714,12 +714,20 @@ It is possible to define the configuration according the client type - by defaul
 
 ### 3.1.0
 
-- [ ] Refactoring DTOs and ApiDTOs – consider removing AutoMapper
-- [ ] Add more translations to new frontend pages
+- [ ] Migrate STS from Bootstrap to Tailwind CSS (align with Admin UI design 🎨), replace Gulp with modern tooling.
 
 ### 3.2.0
 
+- [ ] Refactoring DTOs and ApiDTOs – consider removing AutoMapper
+- [ ] Add more translations to new frontend pages
+
+### 3.3.0
+
 - [ ] Add management for claims ([#22](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/22))
+
+### 4.0.0
+
+- [ ] Rewrite API controllers as Minimal API endpoints using VSA (Vertical Slice Architecture)
 
 ## Licence
 
