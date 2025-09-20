@@ -68,7 +68,7 @@ const ClientWebSummaryTree = () => {
     <span className="flex items-center gap-2">
       <span className="font-medium">{label}:</span>
       <span>{value}</span>
-      {locked && <Lock className="w-4 h-4 opacity-70" />}
+      {locked ? <Lock className="w-4 h-4 opacity-70" /> : null}
     </span>
   );
 
@@ -90,7 +90,7 @@ const ClientWebSummaryTree = () => {
       <Card className="w-[350px] min-h-[140px] shrink-0">
         <CardContent className="p-6">
           <div className="flex flex-col items-center">
-            {avatar && <EarthLock className="w-10 h-10" />}
+            {avatar ? <EarthLock className="w-10 h-10" /> : null}
             <h3 className="text-xl font-semibold mb-2 flex items-center">
               {name}
               <Button
@@ -122,29 +122,34 @@ const ClientWebSummaryTree = () => {
     v ? t("Actions.Yes") : t("Actions.No");
 
   const enforcedRows: DisplayLine[] = React.useMemo(() => {
-    if (!rules?.enforcedValues) return [];
-    return Object.entries(rules.enforcedValues).flatMap(([key, rawValue]) => {
-      const meta: (typeof enforcedFieldMeta)[keyof typeof enforcedFieldMeta] =
-        enforcedFieldMeta[key as keyof typeof enforcedFieldMeta];
-      if (!meta) return [];
+    if (!rules || !rules.enforcedValues) return [];
+    const items: DisplayLine[] = [];
+    for (const [key, rawValue] of Object.entries(rules.enforcedValues)) {
+      const meta = enforcedFieldMeta[key as keyof typeof enforcedFieldMeta];
+      if (!meta) continue;
+
       const label = t(meta.labelKey as any);
-      const formatted =
-        typeof meta.format === "function"
-          ? (meta.format as (value: unknown, t: any) => string)(rawValue, t)
-          : String(rawValue);
-      const isLocked = rules.lockedFields?.includes(
+      let formatted: string;
+      if (typeof meta.format === "function") {
+        formatted = (meta as any).format(rawValue, t);
+      } else {
+        formatted = String(rawValue);
+      }
+      const isLocked = !!rules.lockedFields?.includes(
         key as keyof typeof enforcedFieldMeta
       );
-      return [
+
+      items.push(
         <SummaryRow
           key={key}
           label={label}
           value={formatted}
           locked={isLocked}
-        />,
-      ];
-    });
-  }, [rules?.enforcedValues, rules?.lockedFields, t]);
+        />
+      );
+    }
+    return items;
+  }, [rules, t]);
 
   const clientInfoRows: DisplayLine[] = [
     <SummaryRow

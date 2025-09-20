@@ -114,7 +114,7 @@ const ClientSummaryTable = () => {
                     </TableCell>
                     <TableCell className="flex-1 p-2">
                       {meta.format
-                        ? meta.format(value as any, t)
+                        ? (meta.format as any)(value, t)
                         : String(value)}
                     </TableCell>
                     <TableCell className="flex-1 p-2 flex justify-end">
