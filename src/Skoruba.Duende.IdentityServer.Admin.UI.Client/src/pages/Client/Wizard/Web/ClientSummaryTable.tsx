@@ -12,7 +12,7 @@ import { useFormState } from "@/contexts/FormContext";
 import { ClientWizardFormSummaryData } from "./ClientSummaryStep";
 import { useClientWizard } from "@/contexts/ClientWizardContext";
 import { useTranslation } from "react-i18next";
-import { clientTypeRules } from "../Common/ClientTypeRules";
+import { clientTypeRules, enforcedFieldMeta } from "../Common/ClientTypeRules";
 
 const ClientSummaryTable = () => {
   const { formData, setActiveStep } =
@@ -101,15 +101,28 @@ const ClientSummaryTable = () => {
               </TableRow>
             )}
 
-            {clientRules?.descriptionLabels.map((label: any) => (
-              <TableRow className="flex flex-row" key={label}>
-                <TableCell className="flex-1 p-2">{t(label)}</TableCell>
-                <TableCell className="flex-1 p-2">{t("Actions.Yes")}</TableCell>
-                <TableCell className="flex-1 p-2 flex justify-end">
-                  {createEditButton(1, true)}
-                </TableCell>
-              </TableRow>
-            ))}
+            {clientRules &&
+              Object.entries(clientRules.enforcedValues).map(([key, value]) => {
+                const meta =
+                  enforcedFieldMeta[key as keyof typeof enforcedFieldMeta];
+                if (!meta) return null;
+
+                return (
+                  <TableRow className="flex flex-row" key={key}>
+                    <TableCell className="flex-1 p-2">
+                      {t(meta.labelKey as any)}
+                    </TableCell>
+                    <TableCell className="flex-1 p-2">
+                      {meta.format
+                        ? meta.format(value as any, t)
+                        : String(value)}
+                    </TableCell>
+                    <TableCell className="flex-1 p-2 flex justify-end">
+                      {createEditButton(1, true)}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </section>

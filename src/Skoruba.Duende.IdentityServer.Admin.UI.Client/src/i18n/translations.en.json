@@ -530,7 +530,9 @@
       "SecretValue_Info": "",
       "SecretValue_Label": "Secret Value",
       "HashType_Info": "",
-      "HashType_Label": "Hash Type"
+      "HashType_Label": "Hash Type",
+      "ClientType_Label": "Client Type",
+      "ClientType_Info": "The type of the client (e.g. confidential, public)"
     },
     "Clone": {
       "ButtonClone": "Clone Client",

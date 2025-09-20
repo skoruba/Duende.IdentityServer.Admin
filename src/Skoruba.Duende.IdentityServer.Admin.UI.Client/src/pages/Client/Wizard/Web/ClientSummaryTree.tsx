@@ -60,6 +60,18 @@ const ClientWebSummaryTree = () => {
     }
   };
 
+  const SummaryRow: React.FC<{
+    label: string;
+    value: React.ReactNode;
+    locked?: boolean;
+  }> = ({ label, value, locked }) => (
+    <span className="flex items-center gap-2">
+      <span className="font-medium">{label}:</span>
+      <span>{value}</span>
+      {locked && <Lock className="w-4 h-4 opacity-70" />}
+    </span>
+  );
+
   const OAuthCard: React.FC<OAuthNode> = ({
     step,
     name,
@@ -75,8 +87,7 @@ const ClientWebSummaryTree = () => {
     );
 
     return (
-      // FIX: karty mají fixní šířku, nezvětšují se s buňkou stromu
-      <Card className="w-[340px] min-h-[140px] shrink-0">
+      <Card className="w-[440px] min-h-[140px] shrink-0">
         <CardContent className="p-6">
           <div className="flex flex-col items-center">
             {avatar && <EarthLock className="w-10 h-10" />}
@@ -98,9 +109,7 @@ const ClientWebSummaryTree = () => {
             ) : (
               <div className="flex items-center text-sm text-muted-foreground break-all">
                 {getIcon(type)}
-                <span className="ml-2">
-                  {type === OAuthNodeType.Secret ? "••••••••" : value}
-                </span>
+                <span className="ml-2">{value}</span>
               </div>
             )}
           </div>
@@ -109,50 +118,59 @@ const ClientWebSummaryTree = () => {
     );
   };
 
-  const enforcedPairs: DisplayLine[] = React.useMemo(() => {
+  const yesNo = (v: boolean | undefined) =>
+    v ? t("Actions.Yes") : t("Actions.No");
+
+  const enforcedRows: DisplayLine[] = React.useMemo(() => {
     if (!rules?.enforcedValues) return [];
     return Object.entries(rules.enforcedValues).flatMap(([key, rawValue]) => {
-      const meta = enforcedFieldMeta[key as keyof typeof enforcedFieldMeta] as {
-        labelKey: string;
-        format?: (value: any, t: any) => string;
-      };
+      const meta: (typeof enforcedFieldMeta)[keyof typeof enforcedFieldMeta] =
+        enforcedFieldMeta[key as keyof typeof enforcedFieldMeta];
       if (!meta) return [];
       const label = t(meta.labelKey as any);
-      const value =
+      const formatted =
         typeof meta.format === "function"
-          ? meta.format(rawValue as any, t)
+          ? (meta.format as (value: any, t: any) => string)(rawValue, t)
           : String(rawValue);
       const isLocked = rules.lockedFields?.includes(
         key as keyof typeof enforcedFieldMeta
       );
       return [
-        <span key={key} className="flex items-center gap-2">
-          <span className="font-medium">{label}:</span>
-          <span>{value}</span>
-          {isLocked && <Lock className="w-4 h-4 opacity-70" />}
-        </span>,
+        <SummaryRow
+          key={key}
+          label={label}
+          value={formatted}
+          locked={isLocked}
+        />,
       ];
     });
   }, [rules?.enforcedValues, rules?.lockedFields, t]);
+
+  const clientInfoRows: DisplayLine[] = [
+    <SummaryRow
+      key="clientType"
+      label={t("Client.Label.ClientType_Label")}
+      value={`${startCase(clientType)} Client`}
+    />,
+    ...(excludeOptions?.consent
+      ? []
+      : [
+          <SummaryRow
+            key="requireConsent"
+            label={t("Client.Label.RequireConsent_Label")}
+            value={yesNo(formData.requireConsent)}
+          />,
+        ]),
+    ...(formData.description ? [formData.description] : []),
+    ...enforcedRows,
+  ];
 
   const oauthClientData: OAuthNode = {
     step: 1,
     name: formData.clientName,
     avatar: true,
     type: OAuthNodeType.ClientInfo,
-    value: [
-      `${startCase(clientType)} Client`,
-      formData.clientId,
-      ...(excludeOptions?.consent
-        ? []
-        : [
-            formData.requireConsent
-              ? t("Client.Summary.RequiredConsent")
-              : t("Client.Summary.NoRequiredConsent"),
-          ]),
-      ...(formData.description ? [formData.description] : []),
-      ...enforcedPairs,
-    ],
+    value: clientInfoRows,
     children: [
       ...(excludeOptions?.uris
         ? []
@@ -196,11 +214,9 @@ const ClientWebSummaryTree = () => {
   return (
     <div className="bg-muted p-6 rounded-lg">
       <div className="relative w-full overflow-x-auto">
-        {/* FIX: centrování celého stromu uprostřed bez ohledu na šířku modalu */}
         <div className="relative left-1/2 -translate-x-1/2 inline-block">
           <Tree
             label={
-              // FIX: label obal jako inline-flex, ať se neroztahuje na celou šířku buňky
               <div className="inline-flex justify-center items-center text-center">
                 <OAuthCard {...oauthClientData} />
               </div>
