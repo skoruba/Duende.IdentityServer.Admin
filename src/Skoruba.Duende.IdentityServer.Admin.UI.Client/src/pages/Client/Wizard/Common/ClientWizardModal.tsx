@@ -38,7 +38,8 @@ const ClientWizardModal = () => {
   const { t } = useTranslation();
 
   const dialogClass = "sm:max-w-[900px] max-h-[calc(100vh-2rem)]";
-  const reviewDialogClass = "max-w-full h-full";
+  const reviewDialogClass =
+    "max-w-full flex flex-col items-start justify-start h-full";
 
   const isReviewStep = step === steps[steps.length - 1].step;
 
@@ -91,7 +92,7 @@ const ClientWizardModal = () => {
               />
             </div>
           )}
-          <div className="m-3">
+          <div className={cx(isReviewStep ? "w-full" : "m-3")}>
             <ActiveStepFormComponent steps={steps} />
           </div>
         </DialogContent>

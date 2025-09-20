@@ -135,60 +135,55 @@ const ClientSummaryStep = () => {
   };
 
   return (
-    <div>
-      <Card className="mb-8">
-        <CardContent className="space-y-6 mt-4">
-          <Alert
-            variant="default"
-            className="flex items-center justify-between"
-          >
-            <div className="flex items-start gap-4">
-              <CircleCheckBig className="h-5 w-5 text-primary mt-1" />
-              <div>
-                <AlertTitle className="text-primary font-semibold">
-                  {t("Client.Label.FinalClientReview")}
-                </AlertTitle>
-                <AlertDescription>
-                  {t("Client.Label.FinalClientReviewMessage")}
-                </AlertDescription>
-              </div>
+    <Card className="mb-8">
+      <CardContent className="space-y-6 mt-4">
+        <Alert variant="default" className="flex items-center justify-between">
+          <div className="flex items-start gap-4">
+            <CircleCheckBig className="h-5 w-5 text-primary mt-1" />
+            <div>
+              <AlertTitle className="text-primary font-semibold">
+                {t("Client.Label.FinalClientReview")}
+              </AlertTitle>
+              <AlertDescription>
+                {t("Client.Label.FinalClientReviewMessage")}
+              </AlertDescription>
             </div>
-            <RadioGroup
-              value={view}
-              onValueChange={(value) => setView(value as View)}
-              className="flex items-center gap-4"
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value={View.Tree} id="tree" />
-                <Label htmlFor="tree">
-                  {t("Client.Label.FinalClientReviewTreeView")}
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value={View.Table} id="table" />
-                <Label htmlFor="table">
-                  {t("Client.Label.FinalClientReviewTableView")}
-                </Label>
-              </div>
-            </RadioGroup>
-          </Alert>
-          {view === View.Table ? (
-            <ClientSummaryTable />
-          ) : (
-            <ClientWebSummaryTree />
-          )}
-        </CardContent>
+          </div>
+          <RadioGroup
+            value={view}
+            onValueChange={(value) => setView(value as View)}
+            className="flex items-center gap-4"
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value={View.Tree} id="tree" />
+              <Label htmlFor="tree">
+                {t("Client.Label.FinalClientReviewTreeView")}
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value={View.Table} id="table" />
+              <Label htmlFor="table">
+                {t("Client.Label.FinalClientReviewTableView")}
+              </Label>
+            </div>
+          </RadioGroup>
+        </Alert>
+        {view === View.Table ? (
+          <ClientSummaryTable />
+        ) : (
+          <ClientWebSummaryTree />
+        )}
+      </CardContent>
 
-        <CardFooter className="flex justify-between">
-          <Button onClick={onHandleBack} variant="outline">
-            {t("Actions.Back")}
-          </Button>
-          <Button type="button" onClick={onSubmit} disabled={isLoading}>
-            {isLoading ? <Loading /> : t("Actions.Save")}
-          </Button>
-        </CardFooter>
-      </Card>
-    </div>
+      <CardFooter className="flex justify-between">
+        <Button onClick={onHandleBack} variant="outline">
+          {t("Actions.Back")}
+        </Button>
+        <Button type="button" onClick={onSubmit} disabled={isLoading}>
+          {isLoading ? <Loading /> : t("Actions.Save")}
+        </Button>
+      </CardFooter>
+    </Card>
   );
 };
 

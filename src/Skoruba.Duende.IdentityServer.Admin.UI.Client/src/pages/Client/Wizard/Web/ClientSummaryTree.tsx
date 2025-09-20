@@ -87,7 +87,7 @@ const ClientWebSummaryTree = () => {
     );
 
     return (
-      <Card className="w-[440px] min-h-[140px] shrink-0">
+      <Card className="w-[350px] min-h-[140px] shrink-0">
         <CardContent className="p-6">
           <div className="flex flex-col items-center">
             {avatar && <EarthLock className="w-10 h-10" />}
@@ -130,7 +130,7 @@ const ClientWebSummaryTree = () => {
       const label = t(meta.labelKey as any);
       const formatted =
         typeof meta.format === "function"
-          ? (meta.format as (value: any, t: any) => string)(rawValue, t)
+          ? (meta.format as (value: unknown, t: any) => string)(rawValue, t)
           : String(rawValue);
       const isLocked = rules.lockedFields?.includes(
         key as keyof typeof enforcedFieldMeta
