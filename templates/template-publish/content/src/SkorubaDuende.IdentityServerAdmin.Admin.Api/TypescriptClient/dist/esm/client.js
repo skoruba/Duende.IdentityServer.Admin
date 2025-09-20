@@ -19,7 +19,7 @@ export class WebApiClientBase {
     transformOptions(options) {
         return __awaiter(this, void 0, void 0, function* () {
             const headers = new Headers(options.headers);
-            headers.set("X-CSRF", "1");
+            headers.set("X-ANTI-CSRF", "1");
             return Object.assign(Object.assign({}, options), { headers });
         });
     }
@@ -4294,6 +4294,108 @@ export class IdentityResourcesClient extends WebApiClientBase {
                 let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result400 = ProblemDetails.fromJS(resultData400);
                 return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
+    }
+}
+export class InfoClient extends WebApiClientBase {
+    constructor(baseUrl, http) {
+        super();
+        this.jsonParseReviver = undefined;
+        this.http = http ? http : window;
+        this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
+    }
+    getApplicationVersion() {
+        let url_ = this.baseUrl + "/api/Info/GetApplicationVersion";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
+            return this.processGetApplicationVersion(_response);
+        });
+    }
+    processGetApplicationVersion(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null;
+                return result200;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
+    }
+    getApplicationName() {
+        let url_ = this.baseUrl + "/api/Info/GetApplicationName";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
+            return this.processGetApplicationName(_response);
+        });
+    }
+    processGetApplicationName(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null;
+                return result200;
             });
         }
         else if (status === 401) {

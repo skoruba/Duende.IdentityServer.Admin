@@ -14,8 +14,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IdentityResourcePropertyApiDto = exports.IdentityResourcePropertiesApiDto = exports.IdentityResourceApiDto = exports.IdentityResourcesApiDto = exports.IdentityProviderApiDto = exports.IdentityProvidersApiDto = exports.DashboardIdentityDto = exports.DashboardAuditLogDto = exports.DashboardDto = exports.ConfigurationIssueSummaryDto = exports.ConfigurationResourceType = exports.ConfigurationIssueTypeView = exports.ConfigurationIssueMessageEnum = exports.ConfigurationIssueDto = exports.ClientClaimsApiDto = exports.ClientPropertiesApiDto = exports.ClientSecretApiDto = exports.ClientSecretsApiDto = exports.ClientCloneApiDto = exports.SelectItemDto = exports.ClientPropertyApiDto = exports.ClientClaimApiDto = exports.ClientApiDto = exports.ClientsApiDto = exports.ApiScopePropertyDto = exports.ApiScopeDto = exports.ApiScopePropertiesApiDto = exports.ApiScopePropertyApiDto = exports.ApiScopeApiDto = exports.ApiScopesApiDto = exports.ApiResourcePropertyApiDto = exports.ApiResourcePropertiesApiDto = exports.ApiSecretApiDto = exports.ApiSecretsApiDto = exports.ProblemDetails = exports.ApiResourceApiDto = exports.ApiResourcesApiDto = exports.UsersClient = exports.RolesClient = exports.PersistedGrantsClient = exports.LogsClient = exports.KeysClient = exports.IdentityResourcesClient = exports.IdentityProvidersClient = exports.DashboardClient = exports.ConfigurationIssuesClient = exports.ClientsClient = exports.ApiScopesClient = exports.ApiResourcesClient = exports.WebApiClientBase = void 0;
-exports.SwaggerException = exports.UserChangePasswordApiDtoOfString = exports.UserProviderDeleteApiDtoOfString = exports.UserProviderApiDtoOfString = exports.UserProvidersApiDtoOfString = exports.UserClaimApiDtoOfString = exports.UserClaimsApiDtoOfString = exports.UserRoleApiDtoOfString = exports.UserRolesApiDtoOfIdentityRoleDto = exports.RoleClaimApiDtoOfString = exports.RoleClaimsApiDtoOfString = exports.IdentityUserDto = exports.UserDtoOfString = exports.BaseUserDtoOfString = exports.IdentityUsersDto = exports.UsersDtoOfIdentityUserDtoAndString = exports.IdentityRolesDto = exports.RolesDtoOfIdentityRoleDtoAndString = exports.IdentityRoleDto = exports.RoleDtoOfString = exports.BaseRoleDtoOfString = exports.PersistedGrantsApiDto = exports.PersistedGrantApiDto = exports.PersistedGrantSubjectApiDto = exports.PersistedGrantSubjectsApiDto = exports.AuditLogDto = exports.AuditLogsDto = exports.KeyApiDto = exports.KeysApiDto = void 0;
+exports.IdentityResourcePropertiesApiDto = exports.IdentityResourceApiDto = exports.IdentityResourcesApiDto = exports.IdentityProviderApiDto = exports.IdentityProvidersApiDto = exports.DashboardIdentityDto = exports.DashboardAuditLogDto = exports.DashboardDto = exports.ConfigurationIssueSummaryDto = exports.ConfigurationResourceType = exports.ConfigurationIssueTypeView = exports.ConfigurationIssueMessageEnum = exports.ConfigurationIssueDto = exports.ClientClaimsApiDto = exports.ClientPropertiesApiDto = exports.ClientSecretApiDto = exports.ClientSecretsApiDto = exports.ClientCloneApiDto = exports.SelectItemDto = exports.ClientPropertyApiDto = exports.ClientClaimApiDto = exports.ClientApiDto = exports.ClientsApiDto = exports.ApiScopePropertyDto = exports.ApiScopeDto = exports.ApiScopePropertiesApiDto = exports.ApiScopePropertyApiDto = exports.ApiScopeApiDto = exports.ApiScopesApiDto = exports.ApiResourcePropertyApiDto = exports.ApiResourcePropertiesApiDto = exports.ApiSecretApiDto = exports.ApiSecretsApiDto = exports.ProblemDetails = exports.ApiResourceApiDto = exports.ApiResourcesApiDto = exports.UsersClient = exports.RolesClient = exports.PersistedGrantsClient = exports.LogsClient = exports.KeysClient = exports.InfoClient = exports.IdentityResourcesClient = exports.IdentityProvidersClient = exports.DashboardClient = exports.ConfigurationIssuesClient = exports.ClientsClient = exports.ApiScopesClient = exports.ApiResourcesClient = exports.WebApiClientBase = void 0;
+exports.SwaggerException = exports.UserChangePasswordApiDtoOfString = exports.UserProviderDeleteApiDtoOfString = exports.UserProviderApiDtoOfString = exports.UserProvidersApiDtoOfString = exports.UserClaimApiDtoOfString = exports.UserClaimsApiDtoOfString = exports.UserRoleApiDtoOfString = exports.UserRolesApiDtoOfIdentityRoleDto = exports.RoleClaimApiDtoOfString = exports.RoleClaimsApiDtoOfString = exports.IdentityUserDto = exports.UserDtoOfString = exports.BaseUserDtoOfString = exports.IdentityUsersDto = exports.UsersDtoOfIdentityUserDtoAndString = exports.IdentityRolesDto = exports.RolesDtoOfIdentityRoleDtoAndString = exports.IdentityRoleDto = exports.RoleDtoOfString = exports.BaseRoleDtoOfString = exports.PersistedGrantsApiDto = exports.PersistedGrantApiDto = exports.PersistedGrantSubjectApiDto = exports.PersistedGrantSubjectsApiDto = exports.AuditLogDto = exports.AuditLogsDto = exports.KeyApiDto = exports.KeysApiDto = exports.IdentityResourcePropertyApiDto = void 0;
 /* tslint:disable */
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
@@ -23,7 +23,7 @@ class WebApiClientBase {
     transformOptions(options) {
         return __awaiter(this, void 0, void 0, function* () {
             const headers = new Headers(options.headers);
-            headers.set("X-CSRF", "1");
+            headers.set("X-ANTI-CSRF", "1");
             return Object.assign(Object.assign({}, options), { headers });
         });
     }
@@ -4326,6 +4326,109 @@ class IdentityResourcesClient extends WebApiClientBase {
     }
 }
 exports.IdentityResourcesClient = IdentityResourcesClient;
+class InfoClient extends WebApiClientBase {
+    constructor(baseUrl, http) {
+        super();
+        this.jsonParseReviver = undefined;
+        this.http = http ? http : window;
+        this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
+    }
+    getApplicationVersion() {
+        let url_ = this.baseUrl + "/api/Info/GetApplicationVersion";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
+            return this.processGetApplicationVersion(_response);
+        });
+    }
+    processGetApplicationVersion(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null;
+                return result200;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
+    }
+    getApplicationName() {
+        let url_ = this.baseUrl + "/api/Info/GetApplicationName";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
+            return this.processGetApplicationName(_response);
+        });
+    }
+    processGetApplicationName(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null;
+                return result200;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
+    }
+}
+exports.InfoClient = InfoClient;
 class KeysClient extends WebApiClientBase {
     constructor(baseUrl, http) {
         super();

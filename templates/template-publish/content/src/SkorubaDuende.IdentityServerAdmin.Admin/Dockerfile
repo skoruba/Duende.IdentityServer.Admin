@@ -8,11 +8,13 @@ ARG TARGETARCH
 WORKDIR /src
 
 COPY ["src/SkorubaDuende.IdentityServerAdmin.Admin/SkorubaDuende.IdentityServerAdmin.Admin.csproj", "src/SkorubaDuende.IdentityServerAdmin.Admin/"]
+COPY ["src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Identity/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Identity.csproj", "src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Identity/"]
+COPY ["src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.csproj", "src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework/"]
+COPY ["src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Extensions/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Extensions.csproj", "src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Extensions/"]
+COPY ["src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Configuration/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Configuration.csproj", "src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Configuration/"]
+COPY ["src/SkorubaDuende.IdentityServerAdmin.Admin.UI/SkorubaDuende.IdentityServerAdmin.Admin.UI.csproj", "src/SkorubaDuende.IdentityServerAdmin.Admin.UI/"]
+COPY ["src/SkorubaDuende.IdentityServerAdmin.Shared.Configuration/SkorubaDuende.IdentityServerAdmin.Shared.Configuration.csproj", "src/SkorubaDuende.IdentityServerAdmin.Shared.Configuration/"]
 COPY ["src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.csproj", "src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared/"]
-COPY ["src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer.csproj", "src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer/"]
-COPY ["src/SkorubaDuende.IdentityServerAdmin.Shared/SkorubaDuende.IdentityServerAdmin.Shared.csproj", "src/SkorubaDuende.IdentityServerAdmin.Shared/"]
-COPY ["src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL.csproj", "src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL/"]
-COPY ["src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql.csproj", "src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql/"]
 RUN dotnet restore -a $TARGETARCH "src/SkorubaDuende.IdentityServerAdmin.Admin/SkorubaDuende.IdentityServerAdmin.Admin.csproj"
 COPY . .
 WORKDIR "/src/src/SkorubaDuende.IdentityServerAdmin.Admin"

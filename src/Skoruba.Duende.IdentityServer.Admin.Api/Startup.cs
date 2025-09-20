@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
 // Licensed under the Apache License, Version 2.0.
 
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
@@ -11,25 +9,18 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NSwag;
 using NSwag.AspNetCore;
-using NSwag.Generation.Processors.Security;
 using Skoruba.AuditLogging.EntityFramework.Entities;
 using Skoruba.Duende.IdentityServer.Admin.Api.Configuration;
-using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Extensions;
-using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Extensions;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Entities.Identity;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Extensions;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration;
-using Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration.Authorization;
-using Skoruba.Duende.IdentityServer.Admin.UI.Api.ExceptionHandling;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers;
-using Skoruba.Duende.IdentityServer.Admin.UI.Api.Mappers;
-using Skoruba.Duende.IdentityServer.Admin.UI.Api.Resources;
 using Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers;
 using Skoruba.Duende.IdentityServer.Shared.Dtos;
 using Skoruba.Duende.IdentityServer.Shared.Dtos.Identity;
+using StartupHelpers = Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers.StartupHelpers;
 
 namespace Skoruba.Duende.IdentityServer.Admin.Api
 {
@@ -50,9 +41,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api
         {
             var adminApiConfiguration = Configuration.GetSection(nameof(AdminApiConfiguration)).Get<AdminApiConfiguration>();
             services.AddSingleton(adminApiConfiguration);
+
+            var databaseProviderConfiguration = Configuration.GetSection(nameof(DatabaseProviderConfiguration)).Get<DatabaseProviderConfiguration>();
+            var databaseMigration = StartupHelpers.GetDatabaseMigrationsConfiguration(Configuration, MigrationAssemblyConfiguration.GetMigrationAssemblyByProvider(databaseProviderConfiguration));
             
             // Add DbContexts
-            RegisterDbContexts(services);
+            RegisterDbContexts(services, databaseMigration);
             
             // Add email senders which is currently setup for SendGrid and SMTP
             services.AddEmailSenders(Configuration);
@@ -111,9 +105,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api
             });
         }
 
-        public virtual void RegisterDbContexts(IServiceCollection services)
+        public virtual void RegisterDbContexts(IServiceCollection services,
+            DatabaseMigrationsConfiguration databaseMigration)
         {
-            services.AddDbContexts<AdminIdentityDbContext, IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext, AdminLogDbContext, AdminAuditLogDbContext, IdentityServerDataProtectionDbContext, AuditLog>(Configuration);
+            services.AddDbContexts<AdminIdentityDbContext, IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext, AdminLogDbContext, AdminAuditLogDbContext, IdentityServerDataProtectionDbContext, AuditLog>(Configuration, databaseMigration);
         }
 
         public virtual void RegisterAuthentication(IServiceCollection services)

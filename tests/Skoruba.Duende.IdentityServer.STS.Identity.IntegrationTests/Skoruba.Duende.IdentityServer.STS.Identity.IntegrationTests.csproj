@@ -9,13 +9,13 @@
 
     <ItemGroup>
         <PackageReference Include="FluentAssertions" Version="6.12.1" />
-        <PackageReference Include="HtmlAgilityPack" Version="1.12.1" />
-        <PackageReference Include="Duende.IdentityModel" Version="7.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.4" />
-        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="9.0.4" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+        <PackageReference Include="HtmlAgilityPack" Version="1.12.2" />
+        <PackageReference Include="Duende.IdentityModel" Version="7.1.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.8" />
+        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="9.0.8" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
         <PackageReference Include="xunit" Version="2.9.3" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
+        <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>

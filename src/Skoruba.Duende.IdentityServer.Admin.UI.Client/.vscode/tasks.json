@@ -1,0 +1,41 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Admin UI",
+      "type": "shell",
+      "command": "dotnet run --project ../Skoruba.Duende.IdentityServer.Admin.UI/Skoruba.Duende.IdentityServer.Admin.UI.csproj",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Admin UI API",
+      "type": "shell",
+      "command": "dotnet run --project ../../../Duende.IdentityServer.Admin/src/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "STS",
+      "type": "shell",
+      "command": "dotnet run --project ../../../Duende.IdentityServer.Admin/src/Skoruba.Duende.IdentityServer.STS.Identity/Skoruba.Duende.IdentityServer.STS.Identity.csproj",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Admin UI MVC",
+      "type": "shell",
+      "command": "dotnet run --project ../../../Duende.IdentityServer.Admin/src/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always"
+      }
+    }
+  ]
+}

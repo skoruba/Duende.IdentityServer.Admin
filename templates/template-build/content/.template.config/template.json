@@ -33,8 +33,8 @@
     },
     "adminclientid": {
       "type": "parameter",
-      "defaultValue": "skoruba_identity_admin",
-      "replaces": "skoruba_identity_admin",
+      "defaultValue": "skoruba_identity_admin_v3",
+      "replaces": "skoruba_identity_admin_v3",
       "isRequired": true,
       "description": "The name of client, that is be used in the Duende IdentityServer"
     },

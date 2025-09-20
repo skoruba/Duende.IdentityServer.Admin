@@ -109,5 +109,24 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Post
             // DataProtectionKey DB from existing connection
             services.AddDbContext<TDataProtectionDbContext>(options => options.UseNpgsql(dataProtectionConnectionString, sql => sql.MigrationsAssembly(migrationsAssembly)));
         }
+        
+        /// <summary>
+        /// Add Data Protection DbContext for storing data protection keys in PostgreSQL.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="connectionString"></param>
+        /// <param name="migrationsAssembly"></param>
+        /// <typeparam name="TDataProtectionDbContext"></typeparam>
+        public static void AddDataProtectionDbContextNpgSql<TDataProtectionDbContext>(
+            this IServiceCollection services,
+            string connectionString,
+            string migrationsAssembly = null)
+            where TDataProtectionDbContext : DbContext, IDataProtectionKeyContext
+        {
+            var assembly = migrationsAssembly ?? typeof(DatabaseExtensions).GetTypeInfo().Assembly.GetName().Name;
+            services.AddDbContext<TDataProtectionDbContext>(options =>
+                options.UseNpgsql(connectionString, x => x.MigrationsAssembly(assembly))
+            );
+        }
     }
 }

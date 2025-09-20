@@ -15,6 +15,7 @@ dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configu
 
 # UI
 dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.UI\Skoruba.Duende.IdentityServer.Admin.UI.csproj -c Release -o $packagesOutput
+dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.UI.Spa\Skoruba.Duende.IdentityServer.Admin.UI.Spa.csproj -c Release -o $packagesOutput
 
 # API
 dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.UI.Api\Skoruba.Duende.IdentityServer.Admin.UI.Api.csproj -c Release -o $packagesOutput
