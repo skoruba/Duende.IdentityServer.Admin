@@ -38,6 +38,7 @@ export type AdditionalConfiguration = {
   allowOfflineAccess: boolean;
   requirePkce: boolean;
   requireClientSecret: boolean;
+  authorizationCodeLifetime: number;
 };
 
 export enum View {
