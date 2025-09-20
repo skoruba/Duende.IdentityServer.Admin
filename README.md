@@ -1,4 +1,4 @@
-![Logo](./docs/images/logo.svg)
+![Logo](docs/images/logo.svg)
 
 # Skoruba.Duende.IdentityServer.Admin 🚀
 
