@@ -61,11 +61,11 @@ dotnet new skoruba.duende.isadmin \
 
 ### Admin UI - Light mode ☀️
 
-![Admin-preview](docs/images/light.png)
+![Admin-preview](docs/Images/light.png)
 
 ### Admin UI - Dark mode 🌙
 
-![Admin-preview](docs/images/dark.png)
+![Admin-preview](docs/Images/dark.png)
 
 ## Cloning
 
@@ -516,7 +516,7 @@ In the STS project (`appsettings.json`):
 
 ### Solution structure:
 
-![Project structe](./docs/images/project-structure.png)
+![Project structe](./docs/Images/project-structure.png)
 
 - STS:
 
