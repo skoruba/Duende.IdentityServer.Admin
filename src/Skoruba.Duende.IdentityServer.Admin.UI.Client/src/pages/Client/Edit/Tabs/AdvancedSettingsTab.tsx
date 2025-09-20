@@ -9,72 +9,99 @@ import ClientPropertiesTab from "./Advanced/ClientPropertiesTab";
 import ClientClaimsTab from "./Advanced/ClientClaimsTab";
 import OtherSettingsTab from "./Advanced/AuthorizationSettings/OtherSettingsTab";
 import AuthorizationSettingsTab from "./Advanced/AuthorizationSettingsTab";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/Card/Card";
+import { SlidersHorizontal } from "lucide-react";
 
 const AdvancedSettingsTab = () => {
   const { t } = useTranslation();
 
   return (
-    <Tabs defaultValue="grant_types">
-      <TabsList>
-        <TabsTrigger value="grant_types">
-          {t("Client.Tabs.GrantTypes")}
-        </TabsTrigger>
-        <TabsTrigger value="authentication_logout">
-          {t("Client.Tabs.Authentication")}
-        </TabsTrigger>
-        <TabsTrigger value="authorization">
-          {t("Client.Tabs.Authorization")}
-        </TabsTrigger>
-        <TabsTrigger value="token">{t("Client.Tabs.Tokens")}</TabsTrigger>
-        <TabsTrigger value="consent_screen">
-          {t("Client.Tabs.Consent")}
-        </TabsTrigger>
-        <TabsTrigger value="device_flow">
-          {t("Client.Tabs.DeviceFlow")}
-        </TabsTrigger>
-        <TabsTrigger value="claims">
-          {t("Client.Tabs.ClientClaims")}
-        </TabsTrigger>
-        <TabsTrigger value="properties">
-          {t("Client.Tabs.ClientProperties")}
-        </TabsTrigger>
-      </TabsList>
+    <Card>
+      <CardHeader>
+        <div className="flex items-center space-x-3">
+          <div className="p-2 bg-primary/10 rounded-lg">
+            <SlidersHorizontal className="h-6 w-6 text-primary" />
+          </div>
+          <div>
+            <CardTitle className="text-xl">
+              {t("Client.Tabs.Advanced")}
+            </CardTitle>
+            <CardDescription>
+              {t("Client.Tabs.AdvancedDescription")}
+            </CardDescription>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <Tabs defaultValue="grant_types">
+          <TabsList>
+            <TabsTrigger value="grant_types">
+              {t("Client.Tabs.GrantTypes")}
+            </TabsTrigger>
+            <TabsTrigger value="authentication_logout">
+              {t("Client.Tabs.Authentication")}
+            </TabsTrigger>
+            <TabsTrigger value="authorization">
+              {t("Client.Tabs.Authorization")}
+            </TabsTrigger>
+            <TabsTrigger value="token">{t("Client.Tabs.Tokens")}</TabsTrigger>
+            <TabsTrigger value="consent_screen">
+              {t("Client.Tabs.Consent")}
+            </TabsTrigger>
+            <TabsTrigger value="device_flow">
+              {t("Client.Tabs.DeviceFlow")}
+            </TabsTrigger>
+            <TabsTrigger value="claims">
+              {t("Client.Tabs.ClientClaims")}
+            </TabsTrigger>
+            <TabsTrigger value="properties">
+              {t("Client.Tabs.ClientProperties")}
+            </TabsTrigger>
+          </TabsList>
 
-      <TabsContent value="grant_types">
-        <GrantTypesTab />
-      </TabsContent>
+          <TabsContent value="grant_types">
+            <GrantTypesTab />
+          </TabsContent>
 
-      <TabsContent value="authorization">
-        <AuthorizationSettingsTab />
-      </TabsContent>
+          <TabsContent value="authorization">
+            <AuthorizationSettingsTab />
+          </TabsContent>
 
-      <TabsContent value="authentication_logout">
-        <AuthenticationLogoutTab />
-      </TabsContent>
+          <TabsContent value="authentication_logout">
+            <AuthenticationLogoutTab />
+          </TabsContent>
 
-      <TabsContent value="token">
-        <TokenTab />
-      </TabsContent>
+          <TabsContent value="token">
+            <TokenTab />
+          </TabsContent>
 
-      <TabsContent value="consent_screen">
-        <ConsentScreenTab />
-      </TabsContent>
+          <TabsContent value="consent_screen">
+            <ConsentScreenTab />
+          </TabsContent>
 
-      <TabsContent value="device_flow">
-        <DeviceFlowTab />
-      </TabsContent>
+          <TabsContent value="device_flow">
+            <DeviceFlowTab />
+          </TabsContent>
 
-      <TabsContent value="properties">
-        <ClientPropertiesTab />
-      </TabsContent>
+          <TabsContent value="properties">
+            <ClientPropertiesTab />
+          </TabsContent>
 
-      <TabsContent value="claims">
-        <ClientClaimsTab />
-      </TabsContent>
-      <TabsContent value="otherSettings">
-        <OtherSettingsTab />
-      </TabsContent>
-    </Tabs>
+          <TabsContent value="claims">
+            <ClientClaimsTab />
+          </TabsContent>
+          <TabsContent value="otherSettings">
+            <OtherSettingsTab />
+          </TabsContent>
+        </Tabs>
+      </CardContent>
+    </Card>
   );
 };
 
