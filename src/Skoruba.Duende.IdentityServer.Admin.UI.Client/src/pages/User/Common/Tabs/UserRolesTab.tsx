@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
+import { Trash, Users } from "lucide-react";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { usePaginationTable } from "@/components/DataTable/usePaginationTable";
 import useModal from "@/hooks/modalHooks";
@@ -14,6 +14,7 @@ import { useState } from "react";
 import RolesModal from "@/components/Roles/RolesModal";
 import DeleteDialog from "@/components/DeleteDialog/DeleteDialog";
 import Loading from "@/components/Loading/Loading";
+import { CardWrapper } from "@/components/CardWrapper/CardWrapper";
 
 type Props = {
   userId: string;
@@ -88,7 +89,11 @@ const UserRolesTab: React.FC<Props> = ({ userId }) => {
   }
 
   return (
-    <>
+    <CardWrapper
+      title={t("User.Tabs.Roles")}
+      description={t("User.Tabs.RolesDescription")}
+      icon={Users}
+    >
       <Button onClick={openModal} className="mb-4" type="button">
         {t("Role.Actions.Add")}
       </Button>
@@ -114,7 +119,7 @@ const UserRolesTab: React.FC<Props> = ({ userId }) => {
         message={t("Role.DeleteConfirmDescription")}
         handleDelete={confirmDelete}
       />
-    </>
+    </CardWrapper>
   );
 };
 

@@ -1,6 +1,8 @@
 import { FormRow } from "@/components/FormRow/FormRow";
 import { useTranslation } from "react-i18next";
 import { UserFormMode } from "../UserForm";
+import { CardWrapper } from "@/components/CardWrapper/CardWrapper";
+import { Info } from "lucide-react";
 
 type BasicsTabProps = {
   mode: UserFormMode;
@@ -10,7 +12,11 @@ const BasicsTab: React.FC<BasicsTabProps> = ({ mode }) => {
   const { t } = useTranslation();
 
   return (
-    <>
+    <CardWrapper
+      title={t("User.Tabs.Basics")}
+      description={t("User.Tabs.BasicsDescription")}
+      icon={Info}
+    >
       <FormRow
         name="userName"
         label={t("User.Section.Label.UserUserName_Label")}
@@ -105,7 +111,7 @@ const BasicsTab: React.FC<BasicsTabProps> = ({ mode }) => {
           </div>
         </>
       )}
-    </>
+    </CardWrapper>
   );
 };
 

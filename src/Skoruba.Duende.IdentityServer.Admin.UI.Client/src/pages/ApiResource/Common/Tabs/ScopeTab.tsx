@@ -1,10 +1,11 @@
+import { CardWrapper } from "@/components/CardWrapper/CardWrapper";
 import { FormRow } from "@/components/FormRow/FormRow";
 import Loading from "@/components/Loading/Loading";
 import { Tip } from "@/components/Tip/Tip";
 import { Button } from "@/components/ui/button";
 import { ApiScopeCreateUrl } from "@/routing/Urls";
 import { useClientScopes } from "@/services/ClientServices";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Shield } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -16,7 +17,11 @@ const ScopeTab = () => {
   return clientScopes.isLoading ? (
     <Loading />
   ) : (
-    <>
+    <CardWrapper
+      title={t("ApiResource.Tabs.Scopes")}
+      description={t("ApiResource.Tabs.ScopesDescription")}
+      icon={Shield}
+    >
       <Tip>
         {t("ApiScope.Tips.NoScope")}
         <Button
@@ -46,7 +51,7 @@ const ScopeTab = () => {
           initialItems: clientScopes.data ?? [],
         }}
       />
-    </>
+    </CardWrapper>
   );
 };
 

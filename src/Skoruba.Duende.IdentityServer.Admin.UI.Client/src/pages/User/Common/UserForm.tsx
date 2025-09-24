@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
@@ -14,12 +15,11 @@ import UserClaimsTab from "./Tabs/UserClaimsTab";
 import UserRolesTab from "./Tabs/UserRolesTab";
 import ExternalApplicationsTab from "./Tabs/ExternalApplicationsTab";
 import UserPersistedGrantsTab from "./Tabs/UserPersistedGrantsTab";
-import { useState } from "react";
 import { queryKeys } from "@/services/QueryKeys";
 import Hoorey from "@/components/Hoorey/Hoorey";
 import useModal from "@/hooks/modalHooks";
 import UserDeleteDialog from "./UserDeleteDialog";
-import { Trash2 } from "lucide-react";
+import { Trash2, Info, Tag, Users, Globe, KeySquare } from "lucide-react";
 import {
   useConfirmUnsavedChanges,
   useNavigateWithBlocker,
@@ -38,7 +38,6 @@ interface Props {
 
 const UserForm: React.FC<Props> = ({ mode, userId, defaultValues }) => {
   const { t } = useTranslation();
-
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("basics");
   const deleteModal = useModal();
@@ -49,7 +48,6 @@ const UserForm: React.FC<Props> = ({ mode, userId, defaultValues }) => {
   });
 
   const navigate = useNavigateWithBlocker(form);
-
   const { DialogCmp } = useConfirmUnsavedChanges(form.formState.isDirty);
 
   const mutation = useMutation(
@@ -90,22 +88,43 @@ const UserForm: React.FC<Props> = ({ mode, userId, defaultValues }) => {
             >
               <div className="flex justify-between">
                 <TabsList>
-                  <TabsTrigger value="basics">
+                  <TabsTrigger
+                    value="basics"
+                    className="flex items-center gap-2"
+                  >
+                    <Info className="h-4 w-4" />
                     {t("User.Tabs.Basics")}
                   </TabsTrigger>
-                  <TabsTrigger value="claims">
+                  <TabsTrigger
+                    value="claims"
+                    className="flex items-center gap-2"
+                  >
+                    <Tag className="h-4 w-4" />
                     {t("User.Tabs.Claims")}
                   </TabsTrigger>
-                  <TabsTrigger value="roles">
+                  <TabsTrigger
+                    value="roles"
+                    className="flex items-center gap-2"
+                  >
+                    <Users className="h-4 w-4" />
                     {t("User.Tabs.Roles")}
                   </TabsTrigger>
-                  <TabsTrigger value="providers">
+                  <TabsTrigger
+                    value="providers"
+                    className="flex items-center gap-2"
+                  >
+                    <Globe className="h-4 w-4" />
                     {t("User.Tabs.ExternalApplications")}
                   </TabsTrigger>
-                  <TabsTrigger value="persistedgrants">
+                  <TabsTrigger
+                    value="persistedgrants"
+                    className="flex items-center gap-2"
+                  >
+                    <KeySquare className="h-4 w-4" />
                     {t("User.Tabs.PersistedGrants")}
                   </TabsTrigger>
                 </TabsList>
+
                 <div className="inline-flex">
                   {showDelete && (
                     <Button

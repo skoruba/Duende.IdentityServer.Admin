@@ -1,11 +1,17 @@
+import { CardWrapper } from "@/components/CardWrapper/CardWrapper";
 import { FormRow } from "@/components/FormRow/FormRow";
+import { Info } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const ApiScopeBasicsTab: React.FC = () => {
   const { t } = useTranslation();
 
   return (
-    <>
+    <CardWrapper
+      title={t("ApiScope.Tabs.Basics")}
+      description={t("ApiScope.Tabs.BasicsDescription")}
+      icon={Info}
+    >
       <FormRow
         name="name"
         label={t("ApiScope.Section.Label.Name_Label")}
@@ -55,7 +61,7 @@ const ApiScopeBasicsTab: React.FC = () => {
           type="switch"
         />
       </div>
-    </>
+    </CardWrapper>
   );
 };
 

@@ -10,7 +10,7 @@ import {
 } from "@/services/IdentityProviderService";
 import { IdentityProvidersUrl } from "@/routing/Urls";
 import Hoorey from "@/components/Hoorey/Hoorey";
-import { Trash2 } from "lucide-react";
+import { Trash2, Info, Settings } from "lucide-react";
 import useModal from "@/hooks/modalHooks";
 import IdentityProviderDeleteDialog from "./IdentityProviderDeleteDialog";
 import IdentityProviderBasicsTab from "./Tabs/IdentityProviderBasicsTab";
@@ -91,10 +91,15 @@ const IdentityProviderForm: React.FC<Props> = ({ mode, defaultValues }) => {
               className="flex-1"
             >
               <TabsList>
-                <TabsTrigger value="basics">
+                <TabsTrigger value="basics" className="flex items-center gap-2">
+                  <Info className="h-4 w-4" />
                   {t("IdentityProvider.Tabs.Basics")}
                 </TabsTrigger>
-                <TabsTrigger value="properties">
+                <TabsTrigger
+                  value="properties"
+                  className="flex items-center gap-2"
+                >
+                  <Settings className="h-4 w-4" />
                   {t("IdentityProvider.Tabs.Properties")}
                 </TabsTrigger>
               </TabsList>

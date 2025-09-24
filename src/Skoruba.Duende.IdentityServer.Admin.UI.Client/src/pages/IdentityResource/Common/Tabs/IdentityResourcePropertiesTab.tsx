@@ -8,6 +8,8 @@ import {
 } from "@/services/IdentityResourceServices";
 import { useTranslation } from "react-i18next";
 import { queryKeys } from "@/services/QueryKeys";
+import { CardWrapper } from "@/components/CardWrapper/CardWrapper";
+import { Settings } from "lucide-react";
 
 const IdentityResourcePropertiesTab: React.FC = () => {
   const { resourceId } = useParams<{ resourceId: string }>();
@@ -16,14 +18,20 @@ const IdentityResourcePropertiesTab: React.FC = () => {
   if (!resourceId) return null;
 
   return (
-    <PropertiesTab
-      resourceId={Number(resourceId)}
-      queryKey={[queryKeys.identityResourceProperties, resourceId]}
-      pageTitle={t("IdentityResource.Tabs.Properties")}
-      getProperties={getIdentityResourceProperties}
-      addProperty={addIdentityResourceProperty}
-      deleteProperty={deleteIdentityResourceProperty}
-    />
+    <CardWrapper
+      title={t("IdentityResource.Tabs.Properties")}
+      description={t("IdentityResource.Tabs.PropertiesDescription")}
+      icon={Settings}
+    >
+      <PropertiesTab
+        resourceId={Number(resourceId)}
+        queryKey={[queryKeys.identityResourceProperties, resourceId]}
+        pageTitle={t("IdentityResource.Tabs.Properties")}
+        getProperties={getIdentityResourceProperties}
+        addProperty={addIdentityResourceProperty}
+        deleteProperty={deleteIdentityResourceProperty}
+      />
+    </CardWrapper>
   );
 };
 

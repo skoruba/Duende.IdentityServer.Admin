@@ -8,7 +8,7 @@ import UserClaimsTab from "./Tabs/UserClaimsTab";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
+import { Trash2, Info, Key, Shield, User, Settings } from "lucide-react";
 
 type ApiResourceTabsProps = {
   onApiResourceDelete?: () => void;
@@ -18,33 +18,42 @@ const ApiResourceTabs: React.FC<ApiResourceTabsProps> = ({
   onApiResourceDelete,
 }) => {
   const { t } = useTranslation();
-
   const { resourceId } = useParams<{ resourceId: string }>();
 
   return (
     <Tabs defaultValue="basics">
       <div className="flex justify-between">
         <TabsList>
-          <TabsTrigger value="basics">
+          <TabsTrigger value="basics" className="flex items-center gap-2">
+            <Info className="h-4 w-4" />
             {t("ApiResource.Tabs.Basics")}
           </TabsTrigger>
+
           {resourceId && (
-            <TabsTrigger value="secrets">
+            <TabsTrigger value="secrets" className="flex items-center gap-2">
+              <Key className="h-4 w-4" />
               {t("ApiResource.Tabs.Secrets")}
             </TabsTrigger>
           )}
-          <TabsTrigger value="scopes">
+
+          <TabsTrigger value="scopes" className="flex items-center gap-2">
+            <Shield className="h-4 w-4" />
             {t("ApiResource.Tabs.Scopes")}
           </TabsTrigger>
-          <TabsTrigger value="userClaims">
+
+          <TabsTrigger value="userClaims" className="flex items-center gap-2">
+            <User className="h-4 w-4" />
             {t("ApiResource.Tabs.UserClaims")}
           </TabsTrigger>
+
           {resourceId && (
-            <TabsTrigger value="properties">
+            <TabsTrigger value="properties" className="flex items-center gap-2">
+              <Settings className="h-4 w-4" />
               {t("ApiResource.Tabs.Properties")}
             </TabsTrigger>
           )}
         </TabsList>
+
         <div className="inline-flex">
           {onApiResourceDelete && (
             <Button

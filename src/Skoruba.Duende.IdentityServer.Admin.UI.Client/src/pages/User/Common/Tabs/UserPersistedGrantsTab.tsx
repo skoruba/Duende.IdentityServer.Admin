@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
+import { KeySquare, Trash } from "lucide-react";
 import { DataTable } from "@/components/DataTable/DataTable";
 import {
   useUserPersistedGrants,
@@ -14,6 +14,7 @@ import { PersistedGrant } from "@/models/Users/UserModels";
 import { usePaginationTable } from "@/components/DataTable/usePaginationTable";
 import useModal from "@/hooks/modalHooks";
 import { useState } from "react";
+import { CardWrapper } from "@/components/CardWrapper/CardWrapper";
 
 type Props = {
   userId: string;
@@ -113,7 +114,11 @@ const UserPersistedGrantsTab: React.FC<Props> = ({ userId }) => {
   if (isLoading) return <Loading />;
 
   return (
-    <>
+    <CardWrapper
+      title={t("User.Tabs.PersistedGrants")}
+      description={t("User.Tabs.PersistedGrantsDescription")}
+      icon={KeySquare}
+    >
       <div className="flex justify-end mb-2">
         <Button
           type="button"
@@ -149,7 +154,7 @@ const UserPersistedGrantsTab: React.FC<Props> = ({ userId }) => {
         message={t("User.PersistedGrants.DeleteAllConfirm")}
         handleDelete={confirmDeleteAll}
       />
-    </>
+    </CardWrapper>
   );
 };
 

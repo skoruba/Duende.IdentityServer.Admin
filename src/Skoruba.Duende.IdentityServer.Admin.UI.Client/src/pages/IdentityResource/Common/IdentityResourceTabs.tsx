@@ -5,7 +5,7 @@ import IdentityResourcePropertiesTab from "./Tabs/IdentityResourcePropertiesTab"
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
+import { Trash2, Info, User, Settings } from "lucide-react";
 
 type IdentityResourceTabsProps = {
   onIdentityResourceDelete?: () => void;
@@ -21,18 +21,24 @@ const IdentityResourceTabs: React.FC<IdentityResourceTabsProps> = ({
     <Tabs defaultValue="basics" className="w-full">
       <div className="flex justify-between">
         <TabsList>
-          <TabsTrigger value="basics">
+          <TabsTrigger value="basics" className="flex items-center gap-2">
+            <Info className="h-4 w-4" />
             {t("IdentityResource.Tabs.Basics")}
           </TabsTrigger>
-          <TabsTrigger value="claims">
+
+          <TabsTrigger value="claims" className="flex items-center gap-2">
+            <User className="h-4 w-4" />
             {t("IdentityResource.Tabs.UserClaims")}
           </TabsTrigger>
+
           {resourceId && (
-            <TabsTrigger value="properties">
+            <TabsTrigger value="properties" className="flex items-center gap-2">
+              <Settings className="h-4 w-4" />
               {t("IdentityResource.Tabs.Properties")}
             </TabsTrigger>
           )}
         </TabsList>
+
         <div className="inline-flex">
           {onIdentityResourceDelete && (
             <Button

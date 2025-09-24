@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import WarningChecker from "./ClientsChecker";
 import { OverviewLeft } from "./OverviewLeft";
 import Loading from "@/components/Loading/Loading";
-import { queryKeys } from "@/services/QueryKeys";
+import { queryKeys, queryWithoutCache } from "@/services/QueryKeys";
 
 const DashboardCharts = () => {
   const { t } = useTranslation();
@@ -20,7 +20,7 @@ const DashboardCharts = () => {
   const dashboardIdentityServer = useQuery(
     [queryKeys.dashboard],
     () => getDashboardIdentityServerData(30),
-    { keepPreviousData: true }
+    queryWithoutCache
   );
 
   return (

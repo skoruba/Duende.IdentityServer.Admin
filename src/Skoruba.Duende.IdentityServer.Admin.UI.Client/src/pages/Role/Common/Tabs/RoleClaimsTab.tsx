@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
+import { Tag, Trash } from "lucide-react";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { usePaginationTable } from "@/components/DataTable/usePaginationTable";
 import useModal from "@/hooks/modalHooks";
@@ -14,6 +14,7 @@ import { useState } from "react";
 import ClaimsModal from "@/components/Claims/ClaimsModal";
 import DeleteDialog from "@/components/DeleteDialog/DeleteDialog";
 import Loading from "@/components/Loading/Loading";
+import { CardWrapper } from "@/components/CardWrapper/CardWrapper";
 
 type Props = {
   roleId: string;
@@ -95,7 +96,11 @@ const RoleClaimsTab: React.FC<Props> = ({ roleId }) => {
   }
 
   return (
-    <>
+    <CardWrapper
+      title={t("Role.Tabs.Claims")}
+      description={t("Role.Tabs.ClaimsDescription")}
+      icon={Tag}
+    >
       <Button onClick={openModal} className="mb-4" type="button">
         {t("Claim.Actions.Add")}
       </Button>
@@ -121,7 +126,7 @@ const RoleClaimsTab: React.FC<Props> = ({ roleId }) => {
         message={t("Claim.DeleteConfirmDescription")}
         handleDelete={confirmDelete}
       />
-    </>
+    </CardWrapper>
   );
 };
 

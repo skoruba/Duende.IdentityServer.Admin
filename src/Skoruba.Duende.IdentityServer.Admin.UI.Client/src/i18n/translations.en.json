@@ -143,8 +143,11 @@
     },
     "Tabs": {
       "Basics": "Basics",
+      "BasicsDescription": "Basic settings for the API scope, including its name, description, and whether it is enabled.",
       "UserClaims": "User Claims",
-      "Properties": "Properties"
+      "UserClaimsDescription": "Manage the user claims that should be included in the access token.",
+      "Properties": "Properties",
+      "PropertiesDescription": "Additional properties for the API scope."
     },
     "Create": {
       "PageTitle": "Api Scope"
@@ -195,8 +198,11 @@
     },
     "Tabs": {
       "Basics": "Basics",
+      "BasicsDescription": "Basic settings for the identity resource, including its name, description, and whether it is enabled.",
       "UserClaims": "User Claims",
-      "Properties": "Properties"
+      "UserClaimsDescription": "Manage the user claims that should be included in the identity token.",
+      "Properties": "Properties",
+      "PropertiesDescription": "Additional properties for the identity resource."
     },
     "Create": {
       "PageTitle": "Identity Resource"
@@ -244,10 +250,15 @@
     },
     "Tabs": {
       "Basics": "Basics",
+      "BasicsDescription": "Basic settings for the API resource, including its name, description, and whether it is enabled.",
       "Scopes": "Scopes",
+      "ScopesDescription": "Manage the scopes that belong to this API resource.",
       "Secrets": "Secrets",
+      "SecretsDescription": "Manage API resource secrets for authentication and secure access.",
       "UserClaims": "User Claims",
-      "Properties": "Properties"
+      "UserClaimsDescription": "Manage the user claims that should be included in the access token.",
+      "Properties": "Properties",
+      "PropertiesDescription": "Additional properties for the API resource."
     },
     "Section": {
       "Label": {
@@ -565,7 +576,9 @@
     },
     "Tabs": {
       "Basics": "Basics",
-      "Claims": "Claims"
+      "BasicsDescription": "Basic settings for the role, including its name and description.",
+      "Claims": "Claims",
+      "ClaimsDescription": "Manage the claims that are associated with this role."
     },
     "Users": {
       "PageTitle": "Users in Role",
@@ -612,7 +625,9 @@
     },
     "Tabs": {
       "Basics": "Basics",
-      "Properties": "Properties"
+      "BasicsDescription": "Basic settings for the identity provider, including its name, scheme, and whether it is enabled.",
+      "Properties": "Properties",
+      "PropertiesDescription": "Additional properties for the identity provider."
     },
     "Actions": {
       "Created": "Identity Provider has been created successfully!",
@@ -693,10 +708,15 @@
     },
     "Tabs": {
       "Basics": "Basics",
+      "BasicsDescription": "Basic settings for the user, including username, email, phone number, and security settings.",
       "Claims": "Claims",
+      "ClaimsDescription": "Manage the claims associated with the user.",
       "Roles": "Roles",
+      "RolesDescription": "Manage the roles assigned to the user.",
       "ExternalApplications": "External Applications",
-      "PersistedGrants": "Persisted Grants"
+      "ExternalApplicationsDescription": "Manage the external applications linked to the user.",
+      "PersistedGrants": "Persisted Grants",
+      "PersistedGrantsDescription": "Manage the persisted grants associated with the user."
     },
     "Section": {
       "Label": {

@@ -4,7 +4,7 @@ import Page from "@/components/Page/Page";
 import Loading from "@/components/Loading/Loading";
 import { Breadcrumbs } from "@/components/Breadcrumbs/Breadcrumbs";
 import { RolesUrl } from "@/routing/Urls";
-import RoleForm from "../Common/RoleForm";
+import RoleForm, { RoleFormMode } from "../Common/RoleForm";
 import { useQuery } from "react-query";
 import { getRole } from "@/services/RoleService";
 import { queryKeys } from "@/services/QueryKeys";
@@ -29,7 +29,7 @@ const RoleEdit = () => {
           { name: data.name },
         ]}
       />
-      <RoleForm mode="edit" roleId={roleId} defaultValues={data} />
+      <RoleForm mode={RoleFormMode.Edit} roleId={roleId} defaultValues={data} />
     </Page>
   );
 };

@@ -1,8 +1,5 @@
 import ApiHelper from "@/helpers/ApiHelper";
-import {
-  DashBoardIdentityData,
-  DashboardIdentityServerResult,
-} from "@/models/Dashboard/DashboardModels";
+import { DashboardIdentityServerResult } from "@/models/Dashboard/DashboardModels";
 import {
   ApiResourceEditUrl,
   ApiScopeEditUrl,
@@ -55,20 +52,6 @@ export const getConfigurationIssues = () =>
     },
     queryWithoutCache
   );
-
-export const getDashboardIdentityData =
-  async (): Promise<DashBoardIdentityData> => {
-    const dashboardClient = new client.DashboardClient(
-      ApiHelper.getApiBaseUrl()
-    );
-
-    const dashboard = await dashboardClient.getDashboardIdentity();
-
-    return {
-      usersTotal: dashboard.usersTotal,
-      rolesTotal: dashboard.rolesTotal,
-    };
-  };
 
 export const getDashboardIdentityServerData = async (
   auditLogsLastNumberOfDays: number

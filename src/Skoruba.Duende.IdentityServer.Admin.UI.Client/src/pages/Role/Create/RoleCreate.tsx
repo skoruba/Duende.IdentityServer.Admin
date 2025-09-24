@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import Page from "@/components/Page/Page";
 import { Breadcrumbs } from "@/components/Breadcrumbs/Breadcrumbs";
 import { RolesUrl } from "@/routing/Urls";
-import RoleForm from "../Common/RoleForm";
+import RoleForm, { RoleFormMode } from "../Common/RoleForm";
 import { defaultRoleFormData } from "../Common/RoleSchema";
 
 const RoleCreate = () => {
@@ -16,7 +16,10 @@ const RoleCreate = () => {
           { name: t("Role.Create.PageTitle") },
         ]}
       />
-      <RoleForm mode="create" defaultValues={defaultRoleFormData} />
+      <RoleForm
+        mode={RoleFormMode.Create}
+        defaultValues={defaultRoleFormData}
+      />
     </Page>
   );
 };

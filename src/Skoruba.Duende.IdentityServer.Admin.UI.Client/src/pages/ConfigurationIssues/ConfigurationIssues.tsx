@@ -56,7 +56,6 @@ const ConfigurationIssues: React.FC = () => {
       },
     },
     {
-      accessorKey: "message",
       header: t("ConfigurationIssues.Fix"),
       cell: ({ row }: { row: { original: client.ConfigurationIssueDto } }) => {
         return (

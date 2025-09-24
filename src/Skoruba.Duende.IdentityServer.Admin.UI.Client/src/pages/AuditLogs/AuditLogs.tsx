@@ -10,13 +10,6 @@ import { getAuditLogs } from "@/services/AuditLogsService";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { AuditLogData } from "@/models/AuditLogs/AuditLogsModels";
 import { Code, CalendarIcon, X } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -26,13 +19,14 @@ import {
 import { format } from "date-fns";
 import { queryKeys } from "@/services/QueryKeys";
 
+import AuditLogDetail from "./AuditLogDetail";
+
 const AuditLogs: React.FC = () => {
   const { t } = useTranslation();
   const { pagination, setPagination } = usePaginationTable();
 
   const [filters, setFilters] = useState<Partial<AuditLogData>>({});
   const [selectedLog, setSelectedLog] = useState<AuditLogData | null>(null);
-  const [activeTab, setActiveTab] = useState("data");
   const [date, setDate] = useState<Date | undefined>();
 
   const filtersToSend = {
@@ -69,7 +63,6 @@ const AuditLogs: React.FC = () => {
           variant="outline"
           onClick={() => {
             setSelectedLog(row.original);
-            setActiveTab("data");
           }}
         >
           <Code className="w-4 h-4 mr-2" />
@@ -125,6 +118,7 @@ const AuditLogs: React.FC = () => {
                 setDate(undefined);
                 handleChange("created", undefined);
               }}
+              aria-label={t("AuditLogs.ClearDate")}
             >
               <X className="w-4 h-4" />
             </button>
@@ -144,46 +138,12 @@ const AuditLogs: React.FC = () => {
         />
       )}
 
-      <Dialog open={!!selectedLog} onOpenChange={() => setSelectedLog(null)}>
-        <DialogContent
-          onOpenAutoFocus={(e) => e.preventDefault()}
-          className="overflow-auto max-w-[900px] max-h-[calc(100vh-2rem)]"
-        >
-          <DialogHeader>
-            <DialogTitle>{t("AuditLogs.DetailsModalTitle")}</DialogTitle>
-          </DialogHeader>
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="mb-4">
-              <TabsTrigger value="data">{t("AuditLogs.Data")}</TabsTrigger>
-              <TabsTrigger value="subject">
-                {t("AuditLogs.SubjectAdditionalData")}
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="data">
-              {selectedLog?.data ? (
-                <pre className="p-2 bg-gray-100 rounded text-sm overflow-x-auto">
-                  <code>{selectedLog.data}</code>
-                </pre>
-              ) : (
-                <p className="text-muted-foreground">{t("AuditLogs.NoData")}</p>
-              )}
-            </TabsContent>
-
-            <TabsContent value="subject">
-              {selectedLog?.subjectAdditionalData ? (
-                <pre className="p-2 bg-gray-100 rounded text-sm overflow-x-auto">
-                  <code>{selectedLog.subjectAdditionalData}</code>
-                </pre>
-              ) : (
-                <p className="text-muted-foreground">
-                  {t("AuditLogs.NoSubjectAdditionalData")}
-                </p>
-              )}
-            </TabsContent>
-          </Tabs>
-        </DialogContent>
-      </Dialog>
+      <AuditLogDetail
+        open={!!selectedLog}
+        log={selectedLog}
+        onClose={() => setSelectedLog(null)}
+        defaultTab="data"
+      />
     </Page>
   );
 };

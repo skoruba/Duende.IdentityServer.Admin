@@ -1,11 +1,17 @@
+import { CardWrapper } from "@/components/CardWrapper/CardWrapper";
 import { FormRow } from "@/components/FormRow/FormRow";
+import { Info } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const IdentityResourceBasicsTab: React.FC = () => {
   const { t } = useTranslation();
 
   return (
-    <>
+    <CardWrapper
+      title={t("IdentityResource.Tabs.Basics")}
+      description={t("IdentityResource.Tabs.BasicsDescription")}
+      icon={Info}
+    >
       <FormRow
         name="name"
         label={t("IdentityResource.Section.Label.Name_Label")}
@@ -59,7 +65,7 @@ const IdentityResourceBasicsTab: React.FC = () => {
           type="switch"
         />
       </div>
-    </>
+    </CardWrapper>
   );
 };
 

@@ -1,6 +1,8 @@
+import { CardWrapper } from "@/components/CardWrapper/CardWrapper";
 import { FormRow } from "@/components/FormRow/FormRow";
 import Loading from "@/components/Loading/Loading";
 import { useSigningAlgorithms } from "@/services/ClientServices";
+import { Info } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const BasicsTab: React.FC = () => {
@@ -12,7 +14,11 @@ const BasicsTab: React.FC = () => {
   }
 
   return (
-    <>
+    <CardWrapper
+      title={t("ApiResource.Tabs.Basics")}
+      description={t("ApiResource.Tabs.BasicsDescription")}
+      icon={Info}
+    >
       <FormRow
         name="name"
         label={t("ApiResource.Section.Label.Name_Label")}
@@ -75,7 +81,7 @@ const BasicsTab: React.FC = () => {
             })) ?? [],
         }}
       />
-    </>
+    </CardWrapper>
   );
 };
 

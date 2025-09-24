@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
+import { Globe, Trash } from "lucide-react";
 import { DataTable } from "@/components/DataTable/DataTable";
 import {
   useUserExternalApps,
@@ -10,6 +10,7 @@ import { toast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import DeleteDialog from "@/components/DeleteDialog/DeleteDialog";
 import Loading from "@/components/Loading/Loading";
+import { CardWrapper } from "@/components/CardWrapper/CardWrapper";
 
 type Props = {
   userId: string;
@@ -75,7 +76,11 @@ const ExternalApplicationsTab: React.FC<Props> = ({ userId }) => {
   if (isLoading) return <Loading />;
 
   return (
-    <>
+    <CardWrapper
+      title={t("User.Tabs.ExternalApplications")}
+      description={t("User.Tabs.ExternalApplicationsDescription")}
+      icon={Globe}
+    >
       <DataTable
         columns={columns}
         data={data ?? []}
@@ -95,7 +100,7 @@ const ExternalApplicationsTab: React.FC<Props> = ({ userId }) => {
         message={t("User.Actions.DeleteExternalApplicationConfirm")}
         handleDelete={confirmDelete}
       />
-    </>
+    </CardWrapper>
   );
 };
 

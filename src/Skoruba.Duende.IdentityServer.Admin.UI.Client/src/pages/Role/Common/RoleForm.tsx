@@ -8,22 +8,27 @@ import { useMutation, useQueryClient } from "react-query";
 import { createRole, updateRole } from "@/services/RoleService";
 import { useTranslation } from "react-i18next";
 import { RolesUrl } from "@/routing/Urls";
-import { FormRow } from "@/components/FormRow/FormRow";
 import { queryKeys } from "@/services/QueryKeys";
 import Hoorey from "@/components/Hoorey/Hoorey";
 import useModal from "@/hooks/modalHooks";
 import React, { useState } from "react";
 import RoleDeleteDialog from "./RoleDeleteDialog";
-import { Trash2 } from "lucide-react";
+import { Trash2, Info, Tag } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import RoleClaimsTab from "./Tabs/RoleClaimsTab"; // <<< Přidán import
+import RoleClaimsTab from "./Tabs/RoleClaimsTab";
 import {
   useConfirmUnsavedChanges,
   useNavigateWithBlocker,
 } from "@/hooks/useConfirmUnsavedChanges";
+import RoleBasicTab from "./Tabs/RoleBasicTab";
+
+export enum RoleFormMode {
+  Create = "create",
+  Edit = "edit",
+}
 
 interface RoleFormProps {
-  mode: "create" | "edit";
+  mode: RoleFormMode;
   roleId?: string;
   defaultValues: RoleFormData;
 }
@@ -40,12 +45,13 @@ const RoleForm: React.FC<RoleFormProps> = ({ mode, roleId, defaultValues }) => {
   });
 
   const navigate = useNavigateWithBlocker(form);
-
   const { DialogCmp } = useConfirmUnsavedChanges(form.formState.isDirty);
 
   const mutation = useMutation(
     (data: RoleFormData) =>
-      mode === "create" ? createRole(data) : updateRole(roleId!, data),
+      mode === RoleFormMode.Create
+        ? createRole(data)
+        : updateRole(roleId!, data),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(queryKeys.roles);
@@ -55,7 +61,7 @@ const RoleForm: React.FC<RoleFormProps> = ({ mode, roleId, defaultValues }) => {
         toast({
           title: <Hoorey />,
           description:
-            mode === "create"
+            mode === RoleFormMode.Create
               ? t("Role.Actions.Created")
               : t("Role.Actions.Updated"),
         });
@@ -64,11 +70,11 @@ const RoleForm: React.FC<RoleFormProps> = ({ mode, roleId, defaultValues }) => {
     }
   );
 
-  const showDelete = mode === "edit" && !!roleId && !!defaultValues.name;
+  const showDelete =
+    mode === RoleFormMode.Edit && !!roleId && !!defaultValues.name;
 
   return (
     <>
-      {" "}
       <Form {...form}>
         <form onSubmit={form.handleSubmit((data) => mutation.mutate(data))}>
           <Tabs
@@ -79,15 +85,22 @@ const RoleForm: React.FC<RoleFormProps> = ({ mode, roleId, defaultValues }) => {
           >
             <div className="flex justify-between">
               <TabsList>
-                <TabsTrigger value="basics">
+                <TabsTrigger value="basics" className="flex items-center gap-2">
+                  <Info className="h-4 w-4" />
                   {t("Role.Tabs.Basics")}
                 </TabsTrigger>
+
                 {roleId && (
-                  <TabsTrigger value="claims">
+                  <TabsTrigger
+                    value="claims"
+                    className="flex items-center gap-2"
+                  >
+                    <Tag className="h-4 w-4" />
                     {t("Role.Tabs.Claims")}
                   </TabsTrigger>
                 )}
               </TabsList>
+
               <div className="inline-flex">
                 {showDelete && (
                   <Button
@@ -101,20 +114,11 @@ const RoleForm: React.FC<RoleFormProps> = ({ mode, roleId, defaultValues }) => {
                 )}
               </div>
             </div>
+
             <TabsContent value="basics">
-              <FormRow
-                name="name"
-                label={t("Role.Section.Label.RoleName_Label")}
-                description={t("Role.Section.Label.RoleName_Info")}
-                placeholder={t("Role.Section.Label.RoleName_Label")}
-                type="input"
-                required
-                includeSeparator
-              />
-              <Button type="submit" className="mt-4">
-                {mode === "create" ? t("Actions.Create") : t("Actions.Save")}
-              </Button>
+              <RoleBasicTab mode={mode} />
             </TabsContent>
+
             {roleId && (
               <TabsContent value="claims">
                 <RoleClaimsTab roleId={roleId} />
