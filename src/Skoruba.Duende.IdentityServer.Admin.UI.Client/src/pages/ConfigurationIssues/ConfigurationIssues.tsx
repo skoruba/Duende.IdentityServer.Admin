@@ -10,6 +10,7 @@ import Page from "@/components/Page/Page";
 import { Link } from "react-router-dom";
 import { Hammer } from "lucide-react";
 import { TooltipField } from "@/components/FormRow/FormRow";
+import { IssueTypeBadge } from "./IssueTypeBadge";
 
 const ConfigurationIssues: React.FC = () => {
   const { t } = useTranslation();
@@ -39,11 +40,17 @@ const ConfigurationIssues: React.FC = () => {
       accessorKey: "issueType",
       header: t("ConfigurationIssues.IssueType"),
       cell: ({ row }: { row: { original: client.ConfigurationIssueDto } }) => {
-        const resource = row.original;
+        const r = row.original;
+        const label =
+          r.issueType === client.ConfigurationIssueTypeView.Warning
+            ? t("ConfigurationIssues.IssueTypeWarning")
+            : t("ConfigurationIssues.IssueTypeRecommendation");
 
-        return resource.issueType === client.ConfigurationIssueTypeView.Warning
-          ? t("ConfigurationIssues.IssueTypeWarning")
-          : t("ConfigurationIssues.IssueTypeRecommendation");
+        return (
+          <div className="whitespace-nowrap">
+            <IssueTypeBadge type={r.issueType} label={label} />
+          </div>
+        );
       },
     },
     {
