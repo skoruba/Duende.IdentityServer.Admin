@@ -40,20 +40,24 @@ dotnet new skoruba.duende.isadmin \
   --adminclientid MyClientId \
   --adminclientsecret MyClientSecret \
   --dockersupport true
+  --requirepushedauthorization true
 ```
 
-### Template options
+## Template options
 
-| Option                | Description                                                                    |
-| --------------------- | ------------------------------------------------------------------------------ |
-| `--name`              | Project name                                                                   |
-| `--adminpassword`     | Admin password                                                                 |
-| `--adminemail`        | Admin email                                                                    |
-| `--title`             | Title and footer for the admin UI                                              |
-| `--adminrole`         | Name of the admin role used for authorization                                  |
-| `--adminclientid`     | Client ID used in Duende IdentityServer configuration for the admin client     |
-| `--adminclientsecret` | Client secret used in Duende IdentityServer configuration for the admin client |
-| `--dockersupport`     | Include Docker support (`true` / `false`)                                      |
+| Option                         | Description                                                                                           |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `--name`                       | Project name                                                                                          |
+| `--adminpassword`              | Admin password                                                                                        |
+| `--adminemail`                 | Admin email                                                                                           |
+| `--title`                      | Title and footer for the admin UI                                                                     |
+| `--adminrole`                  | Name of the admin role used for authorization                                                         |
+| `--adminclientid`              | Client ID used in Duende IdentityServer configuration for the admin client                            |
+| `--adminclientsecret`          | Client secret used in Duende IdentityServer configuration for the admin client                        |
+| `--dockersupport`              | Include Docker support (`true` / `false`)                                                             |
+| `--requirepushedauthorization` | Require Pushed Authorization Requests (PAR) for the admin client (`true` / `false`). Default: `true`. |
+
+> **Licensing note:** PAR is available in **Duende IdentityServer Business Edition or higher**. If you have a license lower than Business, set `--requirepushedauthorization` to `false`. More details about PAR [here](https://docs.duendesoftware.com/identityserver/tokens/par/).
 
 ## Administration UI preview
 
