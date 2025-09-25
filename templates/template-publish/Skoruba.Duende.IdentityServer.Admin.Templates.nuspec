@@ -8,6 +8,7 @@
     <license type="expression">Apache-2.0</license>
     <projectUrl>https://github.com/skoruba/Duende.IdentityServer.Admin</projectUrl>
     <icon>nuget-icon.png</icon>
+    <readme>README.md</readme>
     <description>Templates for the administration of the Duende IdentityServer and Asp.Net Core Identity</description>
     <language>en-US</language>
     <tags>Duende IdentityServer, Admin, OpenIDConnect, OAuth2, Identity</tags>
