@@ -103,10 +103,18 @@
       "operations": [
         {
           "type": "replacement",
+          "condition": "(!requirepushedauthorization)",
           "configuration": {
-            "regex": true,
-            "pattern": "(\"ClientId\"\\s*:\\s*\"{{adminclientid}}\"[\\s\\S]*?\"RequirePushedAuthorization\"\\s*:\\s*)(true|false)",
-            "replacement": "$1{{requirepushedauthorization}}"
+            "original": "\"RequirePushedAuthorization\": true",
+            "replacement": "\"RequirePushedAuthorization\": false"
+          }
+        },
+        {
+          "type": "replacement",
+          "condition": "(requirepushedauthorization)",
+          "configuration": {
+            "original": "\"RequirePushedAuthorization\": false",
+            "replacement": "\"RequirePushedAuthorization\": true"
           }
         }
       ]

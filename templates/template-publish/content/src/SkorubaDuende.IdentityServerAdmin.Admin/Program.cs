@@ -8,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.ApplyDockerConfiguration();
 
+builder.Configuration.AddAzureKeyVaultConfiguration(builder.Configuration);
+
 builder.AddSerilog();
 
 builder.Services.AddDataProtectionDbContext(builder.Configuration);

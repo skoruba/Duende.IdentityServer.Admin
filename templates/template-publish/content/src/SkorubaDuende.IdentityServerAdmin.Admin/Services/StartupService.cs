@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using SkorubaDuende.IdentityServerAdmin.Admin.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySql;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.PostgreSQL;
@@ -17,19 +18,22 @@ public static class StartupService
 {
     public static void AddDataProtectionDbContext(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDataProtectionDbContext<IdentityServerDataProtectionDbContext>(configuration);
+        var databaseProviderConfiguration = configuration.GetSection(nameof(DatabaseProviderConfiguration)).Get<DatabaseProviderConfiguration>();
+        var databaseMigration = StartupHelpers.GetDatabaseMigrationsConfiguration(configuration, MigrationAssemblyConfiguration.GetMigrationAssemblyByProvider(databaseProviderConfiguration!));
+        
+        services.AddDataProtectionDbContext<IdentityServerDataProtectionDbContext>(configuration, databaseMigration);
         services.AddDataProtection<IdentityServerDataProtectionDbContext>(configuration);
     }
 
     private static void AddDataProtectionDbContext<TDataProtectionDbContext>(
         this IServiceCollection services,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        DatabaseMigrationsConfiguration databaseMigrations)
         where TDataProtectionDbContext : DbContext, IDataProtectionKeyContext
     {
         var databaseProvider = configuration.GetSection(nameof(DatabaseProviderConfiguration))
             .Get<DatabaseProviderConfiguration>();
-        var databaseMigrations = configuration.GetSection(nameof(DatabaseMigrationsConfiguration))
-            .Get<DatabaseMigrationsConfiguration>() ?? new DatabaseMigrationsConfiguration();
+        
         var connectionStrings = configuration.GetSection("ConnectionStrings")
             .Get<ConnectionStringsConfiguration>();
 
@@ -113,7 +117,7 @@ public static class StartupService
                 options.ClientSecret = adminConfiguration.AuthenticationConfiguration.ClientSecret;
                 options.GetClaimsFromUserInfoEndpoint = true;
                 
-                options.PushedAuthorizationBehavior = PushedAuthorizationBehavior.Require;
+                options.PushedAuthorizationBehavior = PushedAuthorizationBehavior.UseIfAvailable;
             });
     }
 }

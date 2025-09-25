@@ -68,9 +68,9 @@
     ],
     "Clients": [
       {
-        "ClientId": "skoruba_identity_admin",
-        "ClientName": "skoruba_identity_admin",
-        "ClientUri": "https://localhost:44303",
+        "ClientId": "skoruba_identity_admin_v3",
+        "ClientName": "skoruba_identity_admin_v3",
+        "ClientUri": "https://localhost:7127",
         "AllowedGrantTypes": ["authorization_code"],
         "RequirePkce": true,
         "ClientSecrets": [
@@ -78,12 +78,12 @@
             "Value": "skoruba_admin_client_secret"
           }
         ],
-        "RedirectUris": ["https://localhost:44303/signin-oidc"],
-        "FrontChannelLogoutUri": "https://localhost:44303/signout-oidc",
+        "RedirectUris": ["https://localhost:7127/signin-oidc"],
+        "FrontChannelLogoutUri": "https://localhost:7127/signout-oidc",
         "PostLogoutRedirectUris": [
-          "https://localhost:44303/signout-callback-oidc"
+          "https://localhost:7127/signout-callback-oidc"
         ],
-        "AllowedCorsOrigins": ["https://localhost:44303"],
+        "AllowedCorsOrigins": ["https://localhost:7127"],
         "AllowOfflineAccess": true,
         "AllowedScopes": [
           "openid",
@@ -91,7 +91,8 @@
           "profile",
           "roles",
           "skoruba_identity_admin_api"
-        ]
+        ],
+        "RequirePushedAuthorization": false
       },
       {
         "ClientId": "skoruba_identity_admin_api_swaggerui",

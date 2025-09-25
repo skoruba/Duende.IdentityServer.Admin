@@ -9,16 +9,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="9.0.7" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.8" />
+        <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="9.0.8" />
         <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
-        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.UI" Version="3.0.0-preview.2" />
-        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.UI.Spa" Version="3.0.0-preview.2" />
-        <PackageReference Include="Skoruba.Duende.IdentityServer.Shared.Configuration" Version="3.0.0-preview.2" />
+        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.UI" Version="3.0.0-preview.4" />
+        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.UI.Spa" Version="3.0.0-preview.4" />
+        <PackageReference Include="Skoruba.Duende.IdentityServer.Shared.Configuration" Version="3.0.0-preview.4" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.csproj" />
+        <ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql.csproj" />
+        <ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL.csproj" />
+        <ProjectReference Include="..\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer\SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer.csproj" />
     </ItemGroup>
 
     <ItemGroup>

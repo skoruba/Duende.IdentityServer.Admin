@@ -91,7 +91,8 @@
           "profile",
           "roles",
           "skoruba_identity_admin_api"
-        ]
+        ],
+        "RequirePushedAuthorization": true
       },
       {
         "ClientId": "skoruba_identity_admin_api_swaggerui",
