@@ -1,10 +1,9 @@
-param([string] $packagesVersions, [string]$gitBranchName = 'dev')
+param([string] $packagesVersions)
 
 # This script contains following steps:
 # - Download latest version of Skoruba.Duende.IdentityServer.Admin from git repository
 # - Use folders src and tests for project template
 
-#$gitProject = "https://github.com/skoruba/Duende.IdentityServer.Admin"
 $gitProjectFolder = "Skoruba.Duende.IdentityServer.Admin"
 $templateSrc = "template-build/content/src"
 $templateRoot = "template-build/content"
@@ -21,9 +20,6 @@ function CleanBinObjFolders {
     # Clean up bin, obj
     Get-ChildItem .\ -include bin, obj -Recurse | ForEach-Object ($_) { Remove-Item $_.fullname -Force -Recurse }    
 }
-
-# Clone the latest version from master branch
-#git clone $gitProject $gitProjectFolder -b $gitBranchName
 
 # Copy the local src and tests folders to the project folder instead of cloning from git
 Copy-Item ../src $gitProjectFolder/src -Recurse -Force
@@ -207,7 +203,7 @@ dotnet new -i ./$templateLocalName
 ######################################
 # Step 4
 # Create template for fixing project name
-dotnet new skoruba.duende.isadmin --name SkorubaDuende.IdentityServerAdmin --title "Skoruba Duende IdentityServer Admin" --adminrole SkorubaIdentityAdminAdministrator --adminclientid skoruba_identity_admin --adminclientsecret skoruba_admin_client_secret
+dotnet new skoruba.duende.isadmin --name SkorubaDuende.IdentityServerAdmin --title "Skoruba Duende IdentityServer Admin" --adminrole SkorubaIdentityAdminAdministrator --adminclientid skoruba_identity_admin_v3 --adminclientsecret skoruba_admin_client_secret --requirepushedauthorization false
 
 ######################################
 # Step 5

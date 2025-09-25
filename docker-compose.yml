@@ -29,7 +29,6 @@ services:
       - VIRTUAL_HOST=admin.skoruba.local
       - 'ConnectionStrings__DataProtectionDbConnection=Server=db;Database=IdentityServerAdmin;User Id=sa;Password=${DB_PASSWORD:-Password_123};MultipleActiveResultSets=true;TrustServerCertificate=True'
       - 'AdminConfiguration__AuthenticationConfiguration__Authority=https://sts.skoruba.local'
-      - 'AdminConfiguration__ApplicationName=skoruba-admin'
       - 'AdminConfiguration__ApiConfiguration__ApiRemoteConfiguration__RemoteUrl=https://admin-api.skoruba.local'
       - 'AdminConfiguration__BasicConfiguration__Title=Skoruba Duende IdentityServer Admin'
       - 'AdminConfiguration__BasicConfiguration__BasePath=/'

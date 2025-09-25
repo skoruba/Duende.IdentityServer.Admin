@@ -117,7 +117,7 @@ public static class StartupService
                 options.ClientSecret = adminConfiguration.AuthenticationConfiguration.ClientSecret;
                 options.GetClaimsFromUserInfoEndpoint = true;
                 
-                options.PushedAuthorizationBehavior = PushedAuthorizationBehavior.Require;
+                options.PushedAuthorizationBehavior = PushedAuthorizationBehavior.UseIfAvailable;
             });
     }
 }

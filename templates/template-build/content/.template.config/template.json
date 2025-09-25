@@ -1,11 +1,7 @@
 {
   "$schema": "http://json.schemastore.org/template",
   "author": "Jan Skoruba",
-  "classifications": [
-    "Web",
-    "Duende.IdentityServer",
-    "Admin"
-  ],
+  "classifications": ["Web", "Duende.IdentityServer", "Admin"],
   "name": "Skoruba Duende IdentityServer Admin",
   "identity": "Skoruba.Duende.IdentityServer.Admin",
   "groupIdentity": "Skoruba.Duende.IdentityServer.Admin",
@@ -44,6 +40,12 @@
       "replaces": "skoruba_admin_client_secret",
       "isRequired": true,
       "description": "The value of client secret, that is be used in the Duende IdentityServer"
+    },
+    "requirepushedauthorization": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "true",
+      "description": "Set RequirePushedAuthorization on the admin client."
     }
   },
   "primaryOutputs": [
@@ -95,5 +97,19 @@
       "actionId": "210D431B-A78B-4D2F-B762-4ED3E3EA9025",
       "continueOnError": true
     }
-  ]
+  ],
+  "specialCustomOperations": {
+    "**/*.json": {
+      "operations": [
+        {
+          "type": "replacement",
+          "configuration": {
+            "regex": true,
+            "pattern": "(\"ClientId\"\\s*:\\s*\"{{adminclientid}}\"[\\s\\S]*?\"RequirePushedAuthorization\"\\s*:\\s*)(true|false)",
+            "replacement": "$1{{requirepushedauthorization}}"
+          }
+        }
+      ]
+    }
+  }
 }
