@@ -7,11 +7,13 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>nuget-icon.png</PackageIcon>
     <PackageProjectUrl>https://github.com/skoruba/Duende.IdentityServer.Admin</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
 
   <ItemGroup>
-    <None Include="docs/Images/nuget-icon.png" Pack="true" Visible="false" PackagePath="" />
-    <None Include="LICENSE" Pack="true" PackagePath="" />
+    <None Include="../../docs/Images/nuget-icon.png" Pack="true" Visible="false" PackagePath="" />
+    <None Include="../../LICENSE" Pack="true" PackagePath="" />
+    <None Include="../../README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>
