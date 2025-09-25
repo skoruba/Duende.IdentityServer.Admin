@@ -15,8 +15,4 @@
       <packageType name="Template" />
     </packageTypes>
   </metadata>
-
-  <files>
-    <file src="../../docs/Images/nuget-icon.png" target="nuget-icon.png" />
-  </files>
 </package>
