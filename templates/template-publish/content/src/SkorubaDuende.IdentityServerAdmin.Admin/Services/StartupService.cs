@@ -77,6 +77,17 @@ public static class StartupService
         builder.Host.UseSerilog((context, configuration) =>
             configuration.ReadFrom.Configuration(context.Configuration));
     }
+
+    public static void AddAntiForgeryProtection(this IServiceCollection services)
+    {
+        services.AddAntiforgery(o =>
+        {
+            o.Cookie.Name = "__Host-SkorubaBFF-CSRF";
+            o.Cookie.HttpOnly = true;
+            o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            o.Cookie.SameSite = SameSiteMode.Strict;
+        });
+    }
     
     public static void AddAuthenticationConfiguration(this IServiceCollection services, IConfiguration configuration)
     {

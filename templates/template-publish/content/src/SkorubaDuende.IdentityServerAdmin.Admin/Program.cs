@@ -16,6 +16,8 @@ builder.Services.AddDataProtectionDbContext(builder.Configuration);
 
 builder.Services.AddControllers();
 
+builder.Services.AddAntiForgeryProtection();
+
 builder.Services.AddAuthenticationConfiguration(builder.Configuration);
 
 builder.Services.AddSkorubaAdminUI(options =>

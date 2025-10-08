@@ -89,7 +89,7 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api
                     ClientSecret = null
                 };
             });
-
+            
             app.UseRouting();
             UseAuthentication(app);
             app.UseCors();

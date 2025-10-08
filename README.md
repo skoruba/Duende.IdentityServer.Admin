@@ -25,7 +25,7 @@ This application uses a modern **React** frontend (TypeScript, [Tailwind CSS](ht
 ### 1. Install the template
 
 ```sh
-dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::3.0.0-preview.4
+dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::3.0.0-preview.5
 ```
 
 ### 2. Create a new project

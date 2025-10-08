@@ -12,9 +12,9 @@
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.8" />
         <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="9.0.8" />
         <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
-        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.UI" Version="3.0.0-preview.4" />
-        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.UI.Spa" Version="3.0.0-preview.4" />
-        <PackageReference Include="Skoruba.Duende.IdentityServer.Shared.Configuration" Version="3.0.0-preview.4" />
+        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.UI" Version="3.0.0-preview.5" />
+        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.UI.Spa" Version="3.0.0-preview.5" />
+        <PackageReference Include="Skoruba.Duende.IdentityServer.Shared.Configuration" Version="3.0.0-preview.5" />
     </ItemGroup>
 
     <ItemGroup>
