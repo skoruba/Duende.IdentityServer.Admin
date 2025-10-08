@@ -1,14 +1,43 @@
 import { MainNav } from "@/components/MainNav/MainNav";
 import { ModeToggle } from "@/components/ModeToggle/ModeToggle";
 import { useAuth } from "@/contexts/AuthContext";
-import { LogOut, UserCircle2 } from "lucide-react";
+import { Loader2, LogOut, UserCircle2 } from "lucide-react";
 import AuthHelper from "@/helpers/AuthHelper";
+import { useCsrfToken } from "../hooks/useCsrfToken";
+import { useId, useState, MouseEvent } from "react";
+import { Button } from "../ui/button";
 
 export function SiteHeader() {
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
+  const {
+    data: csrf,
+    isLoading,
+    isError,
+    refetch,
+  } = useCsrfToken(AuthHelper.getCsrfUrl(), isAuthenticated);
 
-  const handleLogout = () => {
-    window.location.href = AuthHelper.getLogoutUrl();
+  const [submitting, setSubmitting] = useState(false);
+  const formId = useId();
+
+  const canSubmit = !isLoading && !isError && !!csrf && !submitting;
+
+  const logoutTitle = isError
+    ? "CSRF load failed – click to retry"
+    : isLoading
+    ? "Preparing CSRF…"
+    : submitting
+    ? "Signing out…"
+    : "Logout";
+
+  const handleLogoutClick = (e: MouseEvent<HTMLButtonElement>) => {
+    if (isError) {
+      e.preventDefault();
+      refetch();
+      return;
+    }
+    if (!csrf || submitting) {
+      e.preventDefault();
+    }
   };
 
   return (
@@ -19,13 +48,35 @@ export function SiteHeader() {
           <nav className="flex items-center space-x-2">
             <UserCircle2 className="me-1" />
             <span className="me-2">{user?.userName}</span>
-            <button
-              onClick={handleLogout}
-              className="p-2 rounded hover:bg-muted transition-colors"
-              title="Logout"
+
+            <form
+              id={formId}
+              method="post"
+              action={AuthHelper.getLogoutUrl()}
+              onSubmit={() => setSubmitting(true)}
             >
-              <LogOut className="h-5 w-5 text-muted-foreground hover:text-foreground" />
-            </button>
+              {csrf && (
+                <input type="hidden" name={csrf.fieldName} value={csrf.token} />
+              )}
+              <Button
+                type="submit"
+                form={formId}
+                variant="outline"
+                size="sm"
+                className="gap-2 bg-transparent"
+                disabled={!canSubmit}
+                aria-busy={submitting}
+                title={logoutTitle}
+                onClick={handleLogoutClick}
+              >
+                {submitting ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <LogOut className="w-4 h-4" />
+                )}
+              </Button>
+            </form>
+
             <ModeToggle />
           </nav>
         </div>

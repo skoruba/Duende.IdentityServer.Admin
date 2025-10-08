@@ -45,6 +45,7 @@ export const queryKeys = {
   userPersistedGrants: "userPersistedGrants",
   roleClaims: "roleClaims",
   roleUsers: "roleUsers",
+  csrfToken: "csrfToken",
 } as const;
 
 export const queryWithoutCache = {

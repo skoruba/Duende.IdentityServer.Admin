@@ -70,7 +70,7 @@
       {
         "ClientId": "skoruba_identity_admin_v3",
         "ClientName": "skoruba_identity_admin_v3",
-        "ClientUri": "https://localhost:7127",
+        "ClientUri": "https://localhost:50445",
         "AllowedGrantTypes": ["authorization_code"],
         "RequirePkce": true,
         "ClientSecrets": [
@@ -78,12 +78,12 @@
             "Value": "skoruba_admin_client_secret"
           }
         ],
-        "RedirectUris": ["https://localhost:7127/signin-oidc"],
-        "FrontChannelLogoutUri": "https://localhost:7127/signout-oidc",
+        "RedirectUris": ["https://localhost:50445/signin-oidc"],
+        "FrontChannelLogoutUri": "https://localhost:50445/signout-oidc",
         "PostLogoutRedirectUris": [
-          "https://localhost:7127/signout-callback-oidc"
+          "https://localhost:50445/signout-callback-oidc"
         ],
-        "AllowedCorsOrigins": ["https://localhost:7127"],
+        "AllowedCorsOrigins": ["https://localhost:50445"],
         "AllowOfflineAccess": true,
         "AllowedScopes": [
           "openid",

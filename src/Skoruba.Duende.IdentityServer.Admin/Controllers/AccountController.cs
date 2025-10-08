@@ -1,12 +1,16 @@
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Skoruba.Duende.IdentityServer.Admin.Controllers;
 
-public class AccountController : Controller
+[Authorize]
+public class AccountController(IAntiforgery antiforgery, IOptions<AuthenticationOptions> authOptions)
+    : Controller
 {
     [HttpGet]
     [AllowAnonymous]
@@ -21,14 +25,42 @@ public class AccountController : Controller
         {
             RedirectUri = returnUrl
         };
+        
+        var oidcScheme = authOptions.Value.DefaultChallengeScheme
+                         ?? OpenIdConnectDefaults.AuthenticationScheme;
 
-        return Challenge(authenticationProperties, OpenIdConnectDefaults.AuthenticationScheme);
+        return Challenge(authenticationProperties, oidcScheme);
     }
-
-    [HttpGet]
-    public async Task Logout()
+    
+    [HttpPost]
+    public async Task<IActionResult> Logout([FromForm] string? returnUrl)
     {
-        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
+        try
+        {
+            await antiforgery.ValidateRequestAsync(HttpContext);
+        }
+        catch (AntiforgeryValidationException ex)
+        {
+            return Problem(
+                title: "Invalid CSRF token",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status403Forbidden);
+        }
+
+        if (!Url.IsLocalUrl(returnUrl))
+        {
+            returnUrl = Url.Content("~/");
+        }
+
+        var cookieScheme = authOptions.Value.DefaultScheme
+                           ?? CookieAuthenticationDefaults.AuthenticationScheme;
+
+        var oidcScheme = authOptions.Value.DefaultSignOutScheme
+                         ?? authOptions.Value.DefaultChallengeScheme
+                         ?? OpenIdConnectDefaults.AuthenticationScheme;
+
+        var props = new AuthenticationProperties { RedirectUri = returnUrl };
+
+        return SignOut(props, cookieScheme, oidcScheme);
     }
 }

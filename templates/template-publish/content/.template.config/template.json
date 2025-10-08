@@ -67,6 +67,12 @@
       "datatype": "bool",
       "defaultValue": "true",
       "description": "Set RequirePushedAuthorization on the admin client."
+    },
+    "admindevport": {
+      "type": "parameter",
+      "defaultValue": "localhost:7127",
+      "replaces": "localhost:50445",
+      "description": "The port number for the Admin project when running in development."
     }
   },
   "sources": [

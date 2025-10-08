@@ -69,6 +69,10 @@ export default defineConfig({
         target,
         secure: false,
       },
+      "/csrf/gettoken": {
+        target,
+        secure: false,
+      },
       "/identity-server-admin-api": {
         target,
         secure: false,

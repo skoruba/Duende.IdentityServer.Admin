@@ -1,30 +1,42 @@
 import { getBaseHref } from "@/lib/utils";
 
+const joinUrl = (base: string, path: string): string => {
+  const normalizedBase = base.endsWith("/") ? base : `${base}/`;
+  const normalizedPath = path.startsWith("/") ? path.slice(1) : path;
+  return `${normalizedBase}${normalizedPath}`;
+};
+
+const getSafeReturnUrl = (): string | null => {
+  if (typeof window === "undefined") return null;
+  const { pathname, search } = window.location;
+  return `${pathname}${search}`;
+};
+
 class AuthHelper {
   static getLoginUrl = (): string => {
-    const baseHref = getBaseHref();
-    const normalized = baseHref.endsWith("/") ? baseHref : `${baseHref}/`;
-
-    const loginUrl = `${normalized}account/login?returnUrl=${window.location.pathname}`;
-
-    return loginUrl;
+    const loginUrl = joinUrl(getBaseHref(), "account/login");
+    const returnUrl = getSafeReturnUrl();
+    return returnUrl
+      ? `${loginUrl}?returnUrl=${encodeURIComponent(returnUrl)}`
+      : loginUrl;
   };
 
   static getLogoutUrl = (): string => {
-    const baseHref = getBaseHref();
-    const normalized = baseHref.endsWith("/") ? baseHref : `${baseHref}/`;
+    return joinUrl(getBaseHref(), "account/logout");
+  };
 
-    const logoutUrl = `${normalized}account/logout`;
-
-    return logoutUrl;
+  static getCsrfUrl = (): string => {
+    return joinUrl(getBaseHref(), "csrf/gettoken");
   };
 
   static redirectToLoginUrl = (): void => {
-    window.location.href = AuthHelper.getLoginUrl();
+    if (typeof window === "undefined") return;
+    window.location.assign(AuthHelper.getLoginUrl());
   };
 
   static redirectToLogoutUrl = (): void => {
-    window.location.href = AuthHelper.getLogoutUrl();
+    if (typeof window === "undefined") return;
+    window.location.assign(AuthHelper.getLogoutUrl());
   };
 }
 

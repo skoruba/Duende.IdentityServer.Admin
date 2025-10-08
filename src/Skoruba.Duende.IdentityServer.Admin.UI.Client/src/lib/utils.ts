@@ -5,11 +5,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const getBaseHref = () => {
-  if (typeof document !== "undefined") {
-    const base = document.querySelector('base[id="dynamic-base"]');
-    return base?.getAttribute("href") ?? "/";
+export const getBaseHref = (): string => {
+  if (typeof document === "undefined") return "/";
+
+  const base = document.querySelector('base[id="dynamic-base"]');
+  let href = base?.getAttribute("href") ?? "/";
+
+  if (!href.endsWith("/")) {
+    href += "/";
   }
 
-  return "/";
+  return href;
 };
