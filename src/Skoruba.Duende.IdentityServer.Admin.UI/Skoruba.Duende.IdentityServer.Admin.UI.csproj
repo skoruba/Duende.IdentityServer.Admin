@@ -8,8 +8,8 @@
 
     <ItemGroup>
         <PackageReference Include="Duende.AccessTokenManagement.OpenIdConnect" Version="3.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="9.0.8" />
-        <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="1.1.0" />
+        <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="9.0.10" />
+        <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="1.2.0" />
         <PackageReference Include="Yarp.ReverseProxy" Version="2.3.0" />
     </ItemGroup>
 

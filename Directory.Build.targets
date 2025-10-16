@@ -1,0 +1,37 @@
+<Project>
+  <!-- Prove the file is imported -->
+  <Target Name="__Diag_DirectoryBuildTargets_Imported" BeforeTargets="Build">
+    <Message Importance="High" Text="Directory.Build.targets loaded for $(MSBuildProjectName)" />
+  </Target>
+
+  <!-- This target blocks unwanted NuGet package versions across the solution -->
+  <Target Name="BlockUnwantedDependencies" AfterTargets="ResolvePackageAssets;ResolveReferences">
+    <ItemGroup>
+      <!-- Collect as many resolved items as possible to ensure NuGet metadata is present -->
+      <_AllResolvedFromPackages Include="@(ReferencePath)" />
+      <_AllResolvedFromPackages Include="@(ReferenceCopyLocalPaths)" />
+      <_AllResolvedFromPackages Include="@(ResolvedCompileFileDefinitions)" />
+      <_AllResolvedFromPackages Include="@(RuntimeCopyLocalItems)" />
+      <_AllResolvedFromPackages Include="@(ResolvedFileToPublish)" />
+
+      <!-- Rule: block FluentAssertions >= 8.0.0 -->
+      <_Unwanted Include="@(_AllResolvedFromPackages)"
+                 Condition="'%(_AllResolvedFromPackages.NuGetPackageId)' == 'FluentAssertions'
+                            AND $([MSBuild]::VersionGreaterThanOrEquals('%(_AllResolvedFromPackages.NuGetPackageVersion)', '8.0.0'))" />
+
+      <!-- Rule: block AutoMapper >= 15.0.0 -->
+      <_Unwanted Include="@(_AllResolvedFromPackages)"
+                 Condition="'%(_AllResolvedFromPackages.NuGetPackageId)' == 'AutoMapper'
+                            AND $([MSBuild]::VersionGreaterThanOrEquals('%(_AllResolvedFromPackages.NuGetPackageVersion)', '15.0.0'))" />
+    </ItemGroup>
+
+    <!-- Optional: log any detected blocked packages -->
+    <Message Importance="High"
+             Text="Blocked package detected: %(_Unwanted.NuGetPackageId) v%(_Unwanted.NuGetPackageVersion) in $(MSBuildProjectName)"
+             Condition="'@(_Unwanted)' != ''" />
+
+    <!-- Fail the build for each offending item (escape < and > in XML attributes!) -->
+    <Error Text="Package %(_Unwanted.NuGetPackageId) v%(_Unwanted.NuGetPackageVersion) is not allowed. Please downgrade (e.g., FluentAssertions &lt; 8.0.0, AutoMapper &lt; 15.0.0)."
+           Condition="'@(_Unwanted)' != ''" />
+  </Target>
+</Project>

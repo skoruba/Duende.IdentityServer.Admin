@@ -19,13 +19,13 @@
 
     
     <ItemGroup>
-        <PackageReference Include="NSwag.CodeGeneration" Version="14.5.0" />
-        <PackageReference Include="NSwag.CodeGeneration.TypeScript" Version="14.5.0" />
-        <PackageReference Include="NSwag.Generation" Version="14.5.0" />
-        <PackageReference Include="NSwag.Generation.AspNetCore" Version="14.5.0" />
-        <PackageReference Include="NSwag.Generation.WebApi" Version="14.5.0" />
-        <PackageReference Include="NSwag.AspNetCore" Version="14.5.0" />
-        <PackageReference Include="NSwag.MSBuild" Version="14.5.0">
+        <PackageReference Include="NSwag.CodeGeneration" Version="14.6.1" />
+        <PackageReference Include="NSwag.CodeGeneration.TypeScript" Version="14.6.1" />
+        <PackageReference Include="NSwag.Generation" Version="14.6.1" />
+        <PackageReference Include="NSwag.Generation.AspNetCore" Version="14.6.1" />
+        <PackageReference Include="NSwag.Generation.WebApi" Version="14.6.1" />
+        <PackageReference Include="NSwag.AspNetCore" Version="14.6.1" />
+        <PackageReference Include="NSwag.MSBuild" Version="14.6.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
