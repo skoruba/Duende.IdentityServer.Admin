@@ -302,6 +302,22 @@ export declare class IdentityResourcesClient extends WebApiClientBase implements
     deleteProperty(propertyId: number): Promise<void>;
     protected processDeleteProperty(response: Response): Promise<void>;
 }
+export interface IInfoClient {
+    getApplicationVersion(): Promise<string>;
+    getApplicationName(): Promise<string>;
+}
+export declare class InfoClient extends WebApiClientBase implements IInfoClient {
+    private http;
+    private baseUrl;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined;
+    constructor(baseUrl?: string, http?: {
+        fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
+    });
+    getApplicationVersion(): Promise<string>;
+    protected processGetApplicationVersion(response: Response): Promise<string>;
+    getApplicationName(): Promise<string>;
+    protected processGetApplicationName(response: Response): Promise<string>;
+}
 export interface IKeysClient {
     get(page: number | undefined, pageSize: number | undefined): Promise<KeysApiDto>;
     get2(id: string): Promise<KeyApiDto>;
