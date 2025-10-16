@@ -23,6 +23,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Tests.Base
                 {
                     configApp.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
                     configApp.AddJsonFile("serilog.json", optional: true, reloadOnChange: true);
+                    configApp.AddJsonFile("identitydata.json", optional: true, reloadOnChange: true);
+                    configApp.AddJsonFile("identityserverdata.json", optional: true, reloadOnChange: true);
 
                     var env = hostContext.HostingEnvironment;
                     
