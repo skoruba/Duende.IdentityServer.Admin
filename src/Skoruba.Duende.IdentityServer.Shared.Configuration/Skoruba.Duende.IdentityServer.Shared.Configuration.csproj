@@ -16,6 +16,10 @@
 		<PackageReference Include="Sendgrid" Version="9.29.3" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\SMSSender\SMSSender.csproj" />
+	</ItemGroup>
+
 </Project>
 
 

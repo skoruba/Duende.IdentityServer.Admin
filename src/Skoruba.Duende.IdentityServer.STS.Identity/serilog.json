@@ -17,17 +17,17 @@
                     "rollingInterval": "Day"
                 }
             },
-            {
-                "Name": "MSSqlServer",
-                "Args": {
-                    "connectionString": "Server=(localdb)\\mssqllocaldb;Database=IdentityServerAdmin;Trusted_Connection=True;MultipleActiveResultSets=true",
-                    "tableName": "Log",
-                    "columnOptionsSection": {
-                        "addStandardColumns": [ "LogEvent" ],
-                        "removeStandardColumns": [ "Properties" ]
-                    }
-                }
+          {            
+            "Name": "MSSqlServer",
+            "Args": {
+              "connectionString": "Server=com-dev06;Database=IdentityServerAdmin;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true",
+              "tableName": "Log",
+              "columnOptionsSection": {
+                "addStandardColumns": [ "LogEvent" ],
+                "removeStandardColumns": [ "Properties" ]
+              }
             }
+          }
         ]
     }
 }

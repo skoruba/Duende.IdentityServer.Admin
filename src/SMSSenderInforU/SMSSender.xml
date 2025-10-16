@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ConfigSections>
+  <CustomerSettings>
+    <url>http://api.inforu.co.il/SendMessageXml.ashx</url>
+    <Inforu>
+      <User>
+        <Username>InfoBaySec</Username>
+        <ApiToken>6d87b90e-b6b7-4c77-939a-54c9468cf58c</ApiToken>
+      </User>
+      <Content Type="sms">
+        <Message>{0}</Message>
+        <SMSMessageWithAsmachta>להלן סיסמתך למידע שנשלח אליך:{0}. מספר האסמכתא: {1}</SMSMessageWithAsmachta>
+      </Content>
+      <Recipients>
+        <PhoneNumber></PhoneNumber>
+      </Recipients>
+      <Settings>
+        <Sender>Infobay</Sender>
+        <SecurityProtocolType>3072</SecurityProtocolType>
+      </Settings>
+    </Inforu>
+  </CustomerSettings>
+</ConfigSections>

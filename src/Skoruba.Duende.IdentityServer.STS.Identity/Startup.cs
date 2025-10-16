@@ -1,4 +1,4 @@
-using System;
+using Duende.IdentityServer.Services;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SixLaborsCaptcha.Mvc.Core;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Entities.Identity;
 using Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers;
@@ -13,6 +14,7 @@ using Skoruba.Duende.IdentityServer.STS.Identity.Configuration;
 using Skoruba.Duende.IdentityServer.STS.Identity.Configuration.Constants;
 using Skoruba.Duende.IdentityServer.STS.Identity.Configuration.Interfaces;
 using Skoruba.Duende.IdentityServer.STS.Identity.Helpers;
+using System;
 
 namespace Skoruba.Duende.IdentityServer.STS.Identity
 {
@@ -34,11 +36,16 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity
             // Register DbContexts for IdentityServer and Identity
             RegisterDbContexts(services);
 
+            services.AddTransient<IEventSink, CustomEventSink>();
+
             // Save data protection keys to db, using a common application name shared between Admin and STS
             services.AddDataProtection<IdentityServerDataProtectionDbContext>(Configuration);
 
             // Add email senders which is currently setup for SendGrid and SMTP
             services.AddEmailSenders(Configuration);
+
+            // Add SMS sender
+            services.AddSMSender(Configuration);
 
             // Add services for authentication, including Identity model and external providers
             RegisterAuthentication(services);
@@ -55,6 +62,13 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity
             RegisterAuthorization(services);
 
             services.AddIdSHealthChecks<IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext, AdminIdentityDbContext, IdentityServerDataProtectionDbContext>(Configuration);
+
+            services.AddSixLabCaptcha(x =>
+            {                
+                x.DrawLines = 4;
+            });
+            
+            services.AddSession();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -83,6 +97,8 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity
 
             app.UseRouting();
             app.UseAuthorization();
+            app.UseSession();
+
             app.UseEndpoints(endpoint =>
             {
                 endpoint.MapDefaultControllerRoute();

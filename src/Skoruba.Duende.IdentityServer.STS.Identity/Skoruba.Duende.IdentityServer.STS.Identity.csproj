@@ -41,6 +41,7 @@
 		<PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
 		<PackageReference Include="Serilog.Sinks.MSSqlServer" Version="8.2.0" />
 		<PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
+		<PackageReference Include="SixLaborsCaptcha.Mvc.Core" Version="1.0.0" />
 		<PackageReference Include="Skoruba.AuditLogging.EntityFramework" Version="2.0.0" />
 		<PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
     </ItemGroup>
@@ -50,6 +51,7 @@
         <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj" />
         <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Shared.Configuration\Skoruba.Duende.IdentityServer.Shared.Configuration.csproj" />
         <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Shared\Skoruba.Duende.IdentityServer.Shared.csproj" />
+        <ProjectReference Include="..\SMSSender\SMSSender.csproj" />
     </ItemGroup>
 
     <ItemGroup>
