@@ -8,7 +8,13 @@
 
 [![Build status](https://img.shields.io/badge/Discord-Skoruba-%235865F2)](https://discord.gg/qTqQCSKWkX)
 
-### New release v3 is coming! 🎉
+### Stable production version 2.7.0
+
+If you are looking for the latest stable production version, you can find it here:
+
+➡️ [Skoruba.Duende.IdentityServer.Admin v2.7.0 (release branch)](https://github.com/skoruba/Duende.IdentityServer.Admin/tree/release/2.7.0)
+
+## New release v3 is coming! 🎉
 
 This application uses a modern **React** frontend (TypeScript, [Tailwind CSS](https://tailwindcss.com/) and [shadcn/ui](https://ui.shadcn.com/)) and a backend REST API built with **.NET 9**.
 
