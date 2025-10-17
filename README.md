@@ -61,11 +61,23 @@ dotnet new skoruba.duende.isadmin \
 
 - This administration uses [Tailwind CSS](https://tailwindcss.com/) and [shadcn/ui](https://ui.shadcn.com/) components.
 
-### Admin UI - Light mode ☀️
+### 🧭 Admin UI – Dashboard
 
 ![Admin-preview](docs/Images/light.png)
 
-### Admin UI - Dark mode 🌙
+### 🧙‍♂️ Client Creation – Wizard Flow
+
+![Admin-Client-Wizard](docs/Images/client-wizard.png)
+
+### 📋 Client Creation – Summary
+
+![Admin-Client-Summary](docs/Images/client-summary.png)
+
+### 💼 Client Management
+
+![Admin-Client-Edit](docs/Images/client-edit.png)
+
+### 🌙 Admin UI - Dark mode
 
 ![Admin-preview](docs/Images/dark.png)
 
