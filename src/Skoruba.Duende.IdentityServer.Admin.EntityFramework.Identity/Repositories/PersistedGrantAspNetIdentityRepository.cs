@@ -81,19 +81,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.Repositor
         {
             var pagedList = new PagedList<PersistedGrant>();
 
-            var persistedGrantsData = await PersistedGrantDbContext.PersistedGrants.Where(x => x.SubjectId == subjectId).Select(x => new PersistedGrant()
-            {
-                SubjectId = x.SubjectId,
-                Type = x.Type,
-                Key = x.Key,
-                ClientId = x.ClientId,
-                Data = x.Data,
-                Expiration = x.Expiration,
-                CreationTime = x.CreationTime
-            }).PageBy(x => x.SubjectId, page, pageSize).ToListAsync();
-
-            var persistedGrantsCount = await PersistedGrantDbContext.PersistedGrants.Where(x => x.SubjectId == subjectId).CountAsync();
-
+            var persistedGrants = PersistedGrantDbContext.PersistedGrants.Where(x => x.SubjectId == subjectId);
+            var persistedGrantsCount = await persistedGrants.CountAsync();
+            var persistedGrantsData = await persistedGrants.PageBy(x => x.SubjectId, page, pageSize).ToListAsync();
+            
             pagedList.Data.AddRange(persistedGrantsData);
             pagedList.TotalCount = persistedGrantsCount;
             pagedList.PageSize = pageSize;

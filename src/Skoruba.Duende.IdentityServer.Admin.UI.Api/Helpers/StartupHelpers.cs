@@ -155,10 +155,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
         /// <typeparam name="TIdentityDbContext"></typeparam>
         /// <typeparam name="TAuditLoggingDbContext"></typeparam>
         /// <typeparam name="TDataProtectionDbContext"></typeparam>
+        /// <typeparam name="TAuditLog"></typeparam>
         /// <param name="services"></param>
         /// <param name="configuration"></param>
+        /// <param name="databaseMigrationsConfiguration"></param>
         public static void AddDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext,
-            TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAuditLog>(this IServiceCollection services, IConfiguration configuration)
+            TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAuditLog>(this IServiceCollection services, IConfiguration configuration, DatabaseMigrationsConfiguration databaseMigrationsConfiguration)
             where TIdentityDbContext : DbContext
             where TPersistedGrantDbContext : DbContext, IAdminPersistedGrantDbContext
             where TConfigurationDbContext : DbContext, IAdminConfigurationDbContext
@@ -168,19 +170,18 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
             where TAuditLog : AuditLog
         {
             var databaseProvider = configuration.GetSection(nameof(DatabaseProviderConfiguration)).Get<DatabaseProviderConfiguration>();
-            var databaseMigrations = configuration.GetSection(nameof(DatabaseMigrationsConfiguration)).Get<DatabaseMigrationsConfiguration>() ?? new DatabaseMigrationsConfiguration();
             var connectionStrings = configuration.GetSection("ConnectionStrings").Get<ConnectionStringsConfiguration>();
 
             switch (databaseProvider.ProviderType)
             {
                 case DatabaseProviderType.SqlServer:
-                    services.RegisterSqlServerDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAuditLog>(connectionStrings, databaseMigrations);
+                    services.RegisterSqlServerDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAuditLog>(connectionStrings, databaseMigrationsConfiguration);
                     break;
                 case DatabaseProviderType.PostgreSQL:
-                    services.RegisterNpgSqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAuditLog>(connectionStrings, databaseMigrations);
+                    services.RegisterNpgSqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAuditLog>(connectionStrings, databaseMigrationsConfiguration);
                     break;
                 case DatabaseProviderType.MySql:
-                    services.RegisterMySqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAuditLog>(connectionStrings, databaseMigrations);
+                    services.RegisterMySqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAuditLog>(connectionStrings, databaseMigrationsConfiguration);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(databaseProvider.ProviderType), $@"The value needs to be one of {string.Join(", ", Enum.GetNames(typeof(DatabaseProviderType)))}.");
@@ -401,6 +402,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
             where TAdminAuditLogDbContext : IAuditLoggingDbContext<AuditLog>, IAuditLoggingDbContext<TAuditLog>
             where TAuditLog : AuditLog, new()
         {
+            services.AddSingleton(configuration.GetSection(nameof(IdentityServerData))
+                .Get<IdentityServerData>());
+            
+            services.AddSingleton(configuration.GetSection(nameof(IdentityData))
+                .Get<IdentityData>());
+            
             services.AddDataProtection<TIdentityServerDataProtectionDbContext>(configuration);
             
             services.AddScoped<ControllerExceptionFilterAttribute>();

@@ -6,18 +6,18 @@ using Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration.Common;
 
 namespace Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers
 {
-    public class DockerHelpers
+    public static class DockerHelpers
     {
-        public static void UpdateCaCertificates()
+        private static void UpdateCaCertificates()
         {
             "update-ca-certificates".Bash();
         }
 
-        public static void ApplyDockerConfiguration(IConfiguration configuration)
+        public static void ApplyDockerConfiguration(this IConfiguration configuration)
         {
             var dockerConfiguration = configuration.GetSection(nameof(DockerConfiguration)).Get<DockerConfiguration>();
 
-            if (dockerConfiguration != null && dockerConfiguration.UpdateCaCertificate)
+            if (dockerConfiguration is { UpdateCaCertificate: true })
             {
                 UpdateCaCertificates();
             }

@@ -1,6 +1,6 @@
 param([string] $migration = 'DbInit', [string] $migrationProviderName = 'All', [string] $targetContext = 'All', [string] $projectName = 'Skoruba.Duende.IdentityServer')
 $currentPath = Get-Location
-Set-Location "../src/$projectName.Admin"
+Set-Location "../src/$projectName.Admin.Api"
 Copy-Item appsettings.json -Destination appsettings-backup.json
 $settings = Get-Content appsettings.json -raw
 

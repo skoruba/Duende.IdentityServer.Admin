@@ -19,7 +19,7 @@ export class WebApiClientBase {
     transformOptions(options) {
         return __awaiter(this, void 0, void 0, function* () {
             const headers = new Headers(options.headers);
-            headers.set("X-CSRF", "1");
+            headers.set("X-ANTI-CSRF", "1");
             return Object.assign(Object.assign({}, options), { headers });
         });
     }

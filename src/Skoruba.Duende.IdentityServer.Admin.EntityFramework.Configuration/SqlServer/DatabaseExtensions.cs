@@ -64,6 +64,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.SqlS
                 services.AddDbContext<TDataProtectionDbContext>(options => options.UseSqlServer(connectionStrings.DataProtectionDbConnection,
                     optionsSql => optionsSql.MigrationsAssembly(databaseMigrations.DataProtectionDbMigrationsAssembly ?? migrationsAssembly)));
         }
+        
+        
 
         /// <summary>
         /// Register DbContexts for IdentityServer ConfigurationStore and PersistedGrants and Identity
@@ -100,6 +102,25 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.SqlS
 
             // DataProtectionKey DB from existing connection
             services.AddDbContext<TDataProtectionDbContext>(options => options.UseSqlServer(dataProtectionConnectionString, sql => sql.MigrationsAssembly(migrationsAssembly)));
+        }
+        
+        /// <summary>
+        /// Add Data Protection DbContext for SQL Server
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="connectionString"></param>
+        /// <param name="migrationsAssembly"></param>
+        /// <typeparam name="TDataProtectionDbContext"></typeparam>
+        public static void AddDataProtectionDbContextSqlServer<TDataProtectionDbContext>(
+            this IServiceCollection services,
+            string connectionString,
+            string migrationsAssembly = null)
+            where TDataProtectionDbContext : DbContext, IDataProtectionKeyContext
+        {
+            var assembly = migrationsAssembly ?? typeof(DatabaseExtensions).GetTypeInfo().Assembly.GetName().Name;
+            services.AddDbContext<TDataProtectionDbContext>(options =>
+                options.UseSqlServer(connectionString, x => x.MigrationsAssembly(assembly))
+            );
         }
     }
 }

@@ -13,4 +13,5 @@ dotnet nuget push ./packages/Skoruba.Duende.IdentityServer.Admin.EntityFramework
 dotnet nuget push ./packages/Skoruba.Duende.IdentityServer.Shared.Configuration.$version.nupkg -k $key -s https://api.nuget.org/v3/index.json
 
 dotnet nuget push ./packages/Skoruba.Duende.IdentityServer.Admin.UI.$version.nupkg -k $key -s https://api.nuget.org/v3/index.json
+dotnet nuget push ./packages/Skoruba.Duende.IdentityServer.Admin.UI.Spa.$version.nupkg -k $key -s https://api.nuget.org/v3/index.json
 dotnet nuget push ./packages/Skoruba.Duende.IdentityServer.Admin.UI.Api.$version.nupkg -k $key -s https://api.nuget.org/v3/index.json

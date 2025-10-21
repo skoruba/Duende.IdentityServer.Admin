@@ -1,0 +1,801 @@
+{
+  "Home": {
+    "Title": "Skoruba Duende IdentityServer Admin",
+    "SubTitle": "Admin UI offers a set of features to manage your Duende IdentityServer, Users and Roles",
+    "Clients": "Clients",
+    "ClientsDescription": "Manage your clients",
+    "ApiResources": "Api Resources",
+    "ApiResourcesDescription": "Manage your API resources",
+    "ApiScopes": "Api Scopes",
+    "ApiScopesDescription": "Manage your API scopes",
+    "IdentityResources": "Identity Resources",
+    "IdentityResourcesDescription": "Manage your identity resources",
+    "IdentityProviders": "Identity Providers",
+    "IdentityProvidersDescription": "Manage your external identity providers",
+    "Users": "Users",
+    "UsersDescription": "Manage your users",
+    "Roles": "Roles",
+    "RolesDescription": "Manage your roles",
+    "Logs": "Audit Logs",
+    "LogsDescription": "View Audit logs",
+    "AuditLogs": "Audit Logs",
+    "AuditLogsDescription": "Overview of Audit logs for the last 30 days",
+    "ConfigurationIssues": "Configuration Issues",
+    "ConfigurationIssuesDescription": "Overview of configuration issues",
+    "Keys": "Keys",
+    "KeysDescription": "Manage your keys",
+    "Overview": "Overview",
+    "OverviewDescription": "Total count of Identity Server resources and clients",
+    "ClientsChecker": {
+      "Title": "Clients Configuration Checker",
+      "Description": "This tool helps you to check your Identity Server configuration and find issues.",
+      "Pie": {
+        "NoIssues": "0 issues",
+        "Issues_one": "{{count}} issue",
+        "Issues_other": "{{count}} issues"
+      },
+      "Legend": {
+        "Issues": "Issues",
+        "Warnings": "Warnings",
+        "Recommendations": "Recommendations",
+        "NoIssues": "No issues"
+      },
+      "Found": "We found {{warnings}} and {{recommendations}}.",
+      "Warning_one": "{{count}} warning",
+      "Warning_other": "{{count}} warnings",
+      "Recommendation_one": "{{count}} recommendation",
+      "Recommendation_other": "{{count}} recommendations",
+      "Button": "View issues"
+    }
+  },
+  "Dashboard": {
+    "Today": "Today",
+    "NoAuditData": "No audit data",
+    "Average": "Average"
+  },
+  "Errors": {
+    "Failed": "Failed",
+    "FailedMessage": "An error occurred while processing your request."
+  },
+  "Components": {
+    "FormRow": {
+      "SelectOption": "Select an option",
+      "PickDate": "Pick a date",
+      "CopiedToClipboard": "Copied to clipboard!"
+    },
+    "InputWithTable": {
+      "AddItem": "Add Item",
+      "ItemCannotBeEmpty": "Item cannot be empty",
+      "EnterItem": "Enter item",
+      "Item": "Item",
+      "Actions": "Actions",
+      "Edit": "Edit",
+      "UpdateSave": "Update the value and click save.",
+      "EditItem": "Edit Item"
+    },
+    "DataTablePagination": {
+      "Page": "Page {{page}} of {{total}}",
+      "GoToFirstPage": "Go to first page",
+      "GoToPreviousPage": "Go to previous page",
+      "GoToNextPage": "Go to next page",
+      "GoToLastPage": "Go to last page",
+      "RowsPerPage": "Rows per page"
+    },
+    "Loading": {
+      "Loading": "Loading..."
+    },
+    "ModeToggle": {
+      "Light": "Light",
+      "Dark": "Dark",
+      "System": "System",
+      "ToggleTheme": "Toggle theme"
+    },
+    "SearchDropdown": {
+      "Search": "Search"
+    }
+  },
+  "Validation": {
+    "SecretTypeRequired": "Secret type is required.",
+    "SecretValueRequired": "Secret value is required.",
+    "SecretHashTypeRequired": "A hash type must be selected.",
+    "ExpirationDateRequired": "Expiration date is required.",
+    "ExpirationTimeRequired": "Expiration time is required.",
+    "SecretHashTypeRequiredForSharedSecret": "A hash type must be selected for SharedSecret.",
+    "UrlRequired": "Please enter a valid URL"
+  },
+  "Actions": {
+    "Hooray": "Hooray! 🎉",
+    "Save": "Save",
+    "Delete": "Delete",
+    "Cancel": "Cancel",
+    "ConfirmDeletion": "Confirm Deletion",
+    "Next": "Next",
+    "Back": "Back",
+    "Edit": "Edit",
+    "Yes": "Yes",
+    "No": "No",
+    "Create": "Create",
+    "Leave": "Leave",
+    "UnsavedChangesConfirm": "You have unsaved changes. Are you sure you want to leave?",
+    "UnsavedChangesTitle": "Unsaved Changes",
+    "Search": "Search",
+    "Add": "Add",
+    "Detail": "Detail",
+    "Warning": "Warning"
+  },
+  "Modals": {
+    "Item": "Item",
+    "AddCustomValue": "Add custom value",
+    "Label": "Label"
+  },
+  "ApiScope": {
+    "Tips": {
+      "NoScope": "Do not see the scope you need? Just create an",
+      "ApiScope": "API scope",
+      "ApiScopeAssigned": "This API Scope <strong>{{apiScopeName}}</strong> can be assigned to an API Resource in the <strong>Scopes</strong> section."
+    },
+    "Actions": {
+      "DeleteApiScopeConfirm": "Are you sure you want to delete this api scope <strong>{{apiScopeName}}</strong>?",
+      "Deleted": "Api Scope has been deleted successfully!",
+      "Created": "Api Scope has been created successfully!",
+      "Updated": "Api Scope has been updated successfully!",
+      "Delete": "Delete Api Scope"
+    },
+    "Tabs": {
+      "Basics": "Basics",
+      "BasicsDescription": "Basic settings for the API scope, including its name, description, and whether it is enabled.",
+      "UserClaims": "User Claims",
+      "UserClaimsDescription": "Manage the user claims that should be included in the access token.",
+      "Properties": "Properties",
+      "PropertiesDescription": "Additional properties for the API scope."
+    },
+    "Create": {
+      "PageTitle": "Api Scope"
+    },
+    "Edit": {
+      "PageTitle": "Api Scope"
+    },
+    "Section": {
+      "Label": {
+        "Name_Label": "Name",
+        "Name_Info": "The unique name of the API. This value is used for authentication with introspection and will be added to the audience of the outgoing access token.",
+        "DisplayName_Info": "This value can be used e.g. on the consent screen.",
+        "DisplayName_Label": "Display Name",
+        "Description_Info": "This value can be used e.g. on the consent screen.",
+        "Description_Label": "Description",
+        "Enabled_Info": "Indicates if this resource is enabled and can be requested. Defaults to true.",
+        "Enabled_Label": "Enabled",
+        "ShowInDiscoveryDocument_Label": "Show In Discovery Document",
+        "ShowInDiscoveryDocument_Info": "Specifies whether this scope is shown in the discovery document. Defaults to true.",
+        "Emphasize_Info": "Specifies whether the consent screen will emphasize this scope (if the consent screen wants to implement such a feature). Use this setting for sensitive or important scopes. Defaults to false.",
+        "Emphasize_Label": "Emphasize",
+        "Required_Info": "Specifies whether the user can de-select the scope on the consent screen (if the consent screen wants to implement such a feature). Defaults to false.",
+        "Required_Label": "Required",
+        "UserClaims_Info": "List of associated user claim types that should be included in the access token.",
+        "UserClaims_Label": "User Claims"
+      }
+    }
+  },
+  "ApiScopes": {
+    "ApiScopeName": "Api Scope Name",
+    "PageTitle": "Api Scopes",
+    "AddNewApiScope": "Add Api Scope",
+    "SearchPlaceholder": "Search by scope name or ID"
+  },
+  "IdentityResources": {
+    "PageTitle": "Identity Resources",
+    "AddNewIdentityResource": "Add Identity Resource",
+    "IdentityResourceName": "Identity Resource Name",
+    "SearchPlaceholder": "Search by resource name or ID"
+  },
+  "IdentityResource": {
+    "Actions": {
+      "DeleteIdentityResourceConfirm": "Are you sure you want to delete this identity resource <strong>{{identityResourceName}}</strong>?",
+      "Deleted": "Identity Resource has been deleted successfully!",
+      "Created": "Identity Resource has been created successfully!",
+      "Updated": "Identity Resource has been updated successfully!",
+      "Delete": "Delete Identity Resource"
+    },
+    "Tabs": {
+      "Basics": "Basics",
+      "BasicsDescription": "Basic settings for the identity resource, including its name, description, and whether it is enabled.",
+      "UserClaims": "User Claims",
+      "UserClaimsDescription": "Manage the user claims that should be included in the identity token.",
+      "Properties": "Properties",
+      "PropertiesDescription": "Additional properties for the identity resource."
+    },
+    "Create": {
+      "PageTitle": "Identity Resource"
+    },
+    "Edit": {
+      "PageTitle": "Identity Resource"
+    },
+    "Section": {
+      "Label": {
+        "Description_Info": "This value will be used e.g. on the consent screen.",
+        "Description_Label": "Description",
+        "DisplayName_Info": "This value will be used e.g. on the consent screen.",
+        "DisplayName_Label": "Display Name",
+        "Emphasize_Info": "Specifies whether the consent screen will emphasize this scope (if the consent screen wants to implement such a feature). Use this setting for sensitive or important scopes. Defaults to false.",
+        "Emphasize_Label": "Emphasize",
+        "Enabled_Info": "Indicates if this resource is enabled and can be requested. Defaults to true.",
+        "Enabled_Label": "Enabled",
+        "Name_Info": "The unique name of the identity resource. This is the value a client will use for the scope parameter in the authorize request.",
+        "Name_Label": "Name",
+        "Required_Info": "Specifies whether the user can de-select the scope on the consent screen (if the consent screen wants to implement such a feature). Defaults to false.",
+        "Required_Label": "Required",
+        "ShowInDiscoveryDocument_Info": "Specifies whether this scope is shown in the discovery document. Defaults to true.",
+        "ShowInDiscoveryDocument_Label": "Show In Discovery Document",
+        "UserClaims_Info": "List of associated user claim types that should be included in the identity token.",
+        "UserClaims_Label": "User Claims"
+      }
+    }
+  },
+  "ApiResource": {
+    "Tips": {
+      "MissingScopes": "Do not forget to add <strong>scope/s</strong> to your API resource. You can do this in the <strong>Scopes</strong> tab."
+    },
+    "Actions": {
+      "DeleteApiResourceConfirm": "Are you sure you want to delete this api resource <strong>{{apiResourceName}}<strong>?",
+      "Deleted": "Api Resource has been deleted successfully!",
+      "Created": "Api Resource has been created successfully!",
+      "Updated": "Api Resource has been updated successfully!",
+      "Delete": "Delete Api Resource"
+    },
+    "Create": {
+      "PageTitle": "Api Resource"
+    },
+    "Edit": {
+      "PageTitle": "Api Resource"
+    },
+    "Tabs": {
+      "Basics": "Basics",
+      "BasicsDescription": "Basic settings for the API resource, including its name, description, and whether it is enabled.",
+      "Scopes": "Scopes",
+      "ScopesDescription": "Manage the scopes that belong to this API resource.",
+      "Secrets": "Secrets",
+      "SecretsDescription": "Manage API resource secrets for authentication and secure access.",
+      "UserClaims": "User Claims",
+      "UserClaimsDescription": "Manage the user claims that should be included in the access token.",
+      "Properties": "Properties",
+      "PropertiesDescription": "Additional properties for the API resource."
+    },
+    "Section": {
+      "Label": {
+        "Description_Info": "This value can be used e.g. on the consent screen.",
+        "Description_Label": "Description",
+        "DisplayName_Info": "This value can be used e.g. on the consent screen.",
+        "DisplayName_Label": "Display Name",
+        "Enabled_Info": "Indicates if this resource is enabled and can be requested. Defaults to true.",
+        "Enabled_Label": "Enabled",
+        "Name_Info": "The unique name of the API. This value is used for authentication with introspection and will be added to the audience of the outgoing access token.",
+        "Name_Label": "Name",
+        "RequireResourceIndicator_Info": "Indicates if this API resource requires the resource indicator to request it, and expects access tokens issued to it will only ever contain this API resource as the audience.",
+        "RequireResourceIndicator_Label": "Require Resource Indicator",
+        "SigningAlgorithms_Info": "List of allowed signing algorithms for access token. If empty, will use the server default signing algorithm.",
+        "SigningAlgorithms_Label": "Allowed Access Token Signing Algorithms",
+        "UserClaims_Info": "List of associated user claim types that should be included in the access token.",
+        "UserClaims_Label": "User Claims",
+        "ShowInDiscoveryDocument_Info": "Specifies whether this scope is shown in the discovery document. Defaults to true.",
+        "ShowInDiscoveryDocument_Label": "Show In Discovery Document"
+      }
+    }
+  },
+  "ApiResources": {
+    "PageTitle": "Api Resources",
+    "AddNewApiResource": "Add Api Resource",
+    "ApiResourceName": "Api Resource Name"
+  },
+  "Clients": {
+    "PageTitle": "Clients",
+    "AddNewClient": "Add New Client",
+    "ClientName": "Client Name",
+    "ClientId": "Client Id",
+    "ClientType": "Client Type"
+  },
+  "ClientSecret": {
+    "Actions": {
+      "Added": "The secret has been added successfully"
+    },
+    "ValueWarning": "Copy the new API secret value. You won't be able to retrieve it after you perform this operation."
+  },
+  "Claim": {
+    "Key": "Claim Key",
+    "Value": "Claim Value",
+    "Actions": {
+      "Add": "Add Claim",
+      "Added": "The claim has been added successfully",
+      "Deleted": "The claim has been deleted successfully"
+    },
+    "DeleteConfirmTitle": "Delete Claim",
+    "DeleteConfirmDescription": "Are you sure you want to delete this claim?"
+  },
+  "Secret": {
+    "PageTitle": "Secrets",
+    "Actions": {
+      "Add": "Add Secret",
+      "DeleteSecretConfirm": "Are you sure you want to delete this secret?"
+    }
+  },
+  "Property": {
+    "Key": "Property Key",
+    "Value": "Property Value",
+    "Actions": {
+      "Add": "Add Property",
+      "Added": "The property has been added successfully",
+      "Deleted": "The property has been deleted successfully",
+      "DeletePropertyConfirm": "Are you sure you want to delete this property?"
+    }
+  },
+  "Client": {
+    "PageTitle": "Client - {{clientName}}",
+    "Tips": {
+      "UniqueClientId": "It is recommended to use a unique identifier for each client. You can also use the <strong> Generate <generate /></strong> button to create a random value for the <strong>ClientId</strong>.",
+      "NoScopes": "Do not see the scope you need? Just create an",
+      "NoScopesIdentityResource": "Identity Resource",
+      "NoScopesApiResource": "API Resource",
+      "HighSecureAuth": "For <strong>High Secure Clients</strong>, it is recommended to use asymmetric client authentication, providing a public key e.g., a <strong>JSON Web Key (JWK)</strong> to achieve a higher level of security.",
+      "RedirectUris": "<strong>RedirectUris</strong> specify the allowed URIs where tokens or authorization codes are sent after login<br />(e.g., <code>https://my-app.com/signin-oidc</code>).<br /><strong>PostLogoutRedirectUris</strong> specify the allowed URIs to redirect users to after logout<br />(e.g., <code>https://my-app.com/signout-callback-oidc</code>).<br /><br />After creating the client, you can further adjust logout settings under the <strong>URLs → Logout URIs</strong> section."
+    },
+    "Actions": {
+      "Added": "Your client has been created successfully.",
+      "Updated": "Your client has been updated successfully!",
+      "DeleteClientConfirm": "Are you sure you want to delete this client <strong>{{clientName}}</strong>?",
+      "Deleted": "Your client has been deleted successfully!"
+    },
+    "ClientTypes": {
+      "Confidential": "Confidential",
+      "Public": "Public",
+      "Machine": "Machine",
+      "HighSecure": "High Secure",
+      "Generic": "Generic"
+    },
+    "SubTitle": "Manage your client settings",
+    "Wizard": {
+      "ReviewSubmit": "Review and Submit",
+      "NewClient": "New Client",
+      "ReviewClientDetails": "Review your client details before submission.",
+      "CreateNewClientDescription": "Create a new client by filling in the following details.",
+      "ChooseClientTypeDescription": "Choose the client type that best fits your use case",
+      "ConfidentialClientTypeDescription": "Web app or desktop app that can securely store a client secret.",
+      "PublicClientTypeDescription": "Web app or native app (mobile app) that can't securely store a client secret.",
+      "MachineClientTypeDescription": "Machine-to-machine client that can securely store a client secret.",
+      "HighSecureClientTypeDescription": "The High Secure Web Client ensures security with PAR, DPoP, and Asymmetric Client Secret.",
+      "ConfidentialClientType": "Confidential client",
+      "PublicClientType": "Public client",
+      "MachineClientType": "Machine client",
+      "HighSecureClientType": "High Secure Web Client"
+    },
+    "Summary": {
+      "ClientInfo": "Client Info",
+      "Secret": "Secret",
+      "Uri": "URI",
+      "Scopes": "Scopes",
+      "RequiredConsent": "Require Consent",
+      "NoRequiredConsent": "Not Require Consent",
+      "NoDescription": "No Description",
+      "RedirectUris": "Redirect URIs",
+      "LogoutUri": "Logout URI",
+      "ClientSecret": "Client Secret"
+    },
+    "Tabs": {
+      "Basics": "Basics",
+      "BasicsDescription": "Basic settings for the client, including its name, description, and whether it is enabled.",
+      "Urls": "Urls",
+      "UrlsDescription": "Manage redirect URIs, logout URIs, and CORS origins for the client.",
+      "Scopes": "Scopes",
+      "ScopesDescription": "Manage the Identity and API scopes that the client can access.",
+      "Secrets": "Secrets",
+      "SecretsDescription": "Manage client secrets for authentication and secure access.",
+      "Advanced": "Advanced",
+      "AdvancedDescription": "Advanced settings for the client, including grant types, token settings, consent screen options, and more.",
+      "CloneClient": "Clone Client",
+      "DeleteClient": "Delete Client",
+      "RedirectUris": "Redirect Uris",
+      "LogoutUris": "Logout Uris",
+      "CorsOrigins": "Cors Origins",
+      "GrantTypes": "Grant Types",
+      "Authentication": "Authentication",
+      "Authorization": "Authorization",
+      "Tokens": "Tokens",
+      "Consent": "Consent",
+      "DeviceFlow": "Device Flow",
+      "ClientClaims": "Client Claims",
+      "ClientProperties": "Client Properties",
+      "IdentityToken": "Identity Token",
+      "AccessToken": "Access Token",
+      "RefreshToken": "Refresh Token",
+      "DPoPSettings": "DPoP Settings",
+      "PushAuthorization": "Pushed Authorization",
+      "PKCE": "PKCE",
+      "CIBA": "CIBA",
+      "OtherSettings": "Other Settings"
+    },
+    "Label": {
+      "RequirePushedAuthorization_Label": "Require Pushed Authorization",
+      "AbsoluteRefreshTokenLifetime_Info": "Maximum lifetime of a refresh token in seconds. Defaults to 2592000 seconds / 30 days",
+      "AbsoluteRefreshTokenLifetime_Label": "Absolute Refresh Token Lifetime",
+      "AccessTokenLifetime_Info": "Lifetime of access token in seconds (defaults to 3600 seconds / 1 hour)",
+      "AccessTokenLifetime_Label": "Access Token Lifetime",
+      "AccessTokenTypes_Info": "Specifies whether the access token is a reference token or a self contained JWT token (defaults to Jwt).",
+      "AccessTokenTypes_Label": "Access Token Type",
+      "AllowAccessTokensViaBrowser_Info": "Specifies whether this client is allowed to receive access tokens via the browser. This is useful to harden flows that allow multiple response types (e.g. by disallowing a hybrid flow client that is supposed to use code id_token to add the token response type and thus leaking the token to the browser.",
+      "AllowAccessTokensViaBrowser_Label": "Allow Access Token Via Browser",
+      "AllowOfflineAccess_Info": "Specifies whether this client can request refresh tokens (by requesting the offline_access scope)",
+      "AllowOfflineAccess_Label": "Allow Offline Access",
+      "AllowPlainTextPkce_Info": "Specifies whether clients using PKCE can use a plain text code challenge (not recommended - and default to false)",
+      "AllowPlainTextPkce_Label": "Allow Plain Text Pkce",
+      "AllowRememberConsent_Info": "Specifies whether user can choose to store consent decisions. Defaults to true.",
+      "AllowRememberConsent_Label": "Allow Remember Consent",
+      "AlwaysIncludeUserClaimsInIdToken_Info": "",
+      "AlwaysIncludeUserClaimsInIdToken_Label": "Always Include User Claims In IdToken",
+      "AlwaysSendClientClaims_Info": "If set, the client claims will be sent for every flow. If not, only for client credentials flow (default is false)",
+      "AlwaysSendClientClaims_Label": "Always Send Client Claims",
+      "AuthorizationCodeLifetime_Info": "Lifetime of authorization code in seconds (defaults to 300 seconds / 5 minutes)",
+      "AuthorizationCodeLifetime_Label": "Authorization Code Lifetime",
+      "ClientId_Info": "Unique ID of the client",
+      "ClientId_Label": "ClientId",
+      "ClientName_Info": "Client display name (used for logging and consent screen)",
+      "ClientName_Label": "Client Name",
+      "ClientUri_Info": "URI to further information about client (used on consent screen)",
+      "ClientUri_Label": "Client Uri",
+      "Enabled_Info": "Specifies if client is enabled. Defaults to true.",
+      "Enabled_Label": "Enabled",
+      "EnableLocalLogin_Info": "Specifies if this client can use local accounts, or external IdPs only. Defaults to true.",
+      "EnableLocalLogin_Label": "Enable Local Login",
+      "IdentityTokenLifetime_Info": "Lifetime to identity token in seconds (defaults to 300 seconds / 5 minutes)",
+      "IdentityTokenLifetime_Label": "Identity Token Lifetime",
+      "IncludeJwtId_Info": "Specifies whether JWT access tokens should have an embedded unique ID (via the jti claim).",
+      "IncludeJwtId_Label": "Include Jwt Id",
+      "LogoUri_Info": "URI to client logo (used on consent screen)",
+      "LogoUri_Label": "Logo Uri",
+      "RefreshTokenExpiration_Info": "Absolute the refresh token will expire on a fixed point in time (specified by the AbsoluteRefreshTokenLifetime)\n\nSliding when refreshing the token, the lifetime of the refresh token will be renewed (by the amount specified in SlidingRefreshTokenLifetime). The lifetime will not exceed AbsoluteRefreshTokenLifetime.",
+      "RefreshTokenExpiration_Label": "Refresh Token Expiration",
+      "RefreshTokenUsage_Info": "ReUse the refresh token handle will stay the same when refreshing tokens\n\nOneTime the refresh token handle will be updated when refreshing tokens",
+      "RefreshTokenUsage_Label": "Refresh Token Usage",
+      "RequireClientSecret_Info": "Specifies whether this client needs a secret to request tokens from the token endpoint (defaults to true)",
+      "RequireClientSecret_Label": "Require Client Secret",
+      "RequireConsent_Info": "Specifies whether a consent screen is required.",
+      "RequireConsent_Label": "Require Consent",
+      "ConsentLifetime_Info": "Lifetime of a user consent in seconds. Defaults to null (no expiration).",
+      "ConsentLifetime_Label": "Consent Lifetime",
+      "RequirePkce_Info": "Specifies whether clients using an authorization code based grant type must send a proof key",
+      "RequirePkce_Label": "Require Pkce",
+      "SlidingRefreshTokenLifetime_Info": "Sliding lifetime of a refresh token in seconds. Defaults to 1296000 seconds / 15 days",
+      "SlidingRefreshTokenLifetime_Label": "Sliding Refresh Token Lifetime",
+      "UpdateAccessTokenClaimsOnRefresh_Info": "Gets or sets a value indicating whether the access token (and its claims) should be updated on a refresh token request.",
+      "UpdateAccessTokenClaimsOnRefresh_Label": "Update Access Token Claims On Refresh",
+      "AllowedCorsOrigins_Info": "If specified, will be used by the default CORS policy service implementations (In-Memory and EF) to build a CORS policy for JavaScript clients.",
+      "AllowedCorsOrigins_Label": "Allowed Cors Origins",
+      "AllowedGrantTypes_Info": "Specifies the grant types the client is allowed to use. Use the GrantTypes class for common combinations. List of default grants: Implicit Grant - (implicit), Client Credentials Grant - (client_credentials), Authorization Code Grant - (authorization_code), Hybrid grant - (hybrid), Resource Owner Password Credentials Grant - (password)",
+      "AllowedGrantTypes_Label": "Allowed Grant Types",
+      "AllowedScopes_Info": "By default a client has no access to any resources - specify the allowed resources by adding the corresponding scopes names",
+      "AllowedScopes_Label": "Allowed Scopes",
+      "IdentityProviderRestrictions_Info": "Specifies which external IdPs can be used with this client (if list is empty all IdPs are allowed). Defaults to empty.",
+      "IdentityProviderRestrictions_Label": "Identity Provider Restrictions",
+      "PostLogoutRedirectUris_Info": "Specifies allowed URIs to redirect to after logout",
+      "PostLogoutRedirectUris_Label": "Post Logout Redirect Uris",
+      "RedirectUris_Info": "Specifies the allowed URIs to return tokens or authorization codes to",
+      "RedirectUris_Label": "Redirect Uris",
+      "BackChannelLogoutSessionRequired_Info": "Specifies if the user’s session id should be sent in the request to the BackChannelLogoutUri. Defaults to true.",
+      "BackChannelLogoutSessionRequired_Label": "Back Channel Logout Session Required",
+      "BackChannelLogoutUri_Info": "Specifies logout URI at client for HTTP based back-channel logout. See the OIDC Back-Channel spec for more details.",
+      "BackChannelLogoutUri_Label": "Back Channel Logout Uri",
+      "ClientClaimsPrefix_Info": "If set, the prefix client claim types will be prefixed with. Defaults to client_. The intent is to make sure they don’t accidentally collide with user claims.",
+      "ClientClaimsPrefix_Label": "Client Claims Prefix",
+      "Description_Info": "Client Description",
+      "Description_Label": "Description",
+      "FrontChannelLogoutSessionRequired_Info": "Specifies if the user’s session id should be sent to the FrontChannelLogoutUri. Defaults to true.",
+      "FrontChannelLogoutSessionRequired_Label": "Front Channel Logout Session Required",
+      "FrontChannelLogoutUri_Info": "Specifies logout URI at client for HTTP based front-channel logout. See the OIDC Front-Channel spec for more details.",
+      "FrontChannelLogoutUri_Label": "Front Channel Logout Uri",
+      "PairWiseSubjectSalt_Info": "Salt value used in pair-wise subjectId generation for users of this client.",
+      "PairWiseSubjectSalt_Label": "Pair Wise Subject Salt",
+      "UserSsoLifetime_Info": "The maximum duration (in seconds) since the last time the user authenticated. Defaults to null",
+      "UserSsoLifetime_Label": "User Sso Lifetime",
+      "DeviceCodeLifetime_Info": "Lifetime to device code in seconds (defaults to 300 seconds / 5 minutes)",
+      "DeviceCodeLifetime_Label": "Device Code Lifetime",
+      "UserCodeType_Info": "Specifies the type of user code to use for the client. Otherwise falls back to default.",
+      "UserCodeType_Label": "User Code Type",
+      "Expiration_Info": "Expiration",
+      "Expiration_Label": "Expiration",
+      "ExpirationDate_Info": "Expiration Date",
+      "ExpirationDate_Label": "Expiration Date",
+      "ExpirationTime_Info": "Expiration Time",
+      "ExpirationTime_Label": "Expiration Time",
+      "SecretDescription_Info": "Description",
+      "SecretDescription_Label": "Description",
+      "RequireRequestObject_Label": "Require Request Object",
+      "RequireRequestObject_Info": "Specifies whether this client needs to wrap the authorize request parameters in a JWT (defaults to false)",
+      "SigningAlgorithms_Label": "Allowed Identity Token Signing Algorithms",
+      "SigningAlgorithms_Info": "List of allowed signing algorithms for identity token. If empty, will use the server default signing algorithm.",
+      "CibaLifetime_Info": "Specifies the backchannel authentication request lifetime in seconds. Default to empty.",
+      "CibaLifetime_Label": "Ciba Lifetime",
+      "PollingInterval_Info": "Backchannel polling interval in seconds. Default to empty.",
+      "PollingInterval_Label": "Polling Interval",
+      "CoordinateLifetimeWithUserSession_Info": "When enabled, the client’s token lifetimes (e.g. refresh tokens) will be tied to the user’s session lifetime. This means when the user logs out, any revokable tokens will be removed. If using server-side sessions, expired sessions will also remove any revokable tokens, and backchannel logout will be triggered. This client’s setting overrides the global CoordinateTokensWithUserSession configuration setting.",
+      "CoordinateLifetimeWithUserSession_Label": "Coordinate Lifetime With User Session",
+      "RequireDPoP_Label": "Require DPoP",
+      "RequireDPoP_Info": "Specifies whether a DPoP (Demonstrating Proof-of-Possession) token is requied to be used by this client. Defaults to false.",
+      "DPoPClockSkew_Label": "DPoP Clock Skew",
+      "DPoPClockSkew_Info": "Clock skew used in validating the client’s DPoP proof token ‘iat’ claim value. Defaults to 5 minutes.",
+      "DPoPValidationMode_Label": "DPoP Validation Mode",
+      "DPoPValidationMode_Info": "Enum setting to control validation for the DPoP proof token expiration. This supports both the client generated ‘iat’ value and/or the server generated ’nonce’ value. Defaults to DPoPTokenExpirationValidationMode.Iat, which only validates the ‘iat’ value.",
+      "InitiateLoginUri_Label": "Initiate Login Uri",
+      "InitiateLoginUri_Info": "An optional URI that can be used to initiate login from the IdentityServer host or a third party. This is most commonly used to create a client application portal within the IdentityServer host. Defaults to null.",
+      "RequirePushedAuthorization_Info": "Controls if this client requires PAR. PAR is required if either the global configuration is enabled or if the client’s flag is enabled (this can’t be used to opt out of the global configuration). This defaults to false, which means the global configuration will be used.",
+      "PushedAuthorizationLifetime_Label": "Pushed Authorization Lifetime",
+      "PushedAuthorizationLifetime_Info": "Controls the lifetime of pushed authorization requests for a client. If this lifetime is set, it takes precedence over the global configuration. This defaults to null, which means the global configuration is used.",
+      "FinalClientReview": "Final client review",
+      "FinalClientReviewMessage": "Please review your client details before submitting.",
+      "FinalClientReviewTreeView": "Tree View",
+      "FinalClientReviewTableView": "Table View",
+      "ClientDetails": "Client Details",
+      "Field": "Field",
+      "Value": "Value",
+      "RedirectLogoutUrisTitle": "Redirect & Logout URIs",
+      "ClientSecret_ExpirationDate": "Expiration Date",
+      "ClientSecret_ExpirationTime": "Expiration Time",
+      "ClientSecret_Created": "Created",
+      "Type_Info": "",
+      "Type_Label": "Claim Type",
+      "Value_Info": "",
+      "Value_Label": "Claim Value",
+      "SecretType_Info": "",
+      "SecretType_Label": "Secret Type",
+      "SecretValue_Info": "",
+      "SecretValue_Label": "Secret Value",
+      "HashType_Info": "",
+      "HashType_Label": "Hash Type",
+      "ClientType_Label": "Client Type",
+      "ClientType_Info": "The type of the client (e.g. confidential, public)"
+    },
+    "Clone": {
+      "ButtonClone": "Clone Client",
+      "LabelCloneClientClaims": "Client Claims",
+      "LabelCloneClientCorsOrigins": "Client Cors Origins",
+      "LabelCloneClientGrantTypes": "Client Grant Types",
+      "LabelCloneClientIdPRestrictions": "Client IdP Restrictions",
+      "LabelCloneClientPostLogoutRedirectUris": "Client Post Logout Redirect Uris",
+      "LabelCloneClientProperties": "Client Properties",
+      "LabelCloneClientRedirectUris": "Client Redirect Uris",
+      "LabelCloneClientScopes": "Client Scopes",
+      "PageTitle": "Clone Client {{clientName}}",
+      "PageDescription": "Clone the client by filling in the following details.",
+      "Actions": {
+        "Cloned": "Client has been cloned successfully!"
+      }
+    }
+  },
+  "Role": {
+    "Edit": {
+      "PageTitle": "Role"
+    },
+    "Create": {
+      "PageTitle": "Role"
+    },
+    "Tabs": {
+      "Basics": "Basics",
+      "BasicsDescription": "Basic settings for the role, including its name and description.",
+      "Claims": "Claims",
+      "ClaimsDescription": "Manage the claims that are associated with this role."
+    },
+    "Users": {
+      "PageTitle": "Users in Role",
+      "UsersInRole": "Users in Role",
+      "UsersInRoleShow": "View users in role"
+    },
+
+    "Actions": {
+      "Deleted": "Role has been deleted successfully!",
+      "Created": "Role has been created successfully!",
+      "Updated": "Role has been updated successfully!",
+      "Add": "Add Role",
+      "Added": "The role has been added successfully",
+      "Select": "Select Role",
+      "DeleteConfirmTitle": "Delete Role",
+      "DeleteConfirmDescription": "Are you sure you want to delete role <strong>{{roleName}}</strong>?",
+      "Delete": "Delete Role"
+    },
+    "DeleteConfirmTitle": "Delete Role",
+    "DeleteConfirmDescription": "Are you sure you want to delete this role?",
+    "Section": {
+      "Label": {
+        "RoleName_Info": "Name of the role",
+        "RoleName_Label": "Role Name"
+      }
+    }
+  },
+  "Roles": {
+    "PageTitle": "Roles",
+    "AddNewRole": "Add Role",
+    "SearchPlaceholder": "Search by role name or ID"
+  },
+  "IdentityProviders": {
+    "PageTitle": "Identity Providers"
+  },
+  "IdentityProvider": {
+    "PageTitle": "Identity Provider",
+    "Search": "Search",
+    "Create": {
+      "PageTitle": "Identity Provider"
+    },
+    "Edit": {
+      "PageTitle": "Identity Provider"
+    },
+    "Tabs": {
+      "Basics": "Basics",
+      "BasicsDescription": "Basic settings for the identity provider, including its name, scheme, and whether it is enabled.",
+      "Properties": "Properties",
+      "PropertiesDescription": "Additional properties for the identity provider."
+    },
+    "Actions": {
+      "Created": "Identity Provider has been created successfully!",
+      "Updated": "Identity Provider has been updated successfully!",
+      "Add": "Add Identity Provider",
+      "Added": "The identity provider has been added successfully",
+      "Delete": "Delete Identity Provider",
+      "Deleted": "Identity Provider has been deleted successfully!",
+      "DeleteConfirmTitle": "Delete Identity Provider",
+      "DeleteConfirmDescription": "Are you sure you want to delete identity provider <strong>{{identityProviderName}}</strong>?"
+    },
+    "DeleteConfirmTitle": "Delete Identity Provider",
+    "DeleteConfirmDescription": "Are you sure you want to delete <strong>{{identityProviderName}}</strong>?",
+    "Section": {
+      "Label": {
+        "Enabled_Info": "Indicates if this identity provider is enabled and can be used. Defaults to true.",
+        "Enabled_Label": "Enabled",
+        "Scheme_Info": "This value will be used as the authentication scheme. This needs to be globally unique.",
+        "Scheme_Label": "Scheme",
+        "DisplayName_Info": "This value will be used to display the provider choice (e.g. on a login screen).",
+        "DisplayName_Label": "Display Name",
+        "ProtocolType_Info": "Indicates the protocol type for the identity provider (Duende only supports 'oidc' out of the box).",
+        "ProtocolType_Label": "Protocol Type"
+      }
+    }
+  },
+  "Keys": {
+    "PageTitle": "Keys",
+    "DeleteTitle": "Delete Key",
+    "DeleteDescription": "Are you sure you want to delete this key?",
+    "Section": {
+      "Label": {
+        "Algorithm_Label": "Algorithm",
+        "Use_Label": "Use",
+        "Created_Label": "Created"
+      }
+    }
+  },
+  "Users": {
+    "PageTitle": "Users",
+    "AddNewUser": "Add User",
+    "SearchPlaceholder": "Search by user name or ID"
+  },
+  "User": {
+    "Edit": {
+      "PageTitle": "User"
+    },
+    "Create": {
+      "PageTitle": "User"
+    },
+    "PersistedGrants": {
+      "Type": "Type",
+      "ClientId": "Client ID",
+      "CreationTime": "Created",
+      "Expiration": "Expiration",
+      "Description": "Description",
+      "DetailTitle": "Persisted Grant Detail",
+      "DeleteGrantTitle": "Delete Persisted Grant",
+      "DeleteGrantConfirm": "Are you sure you want to delete this persisted grant?",
+      "Deleted": "Persisted grant was deleted.",
+      "ConsumedTime": "Consumed Time",
+      "SessionId": "Session ID",
+      "DeletedAll": "All persisted grants have been deleted successfully!",
+      "DeleteAllGrants": "Delete All Persisted Grants",
+      "DeleteAllTitle": "Delete All Persisted Grants",
+      "DeleteAllConfirm": "Are you sure you want to delete all persisted grants for this user?"
+    },
+    "Actions": {
+      "Created": "User has been created successfully!",
+      "Updated": "User has been updated successfully!",
+      "DeleteExternalApplication": "Delete External Application",
+      "DeleteExternalApplicationDeleted": "External Application has been deleted successfully!",
+      "DeleteExternalApplicationConfirm": "Are you sure you want to delete this external application?",
+      "Deleted": "User has been deleted successfully!",
+      "DeleteConfirmTitle": "Delete User",
+      "DeleteConfirmDescription": "Are you sure you want to delete user <strong>{{userName}}</strong>?",
+      "Delete": "Delete User"
+    },
+    "Tabs": {
+      "Basics": "Basics",
+      "BasicsDescription": "Basic settings for the user, including username, email, phone number, and security settings.",
+      "Claims": "Claims",
+      "ClaimsDescription": "Manage the claims associated with the user.",
+      "Roles": "Roles",
+      "RolesDescription": "Manage the roles assigned to the user.",
+      "ExternalApplications": "External Applications",
+      "ExternalApplicationsDescription": "Manage the external applications linked to the user.",
+      "PersistedGrants": "Persisted Grants",
+      "PersistedGrantsDescription": "Manage the persisted grants associated with the user."
+    },
+    "Section": {
+      "Label": {
+        "UserAccessFailedCount_Info": "User Access Failed Count",
+        "UserAccessFailedCount_Label": "User Access Failed Count",
+        "UserEmailConfirmed_Info": "User Email Confirmed",
+        "UserEmailConfirmed_Label": "User Email Confirmed",
+        "UserEmail_Info": "Email",
+        "UserEmail_Label": "Email",
+        "UserLockoutEnabled_Info": "User Lockout Enabled",
+        "UserLockoutEnabled_Label": "User Lockout Enabled",
+        "UserLockoutEnd_Info": "User Lockout End Date",
+        "UserLockoutEnd_Label": "User Lockout End Date",
+        "UserLockoutEndTime_Info": "User Lockout End Time",
+        "UserLockoutEndTime_Label": "User Lockout End Time",
+        "UserPhoneNumberConfirmed_Info": "User Phone Number Confirmed",
+        "UserPhoneNumberConfirmed_Label": "User Phone Number Confirmed",
+        "UserPhoneNumber_Info": "User Phone Number",
+        "UserPhoneNumber_Label": "User Phone Number",
+        "UserTwoFactorEnabled_Info": "User Two Factor Enabled",
+        "UserTwoFactorEnabled_Label": "User Two Factor Enabled",
+        "UserUserName_Info": "User Name",
+        "UserUserName_Label": "User Name",
+        "UserProviderLoginProvider_Info": "Login Provider",
+        "UserProviderLoginProvider_Label": "Login Provider",
+        "UserProviderProviderDisplayName_Info": "Display Name",
+        "UserProviderProviderDisplayName_Label": "Display Name",
+        "UserProviderProviderKey_Info": "Provider Key",
+        "UserProviderProviderKey_Label": "Provider Key"
+      }
+    }
+  },
+  "ConfigurationIssues": {
+    "PageTitle": "Configuration Issues",
+    "ResourceName": "Resource Name",
+    "IssueType": "Issue Type",
+    "Message": "Message",
+    "IssueTypeRecommendation": "Recommendation",
+    "IssueTypeWarning": "Warning",
+    "Fix": "Fix",
+    "IssueMessages": {
+      "0": "Grant type 'implicit' is obsolete. Consider using 'authorization code' with PKCE instead.",
+      "1": "Grant type 'password' is obsolete. Consider using 'authorization code' with PKCE instead.",
+      "2": "This client does not use PKCE. Consider enabling PKCE for enhanced security."
+    },
+    "IssuesFix": {
+      "0": "Go to the client details → Advanced → Grant Types and replace 'implicit' with 'authorization_code'.",
+      "1": "Go to the client details → Advanced → Grant Types and replace 'password' with 'authorization_code'.",
+      "2": "Go to the client details → Advanced → Authorization → PKCE and enable 'Require PKCE'."
+    }
+  },
+  "AuditLogs": {
+    "PageTitle": "Audit Logs",
+    "Event": "Event",
+    "Source": "Source",
+    "SubjectName": "Subject Name",
+    "Created": "Created",
+    "SearchEvent": "Search by event...",
+    "SearchSource": "Search by source...",
+    "SearchSubject": "Search by subject...",
+    "Search": "Search",
+    "ViewDetails": "View",
+    "DetailsModalTitle": "Log Entry Details",
+    "Data": "Data",
+    "SubjectAdditionalData": "Subject Additional Data",
+    "NoData": "No data available",
+    "NoSubjectAdditionalData": "No subject additional data available",
+    "SelectDate": "Select date",
+    "ClearDate": "Clear date",
+    "Action": "Action",
+    "InsufficientData": "Insufficient data for trend visualization",
+    "InsufficientDataDescription": "At least 2 days of audit data are needed to display meaningful trends."
+  },
+  "Footer": {
+    "Version": "Version",
+    "Languages": {
+      "en": "English",
+      "NotFound": "No language found.",
+      "SelectLanguage": "Select Language"
+    }
+  }
+}

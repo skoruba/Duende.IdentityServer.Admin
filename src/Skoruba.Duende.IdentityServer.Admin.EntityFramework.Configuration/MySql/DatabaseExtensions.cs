@@ -109,5 +109,24 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySq
                 optionsSql => optionsSql.MigrationsAssembly(migrationsAssembly)));
 
         }
+        
+        /// <summary>
+        /// Add Data Protection DbContext for MySQL
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="connectionString"></param>
+        /// <param name="migrationsAssembly"></param>
+        /// <typeparam name="TDataProtectionDbContext"></typeparam>
+        public static void AddDataProtectionDbContextMySql<TDataProtectionDbContext>(
+            this IServiceCollection services,
+            string connectionString,
+            string migrationsAssembly = null)
+            where TDataProtectionDbContext : DbContext, IDataProtectionKeyContext
+        {
+            var assembly = migrationsAssembly ?? typeof(DatabaseExtensions).GetTypeInfo().Assembly.GetName().Name;
+            services.AddDbContext<TDataProtectionDbContext>(options =>
+                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), x => x.MigrationsAssembly(assembly))
+            );
+        }
     }
 }
