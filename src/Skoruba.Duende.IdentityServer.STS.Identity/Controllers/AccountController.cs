@@ -27,6 +27,7 @@ using Skoruba.Duende.IdentityServer.STS.Identity.Helpers.Localization;
 using Skoruba.Duende.IdentityServer.STS.Identity.ViewModels.Account;
 using SMSSender;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -54,6 +55,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
         private readonly IGenericControllerLocalizer<AccountController<TUser, TKey>> _localizer;
         private readonly LoginConfiguration _loginConfiguration;
         private readonly RegisterConfiguration _registerConfiguration;
+        private readonly OTPConfiguration _otpConfiguration;
         private readonly IdentityOptions _identityOptions;
         private readonly ILogger<AccountController<TUser, TKey>> _logger;
         private readonly IIdentityProviderStore _identityProviderStore;
@@ -71,6 +73,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
             IGenericControllerLocalizer<AccountController<TUser, TKey>> localizer,
             LoginConfiguration loginConfiguration,
             RegisterConfiguration registerConfiguration,
+            OTPConfiguration otpConfiguration,
             IdentityOptions identityOptions,
             ILogger<AccountController<TUser, TKey>> logger,
             IIdentityProviderStore identityProviderStore)
@@ -87,6 +90,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
             _localizer = localizer;
             _loginConfiguration = loginConfiguration;
             _registerConfiguration = registerConfiguration;
+            _otpConfiguration = otpConfiguration;   
             _identityOptions = identityOptions;
             _logger = logger;
             _identityProviderStore = identityProviderStore;
@@ -174,9 +178,87 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
                 var user = await _userResolver.GetUserAsync(model.Username);
                 if (user != default(TUser))
                 {
+                    // Get the user's roles
+                    var otpGroups = await _userManager.GetRolesAsync(user);
+                    var isInAnyOTPGroup = otpGroups.Intersect(_otpConfiguration.Groups).Any();
+
+                    if (isInAnyOTPGroup)
+                    {                        
+                        if (true)
+                        {
+                            // For users with phone number, verify password without signing in
+                            var passwordValid = await _userManager.CheckPasswordAsync(user, model.Password);
+                            if (passwordValid)
+                            {
+                                // Check for lockout
+                                if (await _userManager.IsLockedOutAsync(user))
+                                {
+                                    await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "locked out", clientId: context?.Client.ClientId));
+                                    return View("Lockout");
+                                }
+
+                                // Reset access failed count on successful password check
+                                if (await _userManager.GetAccessFailedCountAsync(user) > 0)
+                                {
+                                    await _userManager.ResetAccessFailedCountAsync(user);
+                                }
+
+                                // Generate OTP and send SMS
+                                var otpCode = GenerateOtpCode();
+                                var otpExpiry = DateTime.UtcNow.AddMinutes(5); // OTP valid for 5 minutes
+
+                                // Store OTP and user info in session
+                                HttpContext.Session.SetString("MfaOtpCode", otpCode);
+                                HttpContext.Session.SetString("MfaOtpExpiry", otpExpiry.ToString("O"));
+                                HttpContext.Session.SetString("MfaUserId", user.Id.ToString());
+                                HttpContext.Session.SetString("MfaRememberMe", model.RememberLogin.ToString());
+                                HttpContext.Session.SetString("MfaReturnUrl", model.ReturnUrl ?? string.Empty);
+
+                                // Send SMS with OTP
+                                try
+                                {
+                                    if (string.IsNullOrWhiteSpace(user.PhoneNumber))
+                                        throw new Exception("User does not have a phone number for SMS OTP.");
+
+                                    var localizedString = _localizer["SmsOtpMessage"];
+                                    var smsMessage = localizedString.ResourceNotFound
+                                        ? $"Your verification code is: {otpCode}. This code will expire in 5 minutes."
+                                        : string.Format(localizedString.Value, otpCode);
+
+                                    await _smsSender.SendSMSAsync(user.PhoneNumber, smsMessage);
+                                    _logger.LogInformation("SMS OTP sent to user {UserId} at phone {PhoneNumber}", user.Id, user.PhoneNumber);
+                                }
+                                catch (Exception ex)
+                                {
+                                    _logger.LogError(ex, "Failed to send SMS OTP to user {UserId} at phone {PhoneNumber}", user.Id, user.PhoneNumber);
+                                    var localizedString = _localizer["SmsOtpSendFailed"];
+                                    var errorMessage = localizedString.ResourceNotFound ? $"Failed to send verification code. Please try again."
+                                        : localizedString.Value;
+
+                                    ModelState.AddModelError(string.Empty, errorMessage);
+                                    return View(await BuildLoginViewModelAsync(model));
+                                }
+
+                                // Redirect to SMS OTP verification page
+                                return RedirectToAction(nameof(LoginWithSmsOtp), new { returnUrl = model.ReturnUrl });
+                            }
+                            else
+                            {
+                                // Invalid password - handle lockout
+                                await _userManager.AccessFailedAsync(user);
+                                if (await _userManager.IsLockedOutAsync(user))
+                                {
+                                    await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "locked out", clientId: context?.Client.ClientId));
+                                    return View("Lockout");
+                                }
+                            }
+                        }
+                    }
+                    // For users without phone number or if password check failed, use standard sign-in
                     var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberLogin, lockoutOnFailure: true);
                     if (result.Succeeded)
                     {
+                        // No phone number - proceed with normal login
                         await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName));
 
                         if (context != null)
@@ -618,6 +700,133 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        public async Task<IActionResult> LoginWithSmsOtp(string returnUrl = null)
+        {
+            // Check if we have OTP data in session (user came from login)
+            var otpCode = HttpContext.Session.GetString("MfaOtpCode");
+            var userId = HttpContext.Session.GetString("MfaUserId");
+            
+            if (string.IsNullOrEmpty(otpCode) || string.IsNullOrEmpty(userId))
+            {
+                // No OTP in session - redirect to login
+                return RedirectToAction(nameof(Login), new { returnUrl });
+            }
+
+            // Get user to display masked phone number
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                // Invalid user - clear session and redirect to login
+                ClearMfaSession();
+                return RedirectToAction(nameof(Login), new { returnUrl });
+            }
+
+            var model = new LoginWithSmsOtpViewModel
+            {
+                ReturnUrl = returnUrl ?? HttpContext.Session.GetString("MfaReturnUrl") ?? returnUrl,
+                PhoneNumber = MaskPhoneNumber(user.PhoneNumber)
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LoginWithSmsOtp(LoginWithSmsOtpViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // Retrieve OTP data from session
+            var storedOtpCode = HttpContext.Session.GetString("MfaOtpCode");
+            var otpExpiryStr = HttpContext.Session.GetString("MfaOtpExpiry");
+            var userId = HttpContext.Session.GetString("MfaUserId");
+            var rememberMeStr = HttpContext.Session.GetString("MfaRememberMe");
+            var returnUrl = model.ReturnUrl ?? HttpContext.Session.GetString("MfaReturnUrl");
+
+            // Validate session data exists
+            if (string.IsNullOrEmpty(storedOtpCode) || string.IsNullOrEmpty(userId))
+            {
+                ClearMfaSession();
+                ModelState.AddModelError(string.Empty, _localizer["SmsOtpSessionExpired"] ?? "Session expired. Please login again.");
+                return RedirectToAction(nameof(Login), new { returnUrl });
+            }
+
+            // Check OTP expiry
+            if (!string.IsNullOrEmpty(otpExpiryStr) && DateTime.TryParse(otpExpiryStr, out var otpExpiry))
+            {
+                if (DateTime.UtcNow > otpExpiry)
+                {
+                    ClearMfaSession();
+                    ModelState.AddModelError(string.Empty, _localizer["SmsOtpExpired"] ?? "Verification code has expired. Please login again.");
+                    return RedirectToAction(nameof(Login), new { returnUrl });
+                }
+            }
+
+            // Verify OTP code
+            var enteredOtp = model.OtpCode?.Replace(" ", string.Empty).Replace("-", string.Empty);
+            if (string.IsNullOrEmpty(enteredOtp) || !enteredOtp.Equals(storedOtpCode, StringComparison.Ordinal))
+            {
+                ModelState.AddModelError(string.Empty, _localizer["SmsOtpInvalid"] ?? "Invalid verification code. Please try again.");
+                
+                // Get user for display
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user != null)
+                {
+                    model.PhoneNumber = MaskPhoneNumber(user.PhoneNumber);
+                }
+                
+                return View(model);
+            }
+
+            // OTP verified - get user and complete login
+            var userToSignIn = await _userManager.FindByIdAsync(userId);
+            if (userToSignIn == null)
+            {
+                ClearMfaSession();
+                ModelState.AddModelError(string.Empty, _localizer["UserNotFound"] ?? "User not found.");
+                return RedirectToAction(nameof(Login), new { returnUrl });
+            }
+
+            // Clear MFA session data
+            ClearMfaSession();
+
+            // Sign in the user
+            bool.TryParse(rememberMeStr, out var rememberMe);
+            await _signInManager.SignInAsync(userToSignIn, rememberMe);
+            
+            await _events.RaiseAsync(new UserLoginSuccessEvent(userToSignIn.UserName, userToSignIn.Id.ToString(), userToSignIn.UserName));
+
+            // Check authorization context
+            var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
+            if (context != null)
+            {
+                if (context.IsNativeClient())
+                {
+                    return this.LoadingPage("Redirect", returnUrl);
+                }
+                return Redirect(returnUrl);
+            }
+
+            // Handle return URL
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+
+            if (string.IsNullOrEmpty(returnUrl))
+            {
+                return Redirect("~/");
+            }
+
+            return Redirect(returnUrl);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
         public IActionResult Register(string returnUrl = null)
         {
             if (!_registerConfiguration.Enabled) return View("RegisterFailure");
@@ -865,6 +1074,45 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
             }
 
             return vm;
+        }
+
+        /// <summary>
+        /// Generate a 6-digit OTP code
+        /// </summary>
+        private string GenerateOtpCode()
+        {
+            var random = new Random();
+            return random.Next(100000, 999999).ToString();
+        }
+
+        /// <summary>
+        /// Clear MFA session data
+        /// </summary>
+        private void ClearMfaSession()
+        {
+            HttpContext.Session.Remove("MfaOtpCode");
+            HttpContext.Session.Remove("MfaOtpExpiry");
+            HttpContext.Session.Remove("MfaUserId");
+            HttpContext.Session.Remove("MfaRememberMe");
+            HttpContext.Session.Remove("MfaReturnUrl");
+        }
+
+        /// <summary>
+        /// Mask phone number for display (e.g., +1234567890 -> +1******890)
+        /// </summary>
+        private string MaskPhoneNumber(string phoneNumber)
+        {
+            if (string.IsNullOrWhiteSpace(phoneNumber))
+                return string.Empty;
+
+            if (phoneNumber.Length <= 4)
+                return phoneNumber;
+
+            var start = phoneNumber.Substring(0, Math.Min(2, phoneNumber.Length - 4));
+            var end = phoneNumber.Substring(phoneNumber.Length - 2);
+            var masked = new string('*', Math.Max(0, phoneNumber.Length - start.Length - end.Length));
+            
+            return start + masked + end;
         }
     }
 }

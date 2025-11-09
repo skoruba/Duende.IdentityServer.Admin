@@ -1,0 +1,30 @@
+@inject IViewLocalizer Localizer
+@using Microsoft.AspNetCore.Mvc.Localization
+@model Skoruba.Duende.IdentityServer.STS.Identity.ViewModels.Account.LoginWithSmsOtpViewModel
+@{
+    ViewData["Title"] = Localizer["SmsOtpTitle"];
+}
+
+@await Html.PartialAsync("_ValidationSummary")
+
+<h2>@ViewData["Title"]</h2>
+<hr />
+<p>@Localizer["SmsOtpInfo", Model.PhoneNumber]</p>
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" asp-action="LoginWithSmsOtp" asp-route-returnUrl="@Model.ReturnUrl">
+            <input asp-for="RememberMe" type="hidden" />
+            <input asp-for="ReturnUrl" type="hidden" />
+            <input asp-for="PhoneNumber" type="hidden" />
+            <div class="form-group">
+                <label asp-for="OtpCode">@Localizer["SmsOtpCode"]</label>
+                <input asp-for="OtpCode" class="form-control" autocomplete="off" autofocus maxlength="6" />
+                <span asp-validation-for="OtpCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">@Localizer["LogIn"]</button>
+                <a asp-action="Login" class="btn btn-secondary">@Localizer["Cancel"]</a>
+            </div>
+        </form>
+    </div>
+</div>

@@ -276,11 +276,13 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
             var loginConfiguration = GetLoginConfiguration(configuration);
             var registrationConfiguration = GetRegistrationConfiguration(configuration);
             var identityOptions = configuration.GetSection(nameof(IdentityOptions)).Get<IdentityOptions>();
+            var otpConfiguration = GetOTPConfiguration(configuration);
 
             services
                 .AddSingleton(registrationConfiguration)
                 .AddSingleton(loginConfiguration)
                 .AddSingleton(identityOptions)
+                .AddSingleton(otpConfiguration)
                 .AddScoped<ApplicationSignInManager<TUserIdentity>>()
                 .AddScoped<UserResolver<TUserIdentity>>()
                 .AddIdentity<TUserIdentity, TUserIdentityRole>(options => configuration.GetSection(nameof(IdentityOptions)).Bind(options))
@@ -308,6 +310,24 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
             var authenticationBuilder = services.AddAuthentication();
 
             AddExternalProviders(authenticationBuilder, configuration);
+        }
+
+        /// <summary>
+        /// Get configuration for OTP
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        private static OTPConfiguration GetOTPConfiguration(IConfiguration configuration)
+        {
+            var otpConfiguration = configuration.GetSection(nameof(OTPConfiguration)).Get<OTPConfiguration>();
+
+            // Cannot load configuration - use default configuration values
+            if (otpConfiguration == null)
+            {
+                return new OTPConfiguration();
+            }
+
+            return otpConfiguration;
         }
 
         /// <summary>
