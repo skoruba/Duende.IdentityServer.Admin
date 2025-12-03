@@ -6,187 +6,202 @@
 @inject IRootConfiguration RootConfiguration
 @inject IViewLocalizer Localizer
 @{
-string name = null;
-if (!true.Equals(ViewData["signed-out"]))
-{
-name = Context.User?.GetDisplayName();
-}
+    string name = null;
+    if (!true.Equals(ViewData["signed-out"]))
+    {
+        name = Context.User?.GetDisplayName();
+    }
 }
 @inject SignInManager<UserIdentity> SignInManager
 @{
-var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@RootConfiguration.AdminConfiguration.PageTitle</title>
     <link rel="icon" type="image/x-icon" href="@UrlHelper.Content(RootConfiguration.AdminConfiguration.FaviconUri)" />
-    <link rel="shortcut icon" type="image/x-icon" href="@UrlHelper.Content(@RootConfiguration.AdminConfiguration.FaviconUri)" />
-    <script>
-        (function() {
-            const theme = localStorage.getItem('theme') || 'light';
-            if (theme === 'dark') {
-                document.documentElement.classList.add('dark');
-            }
-        })();
-    </script>
+    <link rel="shortcut icon" type="image/x-icon"
+        href="@UrlHelper.Content(@RootConfiguration.AdminConfiguration.FaviconUri)" />
+    <script src="~/js/theme-init.js" asp-append-version="true"></script>
     <link href="~/css/app.css" asp-append-version="true" rel="stylesheet" />
     @if (!string.IsNullOrEmpty(RootConfiguration.AdminConfiguration.CustomThemeCss))
     {
-    <link href="@UrlHelper.Content(RootConfiguration.AdminConfiguration.CustomThemeCss)" asp-append-version="true" rel="stylesheet" />
+        <link href="@UrlHelper.Content(RootConfiguration.AdminConfiguration.CustomThemeCss)" asp-append-version="true"
+            rel="stylesheet" />
     }
     @await RenderSectionAsync("styles", required: false)
 </head>
+
 <body class="flex min-h-screen flex-col bg-background text-foreground">
-<header class="sticky top-0 z-50 border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-    <nav class="container flex h-16 items-center">
-        <a class="text-lg font-semibold tracking-tight hover:opacity-90" asp-area="" asp-controller="Home" asp-action="Index">
-            @RootConfiguration.AdminConfiguration.PageTitle
-        </a>
-        <div class="ml-auto hidden items-center gap-4 md:flex">
-            @if (User.Identity.IsAuthenticated && !string.IsNullOrEmpty(name))
-            {
-            <vc:identity-server-admin-link></vc:identity-server-admin-link>
-            <details class="relative group">
-                <summary class="list-none cursor-pointer select-none">
+    <header
+        class="sticky top-0 z-50 border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <nav class="container flex h-16 items-center">
+            <a class="text-lg font-semibold tracking-tight hover:opacity-90" asp-area="" asp-controller="Home"
+                asp-action="Index">
+                @RootConfiguration.AdminConfiguration.PageTitle
+            </a>
+            <div class="ml-auto hidden items-center gap-4 md:flex">
+                @if (User.Identity.IsAuthenticated && !string.IsNullOrEmpty(name))
+                {
+                    <vc:identity-server-admin-link></vc:identity-server-admin-link>
+                    <details class="relative group">
+                        <summary class="list-none cursor-pointer select-none">
                             <span class="btn-outline inline-flex items-center gap-2">
                                 <lucideicon name="cog" class="h-4 w-4" />
                                 <span>@Localizer["Settings"] - @name</span>
                                 <lucideicon name="chevron-down" class="h-4 w-4" />
                             </span>
-                </summary>
-                <div class="card absolute right-0 mt-2 w-64 overflow-hidden">
-                    <div class="p-1">
-                        <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground" asp-controller="Manage" asp-action="Index">
+                        </summary>
+                        <div class="card absolute right-0 mt-2 w-64 overflow-hidden">
+                            <div class="p-1">
+                                <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+                                    asp-controller="Manage" asp-action="Index">
                                     <span class="inline-flex items-center gap-2">
                                         <lucideicon name="user" class="h-4 w-4" />
                                         @Localizer["ManageProfile"]
                                     </span>
-                        </a>
-                        <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground" asp-controller="Manage" asp-action="PersonalData">
+                                </a>
+                                <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+                                    asp-controller="Manage" asp-action="PersonalData">
                                     <span class="inline-flex items-center gap-2">
                                         <lucideicon name="id-card" class="h-4 w-4" />
                                         @Localizer["ManagePersonalData"]
                                     </span>
-                        </a>
-                        @if (hasExternalLogins)
-                        {
-                        <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground" asp-controller="Manage" asp-action="ExternalLogins">
+                                </a>
+                                @if (hasExternalLogins)
+                                {
+                                    <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+                                        asp-controller="Manage" asp-action="ExternalLogins">
                                         <span class="inline-flex items-center gap-2">
                                             <lucideicon name="link-2" class="h-4 w-4" />
                                             @Localizer["ExternalLogins"]
                                         </span>
-                        </a>
-                        }
-                        <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground" asp-controller="Manage" asp-action="TwoFactorAuthentication">
+                                    </a>
+                                }
+                                <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+                                    asp-controller="Manage" asp-action="TwoFactorAuthentication">
                                     <span class="inline-flex items-center gap-2">
                                         <lucideicon name="shield-check" class="h-4 w-4" />
                                         @Localizer["2FA"]
                                     </span>
-                        </a>
-                        <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground" asp-controller="Manage" asp-action="ChangePassword">
+                                </a>
+                                <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+                                    asp-controller="Manage" asp-action="ChangePassword">
                                     <span class="inline-flex items-center gap-2">
                                         <lucideicon name="key-round" class="h-4 w-4" />
                                         @Localizer["ChangePassword"]
                                     </span>
-                        </a>
-                        <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground" asp-controller="Grants" asp-action="Index">
+                                </a>
+                                <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+                                    asp-controller="Grants" asp-action="Index">
                                     <span class="inline-flex items-center gap-2">
                                         <lucideicon name="badge-check" class="h-4 w-4" />
                                         @Localizer["Grants"]
                                     </span>
-                        </a>
-                        <div class="my-1 h-px bg-border"></div>
-                        <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground" asp-action="Logout" asp-controller="Account">
+                                </a>
+                                <div class="my-1 h-px bg-border"></div>
+                                <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+                                    asp-action="Logout" asp-controller="Account">
                                     <span class="inline-flex items-center gap-2">
                                         <lucideicon name="log-out" class="h-4 w-4" />
                                         @Localizer["Signout"]
                                     </span>
-                        </a>
-                    </div>
-                </div>
-            </details>
-            }
-            else
-            {
-            <a class="btn-outline inline-flex items-center gap-2" asp-action="Login" asp-controller="Account">
-                <lucideicon name="log-in" class="h-4 w-4" />
-                @Localizer["Login"]
-            </a>
-            }
-            <button id="theme-toggle" class="btn-ghost btn-icon" aria-label="Toggle theme">
-                    <span id="theme-toggle-dark-icon" class="hidden">
-                        <lucideicon name="moon" class="h-5 w-5" />
-                    </span>
-                <span id="theme-toggle-light-icon" class="hidden">
-                        <lucideicon name="sun" class="h-5 w-5" />
-                    </span>
-            </button>
-        </div>
-
-        <details class="ml-auto md:hidden">
-            <summary class="list-none">
-                <button class="btn-outline inline-flex items-center gap-2">
-                    <lucideicon name="menu" class="h-5 w-5" />
-                    @Localizer["Menu"]
-                </button>
-            </summary>
-            <div class="mt-3 space-y-2">
-                @if (User.Identity.IsAuthenticated && !string.IsNullOrEmpty(name))
-                {
-                <vc:identity-server-admin-link></vc:identity-server-admin-link>
-                <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground" asp-controller="Manage" asp-action="Index">@Localizer["ManageProfile"]</a>
-                <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground" asp-controller="Manage" asp-action="PersonalData">@Localizer["ManagePersonalData"]</a>
-                @if (hasExternalLogins)
-                {
-                <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground" asp-controller="Manage" asp-action="ExternalLogins">@Localizer["ExternalLogins"]</a>
-                }
-                <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground" asp-controller="Manage" asp-action="TwoFactorAuthentication">@Localizer["2FA"]</a>
-                <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground" asp-controller="Manage" asp-action="ChangePassword">@Localizer["ChangePassword"]</a>
-                <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground" asp-controller="Grants" asp-action="Index">@Localizer["Grants"]</a>
-                <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground" asp-action="Logout" asp-controller="Account">@Localizer["Signout"]</a>
+                                </a>
+                            </div>
+                        </div>
+                    </details>
                 }
                 else
                 {
-                <a class="btn-outline inline-flex items-center gap-2" asp-action="Login" asp-controller="Account">
-                    <lucideicon name="log-in" class="h-4 w-4" />
-                    @Localizer["Login"]
-                </a>
+                    <a class="btn-outline inline-flex items-center gap-2" asp-action="Login" asp-controller="Account">
+                        <lucideicon name="log-in" class="h-4 w-4" />
+                        @Localizer["Login"]
+                    </a>
                 }
-                <button id="theme-toggle-mobile" class="btn-ghost btn-icon" aria-label="Toggle theme">
-                    <lucideicon name="sun" class="h-5 w-5" />
+                <button id="theme-toggle" class="btn-ghost btn-icon" aria-label="Toggle theme">
+                    <span id="theme-toggle-dark-icon" class="hidden">
+                        <lucideicon name="moon" class="h-5 w-5" />
+                    </span>
+                    <span id="theme-toggle-light-icon" class="hidden">
+                        <lucideicon name="sun" class="h-5 w-5" />
+                    </span>
                 </button>
             </div>
-        </details>
-    </nav>
-</header>
 
-<div class="container flex-1 px-4 md:px-6">
-    <main role="main" class="py-6">
-        @RenderBody()
-    </main>
-</div>
+            <details class="ml-auto md:hidden">
+                <summary class="list-none">
+                    <button class="btn-outline inline-flex items-center gap-2">
+                        <lucideicon name="menu" class="h-5 w-5" />
+                        @Localizer["Menu"]
+                    </button>
+                </summary>
+                <div class="mt-3 space-y-2">
+                    @if (User.Identity.IsAuthenticated && !string.IsNullOrEmpty(name))
+                    {
+                        <vc:identity-server-admin-link></vc:identity-server-admin-link>
+                        <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+                            asp-controller="Manage" asp-action="Index">@Localizer["ManageProfile"]</a>
+                        <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+                            asp-controller="Manage" asp-action="PersonalData">@Localizer["ManagePersonalData"]</a>
+                        @if (hasExternalLogins)
+                        {
+                            <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+                                asp-controller="Manage" asp-action="ExternalLogins">@Localizer["ExternalLogins"]</a>
+                        }
+                        <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+                            asp-controller="Manage" asp-action="TwoFactorAuthentication">@Localizer["2FA"]</a>
+                        <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+                            asp-controller="Manage" asp-action="ChangePassword">@Localizer["ChangePassword"]</a>
+                        <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+                            asp-controller="Grants" asp-action="Index">@Localizer["Grants"]</a>
+                        <a class="block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+                            asp-action="Logout" asp-controller="Account">@Localizer["Signout"]</a>
+                    }
+                    else
+                    {
+                        <a class="btn-outline inline-flex items-center gap-2" asp-action="Login" asp-controller="Account">
+                            <lucideicon name="log-in" class="h-4 w-4" />
+                            @Localizer["Login"]
+                        </a>
+                    }
+                    <button id="theme-toggle-mobile" class="btn-ghost btn-icon" aria-label="Toggle theme">
+                        <lucideicon name="sun" class="h-5 w-5" />
+                    </button>
+                </div>
+            </details>
+        </nav>
+    </header>
 
-<footer class="mt-auto border-t">
-    <div class="container px-4 py-6 md:px-6">
-        <div class="grid gap-6 md:grid-cols-3 md:items-center">
-            <div class="space-y-1">
-                <div class="font-semibold">@RootConfiguration.AdminConfiguration.PageTitle</div>
-                <small class="text-muted-foreground">@Localizer["FooterCopyright"] @DateTime.Now.Year - @await Html.PartialAsync("Common/ApplicationVersion")</small>
-            </div>
-            <div></div>
-            <div class="flex justify-center md:justify-end">
-                @await Html.PartialAsync("Common/SelectLanguage")
+    <div class="container flex-1 px-4 md:px-6">
+        <main role="main" class="py-6">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="mt-auto border-t">
+        <div class="container px-4 py-6 md:px-6">
+            <div class="grid gap-6 md:grid-cols-3 md:items-center">
+                <div class="space-y-1">
+                    <div class="font-semibold">@RootConfiguration.AdminConfiguration.PageTitle</div>
+                    <small class="text-muted-foreground">@Localizer["FooterCopyright"] @DateTime.Now.Year - @await
+                        Html.PartialAsync("Common/ApplicationVersion")</small>
+                </div>
+                <div></div>
+                <div class="flex justify-center md:justify-end">
+                    @await Html.PartialAsync("Common/SelectLanguage")
+                </div>
             </div>
         </div>
-    </div>
-</footer>
+    </footer>
 
-<script src="~/js/layout.js" asp-append-version="true"></script>
-<script src="~/js/language.js" asp-append-version="true"></script>
-@await RenderSectionAsync("scripts", required: false)
+    <script src="~/js/layout.js" asp-append-version="true"></script>
+    <script src="~/js/language.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("scripts", required: false)
 </body>
+
 </html>
