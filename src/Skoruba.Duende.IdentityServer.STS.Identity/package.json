@@ -1,16 +1,16 @@
 {
-  "version": "1.0.0",
+  "version": "3.0.0",
   "name": "skoruba-duende-identity-server-admin-sts",
   "description": "The administration for the Duende IdentityServer and Asp.Net Core Identity",
   "author": "Jan Skoruba & jan@skoruba.com",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "private": true,
   "scripts": {
     "build:css": "tailwindcss -i Styles/app.css -o wwwroot/css/app.css",
     "watch:css": "tailwindcss -i Styles/app.css -o wwwroot/css/app.css --watch",
     "build:css:prod": "tailwindcss -i Styles/app.css -o wwwroot/css/app.css --minify",
     "icons:lucide": "rimraf wwwroot/icons/lucide && cpy \"node_modules/lucide-static/icons/*.svg\" wwwroot/icons/lucide --flat",
-    "postinstall": "npm run icons:lucide"
+    "icons:copy-used": "node copy-used-icons.js"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.18",

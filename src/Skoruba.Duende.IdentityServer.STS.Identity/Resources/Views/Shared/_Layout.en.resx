@@ -145,6 +145,6 @@
     <value>Settings</value>
   </data>
   <data name="Signout" xml:space="preserve">
-    <value>logout</value>
+    <value>Logout</value>
   </data>
 </root>

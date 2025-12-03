@@ -120,26 +120,50 @@
   <data name="2FA" xml:space="preserve">
     <value>Authentification à deux facteurs</value>
   </data>
+  <data name="2FADescription" xml:space="preserve">
+    <value>Activer ou gérer l'authentification à deux facteurs</value>
+  </data>
   <data name="ChangePassword" xml:space="preserve">
     <value>Modifier le mot de passe</value>
   </data>
+  <data name="ChangePasswordDescription" xml:space="preserve">
+    <value>Mettre à jour le mot de passe de votre compte</value>
+  </data>
   <data name="Discovery" xml:space="preserve">
     <value>Discovery Document</value>
+  </data>
+  <data name="DiscoveryDescription" xml:space="preserve">
+    <value>Afficher la configuration OpenID Connect</value>
   </data>
   <data name="Grants" xml:space="preserve">
     <value>Consentements</value>
     <comment>Octrois persistants. Explicit mistake for clarity</comment>
   </data>
+  <data name="GrantsDescription" xml:space="preserve">
+    <value>Gérer les autorisations d'application</value>
+  </data>
   <data name="Login" xml:space="preserve">
     <value>Connexion</value>
+  </data>
+  <data name="LoginDescription" xml:space="preserve">
+    <value>Se connecter à votre compte</value>
   </data>
   <data name="ManagePersonalData" xml:space="preserve">
     <value>Mes données personnelles</value>
   </data>
+  <data name="ManagePersonalDataDescription" xml:space="preserve">
+    <value>Télécharger ou supprimer vos données</value>
+  </data>
   <data name="ManageProfile" xml:space="preserve">
     <value>Mon profil</value>
   </data>
+  <data name="ManageProfileDescription" xml:space="preserve">
+    <value>Mettre à jour les informations de votre profil</value>
+  </data>
   <data name="SubTitle" xml:space="preserve">
     <value>Bienvenue sur {0}</value>
+  </data>
+  <data name="ViewDetails" xml:space="preserve">
+    <value>Voir les détails</value>
   </data>
 </root>

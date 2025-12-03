@@ -6,156 +6,151 @@
 @inject IRootConfiguration RootConfiguration
 
 <div class="bg-background flex min-h-[calc(100vh-300px)] flex-col items-center justify-center gap-6 py-8 px-6 md:px-10">
-    <div class="w-full max-w-sm">
-        <div class="flex flex-col gap-6">
-            @if (Model.EnableLocalLogin)
+    <div class="w-full max-w-md">
+        <div class="flex flex-col items-center gap-2 text-center mb-6">
+            <a href="/" class="flex flex-col items-center gap-2 font-medium">
+                <div class="flex h-20 w-20 items-center justify-center rounded-md">
+                    <img src="@UrlHelper.Content(RootConfiguration.AdminConfiguration.HomePageLogoUri)" alt="Logo"
+                        class="h-16 w-auto opacity-90 dark:invert" />
+                </div>
+                <span class="sr-only">@RootConfiguration.AdminConfiguration.PageTitle</span>
+            </a>
+            <h1 class="text-2xl font-bold">@Localizer["Title"]</h1>
+            @if (RootConfiguration.RegisterConfiguration.Enabled)
             {
-                <form asp-route="Login" class="space-y-6">
-                    <input type="hidden" asp-for="ReturnUrl" />
-
-                    <div class="flex flex-col items-center gap-2 text-center">
-                        <a href="/" class="flex flex-col items-center gap-2 font-medium">
-                            <div class="flex h-24 w-24 items-center justify-center rounded-md">
-                                <img src="@UrlHelper.Content(RootConfiguration.AdminConfiguration.HomePageLogoUri)" alt="Logo" class="mx-auto h-18 w-auto mb-4 opacity-90 dark:invert" />
-                            </div>
-                            <span class="sr-only">@RootConfiguration.AdminConfiguration.PageTitle</span>
-                        </a>
-                        <h1 class="text-xl font-bold">@Localizer["Title"]</h1>
-                        @if (RootConfiguration.RegisterConfiguration.Enabled)
-                        {
-                            <p class="text-sm text-muted-foreground">
-                                @Localizer["NoAccount"] 
-                                <a asp-action="Register" asp-controller="Account" class="text-primary hover:underline font-medium">@Localizer["SignUp"]</a>
-                            </p>
-                        }
-                    </div>
-
-                    @await Html.PartialAsync("_ValidationSummary")
-
-                    <div class="form-item">
-                        <label class="form-label" for="Username">
-                            <lucideicon name="user" class="inline-block h-4 w-4 mr-1" />
-                            @Localizer[LoginPolicyResolutionLocalizer.GetUserNameLocalizationKey(Model.LoginResolutionPolicy)]
-                        </label>
-                        <input id="Username" class="input" asp-for="Username" autofocus tw-validation />
-                    </div>
-                    
-                    <div class="form-item">
-                        <label class="form-label" for="Password">
-                            <lucideicon name="lock" class="inline-block h-4 w-4 mr-1" />
-                            @Localizer["Password"]
-                        </label>
-                        <input id="Password" type="password" class="input" asp-for="Password" autocomplete="off" tw-validation />
-                    </div>
-
-                    @if (Model.AllowRememberLogin)
-                    {
-                        <div class="flex items-center space-x-2">
-                            <input asp-for="RememberLogin" type="checkbox" class="checkbox" id="RememberLogin" />
-                            <label for="RememberLogin" class="label cursor-pointer text-sm">
-                                @Localizer["Remember"]
-                            </label>
-                        </div>
-                    }
-
-                    <div class="form-item">
-                        <button type="submit" name="button" value="login" class="btn-default w-full">
-                            <lucideicon name="log-in" class="inline-block h-4 w-4 mr-2" />
-                            @Localizer["Login"]
-                        </button>
-                    </div>
-
-                    <div class="flex justify-between text-sm">
-                        <a asp-action="ForgotPassword" asp-controller="Account" class="text-primary hover:underline inline-flex items-center gap-1">
-                            <lucideicon name="key" class="h-3 w-3" />
-                            @Localizer["Forgot"]
-                        </a>
-                        <button type="submit" name="button" value="cancel" class="text-primary hover:underline inline-flex items-center gap-1">
-                            <lucideicon name="x" class="h-3 w-3" />
-                            @Localizer["Cancel"]
-                        </button>
-                    </div>
-
-                    @if (Model.VisibleExternalProviders.Any())
-                    {
-                        <div class="relative">
-                            <div class="absolute inset-0 flex items-center">
-                                <span class="w-full border-t border-border"></span>
-                            </div>
-                            <div class="relative flex justify-center text-xs uppercase">
-                                <span class="bg-background px-2 text-muted-foreground">@Localizer["Or"]</span>
-                            </div>
-                        </div>
-
-                        <div class="grid gap-4 @(Model.VisibleExternalProviders.Count() > 1 ? "sm:grid-cols-2" : "")">
-                            @foreach (var provider in Model.VisibleExternalProviders)
-                            {
-                                var providerName = provider.DisplayName?.ToLower() ?? provider.AuthenticationScheme.ToLower();
-                                <a asp-action="ExternalLogin"
-                                   asp-route-provider="@provider.AuthenticationScheme"
-                                   asp-route-returnUrl="@Model.ReturnUrl"
-                                   class="btn-outline flex items-center justify-center gap-2">
-                                    @if (providerName.Contains("apple"))
-                                    {
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5">
-                                            <path
-                                                d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"
-                                                fill="currentColor" />
-                                        </svg>
-                                    }
-                                    else if (providerName.Contains("google"))
-                                    {
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5">
-                                            <path
-                                                d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"
-                                                fill="currentColor" />
-                                        </svg>
-                                    }
-                                    else if (providerName.Contains("github"))
-                                    {
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5">
-                                            <path
-                                                d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
-                                                fill="currentColor" />
-                                        </svg>
-                                    }
-                                    else if (providerName.Contains("microsoft") || providerName.Contains("azure"))
-                                    {
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5">
-                                            <path d="M11.4 24H0V12.6h11.4V24zM24 24H12.6V12.6H24V24zM11.4 11.4H0V0h11.4v11.4zm12.6 0H12.6V0H24v11.4z" fill="currentColor" />
-                                        </svg>
-                                    }
-                                    <span class="text-sm">@provider.DisplayName</span>
-                                </a>
-                            }
-                        </div>
-                    }
-                </form>
+                <p class="text-sm text-muted-foreground">
+                    @Localizer["NoAccount"]
+                    <a asp-action="Register" asp-controller="Account"
+                        class="text-primary hover:underline font-medium">@Localizer["SignUp"]</a>
+                </p>
             }
+        </div>
 
-            @if (!Model.EnableLocalLogin && Model.VisibleExternalProviders.Any())
-            {
-                <div class="space-y-6">
-                    <div class="flex flex-col items-center gap-2 text-center">
-                        <a href="/" class="flex flex-col items-center gap-2 font-medium">
-                            <div class="flex h-24 w-24 items-center justify-center rounded-md">
-                                <img src="@UrlHelper.Content(RootConfiguration.AdminConfiguration.HomePageLogoUri)" alt="Logo" class="mx-auto h-18 w-auto mb-4 opacity-90 dark:invert" />
+        <div class="card">
+            <div class="card-content py-6">
+                @if (Model.EnableLocalLogin)
+                {
+                    <form asp-route="Login" class="space-y-5">
+                        <input type="hidden" asp-for="ReturnUrl" />
+
+                        @await Html.PartialAsync("_ValidationSummary")
+
+                        <div class="form-item">
+                            <label class="form-label" for="Username">
+                                <lucideicon name="user" class="inline-block h-4 w-4 mr-1" />
+                                @Localizer[LoginPolicyResolutionLocalizer.GetUserNameLocalizationKey(Model.LoginResolutionPolicy)]
+                            </label>
+                            <input id="Username" class="input" asp-for="Username" autofocus tw-validation />
+                        </div>
+
+                        <div class="form-item">
+                            <label class="form-label" for="Password">
+                                <lucideicon name="lock" class="inline-block h-4 w-4 mr-1" />
+                                @Localizer["Password"]
+                            </label>
+                            <input id="Password" type="password" class="input" asp-for="Password" autocomplete="off"
+                                tw-validation />
+                        </div>
+
+                        @if (Model.AllowRememberLogin)
+                        {
+                            <div class="flex items-center space-x-2">
+                                <input asp-for="RememberLogin" type="checkbox" class="checkbox" id="RememberLogin" />
+                                <label for="RememberLogin" class="label cursor-pointer text-sm">
+                                    @Localizer["Remember"]
+                                </label>
                             </div>
-                            <span class="sr-only">@RootConfiguration.AdminConfiguration.PageTitle</span>
-                        </a>
-                        <h1 class="text-xl font-bold">@Localizer["Title"]</h1>
-                    </div>
+                        }
 
+                        <div class="form-item">
+                            <button type="submit" name="button" value="login" class="btn-default w-full">
+                                <lucideicon name="log-in" class="inline-block h-4 w-4 mr-2" />
+                                @Localizer["Login"]
+                            </button>
+                        </div>
+
+                        <div class="flex justify-between text-sm">
+                            <a asp-action="ForgotPassword" asp-controller="Account"
+                                class="text-primary hover:underline inline-flex items-center gap-1">
+                                <lucideicon name="key" class="h-3 w-3" />
+                                @Localizer["Forgot"]
+                            </a>
+                            <button type="submit" name="button" value="cancel"
+                                class="text-primary hover:underline inline-flex items-center gap-1">
+                                <lucideicon name="x" class="h-3 w-3" />
+                                @Localizer["Cancel"]
+                            </button>
+                        </div>
+
+                        @if (Model.VisibleExternalProviders.Any())
+                        {
+                            <div class="relative">
+                                <div class="absolute inset-0 flex items-center">
+                                    <span class="w-full border-t border-border"></span>
+                                </div>
+                                <div class="relative flex justify-center text-xs uppercase">
+                                    <span class="bg-background px-2 text-muted-foreground">@Localizer["Or"]</span>
+                                </div>
+                            </div>
+
+                            <div class="grid gap-4 @(Model.VisibleExternalProviders.Count() > 1 ? "sm:grid-cols-2" : "")">
+                                @foreach (var provider in Model.VisibleExternalProviders)
+                                {
+                                    var providerName = provider.DisplayName?.ToLower() ?? provider.AuthenticationScheme.ToLower();
+                                    <a asp-action="ExternalLogin" asp-route-provider="@provider.AuthenticationScheme"
+                                        asp-route-returnUrl="@Model.ReturnUrl"
+                                        class="btn-outline flex items-center justify-center gap-2">
+                                        @if (providerName.Contains("apple"))
+                                        {
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5">
+                                                <path
+                                                    d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"
+                                                    fill="currentColor" />
+                                            </svg>
+                                        }
+                                        else if (providerName.Contains("google"))
+                                        {
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5">
+                                                <path
+                                                    d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"
+                                                    fill="currentColor" />
+                                            </svg>
+                                        }
+                                        else if (providerName.Contains("github"))
+                                        {
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5">
+                                                <path
+                                                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                                                    fill="currentColor" />
+                                            </svg>
+                                        }
+                                        else if (providerName.Contains("microsoft") || providerName.Contains("azure"))
+                                        {
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5">
+                                                <path
+                                                    d="M11.4 24H0V12.6h11.4V24zM24 24H12.6V12.6H24V24zM11.4 11.4H0V0h11.4v11.4zm12.6 0H12.6V0H24v11.4z"
+                                                    fill="currentColor" />
+                                            </svg>
+                                        }
+                                        <span class="text-sm">@provider.DisplayName</span>
+                                    </a>
+                                }
+                            </div>
+                        }
+                    </form>
+                }
+
+                @if (!Model.EnableLocalLogin && Model.VisibleExternalProviders.Any())
+                {
                     @await Html.PartialAsync("_ValidationSummary")
 
                     <div class="grid gap-4 @(Model.VisibleExternalProviders.Count() > 1 ? "sm:grid-cols-2" : "")">
                         @foreach (var provider in Model.VisibleExternalProviders)
                         {
                             var providerName = provider.DisplayName?.ToLower() ?? provider.AuthenticationScheme.ToLower();
-                            <a asp-action="ExternalLogin"
-                               asp-route-provider="@provider.AuthenticationScheme"
-                               asp-route-returnUrl="@Model.ReturnUrl"
-                               class="btn-outline flex items-center justify-center gap-2">
+                            <a asp-action="ExternalLogin" asp-route-provider="@provider.AuthenticationScheme"
+                                asp-route-returnUrl="@Model.ReturnUrl"
+                                class="btn-outline flex items-center justify-center gap-2">
                                 @if (providerName.Contains("apple"))
                                 {
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5">
@@ -183,32 +178,34 @@
                                 else if (providerName.Contains("microsoft") || providerName.Contains("azure"))
                                 {
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-5 w-5">
-                                        <path d="M11.4 24H0V12.6h11.4V24zM24 24H12.6V12.6H24V24zM11.4 11.4H0V0h11.4v11.4zm12.6 0H12.6V0H24v11.4z" fill="currentColor" />
+                                        <path
+                                            d="M11.4 24H0V12.6h11.4V24zM24 24H12.6V12.6H24V24zM11.4 11.4H0V0h11.4v11.4zm12.6 0H12.6V0H24v11.4z"
+                                            fill="currentColor" />
                                     </svg>
                                 }
                                 <span class="text-sm">@provider.DisplayName</span>
                             </a>
                         }
                     </div>
-                </div>
-            }
+                }
 
-            @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
-            {
-                <div class="alert-destructive">
-                    <lucideicon name="alert-circle" class="h-4 w-4" />
-                    <div>
-                        <h5 class="alert-title">@Localizer["InvalidRequest"]</h5>
-                        <div class="alert-description">@Localizer["NoSchema"]</div>
+                @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
+                {
+                    <div class="alert-destructive">
+                        <lucideicon name="alert-circle" class="h-4 w-4" />
+                        <div>
+                            <h5 class="alert-title">@Localizer["InvalidRequest"]</h5>
+                            <div class="alert-description">@Localizer["NoSchema"]</div>
+                        </div>
                     </div>
-                </div>
-            }
-
-            <div class="mt-4 text-center">
-                <p class="text-xs text-muted-foreground">
-                    @Localizer["PrivacyNotice"]
-                </p>
+                }
             </div>
+        </div>
+
+        <div class="mt-4 text-center">
+            <p class="text-xs text-muted-foreground">
+                @Localizer["PrivacyNotice"]
+            </p>
         </div>
     </div>
 </div>

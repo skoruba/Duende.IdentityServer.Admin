@@ -6,7 +6,8 @@
 
 <div class="py-4">
   <div class="text-center mb-6">
-    <img class="mx-auto h-20 w-auto mb-4 opacity-90 dark:invert" alt="Logo" src="@UrlHelper.Content(RootConfiguration.AdminConfiguration.HomePageLogoUri)">
+    <img class="mx-auto h-20 w-auto mb-4 opacity-90 dark:invert" alt="Logo"
+      src="@UrlHelper.Content(RootConfiguration.AdminConfiguration.HomePageLogoUri)">
     <h1 class="text-5xl font-bold mb-2 tracking-tight">@RootConfiguration.AdminConfiguration.PageTitle</h1>
     <p class="text-lg text-muted-foreground mt-3">
       @Localizer["SubTitle", RootConfiguration.AdminConfiguration.PageTitle]
@@ -15,28 +16,28 @@
 
   @if (!User.IsAuthenticated())
   {
-    <section class="flex min-h-[40vh] items-center justify-center py-6">
+    <section class="flex min-h-[40vh] items-center justify-center py-12">
       <div class="flex flex-wrap justify-center gap-8 max-w-4xl">
-        <div class="card w-80 text-center hover:shadow-lg transition-all hover:-translate-y-1 hover:scale-[1.02] duration-300">
-          <div class="card-header">
-            <h2 class="card-title text-xl font-semibold">@Localizer["Login"]</h2>
-          </div>
-          <div class="card-content">
-            <div class="mx-auto mb-8 inline-flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 ring-1 ring-primary/20">
+        <div class="card w-80 hover:border-primary/40 transition-all hover:shadow-xl duration-300 group">
+          <div class="card-content text-center py-10 px-6">
+            <div
+              class="mx-auto mb-6 inline-flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/15 to-primary/5 group-hover:from-primary/25 group-hover:to-primary/10 transition-all duration-300">
               <lucideicon name="log-in" class="h-12 w-12 text-primary" />
             </div>
+            <h2 class="text-2xl font-bold mb-3">@Localizer["Login"]</h2>
+            <p class="text-sm text-muted-foreground mb-8">@Localizer["LoginDescription"]</p>
             <a asp-controller="Account" asp-action="Login" class="btn-default w-full">@Localizer["Login"]</a>
           </div>
         </div>
 
-        <div class="card w-80 text-center hover:shadow-lg transition-all hover:-translate-y-1 hover:scale-[1.02] duration-300">
-          <div class="card-header">
-            <h2 class="card-title text-xl font-semibold">@Localizer["Discovery"]</h2>
-          </div>
-          <div class="card-content">
-            <div class="mx-auto mb-8 inline-flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 ring-1 ring-primary/20">
+        <div class="card w-80 hover:border-primary/40 transition-all hover:shadow-xl duration-300 group">
+          <div class="card-content text-center py-10 px-6">
+            <div
+              class="mx-auto mb-6 inline-flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/15 to-primary/5 group-hover:from-primary/25 group-hover:to-primary/10 transition-all duration-300">
               <lucideicon name="globe" class="h-12 w-12 text-primary" />
             </div>
+            <h2 class="text-2xl font-bold mb-3">@Localizer["Discovery"]</h2>
+            <p class="text-sm text-muted-foreground mb-8">@Localizer["DiscoveryDescription"]</p>
             <a href="~/.well-known/openid-configuration" class="btn-default w-full">@Localizer["Discovery"]</a>
           </div>
         </div>
@@ -45,34 +46,49 @@
   }
   else
   {
-    <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-3 mb-10">
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mb-10">
       @foreach (var item in new[] {
-        new { Title = Localizer["Grants"], Icon = "badge-check", Controller = "Grants", Action = "Index" },
-        new { Title = Localizer["Discovery"], Icon = "globe", Controller = (string?)null, Action = (string?)null },
-        new { Title = Localizer["ManageProfile"], Icon = "user", Controller = "Manage", Action = "Index" },
-        new { Title = Localizer["ManagePersonalData"], Icon = "cloud-download", Controller = "Manage", Action = "PersonalData" },
-        new { Title = Localizer["2FA"], Icon = "shield-check", Controller = "Manage", Action = "TwoFactorAuthentication" },
-        new { Title = Localizer["ChangePassword"], Icon = "key-round", Controller = "Manage", Action = "ChangePassword" }
-      })
+        new { Title = Localizer["Grants"], Icon = "badge-check", Controller = "Grants", Action = "Index", Description =
+        Localizer["GrantsDescription"], Url = (string?)null },
+        new { Title = Localizer["Discovery"], Icon = "globe", Controller = (string?)null, Action = (string?)null,
+        Description = Localizer["DiscoveryDescription"], Url = "~/.well-known/openid-configuration" },
+        new { Title = Localizer["ManageProfile"], Icon = "user", Controller = "Manage", Action = "Index", Description =
+        Localizer["ManageProfileDescription"], Url = (string?)null },
+        new { Title = Localizer["ManagePersonalData"], Icon = "cloud-download", Controller = "Manage", Action =
+        "PersonalData", Description = Localizer["ManagePersonalDataDescription"], Url = (string?)null },
+        new { Title = Localizer["2FA"], Icon = "shield-check", Controller = "Manage", Action = "TwoFactorAuthentication",
+        Description = Localizer["2FADescription"], Url = (string?)null },
+        new { Title = Localizer["ChangePassword"], Icon = "key-round", Controller = "Manage", Action = "ChangePassword",
+        Description = Localizer["ChangePasswordDescription"], Url = (string?)null }
+        })
       {
-        <div class="card text-center hover:shadow-lg transition-all hover:-translate-y-1 hover:scale-[1.01] duration-300">
-          <div class="card-header">
-            <h2 class="card-title text-xl font-semibold">@item.Title</h2>
-          </div>
-          <div class="card-content">
-            <div class="mx-auto mb-8 inline-flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 ring-1 ring-primary/20">
-              <lucideicon name="@item.Icon" class="h-12 w-12 text-primary" />
+        @if (item.Controller != null)
+        {
+          <a asp-controller="@item.Controller" asp-action="@item.Action"
+            class="card hover:border-primary/40 transition-all hover:shadow-xl duration-300 group block">
+            <div class="card-content text-center py-10 px-6">
+              <div
+                class="mx-auto mb-6 inline-flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/15 to-primary/5 group-hover:from-primary/25 group-hover:to-primary/10 transition-all duration-300">
+                <lucideicon name="@item.Icon" class="h-12 w-12 text-primary" />
+              </div>
+              <h2 class="text-2xl font-bold mb-3">@item.Title</h2>
+              <p class="text-sm text-muted-foreground mb-8">@item.Description</p>
             </div>
-            @if (item.Controller != null)
-            {
-              <a asp-controller="@item.Controller" asp-action="@item.Action" class="btn-outline w-full">@item.Title</a>
-            }
-            else
-            {
-              <a href="~/.well-known/openid-configuration" class="btn-outline w-full">@item.Title</a>
-            }
-          </div>
-        </div>
+          </a>
+        }
+        else
+        {
+          <a href="@item.Url" class="card hover:border-primary/40 transition-all hover:shadow-xl duration-300 group block">
+            <div class="card-content text-center py-10 px-6">
+              <div
+                class="mx-auto mb-6 inline-flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/15 to-primary/5 group-hover:from-primary/25 group-hover:to-primary/10 transition-all duration-300">
+                <lucideicon name="@item.Icon" class="h-12 w-12 text-primary" />
+              </div>
+              <h2 class="text-2xl font-bold mb-3">@item.Title</h2>
+              <p class="text-sm text-muted-foreground mb-8">@item.Description</p>
+            </div>
+          </a>
+        }
       }
     </div>
   }
