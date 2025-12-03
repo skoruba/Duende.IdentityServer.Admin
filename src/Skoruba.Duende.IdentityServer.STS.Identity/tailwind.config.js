@@ -1,11 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
+  safelist: ["dark"],
   content: [
     "./Pages/**/*.cshtml",
     "./Views/**/*.cshtml",
     "./Areas/**/*.cshtml",
-    "./Helpers/TagHelpers/**/*.cs"
+    "./Helpers/TagHelpers/**/*.cs",
   ],
   theme: {
     container: {
@@ -73,5 +74,4 @@ module.exports = {
     },
   },
   plugins: [],
-}
-
+};

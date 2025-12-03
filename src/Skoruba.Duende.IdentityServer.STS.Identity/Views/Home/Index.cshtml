@@ -18,7 +18,7 @@
   {
     <section class="flex min-h-[40vh] items-center justify-center py-12">
       <div class="flex flex-wrap justify-center gap-8 max-w-4xl">
-        <div class="card w-80 hover:border-primary/40 transition-all hover:shadow-xl duration-300 group">
+        <a asp-controller="Account" asp-action="Login" class="card w-80 hover:border-primary/40 transition-all hover:shadow-xl duration-300 group block">
           <div class="card-content text-center py-10 px-6">
             <div
               class="mx-auto mb-6 inline-flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/15 to-primary/5 group-hover:from-primary/25 group-hover:to-primary/10 transition-all duration-300">
@@ -26,11 +26,10 @@
             </div>
             <h2 class="text-2xl font-bold mb-3">@Localizer["Login"]</h2>
             <p class="text-sm text-muted-foreground mb-8">@Localizer["LoginDescription"]</p>
-            <a asp-controller="Account" asp-action="Login" class="btn-default w-full">@Localizer["Login"]</a>
           </div>
-        </div>
+        </a>
 
-        <div class="card w-80 hover:border-primary/40 transition-all hover:shadow-xl duration-300 group">
+        <a href="~/.well-known/openid-configuration" class="card w-80 hover:border-primary/40 transition-all hover:shadow-xl duration-300 group block">
           <div class="card-content text-center py-10 px-6">
             <div
               class="mx-auto mb-6 inline-flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/15 to-primary/5 group-hover:from-primary/25 group-hover:to-primary/10 transition-all duration-300">
@@ -38,9 +37,8 @@
             </div>
             <h2 class="text-2xl font-bold mb-3">@Localizer["Discovery"]</h2>
             <p class="text-sm text-muted-foreground mb-8">@Localizer["DiscoveryDescription"]</p>
-            <a href="~/.well-known/openid-configuration" class="btn-default w-full">@Localizer["Discovery"]</a>
           </div>
-        </div>
+        </a>
       </div>
     </section>
   }
@@ -52,7 +50,7 @@
         new { Title = Localizer["Grants"], Icon = "badge-check", Controller = "Grants", Action = "Index", Description =
         Localizer["GrantsDescription"], Url = "" },
         new { Title = Localizer["Discovery"], Icon = "globe", Controller = "", Action = "", Description =
-        Localizer["DiscoveryDescription"], Url = "~/.well-known/openid-configuration" },
+        Localizer["DiscoveryDescription"], Url = Url.Content("~/.well-known/openid-configuration") },
         new { Title = Localizer["ManageProfile"], Icon = "user", Controller = "Manage", Action = "Index", Description =
         Localizer["ManageProfileDescription"], Url = "" },
         new { Title = Localizer["ManagePersonalData"], Icon = "cloud-download", Controller = "Manage", Action =
@@ -65,10 +63,9 @@
       }
       @foreach (var item in menuItems)
       {
-        @if (!string.IsNullOrEmpty(item.Controller))
+        @if (!string.IsNullOrEmpty(item.Url))
         {
-          <a asp-controller="@item.Controller" asp-action="@item.Action"
-            class="card hover:border-primary/40 transition-all hover:shadow-xl duration-300 group block">
+          <a href="@item.Url" class="card hover:border-primary/40 transition-all hover:shadow-xl duration-300 group block">
             <div class="card-content text-center py-10 px-6">
               <div
                 class="mx-auto mb-6 inline-flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/15 to-primary/5 group-hover:from-primary/25 group-hover:to-primary/10 transition-all duration-300">
@@ -81,7 +78,8 @@
         }
         else
         {
-          <a href="@item.Url" class="card hover:border-primary/40 transition-all hover:shadow-xl duration-300 group block">
+          <a asp-controller="@item.Controller" asp-action="@item.Action"
+            class="card hover:border-primary/40 transition-all hover:shadow-xl duration-300 group block">
             <div class="card-content text-center py-10 px-6">
               <div
                 class="mx-auto mb-6 inline-flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/15 to-primary/5 group-hover:from-primary/25 group-hover:to-primary/10 transition-all duration-300">
