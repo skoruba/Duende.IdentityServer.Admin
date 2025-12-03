@@ -47,22 +47,25 @@
   else
   {
     <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mb-10">
-      @foreach (var item in new[] {
+      @{
+        var menuItems = new[] {
         new { Title = Localizer["Grants"], Icon = "badge-check", Controller = "Grants", Action = "Index", Description =
-        Localizer["GrantsDescription"], Url = (string?)null },
-        new { Title = Localizer["Discovery"], Icon = "globe", Controller = (string?)null, Action = (string?)null,
-        Description = Localizer["DiscoveryDescription"], Url = "~/.well-known/openid-configuration" },
+        Localizer["GrantsDescription"], Url = "" },
+        new { Title = Localizer["Discovery"], Icon = "globe", Controller = "", Action = "", Description =
+        Localizer["DiscoveryDescription"], Url = "~/.well-known/openid-configuration" },
         new { Title = Localizer["ManageProfile"], Icon = "user", Controller = "Manage", Action = "Index", Description =
-        Localizer["ManageProfileDescription"], Url = (string?)null },
+        Localizer["ManageProfileDescription"], Url = "" },
         new { Title = Localizer["ManagePersonalData"], Icon = "cloud-download", Controller = "Manage", Action =
-        "PersonalData", Description = Localizer["ManagePersonalDataDescription"], Url = (string?)null },
+        "PersonalData", Description = Localizer["ManagePersonalDataDescription"], Url = "" },
         new { Title = Localizer["2FA"], Icon = "shield-check", Controller = "Manage", Action = "TwoFactorAuthentication",
-        Description = Localizer["2FADescription"], Url = (string?)null },
+        Description = Localizer["2FADescription"], Url = "" },
         new { Title = Localizer["ChangePassword"], Icon = "key-round", Controller = "Manage", Action = "ChangePassword",
-        Description = Localizer["ChangePasswordDescription"], Url = (string?)null }
-        })
+        Description = Localizer["ChangePasswordDescription"], Url = "" }
+        };
+      }
+      @foreach (var item in menuItems)
       {
-        @if (item.Controller != null)
+        @if (!string.IsNullOrEmpty(item.Controller))
         {
           <a asp-controller="@item.Controller" asp-action="@item.Action"
             class="card hover:border-primary/40 transition-all hover:shadow-xl duration-300 group block">
