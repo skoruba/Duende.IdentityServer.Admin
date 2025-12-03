@@ -1,0 +1,243 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+
+    --chart-1: 221.2 83.2% 53.3%;
+    --chart-2: 212 95% 68%;
+    --chart-3: 140 74% 44%;
+    --chart-4: 210 98% 78%;
+    --chart-5: 212 97% 87%;
+
+    --chart-recommendation: 221.2 83.2% 53.3%;
+    --chart-danger: 0 84% 60%;
+  }
+
+  .dark {
+    --background: 222 40% 6%;
+    --foreground: 210 40% 96%;
+
+    --card: 222 32% 10%;
+    --card-foreground: 210 40% 96%;
+
+    --popover: 222 32% 10%;
+    --popover-foreground: 210 40% 96%;
+
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 217 24% 18%;
+    --secondary-foreground: 210 40% 96%;
+
+    --muted: 217 22% 14%;
+    --muted-foreground: 215 20% 70%;
+
+    --accent: 217 24% 18%;
+    --accent-foreground: 210 40% 96%;
+
+    --destructive: 0 72% 46%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 20% 24%;
+    --input: 217 20% 20%;
+    --ring: 221 83% 63%;
+
+    --chart-1: 221.2 83.2% 53.3%;
+    --chart-2: 212 95% 68%;
+    --chart-3: 140 74% 44%;
+    --chart-4: 210 98% 78%;
+    --chart-5: 212 97% 87%;
+
+    --chart-green: 220 70% 50%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+    @apply disabled:pointer-events-none disabled:opacity-50;
+    @apply h-10 px-4 py-2;
+  }
+
+  .btn-default { @apply btn bg-primary text-primary-foreground hover:bg-primary/90; }
+  .btn-destructive { @apply btn bg-destructive text-destructive-foreground hover:bg-destructive/90; }
+  .btn-outline { @apply btn border border-input bg-background hover:bg-accent hover:text-accent-foreground; }
+  .btn-secondary { @apply btn bg-secondary text-secondary-foreground hover:bg-secondary/80; }
+  .btn-ghost { @apply btn hover:bg-accent hover:text-accent-foreground; }
+  .btn-link { @apply btn text-primary underline-offset-4 hover:underline; }
+  .btn-sm { @apply h-9 rounded-md px-3; }
+  .btn-lg { @apply h-11 rounded-md px-8; }
+  .btn-icon { @apply h-10 w-10; }
+
+  .card { @apply rounded-lg border bg-card text-card-foreground shadow-sm; }
+  .card-header { @apply flex flex-col space-y-1.5 p-6; }
+  .card-title { @apply text-2xl font-semibold leading-none tracking-tight; }
+  .card-description { @apply text-sm text-muted-foreground; }
+  .card-content { @apply p-6 pt-0; }
+  .card-footer { @apply flex items-center p-6 pt-0; }
+
+  .input {
+    @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background;
+    @apply file:border-0 file:bg-transparent file:text-sm file:font-medium;
+    @apply placeholder:text-muted-foreground;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+    @apply disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .textarea {
+    @apply flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background;
+    @apply placeholder:text-muted-foreground;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+    @apply disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .select {
+    @apply flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background;
+    @apply placeholder:text-muted-foreground;
+    @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+    @apply disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .checkbox {
+    @apply h-4 w-4 shrink-0 rounded-sm border border-input ring-offset-background;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+    @apply disabled:cursor-not-allowed disabled:opacity-50;
+    @apply data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground;
+    accent-color: hsl(var(--primary));
+  }
+
+  .badge {
+    @apply inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors;
+    @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+  }
+
+  .badge-default { @apply badge border-transparent bg-primary text-primary-foreground hover:bg-primary/80; }
+  .badge-secondary { @apply badge border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80; }
+  .badge-destructive { @apply badge border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80; }
+  .badge-outline { @apply badge text-foreground; }
+
+  .table-wrapper { @apply relative w-full overflow-auto; }
+  .table { @apply w-full caption-bottom text-sm; }
+  .table-header { @apply [&_tr]:border-b; }
+  .table-body { @apply [&_tr:last-child]:border-0; }
+  .table-footer { @apply bg-primary font-medium text-primary-foreground; }
+  .table-row { @apply border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted; }
+  .table-head { @apply h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0; }
+  .table-cell { @apply p-4 align-middle [&:has([role=checkbox])]:pr-0; }
+  .table-caption { @apply mt-4 text-sm text-muted-foreground; }
+
+  .label { @apply text-sm font-medium leading-none; }
+  .form-item { @apply space-y-2; }
+  .form-label { @apply label; }
+  .form-description { @apply text-sm text-muted-foreground; }
+  .form-message { @apply text-sm font-medium text-destructive; }
+
+  .alert {
+    @apply relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground;
+  }
+
+  .alert-default { @apply alert bg-background text-foreground; }
+  .alert-destructive { @apply alert border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive; }
+  .alert-title { @apply mb-1 font-medium leading-none tracking-tight; }
+  .alert-description { @apply text-sm [&_p]:leading-relaxed; }
+
+  .switch {
+    @apply relative inline-block h-6 w-11 cursor-pointer;
+  }
+
+  .switch input[type="checkbox"] {
+    @apply sr-only;
+  }
+
+  .switch-slider {
+    @apply absolute inset-0 rounded-full border-2 border-transparent transition-colors;
+    @apply bg-input;
+  }
+
+  .switch input[type="checkbox"]:checked + .switch-slider {
+    @apply bg-primary;
+  }
+
+  .switch input[type="checkbox"]:focus-visible + .switch-slider {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  .switch input[type="checkbox"]:disabled + .switch-slider {
+    @apply cursor-not-allowed opacity-50;
+  }
+
+  .switch-slider::before {
+    @apply absolute left-0 top-0 h-5 w-5 rounded-full bg-background shadow-lg transition-transform content-[''];
+  }
+
+  .switch input[type="checkbox"]:checked + .switch-slider::before {
+    @apply translate-x-5;
+  }
+
+  .radio {
+    @apply aspect-square h-4 w-4 rounded-full border border-input text-primary ring-offset-background;
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+    @apply disabled:cursor-not-allowed disabled:opacity-50;
+    accent-color: hsl(var(--primary));
+  }
+
+  /* === Input error state === */
+  .input-invalid,
+  .input-validation-error {
+    @apply border-destructive focus-visible:ring-destructive focus-visible:ring-2 focus-visible:ring-offset-2;
+  }
+
+  .input-invalid::placeholder,
+  .input-validation-error::placeholder {
+    @apply text-destructive/60;
+  }
+
+  .form-label {
+    @apply text-sm font-medium leading-none;
+  }
+
+  .form-label-invalid {
+    @apply text-destructive;
+  }
+}
