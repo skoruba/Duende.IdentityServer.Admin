@@ -13,6 +13,7 @@ import { queryKeys } from "@/services/QueryKeys";
 import DeleteIdentityResourceDialog from "../Common/DeleteIdentityResourceDialog";
 import useModal from "@/hooks/modalHooks";
 import { useCallback, useState } from "react";
+import { Fingerprint } from "lucide-react";
 
 const IdentityResourceEdit = () => {
   const { t } = useTranslation();
@@ -31,17 +32,37 @@ const IdentityResourceEdit = () => {
     deleteModal.openModal();
   }, [deleteModal]);
 
+  const onIdentityResourceDeleted = useCallback(() => {
+    deleteModal.closeModal();
+    navigateWithBlocker(IdentityResourcesUrl);
+  }, [deleteModal, navigateWithBlocker]);
+
   if (isLoading || !identityResourceData) {
     return <Loading fullscreen />;
   }
 
   return (
-    <Page title={t("IdentityResource.Edit.PageTitle")}>
-      <Breadcrumbs
-        items={[
-          { url: IdentityResourcesUrl, name: t("IdentityResources.PageTitle") },
-          { name: identityResourceData.name },
-        ]}
+    <Page
+      title={t("IdentityResource.Edit.PageTitle")}
+      icon={Fingerprint}
+      accentKind="management"
+      breadcrumb={
+        <Breadcrumbs
+          items={[
+            {
+              url: IdentityResourcesUrl,
+              name: t("IdentityResources.PageTitle"),
+            },
+            { name: identityResourceData.name },
+          ]}
+        />
+      }
+    >
+      <DeleteIdentityResourceDialog
+        identityResourceId={Number(resourceId)}
+        identityResourceName={identityResourceData.name}
+        modal={deleteModal}
+        onIdentityResourceDeleted={onIdentityResourceDeleted}
       />
 
       <IdentityResourceForm
@@ -50,16 +71,6 @@ const IdentityResourceEdit = () => {
         defaultValues={identityResourceData}
         onIdentityResourceDelete={onIdentityResourceDelete}
         setNavigateWithBlocker={setNavigateWithBlocker}
-      />
-
-      <DeleteIdentityResourceDialog
-        identityResourceId={Number(resourceId)}
-        identityResourceName={identityResourceData.name}
-        modal={deleteModal}
-        onIdentityResourceDeleted={() => {
-          deleteModal.closeModal();
-          navigateWithBlocker(IdentityResourcesUrl);
-        }}
       />
     </Page>
   );

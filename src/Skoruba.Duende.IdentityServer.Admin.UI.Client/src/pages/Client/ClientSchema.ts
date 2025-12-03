@@ -303,7 +303,6 @@ export const mapFormDataToCreateClient = (
       formData.authorizationCodeLifetime ||
       clientDefaultValues.authorizationCodeLifetime!,
 
-    // Default values for client configurations
     absoluteRefreshTokenLifetime:
       clientDefaultValues.absoluteRefreshTokenLifetime!,
     accessTokenLifetime: clientDefaultValues.accessTokenLifetime!,

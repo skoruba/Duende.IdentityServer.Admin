@@ -11,6 +11,7 @@ import { queryKeys } from "@/services/QueryKeys";
 import DeleteApiScopeDialog from "../Common/DeleteApiScopeDialog";
 import useModal from "@/hooks/modalHooks";
 import { useCallback, useState } from "react";
+import { ShieldCheck } from "lucide-react";
 
 export enum ApiScopeFormMode {
   Create = "create",
@@ -43,13 +44,19 @@ const ApiScopeEdit = () => {
   }
 
   return (
-    <Page title={t("ApiScope.Edit.PageTitle")}>
-      <Breadcrumbs
-        items={[
-          { url: ApiScopesUrl, name: t("ApiScopes.PageTitle") },
-          { name: scopeData.name },
-        ]}
-      />
+    <Page
+      title={t("ApiScope.Edit.PageTitle")}
+      icon={ShieldCheck}
+      accentKind="management"
+      breadcrumb={
+        <Breadcrumbs
+          items={[
+            { url: ApiScopesUrl, name: t("ApiScopes.PageTitle") },
+            { name: scopeData.name },
+          ]}
+        />
+      }
+    >
       <DeleteApiScopeDialog
         apiScopeId={Number(scopeId)}
         apiScopeName={scopeData.name}

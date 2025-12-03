@@ -6,18 +6,28 @@ import IdentityProviderForm, {
   IdentityProviderFormMode,
 } from "../Common/IdentityProviderForm";
 import { defaultIdentityProviderFormData } from "../Common/IdentityProviderSchema";
+import { KeyRound } from "lucide-react";
 
 const IdentityProviderCreate = () => {
   const { t } = useTranslation();
 
   return (
-    <Page title={t("IdentityProvider.Create.PageTitle")}>
-      <Breadcrumbs
-        items={[
-          { url: IdentityProvidersUrl, name: t("IdentityProviders.PageTitle") },
-          { name: t("IdentityProvider.Create.PageTitle") },
-        ]}
-      />
+    <Page
+      title={t("IdentityProvider.Create.PageTitle")}
+      icon={KeyRound}
+      accentKind="providers"
+      breadcrumb={
+        <Breadcrumbs
+          items={[
+            {
+              url: IdentityProvidersUrl,
+              name: t("IdentityProviders.PageTitle"),
+            },
+            { name: t("IdentityProvider.Create.PageTitle") },
+          ]}
+        />
+      }
+    >
       <IdentityProviderForm
         mode={IdentityProviderFormMode.Create}
         defaultValues={defaultIdentityProviderFormData}

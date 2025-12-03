@@ -19,7 +19,7 @@ export type BreadcrumbProps = {
 
 export const Breadcrumbs: React.FC<BreadcrumbProps> = ({ items }) => {
   return (
-    <Breadcrumb className="mb-6 mt-3">
+    <Breadcrumb className="mt-3">
       <BreadcrumbList>
         {items.map((item, index) => (
           <BreadcrumbItem key={item.name}>

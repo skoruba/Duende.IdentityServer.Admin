@@ -39,7 +39,6 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
   const [searchTermRight, setSearchTermRight] = useState("");
   const [isModalOpened, setIsModalOpened] = useState(false);
 
-  // Dynamická aktualizace allItems při změně initialItems
   useEffect(() => {
     const customItems = allItems.filter(
       (item) =>
@@ -58,7 +57,6 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
     setAllItems(merged);
   }, [initialItems, selectedItems]);
 
-  // Aktualizuj selectedItems při změně zvenku
   useEffect(() => {
     setSelectedItems(initialSelectedItems);
   }, [initialSelectedItems]);
@@ -136,7 +134,6 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
 
   return (
     <div className="flex w-full gap-x-4">
-      {/* LEFT */}
       <div className="flex flex-col basis-1/2 overflow-hidden">
         <Button
           type="button"
@@ -179,7 +176,6 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
         </div>
       </div>
 
-      {/* RIGHT */}
       <div className="flex flex-col basis-1/2 overflow-hidden pl-2">
         <Button
           type="button"

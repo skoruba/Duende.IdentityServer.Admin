@@ -8,6 +8,7 @@ import { useQuery } from "react-query";
 import { getUser } from "@/services/UserServices";
 import UserForm, { UserFormMode } from "../Common/UserForm";
 import { queryKeys } from "@/services/QueryKeys";
+import { Users as UsersIcon } from "lucide-react";
 
 const UserEdit = () => {
   const { userId } = useParams<{ userId: string }>();
@@ -22,13 +23,19 @@ const UserEdit = () => {
   }
 
   return (
-    <Page title={t("User.Edit.PageTitle")}>
-      <Breadcrumbs
-        items={[
-          { url: UsersUrl, name: t("Users.PageTitle") },
-          { name: data.userName },
-        ]}
-      />
+    <Page
+      title={t("User.Edit.PageTitle")}
+      icon={UsersIcon}
+      accentKind="identity"
+      breadcrumb={
+        <Breadcrumbs
+          items={[
+            { url: UsersUrl, name: t("Users.PageTitle") },
+            { name: data.userName },
+          ]}
+        />
+      }
+    >
       <UserForm mode={UserFormMode.Edit} userId={userId} defaultValues={data} />
     </Page>
   );

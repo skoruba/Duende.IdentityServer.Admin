@@ -6,18 +6,25 @@ import ApiResourceForm, {
   ApiResourceFormMode,
 } from "../Common/ApiResourceForm";
 import { defaultApiResourceFormData } from "../Common/ApiResourceSchema";
+import { Cable } from "lucide-react";
 
 const ApiResourceCreate = () => {
   const { t } = useTranslation();
 
   return (
-    <Page title={t("ApiResource.Create.PageTitle")}>
-      <Breadcrumbs
-        items={[
-          { url: ApiResourcesUrl, name: t("ApiResources.PageTitle") },
-          { name: t("ApiResource.Create.PageTitle") },
-        ]}
-      />
+    <Page
+      title={t("ApiResource.Create.PageTitle")}
+      icon={Cable}
+      accentKind="management"
+      breadcrumb={
+        <Breadcrumbs
+          items={[
+            { url: ApiResourcesUrl, name: t("ApiResources.PageTitle") },
+            { name: t("ApiResource.Create.PageTitle") },
+          ]}
+        />
+      }
+    >
       <ApiResourceForm
         mode={ApiResourceFormMode.Create}
         defaultValues={defaultApiResourceFormData}

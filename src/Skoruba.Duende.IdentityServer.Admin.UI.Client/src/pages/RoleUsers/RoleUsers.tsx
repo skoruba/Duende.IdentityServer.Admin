@@ -7,12 +7,13 @@ import Page from "@/components/Page/Page";
 import Loading from "@/components/Loading/Loading";
 import { usePaginationTable } from "@/components/DataTable/usePaginationTable";
 import { useTranslation } from "react-i18next";
-import { Search } from "lucide-react";
+import { Search, Lock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import RoleUsersTable from "./RoleUsersTable";
 import { queryKeys } from "@/services/QueryKeys";
 import { RolesUrl } from "@/routing/Urls";
 import { Breadcrumbs } from "@/components/Breadcrumbs/Breadcrumbs";
+import { Button } from "@/components/ui/button";
 
 const RoleUsers: React.FC = () => {
   const { roleId } = useParams<{ roleId: string }>();
@@ -50,51 +51,53 @@ const RoleUsers: React.FC = () => {
     }
   );
 
+  const headerActions = (
+    <div className="flex flex-col space-y-3 md:flex-row md:items-center md:space-x-3 md:space-y-0">
+      <div className="relative w-full md:w-72">
+        <Input
+          type="text"
+          placeholder={t("Users.SearchPlaceholder")}
+          className="pr-10"
+          value={inputValue}
+          onChange={handleInputChange}
+          onKeyDown={handleInputKeyDown}
+        />
+        <Search className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+      </div>
+      <Button variant="secondary" onClick={handleSearch}>
+        {t("Actions.Search")}
+      </Button>
+    </div>
+  );
+
+  const title =
+    roleQuery.isLoading || !roleQuery.data
+      ? t("Role.Users.PageTitle")
+      : `${t("Role.Users.PageTitle")} - ${roleQuery.data.name}`;
+
   return (
     <Page
-      title={
-        roleQuery.isLoading
-          ? t("Role.Users.PageTitle")
-          : `${t("Role.Users.PageTitle")} - ${roleQuery.data?.name ?? ""}`
+      title={title}
+      icon={Lock}
+      accentKind="identity"
+      breadcrumb={
+        <Breadcrumbs
+          items={[
+            { url: RolesUrl, name: t("Roles.PageTitle") },
+            { name: roleQuery.data?.name ?? "" },
+          ]}
+        />
       }
+      topSection={headerActions}
     >
-      <Breadcrumbs
-        items={[
-          { url: RolesUrl, name: t("Roles.PageTitle") },
-          { name: roleQuery.data?.name ?? "" },
-        ]}
-      />
-
       {roleQuery.isLoading || users.isLoading ? (
         <Loading fullscreen />
       ) : (
-        <>
-          <div className="mb-4 flex flex-col space-y-4 md:flex-row md:items-center md:space-x-4 md:space-y-0">
-            <div className="flex-grow relative">
-              <Input
-                type="text"
-                placeholder={t("Users.SearchPlaceholder")}
-                className="w-full pr-10"
-                value={inputValue}
-                onChange={handleInputChange}
-                onKeyDown={handleInputKeyDown}
-              />
-              <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-            </div>
-            <button
-              type="button"
-              className="btn btn-secondary w-full md:w-auto"
-              onClick={handleSearch}
-            >
-              {t("Actions.Search")}
-            </button>
-          </div>
-          <RoleUsersTable
-            data={users.data!}
-            pagination={pagination}
-            setPagination={setPagination}
-          />
-        </>
+        <RoleUsersTable
+          data={users.data!}
+          pagination={pagination}
+          setPagination={setPagination}
+        />
       )}
     </Page>
   );

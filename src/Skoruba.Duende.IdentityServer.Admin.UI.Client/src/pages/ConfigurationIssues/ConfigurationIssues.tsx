@@ -8,7 +8,7 @@ import Loading from "@/components/Loading/Loading";
 import { client } from "@skoruba/duende.identityserver.admin.api.client";
 import Page from "@/components/Page/Page";
 import { Link } from "react-router-dom";
-import { Hammer } from "lucide-react";
+import { Hammer, Cog } from "lucide-react";
 import { TooltipField } from "@/components/FormRow/FormRow";
 import { IssueTypeBadge } from "./IssueTypeBadge";
 
@@ -82,7 +82,11 @@ const ConfigurationIssues: React.FC = () => {
   if (isLoading) return <Loading fullscreen />;
 
   return (
-    <Page title={t("ConfigurationIssues.PageTitle")}>
+    <Page
+      title={t("ConfigurationIssues.PageTitle")}
+      icon={Cog}
+      accentKind="monitoring"
+    >
       <DataTable<client.ConfigurationIssueDto, number>
         columns={columns}
         data={data ?? []}

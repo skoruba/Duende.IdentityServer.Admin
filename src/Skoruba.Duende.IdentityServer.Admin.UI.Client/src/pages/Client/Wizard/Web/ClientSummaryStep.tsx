@@ -3,7 +3,7 @@ import { CircleCheckBig } from "lucide-react";
 import { useFormState } from "@/contexts/FormContext";
 import { BasicsFormData } from "./ClientBasicsStep";
 import { ScopesFormData } from "./ClientScopesStep";
-import { SecretsFormData } from "../../../../components/SecretForm/SecretForm";
+import { SecretsFormData } from "@/components/SecretForm/SecretForm";
 import { UrisFormData } from "./ClientUrisStep";
 import { toast } from "@/components/ui/use-toast";
 import { useCreateClient } from "@/services/ClientServices";

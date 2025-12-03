@@ -1,7 +1,9 @@
 @model Skoruba.Duende.IdentityServer.STS.Identity.ViewModels.Account.RedirectViewModel
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
-<h1>@Localizer["Title"]</h1>
-<p>@Localizer["SubTitle"]</p>
+<div class="py-8 text-center">
+    <h1 class="text-4xl font-bold mb-2">@Localizer["Title"]</h1>
+    <p class="text-lg text-muted-foreground">@Localizer["SubTitle"]</p>
+</div>
 <meta http-equiv="refresh" content="0;url=@Model.RedirectUrl" data-url="@Model.RedirectUrl">
 <script src="~/js/signin-redirect.js"></script>

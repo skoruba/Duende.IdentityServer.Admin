@@ -6,7 +6,7 @@ import { Dispatch, SetStateAction } from "react";
 import RolesActions from "./RolesActions";
 import { RoleEditUrl, RoleUsersUrl } from "@/routing/Urls";
 import { Link, useNavigate } from "react-router-dom";
-import { Users2 } from "lucide-react"; // lucide user icon
+import { Users2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type RolesTableProps = {

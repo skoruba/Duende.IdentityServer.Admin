@@ -4,18 +4,27 @@
     ViewData["Title"] = Localizer["Title"];
 }
 
-<h4>@ViewData["Title"]</h4>
-<div class="alert alert-warning" role="alert">
-    <p>
-        <span class="fa fa-exclamation-triangle"></span>
-        <strong>@Localizer["SubTitle"]</strong>
-    </p>
-    <p>
-        @Localizer["Info"]
-    </p>
-</div>
-<div>
-    <form asp-action="ResetAuthenticator" method="post" class="form-group">
-        <button class="btn btn-danger" type="submit">@Localizer["Reset"]</button>
-    </form>
-</div>
+<section class="space-y-6 max-w-2xl">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">@ViewData["Title"]</h2>
+        </div>
+
+        <div class="card-content space-y-6">
+            <div class="alert-destructive">
+                <lucideicon name="alert-circle" class="h-4 w-4" />
+                <div>
+                    <div class="alert-title">@Localizer["SubTitle"]</div>
+                    <div class="alert-description">@Localizer["Info"]</div>
+                </div>
+            </div>
+
+            <form asp-action="ResetAuthenticator" method="post">
+                <button class="btn-destructive" type="submit">
+                    <lucideicon name="rotate-ccw" class="inline-block h-4 w-4 mr-2" />
+                    @Localizer["Reset"]
+                </button>
+            </form>
+        </div>
+    </div>
+</section>

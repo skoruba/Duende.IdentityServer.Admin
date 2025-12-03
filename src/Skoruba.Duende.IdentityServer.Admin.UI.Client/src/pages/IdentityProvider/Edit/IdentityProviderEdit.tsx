@@ -9,6 +9,7 @@ import IdentityProviderForm, {
 import Loading from "@/components/Loading/Loading";
 import { useIdentityProviderById } from "@/services/IdentityProviderService";
 import { defaultIdentityProviderFormData } from "../Common/IdentityProviderSchema";
+import { KeyRound } from "lucide-react";
 
 const IdentityProviderEdit = () => {
   const { t } = useTranslation();
@@ -19,13 +20,22 @@ const IdentityProviderEdit = () => {
   if (isLoading || !data) return <Loading fullscreen />;
 
   return (
-    <Page title={t("IdentityProvider.Edit.PageTitle")}>
-      <Breadcrumbs
-        items={[
-          { url: IdentityProvidersUrl, name: t("IdentityProvider.PageTitle") },
-          { name: data.scheme },
-        ]}
-      />
+    <Page
+      title={t("IdentityProvider.Edit.PageTitle")}
+      icon={KeyRound}
+      accentKind="providers"
+      breadcrumb={
+        <Breadcrumbs
+          items={[
+            {
+              url: IdentityProvidersUrl,
+              name: t("IdentityProviders.PageTitle"),
+            },
+            { name: data.scheme },
+          ]}
+        />
+      }
+    >
       <IdentityProviderForm
         mode={IdentityProviderFormMode.Edit}
         defaultValues={data ?? defaultIdentityProviderFormData}

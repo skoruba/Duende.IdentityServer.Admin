@@ -12,7 +12,7 @@ import SecretForm, {
   defaultValues,
   SecretsFormData,
   createSecretFormSchema as secretFormSchema,
-} from "../../../../components/SecretForm/SecretForm";
+} from "@/components/SecretForm/SecretForm";
 import { useClientWizard } from "@/contexts/ClientWizardContext";
 import { Trans, useTranslation } from "react-i18next";
 import { Tip } from "@/components/Tip/Tip";

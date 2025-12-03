@@ -7,19 +7,32 @@
 	ViewData["signed-out"] = true;
 }
 
-<div class="page-header logged-out-container">
-	<h1>
-		@Localizer["Title"]
-		<small>@Localizer["SubTitle"]</small>
-	</h1>
+<div class="py-8">
+	<div class="flex min-h-[50vh] items-center justify-center">
+		<div class="w-full max-w-md">
+			<div class="mb-6 text-center">
+				<div class="mx-auto mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 ring-1 ring-primary/20">
+					<lucideicon name="check-circle" class="h-10 w-10 text-primary" />
+				</div>
+				<h1 class="text-3xl font-bold mb-2">@Localizer["Title"]</h1>
+				<p class="text-muted-foreground">@Localizer["SubTitle"]</p>
+			</div>
 
-	@if (Model.PostLogoutRedirectUri != null)
-	{
-		<div>
-			@Localizer["Click"] <a class="PostLogoutRedirectUri" href="@Model.PostLogoutRedirectUri">@Localizer["Here"]</a> @Localizer["Return"]
-			<span>@Model.ClientName</span>.
+			@if (Model.PostLogoutRedirectUri != null)
+			{
+				<div class="card">
+					<div class="card-content py-6">
+						<p class="text-center">
+							@Localizer["Click"] 
+							<a class="text-primary hover:underline font-medium PostLogoutRedirectUri" href="@Model.PostLogoutRedirectUri">@Localizer["Here"]</a> 
+							@Localizer["Return"]
+							<span class="font-semibold">@Model.ClientName</span>.
+						</p>
+					</div>
+				</div>
+			}
 		</div>
-	}
+	</div>
 
 	@if (Model.SignOutIframeUrl != null)
 	{
@@ -28,7 +41,7 @@
 </div>
 
 @section scripts
-	{
+{
 	@if (Model.AutomaticRedirectAfterSignOut)
 	{
 		<script src="~/js/signout-redirect.js"></script>

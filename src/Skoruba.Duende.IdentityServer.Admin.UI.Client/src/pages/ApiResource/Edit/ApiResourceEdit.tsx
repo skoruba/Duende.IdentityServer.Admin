@@ -11,6 +11,7 @@ import ApiResourceForm, {
 import { useCallback, useState } from "react";
 import DeleteApiResourceDialog from "../Common/DeleteApiResourceDialog";
 import useModal from "@/hooks/modalHooks";
+import { Cable } from "lucide-react";
 
 const ApiResourceEdit = () => {
   const { t } = useTranslation();
@@ -37,13 +38,19 @@ const ApiResourceEdit = () => {
   }
 
   return (
-    <Page title={t("ApiResource.Edit.PageTitle")}>
-      <Breadcrumbs
-        items={[
-          { url: ApiResourcesUrl, name: t("ApiResources.PageTitle") },
-          { name: resourceData.name },
-        ]}
-      />
+    <Page
+      title={t("ApiResource.Edit.PageTitle")}
+      icon={Cable}
+      accentKind="management"
+      breadcrumb={
+        <Breadcrumbs
+          items={[
+            { url: ApiResourcesUrl, name: t("ApiResources.PageTitle") },
+            { name: resourceData.name },
+          ]}
+        />
+      }
+    >
       <DeleteApiResourceDialog
         apiResourceId={Number(resourceId)}
         apiResourceName={resourceData.name}

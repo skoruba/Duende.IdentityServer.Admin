@@ -6,18 +6,28 @@ import IdentityResourceForm, {
   IdentityResourceFormMode,
 } from "../Common/IdentityResourceForm";
 import { defaultIdentityResourceFormData } from "../Common/IdentityResourceSchema";
+import { Fingerprint } from "lucide-react";
 
 const IdentityResourceCreate = () => {
   const { t } = useTranslation();
 
   return (
-    <Page title={t("IdentityResource.Create.PageTitle")}>
-      <Breadcrumbs
-        items={[
-          { url: IdentityResourcesUrl, name: t("IdentityResources.PageTitle") },
-          { name: t("IdentityResource.Create.PageTitle") },
-        ]}
-      />
+    <Page
+      title={t("IdentityResource.Create.PageTitle")}
+      icon={Fingerprint}
+      accentKind="management"
+      breadcrumb={
+        <Breadcrumbs
+          items={[
+            {
+              url: IdentityResourcesUrl,
+              name: t("IdentityResources.PageTitle"),
+            },
+            { name: t("IdentityResource.Create.PageTitle") },
+          ]}
+        />
+      }
+    >
       <IdentityResourceForm
         mode={IdentityResourceFormMode.Create}
         defaultValues={defaultIdentityResourceFormData}

@@ -7,7 +7,7 @@ import Page from "@/components/Page/Page";
 import Loading from "@/components/Loading/Loading";
 import { usePaginationTable } from "@/components/DataTable/usePaginationTable";
 import { useTranslation } from "react-i18next";
-import { PlusCircle, Search } from "lucide-react";
+import { PlusCircle, Search, Cable } from "lucide-react";
 import ApiResourcesTable from "./ApiResourcesTable";
 import { Input } from "@/components/ui/input";
 import { ApiResourceCreateUrl } from "@/routing/Urls";
@@ -38,41 +38,46 @@ const ApiResources: React.FC = () => {
     { keepPreviousData: true }
   );
 
+  const headerActions = (
+    <div className="flex flex-col space-y-3 md:flex-row md:items-center md:space-x-3 md:space-y-0">
+      <Button onClick={() => navigate(ApiResourceCreateUrl)}>
+        <PlusCircle className="mr-2 h-4 w-4" />
+        {t("ApiResources.AddNewApiResource")}
+      </Button>
+
+      <div className="relative w-full md:w-72">
+        <Input
+          type="text"
+          placeholder={t("ApiResources.SearchPlaceholder")}
+          className="pr-10"
+          value={inputValue}
+          onChange={handleInputChange}
+          onKeyDown={handleInputKeyDown}
+        />
+        <Search className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+      </div>
+
+      <Button variant="secondary" onClick={handleSearch}>
+        {t("Actions.Search")}
+      </Button>
+    </div>
+  );
+
   return (
-    <Page title={t("ApiResources.PageTitle")}>
+    <Page
+      title={t("ApiResources.PageTitle")}
+      icon={Cable}
+      accentKind="management"
+      topSection={headerActions}
+    >
       {apiResources.isLoading ? (
         <Loading fullscreen />
       ) : (
-        <>
-          <div className="mb-4 flex flex-col space-y-4 md:flex-row md:items-center md:space-x-4 md:space-y-0">
-            <Button
-              className="w-full md:w-auto"
-              onClick={() => navigate(ApiResourceCreateUrl)}
-            >
-              <PlusCircle className="mr-2 h-4 w-4" />
-              {t("ApiResources.AddNewApiResource")}
-            </Button>
-            <div className="flex-grow relative">
-              <Input
-                type="text"
-                placeholder="Search by resource name or ID"
-                className="w-full pr-10"
-                value={inputValue}
-                onChange={handleInputChange}
-                onKeyDown={handleInputKeyDown}
-              />
-              <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-            </div>
-            <Button className="w-full md:w-auto" onClick={handleSearch}>
-              {t("Actions.Search")}
-            </Button>
-          </div>
-          <ApiResourcesTable
-            data={apiResources.data!}
-            pagination={pagination}
-            setPagination={setPagination}
-          />
-        </>
+        <ApiResourcesTable
+          data={apiResources.data!}
+          pagination={pagination}
+          setPagination={setPagination}
+        />
       )}
     </Page>
   );

@@ -9,7 +9,7 @@ import {
 interface CardWrapperProps {
   title: string;
   description: string;
-  icon: React.ElementType; // dostane se např. Shield
+  icon: React.ElementType;
   children: React.ReactNode;
 }
 

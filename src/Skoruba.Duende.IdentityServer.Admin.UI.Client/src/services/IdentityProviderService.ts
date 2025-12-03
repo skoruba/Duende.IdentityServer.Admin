@@ -40,19 +40,29 @@ export const useIdentityProviders = (
 };
 
 export const useCreateIdentityProvider = () => {
-  return useMutation(async (data: IdentityProviderFormData) => {
-    const identityProvidersClient = getClient();
-    return await identityProvidersClient.post(
-      new client.IdentityProviderApiDto({
-        ...data,
-        type: data.type,
-        identityProviderProperties: Object.fromEntries(
-          data.properties.map((prop) => [prop.key, prop.value])
-        ),
-        displayName: data.displayName ?? undefined,
-      })
-    );
-  });
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    async (data: IdentityProviderFormData) => {
+      const identityProvidersClient = getClient();
+      return await identityProvidersClient.post(
+        new client.IdentityProviderApiDto({
+          ...data,
+          type: data.type,
+          identityProviderProperties: Object.fromEntries(
+            data.properties.map((prop) => [prop.key, prop.value])
+          ),
+          displayName: data.displayName ?? undefined,
+        })
+      );
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(queryKeys.identityProviders);
+        queryClient.invalidateQueries(queryKeys.identityProvider);
+      },
+    }
+  );
 };
 
 export const useUpdateIdentityProvider = () => {

@@ -5,18 +5,25 @@ import { ApiScopesUrl } from "@/routing/Urls";
 import ApiScopeForm from "../Common/ApiScopeForm";
 import { defaultApiScopeFormData } from "../Common/ApiScopeSchema";
 import { ApiScopeFormMode } from "../Edit/ApiScopeEdit";
+import { ShieldCheck } from "lucide-react";
 
 const ApiScopeCreate = () => {
   const { t } = useTranslation();
 
   return (
-    <Page title={t("ApiScope.Create.PageTitle")}>
-      <Breadcrumbs
-        items={[
-          { url: ApiScopesUrl, name: t("ApiScopes.PageTitle") },
-          { name: t("ApiScope.Create.PageTitle") },
-        ]}
-      />
+    <Page
+      title={t("ApiScope.Create.PageTitle")}
+      icon={ShieldCheck}
+      accentKind="management"
+      breadcrumb={
+        <Breadcrumbs
+          items={[
+            { url: ApiScopesUrl, name: t("ApiScopes.PageTitle") },
+            { name: t("ApiScope.Create.PageTitle") },
+          ]}
+        />
+      }
+    >
       <ApiScopeForm
         mode={ApiScopeFormMode.Create}
         defaultValues={defaultApiScopeFormData}

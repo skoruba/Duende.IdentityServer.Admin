@@ -26,9 +26,14 @@
     "KeysDescription": "Manage your keys",
     "Overview": "Overview",
     "OverviewDescription": "Total count of Identity Server resources and clients",
+    "ClientsResourcesManagement": "Clients & Resources Management",
+    "IdentityManagement": "Identity Management",
+    "ProvidersAndKeys": "Providers & Keys",
+    "Monitoring": "Monitoring",
+    "Logout": "Logout",
     "ClientsChecker": {
-      "Title": "Clients Configuration Checker",
-      "Description": "This tool helps you to check your Identity Server configuration and find issues.",
+      "Title": "Monitoring",
+      "Description": "Check your IdentityServer configuration for potential issues",
       "Pie": {
         "NoIssues": "0 issues",
         "Issues_one": "{{count}} issue",
@@ -284,14 +289,16 @@
   "ApiResources": {
     "PageTitle": "Api Resources",
     "AddNewApiResource": "Add Api Resource",
-    "ApiResourceName": "Api Resource Name"
+    "ApiResourceName": "Api Resource Name",
+    "SearchPlaceholder": "Search by resource name or ID"
   },
   "Clients": {
     "PageTitle": "Clients",
     "AddNewClient": "Add New Client",
     "ClientName": "Client Name",
     "ClientId": "Client Id",
-    "ClientType": "Client Type"
+    "ClientType": "Client Type",
+    "SearchPlaceholder": "Search by client name or ID"
   },
   "ClientSecret": {
     "Actions": {

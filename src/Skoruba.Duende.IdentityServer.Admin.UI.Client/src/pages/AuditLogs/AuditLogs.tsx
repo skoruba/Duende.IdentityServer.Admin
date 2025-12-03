@@ -9,7 +9,7 @@ import { usePaginationTable } from "@/components/DataTable/usePaginationTable";
 import { getAuditLogs } from "@/services/AuditLogsService";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { AuditLogData } from "@/models/AuditLogs/AuditLogsModels";
-import { Code, CalendarIcon, X } from "lucide-react";
+import { Code, CalendarIcon, X, Activity } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { queryKeys } from "@/services/QueryKeys";
-
 import AuditLogDetail from "./AuditLogDetail";
 
 const AuditLogs: React.FC = () => {
@@ -72,60 +71,67 @@ const AuditLogs: React.FC = () => {
     },
   ];
 
-  return (
-    <Page title={t("AuditLogs.PageTitle")}>
-      <div className="mb-4 grid grid-cols-1 md:grid-cols-4 gap-2 items-center">
-        <Input
-          placeholder={t("AuditLogs.SearchEvent")}
-          onChange={(e) => handleChange("event", e.target.value)}
-        />
-        <Input
-          placeholder={t("AuditLogs.SearchSource")}
-          onChange={(e) => handleChange("source", e.target.value)}
-        />
-        <Input
-          placeholder={t("AuditLogs.SearchSubject")}
-          onChange={(e) => handleChange("subjectName", e.target.value)}
-        />
+  const headerFilters = (
+    <div className="grid grid-cols-1 gap-2 md:grid-cols-4 md:items-center">
+      <Input
+        placeholder={t("AuditLogs.SearchEvent")}
+        onChange={(e) => handleChange("event", e.target.value)}
+      />
+      <Input
+        placeholder={t("AuditLogs.SearchSource")}
+        onChange={(e) => handleChange("source", e.target.value)}
+      />
+      <Input
+        placeholder={t("AuditLogs.SearchSubject")}
+        onChange={(e) => handleChange("subjectName", e.target.value)}
+      />
 
-        <div className="relative">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className="w-full justify-start text-left font-normal pr-10"
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? format(date, "dd.MM.yyyy") : t("AuditLogs.SelectDate")}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent align="start" className="w-auto p-2 space-y-2">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={(selectedDate) => {
-                  setDate(selectedDate ?? undefined);
-                }}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-
-          {date && (
-            <button
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-              onClick={() => {
-                setDate(undefined);
-                handleChange("created", undefined);
-              }}
-              aria-label={t("AuditLogs.ClearDate")}
+      <div className="relative">
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              className="w-full justify-start text-left font-normal pr-10"
             >
-              <X className="w-4 h-4" />
-            </button>
-          )}
-        </div>
-      </div>
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {date ? format(date, "dd.MM.yyyy") : t("AuditLogs.SelectDate")}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent align="start" className="w-auto space-y-2 p-2">
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={(selectedDate) => {
+                setDate(selectedDate ?? undefined);
+              }}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
 
+        {date && (
+          <button
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            onClick={() => {
+              setDate(undefined);
+              handleChange("created", undefined);
+            }}
+            aria-label={t("AuditLogs.ClearDate")}
+          >
+            <X className="h-4 w-4" />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+
+  return (
+    <Page
+      title={t("AuditLogs.PageTitle")}
+      icon={Activity}
+      accentKind="monitoring"
+      topSection={headerFilters}
+    >
       {isLoading ? (
         <Loading fullscreen />
       ) : (

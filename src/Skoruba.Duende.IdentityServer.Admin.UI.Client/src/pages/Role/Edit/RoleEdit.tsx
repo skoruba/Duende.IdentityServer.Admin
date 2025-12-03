@@ -8,6 +8,7 @@ import RoleForm, { RoleFormMode } from "../Common/RoleForm";
 import { useQuery } from "react-query";
 import { getRole } from "@/services/RoleService";
 import { queryKeys } from "@/services/QueryKeys";
+import { Lock } from "lucide-react";
 
 const RoleEdit = () => {
   const { roleId } = useParams<{ roleId: string }>();
@@ -22,13 +23,19 @@ const RoleEdit = () => {
   }
 
   return (
-    <Page title={t("Role.Edit.PageTitle")}>
-      <Breadcrumbs
-        items={[
-          { url: RolesUrl, name: t("Roles.PageTitle") },
-          { name: data.name },
-        ]}
-      />
+    <Page
+      title={t("Role.Edit.PageTitle")}
+      icon={Lock}
+      accentKind="identity"
+      breadcrumb={
+        <Breadcrumbs
+          items={[
+            { url: RolesUrl, name: t("Roles.PageTitle") },
+            { name: data.name },
+          ]}
+        />
+      }
+    >
       <RoleForm mode={RoleFormMode.Edit} roleId={roleId} defaultValues={data} />
     </Page>
   );
