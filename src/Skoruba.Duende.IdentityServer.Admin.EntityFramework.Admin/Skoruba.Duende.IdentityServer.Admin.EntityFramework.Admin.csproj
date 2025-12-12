@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Description>Entity Framework layer for admin features (Configuration Rules, Issues, etc.)</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework\Skoruba.Duende.IdentityServer.Admin.EntityFramework.csproj" />
+    <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj" />
+    <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,7 +1,7 @@
 {
   "name": "skoruba-duende-identityserver-admin",
   "private": true,
-  "version": "3.0.0-preview.5",
+  "version": "3.0.0-preview.7",
   "description": "Skoruba Duende IdentityServer Admin UI",
   "author": "Jan Skoruba <jan@skoruba.com>",
   "license": "Apache-2.0",
@@ -34,7 +34,7 @@
     "@radix-ui/react-tabs": "1.1.1",
     "@radix-ui/react-toast": "1.2.2",
     "@radix-ui/react-tooltip": "1.1.4",
-    "@skoruba/duende.identityserver.admin.api.client": "3.0.0-beta.1",
+    "@skoruba/duende.identityserver.admin.api.client": "3.0.0-preview.7",
     "@tanstack/react-table": "8.20.5",
     "@types/uuid": "10.0.0",
     "class-variance-authority": "0.7.0",

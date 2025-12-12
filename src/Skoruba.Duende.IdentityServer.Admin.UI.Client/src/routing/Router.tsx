@@ -24,6 +24,7 @@ import IdentityProviderCreate from "@/pages/IdentityProvider/Create/IdentityProv
 import IdentityProviderEdit from "@/pages/IdentityProvider/Edit/IdentityProviderEdit";
 import Keys from "@/pages/Keys/Keys";
 import ConfigurationIssues from "@/pages/ConfigurationIssues/ConfigurationIssues";
+import ConfigurationRules from "@/pages/ConfigurationRules/ConfigurationRules";
 import AuditLogs from "@/pages/AuditLogs/AuditLogs";
 import RoleUsers from "@/pages/RoleUsers/RoleUsers";
 import { getBaseHref } from "@/lib/utils";
@@ -52,6 +53,7 @@ import {
   IdentityProviderEditUrl,
   KeysUrl,
   ConfigurationIssuesUrl,
+  ConfigurationRulesUrl,
   AuditLogsUrl,
   RoleUsersUrl,
   NotFoundUrl,
@@ -270,6 +272,14 @@ export const router = createBrowserRouter(
           element: (
             <RouteGuard>
               <ConfigurationIssues />
+            </RouteGuard>
+          ),
+        },
+        {
+          path: ConfigurationRulesUrl,
+          element: (
+            <RouteGuard>
+              <ConfigurationRules />
             </RouteGuard>
           ),
         },

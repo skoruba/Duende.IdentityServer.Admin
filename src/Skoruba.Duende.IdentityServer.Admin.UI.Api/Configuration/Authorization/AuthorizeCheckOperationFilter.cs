@@ -25,8 +25,15 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration.Authorization
 
             if (hasAuthorize)
             {
-                context.OperationDescription.Operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
-                context.OperationDescription.Operation.Responses.Add("403", new OpenApiResponse { Description = "Forbidden" });
+                if (!context.OperationDescription.Operation.Responses.ContainsKey("401"))
+                {
+                    context.OperationDescription.Operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
+                }
+
+                if (!context.OperationDescription.Operation.Responses.ContainsKey("403"))
+                {
+                    context.OperationDescription.Operation.Responses.Add("403", new OpenApiResponse { Description = "Forbidden" });
+                }
 
                 var oauth2Scheme = new OpenApiSecurityRequirement
                 {

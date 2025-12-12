@@ -40,6 +40,8 @@ export const queryKeys = {
   dashboard: "dashboard",
   configurationIssues: "configurationIssues",
   configurationIssuesSummary: "configurationIssuesSummary",
+  configurationRules: "configurationRules",
+  configurationRulesMetadata: "configurationRulesMetadata",
   userExternalApps: "userExternalApps",
   applicationInfo: "applicationInfo",
   userPersistedGrants: "userPersistedGrants",

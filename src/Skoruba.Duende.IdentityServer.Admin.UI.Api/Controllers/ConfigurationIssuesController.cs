@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Entities;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration.Constants;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.ExceptionHandling;
 
@@ -24,10 +24,10 @@ public class ConfigurationIssuesController(IConfigurationIssuesService configura
     public async Task<ActionResult<List<ConfigurationIssueDto>>> Get()
     {
         var issues = await configurationIssuesService.GetAllIssuesAsync();
-        
+
         return Ok(issues);
     }
-    
+
     [HttpGet(nameof(GetSummary))]
     public async Task<ActionResult<ConfigurationIssueSummaryDto>> GetSummary()
     {

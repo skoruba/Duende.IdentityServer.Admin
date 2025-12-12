@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Mappers;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Repositories.Interfaces;
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services;
 
@@ -15,13 +15,7 @@ public class ConfigurationIssuesService(IConfigurationIssuesRepository repositor
 {
     public async Task<List<ConfigurationIssueDto>> GetAllIssuesAsync()
     {
-        var configurationIssues = new List<ConfigurationIssueDto>();
-        
-        var clientIssues = await repository.GetClientIssuesAsync();
-        var clientConfigurationIssues = clientIssues.Select(x => x.Map(ConfigurationResourceType.Client)).ToList();
-        
-        configurationIssues.AddRange(clientConfigurationIssues);
-        
-        return configurationIssues;
+        var issues = await repository.GetAllIssuesAsync();
+        return issues.Select(x => x.ToDto()).ToList();
     }
 }

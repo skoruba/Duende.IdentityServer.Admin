@@ -12,6 +12,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.csproj" />
+		<ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.csproj" />
 	</ItemGroup>
 </Project>
 

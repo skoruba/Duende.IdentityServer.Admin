@@ -19,7 +19,7 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
 
 namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Helpers
 {
-	public static class DbMigrationHelpers
+    public static class DbMigrationHelpers
     {
         /// <summary>
         /// Generate migrations before running this method, you can use these steps bellow:
@@ -30,7 +30,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Helpers
         /// <param name="seedConfiguration"></param>
         /// <param name="databaseMigrationsConfiguration"></param>
         public static async Task<bool> ApplyDbMigrationsWithDataSeedAsync<TIdentityServerDbContext, TIdentityDbContext,
-            TPersistedGrantDbContext, TLogDbContext, TAuditLogDbContext, TDataProtectionDbContext, TUser, TRole>(
+            TPersistedGrantDbContext, TLogDbContext, TAuditLogDbContext, TDataProtectionDbContext, TConfigurationRulesDbContext, TUser, TRole>(
             IHost host, bool applyDbMigrationWithDataSeedFromProgramArguments, SeedConfiguration seedConfiguration,
             DatabaseMigrationsConfiguration databaseMigrationsConfiguration)
             where TIdentityServerDbContext : DbContext, IAdminConfigurationDbContext
@@ -39,6 +39,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Helpers
             where TLogDbContext : DbContext, IAdminLogDbContext
             where TAuditLogDbContext : DbContext, IAuditLoggingDbContext<AuditLog>
             where TDataProtectionDbContext : DbContext, IDataProtectionKeyContext
+            where TConfigurationRulesDbContext : DbContext
             where TUser : IdentityUser, new()
             where TRole : IdentityRole, new()
         {
@@ -51,14 +52,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Helpers
                 if ((databaseMigrationsConfiguration != null && databaseMigrationsConfiguration.ApplyDatabaseMigrations)
                     || (applyDbMigrationWithDataSeedFromProgramArguments))
                 {
-                    migrationComplete = await EnsureDatabasesMigratedAsync<TIdentityDbContext, TIdentityServerDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLogDbContext, TDataProtectionDbContext>(services);
+                    migrationComplete = await EnsureDatabasesMigratedAsync<TIdentityDbContext, TIdentityServerDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLogDbContext, TDataProtectionDbContext, TConfigurationRulesDbContext>(services);
                 }
 
                 if ((seedConfiguration != null && seedConfiguration.ApplySeed)
                     || (applyDbMigrationWithDataSeedFromProgramArguments))
                 {
                     var seedComplete = await EnsureSeedDataAsync<TIdentityServerDbContext, TUser, TRole>(services);
-                    
+
                     return migrationComplete && seedComplete;
                 }
             }
@@ -66,13 +67,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Helpers
             return migrationComplete;
         }
 
-        public static async Task<bool> EnsureDatabasesMigratedAsync<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLogDbContext, TDataProtectionDbContext>(IServiceProvider services)
+        public static async Task<bool> EnsureDatabasesMigratedAsync<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLogDbContext, TDataProtectionDbContext, TConfigurationRulesDbContext>(IServiceProvider services)
             where TIdentityDbContext : DbContext
             where TPersistedGrantDbContext : DbContext
             where TConfigurationDbContext : DbContext
             where TLogDbContext : DbContext
             where TAuditLogDbContext : DbContext
             where TDataProtectionDbContext : DbContext
+            where TConfigurationRulesDbContext : DbContext
         {
             var pendingMigrationCount = 0;
 
@@ -109,6 +111,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Helpers
                 }
 
                 using (var context = scope.ServiceProvider.GetRequiredService<TDataProtectionDbContext>())
+                {
+                    await context.Database.MigrateAsync();
+                    pendingMigrationCount += (await context.Database.GetPendingMigrationsAsync()).Count();
+                }
+
+                using (var context = scope.ServiceProvider.GetRequiredService<TConfigurationRulesDbContext>())
                 {
                     await context.Database.MigrateAsync();
                     pendingMigrationCount += (await context.Database.GetPendingMigrationsAsync()).Count();

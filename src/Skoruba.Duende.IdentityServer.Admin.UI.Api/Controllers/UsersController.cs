@@ -91,7 +91,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<TUserDto>> Post([FromBody]TUserDto user)
+        public async Task<ActionResult<TUserDto>> Post([FromBody] TUserDto user)
         {
             if (!EqualityComparer<TKey>.Default.Equals(user.Id, default))
             {
@@ -105,15 +105,20 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody]TUserDto user)
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Put([FromBody] TUserDto user)
         {
             await _identityService.GetUserAsync(user.Id.ToString());
             await _identityService.UpdateUserAsync(user);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> Delete(TKey id)
         {
             if (IsDeleteForbidden(id))
@@ -124,7 +129,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
             await _identityService.GetUserAsync(user.Id.ToString());
             await _identityService.DeleteUserAsync(user.Id.ToString(), user);
 
-            return Ok();
+            return NoContent();
         }
 
         private bool IsDeleteForbidden(TKey id)
@@ -144,20 +149,25 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpPost("Roles")]
-        public async Task<IActionResult> PostUserRoles([FromBody]UserRoleApiDto<TKey> role)
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> PostUserRoles([FromBody] UserRoleApiDto<TKey> role)
         {
             var userRolesDto = _mapper.Map<TUserRolesDto>(role);
 
             await _identityService.GetUserAsync(userRolesDto.UserId.ToString());
             await _identityService.GetRoleAsync(userRolesDto.RoleId.ToString());
-            
+
             await _identityService.CreateUserRoleAsync(userRolesDto);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("Roles")]
-        public async Task<IActionResult> DeleteUserRoles([FromBody]UserRoleApiDto<TKey> role)
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> DeleteUserRoles([FromBody] UserRoleApiDto<TKey> role)
         {
             var userRolesDto = _mapper.Map<TUserRolesDto>(role);
 
@@ -166,7 +176,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
 
             await _identityService.DeleteUserRoleAsync(userRolesDto);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpGet("{id}/Claims")]
@@ -180,7 +190,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpPost("Claims")]
-        public async Task<IActionResult> PostUserClaims([FromBody]UserClaimApiDto<TKey> claim)
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> PostUserClaims([FromBody] UserClaimApiDto<TKey> claim)
         {
             var userClaimDto = _mapper.Map<TUserClaimsDto>(claim);
 
@@ -191,22 +203,26 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
 
             await _identityService.CreateUserClaimsAsync(userClaimDto);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpPut("Claims")]
-        public async Task<IActionResult> PutUserClaims([FromBody]UserClaimApiDto<TKey> claim)
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> PutUserClaims([FromBody] UserClaimApiDto<TKey> claim)
         {
             var userClaimDto = _mapper.Map<TUserClaimsDto>(claim);
 
             await _identityService.GetUserClaimAsync(userClaimDto.UserId.ToString(), userClaimDto.ClaimId);
             await _identityService.UpdateUserClaimsAsync(userClaimDto);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("{id}/Claims")]
-        public async Task<IActionResult> DeleteUserClaims([FromRoute]TKey id, int claimId)
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> DeleteUserClaims([FromRoute] TKey id, int claimId)
         {
             var userClaimsDto = new TUserClaimsDto
             {
@@ -217,7 +233,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
             await _identityService.GetUserClaimAsync(id.ToString(), claimId);
             await _identityService.DeleteUserClaimAsync(userClaimsDto);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpGet("{id}/Providers")]
@@ -230,34 +246,38 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpDelete("Providers")]
-        public async Task<IActionResult> DeleteUserProviders([FromBody]UserProviderDeleteApiDto<TKey> provider)
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> DeleteUserProviders([FromBody] UserProviderDeleteApiDto<TKey> provider)
         {
             var providerDto = _mapper.Map<TUserProviderDto>(provider);
 
             await _identityService.GetUserProviderAsync(providerDto.UserId.ToString(), providerDto.ProviderKey);
             await _identityService.DeleteUserProvidersAsync(providerDto);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpPost("ChangePassword")]
-        public async Task<IActionResult> PostChangePassword([FromBody]UserChangePasswordApiDto<TKey> password)
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> PostChangePassword([FromBody] UserChangePasswordApiDto<TKey> password)
         {
             var userChangePasswordDto = _mapper.Map<TUserChangePasswordDto>(password);
 
             await _identityService.UserChangePasswordAsync(userChangePasswordDto);
 
-            return Ok();
+            return NoContent();
         }
 
-		[HttpGet("{id}/RoleClaims")]
-		public async Task<ActionResult<RoleClaimsApiDto<TKey>>> GetRoleClaims(TKey id, string claimSearchText, int page = 1, int pageSize = 10)
-		{
-			var roleClaimsDto = await _identityService.GetUserRoleClaimsAsync(id.ToString(), claimSearchText, page, pageSize);
-			var roleClaimsApiDto = _mapper.Map<RoleClaimsApiDto<TKey>>(roleClaimsDto);
+        [HttpGet("{id}/RoleClaims")]
+        public async Task<ActionResult<RoleClaimsApiDto<TKey>>> GetRoleClaims(TKey id, string claimSearchText, int page = 1, int pageSize = 10)
+        {
+            var roleClaimsDto = await _identityService.GetUserRoleClaimsAsync(id.ToString(), claimSearchText, page, pageSize);
+            var roleClaimsApiDto = _mapper.Map<RoleClaimsApiDto<TKey>>(roleClaimsDto);
 
-			return Ok(roleClaimsApiDto);
-		}
+            return Ok(roleClaimsApiDto);
+        }
 
         [HttpGet("ClaimType/{claimType}/ClaimValue/{claimValue}")]
         public async Task<ActionResult<TUsersDto>> GetClaimUsers(string claimType, string claimValue, int page = 1, int pageSize = 10)

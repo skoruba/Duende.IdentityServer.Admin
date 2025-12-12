@@ -26,6 +26,7 @@ using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Identity;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Extensions;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySql;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.PostgreSQL;
@@ -68,7 +69,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
             services
                 .AddTransient<IAuditLoggingRepository<TAuditLog>,
                     AuditLoggingRepository<TAuditLoggingDbContext, TAuditLog>>();
-            
+
             services.AddTransient<IAuditLogRepository<TAuditLog>, AuditLogRepository<TAuditLoggingDbContext, TAuditLog>>();
             services.AddTransient<IAuditLogService, AuditLogService<TAuditLog>>();
 
@@ -134,6 +135,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
             services.TryAddTransient(typeof(IGenericControllerLocalizer<>), typeof(GenericControllerLocalizer<>));
 
             services.AddControllersWithViews(o => { o.Conventions.Add(new GenericControllerRouteConvention()); })
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+                })
                 .AddDataAnnotationsLocalization()
                 .ConfigureApplicationPartManager(m =>
                 {
@@ -160,13 +165,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
         /// <param name="configuration"></param>
         /// <param name="databaseMigrationsConfiguration"></param>
         public static void AddDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext,
-            TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAuditLog>(this IServiceCollection services, IConfiguration configuration, DatabaseMigrationsConfiguration databaseMigrationsConfiguration)
+            TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TConfigurationRulesDbContext, TAuditLog>(this IServiceCollection services, IConfiguration configuration, DatabaseMigrationsConfiguration databaseMigrationsConfiguration)
             where TIdentityDbContext : DbContext
             where TPersistedGrantDbContext : DbContext, IAdminPersistedGrantDbContext
             where TConfigurationDbContext : DbContext, IAdminConfigurationDbContext
             where TLogDbContext : DbContext, IAdminLogDbContext
             where TAuditLoggingDbContext : DbContext, IAuditLoggingDbContext<TAuditLog>
             where TDataProtectionDbContext : DbContext, IDataProtectionKeyContext
+            where TConfigurationRulesDbContext : DbContext, IConfigurationRulesDbContext
             where TAuditLog : AuditLog
         {
             var databaseProvider = configuration.GetSection(nameof(DatabaseProviderConfiguration)).Get<DatabaseProviderConfiguration>();
@@ -175,13 +181,13 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
             switch (databaseProvider.ProviderType)
             {
                 case DatabaseProviderType.SqlServer:
-                    services.RegisterSqlServerDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAuditLog>(connectionStrings, databaseMigrationsConfiguration);
+                    services.RegisterSqlServerDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TConfigurationRulesDbContext, TAuditLog>(connectionStrings, databaseMigrationsConfiguration);
                     break;
                 case DatabaseProviderType.PostgreSQL:
-                    services.RegisterNpgSqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAuditLog>(connectionStrings, databaseMigrationsConfiguration);
+                    services.RegisterNpgSqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TConfigurationRulesDbContext, TAuditLog>(connectionStrings, databaseMigrationsConfiguration);
                     break;
                 case DatabaseProviderType.MySql:
-                    services.RegisterMySqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAuditLog>(connectionStrings, databaseMigrationsConfiguration);
+                    services.RegisterMySqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TConfigurationRulesDbContext, TAuditLog>(connectionStrings, databaseMigrationsConfiguration);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(databaseProvider.ProviderType), $@"The value needs to be one of {string.Join(", ", Enum.GetNames(typeof(DatabaseProviderType)))}.");
@@ -404,15 +410,15 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
         {
             services.AddSingleton(configuration.GetSection(nameof(IdentityServerData))
                 .Get<IdentityServerData>());
-            
+
             services.AddSingleton(configuration.GetSection(nameof(IdentityData))
                 .Get<IdentityData>());
-            
+
             services.AddDataProtection<TIdentityServerDataProtectionDbContext>(configuration);
-            
+
             services.AddScoped<ControllerExceptionFilterAttribute>();
             services.AddScoped<IApiErrorResources, ApiErrorResources>();
-            
+
             var profileTypes = new HashSet<Type>
             {
                 typeof(IdentityMapperProfile<TRoleDto, TUserRolesDto, TKey, TUserClaimsDto, TUserClaimDto, TUserProviderDto, TUserProvidersDto, TUserChangePasswordDto, TRoleClaimDto, TRoleClaimsDto>)
@@ -432,10 +438,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
             services.AddMvcServices<TUserDto, TRoleDto, TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken,
                 TUsersDto, TRolesDto, TUserRolesDto, TUserClaimsDto,
                 TUserProviderDto, TUserProvidersDto, TUserChangePasswordDto, TRoleClaimsDto, TUserClaimDto, TRoleClaimDto>();
-            
+
             services.AddAuditEventLogging<TAdminAuditLogDbContext, TAuditLog>(configuration);
         }
-        
+
         public static string GetInformationalVersion(this Type typeInAssembly)
         {
             ArgumentNullException.ThrowIfNull(typeInAssembly);

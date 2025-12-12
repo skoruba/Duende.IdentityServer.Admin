@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Skoruba.AuditLogging.EntityFramework.DbContexts;
 using Skoruba.AuditLogging.EntityFramework.Entities;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
 
@@ -31,7 +32,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySq
         /// <param name="connectionStrings"></param>
         /// <param name="databaseMigrations"></param>
         public static void RegisterMySqlDbContexts<TIdentityDbContext, TConfigurationDbContext,
-            TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAuditLog>(this IServiceCollection services,
+            TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TConfigurationRulesDbContext, TAuditLog>(this IServiceCollection services,
             ConnectionStringsConfiguration connectionStrings,
             DatabaseMigrationsConfiguration databaseMigrations)
             where TIdentityDbContext : DbContext
@@ -40,10 +41,11 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySq
             where TLogDbContext : DbContext, IAdminLogDbContext
             where TAuditLoggingDbContext : DbContext, IAuditLoggingDbContext<TAuditLog>
             where TDataProtectionDbContext : DbContext, IDataProtectionKeyContext
+            where TConfigurationRulesDbContext : DbContext, IConfigurationRulesDbContext
             where TAuditLog : AuditLog
         {
             var migrationsAssembly = typeof(DatabaseExtensions).GetTypeInfo().Assembly.GetName().Name;
-            
+
             // Config DB for identity
             services.AddDbContext<TIdentityDbContext>(options =>
                 options.UseMySql(connectionStrings.IdentityDbConnection, ServerVersion.AutoDetect(connectionStrings.IdentityDbConnection), sql => sql.MigrationsAssembly(databaseMigrations.IdentityDbMigrationsAssembly ?? migrationsAssembly)));
@@ -66,9 +68,13 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySq
                 optionsSql => optionsSql.MigrationsAssembly(databaseMigrations.AdminAuditLogDbMigrationsAssembly ?? migrationsAssembly)));
 
             // DataProtectionKey DB from existing connection
-            if(!string.IsNullOrEmpty(connectionStrings.DataProtectionDbConnection))
+            if (!string.IsNullOrEmpty(connectionStrings.DataProtectionDbConnection))
                 services.AddDbContext<TDataProtectionDbContext>(options => options.UseMySql(connectionStrings.DataProtectionDbConnection, ServerVersion.AutoDetect(connectionStrings.DataProtectionDbConnection),
                     optionsSql => optionsSql.MigrationsAssembly(databaseMigrations.DataProtectionDbMigrationsAssembly ?? migrationsAssembly)));
+
+            // ConfigurationRules DB from existing connection
+            services.AddDbContext<TConfigurationRulesDbContext>(options => options.UseMySql(connectionStrings.ConfigurationRulesDbConnection, ServerVersion.AutoDetect(connectionStrings.ConfigurationRulesDbConnection),
+                optionsSql => optionsSql.MigrationsAssembly(databaseMigrations.ConfigurationRulesDbMigrationsAssembly ?? migrationsAssembly)));
         }
 
         /// <summary>
@@ -109,7 +115,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySq
                 optionsSql => optionsSql.MigrationsAssembly(migrationsAssembly)));
 
         }
-        
+
         /// <summary>
         /// Add Data Protection DbContext for MySQL
         /// </summary>

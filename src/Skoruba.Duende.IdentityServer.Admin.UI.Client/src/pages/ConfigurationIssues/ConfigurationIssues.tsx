@@ -41,10 +41,12 @@ const ConfigurationIssues: React.FC = () => {
       header: t("ConfigurationIssues.IssueType"),
       cell: ({ row }: { row: { original: client.ConfigurationIssueDto } }) => {
         const r = row.original;
-        const label =
-          r.issueType === client.ConfigurationIssueTypeView.Warning
-            ? t("ConfigurationIssues.IssueTypeWarning")
-            : t("ConfigurationIssues.IssueTypeRecommendation");
+        const isWarning =
+          String(r.issueType) === "Warning" ||
+          r.issueType === client.ConfigurationIssueTypeView.Warning;
+        const label = isWarning
+          ? t("ConfigurationIssues.IssueTypeWarning")
+          : t("ConfigurationIssues.IssueTypeRecommendation");
 
         return (
           <div className="whitespace-nowrap">
@@ -57,21 +59,17 @@ const ConfigurationIssues: React.FC = () => {
       accessorKey: "message",
       header: t("ConfigurationIssues.Message"),
       cell: ({ row }: { row: { original: client.ConfigurationIssueDto } }) => {
-        return t(
-          `ConfigurationIssues.IssueMessages.${row.original.message}` as any
-        );
+        return row.original.message;
       },
     },
     {
       header: t("ConfigurationIssues.Fix"),
       cell: ({ row }: { row: { original: client.ConfigurationIssueDto } }) => {
+        const fixDescription = row.original.fixDescription;
+        if (!fixDescription) return null;
+
         return (
-          <TooltipField
-            side="left"
-            description={t(
-              `ConfigurationIssues.IssuesFix.${row.original.message}` as any
-            )}
-          >
+          <TooltipField side="left" description={fixDescription}>
             <Hammer />
           </TooltipField>
         );

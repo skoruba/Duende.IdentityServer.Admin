@@ -13,6 +13,8 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared.csproj" />
 		<ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework\Skoruba.Duende.IdentityServer.Admin.EntityFramework.csproj" />
+		<ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.csproj" />
+		<ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

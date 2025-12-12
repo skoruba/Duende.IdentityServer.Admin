@@ -3,9 +3,9 @@
 
 namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration
 {
-    public class DatabaseMigrationsConfiguration
-    {
-        public bool ApplyDatabaseMigrations { get; set; } = false;
+	public class DatabaseMigrationsConfiguration
+	{
+		public bool ApplyDatabaseMigrations { get; set; } = false;
 
 		public string ConfigurationDbMigrationsAssembly { get; set; }
 
@@ -19,11 +19,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Conf
 
 		public string DataProtectionDbMigrationsAssembly { get; set; }
 
+		public string ConfigurationRulesDbMigrationsAssembly { get; set; }
+
 		public void SetMigrationsAssemblies(string commonMigrationsAssembly)
 		{
 			AdminAuditLogDbMigrationsAssembly = commonMigrationsAssembly;
 			AdminLogDbMigrationsAssembly = commonMigrationsAssembly;
 			ConfigurationDbMigrationsAssembly = commonMigrationsAssembly;
+			ConfigurationRulesDbMigrationsAssembly = commonMigrationsAssembly;
 			DataProtectionDbMigrationsAssembly = commonMigrationsAssembly;
 			IdentityDbMigrationsAssembly = commonMigrationsAssembly;
 			PersistedGrantDbMigrationsAssembly = commonMigrationsAssembly;

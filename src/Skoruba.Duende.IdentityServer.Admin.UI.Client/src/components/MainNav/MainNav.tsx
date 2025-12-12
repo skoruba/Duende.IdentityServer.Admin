@@ -45,6 +45,7 @@ import {
   KeysUrl,
   AuditLogsUrl,
   ConfigurationIssuesUrl,
+  ConfigurationRulesUrl,
 } from "@/routing/Urls";
 import { getConfigurationIssues } from "@/services/DashboardService";
 import {
@@ -62,6 +63,7 @@ import {
   LayoutGrid,
   Menu,
   Loader2,
+  Settings,
 } from "lucide-react";
 
 import { ACCENTS } from "@/pages/Home/Home";
@@ -199,6 +201,13 @@ const monitoringItems: NavItem[] = [
     icon: Cog,
     kind: "monitoring",
   },
+  {
+    translationKey: "Home.ConfigurationRules",
+    href: ConfigurationRulesUrl,
+    activeBasePaths: [ConfigurationRulesUrl],
+    icon: Settings,
+    kind: "monitoring",
+  },
 ];
 
 function NavDropdown({
@@ -307,7 +316,7 @@ export function MainNav() {
 
         <NavDropdown
           label={t("Home.IdentityManagement")}
-          icon={<ShieldCheck className="h-4 w-4" />}
+          icon={<Users className="h-4 w-4" />}
         >
           <div className="grid min-w-[360px] grid-cols-1 gap-2">
             {identityItems.map((it) => renderDropdownItem(it))}
@@ -316,7 +325,7 @@ export function MainNav() {
 
         <NavDropdown
           label={t("Home.ProvidersAndKeys")}
-          icon={<ShieldCheck className="h-4 w-4" />}
+          icon={<KeyRound className="h-4 w-4" />}
         >
           <div className="grid min-w-[360px] grid-cols-1 gap-2">
             {providersKeysItems.map((it) => renderDropdownItem(it))}
@@ -367,6 +376,7 @@ export function MainNav() {
                 </Badge>
               </Link>
             </DropdownMenuItem>
+            {renderDropdownItem(monitoringItems[2])}
           </div>
         </NavDropdown>
       </div>

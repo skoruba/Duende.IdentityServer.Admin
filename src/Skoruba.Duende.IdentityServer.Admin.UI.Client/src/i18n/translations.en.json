@@ -22,6 +22,8 @@
     "AuditLogsDescription": "Overview of Audit logs for the last 30 days",
     "ConfigurationIssues": "Configuration Issues",
     "ConfigurationIssuesDescription": "Overview of configuration issues",
+    "ConfigurationRules": "Configuration Rules",
+    "ConfigurationRulesDescription": "Manage configuration validation rules",
     "Keys": "Keys",
     "KeysDescription": "Manage your keys",
     "Overview": "Overview",
@@ -109,6 +111,7 @@
     "UrlRequired": "Please enter a valid URL"
   },
   "Actions": {
+    "Actions": "Actions",
     "Hooray": "Hooray! 🎉",
     "Save": "Save",
     "Delete": "Delete",
@@ -774,6 +777,36 @@
       "1": "Go to the client details → Advanced → Grant Types and replace 'password' with 'authorization_code'.",
       "2": "Go to the client details → Advanced → Authorization → PKCE and enable 'Require PKCE'."
     }
+  },
+  "ConfigurationRules": {
+    "PageTitle": "Configuration Rules",
+    "AddNewRule": "Add New Rule",
+    "EditRule": "Edit Rule",
+    "DeleteRule": "Delete Rule",
+    "ConfirmDelete": "Are you sure you want to delete this rule?",
+    "ConfirmDeleteTitle": "Delete Rule",
+    "ConfirmDeleteMessage": "Are you sure you want to delete this rule?",
+    "RuleType": "Rule Type",
+    "ResourceType": "Resource Type",
+    "IssueType": "Issue Type",
+    "Enabled": "Enabled",
+    "MessageTemplate": "Message Template",
+    "FixDescription": "Fix Description",
+    "Configuration": "Configuration",
+    "CreatedAt": "Created At",
+    "UpdatedAt": "Updated At",
+    "Actions": "Actions",
+    "NoRulesFound": "No rules found",
+    "RuleCreated": "Rule created successfully",
+    "RuleUpdated": "Rule updated successfully",
+    "RuleDeleted": "Rule deleted successfully",
+    "Error": "Error",
+    "Warning": "Warning",
+    "Recommendation": "Recommendation",
+    "Client": "Client",
+    "ApiScope": "Api Scope",
+    "ApiResource": "Api Resource",
+    "IdentityResource": "Identity Resource"
   },
   "AuditLogs": {
     "PageTitle": "Audit Logs",

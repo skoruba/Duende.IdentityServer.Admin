@@ -3,9 +3,14 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Resources;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Repositories;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Repositories.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Interfaces;
@@ -39,6 +44,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Extensions
             services.AddTransient<IDashboardRepository, DashboardRepository<TConfigurationDbContext>>();
             services.AddTransient<IConfigurationIssuesRepository, ConfigurationIssuesRepository<TConfigurationDbContext>>();
 
+            // Configuration Rules
+            services.AddScoped<IConfigurationRulesDbContext>(sp => sp.GetRequiredService<ConfigurationRulesDbContext>());
+            services.AddTransient<IConfigurationRulesRepository, ConfigurationRulesRepository>();
+            services.AddScoped<IConfigurationRuleValidatorFactory, ConfigurationRuleValidatorFactory<TConfigurationDbContext>>();
+            services.AddScoped<IConfigurationRuleMetadataProvider, ConfigurationRuleMetadataProvider>();
+
             //Services
             services.AddTransient<IClientService, ClientService>();
             services.AddTransient<IApiResourceService, ApiResourceService>();
@@ -50,6 +61,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Extensions
             services.AddTransient<ILogService, LogService>();
             services.AddTransient<IDashboardService, DashboardService>();
             services.AddTransient<IConfigurationIssuesService, ConfigurationIssuesService>();
+            services.AddTransient<IConfigurationRulesService, ConfigurationRulesService>();
 
             //Resources
             services.AddScoped<IApiResourceServiceResources, ApiResourceServiceResources>();

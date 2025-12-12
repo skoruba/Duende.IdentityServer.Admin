@@ -89,13 +89,13 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<TRoleDto>> Post([FromBody]TRoleDto role)
+        public async Task<ActionResult<TRoleDto>> Post([FromBody] TRoleDto role)
         {
             if (!EqualityComparer<TKey>.Default.Equals(role.Id, default))
             {
                 return BadRequest(_errorResources.CannotSetId());
             }
- 
+
             var (identityResult, roleId) = await _identityService.CreateRoleAsync(role);
             var createdRole = await _identityService.GetRoleAsync(roleId.ToString());
 
@@ -103,15 +103,19 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody]TRoleDto role)
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Put([FromBody] TRoleDto role)
         {
             await _identityService.GetRoleAsync(role.Id.ToString());
             await _identityService.UpdateRoleAsync(role);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> Delete(TKey id)
         {
             var roleDto = new TRoleDto { Id = id };
@@ -119,7 +123,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
             await _identityService.GetRoleAsync(id.ToString());
             await _identityService.DeleteRoleAsync(roleDto);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpGet("{id}/Users")]
@@ -140,7 +144,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpPost("Claims")]
-        public async Task<IActionResult> PostRoleClaims([FromBody]RoleClaimApiDto<TKey> roleClaims)
+        [ProducesResponseType(typeof(RoleClaimApiDto<>), 201)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<RoleClaimApiDto<TKey>>> PostRoleClaims([FromBody] RoleClaimApiDto<TKey> roleClaims)
         {
             var roleClaimsDto = _mapper.Map<TRoleClaimsDto>(roleClaims);
 
@@ -151,11 +157,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
 
             await _identityService.CreateRoleClaimsAsync(roleClaimsDto);
 
-            return Ok();
+            return CreatedAtAction(nameof(GetRoleClaims), new { id = roleClaimsDto.RoleId }, roleClaims);
         }
 
         [HttpPut("Claims")]
-        public async Task<IActionResult> PutRoleClaims([FromBody]RoleClaimApiDto<TKey> roleClaims)
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> PutRoleClaims([FromBody] RoleClaimApiDto<TKey> roleClaims)
         {
             var roleClaimsDto = _mapper.Map<TRoleClaimsDto>(roleClaims);
 
@@ -166,10 +175,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
 
             await _identityService.UpdateRoleClaimsAsync(roleClaimsDto);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("{id}/Claims")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteRoleClaims(TKey id, int claimId)
         {
             var roleDto = new TRoleClaimsDto { ClaimId = claimId, RoleId = id };
@@ -177,7 +188,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
             await _identityService.GetRoleClaimAsync(roleDto.RoleId.ToString(), roleDto.ClaimId);
             await _identityService.DeleteRoleClaimAsync(roleDto);
 
-            return Ok();
+            return NoContent();
         }
     }
 }

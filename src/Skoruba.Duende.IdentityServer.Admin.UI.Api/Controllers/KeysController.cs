@@ -46,11 +46,13 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> Delete(string id)
         {
             await _keyService.DeleteKeyAsync(id);
 
-            return Ok();
+            return NoContent();
         }
     }
 }

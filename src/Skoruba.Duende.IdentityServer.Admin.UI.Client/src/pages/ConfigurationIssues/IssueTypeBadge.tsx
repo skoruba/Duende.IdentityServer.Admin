@@ -8,7 +8,8 @@ type Props = {
 };
 
 export function IssueTypeBadge({ type, label }: Props) {
-  const isWarning = type === client.ConfigurationIssueTypeView.Warning;
+  const isWarning =
+    String(type) === "Warning" || type === client.ConfigurationIssueTypeView.Warning;
 
   return (
     <Badge
