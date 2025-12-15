@@ -34,6 +34,8 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
 }) => {
   const { t } = useTranslation();
   const [selectedRuleType, setSelectedRuleType] = React.useState<string>("");
+  const requiredFieldMessage = (label: string) =>
+    t("Validation.FieldRequired", { field: label });
 
   // Get current metadata based on selected or existing rule type
   const currentMetadata = metadata?.find(
@@ -51,7 +53,10 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
     const baseSchema = {
       isEnabled: z.boolean(),
       issueType: z.enum(["Warning", "Recommendation", "Error"]),
-      messageTemplate: z.string().min(1, t("Validation.Required")),
+      messageTemplate: z.string().min(
+        1,
+        requiredFieldMessage(t("ConfigurationRules.MessageTemplate"))
+      ),
       fixDescription: z.string().optional(),
     };
 
@@ -66,9 +71,16 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
 
       switch (param.type) {
         case "string":
-          parameterFields[paramName] = param.required
-            ? z.string().min(1, t("Validation.Required"))
-            : z.string().optional();
+          {
+            const fieldLabel =
+              param.displayName || paramName || "Configuration parameter";
+            parameterFields[paramName] = param.required
+              ? z.string().min(1, {
+                  message: requiredFieldMessage(fieldLabel),
+                })
+              : z.string().optional();
+          }
+          break;
           break;
 
         case "number":
@@ -89,9 +101,17 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
           break;
 
         case "array":
-          parameterFields[paramName] = param.required
-            ? z.array(z.string()).min(1, t("Validation.AtLeastOneItem"))
-            : z.array(z.string()).optional();
+          {
+            const fieldLabel =
+              param.displayName || paramName || "Configuration parameter";
+            parameterFields[paramName] = param.required
+              ? z.array(z.string()).min(1, {
+                  message: t("Validation.AtLeastOneItemField", {
+                    field: fieldLabel,
+                  }),
+                })
+              : z.array(z.string()).optional();
+          }
           break;
       }
     });

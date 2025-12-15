@@ -9,7 +9,10 @@ import {
   createApiResource,
   updateApiResource,
 } from "@/services/ApiResourceServices";
-import { formSchema, ApiResourceFormData } from "./ApiResourceSchema";
+import {
+  createApiResourceSchema,
+  ApiResourceFormData,
+} from "./ApiResourceSchema";
 import ApiResourceTabs from "./ApiResourceTabs";
 import { ApiResourcesUrl } from "@/routing/Urls";
 import { Trans, useTranslation } from "react-i18next";
@@ -45,7 +48,7 @@ const ApiResourceForm: React.FC<ApiResourceFormProps> = ({
   const queryClient = useQueryClient();
 
   const form = useForm<ApiResourceFormData>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createApiResourceSchema(t)),
     defaultValues,
   });
 

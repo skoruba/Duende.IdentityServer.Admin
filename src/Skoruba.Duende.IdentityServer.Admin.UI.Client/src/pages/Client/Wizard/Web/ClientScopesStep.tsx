@@ -22,21 +22,25 @@ import {
   IdentityResourceCreateUrl,
 } from "@/routing/Urls";
 import { Tip } from "@/components/Tip/Tip";
+import { TFunction } from "i18next";
 
 export type ScopesFormData = {
   scopes: ClientScope[];
 };
 
-const formSchema = z.object({
-  scopes: z
-    .array(
-      z.object({
-        id: z.string(),
-        label: z.string(),
-      })
-    )
-    .min(1),
-});
+const createFormSchema = (t: TFunction) =>
+  z.object({
+    scopes: z
+      .array(
+        z.object({
+          id: z.string(),
+          label: z.string(),
+        })
+      )
+      .min(1, {
+        message: t("Client.Wizard.Validation.ScopesRequired"),
+      }),
+  });
 
 const defaultValues: ScopesFormData = {
   scopes: [],
@@ -50,7 +54,7 @@ export const ClientScopesStep = () => {
   const { excludeOptions, onValidation } = useClientWizard();
 
   const form = useForm<ScopesFormData>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createFormSchema(t)),
     defaultValues,
     mode: "onChange",
   });

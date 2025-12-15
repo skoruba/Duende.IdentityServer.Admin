@@ -1,3 +1,4 @@
+import { TFunction } from "i18next";
 import { z } from "zod";
 import { client } from "@skoruba/duende.identityserver.admin.api.client";
 
@@ -6,8 +7,8 @@ const DualListTypeSchema = z.object({
   label: z.string(),
 });
 
-export const formSchema = z.object({
-  name: z.string().min(1),
+const baseIdentityResourceSchema = z.object({
+  name: z.string(),
   displayName: z.string().optional(),
   description: z.string().optional(),
   enabled: z.boolean(),
@@ -17,7 +18,16 @@ export const formSchema = z.object({
   userClaims: z.array(DualListTypeSchema).optional(),
 });
 
-export type IdentityResourceFormData = z.infer<typeof formSchema>;
+export const createIdentityResourceSchema = (t: TFunction) =>
+  baseIdentityResourceSchema.extend({
+    name: z.string().min(1, {
+      message: t("Validation.FieldRequired", {
+        field: t("IdentityResource.Section.Label.Name_Label"),
+      }),
+    }),
+  });
+
+export type IdentityResourceFormData = z.infer<typeof baseIdentityResourceSchema>;
 
 export const defaultIdentityResourceFormData: IdentityResourceFormData = {
   name: "",

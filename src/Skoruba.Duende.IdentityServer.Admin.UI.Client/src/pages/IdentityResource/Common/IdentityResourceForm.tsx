@@ -9,7 +9,10 @@ import {
   createIdentityResource,
   updateIdentityResource,
 } from "@/services/IdentityResourceServices";
-import { formSchema, IdentityResourceFormData } from "./IdentityResourceSchema";
+import {
+  createIdentityResourceSchema,
+  IdentityResourceFormData,
+} from "./IdentityResourceSchema";
 import IdentityResourceTabs from "./IdentityResourceTabs";
 import { IdentityResourcesUrl } from "@/routing/Urls";
 import { useTranslation } from "react-i18next";
@@ -44,7 +47,7 @@ const IdentityResourceForm: React.FC<Props> = ({
   const queryClient = useQueryClient();
 
   const form = useForm<IdentityResourceFormData>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createIdentityResourceSchema(t)),
     defaultValues,
   });
 

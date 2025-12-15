@@ -10,20 +10,34 @@ import {
   useTrackErrorState,
 } from "@/components/hooks/useTrackDirtyState";
 import { Trans, useTranslation } from "react-i18next";
+import { TFunction } from "i18next";
 import { FormRow } from "@/components/FormRow/FormRow";
 import { RandomValues } from "@/helpers/CryptoHelper";
 import { useClientWizard } from "@/contexts/ClientWizardContext";
 import { Tip } from "@/components/Tip/Tip";
 import { Shuffle } from "lucide-react";
 
-const formSchema = z.object({
-  clientId: z.string().min(1),
-  clientName: z.string().min(1),
-  description: z.string().optional(),
-  requireConsent: z.boolean().optional(),
-});
+const createFormSchema = (t: TFunction) => {
+  const clientIdLabel = t("Client.Label.ClientId_Label");
+  const clientNameLabel = t("Client.Label.ClientName_Label");
+  const requiredField = (label: string) =>
+    t("Validation.FieldRequired", {
+      field: label,
+    });
 
-export type BasicsFormData = z.infer<typeof formSchema>;
+  return z.object({
+    clientId: z.string().min(1, {
+      message: requiredField(clientIdLabel),
+    }),
+    clientName: z.string().min(1, {
+      message: requiredField(clientNameLabel),
+    }),
+    description: z.string().optional(),
+    requireConsent: z.boolean().optional(),
+  });
+};
+
+export type BasicsFormData = z.infer<ReturnType<typeof createFormSchema>>;
 
 const defaultValues: BasicsFormData = {
   clientId: "",
@@ -42,7 +56,7 @@ export const ClientBasicsStep = () => {
 
   const form = useForm<BasicsFormData>({
     defaultValues,
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createFormSchema(t)),
     mode: "onChange",
   });
 

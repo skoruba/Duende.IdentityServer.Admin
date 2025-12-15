@@ -1,15 +1,13 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useBlocker, useNavigate } from "react-router-dom";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { FieldValues, UseFormReturn } from "react-hook-form";
@@ -64,19 +62,23 @@ export function useConfirmUnsavedChanges(isDirty: boolean) {
 
   const handleConfirm = () => {
     setOpen(false);
+    blocker.reset?.();
     resolver.current?.(true);
   };
 
   const handleCancel = () => {
     setOpen(false);
+    blocker.reset?.();
     resolver.current?.(false);
   };
 
   useEffect(() => {
     if (blocker.state === "blocked") {
       confirm().then((confirmed) => {
-        if (confirmed) blocker.proceed();
-        else blocker.reset();
+        if (confirmed) {
+          blocker.proceed();
+        }
+        blocker.reset();
       });
     }
   }, [blocker, confirm]);
@@ -93,30 +95,24 @@ export function useConfirmUnsavedChanges(isDirty: boolean) {
   }, [isDirty]);
 
   const DialogCmp = (
-    <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>
-            {t("Actions.UnsavedChangesTitle")}
-          </AlertDialogTitle>
-          <AlertDialogDescription>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent onInteractOutside={(event) => event.preventDefault()}>
+        <DialogHeader>
+          <DialogTitle>{t("Actions.UnsavedChangesTitle")}</DialogTitle>
+          <DialogDescription>
             {t("Actions.UnsavedChangesConfirm")}
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel asChild>
-            <Button type="button" variant="outline" onClick={handleCancel}>
-              {t("Actions.Cancel")}
-            </Button>
-          </AlertDialogCancel>
-          <AlertDialogAction asChild variant="destructive">
-            <Button type="button" onClick={handleConfirm}>
-              {t("Actions.Leave")}
-            </Button>
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button type="button" variant="outline" onClick={handleCancel}>
+            {t("Actions.Cancel")}
+          </Button>
+          <Button type="button" variant="destructive" onClick={handleConfirm}>
+            {t("Actions.Leave")}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 
   return { confirm, DialogCmp };

@@ -113,7 +113,9 @@
     "SecretHashTypeRequiredForSharedSecret": "A hash type must be selected for SharedSecret.",
     "UrlRequired": "Please enter a valid URL",
     "Required": "This field is required",
-    "AtLeastOneItem": "At least one item is required"
+    "FieldRequired": "{{field}} is required.",
+    "AtLeastOneItem": "At least one item is required",
+    "AtLeastOneItemField": "At least one item is required for {{field}}."
   },
   "Actions": {
     "Actions": "Actions",
@@ -379,7 +381,11 @@
       "ConfidentialClientType": "Confidential client",
       "PublicClientType": "Public client",
       "MachineClientType": "Machine client",
-      "HighSecureClientType": "High Secure Web Client"
+      "HighSecureClientType": "High Secure Web Client",
+      "Validation": {
+        "RedirectUrisRequired": "Add at least one redirect URI and click Add item.",
+        "ScopesRequired": "Select at least one scope before continuing."
+      }
     },
     "Summary": {
       "ClientInfo": "Client Info",

@@ -18,7 +18,9 @@ import { Tip } from "@/components/Tip/Tip";
 
 const formSchema = (t: TFunction) =>
   z.object({
-    redirectUris: z.array(urlValidationSchema(t)).min(1),
+    redirectUris: z
+      .array(urlValidationSchema(t))
+      .min(1, { message: t("Client.Wizard.Validation.RedirectUrisRequired") }),
     logoutUri: urlValidationSchema(t).or(z.literal("")).optional(),
   });
 

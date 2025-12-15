@@ -6,7 +6,10 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import { useMutation, useQueryClient } from "react-query";
 import { createApiScope, updateApiScope } from "@/services/ApiScopeServices";
-import { formSchema, ApiScopeFormData } from "./ApiScopeSchema";
+import {
+  createApiScopeSchema,
+  ApiScopeFormData,
+} from "./ApiScopeSchema";
 import ApiScopeTabs from "./ApiScopeTabs";
 import { ApiScopesUrl } from "@/routing/Urls";
 import { useTranslation } from "react-i18next";
@@ -39,7 +42,7 @@ const ApiScopeForm: React.FC<ApiScopeFormProps> = ({
   const queryClient = useQueryClient();
 
   const form = useForm<ApiScopeFormData>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createApiScopeSchema(t)),
     defaultValues,
   });
 

@@ -1,4 +1,5 @@
 import { IApiResourceApiDto } from "@skoruba/duende.identityserver.admin.api.client/dist/types/client";
+import { TFunction } from "i18next";
 import { z } from "zod";
 
 const DualListTypeSchema = z.object({
@@ -6,8 +7,8 @@ const DualListTypeSchema = z.object({
   label: z.string(),
 });
 
-export const formSchema = z.object({
-  name: z.string().min(1),
+const baseApiResourceSchema = z.object({
+  name: z.string(),
   displayName: z.string().optional(),
   description: z.string().optional(),
   showInDiscoveryDocument: z.boolean(),
@@ -18,7 +19,16 @@ export const formSchema = z.object({
   scopes: z.array(DualListTypeSchema).optional(),
 });
 
-export type ApiResourceFormData = z.infer<typeof formSchema>;
+export const createApiResourceSchema = (t: TFunction) =>
+  baseApiResourceSchema.extend({
+    name: z.string().min(1, {
+      message: t("Validation.FieldRequired", {
+        field: t("ApiResource.Section.Label.Name_Label"),
+      }),
+    }),
+  });
+
+export type ApiResourceFormData = z.infer<typeof baseApiResourceSchema>;
 
 export const defaultApiResourceFormData: ApiResourceFormData = {
   name: "",
