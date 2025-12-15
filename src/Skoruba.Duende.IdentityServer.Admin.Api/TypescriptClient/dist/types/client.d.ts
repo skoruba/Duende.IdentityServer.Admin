@@ -988,10 +988,13 @@ export interface IClientClaimsApiDto {
 export declare class ConfigurationIssueDto implements IConfigurationIssueDto {
     resourceId: number;
     resourceName: string | undefined;
-    message: ConfigurationIssueMessageEnum;
+    message: string | undefined;
     issueType: ConfigurationIssueTypeView;
     resourceType: ConfigurationResourceType;
     fixDescription: string | undefined;
+    messageParameters: {
+        [key: string]: string;
+    } | undefined;
     constructor(data?: IConfigurationIssueDto);
     init(_data?: any): void;
     static fromJS(data: any): ConfigurationIssueDto;
@@ -1000,31 +1003,27 @@ export declare class ConfigurationIssueDto implements IConfigurationIssueDto {
 export interface IConfigurationIssueDto {
     resourceId: number;
     resourceName: string | undefined;
-    message: ConfigurationIssueMessageEnum;
+    message: string | undefined;
     issueType: ConfigurationIssueTypeView;
     resourceType: ConfigurationResourceType;
     fixDescription: string | undefined;
-}
-export declare enum ConfigurationIssueMessageEnum {
-    ObsoleteImplicitGrant = 0,
-    ObsoletePasswordGrant = 1,
-    MissingPkce = 2,
-    ClientRedirectUrisMustUseHttps = 3,
-    ClientAccessTokenLifetimeTooLong = 4,
-    ApiScopeNameMustStartWith = 5,
-    ApiScopeMustHaveDisplayName = 6
+    messageParameters: {
+        [key: string]: string;
+    } | undefined;
 }
 export declare enum ConfigurationIssueTypeView {
-    Warning = 0,
-    Recommendation = 1
+    Warning = "Warning",
+    Recommendation = "Recommendation",
+    Error = "Error"
 }
 export declare enum ConfigurationResourceType {
-    Client = 0,
-    IdentityResource = 1,
-    ApiResource = 2,
-    ApiScope = 3
+    Client = "Client",
+    IdentityResource = "IdentityResource",
+    ApiResource = "ApiResource",
+    ApiScope = "ApiScope"
 }
 export declare class ConfigurationIssueSummaryDto implements IConfigurationIssueSummaryDto {
+    errors: number;
     warnings: number;
     recommendations: number;
     constructor(data?: IConfigurationIssueSummaryDto);
@@ -1033,6 +1032,7 @@ export declare class ConfigurationIssueSummaryDto implements IConfigurationIssue
     toJSON(data?: any): any;
 }
 export interface IConfigurationIssueSummaryDto {
+    errors: number;
     warnings: number;
     recommendations: number;
 }
@@ -1079,25 +1079,25 @@ export interface IConfigurationRuleDto {
     updatedAt: Date | undefined;
 }
 export declare enum ConfigurationRuleType {
-    ObsoleteImplicitGrant = 0,
-    ObsoletePasswordGrant = 1,
-    MissingPkce = 2,
-    ClientRedirectUrisMustUseHttps = 3,
-    ClientMustHaveAllowedScopes = 4,
-    ClientAccessTokenLifetimeTooLong = 5,
-    ClientRefreshTokenLifetimeTooLong = 6,
-    ApiScopeNameMustStartWith = 7,
-    ApiScopeNameMustNotContain = 8,
-    ApiScopeMustHaveDisplayName = 9,
-    ApiResourceMustHaveScopes = 10,
-    ApiResourceNameMustStartWith = 11,
-    IdentityResourceMustBeEnabled = 12,
-    IdentityResourceNameMustStartWith = 13
+    ObsoleteImplicitGrant = "ObsoleteImplicitGrant",
+    ObsoletePasswordGrant = "ObsoletePasswordGrant",
+    MissingPkce = "MissingPkce",
+    ClientRedirectUrisMustUseHttps = "ClientRedirectUrisMustUseHttps",
+    ClientMustHaveAllowedScopes = "ClientMustHaveAllowedScopes",
+    ClientAccessTokenLifetimeTooLong = "ClientAccessTokenLifetimeTooLong",
+    ClientRefreshTokenLifetimeTooLong = "ClientRefreshTokenLifetimeTooLong",
+    ApiScopeNameMustStartWith = "ApiScopeNameMustStartWith",
+    ApiScopeNameMustNotContain = "ApiScopeNameMustNotContain",
+    ApiScopeMustHaveDisplayName = "ApiScopeMustHaveDisplayName",
+    ApiResourceMustHaveScopes = "ApiResourceMustHaveScopes",
+    ApiResourceNameMustStartWith = "ApiResourceNameMustStartWith",
+    IdentityResourceMustBeEnabled = "IdentityResourceMustBeEnabled",
+    IdentityResourceNameMustStartWith = "IdentityResourceNameMustStartWith"
 }
 export declare enum ConfigurationIssueType {
-    Warning = 0,
-    Recommendation = 1,
-    Error = 2
+    Warning = "Warning",
+    Recommendation = "Recommendation",
+    Error = "Error"
 }
 export declare class ConfigurationRuleMetadataDto implements IConfigurationRuleMetadataDto {
     ruleType: string | undefined;

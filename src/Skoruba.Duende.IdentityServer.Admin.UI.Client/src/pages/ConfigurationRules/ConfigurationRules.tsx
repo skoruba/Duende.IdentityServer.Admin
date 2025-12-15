@@ -59,6 +59,7 @@ const ConfigurationRules: React.FC = () => {
           />
           <ConfigurationRuleModal
             rule={selectedRule}
+            existingRules={rules.data?.rules || []}
             isOpen={isOpen}
             onClose={closeModal}
             onSuccess={() => {

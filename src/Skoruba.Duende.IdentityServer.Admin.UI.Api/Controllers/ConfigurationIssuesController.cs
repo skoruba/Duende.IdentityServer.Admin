@@ -35,6 +35,7 @@ public class ConfigurationIssuesController(IConfigurationIssuesService configura
 
         var summary = new ConfigurationIssueSummaryDto
         {
+            Errors = issues.Count(i => i.IssueType == ConfigurationIssueTypeView.Error),
             Warnings = issues.Count(i => i.IssueType == ConfigurationIssueTypeView.Warning),
             Recommendations = issues.Count(i => i.IssueType == ConfigurationIssueTypeView.Recommendation)
         };

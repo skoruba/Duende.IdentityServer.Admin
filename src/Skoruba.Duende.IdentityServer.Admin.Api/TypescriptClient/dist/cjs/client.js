@@ -14,8 +14,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DashboardIdentityDto = exports.DashboardAuditLogDto = exports.DashboardDto = exports.ConfigurationRuleParameterDto = exports.ConfigurationRuleMetadataDto = exports.ConfigurationIssueType = exports.ConfigurationRuleType = exports.ConfigurationRuleDto = exports.ConfigurationRulesDto = exports.ConfigurationIssueSummaryDto = exports.ConfigurationResourceType = exports.ConfigurationIssueTypeView = exports.ConfigurationIssueMessageEnum = exports.ConfigurationIssueDto = exports.ClientClaimsApiDto = exports.ClientPropertiesApiDto = exports.ClientSecretApiDto = exports.ClientSecretsApiDto = exports.ClientCloneApiDto = exports.SelectItemDto = exports.ClientPropertyApiDto = exports.ClientClaimApiDto = exports.ClientApiDto = exports.ClientsApiDto = exports.ApiScopePropertiesApiDto = exports.ApiScopePropertyApiDto = exports.ApiScopeApiDto = exports.ApiScopesApiDto = exports.ApiResourcePropertyApiDto = exports.ApiResourcePropertiesApiDto = exports.ApiSecretApiDto = exports.ApiSecretsApiDto = exports.ProblemDetails = exports.ApiResourceApiDto = exports.ApiResourcesApiDto = exports.UsersClient = exports.RolesClient = exports.PersistedGrantsClient = exports.LogsClient = exports.KeysClient = exports.InfoClient = exports.IdentityResourcesClient = exports.IdentityProvidersClient = exports.DashboardClient = exports.ConfigurationRulesClient = exports.ConfigurationIssuesClient = exports.ClientsClient = exports.ApiScopesClient = exports.ApiResourcesClient = exports.WebApiClientBase = void 0;
-exports.SwaggerException = exports.UserChangePasswordApiDtoOfString = exports.UserProviderDeleteApiDtoOfString = exports.UserProviderApiDtoOfString = exports.UserProvidersApiDtoOfString = exports.UserClaimApiDtoOfString = exports.UserClaimsApiDtoOfString = exports.UserRoleApiDtoOfString = exports.UserRolesApiDtoOfIdentityRoleDto = exports.TKey = exports.RoleClaimApiDto_1 = exports.RoleClaimApiDtoOfString = exports.RoleClaimsApiDtoOfString = exports.IdentityUserDto = exports.UserDtoOfString = exports.BaseUserDtoOfString = exports.IdentityUsersDto = exports.UsersDtoOfIdentityUserDtoAndString = exports.IdentityRolesDto = exports.RolesDtoOfIdentityRoleDtoAndString = exports.IdentityRoleDto = exports.RoleDtoOfString = exports.BaseRoleDtoOfString = exports.PersistedGrantsApiDto = exports.PersistedGrantApiDto = exports.PersistedGrantSubjectApiDto = exports.PersistedGrantSubjectsApiDto = exports.AuditLogDto = exports.AuditLogsDto = exports.KeyApiDto = exports.KeysApiDto = exports.IdentityResourcePropertyApiDto = exports.IdentityResourcePropertiesApiDto = exports.IdentityResourceApiDto = exports.IdentityResourcesApiDto = exports.IdentityProviderApiDto = exports.IdentityProvidersApiDto = void 0;
+exports.IdentityProvidersApiDto = exports.DashboardIdentityDto = exports.DashboardAuditLogDto = exports.DashboardDto = exports.ConfigurationRuleParameterDto = exports.ConfigurationRuleMetadataDto = exports.ConfigurationIssueType = exports.ConfigurationRuleType = exports.ConfigurationRuleDto = exports.ConfigurationRulesDto = exports.ConfigurationIssueSummaryDto = exports.ConfigurationResourceType = exports.ConfigurationIssueTypeView = exports.ConfigurationIssueDto = exports.ClientClaimsApiDto = exports.ClientPropertiesApiDto = exports.ClientSecretApiDto = exports.ClientSecretsApiDto = exports.ClientCloneApiDto = exports.SelectItemDto = exports.ClientPropertyApiDto = exports.ClientClaimApiDto = exports.ClientApiDto = exports.ClientsApiDto = exports.ApiScopePropertiesApiDto = exports.ApiScopePropertyApiDto = exports.ApiScopeApiDto = exports.ApiScopesApiDto = exports.ApiResourcePropertyApiDto = exports.ApiResourcePropertiesApiDto = exports.ApiSecretApiDto = exports.ApiSecretsApiDto = exports.ProblemDetails = exports.ApiResourceApiDto = exports.ApiResourcesApiDto = exports.UsersClient = exports.RolesClient = exports.PersistedGrantsClient = exports.LogsClient = exports.KeysClient = exports.InfoClient = exports.IdentityResourcesClient = exports.IdentityProvidersClient = exports.DashboardClient = exports.ConfigurationRulesClient = exports.ConfigurationIssuesClient = exports.ClientsClient = exports.ApiScopesClient = exports.ApiResourcesClient = exports.WebApiClientBase = void 0;
+exports.SwaggerException = exports.UserChangePasswordApiDtoOfString = exports.UserProviderDeleteApiDtoOfString = exports.UserProviderApiDtoOfString = exports.UserProvidersApiDtoOfString = exports.UserClaimApiDtoOfString = exports.UserClaimsApiDtoOfString = exports.UserRoleApiDtoOfString = exports.UserRolesApiDtoOfIdentityRoleDto = exports.TKey = exports.RoleClaimApiDto_1 = exports.RoleClaimApiDtoOfString = exports.RoleClaimsApiDtoOfString = exports.IdentityUserDto = exports.UserDtoOfString = exports.BaseUserDtoOfString = exports.IdentityUsersDto = exports.UsersDtoOfIdentityUserDtoAndString = exports.IdentityRolesDto = exports.RolesDtoOfIdentityRoleDtoAndString = exports.IdentityRoleDto = exports.RoleDtoOfString = exports.BaseRoleDtoOfString = exports.PersistedGrantsApiDto = exports.PersistedGrantApiDto = exports.PersistedGrantSubjectApiDto = exports.PersistedGrantSubjectsApiDto = exports.AuditLogDto = exports.AuditLogsDto = exports.KeyApiDto = exports.KeysApiDto = exports.IdentityResourcePropertyApiDto = exports.IdentityResourcePropertiesApiDto = exports.IdentityResourceApiDto = exports.IdentityResourcesApiDto = exports.IdentityProviderApiDto = void 0;
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 class WebApiClientBase {
@@ -3405,6 +3405,14 @@ class ConfigurationRulesClient extends WebApiClientBase {
         else if (status === 403) {
             return response.text().then((_responseText) => {
                 return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status === 409) {
+            return response.text().then((_responseText) => {
+                let result409 = null;
+                let resultData409 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result409 = ProblemDetails.fromJS(resultData409);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result409);
             });
         }
         else if (status !== 200 && status !== 204) {
@@ -8060,6 +8068,13 @@ class ConfigurationIssueDto {
             this.issueType = _data["issueType"];
             this.resourceType = _data["resourceType"];
             this.fixDescription = _data["fixDescription"];
+            if (_data["messageParameters"]) {
+                this.messageParameters = {};
+                for (let key in _data["messageParameters"]) {
+                    if (_data["messageParameters"].hasOwnProperty(key))
+                        this.messageParameters[key] = _data["messageParameters"][key];
+                }
+            }
         }
     }
     static fromJS(data) {
@@ -8076,31 +8091,29 @@ class ConfigurationIssueDto {
         data["issueType"] = this.issueType;
         data["resourceType"] = this.resourceType;
         data["fixDescription"] = this.fixDescription;
+        if (this.messageParameters) {
+            data["messageParameters"] = {};
+            for (let key in this.messageParameters) {
+                if (this.messageParameters.hasOwnProperty(key))
+                    data["messageParameters"][key] = this.messageParameters[key];
+            }
+        }
         return data;
     }
 }
 exports.ConfigurationIssueDto = ConfigurationIssueDto;
-var ConfigurationIssueMessageEnum;
-(function (ConfigurationIssueMessageEnum) {
-    ConfigurationIssueMessageEnum[ConfigurationIssueMessageEnum["ObsoleteImplicitGrant"] = 0] = "ObsoleteImplicitGrant";
-    ConfigurationIssueMessageEnum[ConfigurationIssueMessageEnum["ObsoletePasswordGrant"] = 1] = "ObsoletePasswordGrant";
-    ConfigurationIssueMessageEnum[ConfigurationIssueMessageEnum["MissingPkce"] = 2] = "MissingPkce";
-    ConfigurationIssueMessageEnum[ConfigurationIssueMessageEnum["ClientRedirectUrisMustUseHttps"] = 3] = "ClientRedirectUrisMustUseHttps";
-    ConfigurationIssueMessageEnum[ConfigurationIssueMessageEnum["ClientAccessTokenLifetimeTooLong"] = 4] = "ClientAccessTokenLifetimeTooLong";
-    ConfigurationIssueMessageEnum[ConfigurationIssueMessageEnum["ApiScopeNameMustStartWith"] = 5] = "ApiScopeNameMustStartWith";
-    ConfigurationIssueMessageEnum[ConfigurationIssueMessageEnum["ApiScopeMustHaveDisplayName"] = 6] = "ApiScopeMustHaveDisplayName";
-})(ConfigurationIssueMessageEnum || (exports.ConfigurationIssueMessageEnum = ConfigurationIssueMessageEnum = {}));
 var ConfigurationIssueTypeView;
 (function (ConfigurationIssueTypeView) {
-    ConfigurationIssueTypeView[ConfigurationIssueTypeView["Warning"] = 0] = "Warning";
-    ConfigurationIssueTypeView[ConfigurationIssueTypeView["Recommendation"] = 1] = "Recommendation";
+    ConfigurationIssueTypeView["Warning"] = "Warning";
+    ConfigurationIssueTypeView["Recommendation"] = "Recommendation";
+    ConfigurationIssueTypeView["Error"] = "Error";
 })(ConfigurationIssueTypeView || (exports.ConfigurationIssueTypeView = ConfigurationIssueTypeView = {}));
 var ConfigurationResourceType;
 (function (ConfigurationResourceType) {
-    ConfigurationResourceType[ConfigurationResourceType["Client"] = 0] = "Client";
-    ConfigurationResourceType[ConfigurationResourceType["IdentityResource"] = 1] = "IdentityResource";
-    ConfigurationResourceType[ConfigurationResourceType["ApiResource"] = 2] = "ApiResource";
-    ConfigurationResourceType[ConfigurationResourceType["ApiScope"] = 3] = "ApiScope";
+    ConfigurationResourceType["Client"] = "Client";
+    ConfigurationResourceType["IdentityResource"] = "IdentityResource";
+    ConfigurationResourceType["ApiResource"] = "ApiResource";
+    ConfigurationResourceType["ApiScope"] = "ApiScope";
 })(ConfigurationResourceType || (exports.ConfigurationResourceType = ConfigurationResourceType = {}));
 class ConfigurationIssueSummaryDto {
     constructor(data) {
@@ -8113,6 +8126,7 @@ class ConfigurationIssueSummaryDto {
     }
     init(_data) {
         if (_data) {
+            this.errors = _data["errors"];
             this.warnings = _data["warnings"];
             this.recommendations = _data["recommendations"];
         }
@@ -8125,6 +8139,7 @@ class ConfigurationIssueSummaryDto {
     }
     toJSON(data) {
         data = typeof data === 'object' ? data : {};
+        data["errors"] = this.errors;
         data["warnings"] = this.warnings;
         data["recommendations"] = this.recommendations;
         return data;
@@ -8217,26 +8232,26 @@ class ConfigurationRuleDto {
 exports.ConfigurationRuleDto = ConfigurationRuleDto;
 var ConfigurationRuleType;
 (function (ConfigurationRuleType) {
-    ConfigurationRuleType[ConfigurationRuleType["ObsoleteImplicitGrant"] = 0] = "ObsoleteImplicitGrant";
-    ConfigurationRuleType[ConfigurationRuleType["ObsoletePasswordGrant"] = 1] = "ObsoletePasswordGrant";
-    ConfigurationRuleType[ConfigurationRuleType["MissingPkce"] = 2] = "MissingPkce";
-    ConfigurationRuleType[ConfigurationRuleType["ClientRedirectUrisMustUseHttps"] = 3] = "ClientRedirectUrisMustUseHttps";
-    ConfigurationRuleType[ConfigurationRuleType["ClientMustHaveAllowedScopes"] = 4] = "ClientMustHaveAllowedScopes";
-    ConfigurationRuleType[ConfigurationRuleType["ClientAccessTokenLifetimeTooLong"] = 5] = "ClientAccessTokenLifetimeTooLong";
-    ConfigurationRuleType[ConfigurationRuleType["ClientRefreshTokenLifetimeTooLong"] = 6] = "ClientRefreshTokenLifetimeTooLong";
-    ConfigurationRuleType[ConfigurationRuleType["ApiScopeNameMustStartWith"] = 7] = "ApiScopeNameMustStartWith";
-    ConfigurationRuleType[ConfigurationRuleType["ApiScopeNameMustNotContain"] = 8] = "ApiScopeNameMustNotContain";
-    ConfigurationRuleType[ConfigurationRuleType["ApiScopeMustHaveDisplayName"] = 9] = "ApiScopeMustHaveDisplayName";
-    ConfigurationRuleType[ConfigurationRuleType["ApiResourceMustHaveScopes"] = 10] = "ApiResourceMustHaveScopes";
-    ConfigurationRuleType[ConfigurationRuleType["ApiResourceNameMustStartWith"] = 11] = "ApiResourceNameMustStartWith";
-    ConfigurationRuleType[ConfigurationRuleType["IdentityResourceMustBeEnabled"] = 12] = "IdentityResourceMustBeEnabled";
-    ConfigurationRuleType[ConfigurationRuleType["IdentityResourceNameMustStartWith"] = 13] = "IdentityResourceNameMustStartWith";
+    ConfigurationRuleType["ObsoleteImplicitGrant"] = "ObsoleteImplicitGrant";
+    ConfigurationRuleType["ObsoletePasswordGrant"] = "ObsoletePasswordGrant";
+    ConfigurationRuleType["MissingPkce"] = "MissingPkce";
+    ConfigurationRuleType["ClientRedirectUrisMustUseHttps"] = "ClientRedirectUrisMustUseHttps";
+    ConfigurationRuleType["ClientMustHaveAllowedScopes"] = "ClientMustHaveAllowedScopes";
+    ConfigurationRuleType["ClientAccessTokenLifetimeTooLong"] = "ClientAccessTokenLifetimeTooLong";
+    ConfigurationRuleType["ClientRefreshTokenLifetimeTooLong"] = "ClientRefreshTokenLifetimeTooLong";
+    ConfigurationRuleType["ApiScopeNameMustStartWith"] = "ApiScopeNameMustStartWith";
+    ConfigurationRuleType["ApiScopeNameMustNotContain"] = "ApiScopeNameMustNotContain";
+    ConfigurationRuleType["ApiScopeMustHaveDisplayName"] = "ApiScopeMustHaveDisplayName";
+    ConfigurationRuleType["ApiResourceMustHaveScopes"] = "ApiResourceMustHaveScopes";
+    ConfigurationRuleType["ApiResourceNameMustStartWith"] = "ApiResourceNameMustStartWith";
+    ConfigurationRuleType["IdentityResourceMustBeEnabled"] = "IdentityResourceMustBeEnabled";
+    ConfigurationRuleType["IdentityResourceNameMustStartWith"] = "IdentityResourceNameMustStartWith";
 })(ConfigurationRuleType || (exports.ConfigurationRuleType = ConfigurationRuleType = {}));
 var ConfigurationIssueType;
 (function (ConfigurationIssueType) {
-    ConfigurationIssueType[ConfigurationIssueType["Warning"] = 0] = "Warning";
-    ConfigurationIssueType[ConfigurationIssueType["Recommendation"] = 1] = "Recommendation";
-    ConfigurationIssueType[ConfigurationIssueType["Error"] = 2] = "Error";
+    ConfigurationIssueType["Warning"] = "Warning";
+    ConfigurationIssueType["Recommendation"] = "Recommendation";
+    ConfigurationIssueType["Error"] = "Error";
 })(ConfigurationIssueType || (exports.ConfigurationIssueType = ConfigurationIssueType = {}));
 class ConfigurationRuleMetadataDto {
     constructor(data) {

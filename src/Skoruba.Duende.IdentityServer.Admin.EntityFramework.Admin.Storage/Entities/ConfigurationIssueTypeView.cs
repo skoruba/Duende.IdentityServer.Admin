@@ -5,6 +5,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Enti
 
 public enum ConfigurationIssueTypeView
 {
-    Warning,
-    Recommendation
+    Warning = 0,
+    Recommendation = 1,
+    Error = 2
 }

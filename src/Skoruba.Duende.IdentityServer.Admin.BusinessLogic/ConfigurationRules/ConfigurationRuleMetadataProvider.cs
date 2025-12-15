@@ -99,7 +99,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 },
                 DefaultConfiguration = "{\"allowLocalhost\": true}",
                 ExampleConfiguration = "{\"allowLocalhost\": false}",
-                DefaultMessageTemplate = "Client has redirect URIs not using HTTPS",
+                DefaultMessageTemplate = "Client has {count} non-HTTPS redirect URI(s): {uris}",
                 DefaultFixDescription = "Update redirect URIs to use HTTPS protocol. For production environments, HTTP is not secure."
             },
 
@@ -125,7 +125,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 },
                 DefaultConfiguration = "{\"maxLifetimeSeconds\": 3600}",
                 ExampleConfiguration = "{\"maxLifetimeSeconds\": 7200}",
-                DefaultMessageTemplate = "Client access token lifetime exceeds recommended maximum",
+                DefaultMessageTemplate = "Access token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s",
                 DefaultFixDescription = "Go to client details → Token and reduce the Access Token Lifetime to the recommended maximum value."
             },
 
@@ -134,24 +134,24 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
             {
                 RuleType = nameof(ConfigurationRuleType.ApiScopeNameMustStartWith),
                 DisplayName = "API Scope Name Must Start With",
-                Description = "Ensures API scope names follow a specific naming convention by requiring a prefix.",
+                Description = "Ensures API scope names follow a specific naming convention by requiring a prefix or one of multiple allowed prefixes.",
                 ResourceType = nameof(ConfigurationResourceType.ApiScope),
                 Parameters = new List<ConfigurationRuleParameterDto>
                 {
                     new ConfigurationRuleParameterDto
                     {
-                        Name = "prefix",
-                        DisplayName = "Required Prefix",
-                        Description = "The prefix that all API scope names must start with",
-                        Type = "string",
+                        Name = "prefixes",
+                        DisplayName = "Required Prefixes",
+                        Description = "The prefix(es) that API scope names must start with. Can be a single string or an array of strings.",
+                        Type = "array",
                         Required = true,
-                        Pattern = "^[a-zA-Z0-9._-]+$"
+                        DefaultValue = new[] { "scope_" }
                     }
                 },
-                DefaultConfiguration = "{\"prefix\": \"scope_\"}",
-                ExampleConfiguration = "{\"prefix\": \"api.\"}",
-                DefaultMessageTemplate = "API Scope name must start with specified prefix",
-                DefaultFixDescription = "Rename the API Scope to follow the naming convention starting with the required prefix."
+                DefaultConfiguration = "{\"prefixes\": [\"scope_\"]}",
+                ExampleConfiguration = "{\"prefixes\": [\"api.\", \"scope_\", \"resource.\"]}",
+                DefaultMessageTemplate = "API Scope '{actualName}' must start with one of: {allowedPrefixes}",
+                DefaultFixDescription = "Rename the API Scope to follow the naming convention starting with one of the required prefixes."
             },
 
             [ConfigurationRuleType.ApiScopeNameMustNotContain] = new ConfigurationRuleMetadataDto
@@ -222,23 +222,23 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
             {
                 RuleType = nameof(ConfigurationRuleType.ApiResourceNameMustStartWith),
                 DisplayName = "API Resource Name Must Start With",
-                Description = "Ensures API resource names follow a specific naming convention.",
+                Description = "Ensures API resource names follow a specific naming convention by requiring a prefix or one of multiple allowed prefixes.",
                 ResourceType = nameof(ConfigurationResourceType.ApiResource),
                 Parameters = new List<ConfigurationRuleParameterDto>
                 {
                     new ConfigurationRuleParameterDto
                     {
-                        Name = "prefix",
-                        DisplayName = "Required Prefix",
-                        Description = "The prefix that all API resource names must start with",
-                        Type = "string",
+                        Name = "prefixes",
+                        DisplayName = "Required Prefixes",
+                        Description = "The prefix(es) that API resource names must start with. Can be a single string or an array of strings.",
+                        Type = "array",
                         Required = true,
-                        Pattern = "^[a-zA-Z0-9._-]+$"
+                        DefaultValue = new[] { "api." }
                     }
                 },
-                DefaultConfiguration = "{\"prefix\": \"api.\"}",
-                ExampleConfiguration = "{\"prefix\": \"resource.\"}",
-                DefaultMessageTemplate = "API Resource name must start with specified prefix",
+                DefaultConfiguration = "{\"prefixes\": [\"api.\"]}",
+                ExampleConfiguration = "{\"prefixes\": [\"api.\", \"resource.\", \"service.\"]}",
+                DefaultMessageTemplate = "API Resource '{actualName}' must start with one of: {allowedPrefixes}",
                 DefaultFixDescription = "Rename the API Resource to follow the naming convention."
             },
 
@@ -271,18 +271,18 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
             {
                 RuleType = nameof(ConfigurationRuleType.IdentityResourceNameMustStartWith),
                 DisplayName = "Identity Resource Name Must Start With",
-                Description = "Ensures identity resource names follow a naming convention.",
+                Description = "Ensures identity resource names follow a naming convention by requiring a prefix or one of multiple allowed prefixes.",
                 ResourceType = nameof(ConfigurationResourceType.IdentityResource),
                 Parameters = new List<ConfigurationRuleParameterDto>
                 {
                     new ConfigurationRuleParameterDto
                     {
-                        Name = "prefix",
-                        DisplayName = "Required Prefix",
-                        Description = "The prefix that identity resource names must start with",
-                        Type = "string",
+                        Name = "prefixes",
+                        DisplayName = "Required Prefixes",
+                        Description = "The prefix(es) that identity resource names must start with. Can be a single string or an array of strings.",
+                        Type = "array",
                         Required = true,
-                        Pattern = "^[a-zA-Z0-9._-]+$"
+                        DefaultValue = new[] { "custom." }
                     },
                     new ConfigurationRuleParameterDto
                     {
@@ -294,9 +294,9 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                         DefaultValue = true
                     }
                 },
-                DefaultConfiguration = "{\"prefix\": \"custom.\", \"excludeStandard\": true}",
-                ExampleConfiguration = "{\"prefix\": \"app.\", \"excludeStandard\": false}",
-                DefaultMessageTemplate = "Identity Resource name must start with specified prefix",
+                DefaultConfiguration = "{\"prefixes\": [\"custom.\"], \"excludeStandard\": true}",
+                ExampleConfiguration = "{\"prefixes\": [\"app.\", \"custom.\"], \"excludeStandard\": false}",
+                DefaultMessageTemplate = "Identity Resource '{actualName}' must start with one of: {allowedPrefixes}",
                 DefaultFixDescription = "Rename the Identity Resource to follow the naming convention."
             },
 

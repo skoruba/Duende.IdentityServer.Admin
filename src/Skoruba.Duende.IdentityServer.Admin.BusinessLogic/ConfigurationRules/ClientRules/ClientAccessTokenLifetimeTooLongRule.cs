@@ -27,17 +27,31 @@ public class ClientAccessTokenLifetimeTooLongRule<TDbContext> : ConfigurationRul
         var config = DeserializeConfiguration<TokenLifetimeConfig>(configuration);
         var maxLifetime = config.MaxLifetimeSeconds > 0 ? config.MaxLifetimeSeconds : 3600; // Default 1 hour
 
-        return await _dbContext.Clients
+        var clients = await _dbContext.Clients
             .Where(c => c.AccessTokenLifetime > maxLifetime)
-            .Select(c => new ConfigurationIssueView
-            {
-                ResourceId = c.Id,
-                ResourceName = c.ClientName,
-                Message = messageTemplate,
-                IssueType = issueType,
-                ResourceType = ConfigurationResourceType.Client
-            })
             .ToListAsync();
+
+        var issues = new List<ConfigurationIssueView>();
+        foreach (var client in clients)
+        {
+            var parameters = new Dictionary<string, string>
+            {
+                ["maxLifetime"] = maxLifetime.ToString(),
+                ["actualLifetime"] = client.AccessTokenLifetime.ToString()
+            };
+
+            issues.Add(new ConfigurationIssueView
+            {
+                ResourceId = client.Id,
+                ResourceName = client.ClientName,
+                Message = FormatMessage(messageTemplate, parameters),
+                IssueType = issueType,
+                ResourceType = ConfigurationResourceType.Client,
+                MessageParameters = parameters
+            });
+        }
+
+        return issues;
     }
 
     private class TokenLifetimeConfig

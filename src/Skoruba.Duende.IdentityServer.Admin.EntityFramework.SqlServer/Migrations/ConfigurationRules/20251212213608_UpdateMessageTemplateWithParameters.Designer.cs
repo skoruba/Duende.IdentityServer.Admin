@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 
@@ -11,9 +12,11 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migrations.ConfigurationRules
 {
     [DbContext(typeof(ConfigurationRulesDbContext))]
-    partial class ConfigurationRulesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251212213608_UpdateMessageTemplateWithParameters")]
+    partial class UpdateMessageTemplateWithParameters
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,19 +112,19 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migratio
                             FixDescription = "Update redirect URIs to use HTTPS protocol. For production environments, HTTP is not secure.",
                             IsEnabled = false,
                             IssueType = 0,
-                            MessageTemplate = "Client has {count} non-HTTPS redirect URI(s): {uris}",
+                            MessageTemplate = "Client has redirect URIs not using HTTPS",
                             ResourceType = 0,
                             RuleType = 3
                         },
                         new
                         {
                             Id = 5,
-                            Configuration = "{\"prefixes\": [\"scope_\"]}",
+                            Configuration = "{\"prefix\": \"scope_\"}",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            FixDescription = "Rename the API Scope to follow the naming convention starting with one of the required prefixes.",
+                            FixDescription = "Rename the API Scope to follow the naming convention starting with the required prefix.",
                             IsEnabled = false,
                             IssueType = 1,
-                            MessageTemplate = "API Scope '{actualName}' must start with one of: {allowedPrefixes}",
+                            MessageTemplate = "API Scope name must start with specified prefix",
                             ResourceType = 3,
                             RuleType = 7
                         },

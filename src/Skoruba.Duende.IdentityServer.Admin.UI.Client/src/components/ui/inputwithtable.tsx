@@ -22,13 +22,13 @@ import { SearchDropdown } from "../SearchDropdown/SearchDropdown";
 import { useTranslation } from "react-i18next";
 
 const InputWithTable: React.FC<{
-  value: string[];
+  value?: string[];
   onChange: (items: string[]) => void;
   validationSchema?: ZodType;
   search?: boolean;
   searchDataSource?: { id: string; name: string }[];
 }> = ({
-  value,
+  value = [],
   onChange,
   validationSchema,
   search = false,
@@ -36,7 +36,7 @@ const InputWithTable: React.FC<{
 }) => {
   const { t } = useTranslation();
 
-  const [items, setItems] = useState<string[]>(value);
+  const [items, setItems] = useState<string[]>(value || []);
   const [inputValue, setInputValue] = useState("");
   const [editValue, setEditValue] = useState("");
   const [editIndex, setEditIndex] = useState<number | null>(null);
@@ -44,7 +44,7 @@ const InputWithTable: React.FC<{
   const [dialogError, setDialogError] = useState<string | null>(null);
 
   useEffect(() => {
-    setItems(value);
+    setItems(value || []);
   }, [value]);
 
   const validateItem = (value: string): string | null => {

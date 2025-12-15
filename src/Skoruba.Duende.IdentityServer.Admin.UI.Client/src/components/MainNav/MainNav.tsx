@@ -262,7 +262,8 @@ export function MainNav() {
   const { t } = useTranslation();
   const { data, isLoading } = getConfigurationIssues();
 
-  const issuesCount = (data?.recommendations ?? 0) + (data?.warnings ?? 0);
+  const issuesCount =
+    (data?.errors ?? 0) + (data?.warnings ?? 0) + (data?.recommendations ?? 0);
 
   const renderDropdownItem = (item: NavItem, onAfterClick?: () => void) => {
     const accent = ACCENTS[item.kind];

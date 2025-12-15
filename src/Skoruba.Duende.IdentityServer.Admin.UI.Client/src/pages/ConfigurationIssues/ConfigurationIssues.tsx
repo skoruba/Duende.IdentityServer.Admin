@@ -8,9 +8,11 @@ import Loading from "@/components/Loading/Loading";
 import { client } from "@skoruba/duende.identityserver.admin.api.client";
 import Page from "@/components/Page/Page";
 import { Link } from "react-router-dom";
-import { Hammer, Cog } from "lucide-react";
+import { Hammer, Cog, Settings } from "lucide-react";
 import { TooltipField } from "@/components/FormRow/FormRow";
 import { IssueTypeBadge } from "./IssueTypeBadge";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 const ConfigurationIssues: React.FC = () => {
   const { t } = useTranslation();
@@ -37,16 +39,43 @@ const ConfigurationIssues: React.FC = () => {
       },
     },
     {
+      accessorKey: "resourceType",
+      header: t("ConfigurationIssues.ResourceType"),
+      cell: ({ row }: { row: { original: client.ConfigurationIssueDto } }) => {
+        const resourceType = String(row.original.resourceType);
+        const variants: any = {
+          Client: "default",
+          ApiScope: "outline",
+          ApiResource: "outline",
+          IdentityResource: "outline",
+        };
+        return (
+          <Badge variant={variants[resourceType] || "default"}>
+            {resourceType}
+          </Badge>
+        );
+      },
+    },
+    {
       accessorKey: "issueType",
       header: t("ConfigurationIssues.IssueType"),
       cell: ({ row }: { row: { original: client.ConfigurationIssueDto } }) => {
         const r = row.original;
+        const isError =
+          String(r.issueType) === "Error" ||
+          r.issueType === client.ConfigurationIssueTypeView.Error;
         const isWarning =
           String(r.issueType) === "Warning" ||
           r.issueType === client.ConfigurationIssueTypeView.Warning;
-        const label = isWarning
-          ? t("ConfigurationIssues.IssueTypeWarning")
-          : t("ConfigurationIssues.IssueTypeRecommendation");
+
+        let label;
+        if (isError) {
+          label = t("ConfigurationIssues.IssueTypeError");
+        } else if (isWarning) {
+          label = t("ConfigurationIssues.IssueTypeWarning");
+        } else {
+          label = t("ConfigurationIssues.IssueTypeRecommendation");
+        }
 
         return (
           <div className="whitespace-nowrap">
@@ -84,6 +113,14 @@ const ConfigurationIssues: React.FC = () => {
       title={t("ConfigurationIssues.PageTitle")}
       icon={Cog}
       accentKind="monitoring"
+      topSection={
+        <Link to="/configuration-rules">
+          <Button variant="outline" size="sm">
+            <Settings className="mr-2 h-4 w-4" />
+            {t("ConfigurationIssues.ManageRules")}
+          </Button>
+        </Link>
+      }
     >
       <DataTable<client.ConfigurationIssueDto, number>
         columns={columns}

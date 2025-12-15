@@ -3398,6 +3398,14 @@ export class ConfigurationRulesClient extends WebApiClientBase {
                 return throwException("Forbidden", status, _responseText, _headers);
             });
         }
+        else if (status === 409) {
+            return response.text().then((_responseText) => {
+                let result409 = null;
+                let resultData409 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result409 = ProblemDetails.fromJS(resultData409);
+                return throwException("A server side error occurred.", status, _responseText, _headers, result409);
+            });
+        }
         else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
                 return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -8020,6 +8028,13 @@ export class ConfigurationIssueDto {
             this.issueType = _data["issueType"];
             this.resourceType = _data["resourceType"];
             this.fixDescription = _data["fixDescription"];
+            if (_data["messageParameters"]) {
+                this.messageParameters = {};
+                for (let key in _data["messageParameters"]) {
+                    if (_data["messageParameters"].hasOwnProperty(key))
+                        this.messageParameters[key] = _data["messageParameters"][key];
+                }
+            }
         }
     }
     static fromJS(data) {
@@ -8036,30 +8051,28 @@ export class ConfigurationIssueDto {
         data["issueType"] = this.issueType;
         data["resourceType"] = this.resourceType;
         data["fixDescription"] = this.fixDescription;
+        if (this.messageParameters) {
+            data["messageParameters"] = {};
+            for (let key in this.messageParameters) {
+                if (this.messageParameters.hasOwnProperty(key))
+                    data["messageParameters"][key] = this.messageParameters[key];
+            }
+        }
         return data;
     }
 }
-export var ConfigurationIssueMessageEnum;
-(function (ConfigurationIssueMessageEnum) {
-    ConfigurationIssueMessageEnum[ConfigurationIssueMessageEnum["ObsoleteImplicitGrant"] = 0] = "ObsoleteImplicitGrant";
-    ConfigurationIssueMessageEnum[ConfigurationIssueMessageEnum["ObsoletePasswordGrant"] = 1] = "ObsoletePasswordGrant";
-    ConfigurationIssueMessageEnum[ConfigurationIssueMessageEnum["MissingPkce"] = 2] = "MissingPkce";
-    ConfigurationIssueMessageEnum[ConfigurationIssueMessageEnum["ClientRedirectUrisMustUseHttps"] = 3] = "ClientRedirectUrisMustUseHttps";
-    ConfigurationIssueMessageEnum[ConfigurationIssueMessageEnum["ClientAccessTokenLifetimeTooLong"] = 4] = "ClientAccessTokenLifetimeTooLong";
-    ConfigurationIssueMessageEnum[ConfigurationIssueMessageEnum["ApiScopeNameMustStartWith"] = 5] = "ApiScopeNameMustStartWith";
-    ConfigurationIssueMessageEnum[ConfigurationIssueMessageEnum["ApiScopeMustHaveDisplayName"] = 6] = "ApiScopeMustHaveDisplayName";
-})(ConfigurationIssueMessageEnum || (ConfigurationIssueMessageEnum = {}));
 export var ConfigurationIssueTypeView;
 (function (ConfigurationIssueTypeView) {
-    ConfigurationIssueTypeView[ConfigurationIssueTypeView["Warning"] = 0] = "Warning";
-    ConfigurationIssueTypeView[ConfigurationIssueTypeView["Recommendation"] = 1] = "Recommendation";
+    ConfigurationIssueTypeView["Warning"] = "Warning";
+    ConfigurationIssueTypeView["Recommendation"] = "Recommendation";
+    ConfigurationIssueTypeView["Error"] = "Error";
 })(ConfigurationIssueTypeView || (ConfigurationIssueTypeView = {}));
 export var ConfigurationResourceType;
 (function (ConfigurationResourceType) {
-    ConfigurationResourceType[ConfigurationResourceType["Client"] = 0] = "Client";
-    ConfigurationResourceType[ConfigurationResourceType["IdentityResource"] = 1] = "IdentityResource";
-    ConfigurationResourceType[ConfigurationResourceType["ApiResource"] = 2] = "ApiResource";
-    ConfigurationResourceType[ConfigurationResourceType["ApiScope"] = 3] = "ApiScope";
+    ConfigurationResourceType["Client"] = "Client";
+    ConfigurationResourceType["IdentityResource"] = "IdentityResource";
+    ConfigurationResourceType["ApiResource"] = "ApiResource";
+    ConfigurationResourceType["ApiScope"] = "ApiScope";
 })(ConfigurationResourceType || (ConfigurationResourceType = {}));
 export class ConfigurationIssueSummaryDto {
     constructor(data) {
@@ -8072,6 +8085,7 @@ export class ConfigurationIssueSummaryDto {
     }
     init(_data) {
         if (_data) {
+            this.errors = _data["errors"];
             this.warnings = _data["warnings"];
             this.recommendations = _data["recommendations"];
         }
@@ -8084,6 +8098,7 @@ export class ConfigurationIssueSummaryDto {
     }
     toJSON(data) {
         data = typeof data === 'object' ? data : {};
+        data["errors"] = this.errors;
         data["warnings"] = this.warnings;
         data["recommendations"] = this.recommendations;
         return data;
@@ -8173,26 +8188,26 @@ export class ConfigurationRuleDto {
 }
 export var ConfigurationRuleType;
 (function (ConfigurationRuleType) {
-    ConfigurationRuleType[ConfigurationRuleType["ObsoleteImplicitGrant"] = 0] = "ObsoleteImplicitGrant";
-    ConfigurationRuleType[ConfigurationRuleType["ObsoletePasswordGrant"] = 1] = "ObsoletePasswordGrant";
-    ConfigurationRuleType[ConfigurationRuleType["MissingPkce"] = 2] = "MissingPkce";
-    ConfigurationRuleType[ConfigurationRuleType["ClientRedirectUrisMustUseHttps"] = 3] = "ClientRedirectUrisMustUseHttps";
-    ConfigurationRuleType[ConfigurationRuleType["ClientMustHaveAllowedScopes"] = 4] = "ClientMustHaveAllowedScopes";
-    ConfigurationRuleType[ConfigurationRuleType["ClientAccessTokenLifetimeTooLong"] = 5] = "ClientAccessTokenLifetimeTooLong";
-    ConfigurationRuleType[ConfigurationRuleType["ClientRefreshTokenLifetimeTooLong"] = 6] = "ClientRefreshTokenLifetimeTooLong";
-    ConfigurationRuleType[ConfigurationRuleType["ApiScopeNameMustStartWith"] = 7] = "ApiScopeNameMustStartWith";
-    ConfigurationRuleType[ConfigurationRuleType["ApiScopeNameMustNotContain"] = 8] = "ApiScopeNameMustNotContain";
-    ConfigurationRuleType[ConfigurationRuleType["ApiScopeMustHaveDisplayName"] = 9] = "ApiScopeMustHaveDisplayName";
-    ConfigurationRuleType[ConfigurationRuleType["ApiResourceMustHaveScopes"] = 10] = "ApiResourceMustHaveScopes";
-    ConfigurationRuleType[ConfigurationRuleType["ApiResourceNameMustStartWith"] = 11] = "ApiResourceNameMustStartWith";
-    ConfigurationRuleType[ConfigurationRuleType["IdentityResourceMustBeEnabled"] = 12] = "IdentityResourceMustBeEnabled";
-    ConfigurationRuleType[ConfigurationRuleType["IdentityResourceNameMustStartWith"] = 13] = "IdentityResourceNameMustStartWith";
+    ConfigurationRuleType["ObsoleteImplicitGrant"] = "ObsoleteImplicitGrant";
+    ConfigurationRuleType["ObsoletePasswordGrant"] = "ObsoletePasswordGrant";
+    ConfigurationRuleType["MissingPkce"] = "MissingPkce";
+    ConfigurationRuleType["ClientRedirectUrisMustUseHttps"] = "ClientRedirectUrisMustUseHttps";
+    ConfigurationRuleType["ClientMustHaveAllowedScopes"] = "ClientMustHaveAllowedScopes";
+    ConfigurationRuleType["ClientAccessTokenLifetimeTooLong"] = "ClientAccessTokenLifetimeTooLong";
+    ConfigurationRuleType["ClientRefreshTokenLifetimeTooLong"] = "ClientRefreshTokenLifetimeTooLong";
+    ConfigurationRuleType["ApiScopeNameMustStartWith"] = "ApiScopeNameMustStartWith";
+    ConfigurationRuleType["ApiScopeNameMustNotContain"] = "ApiScopeNameMustNotContain";
+    ConfigurationRuleType["ApiScopeMustHaveDisplayName"] = "ApiScopeMustHaveDisplayName";
+    ConfigurationRuleType["ApiResourceMustHaveScopes"] = "ApiResourceMustHaveScopes";
+    ConfigurationRuleType["ApiResourceNameMustStartWith"] = "ApiResourceNameMustStartWith";
+    ConfigurationRuleType["IdentityResourceMustBeEnabled"] = "IdentityResourceMustBeEnabled";
+    ConfigurationRuleType["IdentityResourceNameMustStartWith"] = "IdentityResourceNameMustStartWith";
 })(ConfigurationRuleType || (ConfigurationRuleType = {}));
 export var ConfigurationIssueType;
 (function (ConfigurationIssueType) {
-    ConfigurationIssueType[ConfigurationIssueType["Warning"] = 0] = "Warning";
-    ConfigurationIssueType[ConfigurationIssueType["Recommendation"] = 1] = "Recommendation";
-    ConfigurationIssueType[ConfigurationIssueType["Error"] = 2] = "Error";
+    ConfigurationIssueType["Warning"] = "Warning";
+    ConfigurationIssueType["Recommendation"] = "Recommendation";
+    ConfigurationIssueType["Error"] = "Error";
 })(ConfigurationIssueType || (ConfigurationIssueType = {}));
 export class ConfigurationRuleMetadataDto {
     constructor(data) {

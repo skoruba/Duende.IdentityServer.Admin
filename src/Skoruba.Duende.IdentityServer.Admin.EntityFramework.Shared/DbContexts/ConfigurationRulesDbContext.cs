@@ -92,7 +92,7 @@ public class ConfigurationRulesDbContext : DbContext, IConfigurationRulesDbConte
                 IssueType = ConfigurationIssueType.Warning,
                 IsEnabled = false,
                 Configuration = "{\"allowLocalhost\": true}",
-                MessageTemplate = "Client has redirect URIs not using HTTPS",
+                MessageTemplate = "Client has {count} non-HTTPS redirect URI(s): {uris}",
                 FixDescription = "Update redirect URIs to use HTTPS protocol. For production environments, HTTP is not secure.",
                 CreatedAt = createdAt
             },
@@ -103,9 +103,9 @@ public class ConfigurationRulesDbContext : DbContext, IConfigurationRulesDbConte
                 ResourceType = ConfigurationResourceType.ApiScope,
                 IssueType = ConfigurationIssueType.Recommendation,
                 IsEnabled = false,
-                Configuration = "{\"prefix\": \"scope_\"}",
-                MessageTemplate = "API Scope name must start with specified prefix",
-                FixDescription = "Rename the API Scope to follow the naming convention starting with the required prefix.",
+                Configuration = "{\"prefixes\": [\"scope_\"]}",
+                MessageTemplate = "API Scope '{actualName}' must start with one of: {allowedPrefixes}",
+                FixDescription = "Rename the API Scope to follow the naming convention starting with one of the required prefixes.",
                 CreatedAt = createdAt
             },
             new ConfigurationRule
@@ -116,7 +116,7 @@ public class ConfigurationRulesDbContext : DbContext, IConfigurationRulesDbConte
                 IssueType = ConfigurationIssueType.Recommendation,
                 IsEnabled = false,
                 Configuration = "{\"maxLifetimeSeconds\": 3600}",
-                MessageTemplate = "Client access token lifetime exceeds recommended maximum",
+                MessageTemplate = "Access token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s",
                 FixDescription = "Go to client details → Token and reduce the Access Token Lifetime to the recommended maximum value.",
                 CreatedAt = createdAt
             }

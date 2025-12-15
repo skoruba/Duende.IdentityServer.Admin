@@ -41,7 +41,8 @@
     --chart-5: 212 97% 87%;
 
     --chart-recommendation: 221.2 83.2% 53.3%;
-    --chart-danger: 0 84% 60%;
+    --chart-warning: 38 92% 50%;
+    --chart-error: 0 84% 60%;
   }
  
   .dark {
@@ -80,6 +81,9 @@
     --chart-5: 212 97% 87%;
 
     --chart-green: 220 70% 50%;
+    --chart-recommendation: 221.2 83.2% 63%;
+    --chart-warning: 38 92% 60%;
+    --chart-error: 0 72% 56%;
   }
 }
  

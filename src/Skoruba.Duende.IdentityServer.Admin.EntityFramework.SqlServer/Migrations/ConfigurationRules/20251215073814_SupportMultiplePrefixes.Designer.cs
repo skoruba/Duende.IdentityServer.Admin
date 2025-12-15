@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 
@@ -11,9 +12,11 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migrations.ConfigurationRules
 {
     [DbContext(typeof(ConfigurationRulesDbContext))]
-    partial class ConfigurationRulesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251215073814_SupportMultiplePrefixes")]
+    partial class SupportMultiplePrefixes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

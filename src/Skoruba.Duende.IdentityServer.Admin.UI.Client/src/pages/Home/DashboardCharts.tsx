@@ -9,7 +9,7 @@ import AuditLogs from "./AuditLogs";
 import { getDashboardIdentityServerData } from "@/services/DashboardService";
 import { useQuery } from "react-query";
 import { useTranslation } from "react-i18next";
-import WarningChecker from "./ClientsChecker";
+import ConfigurationIssuesSummary from "./ConfigurationIssuesSummary";
 import { OverviewLeft } from "./OverviewLeft";
 import Loading from "@/components/Loading/Loading";
 import { queryKeys, queryWithoutCache } from "@/services/QueryKeys";
@@ -36,7 +36,7 @@ const DashboardCharts = () => {
             data={dashboardIdentityServer.data?.identityServerDataChart ?? []}
           />
         )}
-        <WarningChecker />
+        <ConfigurationIssuesSummary />
         <Card className="col-span-1">
           <CardHeader>
             <CardTitle>{t("Home.AuditLogs")}</CardTitle>

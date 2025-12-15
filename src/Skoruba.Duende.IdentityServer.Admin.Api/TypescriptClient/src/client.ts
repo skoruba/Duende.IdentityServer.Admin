@@ -3381,6 +3381,13 @@ export class ConfigurationRulesClient extends WebApiClientBase implements IConfi
             return response.text().then((_responseText) => {
             return throwException("Forbidden", status, _responseText, _headers);
             });
+        } else if (status === 409) {
+            return response.text().then((_responseText) => {
+            let result409: any = null;
+            let resultData409 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result409 = ProblemDetails.fromJS(resultData409);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result409);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -8454,6 +8461,7 @@ export class ConfigurationIssueDto implements IConfigurationIssueDto {
     issueType!: ConfigurationIssueTypeView;
     resourceType!: ConfigurationResourceType;
     fixDescription!: string | undefined;
+    messageParameters!: { [key: string]: string; } | undefined;
 
     constructor(data?: IConfigurationIssueDto) {
         if (data) {
@@ -8472,6 +8480,13 @@ export class ConfigurationIssueDto implements IConfigurationIssueDto {
             this.issueType = _data["issueType"];
             this.resourceType = _data["resourceType"];
             this.fixDescription = _data["fixDescription"];
+            if (_data["messageParameters"]) {
+                this.messageParameters = {} as any;
+                for (let key in _data["messageParameters"]) {
+                    if (_data["messageParameters"].hasOwnProperty(key))
+                        (this.messageParameters as any)![key] = _data["messageParameters"][key];
+                }
+            }
         }
     }
 
@@ -8490,6 +8505,13 @@ export class ConfigurationIssueDto implements IConfigurationIssueDto {
         data["issueType"] = this.issueType;
         data["resourceType"] = this.resourceType;
         data["fixDescription"] = this.fixDescription;
+        if (this.messageParameters) {
+            data["messageParameters"] = {};
+            for (let key in this.messageParameters) {
+                if (this.messageParameters.hasOwnProperty(key))
+                    (data["messageParameters"] as any)[key] = (this.messageParameters as any)[key];
+            }
+        }
         return data;
     }
 }
@@ -8501,11 +8523,13 @@ export interface IConfigurationIssueDto {
     issueType: ConfigurationIssueTypeView;
     resourceType: ConfigurationResourceType;
     fixDescription: string | undefined;
+    messageParameters: { [key: string]: string; } | undefined;
 }
 
 export enum ConfigurationIssueTypeView {
     Warning = "Warning",
     Recommendation = "Recommendation",
+    Error = "Error",
 }
 
 export enum ConfigurationResourceType {
@@ -8516,6 +8540,7 @@ export enum ConfigurationResourceType {
 }
 
 export class ConfigurationIssueSummaryDto implements IConfigurationIssueSummaryDto {
+    errors!: number;
     warnings!: number;
     recommendations!: number;
 
@@ -8530,6 +8555,7 @@ export class ConfigurationIssueSummaryDto implements IConfigurationIssueSummaryD
 
     init(_data?: any) {
         if (_data) {
+            this.errors = _data["errors"];
             this.warnings = _data["warnings"];
             this.recommendations = _data["recommendations"];
         }
@@ -8544,6 +8570,7 @@ export class ConfigurationIssueSummaryDto implements IConfigurationIssueSummaryD
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["errors"] = this.errors;
         data["warnings"] = this.warnings;
         data["recommendations"] = this.recommendations;
         return data;
@@ -8551,6 +8578,7 @@ export class ConfigurationIssueSummaryDto implements IConfigurationIssueSummaryD
 }
 
 export interface IConfigurationIssueSummaryDto {
+    errors: number;
     warnings: number;
     recommendations: number;
 }

@@ -39,6 +39,13 @@ public class ConfigurationRulesService : IConfigurationRulesService
 
     public async Task<int> AddRuleAsync(ConfigurationRuleDto ruleDto)
     {
+        // Check if rule type already exists
+        var exists = await _repository.RuleTypeExistsAsync(ruleDto.RuleType);
+        if (exists)
+        {
+            throw new System.InvalidOperationException($"A rule with type '{ruleDto.RuleType}' already exists.");
+        }
+
         var rule = ruleDto.ToEntity();
         return await _repository.AddRuleAsync(rule);
     }

@@ -1,6 +1,7 @@
 // Copyright (c) Jan Škoruba. All Rights Reserved.
 // Licensed under the Apache License, Version 2.0.
 
+using System.Collections.Generic;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities;
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration;
@@ -13,4 +14,5 @@ public class ConfigurationIssueDto
     public ConfigurationIssueTypeView IssueType { get; set; }
     public ConfigurationResourceType ResourceType { get; set; }
     public string FixDescription { get; set; }
+    public Dictionary<string, string> MessageParameters { get; set; }
 }

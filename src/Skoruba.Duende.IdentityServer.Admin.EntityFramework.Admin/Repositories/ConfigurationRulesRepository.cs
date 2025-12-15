@@ -71,4 +71,16 @@ public class ConfigurationRulesRepository(IConfigurationRulesDbContext dbContext
     {
         return await _dbContext.ConfigurationRules.AnyAsync(r => r.Id == id);
     }
+
+    public async Task<bool> RuleTypeExistsAsync(ConfigurationRuleType ruleType, int? excludeId = null)
+    {
+        var query = _dbContext.ConfigurationRules.Where(r => r.RuleType == ruleType);
+
+        if (excludeId.HasValue)
+        {
+            query = query.Where(r => r.Id != excludeId.Value);
+        }
+
+        return await query.AnyAsync();
+    }
 }

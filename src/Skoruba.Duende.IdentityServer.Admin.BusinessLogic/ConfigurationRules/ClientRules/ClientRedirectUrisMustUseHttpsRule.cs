@@ -34,25 +34,35 @@ public class ClientRedirectUrisMustUseHttpsRule<TDbContext> : ConfigurationRuleV
 
         foreach (var client in clients)
         {
-            var hasNonHttpsUri = client.RedirectUris.Any(uri =>
-            {
-                var uriString = uri.RedirectUri?.ToLower() ?? "";
-                if (config.AllowLocalhost && (uriString.StartsWith("http://localhost") || uriString.StartsWith("http://127.0.0.1")))
+            var nonHttpsUris = client.RedirectUris
+                .Where(uri =>
                 {
-                    return false;
-                }
-                return uriString.StartsWith("http://");
-            });
+                    var uriString = uri.RedirectUri?.ToLower() ?? "";
+                    if (config.AllowLocalhost && (uriString.StartsWith("http://localhost") || uriString.StartsWith("http://127.0.0.1")))
+                    {
+                        return false;
+                    }
+                    return uriString.StartsWith("http://");
+                })
+                .Select(uri => uri.RedirectUri)
+                .ToList();
 
-            if (hasNonHttpsUri)
+            if (nonHttpsUris.Any())
             {
+                var parameters = new Dictionary<string, string>
+                {
+                    ["uris"] = string.Join(", ", nonHttpsUris),
+                    ["count"] = nonHttpsUris.Count.ToString()
+                };
+
                 issues.Add(new ConfigurationIssueView
                 {
                     ResourceId = client.Id,
                     ResourceName = client.ClientName,
-                    Message = messageTemplate,
+                    Message = FormatMessage(messageTemplate, parameters),
                     IssueType = issueType,
-                    ResourceType = ConfigurationResourceType.Client
+                    ResourceType = ConfigurationResourceType.Client,
+                    MessageParameters = parameters
                 });
             }
         }

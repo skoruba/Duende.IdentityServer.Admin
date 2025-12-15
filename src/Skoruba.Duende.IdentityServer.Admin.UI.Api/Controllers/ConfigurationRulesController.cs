@@ -54,6 +54,7 @@ public class ConfigurationRulesController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(ConfigurationRuleDto), 201)]
     [ProducesResponseType(400)]
+    [ProducesResponseType(409)]
     public async Task<ActionResult<ConfigurationRuleDto>> Post([FromBody] ConfigurationRuleDto rule)
     {
         if (!ModelState.IsValid)
@@ -61,8 +62,15 @@ public class ConfigurationRulesController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        await _configurationRulesService.AddRuleAsync(rule);
-        return CreatedAtAction(nameof(Get), new { id = rule.Id }, rule);
+        try
+        {
+            await _configurationRulesService.AddRuleAsync(rule);
+            return CreatedAtAction(nameof(Get), new { id = rule.Id }, rule);
+        }
+        catch (System.InvalidOperationException ex)
+        {
+            return Conflict(new { message = ex.Message });
+        }
     }
 
     [HttpPut("{id}")]

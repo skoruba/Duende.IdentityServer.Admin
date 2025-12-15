@@ -57,12 +57,21 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
   };
 
   const getIssueTypeBadge = (issueType: client.ConfigurationIssueType) => {
+    const isError =
+      String(issueType) === "Error" ||
+      issueType === client.ConfigurationIssueType.Error;
     const isWarning =
       String(issueType) === "Warning" ||
       issueType === client.ConfigurationIssueType.Warning;
-    const label = isWarning
-      ? t("ConfigurationRules.Warning")
-      : t("ConfigurationRules.Recommendation");
+
+    let label;
+    if (isError) {
+      label = t("ConfigurationRules.Error");
+    } else if (isWarning) {
+      label = t("ConfigurationRules.Warning");
+    } else {
+      label = t("ConfigurationRules.Recommendation");
+    }
 
     return <IssueTypeBadge type={issueType as any} label={label} />;
   };

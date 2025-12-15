@@ -15,4 +15,5 @@ public interface IConfigurationRulesRepository
     Task<int> UpdateRuleAsync(ConfigurationRule rule);
     Task<int> DeleteRuleAsync(int id);
     Task<bool> RuleExistsAsync(int id);
+    Task<bool> RuleTypeExistsAsync(ConfigurationRuleType ruleType, int? excludeId = null);
 }

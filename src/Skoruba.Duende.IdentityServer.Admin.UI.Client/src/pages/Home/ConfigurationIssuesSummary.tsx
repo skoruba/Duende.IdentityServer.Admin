@@ -34,24 +34,29 @@ function LegendItem({ color, label }: { color: string; label: string }) {
   );
 }
 
-export function ClientsChecker() {
+export function ConfigurationIssuesSummary() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
   const { data, isLoading } = getConfigurationIssues();
 
+  const errors = data?.errors ?? 0;
   const warnings = data?.warnings ?? 0;
   const recommendations = data?.recommendations ?? 0;
 
-  const hasNoIssues = warnings === 0 && recommendations === 0;
+  const hasNoIssues = errors === 0 && warnings === 0 && recommendations === 0;
 
   const chartConfig = {
     issues: {
       label: t("Home.ClientsChecker.Legend.Issues"),
     },
+    errors: {
+      label: t("Home.ClientsChecker.Legend.Errors"),
+      color: "hsl(var(--chart-error))",
+    },
     warnings: {
       label: t("Home.ClientsChecker.Legend.Warnings"),
-      color: "hsl(var(--chart-danger))",
+      color: "hsl(var(--chart-warning))",
     },
     recommendations: {
       label: t("Home.ClientsChecker.Legend.Recommendations"),
@@ -66,24 +71,42 @@ export function ClientsChecker() {
   const chartData = hasNoIssues
     ? [{ browser: "done", issues: 1, fill: "var(--color-done)" }]
     : [
-        {
-          browser: "warnings",
-          issues: warnings,
-          fill: "var(--color-warnings)",
-        },
-        {
-          browser: "recommendations",
-          issues: recommendations,
-          fill: "var(--color-recommendations)",
-        },
+        ...(errors > 0
+          ? [
+              {
+                browser: "errors",
+                issues: errors,
+                fill: "var(--color-errors)",
+              },
+            ]
+          : []),
+        ...(warnings > 0
+          ? [
+              {
+                browser: "warnings",
+                issues: warnings,
+                fill: "var(--color-warnings)",
+              },
+            ]
+          : []),
+        ...(recommendations > 0
+          ? [
+              {
+                browser: "recommendations",
+                issues: recommendations,
+                fill: "var(--color-recommendations)",
+              },
+            ]
+          : []),
       ];
 
   if (isLoading) {
     return <Loading />;
   }
 
-  const totalIssues = warnings + recommendations;
+  const totalIssues = errors + warnings + recommendations;
 
+  const errorsStr = t("Home.ClientsChecker.Error", { count: errors });
   const warningsStr = t("Home.ClientsChecker.Warning", { count: warnings });
   const recommendationsStr = t("Home.ClientsChecker.Recommendation", {
     count: recommendations,
@@ -144,7 +167,11 @@ export function ClientsChecker() {
 
         <div className="flex flex-col justify-center gap-4">
           <LegendItem
-            color="var(--chart-danger)"
+            color="var(--chart-error)"
+            label={t("Home.ClientsChecker.Legend.Errors")}
+          />
+          <LegendItem
+            color="var(--chart-warning)"
             label={t("Home.ClientsChecker.Legend.Warnings")}
           />
           <LegendItem
@@ -161,6 +188,7 @@ export function ClientsChecker() {
       <CardFooter className="flex-col gap-4 text-sm">
         <div className="leading-none text-muted-foreground text-center">
           {t("Home.ClientsChecker.Found", {
+            errors: errorsStr,
             warnings: warningsStr,
             recommendations: recommendationsStr,
           })}
@@ -178,4 +206,4 @@ export function ClientsChecker() {
   );
 }
 
-export default ClientsChecker;
+export default ConfigurationIssuesSummary;
