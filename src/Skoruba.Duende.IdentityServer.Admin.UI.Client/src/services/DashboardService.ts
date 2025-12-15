@@ -18,11 +18,11 @@ export const buildConfigurationIssueLink = (
     case client.ConfigurationResourceType.Client:
       return ClientEditUrl.replace(":clientId", resourceId);
     case client.ConfigurationResourceType.IdentityResource:
-      return IdentityResourceEditUrl.replace(":identityResourceId", resourceId);
+      return IdentityResourceEditUrl.replace(":resourceId", resourceId);
     case client.ConfigurationResourceType.ApiResource:
-      return ApiResourceEditUrl.replace(":apiResourceId", resourceId);
+      return ApiResourceEditUrl.replace(":resourceId", resourceId);
     case client.ConfigurationResourceType.ApiScope:
-      return ApiScopeEditUrl.replace(":apiScopeId", resourceId);
+      return ApiScopeEditUrl.replace(":scopeId", resourceId);
     default:
       return "";
   }

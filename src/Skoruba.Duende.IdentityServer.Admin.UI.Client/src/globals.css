@@ -43,6 +43,22 @@
     --chart-recommendation: 221.2 83.2% 53.3%;
     --chart-warning: 38 92% 50%;
     --chart-error: 0 84% 60%;
+
+    /* Dashboard Chart Colors */
+    --chart-primary: 221.2 83.2% 53.3%;
+    --chart-secondary: 262 83% 58%;
+    --chart-accent: 199 89% 48%;
+    --chart-success: 142 76% 36%;
+
+    /* Activity Chart Colors */
+    --chart-activity-normal: 221.2 83.2% 53.3%;
+    --chart-activity-high: 25 95% 53%;
+    --chart-activity-current: 221.2 83.2% 53.3%;
+
+    /* Status Colors */
+    --chart-normal: 220 14% 96%;
+    --chart-today: 221.2 83.2% 53.3%;
+    --chart-high-activity: 25 95% 53%;
   }
  
   .dark {
@@ -84,6 +100,22 @@
     --chart-recommendation: 221.2 83.2% 63%;
     --chart-warning: 38 92% 60%;
     --chart-error: 0 72% 56%;
+
+    /* Dashboard Chart Colors - Dark Mode */
+    --chart-primary: 221.2 83.2% 63%;
+    --chart-secondary: 262 83% 68%;
+    --chart-accent: 199 89% 58%;
+    --chart-success: 142 76% 46%;
+
+    /* Activity Chart Colors - Dark Mode */
+    --chart-activity-normal: 221.2 83.2% 63%;
+    --chart-activity-high: 25 95% 63%;
+    --chart-activity-current: 221.2 83.2% 63%;
+
+    /* Status Colors - Dark Mode */
+    --chart-normal: 220 13% 18%;
+    --chart-today: 221.2 83.2% 63%;
+    --chart-high-activity: 25 95% 63%;
   }
 }
  
@@ -93,5 +125,19 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .chart-indicator-normal {
+    @apply bg-slate-400;
+  }
+  
+  .chart-indicator-today {
+    @apply bg-blue-500;
+  }
+  
+  .chart-indicator-high-activity {
+    @apply bg-orange-500;
   }
 }

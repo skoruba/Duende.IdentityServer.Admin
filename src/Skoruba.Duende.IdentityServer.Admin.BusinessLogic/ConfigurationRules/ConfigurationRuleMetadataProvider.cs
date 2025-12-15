@@ -174,7 +174,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 },
                 DefaultConfiguration = "{\"forbiddenStrings\": [\"test\", \"temp\", \"debug\"]}",
                 ExampleConfiguration = "{\"forbiddenStrings\": [\"admin\", \"internal\"]}",
-                DefaultMessageTemplate = "API Scope name contains forbidden strings",
+                DefaultMessageTemplate = "API Scope '{scopeName}' contains forbidden string(s): {forbiddenStrings}",
                 DefaultFixDescription = "Rename the API Scope to remove forbidden strings from the name."
             },
 
@@ -214,7 +214,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 },
                 DefaultConfiguration = "{\"minScopes\": 1}",
                 ExampleConfiguration = "{\"minScopes\": 2}",
-                DefaultMessageTemplate = "API Resource must have at least one scope",
+                DefaultMessageTemplate = "API Resource '{resourceName}' has {actualCount} scope(s), but requires at least {requiredCount}",
                 DefaultFixDescription = "Go to API Resource details → Scopes and add at least one scope."
             },
 
@@ -263,7 +263,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 },
                 DefaultConfiguration = "{\"requiredResources\": [\"openid\", \"profile\"]}",
                 ExampleConfiguration = "{\"requiredResources\": [\"openid\", \"profile\", \"email\"]}",
-                DefaultMessageTemplate = "Required identity resource is disabled",
+                DefaultMessageTemplate = "Required identity resource '{resourceName}' ({displayName}) is disabled",
                 DefaultFixDescription = "Go to Identity Resource details and enable this resource."
             },
 
@@ -323,7 +323,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 },
                 DefaultConfiguration = "{\"minScopes\": 1}",
                 ExampleConfiguration = "{\"minScopes\": 3}",
-                DefaultMessageTemplate = "Client must have at least one allowed scope",
+                DefaultMessageTemplate = "Client '{clientName}' has {actualCount} allowed scope(s), but requires at least {requiredCount}",
                 DefaultFixDescription = "Go to client details → Scopes and add allowed scopes."
             },
 
@@ -349,8 +349,68 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 },
                 DefaultConfiguration = "{\"maxLifetimeSeconds\": 2592000}",
                 ExampleConfiguration = "{\"maxLifetimeSeconds\": 7776000}",
-                DefaultMessageTemplate = "Client refresh token lifetime exceeds recommended maximum",
+                DefaultMessageTemplate = "Client '{clientName}' refresh token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s",
                 DefaultFixDescription = "Go to client details → Token and reduce the Refresh Token Lifetime."
+            },
+
+            // Security Rules
+            [ConfigurationRuleType.ScopeIsUnused] = new ConfigurationRuleMetadataDto
+            {
+                RuleType = nameof(ConfigurationRuleType.ScopeIsUnused),
+                DisplayName = "Scope Is Unused",
+                Description = "Detects API scopes that are not used by any clients or API resources, which may indicate unnecessary scopes that can be removed.",
+                ResourceType = nameof(ConfigurationResourceType.ApiScope),
+                Parameters = new List<ConfigurationRuleParameterDto>
+                {
+                    new ConfigurationRuleParameterDto
+                    {
+                        Name = "excludeScopes",
+                        DisplayName = "Exclude Scopes",
+                        Description = "List of scope names to exclude from unused scope detection (e.g., standard OIDC scopes)",
+                        Type = "array",
+                        Required = false,
+                        DefaultValue = new[] { "openid", "profile", "email", "address", "phone", "offline_access" }
+                    }
+                },
+                DefaultConfiguration = "{\"excludeScopes\": [\"openid\", \"profile\", \"email\", \"address\", \"phone\", \"offline_access\"]}",
+                ExampleConfiguration = "{\"excludeScopes\": [\"openid\", \"profile\", \"admin\", \"system\"]}",
+                DefaultMessageTemplate = "API Scope '{scopeName}'{displayNameSuffix} is not used by any clients or API resources",
+                DefaultFixDescription = "Review if this scope is still needed. If not, consider removing it to reduce configuration complexity."
+            },
+
+            [ConfigurationRuleType.SecretIsExpiredInDays] = new ConfigurationRuleMetadataDto
+            {
+                RuleType = nameof(ConfigurationRuleType.SecretIsExpiredInDays),
+                DisplayName = "Secret Is Expired In Days",
+                Description = "Detects client secrets that are expired or will expire within a specified number of days, helping prevent authentication failures.",
+                ResourceType = nameof(ConfigurationResourceType.Client),
+                Parameters = new List<ConfigurationRuleParameterDto>
+                {
+                    new ConfigurationRuleParameterDto
+                    {
+                        Name = "warningDays",
+                        DisplayName = "Warning Days",
+                        Description = "Number of days before expiration to start warning",
+                        Type = "number",
+                        Required = false,
+                        DefaultValue = 30,
+                        MinValue = 1,
+                        MaxValue = 365
+                    },
+                    new ConfigurationRuleParameterDto
+                    {
+                        Name = "includeAlreadyExpired",
+                        DisplayName = "Include Already Expired",
+                        Description = "Include secrets that are already expired",
+                        Type = "boolean",
+                        Required = false,
+                        DefaultValue = true
+                    }
+                },
+                DefaultConfiguration = "{\"warningDays\": 30, \"includeAlreadyExpired\": true}",
+                ExampleConfiguration = "{\"warningDays\": 14, \"includeAlreadyExpired\": false}",
+                DefaultMessageTemplate = "Client '{clientName}' has a secret ({secretType}) that {status} in {daysUntilExpiry} day(s) on {expirationDate}",
+                DefaultFixDescription = "Go to client details → Secrets and renew or extend the expiration date of the secret."
             }
         };
     }

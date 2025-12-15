@@ -80,7 +80,7 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
     resourceType: client.ConfigurationResourceType
   ) => {
     const variants: any = {
-      Client: "default",
+      Client: "outline",
       ApiScope: "outline",
       ApiResource: "outline",
       IdentityResource: "outline",

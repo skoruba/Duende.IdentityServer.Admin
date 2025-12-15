@@ -25,5 +25,9 @@ public enum ConfigurationRuleType
 
     // Identity Resource rules
     IdentityResourceMustBeEnabled,
-    IdentityResourceNameMustStartWith
+    IdentityResourceNameMustStartWith,
+
+    // Security rules
+    ScopeIsUnused,
+    SecretIsExpiredInDays
 }

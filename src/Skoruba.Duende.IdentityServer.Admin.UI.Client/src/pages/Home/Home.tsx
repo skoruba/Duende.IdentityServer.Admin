@@ -7,7 +7,6 @@ import {
   KeyRound,
   Laptop,
   Lock,
-  Settings,
   ShieldCheck,
   Users,
 } from "lucide-react";
@@ -23,7 +22,6 @@ import {
   UsersUrl,
   RolesUrl,
   ConfigurationIssuesUrl,
-  ConfigurationRulesUrl,
   IdentityProvidersUrl,
   AuditLogsUrl,
 } from "@/routing/Urls";
@@ -138,13 +136,6 @@ const Home = () => {
       title: t("Home.ConfigurationIssues"),
       description: t("Home.ConfigurationIssuesDescription"),
       url: ConfigurationIssuesUrl,
-      kind: "monitoring",
-    },
-    {
-      icon: <Settings className="h-12 w-12 stroke-[1.75]" />,
-      title: t("Home.ConfigurationRules"),
-      description: t("Home.ConfigurationRulesDescription"),
-      url: ConfigurationRulesUrl,
       kind: "monitoring",
     },
   ];

@@ -44,7 +44,7 @@ const ConfigurationIssues: React.FC = () => {
       cell: ({ row }: { row: { original: client.ConfigurationIssueDto } }) => {
         const resourceType = String(row.original.resourceType);
         const variants: any = {
-          Client: "default",
+          Client: "outline",
           ApiScope: "outline",
           ApiResource: "outline",
           IdentityResource: "outline",

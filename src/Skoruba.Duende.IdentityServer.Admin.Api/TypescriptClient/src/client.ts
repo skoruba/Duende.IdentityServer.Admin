@@ -8722,6 +8722,8 @@ export enum ConfigurationRuleType {
     ApiResourceNameMustStartWith = "ApiResourceNameMustStartWith",
     IdentityResourceMustBeEnabled = "IdentityResourceMustBeEnabled",
     IdentityResourceNameMustStartWith = "IdentityResourceNameMustStartWith",
+    ScopeIsUnused = "ScopeIsUnused",
+    SecretIsExpiredInDays = "SecretIsExpiredInDays",
 }
 
 export enum ConfigurationIssueType {
