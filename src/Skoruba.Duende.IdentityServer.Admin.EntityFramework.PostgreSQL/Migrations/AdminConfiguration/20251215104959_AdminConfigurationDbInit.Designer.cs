@@ -2,18 +2,18 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 
 #nullable disable
 
-namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migrations.ConfigurationRules
+namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrations.AdminConfiguration
 {
-    [DbContext(typeof(ConfigurationRulesDbContext))]
-    [Migration("20251212201018_DbInit")]
-    partial class DbInit
+    [DbContext(typeof(AdminConfigurationDbContext))]
+    [Migration("20251215104959_AdminConfigurationDbInit")]
+    partial class AdminConfigurationDbInit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,47 +21,47 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migratio
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.10")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities.ConfigurationRule", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Configuration")
                         .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("FixDescription")
                         .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasColumnType("character varying(1000)");
 
                     b.Property<bool>("IsEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<int>("IssueType")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("MessageTemplate")
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("character varying(500)");
 
                     b.Property<int>("ResourceType")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("RuleType")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -74,7 +74,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migratio
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 12, 20, 10, 17, 930, DateTimeKind.Utc).AddTicks(2680),
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             FixDescription = "Go to the client details → Advanced → Grant Types and replace 'implicit' with 'authorization_code'.",
                             IsEnabled = true,
                             IssueType = 0,
@@ -85,7 +85,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migratio
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 12, 12, 20, 10, 17, 930, DateTimeKind.Utc).AddTicks(2680),
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             FixDescription = "Go to the client details → Advanced → Grant Types and replace 'password' with 'authorization_code' or 'client_credentials'.",
                             IsEnabled = true,
                             IssueType = 0,
@@ -96,7 +96,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migratio
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 12, 12, 20, 10, 17, 930, DateTimeKind.Utc).AddTicks(2680),
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             FixDescription = "This client does not use PKCE. Consider enabling PKCE for enhanced security.",
                             IsEnabled = true,
                             IssueType = 1,
@@ -108,23 +108,23 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migratio
                         {
                             Id = 4,
                             Configuration = "{\"allowLocalhost\": true}",
-                            CreatedAt = new DateTime(2025, 12, 12, 20, 10, 17, 930, DateTimeKind.Utc).AddTicks(2680),
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             FixDescription = "Update redirect URIs to use HTTPS protocol. For production environments, HTTP is not secure.",
                             IsEnabled = false,
                             IssueType = 0,
-                            MessageTemplate = "Client has redirect URIs not using HTTPS",
+                            MessageTemplate = "Client has {count} non-HTTPS redirect URI(s): {uris}",
                             ResourceType = 0,
                             RuleType = 3
                         },
                         new
                         {
                             Id = 5,
-                            Configuration = "{\"prefix\": \"scope_\"}",
-                            CreatedAt = new DateTime(2025, 12, 12, 20, 10, 17, 930, DateTimeKind.Utc).AddTicks(2680),
-                            FixDescription = "Rename the API Scope to follow the naming convention starting with the required prefix.",
+                            Configuration = "{\"prefixes\": [\"scope_\"]}",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FixDescription = "Rename the API Scope to follow the naming convention starting with one of the required prefixes.",
                             IsEnabled = false,
                             IssueType = 1,
-                            MessageTemplate = "API Scope name must start with specified prefix",
+                            MessageTemplate = "API Scope '{actualName}' must start with one of: {allowedPrefixes}",
                             ResourceType = 3,
                             RuleType = 7
                         },
@@ -132,11 +132,11 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migratio
                         {
                             Id = 6,
                             Configuration = "{\"maxLifetimeSeconds\": 3600}",
-                            CreatedAt = new DateTime(2025, 12, 12, 20, 10, 17, 930, DateTimeKind.Utc).AddTicks(2680),
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             FixDescription = "Go to client details → Token and reduce the Access Token Lifetime to the recommended maximum value.",
                             IsEnabled = false,
                             IssueType = 1,
-                            MessageTemplate = "Client access token lifetime exceeds recommended maximum",
+                            MessageTemplate = "Access token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s",
                             ResourceType = 0,
                             RuleType = 5
                         });

@@ -19,14 +19,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Conf
 
 		public string DataProtectionDbMigrationsAssembly { get; set; }
 
-		public string ConfigurationRulesDbMigrationsAssembly { get; set; }
+		public string AdminConfigurationDbMigrationsAssembly { get; set; }
 
 		public void SetMigrationsAssemblies(string commonMigrationsAssembly)
 		{
 			AdminAuditLogDbMigrationsAssembly = commonMigrationsAssembly;
 			AdminLogDbMigrationsAssembly = commonMigrationsAssembly;
 			ConfigurationDbMigrationsAssembly = commonMigrationsAssembly;
-			ConfigurationRulesDbMigrationsAssembly = commonMigrationsAssembly;
+			AdminConfigurationDbMigrationsAssembly = commonMigrationsAssembly;
 			DataProtectionDbMigrationsAssembly = commonMigrationsAssembly;
 			IdentityDbMigrationsAssembly = commonMigrationsAssembly;
 			PersistedGrantDbMigrationsAssembly = commonMigrationsAssembly;

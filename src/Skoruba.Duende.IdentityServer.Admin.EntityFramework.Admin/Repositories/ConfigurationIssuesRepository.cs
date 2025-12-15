@@ -14,7 +14,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Repositories
 
 public class ConfigurationIssuesRepository<TDbContext>(
     TDbContext dbContext,
-    IConfigurationRulesDbContext rulesDbContext,
+    IAdminConfigurationStoreDbContext rulesDbContext,
     IConfigurationRuleValidatorFactory ruleValidatorFactory) : IConfigurationIssuesRepository
     where TDbContext : DbContext, IAdminConfigurationDbContext
 {

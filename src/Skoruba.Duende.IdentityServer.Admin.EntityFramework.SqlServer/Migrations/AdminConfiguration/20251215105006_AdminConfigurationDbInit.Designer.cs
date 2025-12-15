@@ -9,11 +9,11 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 
 #nullable disable
 
-namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migrations.ConfigurationRules
+namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migrations.AdminConfiguration
 {
-    [DbContext(typeof(ConfigurationRulesDbContext))]
-    [Migration("20251212201802_SeedDefaultRules")]
-    partial class SeedDefaultRules
+    [DbContext(typeof(AdminConfigurationDbContext))]
+    [Migration("20251215105006_AdminConfigurationDbInit")]
+    partial class AdminConfigurationDbInit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -112,19 +112,19 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migratio
                             FixDescription = "Update redirect URIs to use HTTPS protocol. For production environments, HTTP is not secure.",
                             IsEnabled = false,
                             IssueType = 0,
-                            MessageTemplate = "Client has redirect URIs not using HTTPS",
+                            MessageTemplate = "Client has {count} non-HTTPS redirect URI(s): {uris}",
                             ResourceType = 0,
                             RuleType = 3
                         },
                         new
                         {
                             Id = 5,
-                            Configuration = "{\"prefix\": \"scope_\"}",
+                            Configuration = "{\"prefixes\": [\"scope_\"]}",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            FixDescription = "Rename the API Scope to follow the naming convention starting with the required prefix.",
+                            FixDescription = "Rename the API Scope to follow the naming convention starting with one of the required prefixes.",
                             IsEnabled = false,
                             IssueType = 1,
-                            MessageTemplate = "API Scope name must start with specified prefix",
+                            MessageTemplate = "API Scope '{actualName}' must start with one of: {allowedPrefixes}",
                             ResourceType = 3,
                             RuleType = 7
                         },
@@ -136,7 +136,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migratio
                             FixDescription = "Go to client details → Token and reduce the Access Token Lifetime to the recommended maximum value.",
                             IsEnabled = false,
                             IssueType = 1,
-                            MessageTemplate = "Client access token lifetime exceeds recommended maximum",
+                            MessageTemplate = "Access token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s",
                             ResourceType = 0,
                             RuleType = 5
                         });

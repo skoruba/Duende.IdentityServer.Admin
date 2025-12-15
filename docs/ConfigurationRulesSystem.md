@@ -32,9 +32,9 @@ public class ConfigurationRule
 - `{"allowLocalhost": true}` - pro ClientRedirectUrisMustUseHttps
 - `{"maxLifetimeSeconds": 3600}` - pro ClientAccessTokenLifetimeTooLong
 
-#### ConfigurationRulesDbContext
+#### AdminConfigurationDbContext
 
-Samostatný DbContext v `EntityFramework.Shared/DbContexts/ConfigurationRulesDbContext.cs`
+Samostatný DbContext v `EntityFramework.Shared/DbContexts/AdminConfigurationDbContext.cs`
 
 - Obsahuje seed data s 6 předpřipravenými pravidly
 - Unikátní index na (RuleType, ResourceType)
@@ -237,7 +237,7 @@ public IConfigurationRuleValidator Create(ConfigurationRuleType ruleType)
 ### 4. Přidat seed data (volitelné)
 
 ```csharp
-// EntityFramework.Shared/DbContexts/ConfigurationRulesDbContext.cs
+// EntityFramework.Shared/DbContexts/AdminConfigurationDbContext.cs
 new ConfigurationRule
 {
     Id = 7,
@@ -300,7 +300,7 @@ new ConfigurationRule
 V Startup/Program.cs přidej:
 
 ```csharp
-services.AddDbContext<ConfigurationRulesDbContext>(options =>
+services.AddDbContext<AdminConfigurationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 services.AddScoped<IConfigurationRulesRepository, ConfigurationRulesRepository>();
@@ -311,8 +311,8 @@ services.AddScoped<IConfigurationRuleValidatorFactory, ConfigurationRuleValidato
 ### 2. Migrace databáze
 
 ```bash
-dotnet ef migrations add AddConfigurationRules --context ConfigurationRulesDbContext
-dotnet ef database update --context ConfigurationRulesDbContext
+dotnet ef migrations add AddConfigurationRules --context AdminConfigurationDbContext
+dotnet ef database update --context AdminConfigurationDbContext
 ```
 
 ### 3. Frontend - seznam pravidel

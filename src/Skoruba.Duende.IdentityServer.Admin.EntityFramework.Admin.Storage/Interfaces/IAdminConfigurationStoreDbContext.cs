@@ -8,7 +8,7 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities
 
 namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
 
-public interface IConfigurationRulesDbContext
+public interface IAdminConfigurationStoreDbContext
 {
     DbSet<ConfigurationRule> ConfigurationRules { get; set; }
 

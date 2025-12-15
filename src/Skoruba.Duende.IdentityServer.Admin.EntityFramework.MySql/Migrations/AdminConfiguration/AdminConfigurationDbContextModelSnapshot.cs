@@ -3,27 +3,24 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 
 #nullable disable
 
-namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migrations.ConfigurationRules
+namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.Migrations.AdminConfiguration
 {
-    [DbContext(typeof(ConfigurationRulesDbContext))]
-    [Migration("20251212213608_UpdateMessageTemplateWithParameters")]
-    partial class UpdateMessageTemplateWithParameters
+    [DbContext(typeof(AdminConfigurationDbContext))]
+    partial class AdminConfigurationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.10")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities.ConfigurationRule", b =>
                 {
@@ -31,28 +28,28 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migratio
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Configuration")
                         .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
+                        .HasColumnType("varchar(2000)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("FixDescription")
                         .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasColumnType("varchar(1000)");
 
                     b.Property<bool>("IsEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit(1)");
 
                     b.Property<int>("IssueType")
                         .HasColumnType("int");
 
                     b.Property<string>("MessageTemplate")
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("varchar(500)");
 
                     b.Property<int>("ResourceType")
                         .HasColumnType("int");
@@ -61,7 +58,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migratio
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -112,19 +109,19 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migratio
                             FixDescription = "Update redirect URIs to use HTTPS protocol. For production environments, HTTP is not secure.",
                             IsEnabled = false,
                             IssueType = 0,
-                            MessageTemplate = "Client has redirect URIs not using HTTPS",
+                            MessageTemplate = "Client has {count} non-HTTPS redirect URI(s): {uris}",
                             ResourceType = 0,
                             RuleType = 3
                         },
                         new
                         {
                             Id = 5,
-                            Configuration = "{\"prefix\": \"scope_\"}",
+                            Configuration = "{\"prefixes\": [\"scope_\"]}",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            FixDescription = "Rename the API Scope to follow the naming convention starting with the required prefix.",
+                            FixDescription = "Rename the API Scope to follow the naming convention starting with one of the required prefixes.",
                             IsEnabled = false,
                             IssueType = 1,
-                            MessageTemplate = "API Scope name must start with specified prefix",
+                            MessageTemplate = "API Scope '{actualName}' must start with one of: {allowedPrefixes}",
                             ResourceType = 3,
                             RuleType = 7
                         },

@@ -8,11 +8,11 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities
 
 namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 
-public class ConfigurationRulesDbContext : DbContext, IConfigurationRulesDbContext
+public class AdminConfigurationDbContext : DbContext, IAdminConfigurationStoreDbContext
 {
     public DbSet<ConfigurationRule> ConfigurationRules { get; set; }
 
-    public ConfigurationRulesDbContext(DbContextOptions<ConfigurationRulesDbContext> options)
+    public AdminConfigurationDbContext(DbContextOptions<AdminConfigurationDbContext> options)
         : base(options)
     {
     }

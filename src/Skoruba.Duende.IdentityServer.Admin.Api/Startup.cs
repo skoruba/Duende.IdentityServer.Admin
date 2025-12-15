@@ -108,7 +108,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api
         public virtual void RegisterDbContexts(IServiceCollection services,
             DatabaseMigrationsConfiguration databaseMigration)
         {
-            services.AddDbContexts<AdminIdentityDbContext, IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext, AdminLogDbContext, AdminAuditLogDbContext, IdentityServerDataProtectionDbContext, ConfigurationRulesDbContext, AuditLog>(Configuration, databaseMigration);
+            services.AddDbContexts<AdminIdentityDbContext, IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext, AdminLogDbContext, AdminAuditLogDbContext, IdentityServerDataProtectionDbContext, AdminConfigurationDbContext, AuditLog>(Configuration, databaseMigration);
         }
 
         public virtual void RegisterAuthentication(IServiceCollection services)

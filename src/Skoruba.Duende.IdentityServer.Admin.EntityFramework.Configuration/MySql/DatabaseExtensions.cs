@@ -32,7 +32,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySq
         /// <param name="connectionStrings"></param>
         /// <param name="databaseMigrations"></param>
         public static void RegisterMySqlDbContexts<TIdentityDbContext, TConfigurationDbContext,
-            TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TConfigurationRulesDbContext, TAuditLog>(this IServiceCollection services,
+            TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAdminConfigurationDbContext, TAuditLog>(this IServiceCollection services,
             ConnectionStringsConfiguration connectionStrings,
             DatabaseMigrationsConfiguration databaseMigrations)
             where TIdentityDbContext : DbContext
@@ -41,7 +41,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySq
             where TLogDbContext : DbContext, IAdminLogDbContext
             where TAuditLoggingDbContext : DbContext, IAuditLoggingDbContext<TAuditLog>
             where TDataProtectionDbContext : DbContext, IDataProtectionKeyContext
-            where TConfigurationRulesDbContext : DbContext, IConfigurationRulesDbContext
+            where TAdminConfigurationDbContext : DbContext, IAdminConfigurationStoreDbContext
             where TAuditLog : AuditLog
         {
             var migrationsAssembly = typeof(DatabaseExtensions).GetTypeInfo().Assembly.GetName().Name;
@@ -72,9 +72,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySq
                 services.AddDbContext<TDataProtectionDbContext>(options => options.UseMySql(connectionStrings.DataProtectionDbConnection, ServerVersion.AutoDetect(connectionStrings.DataProtectionDbConnection),
                     optionsSql => optionsSql.MigrationsAssembly(databaseMigrations.DataProtectionDbMigrationsAssembly ?? migrationsAssembly)));
 
-            // ConfigurationRules DB from existing connection
-            services.AddDbContext<TConfigurationRulesDbContext>(options => options.UseMySql(connectionStrings.ConfigurationRulesDbConnection, ServerVersion.AutoDetect(connectionStrings.ConfigurationRulesDbConnection),
-                optionsSql => optionsSql.MigrationsAssembly(databaseMigrations.ConfigurationRulesDbMigrationsAssembly ?? migrationsAssembly)));
+            // Admin configuration DB from existing connection
+            services.AddDbContext<TAdminConfigurationDbContext>(options => options.UseMySql(connectionStrings.AdminConfigurationDbConnection, ServerVersion.AutoDetect(connectionStrings.AdminConfigurationDbConnection),
+                optionsSql => optionsSql.MigrationsAssembly(databaseMigrations.AdminConfigurationDbMigrationsAssembly ?? migrationsAssembly)));
         }
 
         /// <summary>

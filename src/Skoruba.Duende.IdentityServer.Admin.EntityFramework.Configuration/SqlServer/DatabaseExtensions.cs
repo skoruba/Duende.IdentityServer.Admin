@@ -30,7 +30,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.SqlS
         /// <param name="services"></param>
         /// <param name="connectionStrings"></param>
         /// <param name="databaseMigrations"></param>
-        public static void RegisterSqlServerDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TConfigurationRulesDbContext, TAuditLog>(this IServiceCollection services,
+        public static void RegisterSqlServerDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAdminConfigurationDbContext, TAuditLog>(this IServiceCollection services,
             ConnectionStringsConfiguration connectionStrings,
             DatabaseMigrationsConfiguration databaseMigrations)
             where TIdentityDbContext : DbContext
@@ -39,7 +39,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.SqlS
             where TLogDbContext : DbContext, IAdminLogDbContext
             where TAuditLoggingDbContext : DbContext, IAuditLoggingDbContext<TAuditLog>
             where TDataProtectionDbContext : DbContext, IDataProtectionKeyContext
-            where TConfigurationRulesDbContext : DbContext, IConfigurationRulesDbContext
+            where TAdminConfigurationDbContext : DbContext, IAdminConfigurationStoreDbContext
             where TAuditLog : AuditLog
         {
             var migrationsAssembly = typeof(DatabaseExtensions).GetTypeInfo().Assembly.GetName().Name;
@@ -66,9 +66,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.SqlS
                 services.AddDbContext<TDataProtectionDbContext>(options => options.UseSqlServer(connectionStrings.DataProtectionDbConnection,
                     optionsSql => optionsSql.MigrationsAssembly(databaseMigrations.DataProtectionDbMigrationsAssembly ?? migrationsAssembly)));
 
-            // ConfigurationRules DB from existing connection
-            services.AddDbContext<TConfigurationRulesDbContext>(options => options.UseSqlServer(connectionStrings.ConfigurationRulesDbConnection,
-                optionsSql => optionsSql.MigrationsAssembly(databaseMigrations.ConfigurationRulesDbMigrationsAssembly ?? migrationsAssembly)));
+            // Admin configuration DB from existing connection
+            services.AddDbContext<TAdminConfigurationDbContext>(options => options.UseSqlServer(connectionStrings.AdminConfigurationDbConnection,
+                optionsSql => optionsSql.MigrationsAssembly(databaseMigrations.AdminConfigurationDbMigrationsAssembly ?? migrationsAssembly)));
         }
 
 

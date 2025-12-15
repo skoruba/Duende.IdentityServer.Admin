@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 
 #nullable disable
 
-namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migrations.ConfigurationRules
+namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migrations.AdminConfiguration
 {
-    [DbContext(typeof(ConfigurationRulesDbContext))]
-    [Migration("20251215073025_UpdateAllMessageTemplatesWithParameters")]
-    partial class UpdateAllMessageTemplatesWithParameters
+    [DbContext(typeof(AdminConfigurationDbContext))]
+    partial class AdminConfigurationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -119,12 +116,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migratio
                         new
                         {
                             Id = 5,
-                            Configuration = "{\"prefix\": \"scope_\"}",
+                            Configuration = "{\"prefixes\": [\"scope_\"]}",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            FixDescription = "Rename the API Scope to follow the naming convention starting with the required prefix.",
+                            FixDescription = "Rename the API Scope to follow the naming convention starting with one of the required prefixes.",
                             IsEnabled = false,
                             IssueType = 1,
-                            MessageTemplate = "API Scope '{actualName}' must start with '{prefix}'",
+                            MessageTemplate = "API Scope '{actualName}' must start with one of: {allowedPrefixes}",
                             ResourceType = 3,
                             RuleType = 7
                         },

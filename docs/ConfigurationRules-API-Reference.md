@@ -449,17 +449,17 @@ Nebo rozbalovací řádek s detailem:
 # Vytvoření migrace
 dotnet ef migrations add AddConfigurationRules \
   --project src/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared \
-  --context ConfigurationRulesDbContext
+  --context AdminConfigurationDbContext
 
 # Aplikace migrace
 dotnet ef database update \
   --project src/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared \
-  --context ConfigurationRulesDbContext
+  --context AdminConfigurationDbContext
 
 # Rollback
 dotnet ef database update PreviousMigration \
   --project src/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared \
-  --context ConfigurationRulesDbContext
+  --context AdminConfigurationDbContext
 ```
 
 ---
