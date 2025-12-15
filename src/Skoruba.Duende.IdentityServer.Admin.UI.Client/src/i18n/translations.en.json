@@ -790,7 +790,12 @@
       "0": "Go to the client details → Advanced → Grant Types and replace 'implicit' with 'authorization_code'.",
       "1": "Go to the client details → Advanced → Grant Types and replace 'password' with 'authorization_code'.",
       "2": "Go to the client details → Advanced → Authorization → PKCE and enable 'Require PKCE'."
-    }
+    },
+    "ResourceIssuesTitle": "Configuration issues for this resource",
+    "ResourceIssuesSummary": "{{count}} issue(s) detected",
+    "UnknownIssueMessage": "No details provided for this issue.",
+    "ShowIssues": "Show issues",
+    "HideIssues": "Hide issues"
   },
   "ConfigurationRules": {
     "PageTitle": "Configuration Rules",

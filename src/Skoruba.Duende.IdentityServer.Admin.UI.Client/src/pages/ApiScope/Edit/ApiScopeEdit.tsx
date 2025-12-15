@@ -12,6 +12,8 @@ import DeleteApiScopeDialog from "../Common/DeleteApiScopeDialog";
 import useModal from "@/hooks/modalHooks";
 import { useCallback, useState } from "react";
 import { ShieldCheck } from "lucide-react";
+import { client } from "@skoruba/duende.identityserver.admin.api.client";
+import ResourceConfigurationIssues from "@/components/ConfigurationIssues/ResourceConfigurationIssues";
 
 export enum ApiScopeFormMode {
   Create = "create",
@@ -62,6 +64,10 @@ const ApiScopeEdit = () => {
         apiScopeName={scopeData.name}
         modal={deleteModal}
         onApiScopeDeleted={onApiScopeDeleted}
+      />
+      <ResourceConfigurationIssues
+        resourceId={Number(scopeId)}
+        resourceType={client.ConfigurationResourceType.ApiScope}
       />
       <ApiScopeForm
         mode={ApiScopeFormMode.Edit}

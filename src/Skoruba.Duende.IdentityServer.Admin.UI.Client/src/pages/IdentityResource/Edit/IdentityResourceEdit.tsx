@@ -14,6 +14,8 @@ import DeleteIdentityResourceDialog from "../Common/DeleteIdentityResourceDialog
 import useModal from "@/hooks/modalHooks";
 import { useCallback, useState } from "react";
 import { Fingerprint } from "lucide-react";
+import { client } from "@skoruba/duende.identityserver.admin.api.client";
+import ResourceConfigurationIssues from "@/components/ConfigurationIssues/ResourceConfigurationIssues";
 
 const IdentityResourceEdit = () => {
   const { t } = useTranslation();
@@ -63,6 +65,11 @@ const IdentityResourceEdit = () => {
         identityResourceName={identityResourceData.name}
         modal={deleteModal}
         onIdentityResourceDeleted={onIdentityResourceDeleted}
+      />
+
+      <ResourceConfigurationIssues
+        resourceId={Number(resourceId)}
+        resourceType={client.ConfigurationResourceType.IdentityResource}
       />
 
       <IdentityResourceForm

@@ -8,6 +8,8 @@ import { ClientsUrl } from "@/routing/Urls";
 import ClientEditForm from "./ClientEditForm";
 import { Breadcrumbs } from "@/components/Breadcrumbs/Breadcrumbs";
 import { Laptop } from "lucide-react";
+import { client } from "@skoruba/duende.identityserver.admin.api.client";
+import ResourceConfigurationIssues from "@/components/ConfigurationIssues/ResourceConfigurationIssues";
 
 const ClientEdit = () => {
   const { t } = useTranslation();
@@ -28,25 +30,29 @@ const ClientEdit = () => {
       description={t("Client.SubTitle")}
       icon={Laptop}
       accentKind="management"
-      breadcrumb={
-        <Breadcrumbs
-          items={[
-            { url: ClientsUrl, name: t("Clients.PageTitle") },
-            {
-              name: t("Client.PageTitle", {
-                clientName: clientData.clientName,
-              }),
-            },
-          ]}
-        />
-      }
-    >
-      <ClientEditForm
-        clientId={clientId!}
-        client={mapEditClientToFormData(clientData, grantTypes!)}
+    breadcrumb={
+      <Breadcrumbs
+        items={[
+          { url: ClientsUrl, name: t("Clients.PageTitle") },
+          {
+            name: t("Client.PageTitle", {
+              clientName: clientData.clientName,
+            }),
+          },
+        ]}
       />
-    </Page>
-  );
+    }
+  >
+    <ResourceConfigurationIssues
+      resourceId={Number(clientId)}
+      resourceType={client.ConfigurationResourceType.Client}
+    />
+    <ClientEditForm
+      clientId={clientId!}
+      client={mapEditClientToFormData(clientData, grantTypes!)}
+    />
+  </Page>
+);
 };
 
 export default ClientEdit;

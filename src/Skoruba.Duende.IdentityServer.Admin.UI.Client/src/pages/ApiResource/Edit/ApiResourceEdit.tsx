@@ -12,6 +12,8 @@ import { useCallback, useState } from "react";
 import DeleteApiResourceDialog from "../Common/DeleteApiResourceDialog";
 import useModal from "@/hooks/modalHooks";
 import { Cable } from "lucide-react";
+import { client } from "@skoruba/duende.identityserver.admin.api.client";
+import ResourceConfigurationIssues from "@/components/ConfigurationIssues/ResourceConfigurationIssues";
 
 const ApiResourceEdit = () => {
   const { t } = useTranslation();
@@ -56,6 +58,10 @@ const ApiResourceEdit = () => {
         apiResourceName={resourceData.name}
         modal={deleteModal}
         onApiResourceDeleted={onApiResourceDeleted}
+      />
+      <ResourceConfigurationIssues
+        resourceId={Number(resourceId)}
+        resourceType={client.ConfigurationResourceType.ApiResource}
       />
       <ApiResourceForm
         mode={ApiResourceFormMode.Edit}

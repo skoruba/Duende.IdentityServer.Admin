@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import ApiHelper from "@/helpers/ApiHelper";
 import { DashboardIdentityServerResult } from "@/models/Dashboard/DashboardModels";
 import {
@@ -52,6 +53,34 @@ export const getConfigurationIssues = () =>
     },
     queryWithoutCache
   );
+
+export const useConfigurationIssuesForResource = (
+  resourceId?: number,
+  resourceType?: client.ConfigurationResourceType
+) => {
+  const result = useConfigurationIssues();
+
+  const filtered = useMemo(() => {
+    if (
+      resourceId == null ||
+      Number.isNaN(resourceId) ||
+      resourceType == null ||
+      result.data == null
+    ) {
+      return [];
+    }
+
+    return result.data.filter(
+      (issue) =>
+        issue.resourceType === resourceType && issue.resourceId === resourceId
+    );
+  }, [result.data, resourceId, resourceType]);
+
+  return {
+    ...result,
+    data: filtered,
+  };
+};
 
 export const getDashboardIdentityServerData = async (
   auditLogsLastNumberOfDays: number
