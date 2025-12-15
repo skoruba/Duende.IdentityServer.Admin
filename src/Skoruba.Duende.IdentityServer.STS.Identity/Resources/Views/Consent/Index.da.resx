@@ -138,4 +138,10 @@
   <data name="Yes" xml:space="preserve">
     <value>Ja, tillad</value>
   </data>
+  <data name="DescriptionPlaceholder" xml:space="preserve">
+    <value>Beskrivelse eller navn på enheden</value>
+  </data>
+  <data name="DescriptionTitle" xml:space="preserve">
+    <value>Beskrivelse</value>
+  </data>
 </root>

@@ -59,22 +59,35 @@
 			</div>
 		}
 
-	@if (Model.AllowRememberConsent)
-	{
 		<div class="card">
+			<div class="card-header">
+				<h2 class="card-title flex items-center gap-2">
+					<lucideicon name="pencil" class="h-5 w-5" />
+					@Localizer["DescriptionTitle"]
+				</h2>
+			</div>
 			<div class="card-content py-4">
-				<div class="flex items-center justify-between">
-					<label for="RememberConsent" class="font-semibold cursor-pointer">
-						@Localizer["Remember"]
-					</label>
-					<label class="switch">
-						<input asp-for="RememberConsent" type="checkbox" id="RememberConsent" />
-						<span class="switch-slider"></span>
-					</label>
-				</div>
+				<input asp-for="Description" class="input w-full" placeholder="@Localizer["DescriptionPlaceholder"]" />
 			</div>
 		</div>
-	}		<div class="flex flex-wrap gap-4 items-center justify-between">
+
+		@if (Model.AllowRememberConsent)
+		{
+			<div class="card">
+				<div class="card-content py-4">
+					<div class="flex items-center justify-between">
+						<label for="RememberConsent" class="font-semibold cursor-pointer">
+							@Localizer["Remember"]
+						</label>
+						<label class="switch">
+							<input asp-for="RememberConsent" type="checkbox" id="RememberConsent" />
+							<span class="switch-slider"></span>
+						</label>
+					</div>
+				</div>
+			</div>
+		}
+		<div class="flex flex-wrap gap-4 items-center justify-between">
 			<div class="flex gap-3">
 				<button name="button" value="yes" class="btn-default" autofocus>
 					<lucideicon name="check" class="inline-block h-4 w-4 mr-2" />

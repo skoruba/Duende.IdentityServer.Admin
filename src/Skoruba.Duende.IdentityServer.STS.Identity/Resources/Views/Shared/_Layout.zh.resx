@@ -132,6 +132,10 @@
   <data name="Grants" xml:space="preserve">
     <value>授权</value>
   </data>
+  <data name="ServerSessionsMenu" xml:space="preserve">
+    <value>服务器会话</value>
+  </data>
+
   <data name="ManagePersonalData" xml:space="preserve">
     <value>我的个人数据</value>
   </data>

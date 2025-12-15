@@ -132,6 +132,10 @@
   <data name="Grants" xml:space="preserve">
     <value>واگذاری ها</value>
   </data>
+  <data name="ServerSessionsMenu" xml:space="preserve">
+    <value>نشست‌های سرور</value>
+  </data>
+
   <data name="ManagePersonalData" xml:space="preserve">
     <value>اطلاعات شخصی من</value>
   </data>
