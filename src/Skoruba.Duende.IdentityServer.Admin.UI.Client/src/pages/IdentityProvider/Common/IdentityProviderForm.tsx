@@ -8,7 +8,7 @@ import {
   useCreateIdentityProvider,
   useUpdateIdentityProvider,
 } from "@/services/IdentityProviderService";
-import { IdentityProvidersUrl } from "@/routing/Urls";
+import { IdentityProviderEditUrl, IdentityProvidersUrl } from "@/routing/Urls";
 import Hoorey from "@/components/Hoorey/Hoorey";
 import { Trash2, Info, Settings } from "lucide-react";
 import useModal from "@/hooks/modalHooks";
@@ -59,19 +59,23 @@ const IdentityProviderForm: React.FC<Props> = ({ mode, defaultValues }) => {
         ? createMutation
         : updateMutation;
 
-    mutation.mutate(data, {
-      onSuccess: () => {
-        toast({
-          title: <Hoorey />,
-          description:
-            mode === IdentityProviderFormMode.Create
-              ? t("IdentityProvider.Actions.Created")
-              : t("IdentityProvider.Actions.Updated"),
-        });
+    const result = await mutation.mutateAsync(data);
 
-        navigate(IdentityProvidersUrl);
-      },
+    toast({
+      title: <Hoorey />,
+      description:
+        mode === IdentityProviderFormMode.Create
+          ? t("IdentityProvider.Actions.Created")
+          : t("IdentityProvider.Actions.Updated"),
     });
+
+    if (mode === IdentityProviderFormMode.Create && result?.id) {
+      navigate(
+        IdentityProviderEditUrl.replace(":providerId", result.id.toString())
+      );
+    } else {
+      navigate(IdentityProvidersUrl);
+    }
   };
 
   const showDelete =

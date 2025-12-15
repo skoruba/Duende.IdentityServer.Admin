@@ -8192,7 +8192,7 @@ export var ConfigurationRuleType;
     ConfigurationRuleType["ObsoletePasswordGrant"] = "ObsoletePasswordGrant";
     ConfigurationRuleType["MissingPkce"] = "MissingPkce";
     ConfigurationRuleType["ClientRedirectUrisMustUseHttps"] = "ClientRedirectUrisMustUseHttps";
-    ConfigurationRuleType["ClientMustHaveAllowedScopes"] = "ClientMustHaveAllowedScopes";
+    ConfigurationRuleType["ClientMustHaveScopes"] = "ClientMustHaveScopes";
     ConfigurationRuleType["ClientAccessTokenLifetimeTooLong"] = "ClientAccessTokenLifetimeTooLong";
     ConfigurationRuleType["ClientRefreshTokenLifetimeTooLong"] = "ClientRefreshTokenLifetimeTooLong";
     ConfigurationRuleType["ApiScopeNameMustStartWith"] = "ApiScopeNameMustStartWith";

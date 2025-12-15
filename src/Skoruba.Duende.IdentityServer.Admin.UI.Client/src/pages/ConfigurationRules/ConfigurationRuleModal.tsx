@@ -16,6 +16,7 @@ import {
 import { queryKeys } from "@/services/QueryKeys";
 import Loading from "@/components/Loading/Loading";
 import ConfigurationRuleForm from "./ConfigurationRuleForm";
+import { toast } from "@/components/ui/use-toast";
 
 interface ConfigurationRuleModalProps {
   rule: client.ConfigurationRuleDto | null;
@@ -56,6 +57,13 @@ const ConfigurationRuleModal: React.FC<ConfigurationRuleModalProps> = ({
         queryClient.invalidateQueries([queryKeys.configurationIssues]);
         queryClient.invalidateQueries([queryKeys.configurationIssuesSummary]);
         onSuccess();
+      },
+      onError: () => {
+        toast({
+          variant: "destructive",
+          title: t("ConfigurationRules.SaveFailed"),
+          description: t("ConfigurationRules.GenericError"),
+        });
       },
     }
   );

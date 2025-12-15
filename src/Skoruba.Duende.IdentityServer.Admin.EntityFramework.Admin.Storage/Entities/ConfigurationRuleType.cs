@@ -10,7 +10,7 @@ public enum ConfigurationRuleType
     ObsoletePasswordGrant,
     MissingPkce,
     ClientRedirectUrisMustUseHttps,
-    ClientMustHaveAllowedScopes,
+    ClientMustHaveScopes,
     ClientAccessTokenLifetimeTooLong,
     ClientRefreshTokenLifetimeTooLong,
 

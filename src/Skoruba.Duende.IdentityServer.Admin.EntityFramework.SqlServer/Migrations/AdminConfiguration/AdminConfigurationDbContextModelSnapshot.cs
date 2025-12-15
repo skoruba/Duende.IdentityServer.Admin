@@ -62,7 +62,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migratio
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RuleType", "ResourceType")
+                    b.HasIndex("RuleType")
                         .IsUnique();
 
                     b.ToTable("ConfigurationRules");
@@ -136,6 +136,30 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migratio
                             MessageTemplate = "Access token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s",
                             ResourceType = 0,
                             RuleType = 5
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Configuration = "{\"minScopes\": 1}",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FixDescription = "Go to client details → Scopes and add allowed scopes.",
+                            IsEnabled = true,
+                            IssueType = 0,
+                            MessageTemplate = "Client '{clientName}' has {actualCount} allowed scope(s), but requires at least {requiredCount}",
+                            ResourceType = 0,
+                            RuleType = 4
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Configuration = "{\"minScopes\": 1}",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FixDescription = "Go to API Resource details → Scopes and add at least one scope.",
+                            IsEnabled = true,
+                            IssueType = 0,
+                            MessageTemplate = "API Resource '{resourceName}' has {actualCount} scope(s), but requires at least {requiredCount}",
+                            ResourceType = 2,
+                            RuleType = 10
                         });
                 });
 #pragma warning restore 612, 618

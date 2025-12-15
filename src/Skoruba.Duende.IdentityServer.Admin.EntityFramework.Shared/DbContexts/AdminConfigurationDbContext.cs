@@ -39,7 +39,7 @@ public class AdminConfigurationDbContext : DbContext, IAdminConfigurationStoreDb
             entity.Property(e => e.FixDescription).HasMaxLength(1000);
             entity.Property(e => e.CreatedAt).IsRequired();
 
-            entity.HasIndex(e => new { e.RuleType, e.ResourceType }).IsUnique();
+            entity.HasIndex(e => e.RuleType).IsUnique();
         });
     }
 
@@ -118,6 +118,30 @@ public class AdminConfigurationDbContext : DbContext, IAdminConfigurationStoreDb
                 Configuration = "{\"maxLifetimeSeconds\": 3600}",
                 MessageTemplate = "Access token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s",
                 FixDescription = "Go to client details → Token and reduce the Access Token Lifetime to the recommended maximum value.",
+                CreatedAt = createdAt
+            },
+            new ConfigurationRule
+            {
+                Id = 7,
+                RuleType = ConfigurationRuleType.ClientMustHaveScopes,
+                ResourceType = ConfigurationResourceType.Client,
+                IssueType = ConfigurationIssueType.Warning,
+                IsEnabled = true,
+                Configuration = "{\"minScopes\": 1}",
+                MessageTemplate = "Client '{clientName}' has {actualCount} allowed scope(s), but requires at least {requiredCount}",
+                FixDescription = "Go to client details → Scopes and add allowed scopes.",
+                CreatedAt = createdAt
+            },
+            new ConfigurationRule
+            {
+                Id = 8,
+                RuleType = ConfigurationRuleType.ApiResourceMustHaveScopes,
+                ResourceType = ConfigurationResourceType.ApiResource,
+                IssueType = ConfigurationIssueType.Warning,
+                IsEnabled = true,
+                Configuration = "{\"minScopes\": 1}",
+                MessageTemplate = "API Resource '{resourceName}' has {actualCount} scope(s), but requires at least {requiredCount}",
+                FixDescription = "Go to API Resource details → Scopes and add at least one scope.",
                 CreatedAt = createdAt
             }
         );

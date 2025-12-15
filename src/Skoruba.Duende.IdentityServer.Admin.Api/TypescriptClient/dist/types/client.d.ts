@@ -1083,7 +1083,7 @@ export declare enum ConfigurationRuleType {
     ObsoletePasswordGrant = "ObsoletePasswordGrant",
     MissingPkce = "MissingPkce",
     ClientRedirectUrisMustUseHttps = "ClientRedirectUrisMustUseHttps",
-    ClientMustHaveAllowedScopes = "ClientMustHaveAllowedScopes",
+    ClientMustHaveScopes = "ClientMustHaveScopes",
     ClientAccessTokenLifetimeTooLong = "ClientAccessTokenLifetimeTooLong",
     ClientRefreshTokenLifetimeTooLong = "ClientRefreshTokenLifetimeTooLong",
     ApiScopeNameMustStartWith = "ApiScopeNameMustStartWith",

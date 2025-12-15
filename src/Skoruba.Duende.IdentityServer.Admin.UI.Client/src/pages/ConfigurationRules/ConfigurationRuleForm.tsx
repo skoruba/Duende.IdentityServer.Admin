@@ -291,6 +291,7 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
               description={t("ConfigurationRules.MessageTemplateDescription")}
               required
               type="input"
+              maxLength={500}
             />
 
             <FormRow
@@ -298,6 +299,7 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
               label={t("ConfigurationRules.FixDescription")}
               description={t("ConfigurationRules.FixDescriptionDescription")}
               type="textarea"
+              maxLength={1000}
             />
           </>
         )}

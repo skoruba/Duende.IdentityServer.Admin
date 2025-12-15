@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 
@@ -11,9 +12,11 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.Migrations.AdminConfiguration
 {
     [DbContext(typeof(AdminConfigurationDbContext))]
-    partial class AdminConfigurationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251215130308_AdminConfigurationRuleTypeUnique")]
+    partial class AdminConfigurationRuleTypeUnique
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,30 +139,6 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.Migrations.A
                             MessageTemplate = "Access token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s",
                             ResourceType = 0,
                             RuleType = 5
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Configuration = "{\"minScopes\": 1}",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            FixDescription = "Go to client details → Scopes and add allowed scopes.",
-                            IsEnabled = true,
-                            IssueType = 0,
-                            MessageTemplate = "Client '{clientName}' has {actualCount} allowed scope(s), but requires at least {requiredCount}",
-                            ResourceType = 0,
-                            RuleType = 4
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Configuration = "{\"minScopes\": 1}",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            FixDescription = "Go to API Resource details → Scopes and add at least one scope.",
-                            IsEnabled = true,
-                            IssueType = 0,
-                            MessageTemplate = "API Resource '{resourceName}' has {actualCount} scope(s), but requires at least {requiredCount}",
-                            ResourceType = 2,
-                            RuleType = 10
                         });
                 });
 #pragma warning restore 612, 618

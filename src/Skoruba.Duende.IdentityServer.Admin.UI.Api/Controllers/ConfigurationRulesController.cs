@@ -64,8 +64,9 @@ public class ConfigurationRulesController : ControllerBase
 
         try
         {
-            await _configurationRulesService.AddRuleAsync(rule);
-            return CreatedAtAction(nameof(Get), new { id = rule.Id }, rule);
+            var id = await _configurationRulesService.AddRuleAsync(rule);
+            rule.Id = id;
+            return CreatedAtAction(nameof(Get), new { id }, rule);
         }
         catch (System.InvalidOperationException ex)
         {
@@ -92,8 +93,15 @@ public class ConfigurationRulesController : ControllerBase
             return NotFound();
         }
 
-        await _configurationRulesService.UpdateRuleAsync(rule);
-        return NoContent();
+        try
+        {
+            await _configurationRulesService.UpdateRuleAsync(rule);
+            return NoContent();
+        }
+        catch (System.InvalidOperationException ex)
+        {
+            return Conflict(new { message = ex.Message });
+        }
     }
 
     [HttpDelete("{id}")]

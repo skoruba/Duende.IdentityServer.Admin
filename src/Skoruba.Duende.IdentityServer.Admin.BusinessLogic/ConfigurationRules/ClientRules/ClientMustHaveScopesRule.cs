@@ -12,12 +12,12 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfac
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.ClientRules;
 
-public class ClientMustHaveAllowedScopesRule<TDbContext> : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
+public class ClientMustHaveScopesRule<TDbContext> : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
     where TDbContext : DbContext, IAdminConfigurationDbContext
 {
     private readonly TDbContext _dbContext;
 
-    public ClientMustHaveAllowedScopesRule(TDbContext dbContext)
+    public ClientMustHaveScopesRule(TDbContext dbContext)
     {
         _dbContext = dbContext;
     }

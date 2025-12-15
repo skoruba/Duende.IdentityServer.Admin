@@ -80,11 +80,14 @@ type InputFieldProps = {
   placeholder?: string;
   generateRandomValue: RandomValues;
   copyToClipboard?: boolean;
+  maxLength?: number;
+  inputType?: "text" | "password";
 };
 
 type TextareaFieldProps = {
   field: ControllerRenderProps;
   placeholder?: string;
+  maxLength?: number;
 };
 
 type SelectFieldProps = {
@@ -172,6 +175,8 @@ const InputField: React.FC<InputFieldProps> = ({
   placeholder,
   generateRandomValue,
   copyToClipboard,
+  maxLength,
+  inputType = "text",
 }) => {
   const { t } = useTranslation();
 
@@ -180,7 +185,6 @@ const InputField: React.FC<InputFieldProps> = ({
       navigator.clipboard.writeText(field.value).then(() => {
         toast({
           title: t("Components.FormRow.CopiedToClipboard"),
-          description: field.value,
         });
       });
     }
@@ -197,7 +201,13 @@ const InputField: React.FC<InputFieldProps> = ({
   return (
     <FormControl>
       <div className={generateRandomValue ? "flex" : ""}>
-        <Input placeholder={placeholder} {...field} autoComplete="off" />
+        <Input
+          placeholder={placeholder}
+          {...field}
+          autoComplete="off"
+          maxLength={maxLength}
+          type={inputType}
+        />
         {[RandomValues.ClientId, RandomValues.SharedSecret].includes(
           generateRandomValue
         ) && (
@@ -229,9 +239,15 @@ const InputField: React.FC<InputFieldProps> = ({
 const TextareaField: React.FC<TextareaFieldProps> = ({
   field,
   placeholder,
+  maxLength,
 }) => (
   <FormControl>
-    <Textarea placeholder={placeholder} {...field} className="resize-none" />
+    <Textarea
+      placeholder={placeholder}
+      {...field}
+      className="resize-none"
+      maxLength={maxLength}
+    />
   </FormControl>
 );
 
@@ -442,6 +458,8 @@ type FormRowProps<T extends FieldValues> = {
   numberSettings?: {
     showFormattedTime?: boolean;
   };
+  maxLength?: number;
+  inputType?: "text" | "password";
 };
 
 export const FormRow = <T extends FieldValues>({
@@ -466,6 +484,8 @@ export const FormRow = <T extends FieldValues>({
     searchDataSource: [],
   },
   numberSettings: { showFormattedTime = true } = {},
+  maxLength,
+  inputType = "text",
 }: FormRowProps<T>) => {
   const { control } = useFormContext();
 
@@ -502,6 +522,8 @@ export const FormRow = <T extends FieldValues>({
                     placeholder={placeholder}
                     generateRandomValue={generateRandomValue}
                     copyToClipboard={copyToClipboard}
+                    maxLength={maxLength}
+                    inputType={inputType}
                   />
                 )}
                 {type === "textarea" && (

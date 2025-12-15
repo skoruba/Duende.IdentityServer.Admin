@@ -33,7 +33,7 @@ public class ConfigurationRuleValidatorFactory<TDbContext> : IConfigurationRuleV
             ConfigurationRuleType.MissingPkce => new MissingPkceRule<TDbContext>(_dbContext),
             ConfigurationRuleType.ClientRedirectUrisMustUseHttps => new ClientRedirectUrisMustUseHttpsRule<TDbContext>(_dbContext),
             ConfigurationRuleType.ClientAccessTokenLifetimeTooLong => new ClientAccessTokenLifetimeTooLongRule<TDbContext>(_dbContext),
-            ConfigurationRuleType.ClientMustHaveAllowedScopes => new ClientMustHaveAllowedScopesRule<TDbContext>(_dbContext),
+            ConfigurationRuleType.ClientMustHaveScopes => new ClientMustHaveScopesRule<TDbContext>(_dbContext),
             ConfigurationRuleType.ClientRefreshTokenLifetimeTooLong => new ClientRefreshTokenLifetimeTooLongRule<TDbContext>(_dbContext),
             ConfigurationRuleType.ApiScopeNameMustStartWith => new ApiScopeNameMustStartWithRule<TDbContext>(_dbContext),
             ConfigurationRuleType.ApiScopeNameMustNotContain => new ApiScopeNameMustNotContainRule<TDbContext>(_dbContext),

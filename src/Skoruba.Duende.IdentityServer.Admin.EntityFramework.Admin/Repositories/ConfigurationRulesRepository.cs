@@ -31,11 +31,12 @@ public class ConfigurationRulesRepository(IAdminConfigurationStoreDbContext dbCo
             .FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public async Task<int> AddRuleAsync(ConfigurationRule rule)
+    public async Task<ConfigurationRule> AddRuleAsync(ConfigurationRule rule)
     {
         rule.CreatedAt = DateTime.UtcNow;
         await _dbContext.ConfigurationRules.AddAsync(rule);
-        return await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
+        return rule;
     }
 
     public async Task<int> UpdateRuleAsync(ConfigurationRule rule)

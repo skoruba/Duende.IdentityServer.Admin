@@ -8642,7 +8642,7 @@ export class ConfigurationRuleDto implements IConfigurationRuleDto {
     issueType!: ConfigurationIssueType;
     isEnabled!: boolean;
     configuration!: string | undefined;
-    messageTemplate!: string | undefined;
+    messageTemplate!: string;
     fixDescription!: string | undefined;
     createdAt!: Date;
     updatedAt!: Date | undefined;
@@ -8701,7 +8701,7 @@ export interface IConfigurationRuleDto {
     issueType: ConfigurationIssueType;
     isEnabled: boolean;
     configuration: string | undefined;
-    messageTemplate: string | undefined;
+    messageTemplate: string;
     fixDescription: string | undefined;
     createdAt: Date;
     updatedAt: Date | undefined;
@@ -8712,7 +8712,7 @@ export enum ConfigurationRuleType {
     ObsoletePasswordGrant = "ObsoletePasswordGrant",
     MissingPkce = "MissingPkce",
     ClientRedirectUrisMustUseHttps = "ClientRedirectUrisMustUseHttps",
-    ClientMustHaveAllowedScopes = "ClientMustHaveAllowedScopes",
+    ClientMustHaveScopes = "ClientMustHaveScopes",
     ClientAccessTokenLifetimeTooLong = "ClientAccessTokenLifetimeTooLong",
     ClientRefreshTokenLifetimeTooLong = "ClientRefreshTokenLifetimeTooLong",
     ApiScopeNameMustStartWith = "ApiScopeNameMustStartWith",

@@ -12,6 +12,7 @@ import {
 } from "@/services/ConfigurationRulesService";
 import { useMutation } from "react-query";
 import { IssueTypeBadge } from "../ConfigurationIssues/IssueTypeBadge";
+import { toast } from "@/components/ui/use-toast";
 
 interface ConfigurationRulesTableProps {
   data: client.ConfigurationRulesDto;
@@ -34,6 +35,13 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
       onSuccess: () => {
         onRefresh();
       },
+      onError: () => {
+        toast({
+          variant: "destructive",
+          title: t("ConfigurationRules.ToggleFailed"),
+          description: t("ConfigurationRules.GenericError"),
+        });
+      },
     }
   );
 
@@ -42,6 +50,13 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
     {
       onSuccess: () => {
         onRefresh();
+      },
+      onError: () => {
+        toast({
+          variant: "destructive",
+          title: t("ConfigurationRules.DeleteFailed"),
+          description: t("ConfigurationRules.GenericError"),
+        });
       },
     }
   );

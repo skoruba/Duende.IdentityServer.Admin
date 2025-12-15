@@ -38,7 +38,7 @@ public class AdminConfigurationDbContext : DbContext, IAdminConfigurationStoreDb
             entity.Property(e => e.FixDescription).HasMaxLength(1000);
             entity.Property(e => e.CreatedAt).IsRequired();
 
-            entity.HasIndex(e => new { e.RuleType, e.ResourceType }).IsUnique();
+            entity.HasIndex(e => e.RuleType).IsUnique();
         });
     }
 }

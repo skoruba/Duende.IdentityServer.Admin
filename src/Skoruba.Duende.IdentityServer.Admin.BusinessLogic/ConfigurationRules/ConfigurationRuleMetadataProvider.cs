@@ -301,10 +301,10 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
             },
 
             // Additional Client Rules
-            [ConfigurationRuleType.ClientMustHaveAllowedScopes] = new ConfigurationRuleMetadataDto
+            [ConfigurationRuleType.ClientMustHaveScopes] = new ConfigurationRuleMetadataDto
             {
-                RuleType = nameof(ConfigurationRuleType.ClientMustHaveAllowedScopes),
-                DisplayName = "Client Must Have Allowed Scopes",
+                RuleType = nameof(ConfigurationRuleType.ClientMustHaveScopes),
+                DisplayName = "Client Must Have Scopes",
                 Description = "Ensures clients have at least one allowed scope configured.",
                 ResourceType = nameof(ConfigurationResourceType.Client),
                 Parameters = new List<ConfigurationRuleParameterDto>

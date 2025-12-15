@@ -119,6 +119,7 @@ const SecretForm = ({ form }: SecretFormProps) => {
         label={t("Client.Label.SecretValue_Label")}
         description={t("Client.Label.SecretValue_Info")}
         placeholder={t("Client.Label.SecretValue_Label")}
+        inputType="password"
         inputSettings={{
           generateRandomValue: RandomValues.SharedSecret,
           copyToClipboard: true,
