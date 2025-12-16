@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <Description>Entity Framework layer for admin features (Configuration Rules, Issues, etc.)</Description>
+    <Description>Entity Framework layer for admin features</Description>
   </PropertyGroup>
 
   <ItemGroup>
