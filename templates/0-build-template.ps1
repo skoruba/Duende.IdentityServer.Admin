@@ -94,6 +94,9 @@ dotnet remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework
 # Shared
 dotnet remove ./$templateSrc/Skoruba.Duende.IdentityServer.Shared/Skoruba.Duende.IdentityServer.Shared.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.csproj
 
+# EF Shared - remove Admin Storage reference (only Admin Storage is used in template projects)
+dotnet remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.csproj
+
 # Add nuget packages
 # Admin
 dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj package Skoruba.Duende.IdentityServer.Admin.UI -v $packagesVersions
@@ -113,6 +116,9 @@ dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Sh
 # Shared
 dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.Shared/Skoruba.Duende.IdentityServer.Shared.csproj package Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity -v $packagesVersions
 
+# EF Shared - add Admin Storage package (only Admin Storage is used in template projects)
+dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj package Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage -v $packagesVersions
+
 # Clean solution and folders bin, obj
 CleanBinObjFolders
 
@@ -129,6 +135,8 @@ Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.UI -Force -recurs
 Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.UI.Spa -Force -recurse
 Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.UI.Client -Force -recurse
 Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.UI.Api -Force -recurse
+Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin -Force -recurse
+Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage -Force -recurse
 Remove-Item ./$templateTests -Force -recurse
 
 $csprojPath = "$templateSrc/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj"

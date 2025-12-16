@@ -12,6 +12,8 @@ dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensi
 dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.csproj -c Release -o $packagesOutput
 dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj -c Release -o $packagesOutput
 dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.csproj -c Release -o $packagesOutput
+dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.csproj -c Release -o $packagesOutput
+dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.csproj -c Release -o $packagesOutput
 
 # UI
 dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.UI\Skoruba.Duende.IdentityServer.Admin.UI.csproj -c Release -o $packagesOutput
