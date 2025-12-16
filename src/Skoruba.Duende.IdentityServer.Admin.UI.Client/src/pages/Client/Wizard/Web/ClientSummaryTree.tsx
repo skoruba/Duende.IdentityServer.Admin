@@ -45,7 +45,7 @@ const ClientWebSummaryTree = () => {
   const rules = clientType ? clientTypeRules[clientType] : undefined;
 
   const getIcon = (type: OAuthNodeType) => {
-    const iconClass = "w-7 h-7";
+    const iconClass = "w-5 h-5 text-primary/70";
     switch (type) {
       case OAuthNodeType.ClientInfo:
         return <InfoIcon className={iconClass} />;
@@ -80,38 +80,52 @@ const ClientWebSummaryTree = () => {
     avatar,
   }) => {
     const renderValueLine = (line: DisplayLine, index?: number) => (
-      <li key={index ?? 0} className="flex items-center mb-2">
-        {getIcon(type)}
-        <span className="ml-2 break-all">{line}</span>
+      <li key={index ?? 0} className="flex items-start gap-4 mb-1 group">
+        <div className="flex-shrink-0 p-2 rounded-lg bg-primary/5 group-hover:bg-primary/10 transition-colors">
+          {getIcon(type)}
+        </div>
+        <span className="text-sm leading-relaxed break-words pt-0.5">{line}</span>
       </li>
     );
 
     return (
-      <Card className="w-[350px] min-h-[140px] shrink-0">
-        <CardContent className="p-6">
+      <Card className={`${avatar ? "w-[400px] min-h-[180px]" : "w-[320px] min-h-[140px]"} shrink-0 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${
+        avatar ? "bg-gradient-to-br from-primary/5 to-background border-primary/20" : "hover:border-primary/10"
+      }`}>
+        <CardContent className="p-5">
           <div className="flex flex-col items-center">
-            {avatar ? <EarthLock className="w-10 h-10" /> : null}
-            <h3 className="text-xl font-semibold mb-2 flex items-center">
-              {name}
-              <Button
-                variant="secondary"
-                className="p-2 ml-2"
-                onClick={() => setActiveStep(step)}
-              >
-                <Pencil className="w-4 h-4" />
-              </Button>
-            </h3>
-
-            {Array.isArray(value) ? (
-              <ul className="w-full text-sm text-muted-foreground list-none p-0">
-                {value.map((v, i) => renderValueLine(v, i))}
-              </ul>
-            ) : (
-              <div className="flex items-center text-sm text-muted-foreground break-all">
-                {getIcon(type)}
-                <span className="ml-2">{value}</span>
+            {avatar && (
+              <div className="p-3 rounded-full bg-primary/10 mb-1 mt-1">
+                <EarthLock className="w-7 h-7 text-primary" />
               </div>
             )}
+            <div className="text-center w-full mb-3">
+              <div className="flex items-center justify-center gap-3">
+                <h3 className={`font-semibold ${avatar ? "text-lg text-primary" : "text-base"}`}>
+                  {name}
+                </h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-8 p-0 rounded-full hover:bg-primary/10 hover:scale-110 transition-all duration-200"
+                  onClick={() => setActiveStep(step)}
+                >
+                  <Pencil className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+
+            <div className="w-full">
+              {Array.isArray(value) ? (
+                <ul className="space-y-1 list-none p-0">
+                  {value.map((v, i) => renderValueLine(v, i))}
+                </ul>
+              ) : (
+                <ul className="space-y-0 list-none p-0">
+                  {renderValueLine(value, 0)}
+                </ul>
+              )}
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -217,30 +231,41 @@ const ClientWebSummaryTree = () => {
   };
 
   return (
-    <div className="bg-muted p-6 rounded-lg">
-      <div className="relative w-full overflow-x-auto">
+    <div className="bg-gradient-to-br from-background via-muted/20 to-background p-4 rounded-xl border shadow-sm">
+      <div className="relative w-full overflow-x-auto pb-2">
         <div className="relative left-1/2 -translate-x-1/2 inline-block">
           <Tree
+            lineColor="hsl(var(--primary) / 0.2)"
+            lineWidth="2px"
+            lineHeight="20px"
+            nodePadding="8px"
+            lineBorderRadius="6px"
             label={
-              <div className="inline-flex justify-center items-center text-center">
+              <div className="inline-flex justify-center items-center text-center animate-in fade-in duration-700">
                 <OAuthCard {...oauthClientData} />
               </div>
             }
           >
-            {oauthClientData.children?.map((n) => (
+            {oauthClientData.children?.map((n, index) => (
               <TreeNode
                 key={n.name}
                 label={
-                  <div className="inline-flex justify-center items-center text-center">
+                  <div 
+                    className="inline-flex justify-center items-center text-center animate-in slide-in-from-top duration-700"
+                    style={{ animationDelay: `${index * 150}ms` }}
+                  >
                     <OAuthCard {...n} />
                   </div>
                 }
               >
-                {n.children?.map((c) => (
+                {n.children?.map((c, childIndex) => (
                   <TreeNode
                     key={c.name}
                     label={
-                      <div className="inline-flex justify-center items-center text-center">
+                      <div 
+                        className="inline-flex justify-center items-center text-center animate-in slide-in-from-bottom duration-700"
+                        style={{ animationDelay: `${(index + childIndex + 2) * 100}ms` }}
+                      >
                         <OAuthCard {...c} />
                       </div>
                     }
