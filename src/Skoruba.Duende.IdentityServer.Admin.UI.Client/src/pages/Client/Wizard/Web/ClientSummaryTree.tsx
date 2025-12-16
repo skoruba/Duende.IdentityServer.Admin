@@ -84,14 +84,22 @@ const ClientWebSummaryTree = () => {
         <div className="flex-shrink-0 p-2 rounded-lg bg-primary/5 group-hover:bg-primary/10 transition-colors">
           {getIcon(type)}
         </div>
-        <span className="text-sm leading-relaxed break-words pt-0.5">{line}</span>
+        <span className="text-sm leading-relaxed break-words pt-0.5">
+          {line}
+        </span>
       </li>
     );
 
     return (
-      <Card className={`${avatar ? "w-[400px] min-h-[180px]" : "w-[320px] min-h-[140px]"} shrink-0 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${
-        avatar ? "bg-gradient-to-br from-primary/5 to-background border-primary/20" : "hover:border-primary/10"
-      }`}>
+      <Card
+        className={`${
+          avatar ? "w-[400px] min-h-[180px]" : "w-[320px] min-h-[140px]"
+        } shrink-0 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${
+          avatar
+            ? "bg-gradient-to-br from-primary/5 to-background border-primary/20"
+            : "hover:border-primary/10"
+        }`}
+      >
         <CardContent className="p-5">
           <div className="flex flex-col items-center">
             {avatar && (
@@ -101,7 +109,11 @@ const ClientWebSummaryTree = () => {
             )}
             <div className="text-center w-full mb-3">
               <div className="flex items-center justify-center gap-3">
-                <h3 className={`font-semibold ${avatar ? "text-lg text-primary" : "text-base"}`}>
+                <h3
+                  className={`font-semibold ${
+                    avatar ? "text-lg text-primary" : "text-base"
+                  }`}
+                >
                   {name}
                 </h3>
                 <Button
@@ -250,7 +262,7 @@ const ClientWebSummaryTree = () => {
               <TreeNode
                 key={n.name}
                 label={
-                  <div 
+                  <div
                     className="inline-flex justify-center items-center text-center animate-in slide-in-from-top duration-700"
                     style={{ animationDelay: `${index * 150}ms` }}
                   >
@@ -262,9 +274,11 @@ const ClientWebSummaryTree = () => {
                   <TreeNode
                     key={c.name}
                     label={
-                      <div 
+                      <div
                         className="inline-flex justify-center items-center text-center animate-in slide-in-from-bottom duration-700"
-                        style={{ animationDelay: `${(index + childIndex + 2) * 100}ms` }}
+                        style={{
+                          animationDelay: `${(index + childIndex + 2) * 100}ms`,
+                        }}
                       >
                         <OAuthCard {...c} />
                       </div>
