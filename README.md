@@ -71,6 +71,10 @@ dotnet new skoruba.duende.isadmin \
 
 ![Admin-preview](docs/Images/light.png)
 
+### 🌙 Admin UI - Dark mode
+
+![Admin-preview](docs/Images/dark.png)
+
 ### 🧙‍♂️ Client Creation – Wizard Flow
 
 ![Admin-Client-Wizard](docs/Images/client-wizard.png)
@@ -82,10 +86,6 @@ dotnet new skoruba.duende.isadmin \
 ### 💼 Client Management
 
 ![Admin-Client-Edit](docs/Images/client-edit.png)
-
-### 🌙 Admin UI - Dark mode
-
-![Admin-preview](docs/Images/dark.png)
 
 ### Solution structure:
 
