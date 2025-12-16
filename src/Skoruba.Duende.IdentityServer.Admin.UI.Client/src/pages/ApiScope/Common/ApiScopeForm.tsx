@@ -6,10 +6,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import { useMutation, useQueryClient } from "react-query";
 import { createApiScope, updateApiScope } from "@/services/ApiScopeServices";
-import {
-  createApiScopeSchema,
-  ApiScopeFormData,
-} from "./ApiScopeSchema";
+import { createApiScopeSchema, ApiScopeFormData } from "./ApiScopeSchema";
 import ApiScopeTabs from "./ApiScopeTabs";
 import { ApiScopesUrl } from "@/routing/Urls";
 import { useTranslation } from "react-i18next";
@@ -65,6 +62,9 @@ const ApiScopeForm: React.FC<ApiScopeFormProps> = ({
       onSuccess: () => {
         queryClient.invalidateQueries(queryKeys.apiScope);
         queryClient.invalidateQueries(queryKeys.apiScopes);
+        // Invalidate configuration issues cache when API scope changes
+        queryClient.invalidateQueries(queryKeys.configurationIssues);
+        queryClient.invalidateQueries(queryKeys.configurationIssuesSummary);
         toast({
           title: <Hoorey />,
           description:

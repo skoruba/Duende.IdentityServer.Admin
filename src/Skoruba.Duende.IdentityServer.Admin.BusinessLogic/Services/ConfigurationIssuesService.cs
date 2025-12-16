@@ -18,4 +18,11 @@ public class ConfigurationIssuesService(IConfigurationIssuesRepository repositor
         var issues = await repository.GetAllIssuesAsync();
         return issues.Select(x => x.ToDto()).ToList();
     }
+
+    public async Task<ConfigurationIssuesPagedDto> GetIssuesAsync(ConfigurationIssuesFilterDto filter)
+    {
+        var storageFilter = filter.ToStorageDto();
+        var storageResult = await repository.GetIssuesAsync(storageFilter);
+        return storageResult.ToBusinessDto();
+    }
 }

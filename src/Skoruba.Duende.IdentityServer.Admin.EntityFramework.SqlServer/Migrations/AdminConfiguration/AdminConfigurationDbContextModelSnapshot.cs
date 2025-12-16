@@ -72,9 +72,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migratio
                         {
                             Id = 1,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            FixDescription = "Go to the client details → Advanced → Grant Types and replace 'implicit' with 'authorization_code'.",
+                            FixDescription = "Navigate to Client Details → Advanced tab → Grant Types, remove 'implicit' and add 'authorization_code' instead.",
                             IsEnabled = true,
-                            IssueType = 0,
+                            IssueType = 2,
                             MessageTemplate = "Client uses obsolete implicit grant flow",
                             ResourceType = 0,
                             RuleType = 0
@@ -83,9 +83,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migratio
                         {
                             Id = 2,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            FixDescription = "Go to the client details → Advanced → Grant Types and replace 'password' with 'authorization_code' or 'client_credentials'.",
+                            FixDescription = "Navigate to Client Details → Advanced tab → Grant Types, remove 'password' and add 'authorization_code' or 'client_credentials' instead.",
                             IsEnabled = true,
-                            IssueType = 0,
+                            IssueType = 2,
                             MessageTemplate = "Client uses obsolete password grant flow",
                             ResourceType = 0,
                             RuleType = 1
@@ -94,9 +94,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migratio
                         {
                             Id = 3,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            FixDescription = "This client does not use PKCE. Consider enabling PKCE for enhanced security.",
+                            FixDescription = "Navigate to Client Details → Advanced tab → Authentication, scroll down and enable 'Require Proof Key for Code Exchange (PKCE)' toggle.",
                             IsEnabled = true,
-                            IssueType = 1,
+                            IssueType = 0,
                             MessageTemplate = "Client uses authorization code flow without PKCE",
                             ResourceType = 0,
                             RuleType = 2
@@ -104,62 +104,157 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migratio
                         new
                         {
                             Id = 4,
-                            Configuration = "{\"allowLocalhost\": true}",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            FixDescription = "Update redirect URIs to use HTTPS protocol. For production environments, HTTP is not secure.",
-                            IsEnabled = false,
-                            IssueType = 0,
-                            MessageTemplate = "Client has {count} non-HTTPS redirect URI(s): {uris}",
-                            ResourceType = 0,
-                            RuleType = 3
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Configuration = "{\"prefixes\": [\"scope_\"]}",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            FixDescription = "Rename the API Scope to follow the naming convention starting with one of the required prefixes.",
-                            IsEnabled = false,
-                            IssueType = 1,
-                            MessageTemplate = "API Scope '{actualName}' must start with one of: {allowedPrefixes}",
-                            ResourceType = 3,
-                            RuleType = 7
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Configuration = "{\"maxLifetimeSeconds\": 3600}",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            FixDescription = "Go to client details → Token and reduce the Access Token Lifetime to the recommended maximum value.",
-                            IsEnabled = false,
-                            IssueType = 1,
-                            MessageTemplate = "Access token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s",
-                            ResourceType = 0,
-                            RuleType = 5
-                        },
-                        new
-                        {
-                            Id = 7,
                             Configuration = "{\"minScopes\": 1}",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            FixDescription = "Go to client details → Scopes and add allowed scopes.",
+                            FixDescription = "Navigate to Client Details → Resources tab → Allowed Scopes section and add at least one scope from the available list.",
                             IsEnabled = true,
-                            IssueType = 0,
+                            IssueType = 2,
                             MessageTemplate = "Client '{clientName}' has {actualCount} allowed scope(s), but requires at least {requiredCount}",
                             ResourceType = 0,
                             RuleType = 4
                         },
                         new
                         {
-                            Id = 8,
+                            Id = 5,
                             Configuration = "{\"minScopes\": 1}",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            FixDescription = "Go to API Resource details → Scopes and add at least one scope.",
+                            FixDescription = "Navigate to API Resource Details → Scopes section and add at least one scope to this API Resource.",
                             IsEnabled = true,
-                            IssueType = 0,
+                            IssueType = 2,
                             MessageTemplate = "API Resource '{resourceName}' has {actualCount} scope(s), but requires at least {requiredCount}",
                             ResourceType = 2,
                             RuleType = 10
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Configuration = "{\"allowLocalhost\": true}",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FixDescription = "Navigate to Client Details → URLs tab → Redirect URIs section and update all HTTP URIs to use HTTPS protocol.",
+                            IsEnabled = false,
+                            IssueType = 2,
+                            MessageTemplate = "Client has {count} non-HTTPS redirect URI(s): {uris}",
+                            ResourceType = 0,
+                            RuleType = 3
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Configuration = "{\"maxLifetimeSeconds\": 3600}",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FixDescription = "Navigate to Client Details → Advanced tab → Token, find 'Access Token Lifetime' field and reduce the value to {maxLifetime} seconds or less.",
+                            IsEnabled = false,
+                            IssueType = 0,
+                            MessageTemplate = "Access token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s",
+                            ResourceType = 0,
+                            RuleType = 5
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Configuration = "{\"maxLifetimeSeconds\": 2592000}",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FixDescription = "Navigate to Client Details → Advanced tab → Token, find 'Refresh Token Lifetime' field and reduce the value to {maxLifetime} seconds or less.",
+                            IsEnabled = false,
+                            IssueType = 0,
+                            MessageTemplate = "Client '{clientName}' refresh token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s",
+                            ResourceType = 0,
+                            RuleType = 6
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Configuration = "{\"prefixes\": [\"scope_\"]}",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FixDescription = "Navigate to API Scope Details → Basic Information section and rename the scope to start with one of the required prefixes: {allowedPrefixes}.",
+                            IsEnabled = false,
+                            IssueType = 0,
+                            MessageTemplate = "API Scope '{actualName}' must start with one of: {allowedPrefixes}",
+                            ResourceType = 3,
+                            RuleType = 7
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Configuration = "{\"forbiddenStrings\": [\"test\", \"temp\", \"debug\"]}",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FixDescription = "Navigate to API Scope Details → Basic Information section and rename the scope to remove forbidden strings from the name.",
+                            IsEnabled = false,
+                            IssueType = 0,
+                            MessageTemplate = "API Scope '{scopeName}' contains forbidden string(s): {forbiddenStrings}",
+                            ResourceType = 3,
+                            RuleType = 8
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FixDescription = "Navigate to API Scope Details → Basic Information section and add a user-friendly Display Name.",
+                            IsEnabled = false,
+                            IssueType = 1,
+                            MessageTemplate = "API Scope is missing a display name",
+                            ResourceType = 3,
+                            RuleType = 9
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Configuration = "{\"prefixes\": [\"api.\"]}",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FixDescription = "Navigate to API Resource Details → Basic Information section and rename the resource to follow the naming convention.",
+                            IsEnabled = false,
+                            IssueType = 0,
+                            MessageTemplate = "API Resource '{actualName}' must start with one of: {allowedPrefixes}",
+                            ResourceType = 2,
+                            RuleType = 11
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Configuration = "{\"requiredResources\": [\"openid\", \"profile\"]}",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FixDescription = "Navigate to Identity Resource Details → Basic Information section and enable the 'Enabled' toggle.",
+                            IsEnabled = false,
+                            IssueType = 0,
+                            MessageTemplate = "Required identity resource '{resourceName}' ({displayName}) is disabled",
+                            ResourceType = 1,
+                            RuleType = 12
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Configuration = "{\"prefixes\": [\"custom.\"], \"excludeStandard\": true}",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FixDescription = "Navigate to Identity Resource Details → Basic Information section and rename the resource to follow the naming convention.",
+                            IsEnabled = false,
+                            IssueType = 0,
+                            MessageTemplate = "Identity Resource '{actualName}' must start with one of: {allowedPrefixes}",
+                            ResourceType = 1,
+                            RuleType = 13
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Configuration = "{\"excludeScopes\": [\"openid\", \"profile\", \"email\", \"address\", \"phone\", \"offline_access\"]}",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FixDescription = "This API Scope '{scopeName}' is not used by any clients or API resources. Consider removing it from API Scopes list or assigning it to relevant clients/resources.",
+                            IsEnabled = false,
+                            IssueType = 1,
+                            MessageTemplate = "API Scope '{scopeName}'{displayNameSuffix} is not used by any clients or API resources",
+                            ResourceType = 3,
+                            RuleType = 14
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Configuration = "{\"warningDays\": 30, \"includeAlreadyExpired\": true}",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FixDescription = "Navigate to Client Details → Advanced tab → Authentication → Secrets section, remove the expired secret and add a new one with proper expiration date.",
+                            IsEnabled = false,
+                            IssueType = 0,
+                            MessageTemplate = "Client '{clientName}' has a secret ({secretType}) that {status} in {daysUntilExpiry} day(s) on {expirationDate}",
+                            ResourceType = 0,
+                            RuleType = 15
                         });
                 });
 #pragma warning restore 612, 618

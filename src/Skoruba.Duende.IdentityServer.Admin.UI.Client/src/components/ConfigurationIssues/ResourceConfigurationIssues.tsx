@@ -5,10 +5,7 @@ import { IssueTypeBadge } from "@/pages/ConfigurationIssues/IssueTypeBadge";
 import { useConfigurationIssuesForResource } from "@/services/DashboardService";
 import { Button } from "@/components/ui/button";
 
-const severityRank: Record<
-  client.ConfigurationIssueTypeView,
-  number
-> = {
+const severityRank: Record<client.ConfigurationIssueTypeView, number> = {
   [client.ConfigurationIssueTypeView.Error]: 0,
   [client.ConfigurationIssueTypeView.Warning]: 1,
   [client.ConfigurationIssueTypeView.Recommendation]: 2,
@@ -25,10 +22,7 @@ const ResourceConfigurationIssues: React.FC<
   const { t } = useTranslation();
   const [collapsed, setCollapsed] = useState(true);
   const normalizedResourceId = Number(resourceId);
-  const {
-    data: issues = [],
-    isLoading,
-  } = useConfigurationIssuesForResource(
+  const { data: issues = [], isLoading } = useConfigurationIssuesForResource(
     normalizedResourceId,
     resourceType
   );
@@ -37,8 +31,10 @@ const ResourceConfigurationIssues: React.FC<
     () =>
       [...issues].sort(
         (left, right) =>
-          (severityRank[left.issueType] ?? 99) -
-          (severityRank[right.issueType] ?? 99)
+          (severityRank[left.issueType as client.ConfigurationIssueTypeView] ??
+            99) -
+          (severityRank[right.issueType as client.ConfigurationIssueTypeView] ??
+            99)
       ),
     [issues]
   );
@@ -93,7 +89,8 @@ const ResourceConfigurationIssues: React.FC<
               </div>
               <div className="flex-1 space-y-1">
                 <p className="font-semibold text-foreground">
-                  {issue.message ?? t("ConfigurationIssues.UnknownIssueMessage")}
+                  {issue.message ??
+                    t("ConfigurationIssues.UnknownIssueMessage")}
                 </p>
                 {issue.fixDescription && (
                   <p className="text-xs text-muted-foreground">

@@ -50,7 +50,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 DefaultConfiguration = null,
                 ExampleConfiguration = null,
                 DefaultMessageTemplate = "Client uses obsolete implicit grant flow",
-                DefaultFixDescription = "Go to the client details → Advanced → Grant Types and replace 'implicit' with 'authorization_code'."
+                DefaultFixDescription = "Navigate to Client Details → Advanced tab → Grant Types, remove 'implicit' and add 'authorization_code' instead."
             },
 
             [ConfigurationRuleType.ObsoletePasswordGrant] = new ConfigurationRuleMetadataDto
@@ -63,7 +63,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 DefaultConfiguration = null,
                 ExampleConfiguration = null,
                 DefaultMessageTemplate = "Client uses obsolete password grant flow",
-                DefaultFixDescription = "Go to the client details → Advanced → Grant Types and replace 'password' with 'authorization_code' or 'client_credentials'."
+                DefaultFixDescription = "Navigate to Client Details → Advanced tab → Grant Types, remove 'password' and add 'authorization_code' or 'client_credentials' instead."
             },
 
             [ConfigurationRuleType.MissingPkce] = new ConfigurationRuleMetadataDto
@@ -76,7 +76,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 DefaultConfiguration = null,
                 ExampleConfiguration = null,
                 DefaultMessageTemplate = "Client uses authorization code flow without PKCE",
-                DefaultFixDescription = "This client does not use PKCE. Consider enabling PKCE for enhanced security."
+                DefaultFixDescription = "Navigate to Client Details → Advanced tab → Authentication, scroll down and enable 'Require Proof Key for Code Exchange (PKCE)' toggle."
             },
 
             [ConfigurationRuleType.ClientRedirectUrisMustUseHttps] = new ConfigurationRuleMetadataDto
@@ -100,7 +100,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 DefaultConfiguration = "{\"allowLocalhost\": true}",
                 ExampleConfiguration = "{\"allowLocalhost\": false}",
                 DefaultMessageTemplate = "Client has {count} non-HTTPS redirect URI(s): {uris}",
-                DefaultFixDescription = "Update redirect URIs to use HTTPS protocol. For production environments, HTTP is not secure."
+                DefaultFixDescription = "Navigate to Client Details → URLs tab → Redirect URIs section and update all HTTP URIs to use HTTPS protocol."
             },
 
             [ConfigurationRuleType.ClientAccessTokenLifetimeTooLong] = new ConfigurationRuleMetadataDto
@@ -126,7 +126,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 DefaultConfiguration = "{\"maxLifetimeSeconds\": 3600}",
                 ExampleConfiguration = "{\"maxLifetimeSeconds\": 7200}",
                 DefaultMessageTemplate = "Access token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s",
-                DefaultFixDescription = "Go to client details → Token and reduce the Access Token Lifetime to the recommended maximum value."
+                DefaultFixDescription = "Navigate to Client Details → Advanced tab → Token, find 'Access Token Lifetime' field and reduce the value to {maxLifetime} seconds or less."
             },
 
             // API Scope Rules
@@ -151,7 +151,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 DefaultConfiguration = "{\"prefixes\": [\"scope_\"]}",
                 ExampleConfiguration = "{\"prefixes\": [\"api.\", \"scope_\", \"resource.\"]}",
                 DefaultMessageTemplate = "API Scope '{actualName}' must start with one of: {allowedPrefixes}",
-                DefaultFixDescription = "Rename the API Scope to follow the naming convention starting with one of the required prefixes."
+                DefaultFixDescription = "Navigate to API Scope Details → Basic Information section and rename the scope to start with one of the required prefixes: {allowedPrefixes}."
             },
 
             [ConfigurationRuleType.ApiScopeNameMustNotContain] = new ConfigurationRuleMetadataDto
@@ -175,7 +175,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 DefaultConfiguration = "{\"forbiddenStrings\": [\"test\", \"temp\", \"debug\"]}",
                 ExampleConfiguration = "{\"forbiddenStrings\": [\"admin\", \"internal\"]}",
                 DefaultMessageTemplate = "API Scope '{scopeName}' contains forbidden string(s): {forbiddenStrings}",
-                DefaultFixDescription = "Rename the API Scope to remove forbidden strings from the name."
+                DefaultFixDescription = "Navigate to API Scope Details → Basic Information section and rename the scope to remove forbidden strings from the name."
             },
 
             [ConfigurationRuleType.ApiScopeMustHaveDisplayName] = new ConfigurationRuleMetadataDto
@@ -188,7 +188,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 DefaultConfiguration = null,
                 ExampleConfiguration = null,
                 DefaultMessageTemplate = "API Scope is missing a display name",
-                DefaultFixDescription = "Go to API Scope details and add a user-friendly Display Name."
+                DefaultFixDescription = "Navigate to API Scope Details → Basic Information section and add a user-friendly Display Name."
             },
 
             // API Resource Rules
@@ -215,7 +215,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 DefaultConfiguration = "{\"minScopes\": 1}",
                 ExampleConfiguration = "{\"minScopes\": 2}",
                 DefaultMessageTemplate = "API Resource '{resourceName}' has {actualCount} scope(s), but requires at least {requiredCount}",
-                DefaultFixDescription = "Go to API Resource details → Scopes and add at least one scope."
+                DefaultFixDescription = "Navigate to API Resource Details → Scopes section and add at least one scope to this API Resource."
             },
 
             [ConfigurationRuleType.ApiResourceNameMustStartWith] = new ConfigurationRuleMetadataDto
@@ -239,7 +239,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 DefaultConfiguration = "{\"prefixes\": [\"api.\"]}",
                 ExampleConfiguration = "{\"prefixes\": [\"api.\", \"resource.\", \"service.\"]}",
                 DefaultMessageTemplate = "API Resource '{actualName}' must start with one of: {allowedPrefixes}",
-                DefaultFixDescription = "Rename the API Resource to follow the naming convention."
+                DefaultFixDescription = "Navigate to API Resource Details → Basic Information section and rename the resource to follow the naming convention."
             },
 
             // Identity Resource Rules
@@ -264,7 +264,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 DefaultConfiguration = "{\"requiredResources\": [\"openid\", \"profile\"]}",
                 ExampleConfiguration = "{\"requiredResources\": [\"openid\", \"profile\", \"email\"]}",
                 DefaultMessageTemplate = "Required identity resource '{resourceName}' ({displayName}) is disabled",
-                DefaultFixDescription = "Go to Identity Resource details and enable this resource."
+                DefaultFixDescription = "Navigate to Identity Resource Details → Basic Information section and enable the 'Enabled' toggle."
             },
 
             [ConfigurationRuleType.IdentityResourceNameMustStartWith] = new ConfigurationRuleMetadataDto
@@ -297,7 +297,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 DefaultConfiguration = "{\"prefixes\": [\"custom.\"], \"excludeStandard\": true}",
                 ExampleConfiguration = "{\"prefixes\": [\"app.\", \"custom.\"], \"excludeStandard\": false}",
                 DefaultMessageTemplate = "Identity Resource '{actualName}' must start with one of: {allowedPrefixes}",
-                DefaultFixDescription = "Rename the Identity Resource to follow the naming convention."
+                DefaultFixDescription = "Navigate to Identity Resource Details → Basic Information section and rename the resource to follow the naming convention."
             },
 
             // Additional Client Rules
@@ -324,7 +324,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 DefaultConfiguration = "{\"minScopes\": 1}",
                 ExampleConfiguration = "{\"minScopes\": 3}",
                 DefaultMessageTemplate = "Client '{clientName}' has {actualCount} allowed scope(s), but requires at least {requiredCount}",
-                DefaultFixDescription = "Go to client details → Scopes and add allowed scopes."
+                DefaultFixDescription = "Navigate to Client Details → Resources tab → Allowed Scopes section and add at least one scope from the available list."
             },
 
             [ConfigurationRuleType.ClientRefreshTokenLifetimeTooLong] = new ConfigurationRuleMetadataDto
@@ -350,7 +350,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 DefaultConfiguration = "{\"maxLifetimeSeconds\": 2592000}",
                 ExampleConfiguration = "{\"maxLifetimeSeconds\": 7776000}",
                 DefaultMessageTemplate = "Client '{clientName}' refresh token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s",
-                DefaultFixDescription = "Go to client details → Token and reduce the Refresh Token Lifetime."
+                DefaultFixDescription = "Navigate to Client Details → Advanced tab → Token, find 'Refresh Token Lifetime' field and reduce the value to {maxLifetime} seconds or less."
             },
 
             // Security Rules
@@ -375,7 +375,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 DefaultConfiguration = "{\"excludeScopes\": [\"openid\", \"profile\", \"email\", \"address\", \"phone\", \"offline_access\"]}",
                 ExampleConfiguration = "{\"excludeScopes\": [\"openid\", \"profile\", \"admin\", \"system\"]}",
                 DefaultMessageTemplate = "API Scope '{scopeName}'{displayNameSuffix} is not used by any clients or API resources",
-                DefaultFixDescription = "Review if this scope is still needed. If not, consider removing it to reduce configuration complexity."
+                DefaultFixDescription = "This API Scope '{scopeName}' is not used by any clients or API resources. Consider removing it from API Scopes list or assigning it to relevant clients/resources."
             },
 
             [ConfigurationRuleType.SecretIsExpiredInDays] = new ConfigurationRuleMetadataDto
@@ -410,7 +410,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 DefaultConfiguration = "{\"warningDays\": 30, \"includeAlreadyExpired\": true}",
                 ExampleConfiguration = "{\"warningDays\": 14, \"includeAlreadyExpired\": false}",
                 DefaultMessageTemplate = "Client '{clientName}' has a secret ({secretType}) that {status} in {daysUntilExpiry} day(s) on {expirationDate}",
-                DefaultFixDescription = "Go to client details → Secrets and renew or extend the expiration date of the secret."
+                DefaultFixDescription = "Navigate to Client Details → Advanced tab → Authentication → Secrets section, remove the expired secret and add a new one with proper expiration date."
             }
         };
     }

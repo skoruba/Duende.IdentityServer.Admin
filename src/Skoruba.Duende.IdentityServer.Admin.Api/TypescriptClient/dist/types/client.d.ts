@@ -200,7 +200,7 @@ export declare class ClientsClient extends WebApiClientBase implements IClientsC
     protected processDeleteClaim(response: Response): Promise<void>;
 }
 export interface IConfigurationIssuesClient {
-    get(): Promise<ConfigurationIssueDto[]>;
+    get(searchTerm: string | null | undefined, resourceType: ConfigurationResourceType | null | undefined, issueType: ConfigurationIssueTypeView | null | undefined, pageIndex: number | undefined, pageSize: number | undefined, skipPagination: boolean | undefined): Promise<ConfigurationIssuesPagedDto>;
     getSummary(): Promise<ConfigurationIssueSummaryDto>;
 }
 export declare class ConfigurationIssuesClient extends WebApiClientBase implements IConfigurationIssuesClient {
@@ -210,8 +210,8 @@ export declare class ConfigurationIssuesClient extends WebApiClientBase implemen
     constructor(baseUrl?: string, http?: {
         fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
     });
-    get(): Promise<ConfigurationIssueDto[]>;
-    protected processGet(response: Response): Promise<ConfigurationIssueDto[]>;
+    get(searchTerm: string | null | undefined, resourceType: ConfigurationResourceType | null | undefined, issueType: ConfigurationIssueTypeView | null | undefined, pageIndex: number | undefined, pageSize: number | undefined, skipPagination: boolean | undefined): Promise<ConfigurationIssuesPagedDto>;
+    protected processGet(response: Response): Promise<ConfigurationIssuesPagedDto>;
     getSummary(): Promise<ConfigurationIssueSummaryDto>;
     protected processGetSummary(response: Response): Promise<ConfigurationIssueSummaryDto>;
 }
@@ -985,6 +985,28 @@ export interface IClientClaimsApiDto {
     totalCount: number;
     pageSize: number;
 }
+export declare class ConfigurationIssuesPagedDto implements IConfigurationIssuesPagedDto {
+    issues: ConfigurationIssueDto[];
+    totalCount: number;
+    pageIndex: number;
+    pageSize: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+    constructor(data?: IConfigurationIssuesPagedDto);
+    init(_data?: any): void;
+    static fromJS(data: any): ConfigurationIssuesPagedDto;
+    toJSON(data?: any): any;
+}
+export interface IConfigurationIssuesPagedDto {
+    issues: ConfigurationIssueDto[];
+    totalCount: number;
+    pageIndex: number;
+    pageSize: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+}
 export declare class ConfigurationIssueDto implements IConfigurationIssueDto {
     resourceId: number;
     resourceName: string | undefined;
@@ -1057,7 +1079,7 @@ export declare class ConfigurationRuleDto implements IConfigurationRuleDto {
     issueType: ConfigurationIssueType;
     isEnabled: boolean;
     configuration: string | undefined;
-    messageTemplate: string | undefined;
+    messageTemplate: string;
     fixDescription: string | undefined;
     createdAt: Date;
     updatedAt: Date | undefined;
@@ -1073,7 +1095,7 @@ export interface IConfigurationRuleDto {
     issueType: ConfigurationIssueType;
     isEnabled: boolean;
     configuration: string | undefined;
-    messageTemplate: string | undefined;
+    messageTemplate: string;
     fixDescription: string | undefined;
     createdAt: Date;
     updatedAt: Date | undefined;
@@ -1092,7 +1114,9 @@ export declare enum ConfigurationRuleType {
     ApiResourceMustHaveScopes = "ApiResourceMustHaveScopes",
     ApiResourceNameMustStartWith = "ApiResourceNameMustStartWith",
     IdentityResourceMustBeEnabled = "IdentityResourceMustBeEnabled",
-    IdentityResourceNameMustStartWith = "IdentityResourceNameMustStartWith"
+    IdentityResourceNameMustStartWith = "IdentityResourceNameMustStartWith",
+    ScopeIsUnused = "ScopeIsUnused",
+    SecretIsExpiredInDays = "SecretIsExpiredInDays"
 }
 export declare enum ConfigurationIssueType {
     Warning = "Warning",

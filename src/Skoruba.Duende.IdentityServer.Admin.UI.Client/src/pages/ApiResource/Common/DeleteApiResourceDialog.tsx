@@ -27,7 +27,12 @@ const DeleteApiResourceDialog = ({
   const removeApiResource = useMutation(
     () => deleteApiResource(Number(apiResourceId)),
     {
-      onSuccess: () => queryClient.invalidateQueries(queryKeys.apiResources),
+      onSuccess: () => {
+        queryClient.invalidateQueries(queryKeys.apiResources);
+        // Invalidate configuration issues cache when API resource is deleted
+        queryClient.invalidateQueries(queryKeys.configurationIssues);
+        queryClient.invalidateQueries(queryKeys.configurationIssuesSummary);
+      },
     }
   );
 

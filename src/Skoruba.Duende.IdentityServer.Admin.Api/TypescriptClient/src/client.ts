@@ -3148,7 +3148,7 @@ export class ClientsClient extends WebApiClientBase implements IClientsClient {
 
 export interface IConfigurationIssuesClient {
 
-    get(): Promise<ConfigurationIssueDto[]>;
+    get(searchTerm: string | null | undefined, resourceType: ConfigurationResourceType | null | undefined, issueType: ConfigurationIssueTypeView | null | undefined, pageIndex: number | undefined, pageSize: number | undefined, skipPagination: boolean | undefined): Promise<ConfigurationIssuesPagedDto>;
 
     getSummary(): Promise<ConfigurationIssueSummaryDto>;
 }
@@ -3164,8 +3164,26 @@ export class ConfigurationIssuesClient extends WebApiClientBase implements IConf
         this.baseUrl = baseUrl ?? "";
     }
 
-    get(): Promise<ConfigurationIssueDto[]> {
-        let url_ = this.baseUrl + "/api/ConfigurationIssues";
+    get(searchTerm: string | null | undefined, resourceType: ConfigurationResourceType | null | undefined, issueType: ConfigurationIssueTypeView | null | undefined, pageIndex: number | undefined, pageSize: number | undefined, skipPagination: boolean | undefined): Promise<ConfigurationIssuesPagedDto> {
+        let url_ = this.baseUrl + "/api/ConfigurationIssues?";
+        if (searchTerm !== undefined && searchTerm !== null)
+            url_ += "SearchTerm=" + encodeURIComponent("" + searchTerm) + "&";
+        if (resourceType !== undefined && resourceType !== null)
+            url_ += "ResourceType=" + encodeURIComponent("" + resourceType) + "&";
+        if (issueType !== undefined && issueType !== null)
+            url_ += "IssueType=" + encodeURIComponent("" + issueType) + "&";
+        if (pageIndex === null)
+            throw new globalThis.Error("The parameter 'pageIndex' cannot be null.");
+        else if (pageIndex !== undefined)
+            url_ += "PageIndex=" + encodeURIComponent("" + pageIndex) + "&";
+        if (pageSize === null)
+            throw new globalThis.Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (skipPagination === null)
+            throw new globalThis.Error("The parameter 'skipPagination' cannot be null.");
+        else if (skipPagination !== undefined)
+            url_ += "SkipPagination=" + encodeURIComponent("" + skipPagination) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -3182,21 +3200,14 @@ export class ConfigurationIssuesClient extends WebApiClientBase implements IConf
         });
     }
 
-    protected processGet(response: Response): Promise<ConfigurationIssueDto[]> {
+    protected processGet(response: Response): Promise<ConfigurationIssuesPagedDto> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(ConfigurationIssueDto.fromJS(item));
-            }
-            else {
-                result200 = null as any;
-            }
+            result200 = ConfigurationIssuesPagedDto.fromJS(resultData200);
             return result200;
             });
         } else if (status === 401) {
@@ -3212,7 +3223,7 @@ export class ConfigurationIssuesClient extends WebApiClientBase implements IConf
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<ConfigurationIssueDto[]>(null as any);
+        return Promise.resolve<ConfigurationIssuesPagedDto>(null as any);
     }
 
     getSummary(): Promise<ConfigurationIssueSummaryDto> {
@@ -8452,6 +8463,74 @@ export interface IClientClaimsApiDto {
     clientClaims: ClientClaimApiDto[] | undefined;
     totalCount: number;
     pageSize: number;
+}
+
+export class ConfigurationIssuesPagedDto implements IConfigurationIssuesPagedDto {
+    issues!: ConfigurationIssueDto[];
+    totalCount!: number;
+    pageIndex!: number;
+    pageSize!: number;
+    totalPages!: number;
+    hasNextPage!: boolean;
+    hasPreviousPage!: boolean;
+
+    constructor(data?: IConfigurationIssuesPagedDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["issues"])) {
+                this.issues = [] as any;
+                for (let item of _data["issues"])
+                    this.issues!.push(ConfigurationIssueDto.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+            this.pageIndex = _data["pageIndex"];
+            this.pageSize = _data["pageSize"];
+            this.totalPages = _data["totalPages"];
+            this.hasNextPage = _data["hasNextPage"];
+            this.hasPreviousPage = _data["hasPreviousPage"];
+        }
+    }
+
+    static fromJS(data: any): ConfigurationIssuesPagedDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ConfigurationIssuesPagedDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.issues)) {
+            data["issues"] = [];
+            for (let item of this.issues)
+                data["issues"].push(item ? item.toJSON() : undefined as any);
+        }
+        data["totalCount"] = this.totalCount;
+        data["pageIndex"] = this.pageIndex;
+        data["pageSize"] = this.pageSize;
+        data["totalPages"] = this.totalPages;
+        data["hasNextPage"] = this.hasNextPage;
+        data["hasPreviousPage"] = this.hasPreviousPage;
+        return data;
+    }
+}
+
+export interface IConfigurationIssuesPagedDto {
+    issues: ConfigurationIssueDto[];
+    totalCount: number;
+    pageIndex: number;
+    pageSize: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
 }
 
 export class ConfigurationIssueDto implements IConfigurationIssueDto {

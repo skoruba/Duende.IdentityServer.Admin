@@ -1,10 +1,13 @@
 // Copyright (c) Jan Škoruba. All Rights Reserved.
 // Licensed under the Apache License, Version 2.0.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Dtos;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Mappers;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Repositories.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities;
@@ -51,5 +54,55 @@ public class ConfigurationIssuesRepository<TDbContext>(
         }
 
         return issues;
+    }
+
+    public async Task<ConfigurationIssuesPagedDto> GetIssuesAsync(ConfigurationIssuesFilterDto filter)
+    {
+        var allIssues = await GetAllIssuesAsync();
+
+        // Apply filters at the query level
+        var filteredQuery = allIssues.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
+        {
+            var searchTerm = filter.SearchTerm.ToLowerInvariant();
+            filteredQuery = filteredQuery.Where(i =>
+                (i.ResourceName != null && i.ResourceName.ToLowerInvariant().Contains(searchTerm)) ||
+                (i.Message != null && i.Message.ToLowerInvariant().Contains(searchTerm)));
+        }
+
+        if (filter.ResourceType.HasValue)
+        {
+            filteredQuery = filteredQuery.Where(i => i.ResourceType == filter.ResourceType.Value);
+        }
+
+        if (filter.IssueType.HasValue)
+        {
+            filteredQuery = filteredQuery.Where(i => i.IssueType == filter.IssueType.Value);
+        }
+
+        var totalCount = filteredQuery.Count();
+        var totalPages = filter.SkipPagination ? 1 : (int)Math.Ceiling((double)totalCount / filter.PageSize);
+
+        // Apply pagination if not skipped
+        if (!filter.SkipPagination)
+        {
+            filteredQuery = filteredQuery
+                .Skip(filter.PageIndex * filter.PageSize)
+                .Take(filter.PageSize);
+        }
+
+        var issuesList = filteredQuery.ToList();
+
+        return new ConfigurationIssuesPagedDto
+        {
+            Issues = issuesList.Select(x => x.ToDto()).ToList(),
+            TotalCount = totalCount,
+            PageIndex = filter.PageIndex,
+            PageSize = filter.SkipPagination ? totalCount : filter.PageSize,
+            TotalPages = totalPages,
+            HasNextPage = !filter.SkipPagination && filter.PageIndex < totalPages - 1,
+            HasPreviousPage = !filter.SkipPagination && filter.PageIndex > 0
+        };
     }
 }

@@ -38,6 +38,9 @@ const DeleteApiScopeDialog = ({
         description: t("ApiScope.Actions.Deleted"),
       });
       queryClient.invalidateQueries(queryKeys.apiScopes);
+      // Invalidate configuration issues cache when API scope is deleted
+      queryClient.invalidateQueries(queryKeys.configurationIssues);
+      queryClient.invalidateQueries(queryKeys.configurationIssuesSummary);
       modal.closeModal();
       onApiScopeDeleted?.();
     },

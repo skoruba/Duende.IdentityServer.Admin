@@ -10,4 +10,5 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces;
 public interface IConfigurationIssuesService
 {
     Task<List<ConfigurationIssueDto>> GetAllIssuesAsync();
+    Task<ConfigurationIssuesPagedDto> GetIssuesAsync(ConfigurationIssuesFilterDto filter);
 }

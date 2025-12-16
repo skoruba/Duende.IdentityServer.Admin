@@ -14,8 +14,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IdentityProvidersApiDto = exports.DashboardIdentityDto = exports.DashboardAuditLogDto = exports.DashboardDto = exports.ConfigurationRuleParameterDto = exports.ConfigurationRuleMetadataDto = exports.ConfigurationIssueType = exports.ConfigurationRuleType = exports.ConfigurationRuleDto = exports.ConfigurationRulesDto = exports.ConfigurationIssueSummaryDto = exports.ConfigurationResourceType = exports.ConfigurationIssueTypeView = exports.ConfigurationIssueDto = exports.ClientClaimsApiDto = exports.ClientPropertiesApiDto = exports.ClientSecretApiDto = exports.ClientSecretsApiDto = exports.ClientCloneApiDto = exports.SelectItemDto = exports.ClientPropertyApiDto = exports.ClientClaimApiDto = exports.ClientApiDto = exports.ClientsApiDto = exports.ApiScopePropertiesApiDto = exports.ApiScopePropertyApiDto = exports.ApiScopeApiDto = exports.ApiScopesApiDto = exports.ApiResourcePropertyApiDto = exports.ApiResourcePropertiesApiDto = exports.ApiSecretApiDto = exports.ApiSecretsApiDto = exports.ProblemDetails = exports.ApiResourceApiDto = exports.ApiResourcesApiDto = exports.UsersClient = exports.RolesClient = exports.PersistedGrantsClient = exports.LogsClient = exports.KeysClient = exports.InfoClient = exports.IdentityResourcesClient = exports.IdentityProvidersClient = exports.DashboardClient = exports.ConfigurationRulesClient = exports.ConfigurationIssuesClient = exports.ClientsClient = exports.ApiScopesClient = exports.ApiResourcesClient = exports.WebApiClientBase = void 0;
-exports.SwaggerException = exports.UserChangePasswordApiDtoOfString = exports.UserProviderDeleteApiDtoOfString = exports.UserProviderApiDtoOfString = exports.UserProvidersApiDtoOfString = exports.UserClaimApiDtoOfString = exports.UserClaimsApiDtoOfString = exports.UserRoleApiDtoOfString = exports.UserRolesApiDtoOfIdentityRoleDto = exports.TKey = exports.RoleClaimApiDto_1 = exports.RoleClaimApiDtoOfString = exports.RoleClaimsApiDtoOfString = exports.IdentityUserDto = exports.UserDtoOfString = exports.BaseUserDtoOfString = exports.IdentityUsersDto = exports.UsersDtoOfIdentityUserDtoAndString = exports.IdentityRolesDto = exports.RolesDtoOfIdentityRoleDtoAndString = exports.IdentityRoleDto = exports.RoleDtoOfString = exports.BaseRoleDtoOfString = exports.PersistedGrantsApiDto = exports.PersistedGrantApiDto = exports.PersistedGrantSubjectApiDto = exports.PersistedGrantSubjectsApiDto = exports.AuditLogDto = exports.AuditLogsDto = exports.KeyApiDto = exports.KeysApiDto = exports.IdentityResourcePropertyApiDto = exports.IdentityResourcePropertiesApiDto = exports.IdentityResourceApiDto = exports.IdentityResourcesApiDto = exports.IdentityProviderApiDto = void 0;
+exports.DashboardIdentityDto = exports.DashboardAuditLogDto = exports.DashboardDto = exports.ConfigurationRuleParameterDto = exports.ConfigurationRuleMetadataDto = exports.ConfigurationIssueType = exports.ConfigurationRuleType = exports.ConfigurationRuleDto = exports.ConfigurationRulesDto = exports.ConfigurationIssueSummaryDto = exports.ConfigurationResourceType = exports.ConfigurationIssueTypeView = exports.ConfigurationIssueDto = exports.ConfigurationIssuesPagedDto = exports.ClientClaimsApiDto = exports.ClientPropertiesApiDto = exports.ClientSecretApiDto = exports.ClientSecretsApiDto = exports.ClientCloneApiDto = exports.SelectItemDto = exports.ClientPropertyApiDto = exports.ClientClaimApiDto = exports.ClientApiDto = exports.ClientsApiDto = exports.ApiScopePropertiesApiDto = exports.ApiScopePropertyApiDto = exports.ApiScopeApiDto = exports.ApiScopesApiDto = exports.ApiResourcePropertyApiDto = exports.ApiResourcePropertiesApiDto = exports.ApiSecretApiDto = exports.ApiSecretsApiDto = exports.ProblemDetails = exports.ApiResourceApiDto = exports.ApiResourcesApiDto = exports.UsersClient = exports.RolesClient = exports.PersistedGrantsClient = exports.LogsClient = exports.KeysClient = exports.InfoClient = exports.IdentityResourcesClient = exports.IdentityProvidersClient = exports.DashboardClient = exports.ConfigurationRulesClient = exports.ConfigurationIssuesClient = exports.ClientsClient = exports.ApiScopesClient = exports.ApiResourcesClient = exports.WebApiClientBase = void 0;
+exports.SwaggerException = exports.UserChangePasswordApiDtoOfString = exports.UserProviderDeleteApiDtoOfString = exports.UserProviderApiDtoOfString = exports.UserProvidersApiDtoOfString = exports.UserClaimApiDtoOfString = exports.UserClaimsApiDtoOfString = exports.UserRoleApiDtoOfString = exports.UserRolesApiDtoOfIdentityRoleDto = exports.TKey = exports.RoleClaimApiDto_1 = exports.RoleClaimApiDtoOfString = exports.RoleClaimsApiDtoOfString = exports.IdentityUserDto = exports.UserDtoOfString = exports.BaseUserDtoOfString = exports.IdentityUsersDto = exports.UsersDtoOfIdentityUserDtoAndString = exports.IdentityRolesDto = exports.RolesDtoOfIdentityRoleDtoAndString = exports.IdentityRoleDto = exports.RoleDtoOfString = exports.BaseRoleDtoOfString = exports.PersistedGrantsApiDto = exports.PersistedGrantApiDto = exports.PersistedGrantSubjectApiDto = exports.PersistedGrantSubjectsApiDto = exports.AuditLogDto = exports.AuditLogsDto = exports.KeyApiDto = exports.KeysApiDto = exports.IdentityResourcePropertyApiDto = exports.IdentityResourcePropertiesApiDto = exports.IdentityResourceApiDto = exports.IdentityResourcesApiDto = exports.IdentityProviderApiDto = exports.IdentityProvidersApiDto = void 0;
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 class WebApiClientBase {
@@ -3199,8 +3199,26 @@ class ConfigurationIssuesClient extends WebApiClientBase {
         this.http = http ? http : window;
         this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
     }
-    get() {
-        let url_ = this.baseUrl + "/api/ConfigurationIssues";
+    get(searchTerm, resourceType, issueType, pageIndex, pageSize, skipPagination) {
+        let url_ = this.baseUrl + "/api/ConfigurationIssues?";
+        if (searchTerm !== undefined && searchTerm !== null)
+            url_ += "SearchTerm=" + encodeURIComponent("" + searchTerm) + "&";
+        if (resourceType !== undefined && resourceType !== null)
+            url_ += "ResourceType=" + encodeURIComponent("" + resourceType) + "&";
+        if (issueType !== undefined && issueType !== null)
+            url_ += "IssueType=" + encodeURIComponent("" + issueType) + "&";
+        if (pageIndex === null)
+            throw new globalThis.Error("The parameter 'pageIndex' cannot be null.");
+        else if (pageIndex !== undefined)
+            url_ += "PageIndex=" + encodeURIComponent("" + pageIndex) + "&";
+        if (pageSize === null)
+            throw new globalThis.Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (skipPagination === null)
+            throw new globalThis.Error("The parameter 'skipPagination' cannot be null.");
+        else if (skipPagination !== undefined)
+            url_ += "SkipPagination=" + encodeURIComponent("" + skipPagination) + "&";
         url_ = url_.replace(/[?&]$/, "");
         let options_ = {
             method: "GET",
@@ -3225,14 +3243,7 @@ class ConfigurationIssuesClient extends WebApiClientBase {
             return response.text().then((_responseText) => {
                 let result200 = null;
                 let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                if (Array.isArray(resultData200)) {
-                    result200 = [];
-                    for (let item of resultData200)
-                        result200.push(ConfigurationIssueDto.fromJS(item));
-                }
-                else {
-                    result200 = null;
-                }
+                result200 = ConfigurationIssuesPagedDto.fromJS(resultData200);
                 return result200;
             });
         }
@@ -8051,6 +8062,53 @@ class ClientClaimsApiDto {
     }
 }
 exports.ClientClaimsApiDto = ClientClaimsApiDto;
+class ConfigurationIssuesPagedDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            if (Array.isArray(_data["issues"])) {
+                this.issues = [];
+                for (let item of _data["issues"])
+                    this.issues.push(ConfigurationIssueDto.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+            this.pageIndex = _data["pageIndex"];
+            this.pageSize = _data["pageSize"];
+            this.totalPages = _data["totalPages"];
+            this.hasNextPage = _data["hasNextPage"];
+            this.hasPreviousPage = _data["hasPreviousPage"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new ConfigurationIssuesPagedDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.issues)) {
+            data["issues"] = [];
+            for (let item of this.issues)
+                data["issues"].push(item ? item.toJSON() : undefined);
+        }
+        data["totalCount"] = this.totalCount;
+        data["pageIndex"] = this.pageIndex;
+        data["pageSize"] = this.pageSize;
+        data["totalPages"] = this.totalPages;
+        data["hasNextPage"] = this.hasNextPage;
+        data["hasPreviousPage"] = this.hasPreviousPage;
+        return data;
+    }
+}
+exports.ConfigurationIssuesPagedDto = ConfigurationIssuesPagedDto;
 class ConfigurationIssueDto {
     constructor(data) {
         if (data) {
@@ -8246,6 +8304,8 @@ var ConfigurationRuleType;
     ConfigurationRuleType["ApiResourceNameMustStartWith"] = "ApiResourceNameMustStartWith";
     ConfigurationRuleType["IdentityResourceMustBeEnabled"] = "IdentityResourceMustBeEnabled";
     ConfigurationRuleType["IdentityResourceNameMustStartWith"] = "IdentityResourceNameMustStartWith";
+    ConfigurationRuleType["ScopeIsUnused"] = "ScopeIsUnused";
+    ConfigurationRuleType["SecretIsExpiredInDays"] = "SecretIsExpiredInDays";
 })(ConfigurationRuleType || (exports.ConfigurationRuleType = ConfigurationRuleType = {}));
 var ConfigurationIssueType;
 (function (ConfigurationIssueType) {

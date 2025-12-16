@@ -21,11 +21,20 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers;
 public class ConfigurationIssuesController(IConfigurationIssuesService configurationIssuesService) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<ConfigurationIssueDto>>> Get()
+    public async Task<ActionResult<ConfigurationIssuesPagedDto>> Get([FromQuery] ConfigurationIssuesFilterDto filter)
     {
-        var issues = await configurationIssuesService.GetAllIssuesAsync();
+        // Default to skip pagination for backward compatibility
+        if (filter == null)
+        {
+            filter = new ConfigurationIssuesFilterDto { SkipPagination = true };
+        }
+        else if (filter.PageSize <= 0 && !filter.SkipPagination)
+        {
+            filter.SkipPagination = true;
+        }
 
-        return Ok(issues);
+        var result = await configurationIssuesService.GetIssuesAsync(filter);
+        return Ok(result);
     }
 
     [HttpGet(nameof(GetSummary))]

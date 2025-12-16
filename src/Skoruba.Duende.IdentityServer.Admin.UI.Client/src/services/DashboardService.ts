@@ -37,7 +37,9 @@ export const useConfigurationIssues = () =>
         ApiHelper.getApiBaseUrl()
       );
 
-      return await configClient.get();
+      // Use new API with filter parameters - skip pagination to get all results
+      const result = await configClient.get(null, null, null, 0, 50, true);
+      return result.issues || [];
     },
     queryWithoutCache
   );
@@ -70,7 +72,7 @@ export const useConfigurationIssuesForResource = (
       return [];
     }
 
-    return result.data.filter(
+    return (result.data || []).filter(
       (issue) =>
         issue.resourceType === resourceType && issue.resourceId === resourceId
     );

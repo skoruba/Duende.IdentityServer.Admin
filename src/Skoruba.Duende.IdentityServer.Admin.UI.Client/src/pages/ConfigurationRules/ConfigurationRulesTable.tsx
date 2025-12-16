@@ -180,7 +180,7 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
     <DataTable
       columns={columns as any}
       data={data.rules || []}
-      pagination={{ pageIndex: 0, pageSize: data.totalCount }}
+      pagination={{ pageIndex: 0, pageSize: 10, hidePagination: true }}
       setPagination={() => {}}
       totalCount={data.totalCount}
     />

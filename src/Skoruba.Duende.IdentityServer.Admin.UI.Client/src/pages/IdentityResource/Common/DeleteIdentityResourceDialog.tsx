@@ -36,6 +36,9 @@ const DeleteIdentityResourceDialog = ({
     {
       onSuccess: () => {
         queryClient.invalidateQueries(queryKeys.identityResources);
+        // Invalidate configuration issues cache when identity resource is deleted
+        queryClient.invalidateQueries(queryKeys.configurationIssues);
+        queryClient.invalidateQueries(queryKeys.configurationIssuesSummary);
         toast({
           title: <Hoorey />,
           description: t("IdentityResource.Actions.Deleted"),

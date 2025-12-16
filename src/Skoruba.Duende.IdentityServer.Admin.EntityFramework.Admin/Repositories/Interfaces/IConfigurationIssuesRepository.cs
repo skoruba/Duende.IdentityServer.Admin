@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Dtos;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities;
 
 namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Repositories.Interfaces;
@@ -10,4 +11,5 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Repositories
 public interface IConfigurationIssuesRepository
 {
     Task<List<ConfigurationIssueView>> GetAllIssuesAsync();
+    Task<ConfigurationIssuesPagedDto> GetIssuesAsync(ConfigurationIssuesFilterDto filter);
 }
