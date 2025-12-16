@@ -7,6 +7,8 @@
 
     <ItemGroup>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10" PrivateAssets="All" />
+        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage" Version="3.0.0-preview.7" />
     </ItemGroup>
 
     <ItemGroup>
@@ -14,7 +16,6 @@
     </ItemGroup>
 
 </Project>
-
 
 
 

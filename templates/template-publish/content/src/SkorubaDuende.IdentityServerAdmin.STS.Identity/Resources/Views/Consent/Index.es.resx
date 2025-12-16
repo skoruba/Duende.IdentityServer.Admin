@@ -138,4 +138,10 @@
     <data name="Yes" xml:space="preserve">
         <value>Si, permitir</value>
     </data>
+    <data name="DescriptionPlaceholder" xml:space="preserve">
+        <value>Descripción o nombre del dispositivo</value>
+    </data>
+    <data name="DescriptionTitle" xml:space="preserve">
+        <value>Descripción</value>
+    </data>
 </root>

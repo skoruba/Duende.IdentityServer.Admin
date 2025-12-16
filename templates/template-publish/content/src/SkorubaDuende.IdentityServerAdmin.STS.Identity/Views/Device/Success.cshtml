@@ -1,10 +1,11 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
-<div class="page-header">
-    <div class="alert alert-success" role="alert">
-        <h3>
-            @Localizer["Success"]
-            <small>@Localizer["SuccessMessage"]</small>
-        </h3>
+<div class="py-8">
+    <div class="alert-default">
+        <lucideicon name="check" class="h-4 w-4" />
+        <div>
+            <h3 class="alert-title">@Localizer["Success"]</h3>
+            <div class="alert-description">@Localizer["SuccessMessage"]</div>
+        </div>
     </div>
 </div>

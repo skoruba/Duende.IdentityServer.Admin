@@ -5,8 +5,15 @@
     ViewData["Title"] = Localizer["ConfirmEmailTitle"];
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="py-8">
+    <h1 class="text-4xl font-bold mb-6">@ViewData["Title"]</h1>
 
-<p>
-    @Localizer["VerificationSent"]
-</p>
+    <div class="alert-default">
+        <lucideicon name="check" class="h-4 w-4" />
+        <div>
+            <div class="alert-description">
+                @Localizer["VerificationSent"]
+            </div>
+        </div>
+    </div>
+</div>

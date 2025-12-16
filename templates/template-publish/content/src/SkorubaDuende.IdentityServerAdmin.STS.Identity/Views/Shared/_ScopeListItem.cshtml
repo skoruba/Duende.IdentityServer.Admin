@@ -2,41 +2,46 @@
 @inject IViewLocalizer Localizer
 @model SkorubaDuende.IdentityServerAdmin.STS.Identity.ViewModels.Consent.ScopeViewModel
 
-<li class="list-group-item">
-	<div class="toggle-button__input">
-		<toggle-button>
-			<input class="consent-scopecheck"
-				   type="checkbox"
-				   name="ScopesConsented"
-				   id="scopes_@Model.Value"
-				   value="@Model.Value"
-				   checked="@Model.Checked"
-				   disabled="@Model.Required" />
-		</toggle-button>
-	</div>
-	<div class="toggle-button__text">
-		@if (Model.Required)
-		{
-			<input type="hidden"
-				   name="ScopesConsented"
-				   value="@Model.Value" />
-		}
-		<strong>@Model.DisplayName</strong>
-		@if (Model.Emphasize)
-		{
-			<i class="fa fa-exclamation-circle"></i>
-		}
-	</div>
-	@if (Model.Required)
-	{
-		<div class="toggle-button__text">
-			<span><em>@Localizer["Required"]</em></span>
+<li class="border-b last:border-0 pb-4 last:pb-0">
+	<div class="flex items-start justify-between gap-4">
+		<div class="flex-1">
+			@if (Model.Required)
+			{
+				<input type="hidden"
+					   name="ScopesConsented"
+					   value="@Model.Value" />
+			}
+			<div class="flex items-center gap-2 mb-1">
+				<strong class="font-semibold">@Model.DisplayName</strong>
+				@if (Model.Emphasize)
+				{
+					<lucideicon name="alert-circle" class="h-4 w-4 text-destructive" />
+				}
+			</div>
+			@if (Model.Required)
+			{
+				<div class="text-sm text-muted-foreground italic mb-1">
+					@Localizer["Required"]
+				</div>
+			}
+			@if (Model.Description != null)
+			{
+				<label for="scopes_@Model.Value" class="text-sm text-muted-foreground cursor-pointer">
+					@Model.Description
+				</label>
+			}
 		</div>
-	}
-	@if (Model.Description != null)
-	{
-		<div class="consent-description">
-			<label for="scopes_@Model.Value">@Model.Description</label>
+		<div class="flex items-center pt-1">
+			<label class="switch">
+				<input class="consent-scopecheck"
+					   type="checkbox"
+					   name="ScopesConsented"
+					   id="scopes_@Model.Value"
+					   value="@Model.Value"
+					   checked="@Model.Checked"
+					   disabled="@Model.Required" />
+				<span class="switch-slider"></span>
+			</label>
 		</div>
-	}
+	</div>
 </li>

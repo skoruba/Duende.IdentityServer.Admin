@@ -43,8 +43,8 @@
 		<PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
 		<PackageReference Include="Skoruba.AuditLogging.EntityFramework" Version="2.0.0" />
 		<PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
-		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration" Version="3.0.0-preview.6" />
-		<PackageReference Include="Skoruba.Duende.IdentityServer.Shared.Configuration" Version="3.0.0-preview.6" />
+		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration" Version="3.0.0-preview.7" />
+		<PackageReference Include="Skoruba.Duende.IdentityServer.Shared.Configuration" Version="3.0.0-preview.7" />
     </ItemGroup>
 
     <ItemGroup>
@@ -85,9 +85,45 @@
         </EmbeddedResource>
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\dist\fonts\fontawesome-webfont.eot" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\fonts\fontawesome-webfont.svg" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\fonts\fontawesome-webfont.ttf" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\fonts\fontawesome-webfont.woff" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\fonts\fontawesome-webfont.woff2" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\fonts\FontAwesome.otf" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\fonts\open-iconic.eot" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\fonts\open-iconic.otf" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\fonts\open-iconic.svg" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\fonts\open-iconic.ttf" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\fonts\open-iconic.woff" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\bundle.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\themes\cerulean\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\themes\cosmo\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\themes\cyborg\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\themes\darkly\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\themes\flatly\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\themes\journal\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\themes\litera\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\themes\lumen\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\themes\lux\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\themes\materia\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\themes\minty\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\themes\pulse\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\themes\sandstone\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\themes\simplex\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\themes\sketchy\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\themes\slate\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\themes\solar\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\themes\spacelab\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\themes\superhero\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\themes\united\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\themes\yeti\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\web.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\css\web.min.css" />
+    </ItemGroup>
+
 </Project>
-
-
 
 
 

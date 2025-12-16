@@ -44,20 +44,20 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api
 
             var databaseProviderConfiguration = Configuration.GetSection(nameof(DatabaseProviderConfiguration)).Get<DatabaseProviderConfiguration>();
             var databaseMigration = StartupHelpers.GetDatabaseMigrationsConfiguration(Configuration, MigrationAssemblyConfiguration.GetMigrationAssemblyByProvider(databaseProviderConfiguration));
-            
+
             // Add DbContexts
             RegisterDbContexts(services, databaseMigration);
-            
+
             // Add email senders which is currently setup for SendGrid and SMTP
             services.AddEmailSenders(Configuration);
-   
+
             // Add authentication services
             RegisterAuthentication(services);
 
             // Add authorization services
             RegisterAuthorization(services);
-            
-            services.AddIdentityServerAdminApi<AdminIdentityDbContext, IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext, IdentityServerDataProtectionDbContext,AdminLogDbContext, AdminAuditLogDbContext, AuditLog,
+
+            services.AddIdentityServerAdminApi<AdminIdentityDbContext, IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext, IdentityServerDataProtectionDbContext, AdminLogDbContext, AdminAuditLogDbContext, AuditLog,
                 IdentityUserDto, IdentityRoleDto, UserIdentity, UserIdentityRole, string, UserIdentityUserClaim, UserIdentityUserRole,
                 UserIdentityUserLogin, UserIdentityRoleClaim, UserIdentityUserToken,
                 IdentityUsersDto, IdentityRolesDto, IdentityUserRolesDto,
@@ -65,7 +65,7 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api
                 IdentityRoleClaimsDto, IdentityUserClaimDto, IdentityRoleClaimDto>(Configuration, adminApiConfiguration);
 
             services.AddSwaggerServices(adminApiConfiguration);
-            
+
             services.AddIdSHealthChecks<IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext, AdminIdentityDbContext, AdminLogDbContext, AdminAuditLogDbContext, IdentityServerDataProtectionDbContext>(Configuration, adminApiConfiguration);
         }
 
@@ -89,7 +89,7 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api
                     ClientSecret = null
                 };
             });
-            
+
             app.UseRouting();
             UseAuthentication(app);
             app.UseCors();
@@ -108,7 +108,7 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api
         public virtual void RegisterDbContexts(IServiceCollection services,
             DatabaseMigrationsConfiguration databaseMigration)
         {
-            services.AddDbContexts<AdminIdentityDbContext, IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext, AdminLogDbContext, AdminAuditLogDbContext, IdentityServerDataProtectionDbContext, AuditLog>(Configuration, databaseMigration);
+            services.AddDbContexts<AdminIdentityDbContext, IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext, AdminLogDbContext, AdminAuditLogDbContext, IdentityServerDataProtectionDbContext, AdminConfigurationDbContext, AuditLog>(Configuration, databaseMigration);
         }
 
         public virtual void RegisterAuthentication(IServiceCollection services)

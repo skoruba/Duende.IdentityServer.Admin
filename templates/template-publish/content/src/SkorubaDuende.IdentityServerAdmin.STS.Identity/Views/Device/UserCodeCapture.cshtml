@@ -1,42 +1,27 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @model string
-<div class="page-header">
-    <h1>
-        @Localizer["Title"]
-    </h1>
-    
-    <div class="col-sm-6">
-        <div class="card mt-3">
-            <h5 class="card-header">@Localizer["Title"]</h5>
-            <div class="card-body">
 
-                <form asp-action="UserCodeCapture" method="post">
-                    
-                    <fieldset>
-                        <div class="form-group row">
-                            <div class="col-sm-12">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="input-usercode">
-                                            <i class="fa fa-barcode"></i>
-                                        </span>
-                                    </div>
-                                    <input for="userCode" placeholder="@Localizer["EnterCode"]" class="form-control" name="userCode" aria-describedby="input-usercode"/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!--Button-->
-                        <div class="form-group row">
-                            <div class="col-sm-12">
-                                <button class="btn btn-primary">@Localizer["Submit"]</button>
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
-
-            </div>
+<div class="py-8">
+    <div class="card max-w-md">
+        <div class="card-header">
+            <h2 class="card-title">@Localizer["Title"]</h2>
+        </div>
+        <div class="card-content">
+            @await Html.PartialAsync("_ValidationSummary")
+            <form asp-action="UserCodeCapture" method="post" class="space-y-4">
+                <div class="form-item">
+                    <label for="userCode" class="form-label">
+                        <lucideicon name="smartphone" class="inline-block h-4 w-4 mr-1" />
+                        @Localizer["EnterCode"]
+                    </label>
+                    <input id="userCode" name="userCode" placeholder="@Localizer["EnterCode"]" class="input" tw-validation />
+                </div>
+                <button class="btn-default w-full">
+                    <lucideicon name="arrow-right" class="inline-block h-4 w-4 mr-2" />
+                    @Localizer["Submit"]
+                </button>
+            </form>
         </div>
     </div>
 </div>

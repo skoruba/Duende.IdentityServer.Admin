@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Duende.IdentityServer;
 using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.EntityFramework.Storage;
 using Microsoft.AspNetCore.Authentication;
@@ -17,11 +18,13 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using IdentityModel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
+using System.IO;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySql;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.PostgreSQL;
@@ -34,6 +37,7 @@ using SkorubaDuende.IdentityServerAdmin.STS.Identity.Configuration;
 using SkorubaDuende.IdentityServerAdmin.STS.Identity.Configuration.ApplicationParts;
 using SkorubaDuende.IdentityServerAdmin.STS.Identity.Configuration.Constants;
 using SkorubaDuende.IdentityServerAdmin.STS.Identity.Configuration.Interfaces;
+using Configuration = SkorubaDuende.IdentityServerAdmin.STS.Identity.Configuration;
 using SkorubaDuende.IdentityServerAdmin.STS.Identity.Helpers.Localization;
 using SkorubaDuende.IdentityServerAdmin.STS.Identity.Services;
 
@@ -297,7 +301,7 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Helpers
                     AuthenticationHelpers.CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
             });
 
-            
+
 
             services.Configure<IISOptions>(iis =>
             {
@@ -386,6 +390,21 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Helpers
 
             builder.AddExtensionGrantValidator<DelegationGrantValidator>();
 
+            // Check if server-side sessions should be enabled from configuration
+            var serverSideSessionsConfig = configuration.GetSection(Configuration.ServerSideSessionsConfiguration.SectionName).Get<Configuration.ServerSideSessionsConfiguration>() ?? new Configuration.ServerSideSessionsConfiguration();
+            var serverSideSessionsEnabled = serverSideSessionsConfig.Enabled;
+
+            if (serverSideSessionsEnabled)
+            {
+                builder.AddServerSideSessions();
+                services.Configure<IdentityServerOptions>(options =>
+                {
+                    options.ServerSideSessions.UserDisplayNameClaimType = JwtClaimTypes.Name;
+                    options.ServerSideSessions.RemoveExpiredSessions = true;
+                    options.ServerSideSessions.ExpiredSessionsTriggerBackchannelLogout = true;
+                });
+            }
+
             return builder;
         }
 
@@ -423,6 +442,9 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Helpers
                   }, cookieScheme: null);
             }
         }
+
+
+
 
         /// <summary>
         /// Register middleware for localization

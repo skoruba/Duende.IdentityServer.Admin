@@ -132,6 +132,10 @@
   <data name="Grants" xml:space="preserve">
     <value>Medgivanden</value>
   </data>
+  <data name="ServerSessionsMenu" xml:space="preserve">
+    <value>Server-sessioner</value>
+  </data>
+
   <data name="ManagePersonalData" xml:space="preserve">
     <value>Personlig information</value>
   </data>
