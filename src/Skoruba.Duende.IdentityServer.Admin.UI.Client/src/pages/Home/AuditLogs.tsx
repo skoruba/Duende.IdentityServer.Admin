@@ -1,4 +1,4 @@
-import { Calendar, TrendingUp, Activity, Shield, Zap } from "lucide-react";
+import { CalendarClock, BarChart, Activity, Shield, Zap } from "lucide-react";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -135,15 +135,15 @@ const AuditLogs: React.FC<AuditLogsProps> = ({ data }) => {
   if (data.length < 2) {
     return (
       <div className="h-[200px] flex flex-col items-center justify-center gap-3 text-center px-4">
-        <div className="flex items-center gap-2 text-gray-400 dark:text-gray-500">
-          <Calendar className="h-8 w-8" />
-          <TrendingUp className="h-8 w-8" />
+        <div className="flex items-center gap-2 text-muted-foreground">
+          <CalendarClock className="h-8 w-8" />
+          <BarChart className="h-8 w-8" />
         </div>
         <div className="space-y-1">
-          <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+          <p className="text-sm font-medium text-muted-foreground">
             {t("AuditLogs.InsufficientData")}
           </p>
-          <p className="text-xs text-gray-500 dark:text-gray-500">
+          <p className="text-xs text-muted-foreground">
             {t("AuditLogs.InsufficientDataDescription")}
           </p>
         </div>
@@ -297,7 +297,7 @@ const AuditLogs: React.FC<AuditLogsProps> = ({ data }) => {
                     const isHighActivity = data.isHigh;
 
                     return (
-                      <div className="rounded-2xl border bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl p-4 shadow-2xl">
+                      <div className="rounded-2xl border bg-card/95 backdrop-blur-xl p-4 shadow-2xl">
                         <div className="space-y-3">
                           <div className="flex items-center gap-2">
                             <div

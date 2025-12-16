@@ -55,12 +55,12 @@ export function SearchDropdown({
         />
       </div>
       {isOpen && (
-        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg">
+        <div className="absolute z-10 w-full mt-1 bg-popover border border-border rounded-md shadow-lg">
           <ScrollArea className="h-[320px]">
             {filteredItems.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center p-2 cursor-pointer hover:bg-gray-100"
+                className="flex items-center p-2 cursor-pointer hover:bg-accent"
                 onClick={() => {
                   handleChange(item.name);
                   setIsOpen(false);

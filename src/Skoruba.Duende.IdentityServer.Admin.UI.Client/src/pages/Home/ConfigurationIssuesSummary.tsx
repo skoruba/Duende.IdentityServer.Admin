@@ -42,7 +42,7 @@ function LegendItem({
   count?: number;
 }) {
   return (
-    <div className="flex items-center gap-3 p-2 rounded-lg bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors">
+    <div className="flex items-center gap-3 p-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
       <div className="flex items-center gap-2">
         <div
           className="p-1.5 rounded-lg"
@@ -211,7 +211,7 @@ export function ConfigurationIssuesSummary() {
                             y={viewBox.cy}
                             textAnchor="middle"
                             dominantBaseline="middle"
-                            className="text-xl font-bold fill-current text-gray-800 dark:text-gray-200"
+                            className="text-xl font-bold fill-current text-foreground"
                           >
                             {hasNoIssues
                               ? t("Home.ClientsChecker.Pie.NoIssues")

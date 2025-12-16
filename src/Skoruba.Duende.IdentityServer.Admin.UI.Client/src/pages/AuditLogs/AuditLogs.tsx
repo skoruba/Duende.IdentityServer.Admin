@@ -111,7 +111,7 @@ const AuditLogs: React.FC = () => {
 
         {date && (
           <button
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
             onClick={() => {
               setDate(undefined);
               handleChange("created", undefined);

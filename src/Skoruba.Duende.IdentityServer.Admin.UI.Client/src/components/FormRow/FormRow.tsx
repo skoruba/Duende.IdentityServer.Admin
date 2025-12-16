@@ -322,7 +322,7 @@ const DateField: React.FC<DateFieldProps> = ({ field }) => {
               {field.value && (
                 <span
                   onClick={handleClear}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 cursor-pointer"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-destructive cursor-pointer"
                 >
                   <X className="h-4 w-4" />
                 </span>

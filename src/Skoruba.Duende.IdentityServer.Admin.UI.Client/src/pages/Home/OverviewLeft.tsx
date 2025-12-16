@@ -126,7 +126,7 @@ export function OverviewLeft({ data }: OverviewProps) {
                     const Icon = getIcon(data.name);
 
                     return (
-                      <div className="rounded-2xl border bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl p-4 shadow-2xl">
+                      <div className="rounded-2xl border bg-card/95 backdrop-blur-xl p-4 shadow-2xl">
                         <div className="space-y-3">
                           <div className="flex items-center gap-2">
                             <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/20">
@@ -175,7 +175,7 @@ export function OverviewLeft({ data }: OverviewProps) {
               return (
                 <div
                   key={item.name}
-                  className="flex items-center gap-2 p-2 rounded-lg bg-gray-50 dark:bg-gray-800/50"
+                  className="flex items-center gap-2 p-2 rounded-lg bg-muted/50"
                 >
                   <div
                     className="h-2 w-2 rounded-full"

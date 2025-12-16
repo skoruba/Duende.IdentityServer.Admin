@@ -67,7 +67,7 @@ const AuditLogDetail: React.FC<AuditLogDetailProps> = ({
 
           <TabsContent value="subject">
             {log?.subjectAdditionalData ? (
-              <pre className="p-2 bg-gray-100 rounded text-sm overflow-x-auto">
+              <pre className="p-2 bg-muted rounded text-sm overflow-x-auto">
                 <code>{log.subjectAdditionalData}</code>
               </pre>
             ) : (
