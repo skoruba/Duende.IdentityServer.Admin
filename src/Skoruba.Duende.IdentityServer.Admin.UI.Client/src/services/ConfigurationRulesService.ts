@@ -44,7 +44,7 @@ export const getConfigurationRulesMetadata = async (): Promise<
 };
 
 export const getConfigurationRuleMetadata = async (
-  ruleType: string
+  ruleType: client.ConfigurationRuleType
 ): Promise<client.ConfigurationRuleMetadataDto> => {
-  return await apiClient.getMetadata(ruleType as any);
+  return await apiClient.getMetadata(ruleType);
 };

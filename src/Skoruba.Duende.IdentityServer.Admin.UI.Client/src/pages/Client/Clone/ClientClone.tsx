@@ -16,10 +16,25 @@ import { useMutation, useQueryClient } from "react-query";
 import { toast } from "@/components/ui/use-toast";
 import { queryKeys } from "@/services/QueryKeys";
 import Hoorey from "@/components/Hoorey/Hoorey";
+import i18next from "@/i18n/config";
 
 const formSchema = z.object({
-  clientId: z.string().min(1, "Client ID is required."),
-  clientName: z.string().min(1, "Client Name is required."),
+  clientId: z.string().min(
+    1,
+    String(
+      i18next.t("Validation.FieldRequired", {
+        field: i18next.t("Client.Label.ClientId_Label"),
+      })
+    )
+  ),
+  clientName: z.string().min(
+    1,
+    String(
+      i18next.t("Validation.FieldRequired", {
+        field: i18next.t("Client.Label.ClientName_Label"),
+      })
+    )
+  ),
   clientGrantTypes: z.boolean().optional(),
   clientRedirectUris: z.boolean().optional(),
   clientScopes: z.boolean().optional(),
@@ -179,7 +194,7 @@ export const CloneClient = () => {
           />
           <FormRow
             name="clientIdPRestrictions"
-            label="Client IdP Restrictions"
+            label={t("Client.Clone.LabelCloneClientIdPRestrictions")}
             description={t("Client.Clone.LabelCloneClientIdPRestrictions")}
             type="switch"
           />

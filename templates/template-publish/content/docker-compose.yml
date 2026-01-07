@@ -32,6 +32,9 @@ services:
       - 'AdminConfiguration__ApiConfiguration__ApiRemoteConfiguration__RemoteUrl=https://admin-api.skoruba.local'
       - 'AdminConfiguration__BasicConfiguration__Title=Skoruba Duende IdentityServer Admin'
       - 'AdminConfiguration__BasicConfiguration__BasePath=/'
+      - ForwardedHeadersConfiguration__Enabled=true
+      - ForwardedHeadersConfiguration__AllowAll=true
+      - ForwardedHeadersConfiguration__ForwardLimit=1
       - DockerConfiguration__UpdateCaCertificate=true
       - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
@@ -70,6 +73,9 @@ services:
       - 'IdentityServerData__Clients__1__RedirectUris__0=https://admin-api.skoruba.local/swagger/oauth2-redirect.html'
       - 'SeedConfiguration__ApplySeed=true'
       - 'DatabaseMigrationsConfiguration__ApplyDatabaseMigrations=true'
+      - ForwardedHeadersConfiguration__Enabled=true
+      - ForwardedHeadersConfiguration__AllowAll=true
+      - ForwardedHeadersConfiguration__ForwardLimit=1
       - DockerConfiguration__UpdateCaCertificate=true
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:
@@ -100,6 +106,9 @@ services:
       - IdentityServerOptions__Events__RaiseFailureEvents=true
       - IdentityServerOptions__Events__RaiseSuccessEvents=true
       - ServerSideSessionsConfiguration__Enabled=true
+      - ForwardedHeadersConfiguration__Enabled=true
+      - ForwardedHeadersConfiguration__AllowAll=true
+      - ForwardedHeadersConfiguration__ForwardLimit=1
       - DockerConfiguration__UpdateCaCertificate=true
       - ASPNETCORE_ENVIRONMENT=Development
     depends_on:

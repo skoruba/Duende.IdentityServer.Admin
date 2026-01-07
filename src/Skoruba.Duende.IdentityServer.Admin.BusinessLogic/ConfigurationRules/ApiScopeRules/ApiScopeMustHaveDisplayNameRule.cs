@@ -3,28 +3,17 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Entities;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.ConfigurationRules;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.ApiScopeRules;
 
-public class ApiScopeMustHaveDisplayNameRule<TDbContext> : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
-    where TDbContext : DbContext, IAdminConfigurationDbContext
+public class ApiScopeMustHaveDisplayNameRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
 {
-    private readonly TDbContext _dbContext;
-
-    public ApiScopeMustHaveDisplayNameRule(TDbContext dbContext)
+    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
     {
-        _dbContext = dbContext;
-    }
-
-    public async Task<List<ConfigurationIssueView>> ValidateAsync(string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
-    {
-        return await _dbContext.ApiScopes
+        return context.ApiScopes
             .Where(s => string.IsNullOrWhiteSpace(s.DisplayName))
             .Select(s => new ConfigurationIssueView
             {
@@ -34,6 +23,6 @@ public class ApiScopeMustHaveDisplayNameRule<TDbContext> : ConfigurationRuleVali
                 IssueType = issueType,
                 ResourceType = ConfigurationResourceType.ApiScope
             })
-            .ToListAsync();
+            .ToList();
     }
 }

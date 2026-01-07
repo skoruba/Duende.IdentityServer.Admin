@@ -3,32 +3,19 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Entities;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.ConfigurationRules;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.ClientRules;
 
-public class ClientRedirectUrisMustUseHttpsRule<TDbContext> : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
-    where TDbContext : DbContext, IAdminConfigurationDbContext
+public class ClientRedirectUrisMustUseHttpsRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
 {
-    private readonly TDbContext _dbContext;
-
-    public ClientRedirectUrisMustUseHttpsRule(TDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
-    public async Task<List<ConfigurationIssueView>> ValidateAsync(string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
+    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<HttpsConfig>(configuration);
 
-        var clients = await _dbContext.Clients
-            .Include(c => c.RedirectUris)
-            .ToListAsync();
+        var clients = context.Clients;
 
         var issues = new List<ConfigurationIssueView>();
 

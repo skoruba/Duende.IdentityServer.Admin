@@ -10,7 +10,6 @@ import {
 } from "@/models/Clients/ClientModels";
 import { SecretsFormData } from "@/components/SecretForm/SecretForm";
 import { client } from "@skoruba/duende.identityserver.admin.api.client";
-import { ClientApiDto } from "@skoruba/duende.identityserver.admin.api.client/dist/types/client";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { INT_MAX } from "@/helpers/NumberHelper";
 import { queryKeys, queryWithoutCache } from "./QueryKeys";
@@ -228,11 +227,9 @@ export const useSecretTypes = () => {
 
 export const createClient = async (
   clientToAdd: client.IClientApiDto
-): Promise<client.IClientApiDto> => {
+): Promise<client.ClientApiDto> => {
   const clientClient = new client.ClientsClient(ApiHelper.getApiBaseUrl());
-  return (await clientClient.post(
-    new client.ClientApiDto(clientToAdd)
-  )) as any as ClientApiDto;
+  return await clientClient.post(new client.ClientApiDto(clientToAdd));
 };
 
 export const addClientSecret = async (
@@ -275,7 +272,7 @@ export const useCreateClient = () => {
       const createdClient = await createClient(clientData);
 
       if (secret) {
-        createClientSecret(createdClient.id, secret);
+        await createClientSecret(createdClient.id, secret);
       }
 
       return createdClient;

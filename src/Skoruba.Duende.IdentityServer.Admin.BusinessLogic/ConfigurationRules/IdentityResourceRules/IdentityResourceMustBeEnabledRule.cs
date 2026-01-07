@@ -3,33 +3,22 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Entities;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.ConfigurationRules;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.IdentityResourceRules;
 
-public class IdentityResourceMustBeEnabledRule<TDbContext> : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
-    where TDbContext : DbContext, IAdminConfigurationDbContext
+public class IdentityResourceMustBeEnabledRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
 {
-    private readonly TDbContext _dbContext;
-
-    public IdentityResourceMustBeEnabledRule(TDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
-    public async Task<List<ConfigurationIssueView>> ValidateAsync(string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
+    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<RequiredResourcesConfig>(configuration);
         var requiredResources = config.RequiredResources ?? new[] { "openid", "profile" };
 
-        var disabledResources = await _dbContext.IdentityResources
+        var disabledResources = context.IdentityResources
             .Where(ir => requiredResources.Contains(ir.Name) && !ir.Enabled)
-            .ToListAsync();
+            .ToList();
 
         var issues = new List<ConfigurationIssueView>();
 

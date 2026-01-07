@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/table";
 
 import { DataTablePagination } from "./DataTablePagination";
+import { useTranslation } from "react-i18next";
 
 interface PaginationProps {
   pageIndex: number;
@@ -41,6 +42,7 @@ export function DataTable<TData, TValue>({
   totalCount,
   pagination,
 }: DataTableProps<TData, TValue>) {
+  const { t } = useTranslation();
   const table = useReactTable({
     data,
     columns,
@@ -92,7 +94,7 @@ export function DataTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                {t("Components.DataTable.NoResults")}
               </TableCell>
             </TableRow>
           )}

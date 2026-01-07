@@ -1,4 +1,7 @@
 import { ClientType } from "@/models/Clients/ClientModels";
+import type { TFunction } from "i18next";
+
+type TranslationKey = Parameters<TFunction>[0];
 
 export type EnforcedValues = Partial<{
   requirePkce: boolean;
@@ -18,8 +21,8 @@ export interface ClientTypeRuleSet {
 export const enforcedFieldMeta: Record<
   keyof NonNullable<EnforcedValues>,
   {
-    labelKey: string;
-    format?: (value: boolean | number, t: (k: string) => string) => string;
+    labelKey: TranslationKey;
+    format?: (value: boolean | number, t: TFunction) => string;
   }
 > = {
   requirePkce: {

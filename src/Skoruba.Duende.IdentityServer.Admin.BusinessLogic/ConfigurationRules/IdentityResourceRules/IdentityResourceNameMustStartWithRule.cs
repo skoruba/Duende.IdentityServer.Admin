@@ -3,26 +3,15 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Entities;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.ConfigurationRules;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.IdentityResourceRules;
 
-public class IdentityResourceNameMustStartWithRule<TDbContext> : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
-    where TDbContext : DbContext, IAdminConfigurationDbContext
+public class IdentityResourceNameMustStartWithRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
 {
-    private readonly TDbContext _dbContext;
-
-    public IdentityResourceNameMustStartWithRule(TDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
-    public async Task<List<ConfigurationIssueView>> ValidateAsync(string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
+    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<PrefixConfig>(configuration);
 
@@ -47,7 +36,7 @@ public class IdentityResourceNameMustStartWithRule<TDbContext> : ConfigurationRu
         var excludeStandard = config.ExcludeStandard ?? true;
         var standardResources = new[] { "openid", "profile", "email", "address", "phone", "offline_access" };
 
-        var identityResources = await _dbContext.IdentityResources.ToListAsync();
+        var identityResources = context.IdentityResources;
         var issues = new List<ConfigurationIssueView>();
 
         foreach (var resource in identityResources)

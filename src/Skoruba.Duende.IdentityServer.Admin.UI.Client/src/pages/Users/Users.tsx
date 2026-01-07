@@ -71,13 +71,13 @@ const Users: React.FC = () => {
     >
       {users.isLoading ? (
         <Loading fullscreen />
-      ) : (
+      ) : users.data ? (
         <UsersTable
-          data={users.data!}
+          data={users.data}
           pagination={pagination}
           setPagination={setPagination}
         />
-      )}
+      ) : null}
     </Page>
   );
 };

@@ -11,8 +11,8 @@
       const selectedValue = selectedPolicy.value;
 
       if (selectedValue === "Email") {
-        emailSection.style.display = "block";
-        usernameSection.style.display = "none";
+        emailSection.classList.remove("hidden");
+        usernameSection.classList.add("hidden");
         // Enable/disable required fields
         const emailInput = emailSection.querySelector('input[type="email"]');
         const usernameInput =
@@ -20,8 +20,8 @@
         if (emailInput) emailInput.required = true;
         if (usernameInput) usernameInput.required = false;
       } else if (selectedValue === "Username") {
-        emailSection.style.display = "none";
-        usernameSection.style.display = "block";
+        emailSection.classList.add("hidden");
+        usernameSection.classList.remove("hidden");
         // Enable/disable required fields
         const emailInput = emailSection.querySelector('input[type="email"]');
         const usernameInput =

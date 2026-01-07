@@ -3,26 +3,15 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Entities;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.ConfigurationRules;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.ApiScopeRules;
 
-public class ApiScopeNameMustStartWithRule<TDbContext> : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
-    where TDbContext : DbContext, IAdminConfigurationDbContext
+public class ApiScopeNameMustStartWithRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
 {
-    private readonly TDbContext _dbContext;
-
-    public ApiScopeNameMustStartWithRule(TDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
-    public async Task<List<ConfigurationIssueView>> ValidateAsync(string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
+    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<PrefixConfig>(configuration);
 
@@ -44,7 +33,7 @@ public class ApiScopeNameMustStartWithRule<TDbContext> : ConfigurationRuleValida
             return new List<ConfigurationIssueView>();
         }
 
-        var scopes = await _dbContext.ApiScopes.ToListAsync();
+        var scopes = context.ApiScopes;
         var issues = new List<ConfigurationIssueView>();
 
         foreach (var scope in scopes)

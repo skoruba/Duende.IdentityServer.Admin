@@ -71,10 +71,10 @@ const Clients: React.FC = () => {
     >
       {clients.isLoading ? (
         <Loading fullscreen />
-      ) : (
+      ) : clients.data ? (
         <>
           <ClientsTable
-            data={clients.data!}
+            data={clients.data}
             pagination={pagination}
             setPagination={setPagination}
           />
@@ -83,7 +83,7 @@ const Clients: React.FC = () => {
             isOpenModalClientType={isOpen}
           />
         </>
-      )}
+      ) : null}
     </Page>
   );
 };

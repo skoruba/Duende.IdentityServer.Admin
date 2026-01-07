@@ -1,7 +1,13 @@
-import resources from "./resources";
+import "i18next";
+import translation from "../i18n/translations.en.json";
 
 declare module "i18next" {
   interface CustomTypeOptions {
-    resources: typeof resources;
+    defaultNS: "translation";
+    resources: {
+      translation: typeof translation;
+    };
   }
 }
+
+export {};

@@ -3,46 +3,37 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Entities;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.ConfigurationRules;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.SecurityRules;
 
-public class ScopeIsUnusedRule<TDbContext> : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
-    where TDbContext : DbContext, IAdminConfigurationDbContext
+public class ScopeIsUnusedRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
 {
-    private readonly TDbContext _dbContext;
-
-    public ScopeIsUnusedRule(TDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
-    public async Task<List<ConfigurationIssueView>> ValidateAsync(string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
+    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<UnusedScopeConfig>(configuration);
         var excludeScopes = config.ExcludeScopes ?? new[] { "openid", "profile", "email", "address", "phone", "offline_access" };
 
         // Get all scopes
-        var allScopes = await _dbContext.ApiScopes
+        var allScopes = context.ApiScopes
             .Select(s => s.Name)
-            .ToListAsync();
+            .ToList();
 
         // Get scopes used by clients
-        var clientUsedScopes = await _dbContext.ClientScopes
+        var clientUsedScopes = context.Clients
+            .SelectMany(c => c.AllowedScopes)
             .Select(cs => cs.Scope)
             .Distinct()
-            .ToListAsync();
+            .ToList();
 
         // Get scopes used by API resources
-        var apiResourceUsedScopes = await _dbContext.ApiResourceScopes
+        var apiResourceUsedScopes = context.ApiResources
+            .SelectMany(ar => ar.Scopes)
             .Select(ars => ars.Scope)
             .Distinct()
-            .ToListAsync();
+            .ToList();
 
         // Combine all used scopes
         var usedScopes = clientUsedScopes.Union(apiResourceUsedScopes).ToHashSet();
@@ -57,7 +48,7 @@ public class ScopeIsUnusedRule<TDbContext> : ConfigurationRuleValidatorBase, ICo
 
         foreach (var scopeName in unusedScopes)
         {
-            var scope = await _dbContext.ApiScopes.FirstOrDefaultAsync(s => s.Name == scopeName);
+            var scope = context.ApiScopes.FirstOrDefault(s => s.Name == scopeName);
             if (scope != null)
             {
                 var displayName = scope.DisplayName ?? scope.Name;

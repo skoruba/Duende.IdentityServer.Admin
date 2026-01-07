@@ -13,4 +13,8 @@
         <PackageReference Include="Yarp.ReverseProxy" Version="2.3.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Shared.Configuration\Skoruba.Duende.IdentityServer.Shared.Configuration.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -1,0 +1,1 @@
+import{a as c}from"./react-vendor-DPOhIiRq.js";const f=({onSearch:n,onSearchComplete:a}={})=>{const[t,s]=c.useState(""),[o,r]=c.useState(""),p=e=>{s(e.target.value)},u=()=>{r(t),n&&n(t),a&&a()};return{inputValue:t,searchTerm:o,handleInputChange:p,handleSearch:u,handleInputKeyDown:e=>{e.key==="Enter"&&(e.preventDefault(),u())},setInputValue:s,setSearchTerm:r}};export{f as u};

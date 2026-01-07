@@ -3,28 +3,17 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Entities;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.ConfigurationRules;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.ClientRules;
 
-public class ObsoleteImplicitGrantRule<TDbContext> : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
-    where TDbContext : DbContext, IAdminConfigurationDbContext
+public class ObsoleteImplicitGrantRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
 {
-    private readonly TDbContext _dbContext;
-
-    public ObsoleteImplicitGrantRule(TDbContext dbContext)
+    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
     {
-        _dbContext = dbContext;
-    }
-
-    public async Task<List<ConfigurationIssueView>> ValidateAsync(string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
-    {
-        return await _dbContext.Clients
+        return context.Clients
             .Where(c => c.AllowedGrantTypes.Any(g => g.GrantType == "implicit"))
             .Select(c => new ConfigurationIssueView
             {
@@ -34,6 +23,6 @@ public class ObsoleteImplicitGrantRule<TDbContext> : ConfigurationRuleValidatorB
                 IssueType = issueType,
                 ResourceType = ConfigurationResourceType.Client
             })
-            .ToListAsync();
+            .ToList();
     }
 }

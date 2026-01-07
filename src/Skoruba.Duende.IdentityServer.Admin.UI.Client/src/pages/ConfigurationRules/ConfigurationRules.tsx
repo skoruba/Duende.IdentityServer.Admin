@@ -10,11 +10,13 @@ import ConfigurationRulesTable from "./ConfigurationRulesTable";
 import ConfigurationRuleModal from "./ConfigurationRuleModal";
 import { queryKeys } from "@/services/QueryKeys";
 import { getConfigurationRules } from "@/services/ConfigurationRulesService";
+import { client } from "@skoruba/duende.identityserver.admin.api.client";
 
 const ConfigurationRules: React.FC = () => {
   const { isOpen, closeModal, openModal } = useModal();
   const { t } = useTranslation();
-  const [selectedRule, setSelectedRule] = useState<any>(null);
+  const [selectedRule, setSelectedRule] =
+    useState<client.ConfigurationRuleDto | null>(null);
 
   const rules = useQuery(
     [queryKeys.configurationRules],
@@ -27,7 +29,7 @@ const ConfigurationRules: React.FC = () => {
     openModal();
   };
 
-  const handleEdit = (rule: any) => {
+  const handleEdit = (rule: client.ConfigurationRuleDto) => {
     setSelectedRule(rule);
     openModal();
   };
@@ -50,10 +52,10 @@ const ConfigurationRules: React.FC = () => {
     >
       {rules.isLoading ? (
         <Loading fullscreen />
-      ) : (
+      ) : rules.data ? (
         <>
           <ConfigurationRulesTable
-            data={rules.data!}
+            data={rules.data}
             onEdit={handleEdit}
             onRefresh={rules.refetch}
           />
@@ -68,7 +70,7 @@ const ConfigurationRules: React.FC = () => {
             }}
           />
         </>
-      )}
+      ) : null}
     </Page>
   );
 };

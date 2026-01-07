@@ -44,7 +44,6 @@ import {
   FieldValues,
   Path,
   useFormContext,
-  ControllerRenderProps,
   Control,
 } from "react-hook-form";
 import { Item } from "../ui/dualListselector";
@@ -62,6 +61,14 @@ import { ZodType } from "zod";
 import { SearchDropdown } from "../SearchDropdown/SearchDropdown";
 import { useTranslation } from "react-i18next";
 
+type FieldAdapter = {
+  name: string;
+  value: unknown;
+  onChange: (...event: unknown[]) => void;
+  onBlur: () => void;
+  ref: React.RefCallback<unknown>;
+};
+
 type TooltipFieldProps = {
   children: React.ReactNode;
   description: string;
@@ -69,14 +76,14 @@ type TooltipFieldProps = {
 };
 
 type SwitchFieldProps = {
-  field: ControllerRenderProps;
+  field: FieldAdapter;
   label: string;
   description?: string;
   required: boolean;
 };
 
 type InputFieldProps = {
-  field: ControllerRenderProps;
+  field: FieldAdapter;
   placeholder?: string;
   generateRandomValue: RandomValues;
   copyToClipboard?: boolean;
@@ -85,45 +92,45 @@ type InputFieldProps = {
 };
 
 type TextareaFieldProps = {
-  field: ControllerRenderProps;
+  field: FieldAdapter;
   placeholder?: string;
   maxLength?: number;
 };
 
 type SelectFieldProps = {
-  field: ControllerRenderProps;
+  field: FieldAdapter;
   options: { value: string; label: string }[];
 };
 
 type DualListFieldProps = {
-  field: ControllerRenderProps;
+  field: FieldAdapter;
   control: Control;
   initialItems: Item[];
 };
 
 type DateFieldProps = {
-  field: ControllerRenderProps;
+  field: FieldAdapter;
 };
 
 type TimeFieldProps = {
-  field: ControllerRenderProps;
+  field: FieldAdapter;
 };
 
 type NumberFieldProps = {
-  field: ControllerRenderProps;
+  field: FieldAdapter;
   placeholder?: string;
   showFormattedTime?: boolean;
 };
 
 type InputWithTableFieldProps = {
-  field: ControllerRenderProps;
+  field: FieldAdapter;
   validationSchema?: ZodType;
   search?: boolean;
   searchDataSource?: { id: string; name: string }[];
 };
 
 type SearchDropdownFieldProps = {
-  field: ControllerRenderProps;
+  field: FieldAdapter;
   items: { id: string; name: string }[];
 };
 
@@ -165,7 +172,7 @@ const SwitchField: React.FC<SwitchFieldProps> = ({
       </div>
     </div>
     <FormControl>
-      <Switch checked={field.value} onCheckedChange={field.onChange} />
+      <Switch checked={Boolean(field.value)} onCheckedChange={field.onChange} />
     </FormControl>
   </FormItem>
 );
@@ -181,8 +188,8 @@ const InputField: React.FC<InputFieldProps> = ({
   const { t } = useTranslation();
 
   const handleCopyToClipboard = () => {
-    if (field.value) {
-      navigator.clipboard.writeText(field.value).then(() => {
+    if (field.value !== null && field.value !== undefined) {
+      navigator.clipboard.writeText(String(field.value)).then(() => {
         toast({
           title: t("Components.FormRow.CopiedToClipboard"),
         });
@@ -203,7 +210,15 @@ const InputField: React.FC<InputFieldProps> = ({
       <div className={generateRandomValue ? "flex" : ""}>
         <Input
           placeholder={placeholder}
-          {...field}
+          name={field.name}
+          value={
+            typeof field.value === "string" || typeof field.value === "number"
+              ? field.value
+              : ""
+          }
+          onChange={field.onChange}
+          onBlur={field.onBlur}
+          ref={field.ref}
           autoComplete="off"
           maxLength={maxLength}
           type={inputType}
@@ -226,7 +241,7 @@ const InputField: React.FC<InputFieldProps> = ({
             variant={"outline"}
             onClick={handleCopyToClipboard}
             className="ms-1"
-            disabled={!field.value}
+            disabled={field.value === null || field.value === undefined || field.value === ""}
           >
             <ClipboardCopy />
           </Button>
@@ -244,7 +259,11 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
   <FormControl>
     <Textarea
       placeholder={placeholder}
-      {...field}
+      name={field.name}
+      value={typeof field.value === "string" ? field.value : ""}
+      onChange={field.onChange}
+      onBlur={field.onBlur}
+      ref={field.ref}
       className="resize-none"
       maxLength={maxLength}
     />
@@ -258,8 +277,8 @@ const SelectField: React.FC<SelectFieldProps> = ({ field, options }) => {
     <FormControl>
       <Select
         onValueChange={field.onChange}
-        defaultValue={field.value}
-        value={field.value}
+        defaultValue={typeof field.value === "string" ? field.value : undefined}
+        value={typeof field.value === "string" ? field.value : ""}
       >
         <SelectTrigger>
           <SelectValue placeholder={t("Components.FormRow.SelectOption")} />
@@ -292,6 +311,7 @@ const DualListField: React.FC<DualListFieldProps> = ({
 
 const DateField: React.FC<DateFieldProps> = ({ field }) => {
   const { t } = useTranslation();
+  const selectedDate = field.value instanceof Date ? field.value : undefined;
 
   const handleClear = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -308,18 +328,18 @@ const DateField: React.FC<DateFieldProps> = ({ field }) => {
               variant="outline"
               className={cn(
                 "w-full pl-3 pr-10 justify-start text-left font-normal",
-                !field.value && "text-muted-foreground"
+                !selectedDate && "text-muted-foreground"
               )}
             >
-              {field.value ? (
-                format(field.value, "PPP")
+              {selectedDate ? (
+                format(selectedDate, "PPP")
               ) : (
                 <span>{t("Components.FormRow.PickDate")}</span>
               )}
 
               <CalendarIcon className="absolute right-8 top-1/2 h-4 w-4 -translate-y-1/2 opacity-50" />
 
-              {field.value && (
+              {selectedDate && (
                 <span
                   onClick={handleClear}
                   className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-destructive cursor-pointer"
@@ -334,8 +354,8 @@ const DateField: React.FC<DateFieldProps> = ({ field }) => {
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             mode="single"
-            selected={field.value ?? undefined}
-            onSelect={field.onChange}
+            selected={selectedDate}
+            onSelect={(date) => field.onChange(date ?? null)}
             initialFocus
           />
         </PopoverContent>
@@ -348,7 +368,7 @@ const TimeField: React.FC<TimeFieldProps> = ({ field }) => (
   <FormControl>
     <Input
       type="time"
-      value={field.value ?? ""}
+      value={typeof field.value === "string" ? field.value : ""}
       onChange={field.onChange}
       onBlur={field.onBlur}
       ref={field.ref}
@@ -366,7 +386,11 @@ const NumberField: React.FC<NumberFieldProps> = ({
     <FormControl>
       <Input
         type="number"
-        value={field.value ?? ""}
+        value={
+          typeof field.value === "number" || typeof field.value === "string"
+            ? field.value
+            : ""
+        }
         onChange={(e) => {
           const value = e.target.value;
           field.onChange(value === "" ? undefined : Number(value));
@@ -377,7 +401,7 @@ const NumberField: React.FC<NumberFieldProps> = ({
         placeholder={placeholder}
       />
     </FormControl>
-    {showFormattedTime && field.value !== undefined && (
+    {showFormattedTime && typeof field.value === "number" && (
       <FormDescription className="ms-2">
         {secondsToFormattedTime({
           seconds: field.value,
@@ -396,7 +420,7 @@ const InputWithTableField: React.FC<InputWithTableFieldProps> = ({
 }) => (
   <FormControl>
     <InputWithTable
-      value={field.value}
+      value={Array.isArray(field.value) ? (field.value as string[]) : undefined}
       onChange={field.onChange}
       validationSchema={validationSchema}
       search={search}
@@ -412,7 +436,7 @@ const SearchDropdownField: React.FC<SearchDropdownFieldProps> = ({
   <FormControl>
     <SearchDropdown
       items={items}
-      value={field.value}
+      value={typeof field.value === "string" ? field.value : ""}
       onChange={field.onChange}
     />
   </FormControl>

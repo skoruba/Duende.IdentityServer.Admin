@@ -6,61 +6,154 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Dtos;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Mappers;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.ConfigurationRules;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Repositories.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
 
 namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Repositories;
 
-public class ConfigurationIssuesRepository<TDbContext>(
-    TDbContext dbContext,
-    IAdminConfigurationStoreDbContext rulesDbContext,
-    IConfigurationRuleValidatorFactory ruleValidatorFactory) : IConfigurationIssuesRepository
+public class ConfigurationIssuesRepository<TDbContext> : IConfigurationIssuesRepository
     where TDbContext : DbContext, IAdminConfigurationDbContext
 {
+    private readonly TDbContext _dbContext;
+    private readonly IAdminConfigurationStoreDbContext _rulesDbContext;
+    private readonly IConfigurationRuleValidatorFactory _ruleValidatorFactory;
+    private readonly ILogger<ConfigurationIssuesRepository<TDbContext>> _logger;
+
+    public ConfigurationIssuesRepository(
+        TDbContext dbContext,
+        IAdminConfigurationStoreDbContext rulesDbContext,
+        IConfigurationRuleValidatorFactory ruleValidatorFactory,
+        ILogger<ConfigurationIssuesRepository<TDbContext>> logger)
+    {
+        _dbContext = dbContext;
+        _rulesDbContext = rulesDbContext;
+        _ruleValidatorFactory = ruleValidatorFactory;
+        _logger = logger;
+    }
+
     public async Task<List<ConfigurationIssueView>> GetAllIssuesAsync()
     {
         var issues = new List<ConfigurationIssueView>();
 
-        // Get all enabled rules from database
-        var enabledRules = await rulesDbContext.ConfigurationRules
-            .Where(r => r.IsEnabled)
-            .ToListAsync();
-
-        // Execute each rule
-        foreach (var rule in enabledRules)
+        try
         {
-            try
-            {
-                var validator = ruleValidatorFactory.Create(rule.RuleType);
-                var issueTypeView = (ConfigurationIssueTypeView)rule.IssueType;
-                var ruleIssues = await validator.ValidateAsync(rule.Configuration, rule.MessageTemplate, issueTypeView);
+            var enabledRules = await _rulesDbContext.ConfigurationRules
+                .Where(r => r.IsEnabled)
+                .AsNoTracking()
+                .ToListAsync();
 
-                // Add FixDescription from rule to each issue
-                foreach (var issue in ruleIssues)
+            _logger.LogInformation("Executing {RuleCount} enabled configuration rules", enabledRules.Count);
+
+            var validationContext = await LoadValidationContextAsync();
+
+            foreach (var rule in enabledRules)
+            {
+                try
                 {
-                    issue.FixDescription = rule.FixDescription;
-                }
+                    var validator = _ruleValidatorFactory.Create(rule.RuleType);
+                    var issueTypeView = MapIssueType(rule.IssueType);
 
-                issues.AddRange(ruleIssues);
+                    var ruleIssues = validator.ValidateWithContext(
+                        validationContext,
+                        rule.Configuration,
+                        rule.MessageTemplate,
+                        issueTypeView);
+
+                    foreach (var issue in ruleIssues)
+                    {
+                        issue.FixDescription = rule.FixDescription;
+                    }
+
+                    if (ruleIssues.Count > 0)
+                    {
+                        _logger.LogDebug("Rule {RuleType} found {IssueCount} issues",
+                            rule.RuleType, ruleIssues.Count);
+                    }
+
+                    issues.AddRange(ruleIssues);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex,
+                        "Failed to execute configuration rule {RuleType} (ID: {RuleId}). Skipping this rule and continuing with others.",
+                        rule.RuleType, rule.Id);
+                }
             }
-            catch
-            {
-                // Log error if needed, but continue with other rules
-            }
+
+            _logger.LogInformation("Configuration validation completed. Found {TotalIssues} issues across all rules",
+                issues.Count);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Critical error during configuration validation");
+            throw;
         }
 
         return issues;
+    }
+
+    private async Task<ValidationContext> LoadValidationContextAsync()
+    {
+        var context = new ValidationContext();
+
+        try
+        {
+            context.Clients = await _dbContext.Clients
+                .Include(c => c.AllowedGrantTypes)
+                .Include(c => c.AllowedScopes)
+                .Include(c => c.RedirectUris)
+                .Include(c => c.PostLogoutRedirectUris)
+                .Include(c => c.ClientSecrets)
+                .AsNoTracking()
+                .ToListAsync();
+
+            context.ApiScopes = await _dbContext.ApiScopes
+                .AsNoTracking()
+                .ToListAsync();
+
+            context.ApiResources = await _dbContext.ApiResources
+                .Include(r => r.Scopes)
+                .AsNoTracking()
+                .ToListAsync();
+
+            context.IdentityResources = await _dbContext.IdentityResources
+                .AsNoTracking()
+                .ToListAsync();
+
+            _logger.LogDebug(
+                "Loaded validation context: {ClientCount} clients, {ApiScopeCount} API scopes, {ApiResourceCount} API resources, {IdentityResourceCount} identity resources",
+                context.Clients.Count, context.ApiScopes.Count, context.ApiResources.Count, context.IdentityResources.Count);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to load validation context");
+            throw;
+        }
+
+        return context;
+    }
+
+    private ConfigurationIssueTypeView MapIssueType(ConfigurationIssueType type)
+    {
+        return type switch
+        {
+            ConfigurationIssueType.Warning => ConfigurationIssueTypeView.Warning,
+            ConfigurationIssueType.Recommendation => ConfigurationIssueTypeView.Recommendation,
+            ConfigurationIssueType.Error => ConfigurationIssueTypeView.Error,
+            _ => throw new ArgumentException($"Unknown issue type: {type}", nameof(type))
+        };
     }
 
     public async Task<ConfigurationIssuesPagedDto> GetIssuesAsync(ConfigurationIssuesFilterDto filter)
     {
         var allIssues = await GetAllIssuesAsync();
 
-        // Apply filters at the query level
         var filteredQuery = allIssues.AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
@@ -84,7 +177,6 @@ public class ConfigurationIssuesRepository<TDbContext>(
         var totalCount = filteredQuery.Count();
         var totalPages = filter.SkipPagination ? 1 : (int)Math.Ceiling((double)totalCount / filter.PageSize);
 
-        // Apply pagination if not skipped
         if (!filter.SkipPagination)
         {
             filteredQuery = filteredQuery

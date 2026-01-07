@@ -1,8 +1,14 @@
 import { z } from "zod";
+import { t } from "i18next";
 
 export const formSchema = z.object({
-  userName: z.string().min(1, "User name is required"),
-  email: z.string().email("Invalid email"),
+  userName: z.string().min(
+    1,
+    t("Validation.FieldRequired", {
+      field: t("User.Section.Label.UserUserName_Label"),
+    })
+  ),
+  email: z.string().email(t("Validation.InvalidEmail")),
   emailConfirmed: z.boolean().optional(),
   phoneNumber: z.string().optional(),
   phoneNumberConfirmed: z.boolean().optional(),

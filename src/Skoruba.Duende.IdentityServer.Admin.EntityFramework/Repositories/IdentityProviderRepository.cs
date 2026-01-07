@@ -29,6 +29,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
 
         public virtual async Task<PagedList<IdentityProvider>> GetIdentityProvidersAsync(string search, int page = 1, int pageSize = 10)
         {
+            pageSize = QueryableExtensions.NormalizePageSize(pageSize);
+
             var pagedList = new PagedList<IdentityProvider>();
 
             Expression<Func<IdentityProvider, bool>> searchCondition = x => x.Scheme.Contains(search) || x.DisplayName.Contains(search);

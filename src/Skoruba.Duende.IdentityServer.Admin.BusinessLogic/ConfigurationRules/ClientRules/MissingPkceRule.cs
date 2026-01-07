@@ -3,28 +3,17 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Entities;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.ConfigurationRules;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.ClientRules;
 
-public class MissingPkceRule<TDbContext> : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
-    where TDbContext : DbContext, IAdminConfigurationDbContext
+public class MissingPkceRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
 {
-    private readonly TDbContext _dbContext;
-
-    public MissingPkceRule(TDbContext dbContext)
+    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
     {
-        _dbContext = dbContext;
-    }
-
-    public async Task<List<ConfigurationIssueView>> ValidateAsync(string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
-    {
-        return await _dbContext.Clients
+        return context.Clients
             .Where(c => c.AllowedGrantTypes.Any(g => g.GrantType == "authorization_code")
                 && c.RequirePkce == false)
             .Select(c => new ConfigurationIssueView
@@ -35,6 +24,6 @@ public class MissingPkceRule<TDbContext> : ConfigurationRuleValidatorBase, IConf
                 IssueType = issueType,
                 ResourceType = ConfigurationResourceType.Client
             })
-            .ToListAsync();
+            .ToList();
     }
 }

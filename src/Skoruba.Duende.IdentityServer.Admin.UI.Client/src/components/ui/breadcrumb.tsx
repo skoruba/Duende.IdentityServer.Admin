@@ -3,6 +3,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { ChevronRight, MoreHorizontal } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import i18next from "@/i18n/config";
 
 const Breadcrumb = React.forwardRef<
   HTMLElement,
@@ -99,7 +100,7 @@ const BreadcrumbEllipsis = ({
     {...props}
   >
     <MoreHorizontal className="h-4 w-4" />
-    <span className="sr-only">More</span>
+    <span className="sr-only">{String(i18next.t("Common.More"))}</span>
   </span>
 );
 BreadcrumbEllipsis.displayName = "BreadcrumbElipssis";

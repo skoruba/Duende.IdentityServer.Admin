@@ -72,13 +72,13 @@ const ApiResources: React.FC = () => {
     >
       {apiResources.isLoading ? (
         <Loading fullscreen />
-      ) : (
+      ) : apiResources.data ? (
         <ApiResourcesTable
-          data={apiResources.data!}
+          data={apiResources.data}
           pagination={pagination}
           setPagination={setPagination}
         />
-      )}
+      ) : null}
     </Page>
   );
 };

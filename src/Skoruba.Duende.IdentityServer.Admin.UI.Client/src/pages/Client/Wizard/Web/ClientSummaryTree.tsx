@@ -150,20 +150,25 @@ const ClientWebSummaryTree = () => {
   const enforcedRows: DisplayLine[] = React.useMemo(() => {
     if (!rules || !rules.enforcedValues) return [];
     const items: DisplayLine[] = [];
-    for (const [key, rawValue] of Object.entries(rules.enforcedValues)) {
-      const meta = enforcedFieldMeta[key as keyof typeof enforcedFieldMeta];
+    const keys = Object.keys(rules.enforcedValues) as Array<
+      keyof typeof rules.enforcedValues
+    >;
+    for (const key of keys) {
+      const rawValue = rules.enforcedValues[key];
+      if (rawValue === undefined) continue;
+
+      const meta = enforcedFieldMeta[key];
       if (!meta) continue;
 
-      const label = t(meta.labelKey as any);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const label = String(t(meta.labelKey as any));
       let formatted: string;
       if (typeof meta.format === "function") {
-        formatted = (meta as any).format(rawValue, t);
+        formatted = meta.format(rawValue, t);
       } else {
         formatted = String(rawValue);
       }
-      const isLocked = !!rules.lockedFields?.includes(
-        key as keyof typeof enforcedFieldMeta
-      );
+      const isLocked = !!rules.lockedFields?.includes(key);
 
       items.push(
         <SummaryRow

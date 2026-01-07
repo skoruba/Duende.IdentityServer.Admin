@@ -10,6 +10,7 @@ import {
 import { client } from "@skoruba/duende.identityserver.admin.api.client";
 import { useQuery } from "react-query";
 import { queryKeys, queryWithoutCache } from "./QueryKeys";
+import i18next from "@/i18n/config";
 
 export const buildConfigurationIssueLink = (
   resourceId: string,
@@ -102,10 +103,16 @@ export const getDashboardIdentityServerData = async (
   };
 
   const identityServerDataChart = [
-    { name: "Clients", total: dashboard.clientsTotal },
-    { name: "Api Resources", total: dashboard.apiResourcesTotal },
-    { name: "Api Scopes", total: dashboard.apiScopesTotal },
-    { name: "Identity  Resources", total: dashboard.identityResourcesTotal },
+    { name: String(i18next.t("Home.Clients")), total: dashboard.clientsTotal },
+    {
+      name: String(i18next.t("Home.ApiResources")),
+      total: dashboard.apiResourcesTotal,
+    },
+    { name: String(i18next.t("Home.ApiScopes")), total: dashboard.apiScopesTotal },
+    {
+      name: String(i18next.t("Home.IdentityResources")),
+      total: dashboard.identityResourcesTotal,
+    },
   ];
 
   const auditLogsData =

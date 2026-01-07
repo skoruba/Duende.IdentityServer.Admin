@@ -13,14 +13,13 @@ import {
 import { useMutation } from "react-query";
 import { IssueTypeBadge } from "../ConfigurationIssues/IssueTypeBadge";
 import { toast } from "@/components/ui/use-toast";
+import type { ColumnDef } from "@tanstack/react-table";
 
 interface ConfigurationRulesTableProps {
   data: client.ConfigurationRulesDto;
   onEdit: (rule: client.ConfigurationRuleDto) => void;
   onRefresh: () => void;
 }
-
-type ColumnRow = { row: { original: client.ConfigurationRuleDto } };
 
 const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
   data,
@@ -88,17 +87,28 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
       label = t("ConfigurationRules.Recommendation");
     }
 
-    return <IssueTypeBadge type={issueType as any} label={label} />;
+    return (
+      <IssueTypeBadge
+        type={
+          issueType === client.ConfigurationIssueType.Error
+            ? client.ConfigurationIssueTypeView.Error
+            : issueType === client.ConfigurationIssueType.Warning
+              ? client.ConfigurationIssueTypeView.Warning
+              : client.ConfigurationIssueTypeView.Recommendation
+        }
+        label={label}
+      />
+    );
   };
 
   const getResourceTypeBadge = (
     resourceType: client.ConfigurationResourceType
   ) => {
-    const variants: any = {
-      Client: "outline",
-      ApiScope: "outline",
-      ApiResource: "outline",
-      IdentityResource: "outline",
+    const variants: Record<client.ConfigurationResourceType, "outline"> = {
+      [client.ConfigurationResourceType.Client]: "outline",
+      [client.ConfigurationResourceType.ApiScope]: "outline",
+      [client.ConfigurationResourceType.ApiResource]: "outline",
+      [client.ConfigurationResourceType.IdentityResource]: "outline",
     };
     return (
       <Badge variant={variants[resourceType] || "default"}>
@@ -107,11 +117,11 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
     );
   };
 
-  const columns = [
+  const columns: ColumnDef<client.ConfigurationRuleDto, unknown>[] = [
     {
       accessorKey: "ruleType",
       header: t("ConfigurationRules.RuleType"),
-      cell: ({ row }: ColumnRow) => {
+      cell: ({ row }) => {
         return (
           <div>
             <div className="font-medium">{row.original.ruleType}</div>
@@ -125,21 +135,21 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
     {
       accessorKey: "resourceType",
       header: t("ConfigurationRules.ResourceType"),
-      cell: ({ row }: ColumnRow) => {
+      cell: ({ row }) => {
         return getResourceTypeBadge(row.original.resourceType);
       },
     },
     {
       accessorKey: "issueType",
       header: t("ConfigurationRules.IssueType"),
-      cell: ({ row }: ColumnRow) => {
+      cell: ({ row }) => {
         return getIssueTypeBadge(row.original.issueType);
       },
     },
     {
       accessorKey: "isEnabled",
       header: t("ConfigurationRules.Enabled"),
-      cell: ({ row }: ColumnRow) => {
+      cell: ({ row }) => {
         return (
           <Switch
             checked={row.original.isEnabled}
@@ -152,7 +162,7 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
     {
       id: "actions",
       header: t("Actions.Actions"),
-      cell: ({ row }: ColumnRow) => {
+      cell: ({ row }) => {
         return (
           <div className="flex space-x-2">
             <Button
@@ -178,7 +188,7 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
 
   return (
     <DataTable
-      columns={columns as any}
+      columns={columns}
       data={data.rules || []}
       pagination={{ pageIndex: 0, pageSize: 10, hidePagination: true }}
       setPagination={() => {}}

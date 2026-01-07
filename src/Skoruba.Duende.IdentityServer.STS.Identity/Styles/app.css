@@ -45,11 +45,12 @@
   }
 
   .dark {
-    --background: 222 40% 6%;
-    --foreground: 210 40% 96%;
+    /* Keep in sync with Admin UI (Client) dark theme */
+    --background: 224 14% 12%;
+    --foreground: 210 40% 98%;
 
-    --card: 222 32% 10%;
-    --card-foreground: 210 40% 96%;
+    --card: 224 14% 15%;
+    --card-foreground: 210 40% 98%;
 
     --popover: 222 32% 10%;
     --popover-foreground: 210 40% 96%;
@@ -57,20 +58,20 @@
     --primary: 221.2 83.2% 53.3%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 217 24% 18%;
-    --secondary-foreground: 210 40% 96%;
+    --secondary: 217 12% 19%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 217 22% 14%;
-    --muted-foreground: 215 20% 70%;
+    --muted: 217 12% 18%;
+    --muted-foreground: 215 15% 65%;
 
-    --accent: 217 24% 18%;
-    --accent-foreground: 210 40% 96%;
+    --accent: 217 12% 19%;
+    --accent-foreground: 210 40% 98%;
 
     --destructive: 0 72% 46%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217 20% 24%;
-    --input: 217 20% 20%;
+    --border: 217 12% 25%;
+    --input: 217 12% 20%;
     --ring: 221 83% 63%;
 
     --chart-1: 221.2 83.2% 53.3%;

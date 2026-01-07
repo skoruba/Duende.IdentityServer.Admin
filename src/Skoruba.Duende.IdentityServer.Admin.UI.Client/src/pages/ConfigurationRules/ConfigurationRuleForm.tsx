@@ -16,12 +16,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { isEnumValue } from "@/lib/type-guards";
 
 interface ConfigurationRuleFormProps {
   rule: client.ConfigurationRuleDto | null;
   existingRules: client.ConfigurationRuleDto[];
   metadata: client.ConfigurationRuleMetadataDto[];
-  onSubmit: (data: any) => void;
+  onSubmit: (data: client.ConfigurationRuleDto) => void;
   isEditMode: boolean;
 }
 
@@ -33,30 +34,32 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
   isEditMode,
 }) => {
   const { t } = useTranslation();
-  const [selectedRuleType, setSelectedRuleType] = React.useState<string>("");
+  const [selectedRuleType, setSelectedRuleType] = React.useState<
+    client.ConfigurationRuleType | ""
+  >("");
   const requiredFieldMessage = (label: string) =>
     t("Validation.FieldRequired", { field: label });
 
   // Get current metadata based on selected or existing rule type
+  const selectedTypeValue = selectedRuleType || rule?.ruleType;
   const currentMetadata = metadata?.find(
-    (m) => String(m.ruleType) === (selectedRuleType || String(rule?.ruleType))
+    (m) => String(m.ruleType) === String(selectedTypeValue)
   );
 
   // Check for duplicate rule type
   const isDuplicate =
     !isEditMode &&
     selectedRuleType &&
-    existingRules.some((r) => String(r.ruleType) === selectedRuleType);
+    existingRules.some((r) => r.ruleType === selectedRuleType);
 
   // Build dynamic schema based on current metadata
   const buildSchema = () => {
     const baseSchema = {
       isEnabled: z.boolean(),
-      issueType: z.enum(["Warning", "Recommendation", "Error"]),
-      messageTemplate: z.string().min(
-        1,
-        requiredFieldMessage(t("ConfigurationRules.MessageTemplate"))
-      ),
+      issueType: z.nativeEnum(client.ConfigurationIssueType),
+      messageTemplate: z
+        .string()
+        .min(1, requiredFieldMessage(t("ConfigurationRules.MessageTemplate"))),
       fixDescription: z.string().optional(),
     };
 
@@ -80,7 +83,6 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
                 })
               : z.string().optional();
           }
-          break;
           break;
 
         case "number":
@@ -133,7 +135,7 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
   // Initialize form when rule changes
   useEffect(() => {
     if (rule && isEditMode) {
-      setSelectedRuleType(String(rule.ruleType));
+      setSelectedRuleType(rule.ruleType);
 
       // Parse configuration JSON
       let configObject: any = {};
@@ -155,7 +157,7 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
 
       form.reset({
         isEnabled: rule.isEnabled,
-        issueType: String(rule.issueType) as any,
+        issueType: rule.issueType,
         messageTemplate: rule.messageTemplate || "",
         fixDescription: rule.fixDescription || "",
         ...configObject,
@@ -164,7 +166,7 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
       // Only reset when opening a new form (not when user is selecting a rule type)
       form.reset({
         isEnabled: true,
-        issueType: "Recommendation" as any,
+        issueType: client.ConfigurationIssueType.Recommendation,
         messageTemplate: "",
         fixDescription: "",
       });
@@ -195,7 +197,7 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
 
       form.reset({
         isEnabled: true,
-        issueType: "Recommendation" as any,
+        issueType: client.ConfigurationIssueType.Recommendation,
         messageTemplate: currentMetadata.defaultMessageTemplate || "",
         fixDescription: currentMetadata.defaultFixDescription || "",
         ...configObject,
@@ -204,8 +206,23 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
   }, [selectedRuleType, isEditMode, currentMetadata]);
 
   const handleFormSubmit = (data: FormData) => {
+    if (!isEditMode && !selectedRuleType) return;
+
+    const resolvedRuleType = isEditMode
+      ? rule?.ruleType
+      : selectedRuleType || undefined;
+    if (!resolvedRuleType) return;
+
+    const resolvedResourceType = isEnumValue(
+      client.ConfigurationResourceType,
+      currentMetadata?.resourceType
+    )
+      ? currentMetadata?.resourceType
+      : rule?.resourceType;
+    if (!resolvedResourceType) return;
+
     // Extract configuration parameters
-    const configFields: Record<string, any> = {};
+    const configFields: Record<string, unknown> = {};
     currentMetadata?.parameters?.forEach((param) => {
       const paramName = param.name || "";
       if (data[paramName as keyof FormData] !== undefined) {
@@ -213,21 +230,23 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
       }
     });
 
-    const finalData: client.ConfigurationRuleDto = {
-      ...rule,
-      ruleType: (isEditMode
-        ? rule?.ruleType
-        : selectedRuleType) as unknown as client.ConfigurationRuleType,
-      resourceType: currentMetadata?.resourceType as any,
-      isEnabled: data.isEnabled,
-      issueType: data.issueType as any,
-      messageTemplate: data.messageTemplate,
-      fixDescription: data.fixDescription || null,
-      configuration:
-        Object.keys(configFields).length > 0
-          ? JSON.stringify(configFields)
-          : null,
-    } as client.ConfigurationRuleDto;
+    const finalData = rule
+      ? new client.ConfigurationRuleDto(rule)
+      : new client.ConfigurationRuleDto();
+
+    finalData.id = rule?.id ?? 0;
+    finalData.createdAt = rule?.createdAt ?? new Date();
+    finalData.updatedAt = rule?.updatedAt;
+    finalData.ruleType = resolvedRuleType;
+    finalData.resourceType = resolvedResourceType;
+    finalData.isEnabled = data.isEnabled;
+    finalData.issueType = data.issueType;
+    finalData.messageTemplate = data.messageTemplate;
+    finalData.fixDescription = data.fixDescription || undefined;
+    finalData.configuration =
+      Object.keys(configFields).length > 0
+        ? JSON.stringify(configFields)
+        : undefined;
 
     onSubmit(finalData);
   };
@@ -252,7 +271,13 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
             </Label>
             <Select
               value={selectedRuleType || undefined}
-              onValueChange={setSelectedRuleType}
+              onValueChange={(value) => {
+                if (isEnumValue(client.ConfigurationRuleType, value)) {
+                  setSelectedRuleType(value);
+                } else {
+                  setSelectedRuleType("");
+                }
+              }}
             >
               <SelectTrigger>
                 <SelectValue

@@ -89,7 +89,9 @@ export function OverviewLeft({ data }: OverviewProps) {
             <div className="text-2xl font-bold text-foreground">
               {totalCount.toLocaleString()}
             </div>
-            <div className="text-xs text-muted-foreground">Total Resources</div>
+            <div className="text-xs text-muted-foreground">
+              {t("Home.TotalResources")}
+            </div>
           </div>
         </div>
       </CardHeader>

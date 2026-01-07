@@ -24,5 +24,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Configuration.Constants
         public const string AdvancedConfigurationKey = "AdvancedConfiguration";
 
         public const string CspTrustedDomainsKey = "CspTrustedDomains";
+
+        public const string ForwardedHeadersConfigurationKey = "ForwardedHeadersConfiguration";
     }
 }

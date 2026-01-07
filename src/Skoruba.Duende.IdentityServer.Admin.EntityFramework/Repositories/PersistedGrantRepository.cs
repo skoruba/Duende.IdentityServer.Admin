@@ -31,6 +31,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
 
         public virtual async Task<PagedList<PersistedGrantDataView>> GetPersistedGrantsByUsersAsync(string search, int page = 1, int pageSize = 10)
         {
+            pageSize = QueryableExtensions.NormalizePageSize(pageSize);
+
             var pagedList = new PagedList<PersistedGrantDataView>();
 
             var persistedGrantByUsers = (from pe in DbContext.PersistedGrants
@@ -55,6 +57,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
 
         public virtual async Task<PagedList<PersistedGrant>> GetPersistedGrantsByUserAsync(string subjectId, int page = 1, int pageSize = 10)
         {
+            pageSize = QueryableExtensions.NormalizePageSize(pageSize);
+
             var pagedList = new PagedList<PersistedGrant>();
 
             var persistedGrantsData = await DbContext.PersistedGrants.Where(x => x.SubjectId == subjectId).Select(x => new PersistedGrant()
@@ -84,10 +88,15 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
 
         public virtual async Task<int> DeletePersistedGrantAsync(string key)
         {
+            if (AutoSaveChanges && DbContext.Database.IsRelational())
+            {
+                return await DbContext.PersistedGrants.Where(x => x.Key == key).ExecuteDeleteAsync();
+            }
+
             var persistedGrant = await DbContext.PersistedGrants.Where(x => x.Key == key).SingleOrDefaultAsync();
+            if (persistedGrant == null) return 0;
 
             DbContext.PersistedGrants.Remove(persistedGrant);
-
             return await AutoSaveChangesAsync();
         }
 
@@ -98,10 +107,15 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
 
         public virtual async Task<int> DeletePersistedGrantsAsync(string userId)
         {
+            if (AutoSaveChanges && DbContext.Database.IsRelational())
+            {
+                return await DbContext.PersistedGrants.Where(x => x.SubjectId == userId).ExecuteDeleteAsync();
+            }
+
             var grants = await DbContext.PersistedGrants.Where(x => x.SubjectId == userId).ToListAsync();
+            if (grants.Count == 0) return 0;
 
             DbContext.RemoveRange(grants);
-
             return await AutoSaveChangesAsync();
         }
 

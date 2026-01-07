@@ -92,13 +92,13 @@ const RoleUsers: React.FC = () => {
     >
       {roleQuery.isLoading || users.isLoading ? (
         <Loading fullscreen />
-      ) : (
+      ) : users.data ? (
         <RoleUsersTable
-          data={users.data!}
+          data={users.data}
           pagination={pagination}
           setPagination={setPagination}
         />
-      )}
+      ) : null}
     </Page>
   );
 };

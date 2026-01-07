@@ -4,26 +4,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Entities;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.ConfigurationRules;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.SecurityRules;
 
-public class SecretIsExpiredInDaysRule<TDbContext> : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
-    where TDbContext : DbContext, IAdminConfigurationDbContext
+public class SecretIsExpiredInDaysRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
 {
-    private readonly TDbContext _dbContext;
-
-    public SecretIsExpiredInDaysRule(TDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
-    public async Task<List<ConfigurationIssueView>> ValidateAsync(string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
+    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<ExpirationConfig>(configuration);
         var warningDays = config.WarningDays ?? 30;
@@ -33,25 +22,27 @@ public class SecretIsExpiredInDaysRule<TDbContext> : ConfigurationRuleValidatorB
         var now = DateTime.UtcNow;
 
         // Get client secrets that expire within the warning period or are already expired
-        var expiringSecrets = await _dbContext.ClientSecrets
-            .Include(cs => cs.Client)
-            .Where(cs => cs.Expiration.HasValue &&
-                        (includeAlreadyExpired ? cs.Expiration.Value <= warningDate :
-                         cs.Expiration.Value > now && cs.Expiration.Value <= warningDate))
-            .OrderBy(cs => cs.Expiration)
-            .ToListAsync();
+        var expiringSecrets = context.Clients
+            .SelectMany(c => c.ClientSecrets.Select(cs => new { Secret = cs, Client = c }))
+            .Where(x => x.Secret.Expiration.HasValue &&
+                        (includeAlreadyExpired ? x.Secret.Expiration.Value <= warningDate :
+                         x.Secret.Expiration.Value > now && x.Secret.Expiration.Value <= warningDate))
+            .OrderBy(x => x.Secret.Expiration)
+            .ToList();
 
         var issues = new List<ConfigurationIssueView>();
 
-        foreach (var secret in expiringSecrets)
+        foreach (var item in expiringSecrets)
         {
+            var secret = item.Secret;
+            var client = item.Client;
             var daysUntilExpiry = (int)(secret.Expiration.Value - now).TotalDays;
             var isExpired = daysUntilExpiry < 0;
 
             var parameters = new Dictionary<string, string>
             {
-                ["clientName"] = secret.Client.ClientName ?? secret.Client.ClientId,
-                ["clientId"] = secret.Client.ClientId,
+                ["clientName"] = client.ClientName ?? client.ClientId,
+                ["clientId"] = client.ClientId,
                 ["secretType"] = secret.Type ?? "SharedSecret",
                 ["secretDescription"] = secret.Description ?? "No description",
                 ["expirationDate"] = secret.Expiration.Value.ToString("yyyy-MM-dd HH:mm"),
@@ -62,8 +53,8 @@ public class SecretIsExpiredInDaysRule<TDbContext> : ConfigurationRuleValidatorB
 
             issues.Add(new ConfigurationIssueView
             {
-                ResourceId = secret.Client.Id,
-                ResourceName = secret.Client.ClientName ?? secret.Client.ClientId,
+                ResourceId = client.Id,
+                ResourceName = client.ClientName ?? client.ClientId,
                 Message = FormatMessage(messageTemplate, parameters),
                 IssueType = isExpired ? ConfigurationIssueTypeView.Error : issueType,
                 ResourceType = ConfigurationResourceType.Client,

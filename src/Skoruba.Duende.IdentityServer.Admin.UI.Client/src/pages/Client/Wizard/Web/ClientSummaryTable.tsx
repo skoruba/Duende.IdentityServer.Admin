@@ -102,20 +102,25 @@ const ClientSummaryTable = () => {
             )}
 
             {clientRules &&
-              Object.entries(clientRules.enforcedValues).map(([key, value]) => {
-                const meta =
-                  enforcedFieldMeta[key as keyof typeof enforcedFieldMeta];
+              (
+                Object.keys(clientRules.enforcedValues) as Array<
+                  keyof typeof clientRules.enforcedValues
+                >
+              ).map((key) => {
+                const value = clientRules.enforcedValues[key];
+                if (value === undefined) return null;
+
+                const meta = enforcedFieldMeta[key];
                 if (!meta) return null;
 
                 return (
                   <TableRow className="flex flex-row" key={key}>
                     <TableCell className="flex-1 p-2">
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                       {t(meta.labelKey as any)}
                     </TableCell>
                     <TableCell className="flex-1 p-2">
-                      {meta.format
-                        ? (meta.format as any)(value, t)
-                        : String(value)}
+                      {meta.format ? meta.format(value, t) : String(value)}
                     </TableCell>
                     <TableCell className="flex-1 p-2 flex justify-end">
                       {createEditButton(1, true)}

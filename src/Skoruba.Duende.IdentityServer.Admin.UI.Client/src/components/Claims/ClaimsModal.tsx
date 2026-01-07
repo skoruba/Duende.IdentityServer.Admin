@@ -107,7 +107,7 @@ const ClaimsModal = ({ isOpen, onClose, onSubmit }: ClaimsModalProps) => {
             </Label>
             <Input
               id="value"
-              placeholder="Enter value"
+              placeholder={t("Claim.EnterValuePlaceholder")}
               value={formData.value}
               autoComplete="off"
               onChange={handleInputChange("value")}

@@ -76,13 +76,13 @@ const IdentityResources: React.FC = () => {
     >
       {identityResources.isLoading ? (
         <Loading fullscreen />
-      ) : (
+      ) : identityResources.data ? (
         <IdentityResourcesTable
-          data={identityResources.data!}
+          data={identityResources.data}
           pagination={pagination}
           setPagination={setPagination}
         />
-      )}
+      ) : null}
     </Page>
   );
 };

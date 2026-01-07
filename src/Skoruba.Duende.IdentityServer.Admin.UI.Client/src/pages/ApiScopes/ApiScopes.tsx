@@ -71,13 +71,13 @@ const ApiScopes: React.FC = () => {
     >
       {apiScopes.isLoading ? (
         <Loading fullscreen />
-      ) : (
+      ) : apiScopes.data ? (
         <ApiScopesTable
-          data={apiScopes.data!}
+          data={apiScopes.data}
           pagination={pagination}
           setPagination={setPagination}
         />
-      )}
+      ) : null}
     </Page>
   );
 };

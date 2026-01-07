@@ -9,6 +9,7 @@ using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.ConfigurationRules;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Repositories;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Repositories.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
@@ -47,7 +48,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Extensions
             // Configuration Rules
             services.AddScoped<IAdminConfigurationStoreDbContext>(sp => sp.GetRequiredService<AdminConfigurationDbContext>());
             services.AddTransient<IConfigurationRulesRepository, ConfigurationRulesRepository>();
-            services.AddScoped<IConfigurationRuleValidatorFactory, ConfigurationRuleValidatorFactory<TConfigurationDbContext>>();
+            services.AddScoped<IConfigurationRuleValidatorFactory, ConfigurationRuleValidatorFactory>();
             services.AddScoped<IConfigurationRuleMetadataProvider, ConfigurationRuleMetadataProvider>();
 
             //Services

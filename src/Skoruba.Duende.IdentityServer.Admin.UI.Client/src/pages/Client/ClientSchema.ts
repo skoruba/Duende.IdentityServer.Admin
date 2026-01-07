@@ -6,6 +6,7 @@ import { client } from "@skoruba/duende.identityserver.admin.api.client";
 import { z } from "zod";
 import { ClientWizardFormSummaryData } from "./Wizard/Web/ClientSummaryStep";
 import { DPoPMode, GrantType } from "@/models/Clients/ClientModels";
+import { t } from "i18next";
 
 const DualListTypeSchema = z.object({
   id: z.string(),
@@ -13,8 +14,14 @@ const DualListTypeSchema = z.object({
 });
 
 export const formSchema = z.object({
-  clientId: z.string().min(1, "Client Id is required"),
-  clientName: z.string().min(1, "Client Name is required"),
+  clientId: z.string().min(
+    1,
+    t("Validation.FieldRequired", { field: t("Client.Label.ClientId_Label") })
+  ),
+  clientName: z.string().min(
+    1,
+    t("Validation.FieldRequired", { field: t("Client.Label.ClientName_Label") })
+  ),
   description: z.string().optional(),
   enabled: z.boolean().optional(),
   redirectUris: z.array(z.string()).optional(),

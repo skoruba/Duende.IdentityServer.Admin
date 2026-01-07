@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/Card/Card";
-import { ACCENTS } from "@/pages/Home/Home";
+import { ACCENTS } from "@/lib/accents";
 import React from "react";
 
 type Kind = keyof typeof ACCENTS;

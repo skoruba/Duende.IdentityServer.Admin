@@ -55,6 +55,22 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Split vendor libraries into separate chunks
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'ui-vendor': ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-select', '@radix-ui/react-tabs'],
+          'table-vendor': ['@tanstack/react-table'],
+          'form-vendor': ['react-hook-form', '@hookform/resolvers', 'zod'],
+          'i18n-vendor': ['i18next', 'react-i18next', 'i18next-browser-languagedetector'],
+          'utils': ['lodash', 'date-fns', 'uuid', 'clsx', 'tailwind-merge']
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1200, // Increased limit for main chunk with all routes
+  },
   server: {
     proxy: {
       "^/user$": {

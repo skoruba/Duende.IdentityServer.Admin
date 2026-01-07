@@ -7,10 +7,12 @@ import {
   ClientsData,
   ClientTypeKey,
   ClientTypeLabel,
+  type ClientData,
 } from "@/models/Clients/ClientModels";
 import { PaginationState } from "@tanstack/react-table";
 import { Dispatch, SetStateAction } from "react";
 import { Badge } from "@/components/ui/badge";
+import type { ColumnDef } from "@tanstack/react-table";
 
 type ClientsTableProps = {
   data: ClientsData;
@@ -25,11 +27,11 @@ const ClientsTable = ({
 }: ClientsTableProps) => {
   const { t } = useTranslation();
 
-  const columns = [
+  const columns: ColumnDef<ClientData, unknown>[] = [
     {
       accessorKey: "clientName",
       header: t("Clients.ClientName"),
-      cell: ({ row }: any) => {
+      cell: ({ row }) => {
         const client = row.original;
         return (
           <Link
@@ -44,7 +46,7 @@ const ClientsTable = ({
     {
       accessorKey: "clientId",
       header: t("Clients.ClientId"),
-      cell: ({ row }: any) => {
+      cell: ({ row }) => {
         const client = row.original;
         return (
           <code className="bg-muted px-2 py-1 rounded">{client.clientId}</code>
@@ -54,29 +56,29 @@ const ClientsTable = ({
     {
       accessorKey: "clientType",
       header: t("Clients.ClientType"),
-      cell: ({ row }: any) => {
+      cell: ({ row }) => {
         const client = row.original;
 
         const fullTypeValue = client.clientProperties?.find(
-          (clientProperty: any) => clientProperty.key === ClientTypeKey
+          (clientProperty) => clientProperty.key === ClientTypeKey
         )?.value;
 
-        const typeEntry = Object.entries(ClientTypeLabel).find(
-          ([, label]) => label === fullTypeValue
-        );
-
-        const typeKey = typeEntry?.[0] ?? "Generic";
+        const typeKeys = Object.keys(ClientTypeLabel) as Array<
+          keyof typeof ClientTypeLabel
+        >;
+        const typeKey =
+          typeKeys.find((key) => ClientTypeLabel[key] === fullTypeValue) ??
+          "Generic";
+        const translationKey = `Client.ClientTypes.${typeKey}` as const;
 
         return (
-          <Badge variant="outline">
-            {t(`Client.ClientTypes.${typeKey}` as any)}
-          </Badge>
+          <Badge variant="outline">{t(translationKey)}</Badge>
         );
       },
     },
     {
       id: "actions",
-      cell: ({ row }: any) => <ClientActions client={row.original} />,
+      cell: ({ row }) => <ClientActions client={row.original} />,
     },
   ];
 

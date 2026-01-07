@@ -1,8 +1,14 @@
 import { z } from "zod";
+import { t } from "i18next";
 
 export const IdentityProviderFormSchema = z.object({
   id: z.number().optional().default(0),
-  scheme: z.string().min(1, "Scheme is required"),
+  scheme: z.string().min(
+    1,
+    t("Validation.FieldRequired", {
+      field: t("IdentityProvider.Section.Label.Scheme_Label"),
+    })
+  ),
   displayName: z.string().optional().nullable(),
   enabled: z.boolean(),
   type: z.string().optional(),
@@ -10,8 +16,14 @@ export const IdentityProviderFormSchema = z.object({
     .array(
       z.object({
         id: z.number().optional().default(0),
-        key: z.string().min(1, "Key is required"),
-        value: z.string().min(1, "Value is required"),
+        key: z.string().min(
+          1,
+          t("Validation.FieldRequired", { field: t("Property.Key") })
+        ),
+        value: z.string().min(
+          1,
+          t("Validation.FieldRequired", { field: t("Property.Value") })
+        ),
       })
     )
     .default([]),

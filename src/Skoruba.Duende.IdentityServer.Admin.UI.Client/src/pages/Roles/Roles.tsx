@@ -71,13 +71,13 @@ const Roles: React.FC = () => {
     >
       {roles.isLoading ? (
         <Loading fullscreen />
-      ) : (
+      ) : roles.data ? (
         <RolesTable
-          data={roles.data!}
+          data={roles.data}
           pagination={pagination}
           setPagination={setPagination}
         />
-      )}
+      ) : null}
     </Page>
   );
 };

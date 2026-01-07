@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import AuthHelper from "../helpers/AuthHelper";
+import { getBaseHref } from "@/lib/utils";
 
 interface IUser {
   userName?: string;
@@ -34,26 +35,46 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const getUser = async () => {
-    const userResponse = await fetch("/user", {
-      headers: {
-        "X-ANTI-CSRF": "1",
-      },
-    });
+    try {
+      const baseHref = getBaseHref();
+      const userUrl = `${baseHref}user`;
+      const userResponse = await fetch(userUrl, {
+        headers: {
+          "X-ANTI-CSRF": "1",
+        },
+      });
 
-    const userResult = await userResponse.json();
+      if (userResponse.status === 401) {
+        setIsAuthenticated(false);
+        setUser(undefined);
+        return;
+      }
 
-    setIsAuthenticated(userResult.isAuthenticated);
+      if (!userResponse.ok) {
+        throw new Error(`HTTP error! status: ${userResponse.status}`);
+      }
 
-    if (userResult.isAuthenticated) {
-      const user: IUser = {
-        userName: userResult.userName,
-        userId: userResult.userId,
+      const userResult = (await userResponse.json()) as {
+        isAuthenticated?: boolean;
+        userName?: string;
+        userId?: string;
       };
 
-      setUser(user);
-    }
+      const authenticated = !!userResult.isAuthenticated;
+      setIsAuthenticated(authenticated);
 
-    setIsLoading(false);
+      setUser(
+        authenticated
+          ? { userName: userResult.userName, userId: userResult.userId }
+          : undefined
+      );
+    } catch (error) {
+      console.error("Failed to get user info:", error);
+      setIsAuthenticated(false);
+      setUser(undefined);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {

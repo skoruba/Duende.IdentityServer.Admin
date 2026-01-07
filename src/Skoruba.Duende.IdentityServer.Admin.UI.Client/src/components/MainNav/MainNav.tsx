@@ -66,7 +66,7 @@ import {
   Settings,
 } from "lucide-react";
 
-import { ACCENTS } from "@/pages/Home/Home";
+import { ACCENTS } from "@/lib/accents";
 
 type Kind = keyof typeof ACCENTS;
 type IconType = React.ComponentType<React.SVGProps<SVGSVGElement>>;
@@ -292,6 +292,7 @@ export function MainNav() {
           >
             <Icon className={cn("h-3.5 w-3.5", accent.text)} />
           </span>
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           <span>{t(item.translationKey as any)}</span>
         </Link>
       </DropdownMenuItem>
@@ -302,7 +303,7 @@ export function MainNav() {
     <div className="flex items-center gap-2 md:gap-4">
       <Link to="/" className="flex cursor-pointer items-center gap-2">
         <Icons.logo className="h-8 w-8" />
-        <span className="sr-only">Home</span>
+        <span className="sr-only">{t("Common.Home")}</span>
       </Link>
 
       <div className="hidden items-center gap-1 lg:flex">
@@ -444,6 +445,7 @@ function MobileNav() {
         >
           <Icon className={cn("h-3.5 w-3.5", accent.text)} />
         </span>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         <span>{t(it.translationKey as any)}</span>
         {it.href === ConfigurationIssuesUrl && (
           <Badge variant="secondary" className="ml-auto">
@@ -463,7 +465,7 @@ function MobileNav() {
       <SheetTrigger asChild>
         <Button variant="outline" size="icon" className="shrink-0">
           <Menu className="h-5 w-5" />
-          <span className="sr-only">Menu</span>
+          <span className="sr-only">{t("Common.Menu")}</span>
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="w-[320px] p-0">
@@ -496,7 +498,7 @@ function MobileNav() {
               <div className="flex items-center gap-2 px-3 text-xs uppercase text-muted-foreground">
                 {g.icon}
                 <span>{g.title}</span>
-                {g.title.toLowerCase().includes("monitor") && (
+                {String(g.title).toLowerCase().includes("monitor") && (
                   <Badge variant="secondary" className="ml-2">
                     {isLoading ? (
                       <Loader2 className="h-3 w-3 animate-spin" />

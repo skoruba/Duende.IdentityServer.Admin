@@ -9,6 +9,22 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Extensi
 {
     public static class QueryableExtensions
     {
+        private const int DefaultPageSize = 10;
+        private const int MaxPageSize = 100;
+        private const int MaxTakeLimit = 1000;
+
+        public static int NormalizePageSize(int pageSize)
+        {
+            if (pageSize <= 0) return DefaultPageSize;
+            return pageSize > MaxPageSize ? MaxPageSize : pageSize;
+        }
+
+        public static int NormalizeTakeLimit(int limit)
+        {
+            if (limit <= 0) return 0;
+            return limit > MaxTakeLimit ? MaxTakeLimit : limit;
+        }
+
         public static IQueryable<T> WhereIf<T>(this IQueryable<T> query, bool condition, Expression<Func<T, bool>> predicate)
         {
             return condition
@@ -20,6 +36,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Extensi
         {
             // It is necessary sort items before it
             query = orderByDescending ? query.OrderByDescending(orderBy) : query.OrderBy(orderBy);
+
+            if (condition)
+            {
+                limit = NormalizeTakeLimit(limit);
+                if (limit <= 0) return query.Take(0);
+            }
 
             return condition
                 ? query.Take(limit)
@@ -41,10 +63,18 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Extensi
                 page = defaultPageNumber;
             }
 
+            pageSize = NormalizePageSize(pageSize);
+
             // It is necessary sort items before it
             query = orderByDescending ? query.OrderByDescending(orderBy) : query.OrderBy(orderBy);
 
-            return query.Skip((page - 1) * pageSize).Take(pageSize);
+            var skip = (page - 1L) * pageSize;
+            if (skip > int.MaxValue)
+            {
+                return query.Take(0);
+            }
+
+            return query.Skip((int)skip).Take(pageSize);
         }
     }
 }

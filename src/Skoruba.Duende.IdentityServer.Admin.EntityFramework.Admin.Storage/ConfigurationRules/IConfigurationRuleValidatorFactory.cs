@@ -3,7 +3,7 @@
 
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities;
 
-namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
+namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.ConfigurationRules;
 
 public interface IConfigurationRuleValidatorFactory
 {

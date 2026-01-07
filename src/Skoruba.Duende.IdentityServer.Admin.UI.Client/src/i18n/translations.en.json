@@ -28,6 +28,7 @@
     "KeysDescription": "Manage your keys",
     "Overview": "Overview",
     "OverviewDescription": "Total count of Identity Server resources and clients",
+    "TotalResources": "Total Resources",
     "ClientsResourcesManagement": "Clients & Resources Management",
     "IdentityManagement": "Identity Management",
     "ProvidersAndKeys": "Providers & Keys",
@@ -65,7 +66,17 @@
   },
   "Errors": {
     "Failed": "Failed",
-    "FailedMessage": "An error occurred while processing your request."
+    "FailedMessage": "An error occurred while processing your request.",
+    "Unexpected": "Unexpected error",
+    "InvalidFormat": "Invalid error format",
+    "Unknown": "Unknown error",
+    "DefaultTitle": "Ooops!",
+    "Unauthorized": "Unauthorized access - please log in",
+    "Forbidden": "Access forbidden",
+    "NotFound": "Resource not found",
+    "ServerError": "Server error - please try again later",
+    "NetworkError": "Network error - check your connection",
+    "TimeoutError": "Request timeout - please try again"
   },
   "Components": {
     "FormRow": {
@@ -91,6 +102,30 @@
       "GoToLastPage": "Go to last page",
       "RowsPerPage": "Rows per page"
     },
+    "DataTable": {
+      "NoResults": "No results."
+    },
+    "Pagination": {
+      "Previous": "Previous",
+      "Next": "Next",
+      "MorePages": "More pages"
+    },
+    "ErrorBoundary": {
+      "Title": "Something went wrong",
+      "Description": "An unexpected error occurred. This has been logged and will be investigated.",
+      "Details": "Error Details (Development Only)",
+      "TryAgain": "Try Again",
+      "ReloadPage": "Reload Page"
+    },
+    "Tip": {
+      "Label": "Tip:"
+    },
+    "DualListSelector": {
+      "SelectAll": "Select All",
+      "DeselectAll": "Deselect All",
+      "SearchPlaceholder": "Search...",
+      "Name": "Name"
+    },
     "Loading": {
       "Loading": "Loading..."
     },
@@ -112,6 +147,7 @@
     "ExpirationTimeRequired": "Expiration time is required.",
     "SecretHashTypeRequiredForSharedSecret": "A hash type must be selected for SharedSecret.",
     "UrlRequired": "Please enter a valid URL",
+    "InvalidEmail": "Invalid email",
     "Required": "This field is required",
     "FieldRequired": "{{field}} is required.",
     "AtLeastOneItem": "At least one item is required",
@@ -137,6 +173,13 @@
     "Add": "Add",
     "Detail": "Detail",
     "Warning": "Warning"
+  },
+  "Common": {
+    "Close": "Close",
+    "OpenMenu": "Open menu",
+    "Home": "Home",
+    "Menu": "Menu",
+    "More": "More"
   },
   "Modals": {
     "Item": "Item",
@@ -319,6 +362,7 @@
   "Claim": {
     "Key": "Claim Key",
     "Value": "Claim Value",
+    "EnterValuePlaceholder": "Enter value",
     "Actions": {
       "Add": "Add Claim",
       "Added": "The claim has been added successfully",
@@ -679,6 +723,8 @@
     "PageTitle": "Keys",
     "DeleteTitle": "Delete Key",
     "DeleteDescription": "Are you sure you want to delete this key?",
+    "DeleteSuccess": "Key deleted successfully.",
+    "DeleteFailed": "Failed to delete key.",
     "Section": {
       "Label": {
         "Algorithm_Label": "Algorithm",
@@ -893,7 +939,8 @@
     "Languages": {
       "en": "English",
       "NotFound": "No language found.",
-      "SelectLanguage": "Select Language"
+      "SelectLanguage": "Select Language",
+      "SearchPlaceholder": "Search language..."
     }
   }
 }

@@ -13,6 +13,7 @@ import { ArrowLeft, ArrowRight, PlusCircle } from "lucide-react";
 import { Separator } from "./separator";
 import CustomItemModal from "@/pages/Client/CustomItemModal";
 import { useToast } from "@/components/ui/use-toast";
+import { useTranslation } from "react-i18next";
 
 export interface Item {
   id: string;
@@ -31,6 +32,7 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
   onSelectedItemsChange,
 }) => {
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const [allItems, setAllItems] = useState<Item[]>([]);
   const [selectedItems, setSelectedItems] =
@@ -141,19 +143,19 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
           onClick={selectAll}
           className="mb-2"
         >
-          Select All
+          {t("Components.DualListSelector.SelectAll")}
         </Button>
         <Input
           value={searchTermLeft}
           onChange={(e) => setSearchTermLeft(e.target.value)}
-          placeholder="Search..."
+          placeholder={t("Components.DualListSelector.SearchPlaceholder")}
         />
         <Separator className="mt-6" />
         <div className="flex-grow overflow-auto max-h-[300px]">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
+                <TableHead>{t("Components.DualListSelector.Name")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -183,19 +185,19 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
           variant="destructive"
           className="mb-2"
         >
-          Deselect All
+          {t("Components.DualListSelector.DeselectAll")}
         </Button>
         <Input
           value={searchTermRight}
           onChange={(e) => setSearchTermRight(e.target.value)}
-          placeholder="Search..."
+          placeholder={t("Components.DualListSelector.SearchPlaceholder")}
         />
         <Separator className="mt-6" />
         <div className="flex-grow overflow-auto max-h-[300px]">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
+                <TableHead>{t("Components.DualListSelector.Name")}</TableHead>
                 <TableHead className="flex justify-end">
                   <Button
                     onClick={() => setIsModalOpened(true)}
@@ -203,7 +205,7 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
                     className="ms-4 mt-1"
                     type="button"
                   >
-                    <PlusCircle className="w-5 h-5 me-1" /> Add
+                    <PlusCircle className="w-5 h-5 me-1" /> {t("Actions.Add")}
                   </Button>
                 </TableHead>
               </TableRow>
