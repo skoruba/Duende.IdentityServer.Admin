@@ -29,7 +29,7 @@
                 <li class="space-y-3">
                     <p class="text-foreground">@Localizer["ScanQR"] <kbd class="rounded bg-muted px-1 py-0.5 text-xs">@Model.SharedKey</kbd> @Localizer["ScanQRSubTitle"]</p>
                     <div id="qrCode" class="rounded-md border p-4 inline-block"></div>
-                    <div id="qrCodeData" data-url="@Html.Raw(Model.AuthenticatorUri)"></div>
+                    <div id="qrCodeData" data-url="@Model.AuthenticatorUri"></div>
                 </li>
 
                 <li class="space-y-3">
@@ -56,11 +56,4 @@
 </section>
 
 <script src="~/js/qrcode.min.js"></script>
-<script type="text/javascript">
-    new QRCode(document.getElementById("qrCode"),
-        {
-            text: "@Html.Raw(Model.AuthenticatorUri)",
-            width: 300,
-            height: 300
-        });
-</script>
+<script src="~/js/enable-authenticator.js" asp-append-version="true"></script>

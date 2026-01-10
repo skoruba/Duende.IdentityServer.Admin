@@ -71,7 +71,7 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AdminApiConfiguration adminApiConfiguration)
         {
-            app.AddForwardHeaders();
+            app.AddForwardHeaders(Configuration);
 
             if (env.IsDevelopment())
             {

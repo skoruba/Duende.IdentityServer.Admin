@@ -28,7 +28,7 @@ builder.Services.AddSkorubaAdminUI(options =>
 
 var app = builder.Build();
 
-app.UseApplicationForwardHeaders();
+app.UseApplicationForwardHeaders(builder.Configuration);
 app.UseApplicationSecurityHeaders();
 
 app.UseStaticFiles();
