@@ -24,16 +24,17 @@ public class IdentityResourceMustBeEnabledRule : ConfigurationRuleValidatorBase,
 
         foreach (var resource in disabledResources)
         {
+            var displayName = GetDisplayName(resource.DisplayName, resource.Name);
             var parameters = new Dictionary<string, string>
             {
                 ["resourceName"] = resource.Name,
-                ["displayName"] = resource.DisplayName ?? resource.Name
+                ["displayName"] = displayName
             };
 
             issues.Add(new ConfigurationIssueView
             {
                 ResourceId = resource.Id,
-                ResourceName = resource.DisplayName ?? resource.Name,
+                ResourceName = displayName,
                 Message = FormatMessage(messageTemplate, parameters),
                 IssueType = issueType,
                 ResourceType = ConfigurationResourceType.IdentityResource,

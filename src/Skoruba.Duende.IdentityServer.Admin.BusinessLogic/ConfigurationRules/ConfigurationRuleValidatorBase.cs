@@ -66,4 +66,9 @@ public abstract class ConfigurationRuleValidatorBase
         }
         return result;
     }
+
+    protected static string GetDisplayName(string displayName, string name)
+    {
+        return string.IsNullOrWhiteSpace(displayName) ? name : displayName;
+    }
 }

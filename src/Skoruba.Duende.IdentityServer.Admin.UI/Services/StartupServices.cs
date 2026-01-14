@@ -15,7 +15,7 @@ public static class StartupServices
             {
                 cspBuilder.AddDefaultSrc().Self();
                 cspBuilder.AddScriptSrc().Self();
-                cspBuilder.AddStyleSrc().Self();
+                cspBuilder.AddStyleSrc().Self().UnsafeInline();
                 cspBuilder.AddFontSrc().Self().Data();
                 cspBuilder.AddImgSrc().Self().Data();
                 cspBuilder.AddObjectSrc().None();

@@ -52,17 +52,18 @@ public class IdentityResourceNameMustStartWithRule : ConfigurationRuleValidatorB
 
             if (!startsWithAnyPrefix)
             {
+                var displayName = GetDisplayName(resource.DisplayName, resource.Name);
                 var parameters = new Dictionary<string, string>
                 {
                     ["allowedPrefixes"] = string.Join(", ", prefixes),
                     ["actualName"] = resource.Name,
-                    ["displayName"] = resource.DisplayName ?? resource.Name
+                    ["displayName"] = displayName
                 };
 
                 issues.Add(new ConfigurationIssueView
                 {
                     ResourceId = resource.Id,
-                    ResourceName = resource.DisplayName ?? resource.Name,
+                    ResourceName = displayName,
                     Message = FormatMessage(messageTemplate, parameters),
                     IssueType = issueType,
                     ResourceType = ConfigurationResourceType.IdentityResource,

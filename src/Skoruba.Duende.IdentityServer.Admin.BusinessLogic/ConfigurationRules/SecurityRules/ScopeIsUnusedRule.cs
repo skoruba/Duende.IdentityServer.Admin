@@ -51,10 +51,10 @@ public class ScopeIsUnusedRule : ConfigurationRuleValidatorBase, IConfigurationR
             var scope = context.ApiScopes.FirstOrDefault(s => s.Name == scopeName);
             if (scope != null)
             {
-                var displayName = scope.DisplayName ?? scope.Name;
-                var displayNameSuffix = !string.IsNullOrWhiteSpace(scope.DisplayName) &&
-                                      scope.DisplayName != scope.Name ?
-                                      $" ({scope.DisplayName})" : "";
+                var displayName = GetDisplayName(scope.DisplayName, scope.Name);
+                var displayNameSuffix = displayName != scope.Name
+                    ? $" ({displayName})"
+                    : "";
 
                 var parameters = new Dictionary<string, string>
                 {
