@@ -143,8 +143,14 @@ function handleGlobalError(
   title: string = ERROR_MESSAGES.DEFAULT_TITLE()
 ) {
   const description = getErrorMessage(error);
+  const status = getStatusCode(error);
+  if (status === 401) return;
+  const variant =
+    typeof status === "number" && (status === 400 || status >= 500)
+      ? "destructive"
+      : "default";
   toast({
-    variant: "destructive",
+    variant,
     title,
     description,
   });

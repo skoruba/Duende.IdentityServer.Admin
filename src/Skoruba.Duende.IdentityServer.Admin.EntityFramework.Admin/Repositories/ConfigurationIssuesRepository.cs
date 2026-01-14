@@ -17,19 +17,20 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
 
 namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Repositories;
 
-public class ConfigurationIssuesRepository<TDbContext> : IConfigurationIssuesRepository
+public class ConfigurationIssuesRepository<TDbContext, TRulesDbContext> : IConfigurationIssuesRepository
     where TDbContext : DbContext, IAdminConfigurationDbContext
+    where TRulesDbContext : DbContext, IAdminConfigurationStoreDbContext
 {
     private readonly TDbContext _dbContext;
-    private readonly IAdminConfigurationStoreDbContext _rulesDbContext;
+    private readonly TRulesDbContext _rulesDbContext;
     private readonly IConfigurationRuleValidatorFactory _ruleValidatorFactory;
-    private readonly ILogger<ConfigurationIssuesRepository<TDbContext>> _logger;
+    private readonly ILogger<ConfigurationIssuesRepository<TDbContext, TRulesDbContext>> _logger;
 
     public ConfigurationIssuesRepository(
         TDbContext dbContext,
-        IAdminConfigurationStoreDbContext rulesDbContext,
+        TRulesDbContext rulesDbContext,
         IConfigurationRuleValidatorFactory ruleValidatorFactory,
-        ILogger<ConfigurationIssuesRepository<TDbContext>> logger)
+        ILogger<ConfigurationIssuesRepository<TDbContext, TRulesDbContext>> logger)
     {
         _dbContext = dbContext;
         _rulesDbContext = rulesDbContext;

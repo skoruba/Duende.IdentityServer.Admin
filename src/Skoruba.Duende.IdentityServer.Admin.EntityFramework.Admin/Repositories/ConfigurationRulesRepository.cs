@@ -12,9 +12,10 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities
 
 namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Repositories;
 
-public class ConfigurationRulesRepository(IAdminConfigurationStoreDbContext dbContext) : IConfigurationRulesRepository
+public class ConfigurationRulesRepository<TDbContext>(TDbContext dbContext) : IConfigurationRulesRepository
+    where TDbContext : DbContext, IAdminConfigurationStoreDbContext
 {
-    private readonly IAdminConfigurationStoreDbContext _dbContext = dbContext;
+    private readonly TDbContext _dbContext = dbContext;
 
     public async Task<List<ConfigurationRule>> GetAllRulesAsync()
     {

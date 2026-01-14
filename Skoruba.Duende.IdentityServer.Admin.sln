@@ -63,8 +63,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skoruba.Duende.IdentityServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skoruba.Duende.IdentityServer.Admin", "src\Skoruba.Duende.IdentityServer.Admin\Skoruba.Duende.IdentityServer.Admin.csproj", "{9104F885-AA75-4245-8C06-A223238D05F1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin", "src\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.csproj", "{CAFEC130-06CC-4F0D-8F08-E302C8671704}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage", "src\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.csproj", "{158B1F25-243E-4629-8095-BF42734E5F57}"
@@ -424,8 +422,8 @@ Global
 		{28FC66E6-11A1-4A45-AC12-9BD5E4DDD6F3} = {588205D4-3A30-4DA4-849D-C7422C396DAA}
 		{87EFC071-D6F2-4F35-9A08-3A935D38D3BE} = {588205D4-3A30-4DA4-849D-C7422C396DAA}
 		{9104F885-AA75-4245-8C06-A223238D05F1} = {588205D4-3A30-4DA4-849D-C7422C396DAA}
-		{CAFEC130-06CC-4F0D-8F08-E302C8671704} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
-		{158B1F25-243E-4629-8095-BF42734E5F57} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{CAFEC130-06CC-4F0D-8F08-E302C8671704} = {2A514C8F-6A53-41CA-AB41-B644E7BC92A7}
+		{158B1F25-243E-4629-8095-BF42734E5F57} = {2A514C8F-6A53-41CA-AB41-B644E7BC92A7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B3166EDE-037B-4C68-BEBA-5DE9C5E3DB82}

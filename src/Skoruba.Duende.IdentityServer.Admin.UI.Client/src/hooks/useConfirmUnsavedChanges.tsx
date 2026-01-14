@@ -62,13 +62,11 @@ export function useConfirmUnsavedChanges(isDirty: boolean) {
 
   const handleConfirm = () => {
     setOpen(false);
-    blocker.reset?.();
     resolver.current?.(true);
   };
 
   const handleCancel = () => {
     setOpen(false);
-    blocker.reset?.();
     resolver.current?.(false);
   };
 

@@ -35,7 +35,6 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Helpers;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Interfaces;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Extensions;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration.ApplicationParts;
@@ -192,6 +191,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
                 default:
                     throw new ArgumentOutOfRangeException(nameof(databaseProvider.ProviderType), $@"The value needs to be one of {string.Join(", ", Enum.GetNames(typeof(DatabaseProviderType)))}.");
             }
+
         }
 
         /// <summary>
@@ -422,7 +422,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
             }
         }
 
-        public static void AddIdentityServerAdminApi<TIdentityDbContext, TIdentityServerConfigurationDbContext, TPersistedGrantDbContext, TIdentityServerDataProtectionDbContext, TAdminLogDbContext, TAdminAuditLogDbContext, TAuditLog, TUserDto, TRoleDto, TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken,
+        public static void AddIdentityServerAdminApi<TIdentityDbContext, TIdentityServerConfigurationDbContext, TPersistedGrantDbContext, TIdentityServerDataProtectionDbContext, TAdminLogDbContext, TAdminAuditLogDbContext, TAdminConfigurationDbContext, TAuditLog, TUserDto, TRoleDto, TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken,
             TUsersDto, TRolesDto, TUserRolesDto, TUserClaimsDto,
             TUserProviderDto, TUserProvidersDto, TUserChangePasswordDto, TRoleClaimsDto, TUserClaimDto, TRoleClaimDto>(this IServiceCollection services, IConfiguration configuration, AdminApiConfiguration adminApiConfiguration)
             where TPersistedGrantDbContext : DbContext, IAdminPersistedGrantDbContext
@@ -450,6 +450,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
             where TIdentityServerDataProtectionDbContext : DbContext, IDataProtectionKeyContext
             where TIdentityServerConfigurationDbContext : DbContext, IAdminConfigurationDbContext
             where TAdminLogDbContext : DbContext, IAdminLogDbContext
+            where TAdminConfigurationDbContext : DbContext, IAdminConfigurationStoreDbContext
             where TAdminAuditLogDbContext : IAuditLoggingDbContext<AuditLog>, IAuditLoggingDbContext<TAuditLog>
             where TAuditLog : AuditLog, new()
         {
@@ -476,7 +477,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
                 TUsersDto, TRolesDto, TUserRolesDto, TUserClaimsDto,
                 TUserProviderDto, TUserProvidersDto, TUserChangePasswordDto, TRoleClaimsDto, TUserClaimDto, TRoleClaimDto>(profileTypes);
 
-            services.AddAdminServices<TIdentityServerConfigurationDbContext, TPersistedGrantDbContext, TAdminLogDbContext>();
+            services.AddAdminServices<TIdentityServerConfigurationDbContext, TPersistedGrantDbContext, TAdminLogDbContext, TAdminConfigurationDbContext>();
 
             services.AddAdminApiCors(adminApiConfiguration);
 

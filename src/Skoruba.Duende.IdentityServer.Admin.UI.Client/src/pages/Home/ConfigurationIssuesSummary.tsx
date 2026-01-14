@@ -30,33 +30,51 @@ import { ConfigurationIssuesUrl, ConfigurationRulesUrl } from "@/routing/Urls";
 import Loading from "@/components/Loading/Loading";
 import { getConfigurationIssues } from "@/services/DashboardService";
 
+const LEGEND_STYLES = {
+  errors: {
+    icon: "text-[hsl(var(--chart-error))]",
+    count: "text-[hsl(var(--chart-error))]",
+    bg: "bg-[hsl(var(--chart-error)/0.2)]",
+  },
+  warnings: {
+    icon: "text-[hsl(var(--chart-warning))]",
+    count: "text-[hsl(var(--chart-warning))]",
+    bg: "bg-[hsl(var(--chart-warning)/0.2)]",
+  },
+  recommendations: {
+    icon: "text-[hsl(var(--chart-recommendation))]",
+    count: "text-[hsl(var(--chart-recommendation))]",
+    bg: "bg-[hsl(var(--chart-recommendation)/0.2)]",
+  },
+  done: {
+    icon: "text-[hsl(var(--chart-3))]",
+    count: "text-[hsl(var(--chart-3))]",
+    bg: "bg-[hsl(var(--chart-3)/0.2)]",
+  },
+} as const;
+
 function LegendItem({
-  color,
+  variant,
   label,
   icon: Icon,
   count,
 }: {
-  color: string;
+  variant: keyof typeof LEGEND_STYLES;
   label: string;
   icon: any;
   count?: number;
 }) {
+  const styles = LEGEND_STYLES[variant];
   return (
     <div className="flex items-center gap-3 p-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
       <div className="flex items-center gap-2">
-        <div
-          className="p-1.5 rounded-lg"
-          style={{ backgroundColor: `hsl(${color})`, opacity: 0.2 }}
-        >
-          <Icon className="h-3 w-3" style={{ color: `hsl(${color})` }} />
+        <div className={`p-1.5 rounded-lg ${styles.bg}`}>
+          <Icon className={`h-3 w-3 ${styles.icon}`} />
         </div>
         <span className="text-sm font-medium">{label}</span>
       </div>
       {count !== undefined && (
-        <span
-          className="ml-auto text-sm font-bold"
-          style={{ color: `hsl(${color})` }}
-        >
+        <span className={`ml-auto text-sm font-bold ${styles.count}`}>
           {count}
         </span>
       )}
@@ -232,26 +250,26 @@ export function ConfigurationIssuesSummary() {
 
         <div className="flex flex-col justify-center gap-2">
           <LegendItem
-            color="var(--chart-error)"
+            variant="errors"
             label={t("Home.ClientsChecker.Legend.Errors")}
             icon={XCircle}
             count={errors}
           />
           <LegendItem
-            color="var(--chart-warning)"
+            variant="warnings"
             label={t("Home.ClientsChecker.Legend.Warnings")}
             icon={AlertTriangle}
             count={warnings}
           />
           <LegendItem
-            color="var(--chart-recommendation)"
+            variant="recommendations"
             label={t("Home.ClientsChecker.Legend.Recommendations")}
             icon={Zap}
             count={recommendations}
           />
           {hasNoIssues && (
             <LegendItem
-              color="var(--chart-3)"
+              variant="done"
               label={t("Home.ClientsChecker.Legend.NoIssues")}
               icon={CheckCircle}
             />
