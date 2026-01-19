@@ -1,6 +1,6 @@
 ![Logo](docs/Images/logo.svg)
 
-# Skoruba.Duende.IdentityServer.Admin 🚀
+# Skoruba.Duende.IdentityServer.Admin v3 🚀
 
 > Admin UI for Duende IdentityServer and ASP.NET Core Identity
 
@@ -31,7 +31,7 @@ This application uses a modern **React** frontend (TypeScript, [Tailwind CSS](ht
 ### 1. Install the template
 
 ```sh
-dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::3.0.0-preview.13
+dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::3.0.0-preview.14
 ```
 
 ### 2. Create a new project
@@ -45,7 +45,7 @@ dotnet new skoruba.duende.isadmin \
   --adminrole MyRole \
   --adminclientid MyClientId \
   --adminclientsecret MyClientSecret \
-  --dockersupport true
+  --dockersupport true \
   --requirepushedauthorization true
 ```
 
@@ -86,6 +86,22 @@ dotnet new skoruba.duende.isadmin \
 ### 💼 Client Management
 
 ![Admin-Client-Edit](docs/Images/client-edit.png)
+
+### 📡 Monitoring
+
+The Monitoring feature lets admins define and track configuration rules for clients, API resources, and identity resources. It can flag deprecated OAuth 2.1 flows, enforce required scopes, validate scope/resource naming conventions, and warn about expired client secrets.
+
+### 🧱 Monitoring - Configuration Rules
+
+![Configuration-Rules](docs/Images/configuration-rules.png)
+
+### 🧩 Monitoring - Configuration Issues
+
+![Configuration-Issues](docs/Images/configuration-issues.png)
+
+### 📈 Monitoring - Dashboard
+
+![Monitoring-Charts](docs/Images/monitoring-charts.png)
 
 ### Solution structure:
 
@@ -731,10 +747,12 @@ It is possible to define the configuration according the client type - by defaul
 
 - [x] New UI in React and Typescript ([#182](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/182))
 - [x] Add wizard for client registration ([#18](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/18))
+- [x] Migrate STS from Bootstrap to Tailwind CSS (align with Admin UI design 🎨), replace Gulp with modern tooling.
 
 ### 3.1.0
 
-- [ ] Migrate STS from Bootstrap to Tailwind CSS (align with Admin UI design 🎨), replace Gulp with modern tooling.
+- [ ] Update to .NET 10
+- [ ] Add support for PassKeys
 
 ### 3.2.0
 

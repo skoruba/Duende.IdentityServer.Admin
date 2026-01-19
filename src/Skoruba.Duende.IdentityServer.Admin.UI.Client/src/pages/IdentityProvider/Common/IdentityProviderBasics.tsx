@@ -31,6 +31,7 @@ const IdentityProviderBasics: React.FC = () => {
         label={t("IdentityProvider.Section.Label.DisplayName_Label")}
         description={t("IdentityProvider.Section.Label.DisplayName_Info")}
         type="input"
+        required
       />
       <FormRow
         name="enabled"

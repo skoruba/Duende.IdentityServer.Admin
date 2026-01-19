@@ -9,9 +9,19 @@ export const IdentityProviderFormSchema = z.object({
       field: t("IdentityProvider.Section.Label.Scheme_Label"),
     })
   ),
-  displayName: z.string().optional().nullable(),
+  displayName: z.string().min(
+    1,
+    t("Validation.FieldRequired", {
+      field: t("IdentityProvider.Section.Label.DisplayName_Label"),
+    })
+  ),
   enabled: z.boolean(),
-  type: z.string().optional(),
+  type: z.string().min(
+    1,
+    t("Validation.FieldRequired", {
+      field: t("IdentityProvider.Section.Label.ProtocolType_Label"),
+    })
+  ),
   properties: z
     .array(
       z.object({
@@ -36,7 +46,7 @@ export type IdentityProviderFormData = z.infer<
 export const defaultIdentityProviderFormData: IdentityProviderFormData = {
   id: 0,
   scheme: "",
-  displayName: undefined,
+  displayName: "",
   enabled: true,
   type: "oidc",
   properties: [],

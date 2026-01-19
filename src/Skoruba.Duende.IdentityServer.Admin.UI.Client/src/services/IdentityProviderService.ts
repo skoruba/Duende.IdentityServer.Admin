@@ -52,7 +52,7 @@ export const useCreateIdentityProvider = () => {
           identityProviderProperties: Object.fromEntries(
             data.properties.map((prop) => [prop.key, prop.value])
           ),
-          displayName: data.displayName ?? undefined,
+          displayName: data.displayName,
         })
       );
     },
@@ -78,7 +78,7 @@ export const useUpdateIdentityProvider = () => {
           identityProviderProperties: Object.fromEntries(
             data.properties.map((prop) => [prop.key, prop.value])
           ),
-          displayName: data.displayName ?? undefined,
+          displayName: data.displayName,
         })
       );
     },
@@ -123,6 +123,7 @@ export const useIdentityProviderById = (id: number) => {
     const formData: IdentityProviderFormData = {
       ...result,
       properties,
+      displayName: result.displayName ?? "",
     };
 
     return formData;

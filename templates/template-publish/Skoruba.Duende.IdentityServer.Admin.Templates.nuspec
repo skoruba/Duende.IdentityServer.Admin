@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>Skoruba.Duende.IdentityServer.Admin.Templates</id>
-    <version>3.0.0-preview.13</version>
+    <version>3.0.0-preview.14</version>
     <authors>Jan Škoruba</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">Apache-2.0</license>

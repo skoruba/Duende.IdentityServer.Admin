@@ -1,5 +1,10 @@
 $packagesOutput = ".\packages"
 
+# Clean packages output directory
+if (Test-Path $packagesOutput) {
+    Get-ChildItem -Path $packagesOutput -Force | Remove-Item -Recurse -Force
+}
+
 # Build SPA assets for client before packing
 $clientPath = ".\..\src\Skoruba.Duende.IdentityServer.Admin.UI.Client"
 if (Test-Path $clientPath) {
