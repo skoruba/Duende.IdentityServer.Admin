@@ -8,7 +8,7 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.10" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10" PrivateAssets="All" />
-		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage" Version="3.0.0-preview.15" />
+		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage" Version="3.0.0-preview.16" />
 	</ItemGroup>
 
 	<ItemGroup>

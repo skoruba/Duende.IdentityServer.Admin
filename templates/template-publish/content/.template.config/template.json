@@ -22,10 +22,10 @@
     },
     "adminpassword": {
       "type": "parameter",
-      "defaultValue": "P@ssword123",
-      "replaces": "P@ssword123",
+      "defaultValue": "Passw0rd-123",
+      "replaces": "Passw0rd-123",
       "isRequired": true,
-      "description": "The admin password, that is used to first login (default is P@ssword123)."
+      "description": "The admin password, that is used to first login (default is Passw0rd-123)."
     },
     "adminemail": {
       "type": "parameter",

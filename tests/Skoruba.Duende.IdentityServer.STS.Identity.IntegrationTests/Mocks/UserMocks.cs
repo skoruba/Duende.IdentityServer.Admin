@@ -11,7 +11,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.IntegrationTests.Mocks
 {
     public static class UserMocks
     {
-        public static string UserPassword = "P@ssword123";
+        public static string UserPassword = "Passw0rd-123";
         public static string AntiForgeryTokenKey = "__RequestVerificationToken";
 
         public static Dictionary<string, string> GenerateRegisterData()

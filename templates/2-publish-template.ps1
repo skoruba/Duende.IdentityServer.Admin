@@ -31,4 +31,4 @@ dotnet new --uninstall Skoruba.Duende.IdentityServer.Admin.Templates
 $templateLocalName = "Skoruba.Duende.IdentityServer.Admin.Templates.$packagesVersions.nupkg"
 dotnet new -i $templateLocalName
 
-dotnet new skoruba.duende.isadmin --name MyProject --title MyProject --adminemail 'admin@skoruba.com' --adminpassword 'P@ssword123' --adminrole SkorubaIdentityAdminAdministrator --adminclientid skoruba_identity_admin_v3 --adminclientsecret skoruba_admin_client_secret --dockersupport true --requirepushedauthorization true
+dotnet new skoruba.duende.isadmin --name MyProject --title MyProject --adminemail 'admin@skoruba.com' --adminpassword 'Passw0rd-123' --adminrole SkorubaIdentityAdminAdministrator --adminclientid skoruba_identity_admin_v3 --adminclientsecret skoruba_admin_client_secret --dockersupport true --requirepushedauthorization true

@@ -31,7 +31,7 @@ This application uses a modern **React** frontend (TypeScript, [Tailwind CSS](ht
 ### 1. Install the template
 
 ```sh
-dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::3.0.0-preview.15
+dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::3.0.0-preview.16
 ```
 
 ### 2. Create a new project
@@ -41,7 +41,7 @@ dotnet new skoruba.duende.isadmin \
   --name MyProject \
   --title MyProject \
   --adminemail "admin@example.com" \
-  --adminpassword "P@ssword123" \
+  --adminpassword "Passw0rd-123" \
   --adminrole MyRole \
   --adminclientid MyClientId \
   --adminclientsecret MyClientSecret \

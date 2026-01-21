@@ -8,7 +8,7 @@
     "Users": [
       {
         "Username": "admin",
-        "Password": "P@ssword123",
+        "Password": "Passw0rd-123",
         "Email": "admin@skoruba.com",
         "Roles": [
           "SkorubaIdentityAdminAdministrator"

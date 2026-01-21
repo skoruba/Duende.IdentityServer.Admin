@@ -41,7 +41,7 @@ dotnet new skoruba.duende.isadmin \
   --name MyProject \
   --title MyProject \
   --adminemail "admin@example.com" \
-  --adminpassword "P@ssword123" \
+  --adminpassword "Passw0rd-123" \
   --adminrole MyRole \
   --adminclientid MyClientId \
   --adminclientsecret MyClientSecret \
