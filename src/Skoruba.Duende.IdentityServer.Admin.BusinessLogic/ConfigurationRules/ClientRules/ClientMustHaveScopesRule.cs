@@ -11,7 +11,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.C
 
 public class ClientMustHaveScopesRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
+    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<ScopesConfig>(configuration);
         var minScopes = config.MinScopes ?? 1;
@@ -36,6 +36,7 @@ public class ClientMustHaveScopesRule : ConfigurationRuleValidatorBase, IConfigu
                 ResourceId = client.Id,
                 ResourceName = client.ClientName ?? client.ClientId,
                 Message = FormatMessage(messageTemplate, parameters),
+                FixDescription = FormatMessage(fixDescriptionTemplate, parameters),
                 IssueType = issueType,
                 ResourceType = ConfigurationResourceType.Client,
                 MessageParameters = parameters

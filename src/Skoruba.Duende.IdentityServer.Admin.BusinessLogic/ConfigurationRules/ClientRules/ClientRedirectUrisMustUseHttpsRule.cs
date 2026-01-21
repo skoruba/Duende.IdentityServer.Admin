@@ -11,7 +11,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.C
 
 public class ClientRedirectUrisMustUseHttpsRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
+    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<HttpsConfig>(configuration);
 
@@ -47,6 +47,7 @@ public class ClientRedirectUrisMustUseHttpsRule : ConfigurationRuleValidatorBase
                     ResourceId = client.Id,
                     ResourceName = client.ClientName,
                     Message = FormatMessage(messageTemplate, parameters),
+                    FixDescription = FormatMessage(fixDescriptionTemplate, parameters),
                     IssueType = issueType,
                     ResourceType = ConfigurationResourceType.Client,
                     MessageParameters = parameters

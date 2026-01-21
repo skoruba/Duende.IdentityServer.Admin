@@ -124,6 +124,7 @@ export const useIdentityProviderById = (id: number) => {
       ...result,
       properties,
       displayName: result.displayName ?? "",
+      type: result.type ?? "",
     };
 
     return formData;

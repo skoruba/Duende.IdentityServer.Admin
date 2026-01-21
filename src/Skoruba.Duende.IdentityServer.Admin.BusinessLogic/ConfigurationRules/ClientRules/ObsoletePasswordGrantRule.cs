@@ -11,7 +11,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.C
 
 public class ObsoletePasswordGrantRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
+    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         return context.Clients
             .Where(c => c.AllowedGrantTypes.Any(g => g.GrantType == "password"))
@@ -20,6 +20,7 @@ public class ObsoletePasswordGrantRule : ConfigurationRuleValidatorBase, IConfig
                 ResourceId = c.Id,
                 ResourceName = c.ClientName,
                 Message = messageTemplate,
+                FixDescription = fixDescriptionTemplate,
                 IssueType = issueType,
                 ResourceType = ConfigurationResourceType.Client
             })

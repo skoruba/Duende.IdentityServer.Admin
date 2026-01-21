@@ -11,7 +11,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.I
 
 public class IdentityResourceMustBeEnabledRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
+    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<RequiredResourcesConfig>(configuration);
         var requiredResources = config.RequiredResources ?? new[] { "openid", "profile" };
@@ -36,6 +36,7 @@ public class IdentityResourceMustBeEnabledRule : ConfigurationRuleValidatorBase,
                 ResourceId = resource.Id,
                 ResourceName = displayName,
                 Message = FormatMessage(messageTemplate, parameters),
+                FixDescription = FormatMessage(fixDescriptionTemplate, parameters),
                 IssueType = issueType,
                 ResourceType = ConfigurationResourceType.IdentityResource,
                 MessageParameters = parameters

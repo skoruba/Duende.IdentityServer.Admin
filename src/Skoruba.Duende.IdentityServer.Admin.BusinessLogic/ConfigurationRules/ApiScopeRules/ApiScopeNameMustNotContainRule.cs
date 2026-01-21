@@ -11,7 +11,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.A
 
 public class ApiScopeNameMustNotContainRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
+    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<ForbiddenConfig>(configuration);
 
@@ -43,6 +43,7 @@ public class ApiScopeNameMustNotContainRule : ConfigurationRuleValidatorBase, IC
                     ResourceId = scope.Id,
                     ResourceName = scope.Name,
                     Message = FormatMessage(messageTemplate, parameters),
+                    FixDescription = FormatMessage(fixDescriptionTemplate, parameters),
                     IssueType = issueType,
                     ResourceType = ConfigurationResourceType.ApiScope,
                     MessageParameters = parameters

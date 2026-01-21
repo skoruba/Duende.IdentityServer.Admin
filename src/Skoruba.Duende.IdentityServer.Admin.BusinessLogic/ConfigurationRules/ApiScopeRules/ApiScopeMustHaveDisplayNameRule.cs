@@ -11,7 +11,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.A
 
 public class ApiScopeMustHaveDisplayNameRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
+    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         return context.ApiScopes
             .Where(s => string.IsNullOrWhiteSpace(s.DisplayName))
@@ -20,6 +20,7 @@ public class ApiScopeMustHaveDisplayNameRule : ConfigurationRuleValidatorBase, I
                 ResourceId = s.Id,
                 ResourceName = s.Name,
                 Message = messageTemplate,
+                FixDescription = fixDescriptionTemplate,
                 IssueType = issueType,
                 ResourceType = ConfigurationResourceType.ApiScope
             })

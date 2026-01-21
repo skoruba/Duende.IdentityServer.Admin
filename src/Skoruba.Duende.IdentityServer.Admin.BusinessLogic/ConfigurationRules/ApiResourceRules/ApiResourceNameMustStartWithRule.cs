@@ -11,7 +11,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.A
 
 public class ApiResourceNameMustStartWithRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
+    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<PrefixConfig>(configuration);
 
@@ -54,6 +54,7 @@ public class ApiResourceNameMustStartWithRule : ConfigurationRuleValidatorBase, 
                     ResourceId = apiResource.Id,
                     ResourceName = apiResource.Name,
                     Message = FormatMessage(messageTemplate, parameters),
+                    FixDescription = FormatMessage(fixDescriptionTemplate, parameters),
                     IssueType = issueType,
                     ResourceType = ConfigurationResourceType.ApiResource,
                     MessageParameters = parameters

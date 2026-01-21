@@ -12,7 +12,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.S
 
 public class SecretIsExpiredInDaysRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
+    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<ExpirationConfig>(configuration);
         var warningDays = config.WarningDays ?? 30;
@@ -56,6 +56,7 @@ public class SecretIsExpiredInDaysRule : ConfigurationRuleValidatorBase, IConfig
                 ResourceId = client.Id,
                 ResourceName = client.ClientName ?? client.ClientId,
                 Message = FormatMessage(messageTemplate, parameters),
+                FixDescription = FormatMessage(fixDescriptionTemplate, parameters),
                 IssueType = isExpired ? ConfigurationIssueTypeView.Error : issueType,
                 ResourceType = ConfigurationResourceType.Client,
                 MessageParameters = parameters

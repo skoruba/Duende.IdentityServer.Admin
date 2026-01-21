@@ -11,7 +11,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.C
 
 public class ClientAccessTokenLifetimeTooLongRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
+    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<TokenLifetimeConfig>(configuration);
         var maxLifetime = config.MaxLifetimeSeconds > 0 ? config.MaxLifetimeSeconds : 3600; // Default 1 hour
@@ -34,6 +34,7 @@ public class ClientAccessTokenLifetimeTooLongRule : ConfigurationRuleValidatorBa
                 ResourceId = client.Id,
                 ResourceName = client.ClientName,
                 Message = FormatMessage(messageTemplate, parameters),
+                FixDescription = FormatMessage(fixDescriptionTemplate, parameters),
                 IssueType = issueType,
                 ResourceType = ConfigurationResourceType.Client,
                 MessageParameters = parameters

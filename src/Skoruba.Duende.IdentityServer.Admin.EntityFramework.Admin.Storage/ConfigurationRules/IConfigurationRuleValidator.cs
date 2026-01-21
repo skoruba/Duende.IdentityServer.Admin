@@ -11,5 +11,5 @@ public interface IConfigurationRuleValidator
     /// <summary>
     /// Validates using pre-loaded data to avoid N+1 queries
     /// </summary>
-    List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, ConfigurationIssueTypeView issueType);
+    List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType);
 }

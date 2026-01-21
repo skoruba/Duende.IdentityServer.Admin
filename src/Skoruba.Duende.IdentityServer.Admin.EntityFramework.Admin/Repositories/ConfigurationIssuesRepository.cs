@@ -64,12 +64,8 @@ public class ConfigurationIssuesRepository<TDbContext, TRulesDbContext> : IConfi
                         validationContext,
                         rule.Configuration,
                         rule.MessageTemplate,
+                        rule.FixDescription,
                         issueTypeView);
-
-                    foreach (var issue in ruleIssues)
-                    {
-                        issue.FixDescription = rule.FixDescription;
-                    }
 
                     if (ruleIssues.Count > 0)
                     {

@@ -11,7 +11,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.S
 
 public class ScopeIsUnusedRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
+    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<UnusedScopeConfig>(configuration);
         var excludeScopes = config.ExcludeScopes ?? new[] { "openid", "profile", "email", "address", "phone", "offline_access" };
@@ -69,6 +69,7 @@ public class ScopeIsUnusedRule : ConfigurationRuleValidatorBase, IConfigurationR
                     ResourceId = scope.Id,
                     ResourceName = scope.Name,
                     Message = FormatMessage(messageTemplate, parameters),
+                    FixDescription = FormatMessage(fixDescriptionTemplate, parameters),
                     IssueType = issueType,
                     ResourceType = ConfigurationResourceType.ApiScope,
                     MessageParameters = parameters

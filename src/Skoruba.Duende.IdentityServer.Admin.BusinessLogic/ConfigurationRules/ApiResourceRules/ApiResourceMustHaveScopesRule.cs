@@ -11,7 +11,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.A
 
 public class ApiResourceMustHaveScopesRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, ConfigurationIssueTypeView issueType)
+    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<ScopesConfig>(configuration);
         var minScopes = config.MinScopes ?? 1;
@@ -31,15 +31,16 @@ public class ApiResourceMustHaveScopesRule : ConfigurationRuleValidatorBase, ICo
                 ["requiredCount"] = minScopes.ToString()
             };
 
-            issues.Add(new ConfigurationIssueView
-            {
-                ResourceId = apiResource.Id,
-                ResourceName = apiResource.Name,
-                Message = FormatMessage(messageTemplate, parameters),
-                IssueType = issueType,
-                ResourceType = ConfigurationResourceType.ApiResource,
-                MessageParameters = parameters
-            });
+                issues.Add(new ConfigurationIssueView
+                {
+                    ResourceId = apiResource.Id,
+                    ResourceName = apiResource.Name,
+                    Message = FormatMessage(messageTemplate, parameters),
+                    FixDescription = FormatMessage(fixDescriptionTemplate, parameters),
+                    IssueType = issueType,
+                    ResourceType = ConfigurationResourceType.ApiResource,
+                    MessageParameters = parameters
+                });
         }
 
         return issues;
