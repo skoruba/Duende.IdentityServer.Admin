@@ -92,6 +92,11 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl)
         {
+            if (null != User && (User.Identity?.IsAuthenticated ?? false))
+            {
+                _logger.LogInformation($"user {User.Identity.Name} is already Authenticated, redirected to Home");
+                return RedirectToAction("Index", "Home");
+            }
             // build a model so we know what to show on the login page
             var vm = await BuildLoginViewModelAsync(returnUrl);
 
