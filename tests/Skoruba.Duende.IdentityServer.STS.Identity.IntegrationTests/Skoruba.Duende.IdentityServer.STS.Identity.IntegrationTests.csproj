@@ -10,7 +10,7 @@
     <ItemGroup>
         <PackageReference Include="FluentAssertions" Version="6.12.1" />
         <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
-        <PackageReference Include="Duende.IdentityModel" Version="7.1.0" />
+        <PackageReference Include="Duende.IdentityModel" Version="8.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.10" />
         <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="9.0.10" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
