@@ -9,7 +9,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Services;
 
 public static class SpaEndpointExtensions
 {
-    private static async Task ServeSpaIndexHtml(HttpContext context, string basePath, string title)
+    private static async Task ServeSpaIndexHtml(HttpContext context, string basePath)
     {
         var env = context.RequestServices.GetRequiredService<IWebHostEnvironment>();
         var fileProvider = env.WebRootFileProvider;
@@ -33,32 +33,29 @@ public static class SpaEndpointExtensions
             RegexOptions.IgnoreCase
         );
 
-        html = html.Replace("<!--TITLE-->", $"<title>{title}</title>");
-
         context.Response.ContentType = "text/html";
         await context.Response.WriteAsync(html);
     }
 
-    public static void MapSpa(this IEndpointRouteBuilder endpoints,
-        string basePath,
-        string title)
+    public static void MapSpa(this IEndpointRouteBuilder endpoints, string basePath)
     {
         if (basePath == "/")
         {
-            endpoints.MapFallback(async context => {
-                await ServeSpaIndexHtml(context, basePath, title);
+            endpoints.MapFallback(async context =>
+            {
+                await ServeSpaIndexHtml(context, basePath);
             });
         }
         else
         {
             endpoints.MapGet($"{basePath}index.html", async context =>
             {
-                await ServeSpaIndexHtml(context, basePath, title);
+                await ServeSpaIndexHtml(context, basePath);
             });
 
             endpoints.MapFallback($"{basePath}{{**rest}}", async context =>
             {
-                await ServeSpaIndexHtml(context, basePath, title);
+                await ServeSpaIndexHtml(context, basePath);
             });
         }
     }
