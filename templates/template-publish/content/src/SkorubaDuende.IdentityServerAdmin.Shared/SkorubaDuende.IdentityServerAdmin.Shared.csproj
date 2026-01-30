@@ -13,7 +13,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="9.0.10" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.10" />
 		<PackageReference Include="Sendgrid" Version="9.29.3" />
-		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity" Version="3.0.0-preview.17" />
+		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity" Version="3.0.0-preview.18" />
 	</ItemGroup>
 
 </Project>
