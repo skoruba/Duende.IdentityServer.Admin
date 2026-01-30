@@ -39,24 +39,14 @@ public static class SpaEndpointExtensions
 
     public static void MapSpa(this IEndpointRouteBuilder endpoints, string basePath)
     {
-        if (basePath == "/")
+        endpoints.MapGet("/index.html", async context =>
         {
-            endpoints.MapFallback(async context =>
-            {
-                await ServeSpaIndexHtml(context, basePath);
-            });
-        }
-        else
-        {
-            endpoints.MapGet($"{basePath}index.html", async context =>
-            {
-                await ServeSpaIndexHtml(context, basePath);
-            });
+            await ServeSpaIndexHtml(context, basePath);
+        });
 
-            endpoints.MapFallback($"{basePath}{{**rest}}", async context =>
-            {
-                await ServeSpaIndexHtml(context, basePath);
-            });
-        }
+        endpoints.MapFallback(async context =>
+        {
+            await ServeSpaIndexHtml(context, basePath);
+        });
     }
 }

@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>    
-    <Version>3.0.0-preview.18</Version>
+    <Version>3.0.0-preview.19</Version>
     <Authors>Jan Škoruba</Authors>
     <PackageTags>Duende IdentityServer Admin OpenIDConnect OAuth2 Identity</PackageTags>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>

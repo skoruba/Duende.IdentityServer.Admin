@@ -31,6 +31,8 @@ var app = builder.Build();
 app.UseApplicationForwardHeaders(builder.Configuration);
 app.UseApplicationSecurityHeaders();
 
+app.UseSkorubaAdminUI();
+
 app.UseStaticFiles();
 app.UseSerilogRequestLogging();
 app.UseRouting();
@@ -39,9 +41,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllerRoute(name: "default", pattern: "{controller}/{action=Index}/{id?}");
 
-app.UseSkorubaAdminUI();
-
 app.UseEndpoints(_ => { });
-app.MapFallbackToFile("/index.html");
 
 app.Run();

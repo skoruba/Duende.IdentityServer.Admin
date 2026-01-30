@@ -1,12 +1,12 @@
-import { getBaseHref } from "@/lib/utils";
+import { getBaseHref, normalizeBasePath } from "@/lib/utils";
 
 const joinUrl = (base: string, path: string): string => {
-  const normalizedBase = base.endsWith("/") ? base : `${base}/`;
+  const normalizedBase = normalizeBasePath(base);
   const normalizedPath = path.startsWith("/") ? path.slice(1) : path;
-  return `${normalizedBase}${normalizedPath}`;
+  return normalizedPath ? `${normalizedBase}${normalizedPath}` : normalizedBase;
 };
 
-const getSafeReturnUrl = (): string | null => {
+const getReturnUrl = (): string | null => {
   if (typeof window === "undefined") return null;
   const { pathname, search } = window.location;
   return `${pathname}${search}`;
@@ -15,7 +15,7 @@ const getSafeReturnUrl = (): string | null => {
 class AuthHelper {
   static getLoginUrl = (): string => {
     const loginUrl = joinUrl(getBaseHref(), "account/login");
-    const returnUrl = getSafeReturnUrl();
+    const returnUrl = getReturnUrl();
     return returnUrl
       ? `${loginUrl}?returnUrl=${encodeURIComponent(returnUrl)}`
       : loginUrl;

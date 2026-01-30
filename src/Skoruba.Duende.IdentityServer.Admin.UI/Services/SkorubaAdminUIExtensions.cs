@@ -15,6 +15,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Services
             var options = new SkorubaAdminUIOptions();
 
             configure?.Invoke(options);
+
+            options.AdminConfiguration.BasicConfiguration.BasePath =
+                BasePathHelper.Normalize(options.AdminConfiguration.BasicConfiguration.BasePath);
+
             services.AddSingleton(options);
 
             services.AddDistributedMemoryCache();
@@ -39,12 +43,15 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Services
                 throw new InvalidOperationException("UseSkorubaAdminUI method must be called on WebApplication.");
             }
 
-            webApp.MapSpa(options.AdminConfiguration.BasicConfiguration.BasePath);
+            var basePath = BasePathHelper.Normalize(options.AdminConfiguration.BasicConfiguration.BasePath);
+
+            BasePathPipeline.ConfigureBasePath(webApp, basePath);
+
+            webApp.MapSpa(basePath);
 
             webApp.AddRemoteApisProxy();
 
             return app;
         }
-
     }
 }
