@@ -16,7 +16,7 @@ Modern admin UI for **Duende IdentityServer** and **ASP.NET Core Identity**.
 - ✅ **Stable (production): v2.7.0**  
   https://github.com/skoruba/Duende.IdentityServer.Admin/tree/release/2.7.0
 
-- 🎉 **Next generation (v3 – preview)** – current prerelease: `3.0.0-preview.16`
+- 🎉 **Next generation (v3 – preview)** – current prerelease: `3.0.0-preview.17`
   - React + TypeScript + Tailwind CSS + shadcn/ui
   - .NET 9 backend REST API
   - New monitoring and wizard flows
@@ -79,6 +79,7 @@ Define and track configuration rules for clients, API resources, and identity re
 - .NET 9 SDK
 - Node.js 18+ and npm (required for the React client)
 - SQL Server (default LocalDB), PostgreSQL or MySQL
+- Duende IdentityServer 7.4.5
 
 > **Note:** Using older .NET versions may cause 502.5 errors on IIS or application startup failures.
 
@@ -92,7 +93,7 @@ Define and track configuration rules for clients, API resources, and identity re
 ### 1. Install the template
 
 ```sh
-dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::3.0.0-preview.16
+dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::3.0.0-preview.17
 ```
 
 ### 2. Create a new project

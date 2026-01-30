@@ -1,6 +1,6 @@
 # Changelog
 
-## [3.0.0-preview.16] – 2026-01-30
+## [3.0.0-preview.17] – 2026-01-30
 
 ### Added
 
@@ -22,6 +22,7 @@
 
 ### Changed
 
+- Updated Duende IdentityServer to 7.4.5
 - Updated solution structure for new frontend architecture
 - Major UX improvements for client and resource management
 - Improved form layouts and compact designs
