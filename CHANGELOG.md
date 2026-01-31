@@ -158,7 +158,7 @@
 - Audit logging via skoruba/AuditLogging
 - Docker support with nginx-proxy
 - Health checks for databases and IdentityServer
-- Multiple database providers (SQL Server, MySQL, PostgreSQL)
+- Multiple database providers (SQL Server, PostgreSQL)
 - External authentication providers (GitHub, Azure AD)
 - Two-Factor Authentication (2FA)
 - User registration and password reset

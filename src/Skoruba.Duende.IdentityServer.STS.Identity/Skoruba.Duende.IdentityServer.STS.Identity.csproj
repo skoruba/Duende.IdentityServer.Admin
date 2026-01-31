@@ -11,7 +11,6 @@
 
     <ItemGroup>
 		<PackageReference Include="AspNet.Security.OAuth.GitHub" Version="9.4.1" />
-		<PackageReference Include="AspNetCore.HealthChecks.MySql" Version="9.0.0" />
 		<PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="9.0.0" />
 		<PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="9.0.0" />
 		<PackageReference Include="AspNetCore.HealthChecks.UI" Version="9.0.0" />
@@ -124,7 +123,6 @@
     </ItemGroup>
 
 </Project>
-
 
 
 

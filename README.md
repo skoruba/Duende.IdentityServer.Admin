@@ -78,7 +78,7 @@ Define and track configuration rules for clients, API resources, and identity re
 
 - .NET 9 SDK
 - Node.js 18+ and npm (required for the React client)
-- SQL Server (default LocalDB), PostgreSQL or MySQL
+- SQL Server (default LocalDB) or PostgreSQL
 - Duende IdentityServer 7.4.5
 
 > **Note:** Using older .NET versions may cause 502.5 errors on IIS or application startup failures.
@@ -269,7 +269,6 @@ The solution uses the following `DbContext` classes:
 ### Database Providers
 
 - **SQL Server** (default)
-- **MySQL**
 - **PostgreSQL**
 
 Switch providers in `appsettings.json`:
@@ -294,12 +293,6 @@ Data Source=(LocalDb)\\MSSQLLocalDB;database=DuendeIdentityServerAdmin;trusted_c
 Server=localhost;Port=5432;Database=DuendeIdentityServerAdmin;User Id=sa;Password=#;
 ```
 
-**MySQL:**
-
-```
-server=localhost;database=DuendeIdentityServerAdmin;user=root;password=#
-```
-
 ### Running Entity Framework Migrations
 
 > **Note:** Initial migrations are included in the repository.
@@ -313,7 +306,7 @@ Use the PowerShell script in `build/add-migrations.ps1`:
 **Arguments:**
 
 - `--migration` – Migration name
-- `--migrationProviderName` – Provider type (choices: `All`, `SqlServer`, `MySql`, `PostgreSQL`)
+- `--migrationProviderName` – Provider type (choices: `All`, `SqlServer`, `PostgreSQL`)
 
 ### Seed Data
 
@@ -632,7 +625,6 @@ The solution contains **unit and integration tests** for all major components.
 - `Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity` – Identity repositories
 - `Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared` – DbContexts
 - `Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer` – SQL Server migrations
-- `Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql` – MySQL migrations
 - `Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL` – PostgreSQL migrations
 
 ### Shared

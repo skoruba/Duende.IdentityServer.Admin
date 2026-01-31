@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Skoruba.Duende.IdentityServer.Admin.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySql;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.PostgreSQL;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.SqlServer;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
@@ -56,11 +55,6 @@ public static class StartupService
                 break;
             case DatabaseProviderType.PostgreSQL:
                 services.AddDataProtectionDbContextNpgSql<TDataProtectionDbContext>(
-                    connectionStrings.DataProtectionDbConnection,
-                    databaseMigrations.DataProtectionDbMigrationsAssembly);
-                break;
-            case DatabaseProviderType.MySql:
-                services.AddDataProtectionDbContextMySql<TDataProtectionDbContext>(
                     connectionStrings.DataProtectionDbConnection,
                     databaseMigrations.DataProtectionDbMigrationsAssembly);
                 break;

@@ -17,7 +17,6 @@ COPY ["src/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions/Skorub
 COPY ["src/Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared/Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared.csproj", "src/Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared/"]
 COPY ["src/Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity/Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.csproj", "src/Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity/"]
 COPY ["src/Skoruba.Duende.IdentityServer.Admin.BusinessLogic/Skoruba.Duende.IdentityServer.Admin.BusinessLogic.csproj", "src/Skoruba.Duende.IdentityServer.Admin.BusinessLogic/"]
-COPY ["src/Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql/Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.csproj", "src/Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql/"]
 COPY ["src/Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL/Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.csproj", "src/Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL/"]
 COPY ["src/Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer/Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.csproj", "src/Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer/"]
 COPY ["src/Skoruba.Duende.IdentityServer.Admin.UI.Api/Skoruba.Duende.IdentityServer.Admin.UI.Api.csproj", "src/Skoruba.Duende.IdentityServer.Admin.UI.Api/"]

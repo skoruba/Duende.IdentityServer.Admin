@@ -98,7 +98,6 @@ dotnet remove ./$templateSrc/Skoruba.Duende.IdentityServer.Shared/Skoruba.Duende
 dotnet remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.csproj
 
 # DB specific projects - remove Admin Storage project references
-dotnet remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql/Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.csproj
 dotnet remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer/Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.csproj
 dotnet remove ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL/Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.csproj reference ..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.csproj
 
@@ -125,7 +124,6 @@ dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.Shared/Skoruba.Duende.Id
 dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj package Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage -v $packagesVersions
 
 # DB specific projects - add Admin Storage NuGet package
-dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql/Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.csproj package Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage -v $packagesVersions
 dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer/Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.csproj package Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage -v $packagesVersions
 dotnet add ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL/Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.csproj package Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage -v $packagesVersions
 
@@ -255,10 +253,6 @@ foreach ($file in $templateFiles) {
 
     (Get-Content $file.PSPath -raw -Encoding UTF8) |
     Foreach-Object { $_ -replace "Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared", "SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared" } |
-    Out-File $file.PSPath -Encoding UTF8 -NoNewline
-
-    (Get-Content $file.PSPath -raw -Encoding UTF8) |
-    Foreach-Object { $_ -replace "Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql", "SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql" } |
     Out-File $file.PSPath -Encoding UTF8 -NoNewline
 
     (Get-Content $file.PSPath -raw -Encoding UTF8) |

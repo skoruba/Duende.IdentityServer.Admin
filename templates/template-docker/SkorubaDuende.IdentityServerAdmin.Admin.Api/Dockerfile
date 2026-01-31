@@ -11,7 +11,6 @@ COPY ["src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared/Skorub
 COPY ["src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer.csproj", "src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer/"]
 COPY ["src/SkorubaDuende.IdentityServerAdmin.Shared/SkorubaDuende.IdentityServerAdmin.Shared.csproj", "src/SkorubaDuende.IdentityServerAdmin.Shared/"]
 COPY ["src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL.csproj", "src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL/"]
-COPY ["src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql.csproj", "src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql/"]
 RUN dotnet restore -a $TARGETARCH "src/SkorubaDuende.IdentityServerAdmin.Admin.Api/SkorubaDuende.IdentityServerAdmin.Admin.Api.csproj"
 COPY . .
 WORKDIR "/src/src/SkorubaDuende.IdentityServerAdmin.Admin.Api"

@@ -10,7 +10,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AspNetCore.HealthChecks.MySql" Version="9.0.0" />
         <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="9.0.0" />
         <PackageReference Include="AspNetCore.HealthChecks.OpenIdConnectServer" Version="9.0.0" />
         <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="9.0.0" />

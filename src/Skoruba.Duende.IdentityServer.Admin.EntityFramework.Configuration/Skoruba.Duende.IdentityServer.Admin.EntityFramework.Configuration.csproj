@@ -10,8 +10,6 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.10" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
 		<PackageReference Include="Skoruba.AuditLogging.EntityFramework" Version="2.0.0" />
-		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
-		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -20,7 +18,6 @@
 	</ItemGroup>
 
 </Project>
-
 
 
 
