@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.DbContexts;
@@ -11,9 +12,11 @@ using SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.DbContexts;
 namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL.Migrations.AdminConfiguration
 {
     [DbContext(typeof(AdminConfigurationDbContext))]
-    partial class AdminConfigurationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260131083709_UpdateConfigurationRuleTimestamps")]
+    partial class UpdateConfigurationRuleTimestamps
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

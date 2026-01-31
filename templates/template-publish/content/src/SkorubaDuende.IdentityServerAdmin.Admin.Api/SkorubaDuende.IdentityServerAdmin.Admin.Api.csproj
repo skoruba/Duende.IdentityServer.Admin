@@ -32,7 +32,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.UI.Api" Version="3.0.0-preview.19" />
+        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.UI.Api" Version="3.0.0-preview.20" />
     </ItemGroup>
 
     
