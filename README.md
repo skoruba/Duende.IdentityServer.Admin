@@ -650,6 +650,10 @@ For detailed release history and upcoming features, see [CHANGELOG.md](CHANGELOG
 
 - Passkeys support ([251](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/251))
 
+### 3.2.0
+
+- Add support for importing/exporting IdentityServer data in JSON format ([20](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/20))
+
 ### 4.0.0
 
 - DTO refactoring

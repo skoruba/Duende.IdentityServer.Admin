@@ -181,26 +181,3 @@
 
 For history before the Duende rebranding, see the IdentityServer4.Admin repository history at:  
 https://github.com/skoruba/IdentityServer4.Admin
-
----
-
-## Upcoming Releases
-
-### [3.1.0] – Planned
-
-- Passkeys support
-
-### [4.0.0] – Planned
-
-- DTO refactoring
-- Removal of AutoMapper and FluentAssertions
-- Additional translations for the Admin UI
-
-### [5.0.0] – Planned
-
-- Claims management UI ([#22](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/22))
-- Identity management improvements – added options for loading a custom Identity schema
-
-### [6.0.0] – Planned
-
-- Minimal API rewrite using Vertical Slice Architecture (VSA)
