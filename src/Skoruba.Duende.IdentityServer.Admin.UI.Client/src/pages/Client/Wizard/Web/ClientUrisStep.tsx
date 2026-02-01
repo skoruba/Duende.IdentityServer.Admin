@@ -50,7 +50,7 @@ export const ClientUrisStep = () => {
   useDirtyFormState(form, "uris");
 
   const onSubmit: SubmitHandler<UrisFormData> = (data) => {
-    setFormData((prev: any) => ({ ...prev, ...data }));
+    setFormData((prev) => ({ ...prev, ...data }));
     onHandleNext();
   };
 

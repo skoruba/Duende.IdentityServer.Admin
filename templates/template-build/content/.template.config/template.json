@@ -68,9 +68,6 @@
       "path": "src/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj"
     },
     {
-      "path": "src/Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql/Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.csproj"
-    },
-    {
       "path": "src/Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL/Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.csproj"
     },
     {
@@ -84,7 +81,7 @@
     {
       "actionId": "D396686C-DE0E-4DE6-906D-291CD29FC5DE",
       "args": {
-        "primaryOutputIndexes": "0;1;2;3;4;5;6;7"
+        "primaryOutputIndexes": "0;1;2;3;4;5;6"
       },
       "continueOnError": false,
       "manualInstructions": [

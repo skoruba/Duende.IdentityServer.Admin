@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Duende.AccessTokenManagement.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -73,10 +74,11 @@ public static class IdentityServices
                     return;
                 }
 
-                var token = await context.GetUserAccessTokenAsync();
-                if (!string.IsNullOrEmpty(token.AccessToken))
+                var tokenResult = await context.GetUserAccessTokenAsync();
+                var accessToken = tokenResult.Succeeded ? tokenResult.Token?.AccessToken.ToString() : null;
+                if (!string.IsNullOrEmpty(accessToken))
                 {
-                    context.Request.Headers.Authorization = $"Bearer {token.AccessToken}";
+                    context.Request.Headers.Authorization = $"Bearer {accessToken}";
                 }
 
                 await next();

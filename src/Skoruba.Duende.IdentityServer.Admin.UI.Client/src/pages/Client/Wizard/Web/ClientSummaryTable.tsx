@@ -116,8 +116,7 @@ const ClientSummaryTable = () => {
                 return (
                   <TableRow className="flex flex-row" key={key}>
                     <TableCell className="flex-1 p-2">
-                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      {t(meta.labelKey as any)}
+                      {String(t(meta.labelKey as never))}
                     </TableCell>
                     <TableCell className="flex-1 p-2">
                       {meta.format ? meta.format(value, t) : String(value)}

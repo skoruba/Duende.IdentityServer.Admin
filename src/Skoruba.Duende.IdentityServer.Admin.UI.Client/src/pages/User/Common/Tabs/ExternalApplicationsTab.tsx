@@ -11,6 +11,7 @@ import { useState } from "react";
 import DeleteDialog from "@/components/DeleteDialog/DeleteDialog";
 import Loading from "@/components/Loading/Loading";
 import { CardWrapper } from "@/components/CardWrapper/CardWrapper";
+import { client } from "@skoruba/duende.identityserver.admin.api.client";
 
 type Props = {
   userId: string;
@@ -59,11 +60,18 @@ const ExternalApplicationsTab: React.FC<Props> = ({ userId }) => {
     },
     {
       id: "actions",
-      cell: ({ row }: any) => (
+      cell: ({
+        row,
+      }: {
+        row: { original: client.UserProviderApiDtoOfString };
+      }) => (
         <Button
           variant="ghost"
           onClick={() =>
-            openDeleteDialog(row.original.provider, row.original.providerUserId)
+            openDeleteDialog(
+              row.original.loginProvider ?? "",
+              row.original.providerKey ?? ""
+            )
           }
           className="text-red-500"
         >

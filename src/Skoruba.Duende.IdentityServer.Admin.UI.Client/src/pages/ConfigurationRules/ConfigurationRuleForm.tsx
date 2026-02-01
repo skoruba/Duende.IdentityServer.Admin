@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,23 +37,22 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
   const [selectedRuleType, setSelectedRuleType] = React.useState<
     client.ConfigurationRuleType | ""
   >("");
-  const requiredFieldMessage = (label: string) =>
-    t("Validation.FieldRequired", { field: label });
+  const requiredFieldMessage = useCallback(
+    (label: string) => t("Validation.FieldRequired", { field: label }),
+    [t]
+  );
 
-  // Get current metadata based on selected or existing rule type
   const selectedTypeValue = selectedRuleType || rule?.ruleType;
   const currentMetadata = metadata?.find(
     (m) => String(m.ruleType) === String(selectedTypeValue)
   );
 
-  // Check for duplicate rule type
   const isDuplicate =
     !isEditMode &&
     selectedRuleType &&
     existingRules.some((r) => r.ruleType === selectedRuleType);
 
-  // Build dynamic schema based on current metadata
-  const buildSchema = () => {
+  const buildSchema = useCallback(() => {
     const baseSchema = {
       isEnabled: z.boolean(),
       issueType: z.nativeEnum(client.ConfigurationIssueType),
@@ -86,16 +85,18 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
           break;
 
         case "number":
-          let numberSchema = z.number();
-          if (param.minValue !== undefined) {
-            numberSchema = numberSchema.min(param.minValue);
+          {
+            let numberSchema = z.number();
+            if (param.minValue !== undefined) {
+              numberSchema = numberSchema.min(param.minValue);
+            }
+            if (param.maxValue !== undefined) {
+              numberSchema = numberSchema.max(param.maxValue);
+            }
+            parameterFields[paramName] = param.required
+              ? numberSchema
+              : numberSchema.optional();
           }
-          if (param.maxValue !== undefined) {
-            numberSchema = numberSchema.max(param.maxValue);
-          }
-          parameterFields[paramName] = param.required
-            ? numberSchema
-            : numberSchema.optional();
           break;
 
         case "boolean":
@@ -122,9 +123,9 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
       ...baseSchema,
       ...parameterFields,
     });
-  };
+  }, [currentMetadata, requiredFieldMessage, t]);
 
-  const schema = useMemo(() => buildSchema(), [currentMetadata]);
+  const schema = useMemo(() => buildSchema(), [buildSchema]);
   type FormData = z.infer<typeof schema>;
 
   const form = useForm<FormData>({
@@ -132,20 +133,17 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
     mode: "onSubmit",
   });
 
-  // Initialize form when rule changes
   useEffect(() => {
     if (rule && isEditMode) {
       setSelectedRuleType(rule.ruleType);
 
-      // Parse configuration JSON
-      let configObject: any = {};
+      let configObject: Record<string, unknown> = {};
       try {
         configObject = rule.configuration ? JSON.parse(rule.configuration) : {};
       } catch {
         configObject = {};
       }
 
-      // Initialize array parameters with empty arrays if not present
       currentMetadata?.parameters?.forEach((param) => {
         if (
           param.type === "array" &&
@@ -163,7 +161,6 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
         ...configObject,
       });
     } else if (!rule && !selectedRuleType) {
-      // Only reset when opening a new form (not when user is selecting a rule type)
       form.reset({
         isEnabled: true,
         issueType: client.ConfigurationIssueType.Recommendation,
@@ -171,12 +168,11 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
         fixDescription: "",
       });
     }
-  }, [rule, isEditMode]);
+  }, [rule, isEditMode, currentMetadata?.parameters, form, selectedRuleType]);
 
-  // Update form when rule type changes (add new mode)
   useEffect(() => {
     if (selectedRuleType && !isEditMode && currentMetadata) {
-      let configObject: any = {};
+      let configObject: Record<string, unknown> = {};
       try {
         configObject = currentMetadata.defaultConfiguration
           ? JSON.parse(currentMetadata.defaultConfiguration)
@@ -185,7 +181,6 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
         configObject = {};
       }
 
-      // Initialize array parameters with empty arrays if not present
       currentMetadata.parameters?.forEach((param) => {
         if (
           param.type === "array" &&
@@ -203,7 +198,7 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
         ...configObject,
       });
     }
-  }, [selectedRuleType, isEditMode, currentMetadata]);
+  }, [selectedRuleType, isEditMode, currentMetadata, form]);
 
   const handleFormSubmit = (data: FormData) => {
     if (!isEditMode && !selectedRuleType) return;
@@ -221,7 +216,6 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
       : rule?.resourceType;
     if (!resolvedResourceType) return;
 
-    // Extract configuration parameters
     const configFields: Record<string, unknown> = {};
     currentMetadata?.parameters?.forEach((param) => {
       const paramName = param.name || "";

@@ -160,8 +160,7 @@ const ClientWebSummaryTree = () => {
       const meta = enforcedFieldMeta[key];
       if (!meta) continue;
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const label = String(t(meta.labelKey as any));
+      const label = String(t(meta.labelKey as never));
       let formatted: string;
       if (typeof meta.format === "function") {
         formatted = meta.format(rawValue, t);

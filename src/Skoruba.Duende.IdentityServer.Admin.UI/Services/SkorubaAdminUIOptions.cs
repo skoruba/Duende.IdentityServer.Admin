@@ -4,5 +4,5 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Services;
 
 public class SkorubaAdminUIOptions
 {
-    public AdminConfiguration AdminConfiguration { get; set; }
+    public AdminConfiguration AdminConfiguration { get; set; } = new();
 }

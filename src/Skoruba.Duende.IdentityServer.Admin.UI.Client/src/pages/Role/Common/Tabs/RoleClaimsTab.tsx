@@ -79,7 +79,7 @@ const RoleClaimsTab: React.FC<Props> = ({ roleId }) => {
     },
     {
       id: "actions",
-      cell: ({ row }: any) => (
+      cell: ({ row }: { row: { original: { claimId: number } } }) => (
         <Button
           variant="ghost"
           onClick={() => openDeleteDialog(row.original.claimId)}

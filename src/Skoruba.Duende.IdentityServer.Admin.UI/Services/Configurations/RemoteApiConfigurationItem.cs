@@ -2,9 +2,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Services.Configurations;
 
 public class RemoteApiConfigurationItem
 {
-    public required string ApiName { get; set; }
+    public string ApiName { get; set; } = string.Empty;
 
-    public required string RemoteUrl { get; set; }
+    public string RemoteUrl { get; set; } = string.Empty;
 
     public bool UseCsrfProtection { get; set; } = true;
 }

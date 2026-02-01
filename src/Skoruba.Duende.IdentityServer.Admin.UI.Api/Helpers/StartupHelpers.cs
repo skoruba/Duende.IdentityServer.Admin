@@ -3,7 +3,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Reflection;
+using NetIPNetwork = System.Net.IPNetwork;
 using Duende.IdentityServer.EntityFramework.Options;
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -28,7 +30,6 @@ using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySql;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.PostgreSQL;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.SqlServer;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Helpers;
@@ -184,9 +185,6 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
                     break;
                 case DatabaseProviderType.PostgreSQL:
                     services.RegisterNpgSqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAdminConfigurationDbContext, TAuditLog>(connectionStrings, databaseMigrationsConfiguration);
-                    break;
-                case DatabaseProviderType.MySql:
-                    services.RegisterMySqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAdminConfigurationDbContext, TAuditLog>(connectionStrings, databaseMigrationsConfiguration);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(databaseProvider.ProviderType), $@"The value needs to be one of {string.Join(", ", Enum.GetNames(typeof(DatabaseProviderType)))}.");
@@ -349,15 +347,6 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
                             .AddNpgSql(dataProtectionDbConnectionString, name: "DataProtectionDb",
                                 healthQuery: $"SELECT * FROM \"{dataProtectionTableName}\"  LIMIT 1");
                         break;
-                    case DatabaseProviderType.MySql:
-                        healthChecksBuilder
-                            .AddMySql(configurationDbConnectionString, name: "ConfigurationDb")
-                            .AddMySql(persistedGrantsDbConnectionString, name: "PersistentGrantsDb")
-                            .AddMySql(identityDbConnectionString, name: "IdentityDb")
-                            .AddMySql(logDbConnectionString, name: "LogDb")
-                            .AddMySql(auditLogDbConnectionString, name: "AuditLogDb")
-                            .AddMySql(dataProtectionDbConnectionString, name: "DataProtectionDb");
-                        break;
                     default:
                         throw new NotImplementedException($"Health checks not defined for database provider {databaseProvider.ProviderType}");
                 }
@@ -381,7 +370,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
                 if (forwardedHeadersConfig.AllowAll)
                 {
                     // Development mode: allow all proxies and networks (insecure)
-                    forwardingOptions.KnownNetworks.Clear();
+                    forwardingOptions.KnownIPNetworks.Clear();
                     forwardingOptions.KnownProxies.Clear();
                 }
                 else
@@ -401,15 +390,15 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
 
                     if (forwardedHeadersConfig.KnownNetworks != null && forwardedHeadersConfig.KnownNetworks.Count > 0)
                     {
-                        forwardingOptions.KnownNetworks.Clear();
+                        forwardingOptions.KnownIPNetworks.Clear();
                         foreach (var network in forwardedHeadersConfig.KnownNetworks)
                         {
                             var parts = network.Split('/');
                             if (parts.Length == 2 &&
-                                System.Net.IPAddress.TryParse(parts[0], out var prefix) &&
+                                IPAddress.TryParse(parts[0], out var prefix) &&
                                 int.TryParse(parts[1], out var prefixLength))
                             {
-                                forwardingOptions.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(prefix, prefixLength));
+                                forwardingOptions.KnownIPNetworks.Add(new NetIPNetwork(prefix, prefixLength));
                             }
                         }
                     }

@@ -11,7 +11,7 @@ import {
 export const useTrackErrorState = (
   onValidation: (hasError: boolean) => void,
   errors: FieldErrors,
-  values: any
+  values: FieldValues
 ) => {
   useEffect(() => {
     const hasErrors = Object.keys(errors).length > 0;
@@ -19,7 +19,7 @@ export const useTrackErrorState = (
   }, [values, onValidation, errors]);
 };
 
-export const useDirtyReset = <T extends {}>(
+export const useDirtyReset = <T extends Record<string, unknown>>(
   form: UseFormReturn<T>,
   formData: T | undefined,
   defaultValues: T

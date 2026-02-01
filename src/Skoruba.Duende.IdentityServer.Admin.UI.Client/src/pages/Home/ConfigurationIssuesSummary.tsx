@@ -28,7 +28,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ConfigurationIssuesUrl, ConfigurationRulesUrl } from "@/routing/Urls";
 import Loading from "@/components/Loading/Loading";
-import { getConfigurationIssues } from "@/services/DashboardService";
+import { useConfigurationIssuesSummary } from "@/services/DashboardService";
 
 const LEGEND_STYLES = {
   errors: {
@@ -61,7 +61,7 @@ function LegendItem({
 }: {
   variant: keyof typeof LEGEND_STYLES;
   label: string;
-  icon: any;
+  icon: React.ComponentType<{ className?: string }>;
   count?: number;
 }) {
   const styles = LEGEND_STYLES[variant];
@@ -86,7 +86,7 @@ export function ConfigurationIssuesSummary() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const { data, isLoading } = getConfigurationIssues();
+  const { data, isLoading } = useConfigurationIssuesSummary();
 
   const errors = data?.errors ?? 0;
   const warnings = data?.warnings ?? 0;

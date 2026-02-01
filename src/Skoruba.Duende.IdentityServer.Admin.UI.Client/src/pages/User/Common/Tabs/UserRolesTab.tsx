@@ -72,10 +72,10 @@ const UserRolesTab: React.FC<Props> = ({ userId }) => {
     },
     {
       id: "actions",
-      cell: ({ row }: any) => (
+      cell: ({ row }: { row: { original: { id?: string } } }) => (
         <Button
           variant="ghost"
-          onClick={() => openDeleteDialog(row.original.id)}
+          onClick={() => openDeleteDialog(row.original.id ?? "")}
           className="text-red-500"
         >
           <Trash className="h-4 w-4" />

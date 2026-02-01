@@ -53,7 +53,6 @@ const ConfigurationRuleModal: React.FC<ConfigurationRuleModalProps> = ({
     },
     {
       onSuccess: () => {
-        // Invalidate configuration issues cache
         queryClient.invalidateQueries([queryKeys.configurationIssues]);
         queryClient.invalidateQueries([queryKeys.configurationIssuesSummary]);
         onSuccess();

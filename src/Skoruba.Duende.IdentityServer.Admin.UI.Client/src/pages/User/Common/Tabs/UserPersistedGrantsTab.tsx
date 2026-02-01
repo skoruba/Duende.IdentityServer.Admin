@@ -10,7 +10,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import DeleteDialog from "@/components/DeleteDialog/DeleteDialog";
 import Loading from "@/components/Loading/Loading";
-import { PersistedGrant } from "@/models/Users/UserModels";
+import { client } from "@skoruba/duende.identityserver.admin.api.client";
 import { usePaginationTable } from "@/components/DataTable/usePaginationTable";
 import useModal from "@/hooks/modalHooks";
 import { useState } from "react";
@@ -27,9 +27,8 @@ const UserPersistedGrantsTab: React.FC<Props> = ({ userId }) => {
   const deleteModal = useModal();
   const deleteAllModal = useModal();
 
-  const [grantToDelete, setGrantToDelete] = useState<PersistedGrant | null>(
-    null
-  );
+  const [grantToDelete, setGrantToDelete] =
+    useState<client.PersistedGrantApiDto | null>(null);
 
   const { data, isLoading } = useUserPersistedGrants(
     userId,
@@ -39,14 +38,14 @@ const UserPersistedGrantsTab: React.FC<Props> = ({ userId }) => {
   const deleteMutation = useDeletePersistedGrant();
   const deleteAllMutation = useDeleteAllPersistedGrantsForUser();
 
-  const openDeleteDialog = (grant: PersistedGrant) => {
+  const openDeleteDialog = (grant: client.PersistedGrantApiDto) => {
     setGrantToDelete(grant);
     deleteModal.openModal();
   };
 
   const confirmDelete = () => {
     if (!grantToDelete) return;
-    deleteMutation.mutate(grantToDelete.key, {
+    deleteMutation.mutate(grantToDelete.key ?? "", {
       onSuccess: () => {
         toast({
           title: t("Actions.Hooray"),
@@ -82,7 +81,7 @@ const UserPersistedGrantsTab: React.FC<Props> = ({ userId }) => {
     {
       accessorKey: "creationTime",
       header: t("User.PersistedGrants.CreationTime"),
-      cell: ({ row }: any) =>
+      cell: ({ row }: { row: { original: client.PersistedGrantApiDto } }) =>
         row.original.creationTime
           ? new Date(row.original.creationTime).toLocaleString()
           : "-",
@@ -90,14 +89,14 @@ const UserPersistedGrantsTab: React.FC<Props> = ({ userId }) => {
     {
       accessorKey: "expiration",
       header: t("User.PersistedGrants.Expiration"),
-      cell: ({ row }: any) =>
+      cell: ({ row }: { row: { original: client.PersistedGrantApiDto } }) =>
         row.original.expiration
           ? new Date(row.original.expiration).toLocaleString()
           : "-",
     },
     {
       id: "actions",
-      cell: ({ row }: any) => (
+      cell: ({ row }: { row: { original: client.PersistedGrantApiDto } }) => (
         <Button
           type="button"
           variant="ghost"

@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Description>Entity Framework layer for admin features</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.2" />
   </ItemGroup>
 
   <ItemGroup>

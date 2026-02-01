@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
+using System.Net;
+using NetIPNetwork = System.Net.IPNetwork;
 using Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration;
 
 namespace Skoruba.Duende.IdentityServer.Admin.UI.Services;
@@ -41,7 +43,7 @@ public static class StartupServices
             if (forwardedHeadersConfig.AllowAll)
             {
                 // Development mode: allow all proxies and networks (insecure)
-                forwardingOptions.KnownNetworks.Clear();
+                forwardingOptions.KnownIPNetworks.Clear();
                 forwardingOptions.KnownProxies.Clear();
             }
             else
@@ -61,7 +63,7 @@ public static class StartupServices
 
                 if (forwardedHeadersConfig.KnownNetworks != null && forwardedHeadersConfig.KnownNetworks.Count > 0)
                 {
-                    forwardingOptions.KnownNetworks.Clear();
+                    forwardingOptions.KnownIPNetworks.Clear();
                     foreach (var network in forwardedHeadersConfig.KnownNetworks)
                     {
                         var parts = network.Split('/');
@@ -69,7 +71,7 @@ public static class StartupServices
                             System.Net.IPAddress.TryParse(parts[0], out var prefix) &&
                             int.TryParse(parts[1], out var prefixLength))
                         {
-                            forwardingOptions.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(prefix, prefixLength));
+                            forwardingOptions.KnownIPNetworks.Add(new NetIPNetwork(prefix, prefixLength));
                         }
                     }
                 }

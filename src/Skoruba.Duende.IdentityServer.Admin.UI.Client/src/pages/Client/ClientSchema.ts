@@ -7,6 +7,7 @@ import { z } from "zod";
 import { ClientWizardFormSummaryData } from "./Wizard/Web/ClientSummaryStep";
 import { DPoPMode, GrantType } from "@/models/Clients/ClientModels";
 import { t } from "i18next";
+import { urlValidationSchema } from "./Common/UrlListValidatorSchema";
 
 const DualListTypeSchema = z.object({
   id: z.string(),
@@ -14,21 +15,25 @@ const DualListTypeSchema = z.object({
 });
 
 export const formSchema = z.object({
-  clientId: z.string().min(
-    1,
-    t("Validation.FieldRequired", { field: t("Client.Label.ClientId_Label") })
-  ),
+  clientId: z
+    .string()
+    .min(
+      1,
+      t("Validation.FieldRequired", { field: t("Client.Label.ClientId_Label") })
+    ),
   clientName: z.string().min(
     1,
-    t("Validation.FieldRequired", { field: t("Client.Label.ClientName_Label") })
+    t("Validation.FieldRequired", {
+      field: t("Client.Label.ClientName_Label"),
+    })
   ),
   description: z.string().optional(),
   enabled: z.boolean().optional(),
-  redirectUris: z.array(z.string()).optional(),
-  postLogoutRedirectUris: z.array(z.string()).optional(),
-  frontChannelLogoutUri: z.string().optional(),
+  redirectUris: z.array(urlValidationSchema(t)).optional(),
+  postLogoutRedirectUris: z.array(urlValidationSchema(t)).optional(),
+  frontChannelLogoutUri: urlValidationSchema(t).or(z.literal("")).optional(),
   frontChannelLogoutSessionRequired: z.boolean().optional(),
-  backChannelLogoutUri: z.string().optional(),
+  backChannelLogoutUri: urlValidationSchema(t).or(z.literal("")).optional(),
   backChannelLogoutSessionRequired: z.boolean().optional(),
   allowedCorsOrigins: z.array(z.string()).optional(),
   allowedScopes: z.array(DualListTypeSchema).optional(),
@@ -288,26 +293,27 @@ export const mapFormDataToCreateClient = (
 ): IClientApiDto => {
   return {
     id: 0,
-    clientId: formData.clientId || clientDefaultValues.clientId,
-    clientName: formData.clientName || clientDefaultValues.clientName,
-    description: formData.description || clientDefaultValues.description,
-    requireConsent: formData.requireConsent ?? false,
-    redirectUris: formData.redirectUris || [],
+    clientId: formData.clientId ?? clientDefaultValues.clientId,
+    clientName: formData.clientName ?? clientDefaultValues.clientName,
+    description: formData.description ?? clientDefaultValues.description,
+    requireConsent:
+      formData.requireConsent ?? clientDefaultValues.requireConsent!,
+    redirectUris: formData.redirectUris ?? clientDefaultValues.redirectUris,
     postLogoutRedirectUris: formData.logoutUri ? [formData.logoutUri] : [],
-    allowedScopes: (formData.scopes || []).map((scope) => scope.id),
+    allowedScopes: (formData.scopes ?? []).map((scope) => scope.id),
     allowedGrantTypes: grantTypes,
     allowedCorsOrigins: [],
-    requireDPoP: formData.requireDPoP || clientDefaultValues.requireDPoP!,
+    requireDPoP: formData.requireDPoP ?? clientDefaultValues.requireDPoP!,
     requirePushedAuthorization:
-      formData.requirePushedAuthorization ||
+      formData.requirePushedAuthorization ??
       clientDefaultValues.requirePushedAuthorization!,
     allowOfflineAccess:
-      formData.allowOfflineAccess || clientDefaultValues.allowOfflineAccess!,
-    requirePkce: formData.requirePkce || clientDefaultValues.requirePkce!,
+      formData.allowOfflineAccess ?? clientDefaultValues.allowOfflineAccess!,
+    requirePkce: formData.requirePkce ?? clientDefaultValues.requirePkce!,
     requireClientSecret:
-      formData.requireClientSecret || clientDefaultValues.requireClientSecret!,
+      formData.requireClientSecret ?? clientDefaultValues.requireClientSecret!,
     authorizationCodeLifetime:
-      formData.authorizationCodeLifetime ||
+      formData.authorizationCodeLifetime ??
       clientDefaultValues.authorizationCodeLifetime!,
 
     absoluteRefreshTokenLifetime:
@@ -361,22 +367,24 @@ export const mapFormDataToCreateClient = (
     allowedIdentityTokenSigningAlgorithms:
       clientDefaultValues.allowedIdentityTokenSigningAlgorithms!,
     userSsoLifetime: clientDefaultValues.userSsoLifetime,
-    claims: clientDefaultValues.claims?.map(
-      (claim) =>
-        new client.ClientClaimApiDto({
-          id: claim.id,
-          value: claim.value,
-          type: claim.key,
-        })
-    ),
-    properties: formData.clientProperties?.map(
-      (property) =>
-        new client.ClientPropertyApiDto({
-          id: 0,
-          key: property.key,
-          value: property.value,
-        })
-    ),
+    claims:
+      clientDefaultValues.claims?.map(
+        (claim) =>
+          new client.ClientClaimApiDto({
+            id: claim.id,
+            value: claim.value,
+            type: claim.key,
+          })
+      ) ?? [],
+    properties:
+      formData.clientProperties?.map(
+        (property) =>
+          new client.ClientPropertyApiDto({
+            id: 0,
+            key: property.key,
+            value: property.value,
+          })
+      ) ?? [],
     updated: undefined,
     lastAccessed: undefined,
     nonEditable: false,
@@ -427,42 +435,49 @@ export const mapFormDataToEditClient = (
     requirePkce: formData.requirePkce!,
     updateAccessTokenClaimsOnRefresh:
       formData.updateAccessTokenClaimsOnRefresh!,
-    postLogoutRedirectUris: formData.postLogoutRedirectUris?.length
-      ? formData.postLogoutRedirectUris
-      : undefined,
-    identityProviderRestrictions: formData.identityProviderRestrictions?.length
-      ? formData.identityProviderRestrictions
-      : undefined,
-    redirectUris: formData.redirectUris?.length
-      ? formData.redirectUris
-      : undefined,
-    allowedCorsOrigins: formData.allowedCorsOrigins?.length
-      ? formData.allowedCorsOrigins
-      : undefined,
-    allowedGrantTypes: formData.allowedGrantTypes?.map((grant) => grant.id),
-    allowedScopes: formData.allowedScopes?.length
-      ? formData.allowedScopes!.map((scope) => scope.id)
-      : undefined,
+    postLogoutRedirectUris:
+      formData.postLogoutRedirectUris ??
+      clientDefaultValues.postLogoutRedirectUris,
+    identityProviderRestrictions:
+      formData.identityProviderRestrictions ??
+      clientDefaultValues.identityProviderRestrictions,
+    redirectUris: formData.redirectUris ?? clientDefaultValues.redirectUris,
+    allowedCorsOrigins:
+      formData.allowedCorsOrigins ?? clientDefaultValues.allowedCorsOrigins,
+    allowedGrantTypes:
+      formData.allowedGrantTypes?.map((grant) => grant.id) ??
+      clientDefaultValues.allowedGrantTypes?.map((grant) => grant.id),
+    allowedScopes:
+      formData.allowedScopes?.map((scope) => scope.id) ??
+      clientDefaultValues.allowedScopes?.map((scope) => scope.id),
 
-    userSsoLifetime: formData.useSsoLifetime || undefined,
-    userCodeType: formData.userCodeType || undefined,
-    deviceCodeLifetime: formData.deviceCodeLifetime!,
-    requireRequestObject: formData.requireRequestObject!,
-    cibaLifetime: formData.cibaLifetime || undefined,
-    pollingInterval: formData.pollingInterval || undefined,
+    userSsoLifetime:
+      formData.useSsoLifetime ?? clientDefaultValues.useSsoLifetime,
+    userCodeType: formData.userCodeType ?? clientDefaultValues.userCodeType,
+    deviceCodeLifetime:
+      formData.deviceCodeLifetime ?? clientDefaultValues.deviceCodeLifetime!,
+    requireRequestObject:
+      formData.requireRequestObject ??
+      clientDefaultValues.requireRequestObject!,
+    cibaLifetime: formData.cibaLifetime ?? clientDefaultValues.cibaLifetime,
+    pollingInterval:
+      formData.pollingInterval ?? clientDefaultValues.pollingInterval,
     coordinateLifetimeWithUserSession:
       formData.coordinateLifetimeWithUserSession!,
     requireDPoP: formData.requireDPoP!,
-    dPoPValidationMode: Number(formData.dPoPValidationMode!),
-    dPoPClockSkew: formData.dPoPClockSkew!,
+    dPoPValidationMode: Number(
+      formData.dPoPValidationMode ?? clientDefaultValues.dPoPValidationMode!
+    ),
+    dPoPClockSkew: formData.dPoPClockSkew ?? clientDefaultValues.dPoPClockSkew!,
     pushedAuthorizationLifetime:
-      formData.pushedAuthorizationLifetime || undefined,
+      formData.pushedAuthorizationLifetime ??
+      clientDefaultValues.pushedAuthorizationLifetime,
     requirePushedAuthorization: formData.requirePushedAuthorization!,
-    initiateLoginUri: formData.initiateLoginUri || undefined,
-    allowedIdentityTokenSigningAlgorithms: formData
-      .allowedIdentityTokenSigningAlgorithms?.length
-      ? formData.allowedIdentityTokenSigningAlgorithms
-      : undefined,
+    initiateLoginUri:
+      formData.initiateLoginUri ?? clientDefaultValues.initiateLoginUri,
+    allowedIdentityTokenSigningAlgorithms:
+      formData.allowedIdentityTokenSigningAlgorithms ??
+      clientDefaultValues.allowedIdentityTokenSigningAlgorithms,
     claims:
       formData.claims?.map(
         (claim) =>

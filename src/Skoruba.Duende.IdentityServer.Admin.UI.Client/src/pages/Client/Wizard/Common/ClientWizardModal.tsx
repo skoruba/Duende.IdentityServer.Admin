@@ -21,6 +21,8 @@ const ClientWizardModal = () => {
   const { isAnyDirty, reset: resetDirty } = useDirtyGuard();
 
   const { DialogCmp, confirm } = useConfirmUnsavedChanges(isAnyDirty);
+  const { step, resetForm } = useFormState();
+  const { t } = useTranslation();
 
   if (clientType === undefined) {
     return null;
@@ -33,9 +35,6 @@ const ClientWizardModal = () => {
     step: stepType,
     component: <StepComponent />,
   }));
-
-  const { step, resetForm } = useFormState();
-  const { t } = useTranslation();
 
   const dialogClass = "sm:max-w-[900px] max-h-[calc(100vh-2rem)]";
   const reviewDialogClass =

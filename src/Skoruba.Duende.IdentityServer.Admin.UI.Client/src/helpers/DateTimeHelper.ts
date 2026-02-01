@@ -103,16 +103,16 @@ export const secondsToFormattedTime = ({
 
   let remainingSeconds = seconds;
 
-  let weeks = Math.floor(remainingSeconds / SECONDS_IN_WEEK);
+  const weeks = Math.floor(remainingSeconds / SECONDS_IN_WEEK);
   remainingSeconds %= SECONDS_IN_WEEK;
 
-  let days = Math.floor(remainingSeconds / SECONDS_IN_DAY);
+  const days = Math.floor(remainingSeconds / SECONDS_IN_DAY);
   remainingSeconds %= SECONDS_IN_DAY;
 
-  let hours = Math.floor(remainingSeconds / SECONDS_IN_HOUR);
+  const hours = Math.floor(remainingSeconds / SECONDS_IN_HOUR);
   remainingSeconds %= SECONDS_IN_HOUR;
 
-  let minutes = Math.floor(remainingSeconds / SECONDS_IN_MINUTE);
+  const minutes = Math.floor(remainingSeconds / SECONDS_IN_MINUTE);
   remainingSeconds %= SECONDS_IN_MINUTE;
 
   const secs = remainingSeconds;

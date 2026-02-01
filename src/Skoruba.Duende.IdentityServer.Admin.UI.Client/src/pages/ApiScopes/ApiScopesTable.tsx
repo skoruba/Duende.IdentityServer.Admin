@@ -38,7 +38,9 @@ const ApiScopesTable = ({
     },
     {
       id: "actions",
-      cell: ({ row }: any) => <ApiScopesActions scope={row.original} />,
+      cell: ({ row }: { row: { original: ApiScopeData } }) => (
+        <ApiScopesActions scope={row.original} />
+      ),
     },
   ];
 

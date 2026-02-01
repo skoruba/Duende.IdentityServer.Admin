@@ -1,3 +1,4 @@
+using Duende.AccessTokenManagement.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Skoruba.Duende.IdentityServer.Admin.UI.Services.Configurations;

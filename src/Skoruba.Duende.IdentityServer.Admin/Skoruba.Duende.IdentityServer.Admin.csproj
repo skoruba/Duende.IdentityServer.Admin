@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <SpaRoot>..\Skoruba.Duende.IdentityServer.Admin.UI.Client</SpaRoot>
@@ -12,16 +12,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.10" />
-        <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="9.0.10" />
-        <PackageReference Include="Serilog.AspNetCore" Version="9.0.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="10.0.2" />
+        <PackageReference Include="Serilog.AspNetCore" Version="10.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj" />
         <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.UI\Skoruba.Duende.IdentityServer.Admin.UI.csproj"/>
         <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Shared.Configuration\Skoruba.Duende.IdentityServer.Shared.Configuration.csproj" />
-        <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql\Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.csproj" />
         <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL\Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.csproj" />
         <ProjectReference Include="..\Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer\Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.csproj" />
     </ItemGroup>

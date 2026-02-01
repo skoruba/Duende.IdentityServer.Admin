@@ -49,7 +49,7 @@ public class ConfigurationIssuesRepository<TDbContext, TRulesDbContext> : IConfi
                 .AsNoTracking()
                 .ToListAsync();
 
-            _logger.LogInformation("Executing {RuleCount} enabled configuration rules", enabledRules.Count);
+            _logger.LogDebug("Executing {RuleCount} enabled configuration rules", enabledRules.Count);
 
             var validationContext = await LoadValidationContextAsync();
 
@@ -83,7 +83,7 @@ public class ConfigurationIssuesRepository<TDbContext, TRulesDbContext> : IConfi
                 }
             }
 
-            _logger.LogInformation("Configuration validation completed. Found {TotalIssues} issues across all rules",
+            _logger.LogDebug("Configuration validation completed. Found {TotalIssues} issues across all rules",
                 issues.Count);
         }
         catch (Exception ex)

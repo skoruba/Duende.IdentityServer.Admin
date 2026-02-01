@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <Description>API endpoints for the administration of the Duende IdentityServer</Description>
     </PropertyGroup>
 
@@ -10,34 +10,34 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AspNetCore.HealthChecks.MySql" Version="9.0.0" />
         <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="9.0.0" />
         <PackageReference Include="AspNetCore.HealthChecks.OpenIdConnectServer" Version="9.0.0" />
         <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="9.0.0" />
         <PackageReference Include="AspNetCore.HealthChecks.UI" Version="9.0.0" />
         <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="9.0.0" />
+        <PackageReference Include="KubernetesClient" Version="18.0.13" />
+        <PackageReference Include="IdentityModel" Version="7.0.0" />
         <PackageReference Include="AutoMapper" Version="14.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.10" />
-        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.10" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.10" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.10" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.10" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.10">
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="10.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.2">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="9.0.10" />
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="9.0.10" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.2" />
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
-        <PackageReference Include="NSwag.Generation" Version="14.6.1" />
+        <PackageReference Include="NSwag.Generation" Version="14.6.3" />
         <PackageReference Include="Serilog" Version="4.3.0" />
         <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
         <PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" />
-        <PackageReference Include="Serilog.Extensions.Hosting" Version="9.0.0" />
-        <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.0" />
-        <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+        <PackageReference Include="Serilog.Extensions.Hosting" Version="10.0.0" />
+        <PackageReference Include="Serilog.Settings.Configuration" Version="10.0.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
         <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
-        <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="8.2.2" />
+        <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="9.0.2" />
         <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
     </ItemGroup>
 

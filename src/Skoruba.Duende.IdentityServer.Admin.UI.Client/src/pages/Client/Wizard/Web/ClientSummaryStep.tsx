@@ -126,7 +126,7 @@ const ClientSummaryStep = () => {
           },
         }
       );
-    } catch (error) {
+    } catch {
       toast({
         title: t("Errors.Failed"),
         variant: "destructive",

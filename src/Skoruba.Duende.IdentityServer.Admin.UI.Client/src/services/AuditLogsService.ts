@@ -25,7 +25,7 @@ export const getAuditLogs = async (
     filters.subjectIdentifier ?? null,
     filters.subjectName ?? null,
     pageSize,
-    page
+    page + 1
   );
 
   return {
