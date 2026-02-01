@@ -1,6 +1,6 @@
 # Changelog
 
-## [3.0.0-preview.18]
+## [3.0.0-preview.21]
 
 ### Added
 
@@ -22,6 +22,7 @@
 
 ### Changed
 
+- Updated to .NET 10
 - Updated Duende IdentityServer to 7.4.5
 - Updated solution structure for new frontend architecture
 - Major UX improvements for client and resource management

@@ -6,19 +6,20 @@ using System.Net.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Skoruba.Duende.IdentityServer.Admin.Api.Configuration.Test;
 
 namespace Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Tests.Base
 {
     public class TestFixture : IDisposable
     {
-        public TestServer TestServer;
-
+        public IHost Host { get; }
+        public TestServer TestServer { get; }
         public HttpClient Client { get; }
 
         public TestFixture()
         {
-            var builder = new WebHostBuilder()
+            Host = new HostBuilder()
                 .ConfigureAppConfiguration((hostContext, configApp) =>
                 {
                     configApp.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
@@ -27,20 +28,25 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Tests.Base
                     configApp.AddJsonFile("identityserverdata.json", optional: true, reloadOnChange: true);
 
                     var env = hostContext.HostingEnvironment;
-                    
+
                     configApp.AddJsonFile($"serilog.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
                     configApp.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
                 })
-                .UseStartup<StartupTest>();
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseTestServer();
+                    webBuilder.UseStartup<StartupTest>();
+                })
+                .Start();
 
-            TestServer = new TestServer(builder);
-            Client = TestServer.CreateClient();
+            TestServer = Host.GetTestServer();
+            Client = Host.GetTestClient();
         }
 
         public void Dispose()
         {
             Client.Dispose();
-            TestServer.Dispose();
+            Host.Dispose();
         }
     }
 }

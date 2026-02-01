@@ -1,5 +1,4 @@
 import { useFormContext, useFieldArray } from "react-hook-form";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { Trash } from "lucide-react";
@@ -8,17 +7,13 @@ import useModal from "@/hooks/modalHooks";
 import { useTranslation } from "react-i18next";
 import PropertyModal from "@/components/Properties/PropertyModal";
 
-const formSchema = z.object({
-  properties: z.array(
-    z.object({
-      id: z.number(),
-      key: z.string(),
-      value: z.string(),
-    })
-  ),
-});
-
-type FormData = z.infer<typeof formSchema>;
+type FormData = {
+  properties: Array<{
+    id: number;
+    key: string;
+    value: string;
+  }>;
+};
 
 const PropertiesForm = () => {
   const { t } = useTranslation();
@@ -63,10 +58,14 @@ const PropertiesForm = () => {
     },
     {
       id: "actions",
-      cell: ({ row }: any) => (
+      cell: ({ row }: { row: { index: number } }) => (
         <Button
           variant="ghost"
-          onClick={() => handleRemoveProperty(row.index)}
+          onClick={() =>
+            handleRemoveProperty(
+              pagination.pageIndex * pagination.pageSize + row.index
+            )
+          }
           className="text-red-500"
         >
           <Trash className="h-4 w-4" />

@@ -39,7 +39,7 @@ export function useNavigateWithBlockerInWizard() {
         navigate(url);
       }, 0);
     },
-    [navigate]
+    [navigate, reset]
   );
 }
 

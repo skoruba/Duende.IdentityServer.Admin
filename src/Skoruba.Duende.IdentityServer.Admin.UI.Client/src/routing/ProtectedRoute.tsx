@@ -6,7 +6,7 @@ export type GuardProps = {
   children: JSX.Element;
 };
 
-const Login = ({ login }: any) => {
+const Login = ({ login }: { login: () => void }) => {
   useEffect(() => {
     login();
   }, [login]);

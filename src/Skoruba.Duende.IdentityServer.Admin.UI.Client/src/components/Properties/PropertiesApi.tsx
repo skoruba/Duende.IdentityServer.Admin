@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import useModal from "@/hooks/modalHooks";
 import PropertyModal from "./PropertyModal";
 import Loading from "@/components/Loading/Loading";
-import { PropertiesData } from "@/models/Common/CommonModels";
+import { PropertiesData, PropertyData } from "@/models/Common/CommonModels";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,7 +23,7 @@ import { toast } from "../ui/use-toast";
 
 type PropertiesTabProps = {
   resourceId: number;
-  queryKey: any[];
+  queryKey: string[];
   pageTitle: string;
   getProperties: (
     resourceId: number,
@@ -48,6 +48,8 @@ const PropertiesApi: React.FC<PropertiesTabProps> = ({
   const { t } = useTranslation();
   const { pagination, setPagination } = usePaginationTable(0, 5);
   const { isOpen, openModal, closeModal } = useModal();
+  const [propertyToDelete, setPropertyToDelete] =
+    React.useState<PropertyData | null>(null);
 
   const queryClient = useQueryClient();
 
@@ -96,52 +98,24 @@ const PropertiesApi: React.FC<PropertiesTabProps> = ({
     },
     {
       id: "actions",
-      cell: ({ row }: any) => {
-        const property = row.original;
-        const [isAlertOpen, setAlertOpen] = React.useState(false);
-        return (
-          <>
-            <Button
-              onClick={() => setAlertOpen(true)}
-              type="button"
-              variant="ghost"
-              className="text-red-500"
-              size={"sm"}
-            >
-              <Trash className="h-4 w-4" />
-            </Button>
-
-            <AlertDialog open={isAlertOpen} onOpenChange={setAlertOpen}>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    {t("Actions.ConfirmDeletion")}
-                  </AlertDialogTitle>
-                  <AlertDialogDescription>
-                    {t("Property.Actions.DeletePropertyConfirm")}
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel onClick={() => setAlertOpen(false)}>
-                    {t("Actions.Cancel")}
-                  </AlertDialogCancel>
-                  <AlertDialogAction
-                    variant="destructive"
-                    onClick={() => {
-                      deleteMutation.mutate(property.id);
-                      setAlertOpen(false);
-                    }}
-                  >
-                    {t("Actions.Delete")}
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </>
-        );
-      },
+      cell: ({ row }: { row: { original: PropertyData } }) => (
+        <Button
+          onClick={() => setPropertyToDelete(row.original)}
+          type="button"
+          variant="ghost"
+          className="text-red-500"
+          size={"sm"}
+        >
+          <Trash className="h-4 w-4" />
+        </Button>
+      ),
     },
   ];
+  const handleConfirmDelete = () => {
+    if (!propertyToDelete) return;
+    deleteMutation.mutate(propertyToDelete.id);
+    setPropertyToDelete(null);
+  };
 
   return (
     <>
@@ -169,6 +143,30 @@ const PropertiesApi: React.FC<PropertiesTabProps> = ({
         onClose={closeModal}
         onSubmit={handleAddProperty}
       />
+      <AlertDialog
+        open={!!propertyToDelete}
+        onOpenChange={(open) => !open && setPropertyToDelete(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("Actions.ConfirmDeletion")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("Property.Actions.DeletePropertyConfirm")}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setPropertyToDelete(null)}>
+              {t("Actions.Cancel")}
+            </AlertDialogCancel>
+            <AlertDialogAction
+              variant="destructive"
+              onClick={handleConfirmDelete}
+            >
+              {t("Actions.Delete")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };

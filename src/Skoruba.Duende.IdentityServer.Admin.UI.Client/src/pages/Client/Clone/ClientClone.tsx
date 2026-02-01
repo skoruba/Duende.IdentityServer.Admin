@@ -63,7 +63,7 @@ const defaultValues: CloneClientFormData = {
 export const CloneClient = () => {
   const navigate = useNavigate();
 
-  var queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   const form = useForm<CloneClientFormData>({
     defaultValues,

@@ -13,7 +13,7 @@ import { ClientUrisStep } from "@/pages/Client/Wizard/Web/ClientUrisStep";
 
 type StepConfig = {
   stepType: ClientStepType;
-  component: React.ComponentType<any>;
+  component: React.ComponentType;
 };
 
 type WizardConfig = Record<

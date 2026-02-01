@@ -43,7 +43,7 @@ export const SecretStep = () => {
       data.expirationTime
     );
 
-    setFormData((prev: any) => ({
+    setFormData((prev) => ({
       ...prev,
       ...data,
       expiration: data.addExpiration ? combinedExpiration : null,

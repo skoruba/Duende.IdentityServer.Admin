@@ -44,7 +44,9 @@ const ApiResourcesTable = ({
     },
     {
       id: "actions",
-      cell: ({ row }: any) => <ApiResourcesActions resource={row.original} />,
+      cell: ({ row }: { row: { original: ApiResourceData } }) => (
+        <ApiResourcesActions resource={row.original} />
+      ),
     },
   ];
 

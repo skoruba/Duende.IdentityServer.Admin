@@ -97,7 +97,7 @@ const ConfigurationIssues: React.FC = () => {
       header: t("ConfigurationIssues.ResourceType"),
       cell: ({ row }: { row: { original: client.ConfigurationIssueDto } }) => {
         const resourceType = String(row.original.resourceType);
-        const variants: any = {
+        const variants: Record<string, "outline" | "default"> = {
           Client: "outline",
           ApiScope: "outline",
           ApiResource: "outline",

@@ -1,7 +1,7 @@
 import { ClientType } from "@/models/Clients/ClientModels";
 import type { TFunction } from "i18next";
 
-type TranslationKey = Parameters<TFunction>[0];
+type TranslationKey = string;
 
 export type EnforcedValues = Partial<{
   requirePkce: boolean;

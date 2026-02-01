@@ -45,7 +45,7 @@ export const useConfigurationIssues = () =>
     queryWithoutCache
   );
 
-export const getConfigurationIssues = () =>
+export const useConfigurationIssuesSummary = () =>
   useQuery(
     queryKeys.configurationIssuesSummary,
     async () => {

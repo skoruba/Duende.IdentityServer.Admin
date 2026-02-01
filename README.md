@@ -4,7 +4,7 @@
 
 Modern admin UI for **Duende IdentityServer** and **ASP.NET Core Identity**.
 
-![.NET](https://img.shields.io/badge/.NET-9.0-512BD4)
+![.NET](https://img.shields.io/badge/.NET-10.0-512BD4)
 ![React](https://img.shields.io/badge/React-18-61DAFB)
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue)
 [![Discord](https://img.shields.io/badge/Discord-Skoruba-%235865F2)](https://discord.gg/qTqQCSKWkX)
@@ -16,9 +16,9 @@ Modern admin UI for **Duende IdentityServer** and **ASP.NET Core Identity**.
 - ✅ **Stable (production): v2.7.0**  
   https://github.com/skoruba/Duende.IdentityServer.Admin/tree/release/2.7.0
 
-- 🎉 **Next generation (v3 – preview)** – current prerelease: `3.0.0-preview.20`
+- 🎉 **Next generation (v3 – preview)** – current prerelease: `3.0.0-preview.21`
   - React + TypeScript + Tailwind CSS + shadcn/ui
-  - .NET 9 backend REST API
+  - .NET 10 backend REST API
   - New monitoring and wizard flows
 
 ---
@@ -76,7 +76,7 @@ Define and track configuration rules for clients, API resources, and identity re
 
 ## ✅ Prerequisites
 
-- .NET 9 SDK
+- .NET 10 SDK
 - Node.js 18+ and npm (required for the React client)
 - SQL Server (default LocalDB) or PostgreSQL
 - Duende IdentityServer 7.4.5

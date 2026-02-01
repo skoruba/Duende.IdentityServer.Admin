@@ -21,7 +21,7 @@ const PropertiesTab = () => {
     >
       <PropertiesApi
         resourceId={Number(resourceId)}
-        queryKey={[queryKeys.apiResourceProperties, resourceId]}
+        queryKey={[queryKeys.apiResourceProperties, resourceId ?? ""]}
         pageTitle={"Properties"}
         getProperties={getApiResourceProperties}
         addProperty={addApiResourceProperty}

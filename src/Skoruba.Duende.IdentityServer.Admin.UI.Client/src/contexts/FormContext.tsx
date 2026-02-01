@@ -22,6 +22,7 @@ interface IFormContext<T> {
   formSubmitting: boolean;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const FormContext = createContext<IFormContext<any>>({
   formData: {},
   onHandleBack: () => {},

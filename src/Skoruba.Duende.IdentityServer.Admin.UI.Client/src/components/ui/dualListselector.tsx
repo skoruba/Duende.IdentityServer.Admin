@@ -34,7 +34,7 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
   const { toast } = useToast();
   const { t } = useTranslation();
 
-  const [allItems, setAllItems] = useState<Item[]>([]);
+  const [customItems, setCustomItems] = useState<Item[]>([]);
   const [selectedItems, setSelectedItems] =
     useState<Item[]>(initialSelectedItems);
   const [searchTermLeft, setSearchTermLeft] = useState("");
@@ -42,26 +42,16 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
   const [isModalOpened, setIsModalOpened] = useState(false);
 
   useEffect(() => {
-    const customItems = allItems.filter(
-      (item) =>
-        !initialItems.some((i) => i.id === item.id) &&
-        !selectedItems.some((s) => s.id === item.id)
-    );
-
-    const merged = [
-      ...initialItems,
-      ...selectedItems.filter(
-        (item) => !initialItems.some((i) => i.id === item.id)
-      ),
-      ...customItems,
-    ];
-
-    setAllItems(merged);
-  }, [initialItems, selectedItems]);
-
-  useEffect(() => {
     setSelectedItems(initialSelectedItems);
   }, [initialSelectedItems]);
+
+  const allItems = useMemo(() => {
+    const merged = new Map<string, Item>();
+    [...initialItems, ...selectedItems, ...customItems].forEach((item) => {
+      merged.set(item.id, item);
+    });
+    return Array.from(merged.values());
+  }, [initialItems, selectedItems, customItems]);
 
   const notifySelectedItemsChange = (newSelected: Item[]) => {
     setSelectedItems(newSelected);
@@ -92,7 +82,9 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
 
     const existsInAll = allItems.some((i) => i.id === label);
     if (!existsInAll) {
-      setAllItems((prev) => [...prev, newItem]);
+      setCustomItems((prev) =>
+        prev.some((i) => i.id === label) ? prev : [...prev, newItem]
+      );
     }
 
     notifySelectedItemsChange([...selectedItems, newItem]);

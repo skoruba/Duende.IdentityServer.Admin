@@ -65,7 +65,7 @@ export const ClientBasicsStep = () => {
   useDirtyFormState(form, "basics");
 
   const onSubmit: SubmitHandler<BasicsFormData> = (data) => {
-    setFormData((prev: any) => ({ ...prev, ...data }));
+    setFormData((prev) => ({ ...prev, ...data }));
     onHandleNext();
   };
 

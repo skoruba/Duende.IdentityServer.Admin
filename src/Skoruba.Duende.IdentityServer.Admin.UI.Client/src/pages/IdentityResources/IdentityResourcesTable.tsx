@@ -40,7 +40,7 @@ const IdentityResourcesTable = ({ data, pagination, setPagination }: Props) => {
     },
     {
       id: "actions",
-      cell: ({ row }: any) => (
+      cell: ({ row }: { row: { original: IdentityResourceData } }) => (
         <IdentityResourcesActions resource={row.original} />
       ),
     },

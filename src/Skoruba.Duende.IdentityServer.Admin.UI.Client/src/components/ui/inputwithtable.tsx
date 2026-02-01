@@ -92,6 +92,12 @@ const InputWithTable: React.FC<{
     onChange(updatedItems);
   };
 
+  const handleDialogClose = () => {
+    setEditIndex(null);
+    setEditValue("");
+    setDialogError(null);
+  };
+
   return (
     <div>
       <div className="flex">
@@ -169,7 +175,7 @@ const InputWithTable: React.FC<{
         </div>
       )}
       {editIndex !== null && (
-        <Dialog open={editIndex !== null}>
+        <Dialog open={editIndex !== null} onOpenChange={(open) => !open && handleDialogClose()}>
           <DialogContent>
             <DialogTitle>{t("Components.InputWithTable.Edit")}</DialogTitle>
             <DialogDescription>
@@ -188,14 +194,7 @@ const InputWithTable: React.FC<{
             <DialogFooter>
               <Button onClick={handleEditItem}>{t("Actions.Save")}</Button>
               <DialogClose asChild>
-                <Button
-                  type="button"
-                  onClick={() => {
-                    setEditIndex(null);
-                    setEditValue("");
-                    setDialogError(null);
-                  }}
-                >
+                <Button type="button" onClick={handleDialogClose}>
                   {t("Actions.Cancel")}
                 </Button>
               </DialogClose>

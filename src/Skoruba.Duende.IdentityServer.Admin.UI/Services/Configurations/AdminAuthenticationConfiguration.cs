@@ -2,11 +2,11 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Services.Configurations;
 
 public class AdminAuthenticationConfiguration
 {
-    public required string Authority { get; set; }
+    public string Authority { get; set; } = string.Empty;
 
-    public required string ClientId { get; set; }
+    public string ClientId { get; set; } = string.Empty;
 
-    public required string ClientSecret { get; set; }
+    public string ClientSecret { get; set; } = string.Empty;
     
-    public required List<string> AdminScopes { get; set; } = new();
+    public List<string> AdminScopes { get; set; } = new();
 }

@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using NetIPNetwork = System.Net.IPNetwork;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.EntityFramework.Storage;
@@ -118,7 +120,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
                 if (forwardedHeadersConfig.AllowAll)
                 {
                     // Development mode: allow all proxies and networks (insecure)
-                    forwardingOptions.KnownNetworks.Clear();
+                    forwardingOptions.KnownIPNetworks.Clear();
                     forwardingOptions.KnownProxies.Clear();
                 }
                 else
@@ -138,15 +140,15 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
 
                     if (forwardedHeadersConfig.KnownNetworks != null && forwardedHeadersConfig.KnownNetworks.Count > 0)
                     {
-                        forwardingOptions.KnownNetworks.Clear();
+                        forwardingOptions.KnownIPNetworks.Clear();
                         foreach (var network in forwardedHeadersConfig.KnownNetworks)
                         {
                             var parts = network.Split('/');
                             if (parts.Length == 2 &&
-                                System.Net.IPAddress.TryParse(parts[0], out var prefix) &&
+                                IPAddress.TryParse(parts[0], out var prefix) &&
                                 int.TryParse(parts[1], out var prefixLength))
                             {
-                                forwardingOptions.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(prefix, prefixLength));
+                                forwardingOptions.KnownIPNetworks.Add(new NetIPNetwork(prefix, prefixLength));
                             }
                         }
                     }

@@ -64,7 +64,7 @@ export const ClientScopesStep = () => {
   useDirtyFormState(form, "scopes");
 
   const onSubmit: SubmitHandler<ScopesFormData> = (data) => {
-    setFormData((prev: any) => ({ ...prev, ...data }));
+    setFormData((prev) => ({ ...prev, ...data }));
     onHandleNext();
   };
 

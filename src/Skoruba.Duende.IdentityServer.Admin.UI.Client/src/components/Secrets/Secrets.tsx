@@ -33,7 +33,7 @@ import {
 
 type SecretsTableProps = {
   resourceId: number;
-  queryKey: any[];
+  queryKey: string[];
   getSecrets: (
     resourceId: number,
     pageIndex: number,
@@ -53,6 +53,9 @@ const SecretsTable: React.FC<SecretsTableProps> = ({
   const { t } = useTranslation();
   const { pagination, setPagination } = usePaginationTable(0, 5);
   const [isDialogOpen, setDialogOpen] = React.useState(false);
+  const [secretToDelete, setSecretToDelete] = React.useState<SecretData | null>(
+    null
+  );
 
   const queryClient = useQueryClient();
 
@@ -121,52 +124,23 @@ const SecretsTable: React.FC<SecretsTableProps> = ({
     },
     {
       id: "actions",
-      cell: ({ row }) => {
-        const secret = row.original;
-        const [isAlertOpen, setAlertOpen] = React.useState(false);
-
-        return (
-          <>
-            <Button
-              onClick={() => setAlertOpen(true)}
-              type="button"
-              variant={"destructive"}
-              size={"sm"}
-            >
-              {t("Actions.Delete")}
-            </Button>
-
-            <AlertDialog open={isAlertOpen} onOpenChange={setAlertOpen}>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    {t("Actions.ConfirmDeletion")}
-                  </AlertDialogTitle>
-                  <AlertDialogDescription>
-                    {t("Secret.Actions.DeleteSecretConfirm")}
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel onClick={() => setAlertOpen(false)}>
-                    {t("Actions.Cancel")}
-                  </AlertDialogCancel>
-                  <AlertDialogAction
-                    variant="destructive"
-                    onClick={() => {
-                      deleteMutation.mutate(secret.id);
-                      setAlertOpen(false);
-                    }}
-                  >
-                    {t("Actions.Delete")}
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </>
-        );
-      },
+      cell: ({ row }) => (
+        <Button
+          onClick={() => setSecretToDelete(row.original)}
+          type="button"
+          variant={"destructive"}
+          size={"sm"}
+        >
+          {t("Actions.Delete")}
+        </Button>
+      ),
     },
   ];
+  const confirmDelete = () => {
+    if (!secretToDelete) return;
+    deleteMutation.mutate(secretToDelete.id);
+    setSecretToDelete(null);
+  };
 
   return (
     <>
@@ -201,6 +175,27 @@ const SecretsTable: React.FC<SecretsTableProps> = ({
           />
         </DialogContent>
       </Dialog>
+      <AlertDialog
+        open={!!secretToDelete}
+        onOpenChange={(open) => !open && setSecretToDelete(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("Actions.ConfirmDeletion")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("Secret.Actions.DeleteSecretConfirm")}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setSecretToDelete(null)}>
+              {t("Actions.Cancel")}
+            </AlertDialogCancel>
+            <AlertDialogAction variant="destructive" onClick={confirmDelete}>
+              {t("Actions.Delete")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };

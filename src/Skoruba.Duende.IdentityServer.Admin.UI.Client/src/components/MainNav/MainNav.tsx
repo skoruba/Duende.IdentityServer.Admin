@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/Icons/Icons";
 import { ModeToggle } from "@/components/ModeToggle/ModeToggle";
@@ -47,7 +47,7 @@ import {
   ConfigurationIssuesUrl,
   ConfigurationRulesUrl,
 } from "@/routing/Urls";
-import { getConfigurationIssues } from "@/services/DashboardService";
+import { useConfigurationIssuesSummary } from "@/services/DashboardService";
 import {
   Activity,
   Cog,
@@ -260,7 +260,11 @@ function NavDropdown({
 export function MainNav() {
   const location = useLocation();
   const { t } = useTranslation();
-  const { data, isLoading } = getConfigurationIssues();
+  const translate = useCallback(
+    (key: string) => String(t(key as never)),
+    [t]
+  );
+  const { data, isLoading } = useConfigurationIssuesSummary();
 
   const issuesCount =
     (data?.errors ?? 0) + (data?.warnings ?? 0) + (data?.recommendations ?? 0);
@@ -292,8 +296,7 @@ export function MainNav() {
           >
             <Icon className={cn("h-3.5 w-3.5", accent.text)} />
           </span>
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-          <span>{t(item.translationKey as any)}</span>
+          <span>{translate(item.translationKey)}</span>
         </Link>
       </DropdownMenuItem>
     );
@@ -393,8 +396,12 @@ export function MainNav() {
 function MobileNav() {
   const location = useLocation();
   const { t } = useTranslation();
-  const { data, isLoading } = getConfigurationIssues();
+  const { data, isLoading } = useConfigurationIssuesSummary();
   const [open, setOpen] = useState(false);
+  const translate = useCallback(
+    (key: string) => String(t(key as never)),
+    [t]
+  );
 
   const issuesCount = (data?.recommendations ?? 0) + (data?.warnings ?? 0);
 
@@ -435,18 +442,17 @@ function MobileNav() {
             ? "bg-accent text-accent-foreground"
             : "text-muted-foreground hover:text-foreground"
         )}
-      >
-        <span
-          className={cn(
-            "inline-flex h-7 w-7 items-center justify-center rounded-full",
-            accent.bg,
-            accent.ring
-          )}
         >
-          <Icon className={cn("h-3.5 w-3.5", accent.text)} />
-        </span>
-        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-        <span>{t(it.translationKey as any)}</span>
+          <span
+            className={cn(
+              "inline-flex h-7 w-7 items-center justify-center rounded-full",
+              accent.bg,
+              accent.ring
+            )}
+          >
+            <Icon className={cn("h-3.5 w-3.5", accent.text)} />
+          </span>
+        <span>{translate(it.translationKey)}</span>
         {it.href === ConfigurationIssuesUrl && (
           <Badge variant="secondary" className="ml-auto">
             {isLoading ? (

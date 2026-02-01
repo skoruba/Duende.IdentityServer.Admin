@@ -1,5 +1,4 @@
 import { useFormContext, useFieldArray } from "react-hook-form";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { Trash } from "lucide-react";
@@ -8,17 +7,13 @@ import useModal from "@/hooks/modalHooks";
 import { useTranslation } from "react-i18next";
 import ClaimsModal from "./ClaimsModal";
 
-const formSchema = z.object({
-  claims: z.array(
-    z.object({
-      id: z.number(),
-      key: z.string(),
-      value: z.string(),
-    })
-  ),
-});
-
-type FormData = z.infer<typeof formSchema>;
+type FormData = {
+  claims: Array<{
+    id: number;
+    key: string;
+    value: string;
+  }>;
+};
 
 const ClaimsForm = () => {
   const { isOpen, openModal, closeModal } = useModal();
@@ -64,10 +59,14 @@ const ClaimsForm = () => {
     },
     {
       id: "actions",
-      cell: ({ row }: any) => (
+      cell: ({ row }: { row: { index: number } }) => (
         <Button
           variant="ghost"
-          onClick={() => handleRemoveClaim(row.index)}
+          onClick={() =>
+            handleRemoveClaim(
+              pagination.pageIndex * pagination.pageSize + row.index
+            )
+          }
           className="text-red-500"
         >
           <Trash className="h-4 w-4" />
