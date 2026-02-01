@@ -188,19 +188,19 @@ https://github.com/skoruba/IdentityServer4.Admin
 
 ### [3.1.0] – Planned
 
-- Update to .NET 10
 - Passkeys support
 
-### [3.2.0] – Planned
+### [4.0.0] – Planned
 
 - DTO refactoring
-- AutoMapper removal consideration
-- Additional translations
+- Removal of AutoMapper and FluentAssertions
+- Additional translations for the Admin UI
 
-### [3.3.0] – Planned
+### [5.0.0] – Planned
 
 - Claims management UI ([#22](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/22))
+- Identity management improvements – added options for loading a custom Identity schema
 
-### [4.0.0] – Planned
+### [6.0.0] – Planned
 
 - Minimal API rewrite using Vertical Slice Architecture (VSA)

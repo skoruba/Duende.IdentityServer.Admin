@@ -648,20 +648,20 @@ For detailed release history and upcoming features, see [CHANGELOG.md](CHANGELOG
 
 ### 3.1.0
 
-- .NET 10 upgrade
-- Passkeys support
-
-### 3.2.0
-
-- DTO refactoring
-- AutoMapper removal
-- More translations
-
-### 3.3.0
-
-- Claims management UI
+- Passkeys support ([251](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/251))
 
 ### 4.0.0
+
+- DTO refactoring
+- Removal of AutoMapper and FluentAssertions
+- Additional translations for the Admin UI
+
+### 5.0.0
+
+- Claims management UI ([#22](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/22))
+- Identity management improvements – added options for loading a custom Identity schema
+
+### 6.0.0
 
 - Minimal API rewrite (Vertical Slice Architecture)
 
