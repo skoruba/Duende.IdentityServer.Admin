@@ -1,6 +1,6 @@
-param([string] $packagesVersions, [string]$gitBranchName = 'dev')
+param([string] $packagesVersions)
 
-./0-build-template.ps1 -packagesVersions $packagesVersions -gitBranchName $gitBranchName
+./0-build-template.ps1 -packagesVersions $packagesVersions
 
 ./1-add-docker-support.ps1
 
