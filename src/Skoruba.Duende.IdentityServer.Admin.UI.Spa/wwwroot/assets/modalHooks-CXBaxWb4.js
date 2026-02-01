@@ -1,1 +1,0 @@
-import{a as s}from"./react-vendor-DPOhIiRq.js";const p=(l=!1)=>{const[o,e]=s.useState(l??!1),t=s.useCallback(()=>{e(!0)},[]),c=s.useCallback(()=>{e(!1)},[]),n=s.useCallback(()=>{e(a=>!a)},[]),u=s.useCallback(a=>{e(a)},[]);return{isOpen:o,openModal:t,closeModal:c,toggleModal:n,setValue:u}};export{p as u};
