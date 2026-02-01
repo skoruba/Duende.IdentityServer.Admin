@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using NetIPNetwork = System.Net.IPNetwork;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.EntityFramework.Storage;
@@ -26,7 +28,6 @@ using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
 using System.IO;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySql;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.PostgreSQL;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.SqlServer;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Helpers;
@@ -119,7 +120,7 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Helpers
                 if (forwardedHeadersConfig.AllowAll)
                 {
                     // Development mode: allow all proxies and networks (insecure)
-                    forwardingOptions.KnownNetworks.Clear();
+                    forwardingOptions.KnownIPNetworks.Clear();
                     forwardingOptions.KnownProxies.Clear();
                 }
                 else
@@ -139,15 +140,15 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Helpers
 
                     if (forwardedHeadersConfig.KnownNetworks != null && forwardedHeadersConfig.KnownNetworks.Count > 0)
                     {
-                        forwardingOptions.KnownNetworks.Clear();
+                        forwardingOptions.KnownIPNetworks.Clear();
                         foreach (var network in forwardedHeadersConfig.KnownNetworks)
                         {
                             var parts = network.Split('/');
                             if (parts.Length == 2 &&
-                                System.Net.IPAddress.TryParse(parts[0], out var prefix) &&
+                                IPAddress.TryParse(parts[0], out var prefix) &&
                                 int.TryParse(parts[1], out var prefixLength))
                             {
-                                forwardingOptions.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(prefix, prefixLength));
+                                forwardingOptions.KnownIPNetworks.Add(new NetIPNetwork(prefix, prefixLength));
                             }
                         }
                     }
@@ -261,9 +262,6 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Helpers
                     break;
                 case DatabaseProviderType.PostgreSQL:
                     services.RegisterNpgSqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TDataProtectionDbContext>(identityConnectionString, configurationConnectionString, persistedGrantsConnectionString, dataProtectionConnectionString);
-                    break;
-                case DatabaseProviderType.MySql:
-                    services.RegisterMySqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TDataProtectionDbContext>(identityConnectionString, configurationConnectionString, persistedGrantsConnectionString, dataProtectionConnectionString);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(databaseProvider.ProviderType), $@"The value needs to be one of {string.Join(", ", Enum.GetNames(typeof(DatabaseProviderType)))}.");
@@ -565,13 +563,6 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Helpers
                                 healthQuery: $"SELECT * FROM \"{identityTableName}\" LIMIT 1")
                             .AddNpgSql(dataProtectionDbConnectionString, name: "DataProtectionDb",
                                 healthQuery: $"SELECT * FROM \"{dataProtectionTableName}\"  LIMIT 1");
-                        break;
-                    case DatabaseProviderType.MySql:
-                        healthChecksBuilder
-                            .AddMySql(configurationDbConnectionString, name: "ConfigurationDb")
-                            .AddMySql(persistedGrantsDbConnectionString, name: "PersistentGrantsDb")
-                            .AddMySql(identityDbConnectionString, name: "IdentityDb")
-                            .AddMySql(dataProtectionDbConnectionString, name: "DataProtectionDb");
                         break;
                     default:
                         throw new NotImplementedException($"Health checks not defined for database provider {databaseProvider.ProviderType}");
