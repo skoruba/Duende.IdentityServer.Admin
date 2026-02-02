@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
 using SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.DbContexts;
 using SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Entities.Identity;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers;
@@ -20,7 +21,8 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api.Configuration.Test
         {
         }
 
-        public override void RegisterDbContexts(IServiceCollection services)
+        public override void RegisterDbContexts(IServiceCollection services,
+            DatabaseMigrationsConfiguration databaseMigration)
         {
             services.RegisterDbContextsStaging<AdminIdentityDbContext, IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext, AdminLogDbContext, AdminAuditLogDbContext, IdentityServerDataProtectionDbContext>();
         }

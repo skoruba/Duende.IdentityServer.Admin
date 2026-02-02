@@ -5,114 +5,143 @@
 @model SkorubaDuende.IdentityServerAdmin.STS.Identity.ViewModels.Account.LoginViewModel
 @inject IRootConfiguration RootConfiguration
 
-<div class="login-page">
-    <div class="page-header">
-        <h1>@Localizer["Title"]</h1>
-    </div>
+<div class="bg-background flex min-h-[calc(100vh-300px)] flex-col items-center justify-center gap-6 py-8 px-6 md:px-10">
+    <div class="w-full max-w-md">
+        <div class="flex flex-col items-center gap-2 text-center mb-6">
+            <a href="/" class="flex flex-col items-center gap-2 font-medium">
+                <div class="flex h-20 w-20 items-center justify-center rounded-md">
+                    <img src="@UrlHelper.Content(RootConfiguration.AdminConfiguration.HomePageLogoUri)" alt="Logo"
+                        class="h-16 w-auto opacity-90 dark:invert" />
+                </div>
+                <span class="sr-only">@RootConfiguration.AdminConfiguration.PageTitle</span>
+            </a>
+            <h1 class="text-2xl font-bold">@Localizer["Title"]</h1>
+            @if (RootConfiguration.RegisterConfiguration.Enabled)
+            {
+                <p class="text-sm text-muted-foreground">
+                    @Localizer["NoAccount"]
+                    <a asp-action="Register" asp-controller="Account"
+                        class="text-primary hover:underline font-medium">@Localizer["SignUp"]</a>
+                </p>
+            }
+        </div>
 
-    @await Html.PartialAsync("_ValidationSummary")
+        <div class="card">
+            <div class="card-content py-6">
+                @if (Model.EnableLocalLogin)
+                {
+                    <form asp-route="Login" class="space-y-5">
+                        <input type="hidden" asp-for="ReturnUrl" />
 
-    <div class="row">
+                        @await Html.PartialAsync("_ValidationSummary")
 
-        @if (Model.EnableLocalLogin)
-        {
-            <div class="col-sm-6">
-                <div class="card mt-3">
-                    <h5 class="card-header">@Localizer["LocalLogin"]</h5>
-                    <div class="card-body">
-                        <form asp-route="Login">
-                            <input type="hidden" asp-for="ReturnUrl" />
+                        <div class="form-item">
+                            <label class="form-label" for="Username">
+                                <lucideicon name="user" class="inline-block h-4 w-4 mr-1" />
+                                @Localizer[LoginPolicyResolutionLocalizer.GetUserNameLocalizationKey(Model.LoginResolutionPolicy)]
+                            </label>
+                            <input id="Username" class="input" asp-for="Username" autofocus tw-validation />
+                        </div>
 
-                            <fieldset>
-                                <div class="form-group row">
-                                    <div class="col-sm-12">
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="input-username">
-                                                    <i class="fa fa-user"></i>
-                                                </span>
-                                            </div>
-                                            <input class="form-control" placeholder="@Localizer[LoginPolicyResolutionLocalizer.GetUserNameLocalizationKey(Model.LoginResolutionPolicy)]" asp-for="Username" aria-label="Username" aria-describedby="input-username" autofocus>
-                                        </div>
-                                    </div>
+                        <div class="form-item">
+                            <label class="form-label" for="Password">
+                                <lucideicon name="lock" class="inline-block h-4 w-4 mr-1" />
+                                @Localizer["Password"]
+                            </label>
+                            <input id="Password" type="password" class="input" asp-for="Password" autocomplete="off"
+                                tw-validation />
+                        </div>
+
+                        @if (Model.AllowRememberLogin)
+                        {
+                            <div class="flex items-center space-x-2">
+                                <input asp-for="RememberLogin" type="checkbox" class="checkbox" id="RememberLogin" />
+                                <label for="RememberLogin" class="label cursor-pointer text-sm">
+                                    @Localizer["Remember"]
+                                </label>
+                            </div>
+                        }
+
+                        <div class="form-item">
+                            <button type="submit" name="button" value="login" class="btn-default w-full">
+                                <lucideicon name="log-in" class="inline-block h-4 w-4 mr-2" />
+                                @Localizer["Login"]
+                            </button>
+                        </div>
+
+                        <div class="flex justify-between text-sm">
+                            <a asp-action="ForgotPassword" asp-controller="Account"
+                                class="text-primary hover:underline inline-flex items-center gap-1">
+                                <lucideicon name="key" class="h-3 w-3" />
+                                @Localizer["Forgot"]
+                            </a>
+                            <button type="submit" name="button" value="cancel"
+                                class="text-primary hover:underline inline-flex items-center gap-1">
+                                <lucideicon name="x" class="h-3 w-3" />
+                                @Localizer["Cancel"]
+                            </button>
+                        </div>
+
+                        @if (Model.VisibleExternalProviders.Any())
+                        {
+                            <div class="relative">
+                                <div class="absolute inset-0 flex items-center">
+                                    <span class="w-full border-t border-border"></span>
                                 </div>
-
-                                <div class="form-group row">
-                                    <div class="col-sm-12">
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="input-password">
-                                                    <span class="oi oi-lock-locked" title="Lock" aria-hidden="true"></span>
-                                                </span>
-                                            </div>
-                                            <input type="password" class="form-control" placeholder="@Localizer["Password"]" aria-label="Password" aria-describedby="input-password" asp-for="Password" autocomplete="off">
-                                        </div>
-                                    </div>
+                                <div class="relative flex justify-center text-xs uppercase">
+                                    <span class="bg-background px-2 text-muted-foreground">@Localizer["Or"]</span>
                                 </div>
+                            </div>
 
-                                @if (Model.AllowRememberLogin)
+                            <div class="grid gap-4 @(Model.VisibleExternalProviders.Count() > 1 ? "sm:grid-cols-2" : "")">
+                                @foreach (var provider in Model.VisibleExternalProviders)
                                 {
-                                    <div class="form-group login-remember row">
-                                        <div class="col-sm-9">
-                                            <div>
-                                                @Localizer["Remember"]
-                                            </div>
-                                            <toggle-button>
-                                                <input asp-for="RememberLogin" type="checkbox">
-                                            </toggle-button>
-                                        </div>
-                                    </div>
-                                }
-
-                                <!--Button-->
-                                <div class="form-group row">
-                                    <div class="col-sm-12">
-                                        <button class="btn btn-primary" name="button" value="login">@Localizer["Login"]</button>
-                                        <button class="btn btn-secondary" name="button" value="cancel">@Localizer["Cancel"]</button>
-                                        <a asp-action="ForgotPassword" asp-controller="Account" class="btn btn-info" value="forgot">@Localizer["Forgot"]</a>                                        
-                                        @if (RootConfiguration.RegisterConfiguration.Enabled)
-                                        {
-                                            <a asp-action="Register" asp-controller="Account" class="btn btn-dark" value="forgot">@Localizer["Register"]</a>
-                                        }
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        }
-
-        @if (Model.VisibleExternalProviders.Any())
-        {
-            <div class="col-sm-6 external-providers">
-                <div class="card mt-3">
-                    <h5 class="card-header">@Localizer["ExternalLogin"]</h5>
-                    <div class="card-body">
-                        <ul class="list-inline">
-                            @foreach (var provider in Model.VisibleExternalProviders)
-                            {
-                                <li class="list-inline-item">
-                                    <a class="btn btn-primary"
-                                       asp-action="ExternalLogin"
-                                       asp-route-provider="@provider.AuthenticationScheme"
-                                       asp-route-returnUrl="@Model.ReturnUrl">
-                                        @provider.DisplayName
+                                    var providerName = provider.DisplayName?.ToLower() ?? provider.AuthenticationScheme.ToLower();
+                                    <a asp-action="ExternalLogin" asp-route-provider="@provider.AuthenticationScheme"
+                                        asp-route-returnUrl="@Model.ReturnUrl"
+                                        class="btn-outline flex items-center justify-center gap-2">
+                                        <span class="text-sm">@provider.DisplayName</span>
                                     </a>
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        }
+                                }
+                            </div>
+                        }
+                    </form>
+                }
 
-        @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
-        {
-            <div class="alert alert-warning">
-                <strong>@Localizer["InvalidRequest"]</strong>
-                @Localizer["NoSchema"]
+                @if (!Model.EnableLocalLogin && Model.VisibleExternalProviders.Any())
+                {
+                    @await Html.PartialAsync("_ValidationSummary")
+
+                    <div class="grid gap-4 @(Model.VisibleExternalProviders.Count() > 1 ? "sm:grid-cols-2" : "")">
+                        @foreach (var provider in Model.VisibleExternalProviders)
+                        {
+                            var providerName = provider.DisplayName?.ToLower() ?? provider.AuthenticationScheme.ToLower();
+                            <a asp-action="ExternalLogin" asp-route-provider="@provider.AuthenticationScheme"
+                                asp-route-returnUrl="@Model.ReturnUrl"
+                                class="btn-outline flex items-center justify-center gap-2">
+                                <span class="text-sm">@provider.DisplayName</span>
+                            </a>
+                        }
+                    </div>
+                }
+
+                @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
+                {
+                    <div class="alert-destructive">
+                        <lucideicon name="alert-circle" class="h-4 w-4" />
+                        <div>
+                            <h5 class="alert-title">@Localizer["InvalidRequest"]</h5>
+                            <div class="alert-description">@Localizer["NoSchema"]</div>
+                        </div>
+                    </div>
+                }
             </div>
-        }
+        </div>
+
+        <div class="mt-4 text-center">
+            <p class="text-xs text-muted-foreground">
+                @Localizer["PrivacyNotice"]
+            </p>
+        </div>
     </div>
 </div>

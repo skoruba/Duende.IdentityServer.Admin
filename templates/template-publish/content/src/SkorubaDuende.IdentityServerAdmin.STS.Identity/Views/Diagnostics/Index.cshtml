@@ -2,33 +2,59 @@
 @inject IViewLocalizer Localizer
 @model SkorubaDuende.IdentityServerAdmin.STS.Identity.ViewModels.Diagnostics.DiagnosticsViewModel
 
-<h1>@Localizer["Title"]</h1>
+<div class="py-8">
+	<h1 class="text-4xl font-bold mb-8">@Localizer["Title"]</h1>
 
-<h3>@Localizer["Claims"]</h3>
-<dl>
-	@foreach (var claim in Model.AuthenticateResult.Principal.Claims)
-	{
-		<dt>@claim.Type</dt>
-		<dd>@claim.Value</dd>
-	}
-</dl>
+	<div class="space-y-8">
+		<div class="card">
+			<div class="card-header">
+				<h2 class="card-title">@Localizer["Claims"]</h2>
+			</div>
+			<div class="card-content">
+				<dl class="grid grid-cols-1 gap-4">
+					@foreach (var claim in Model.AuthenticateResult.Principal.Claims)
+					{
+						<div class="border-b pb-2">
+							<dt class="font-semibold text-sm mb-1">@claim.Type</dt>
+							<dd class="text-sm text-muted-foreground">@claim.Value</dd>
+						</div>
+					}
+				</dl>
+			</div>
+		</div>
 
-<h3>@Localizer["Properties"]</h3>
-<dl>
-	@foreach (var prop in Model.AuthenticateResult.Properties.Items)
-	{
-		<dt>@prop.Key</dt>
-		<dd>@prop.Value</dd>
-	}
-</dl>
+		<div class="card">
+			<div class="card-header">
+				<h2 class="card-title">@Localizer["Properties"]</h2>
+			</div>
+			<div class="card-content">
+				<dl class="grid grid-cols-1 gap-4">
+					@foreach (var prop in Model.AuthenticateResult.Properties.Items)
+					{
+						<div class="border-b pb-2">
+							<dt class="font-semibold text-sm mb-1">@prop.Key</dt>
+							<dd class="text-sm text-muted-foreground">@prop.Value</dd>
+						</div>
+					}
+				</dl>
+			</div>
+		</div>
 
-@if (Model.Clients.Any())
-{
-	<h3>@Localizer["Clients"]</h3>
-	<ul>
-		@foreach (var client in Model.Clients)
+		@if (Model.Clients.Any())
 		{
-			<li>@client</li>
+			<div class="card">
+				<div class="card-header">
+					<h2 class="card-title">@Localizer["Clients"]</h2>
+				</div>
+				<div class="card-content">
+					<ul class="list-disc list-inside space-y-2">
+						@foreach (var client in Model.Clients)
+						{
+							<li>@client</li>
+						}
+					</ul>
+				</div>
+			</div>
 		}
-	</ul>
-}
+	</div>
+</div>

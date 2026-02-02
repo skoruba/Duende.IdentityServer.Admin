@@ -120,25 +120,49 @@
   <data name="2FA" xml:space="preserve">
     <value>Zwei-Faktor-Authentifizierung</value>
   </data>
+  <data name="2FADescription" xml:space="preserve">
+    <value>Zwei-Faktor-Authentifizierung aktivieren oder verwalten</value>
+  </data>
   <data name="ChangePassword" xml:space="preserve">
     <value>Passwort ändern</value>
+  </data>
+  <data name="ChangePasswordDescription" xml:space="preserve">
+    <value>Ihr Kontopasswort aktualisieren</value>
   </data>
   <data name="Discovery" xml:space="preserve">
     <value>Discovery-Document</value>
   </data>
+  <data name="DiscoveryDescription" xml:space="preserve">
+    <value>OpenID Connect-Konfiguration anzeigen</value>
+  </data>
   <data name="Grants" xml:space="preserve">
     <value>Persisted Grants</value>
+  </data>
+  <data name="GrantsDescription" xml:space="preserve">
+    <value>Anwendungsberechtigungen verwalten</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Login</value>
   </data>
+  <data name="LoginDescription" xml:space="preserve">
+    <value>Bei Ihrem Konto anmelden</value>
+  </data>
   <data name="ManagePersonalData" xml:space="preserve">
     <value>Meine persönlichen Daten</value>
+  </data>
+  <data name="ManagePersonalDataDescription" xml:space="preserve">
+    <value>Ihre Daten herunterladen oder löschen</value>
   </data>
   <data name="ManageProfile" xml:space="preserve">
     <value>Mein Profil</value>
   </data>
+  <data name="ManageProfileDescription" xml:space="preserve">
+    <value>Ihre Profilinformationen aktualisieren</value>
+  </data>
   <data name="SubTitle" xml:space="preserve">
     <value>Wilkommen bei {0}</value>
+  </data>
+  <data name="ViewDetails" xml:space="preserve">
+    <value>Details anzeigen</value>
   </data>
 </root>

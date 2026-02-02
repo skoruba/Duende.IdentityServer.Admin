@@ -120,25 +120,49 @@
   <data name="2FA" xml:space="preserve">
     <value>احراز هویت دو-عاملی</value>
   </data>
+  <data name="2FADescription" xml:space="preserve">
+    <value>فعال یا مدیریت احراز هویت دو عاملی</value>
+  </data>
   <data name="ChangePassword" xml:space="preserve">
     <value>تغییر کلمه عبور</value>
+  </data>
+  <data name="ChangePasswordDescription" xml:space="preserve">
+    <value>به روز رسانی رمز عبور حساب شما</value>
   </data>
   <data name="Discovery" xml:space="preserve">
     <value>سند کشف</value>
   </data>
+  <data name="DiscoveryDescription" xml:space="preserve">
+    <value>مشاهده پیکربندی OpenID Connect</value>
+  </data>
   <data name="Grants" xml:space="preserve">
     <value>واگذاری های اصرارشده</value>
+  </data>
+  <data name="GrantsDescription" xml:space="preserve">
+    <value>مدیریت مجوزهای برنامه</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>ورود</value>
   </data>
+  <data name="LoginDescription" xml:space="preserve">
+    <value>وارد حساب خود شوید</value>
+  </data>
   <data name="ManagePersonalData" xml:space="preserve">
     <value>اطلاعات شخصی من</value>
+  </data>
+  <data name="ManagePersonalDataDescription" xml:space="preserve">
+    <value>دانلود یا حذف اطلاعات شما</value>
   </data>
   <data name="ManageProfile" xml:space="preserve">
     <value>پروفایل من</value>
   </data>
+  <data name="ManageProfileDescription" xml:space="preserve">
+    <value>به روز رسانی اطلاعات نمایه شما</value>
+  </data>
   <data name="SubTitle" xml:space="preserve">
     <value>خوش آمدید به {0}</value>
+  </data>
+  <data name="ViewDetails" xml:space="preserve">
+    <value>مشاهده جزئیات</value>
   </data>
 </root>

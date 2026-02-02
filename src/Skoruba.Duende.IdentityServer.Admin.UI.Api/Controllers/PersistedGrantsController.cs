@@ -59,19 +59,23 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> Delete(string id)
         {
             await _persistedGrantsService.DeletePersistedGrantAsync(UrlHelpers.QueryStringUnSafeHash(id));
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("Subjects/{subjectId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteBySubject(string subjectId)
         {
             await _persistedGrantsService.DeletePersistedGrantsAsync(subjectId);
 
-            return Ok();
+            return NoContent();
         }
 
         private void ParsePersistedGrantKey(PersistedGrantApiDto persistedGrantApiDto)

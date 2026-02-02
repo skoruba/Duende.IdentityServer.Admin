@@ -3,7 +3,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Reflection;
+using NetIPNetwork = System.Net.IPNetwork;
 using Duende.IdentityServer.EntityFramework.Options;
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -26,15 +28,14 @@ using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Identity;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Extensions;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySql;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.PostgreSQL;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.SqlServer;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Helpers;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Interfaces;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Extensions;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration.ApplicationParts;
@@ -68,7 +69,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
             services
                 .AddTransient<IAuditLoggingRepository<TAuditLog>,
                     AuditLoggingRepository<TAuditLoggingDbContext, TAuditLog>>();
-            
+
             services.AddTransient<IAuditLogRepository<TAuditLog>, AuditLogRepository<TAuditLoggingDbContext, TAuditLog>>();
             services.AddTransient<IAuditLogService, AuditLogService<TAuditLog>>();
 
@@ -134,6 +135,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
             services.TryAddTransient(typeof(IGenericControllerLocalizer<>), typeof(GenericControllerLocalizer<>));
 
             services.AddControllersWithViews(o => { o.Conventions.Add(new GenericControllerRouteConvention()); })
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+                })
                 .AddDataAnnotationsLocalization()
                 .ConfigureApplicationPartManager(m =>
                 {
@@ -155,36 +160,36 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
         /// <typeparam name="TIdentityDbContext"></typeparam>
         /// <typeparam name="TAuditLoggingDbContext"></typeparam>
         /// <typeparam name="TDataProtectionDbContext"></typeparam>
+        /// <typeparam name="TAuditLog"></typeparam>
         /// <param name="services"></param>
         /// <param name="configuration"></param>
+        /// <param name="databaseMigrationsConfiguration"></param>
         public static void AddDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext,
-            TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAuditLog>(this IServiceCollection services, IConfiguration configuration)
+            TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAdminConfigurationDbContext, TAuditLog>(this IServiceCollection services, IConfiguration configuration, DatabaseMigrationsConfiguration databaseMigrationsConfiguration)
             where TIdentityDbContext : DbContext
             where TPersistedGrantDbContext : DbContext, IAdminPersistedGrantDbContext
             where TConfigurationDbContext : DbContext, IAdminConfigurationDbContext
             where TLogDbContext : DbContext, IAdminLogDbContext
             where TAuditLoggingDbContext : DbContext, IAuditLoggingDbContext<TAuditLog>
             where TDataProtectionDbContext : DbContext, IDataProtectionKeyContext
+            where TAdminConfigurationDbContext : DbContext, IAdminConfigurationStoreDbContext
             where TAuditLog : AuditLog
         {
             var databaseProvider = configuration.GetSection(nameof(DatabaseProviderConfiguration)).Get<DatabaseProviderConfiguration>();
-            var databaseMigrations = configuration.GetSection(nameof(DatabaseMigrationsConfiguration)).Get<DatabaseMigrationsConfiguration>() ?? new DatabaseMigrationsConfiguration();
             var connectionStrings = configuration.GetSection("ConnectionStrings").Get<ConnectionStringsConfiguration>();
 
             switch (databaseProvider.ProviderType)
             {
                 case DatabaseProviderType.SqlServer:
-                    services.RegisterSqlServerDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAuditLog>(connectionStrings, databaseMigrations);
+                    services.RegisterSqlServerDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAdminConfigurationDbContext, TAuditLog>(connectionStrings, databaseMigrationsConfiguration);
                     break;
                 case DatabaseProviderType.PostgreSQL:
-                    services.RegisterNpgSqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAuditLog>(connectionStrings, databaseMigrations);
-                    break;
-                case DatabaseProviderType.MySql:
-                    services.RegisterMySqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAuditLog>(connectionStrings, databaseMigrations);
+                    services.RegisterNpgSqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAdminConfigurationDbContext, TAuditLog>(connectionStrings, databaseMigrationsConfiguration);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(databaseProvider.ProviderType), $@"The value needs to be one of {string.Join(", ", Enum.GetNames(typeof(DatabaseProviderType)))}.");
             }
+
         }
 
         /// <summary>
@@ -342,35 +347,71 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
                             .AddNpgSql(dataProtectionDbConnectionString, name: "DataProtectionDb",
                                 healthQuery: $"SELECT * FROM \"{dataProtectionTableName}\"  LIMIT 1");
                         break;
-                    case DatabaseProviderType.MySql:
-                        healthChecksBuilder
-                            .AddMySql(configurationDbConnectionString, name: "ConfigurationDb")
-                            .AddMySql(persistedGrantsDbConnectionString, name: "PersistentGrantsDb")
-                            .AddMySql(identityDbConnectionString, name: "IdentityDb")
-                            .AddMySql(logDbConnectionString, name: "LogDb")
-                            .AddMySql(auditLogDbConnectionString, name: "AuditLogDb")
-                            .AddMySql(dataProtectionDbConnectionString, name: "DataProtectionDb");
-                        break;
                     default:
                         throw new NotImplementedException($"Health checks not defined for database provider {databaseProvider.ProviderType}");
                 }
             }
         }
 
-        public static void AddForwardHeaders(this IApplicationBuilder app)
+        public static void AddForwardHeaders(this IApplicationBuilder app, IConfiguration configuration)
         {
-            var forwardingOptions = new ForwardedHeadersOptions()
+            var forwardedHeadersConfig = configuration.GetSection("ForwardedHeadersConfiguration")
+                .Get<Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration.ForwardedHeadersConfiguration>()
+                ?? new Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration.ForwardedHeadersConfiguration();
+
+            if (forwardedHeadersConfig.Enabled)
             {
-                ForwardedHeaders = ForwardedHeaders.All
-            };
+                var forwardingOptions = new ForwardedHeadersOptions()
+                {
+                    ForwardedHeaders = ForwardedHeaders.All,
+                    ForwardLimit = forwardedHeadersConfig.ForwardLimit
+                };
 
-            forwardingOptions.KnownNetworks.Clear();
-            forwardingOptions.KnownProxies.Clear();
+                if (forwardedHeadersConfig.AllowAll)
+                {
+                    // Development mode: allow all proxies and networks (insecure)
+                    forwardingOptions.KnownIPNetworks.Clear();
+                    forwardingOptions.KnownProxies.Clear();
+                }
+                else
+                {
+                    // Production mode: only trust configured proxies and networks
+                    if (forwardedHeadersConfig.KnownProxies != null && forwardedHeadersConfig.KnownProxies.Count > 0)
+                    {
+                        forwardingOptions.KnownProxies.Clear();
+                        foreach (var proxy in forwardedHeadersConfig.KnownProxies)
+                        {
+                            if (System.Net.IPAddress.TryParse(proxy, out var ipAddress))
+                            {
+                                forwardingOptions.KnownProxies.Add(ipAddress);
+                            }
+                        }
+                    }
 
-            app.UseForwardedHeaders(forwardingOptions);
+                    if (forwardedHeadersConfig.KnownNetworks != null && forwardedHeadersConfig.KnownNetworks.Count > 0)
+                    {
+                        forwardingOptions.KnownIPNetworks.Clear();
+                        foreach (var network in forwardedHeadersConfig.KnownNetworks)
+                        {
+                            var parts = network.Split('/');
+                            if (parts.Length == 2 &&
+                                IPAddress.TryParse(parts[0], out var prefix) &&
+                                int.TryParse(parts[1], out var prefixLength))
+                            {
+                                forwardingOptions.KnownIPNetworks.Add(new NetIPNetwork(prefix, prefixLength));
+                            }
+                        }
+                    }
+
+                    // If no proxies or networks configured, don't clear defaults (more secure)
+                    // This means it will only trust the loopback by default
+                }
+
+                app.UseForwardedHeaders(forwardingOptions);
+            }
         }
 
-        public static void AddIdentityServerAdminApi<TIdentityDbContext, TIdentityServerConfigurationDbContext, TPersistedGrantDbContext, TIdentityServerDataProtectionDbContext, TAdminLogDbContext, TAdminAuditLogDbContext, TAuditLog, TUserDto, TRoleDto, TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken,
+        public static void AddIdentityServerAdminApi<TIdentityDbContext, TIdentityServerConfigurationDbContext, TPersistedGrantDbContext, TIdentityServerDataProtectionDbContext, TAdminLogDbContext, TAdminAuditLogDbContext, TAdminConfigurationDbContext, TAuditLog, TUserDto, TRoleDto, TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken,
             TUsersDto, TRolesDto, TUserRolesDto, TUserClaimsDto,
             TUserProviderDto, TUserProvidersDto, TUserChangePasswordDto, TRoleClaimsDto, TUserClaimDto, TRoleClaimDto>(this IServiceCollection services, IConfiguration configuration, AdminApiConfiguration adminApiConfiguration)
             where TPersistedGrantDbContext : DbContext, IAdminPersistedGrantDbContext
@@ -398,14 +439,21 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
             where TIdentityServerDataProtectionDbContext : DbContext, IDataProtectionKeyContext
             where TIdentityServerConfigurationDbContext : DbContext, IAdminConfigurationDbContext
             where TAdminLogDbContext : DbContext, IAdminLogDbContext
+            where TAdminConfigurationDbContext : DbContext, IAdminConfigurationStoreDbContext
             where TAdminAuditLogDbContext : IAuditLoggingDbContext<AuditLog>, IAuditLoggingDbContext<TAuditLog>
             where TAuditLog : AuditLog, new()
         {
+            services.AddSingleton(configuration.GetSection(nameof(IdentityServerData))
+                .Get<IdentityServerData>());
+
+            services.AddSingleton(configuration.GetSection(nameof(IdentityData))
+                .Get<IdentityData>());
+
             services.AddDataProtection<TIdentityServerDataProtectionDbContext>(configuration);
-            
+
             services.AddScoped<ControllerExceptionFilterAttribute>();
             services.AddScoped<IApiErrorResources, ApiErrorResources>();
-            
+
             var profileTypes = new HashSet<Type>
             {
                 typeof(IdentityMapperProfile<TRoleDto, TUserRolesDto, TKey, TUserClaimsDto, TUserClaimDto, TUserProviderDto, TUserProvidersDto, TUserChangePasswordDto, TRoleClaimDto, TRoleClaimsDto>)
@@ -418,17 +466,17 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
                 TUsersDto, TRolesDto, TUserRolesDto, TUserClaimsDto,
                 TUserProviderDto, TUserProvidersDto, TUserChangePasswordDto, TRoleClaimsDto, TUserClaimDto, TRoleClaimDto>(profileTypes);
 
-            services.AddAdminServices<TIdentityServerConfigurationDbContext, TPersistedGrantDbContext, TAdminLogDbContext>();
+            services.AddAdminServices<TIdentityServerConfigurationDbContext, TPersistedGrantDbContext, TAdminLogDbContext, TAdminConfigurationDbContext>();
 
             services.AddAdminApiCors(adminApiConfiguration);
 
             services.AddMvcServices<TUserDto, TRoleDto, TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken,
                 TUsersDto, TRolesDto, TUserRolesDto, TUserClaimsDto,
                 TUserProviderDto, TUserProvidersDto, TUserChangePasswordDto, TRoleClaimsDto, TUserClaimDto, TRoleClaimDto>();
-            
+
             services.AddAuditEventLogging<TAdminAuditLogDbContext, TAuditLog>(configuration);
         }
-        
+
         public static string GetInformationalVersion(this Type typeInAssembly)
         {
             ArgumentNullException.ThrowIfNull(typeInAssembly);

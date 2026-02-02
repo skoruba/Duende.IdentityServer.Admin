@@ -1,11 +1,7 @@
 {
   "$schema": "http://json.schemastore.org/template",
   "author": "Jan Skoruba",
-  "classifications": [
-    "Web",
-    "Duende.IdentityServer",
-    "Admin"
-  ],
+  "classifications": ["Web", "Duende.IdentityServer", "Admin"],
   "name": "Skoruba Duende IdentityServer Admin",
   "identity": "Skoruba.Duende.IdentityServer.Admin",
   "groupIdentity": "Skoruba.Duende.IdentityServer.Admin",
@@ -33,8 +29,8 @@
     },
     "adminclientid": {
       "type": "parameter",
-      "defaultValue": "skoruba_identity_admin",
-      "replaces": "skoruba_identity_admin",
+      "defaultValue": "skoruba_identity_admin_v3",
+      "replaces": "skoruba_identity_admin_v3",
       "isRequired": true,
       "description": "The name of client, that is be used in the Duende IdentityServer"
     },
@@ -44,6 +40,18 @@
       "replaces": "skoruba_admin_client_secret",
       "isRequired": true,
       "description": "The value of client secret, that is be used in the Duende IdentityServer"
+    },
+    "requirepushedauthorization": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "true",
+      "description": "Set RequirePushedAuthorization on the admin client."
+    },
+    "admindevport": {
+      "type": "parameter",
+      "defaultValue": "localhost:7127",
+      "replaces": "localhost:50445",
+      "description": "The port number for the Admin project when running in development."
     }
   },
   "primaryOutputs": [
@@ -60,9 +68,6 @@
       "path": "src/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared/Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj"
     },
     {
-      "path": "src/Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql/Skoruba.Duende.IdentityServer.Admin.EntityFramework.MySql.csproj"
-    },
-    {
       "path": "src/Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL/Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.csproj"
     },
     {
@@ -76,7 +81,7 @@
     {
       "actionId": "D396686C-DE0E-4DE6-906D-291CD29FC5DE",
       "args": {
-        "primaryOutputIndexes": "0;1;2;3;4;5;6;7"
+        "primaryOutputIndexes": "0;1;2;3;4;5;6"
       },
       "continueOnError": false,
       "manualInstructions": [
@@ -95,5 +100,27 @@
       "actionId": "210D431B-A78B-4D2F-B762-4ED3E3EA9025",
       "continueOnError": true
     }
-  ]
+  ],
+  "specialCustomOperations": {
+    "**/*.json": {
+      "operations": [
+        {
+          "type": "replacement",
+          "condition": "(!requirepushedauthorization)",
+          "configuration": {
+            "original": "\"RequirePushedAuthorization\": true",
+            "replacement": "\"RequirePushedAuthorization\": false"
+          }
+        },
+        {
+          "type": "replacement",
+          "condition": "(requirepushedauthorization)",
+          "configuration": {
+            "original": "\"RequirePushedAuthorization\": false",
+            "replacement": "\"RequirePushedAuthorization\": true"
+          }
+        }
+      ]
+    }
+  }
 }

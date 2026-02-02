@@ -133,6 +133,10 @@
     <value>Consentements</value>
     <comment>Octrois. Explicit mistake for clarity</comment>
   </data>
+  <data name="ServerSessionsMenu" xml:space="preserve">
+    <value>Sessions serveur</value>
+  </data>
+
   <data name="ManagePersonalData" xml:space="preserve">
     <value>Mes données personnelles</value>
   </data>

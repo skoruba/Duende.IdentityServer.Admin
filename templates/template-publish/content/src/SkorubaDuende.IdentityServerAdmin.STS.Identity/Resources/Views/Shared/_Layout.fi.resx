@@ -132,6 +132,10 @@
   <data name="Grants" xml:space="preserve">
     <value>Käyttöoikeudet</value>
   </data>
+  <data name="ServerSessionsMenu" xml:space="preserve">
+    <value>Palvelinsessiot</value>
+  </data>
+
   <data name="ManagePersonalData" xml:space="preserve">
     <value>Henkilökohtaiset tietoni</value>
   </data>

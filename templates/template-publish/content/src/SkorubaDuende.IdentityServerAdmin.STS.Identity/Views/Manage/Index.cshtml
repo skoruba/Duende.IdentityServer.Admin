@@ -2,93 +2,144 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @model SkorubaDuende.IdentityServerAdmin.STS.Identity.ViewModels.Manage.IndexViewModel
 
-<h4>@Localizer["Title"]</h4>
-
-@await Html.PartialAsync("_ValidationSummary")
-
-@await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
-
-<div class="row">
-    <div class="col-lg-2">
-        <img-gravatar email="@Model.Email" class="img-thumbnail" size="150" />
+<section class="space-y-6">
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title">@Localizer["Title"]</h2>
+      <p class="card-description">@Localizer["Manage your profile and contact information."]</p>
     </div>
-    <div class="col-sm-10">
-        <form method="post">
-            <div class="form-group">
-                <label asp-for="Username">@Localizer["UserName"]</label>
-                <input asp-for="Username" class="form-control" disabled />
-            </div>
-            <div class="form-group">
-                <label asp-for="Email">@Localizer["Email"]</label>
-                <input type="hidden" asp-for="IsEmailConfirmed" />
-                @if (Model.IsEmailConfirmed)
-                {
-                    <div class="input-group">
-                        <input asp-for="Email" class="form-control" />
-                    </div>
-                }
-                else
-                {
-                    <input asp-for="Email" class="form-control" />
-                    <button asp-action="SendVerificationEmail" class="btn btn-link">@Localizer["SendVerificationEmail"]</button>
-                }
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PhoneNumber">@Localizer["PhoneNumber"]</label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
 
-            <div class="form-group">
-                <label asp-for="Name">@Localizer["Name"]</label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
+    <div class="card-content space-y-6">
+      @await Html.PartialAsync("_ValidationSummary")
+      @await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
 
-            <div class="form-group">
-                <label asp-for="Website">@Localizer["Website"]</label>
-                <input asp-for="Website" class="form-control" />
-                <span asp-validation-for="Website" class="text-danger"></span>
-            </div>
+      <div class="grid gap-6 md:grid-cols-[180px,1fr]">
+        <div class="flex items-start">
+          <img-gravatar email="@Model.Email" class="rounded-full border shadow-sm" size="150" />
+        </div>
 
-            <div class="form-group">
-                <label asp-for="Profile">@Localizer["Profile"]</label>
-                <input asp-for="Profile" class="form-control" />
-                <span asp-validation-for="Profile" class="text-danger"></span>
-            </div>
+        <form method="post" class="space-y-6">
+          <!-- Username (read-only) -->
+          <div class="form-item">
+            <label asp-for="Username" class="form-label" tw-validation>
+              <lucideicon name="user" class="inline-block h-4 w-4 mr-1" />
+              @Localizer["Username"]
+            </label>
+            <input asp-for="Username" class="input" disabled tw-validation />
+            <span asp-validation-for="Username" class="form-message"></span>
+          </div>
 
-            <div class="form-group">
-                <label asp-for="StreetAddress">@Localizer["StreetAddress"]</label>
-                <input asp-for="StreetAddress" class="form-control" />
-                <span asp-validation-for="StreetAddress" class="text-danger"></span>
+          <!-- Email + verification -->
+          <div class="form-item">
+            <label asp-for="Email" class="form-label" tw-validation>
+              <lucideicon name="mail" class="inline-block h-4 w-4 mr-1" />
+              @Localizer["Email"]
+            </label>
+            <input type="hidden" asp-for="IsEmailConfirmed" />
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+              <input asp-for="Email" class="input sm:flex-1" tw-validation />
+              @if (!Model.IsEmailConfirmed)
+              {
+                <button asp-action="SendVerificationEmail" class="btn-link">@Localizer["SendVerificationEmail"]</button>
+              }
             </div>
+            <span asp-validation-for="Email" class="form-message"></span>
+          </div>
 
-            <div class="form-group">
-                <label asp-for="Locality">@Localizer["Locality"]</label>
-                <input asp-for="Locality" class="form-control" />
-                <span asp-validation-for="Locality" class="text-danger"></span>
+          <!-- Contact -->
+          <div class="grid gap-6 md:grid-cols-2">
+            <div class="form-item">
+              <label asp-for="PhoneNumber" class="form-label" tw-validation>
+                <lucideicon name="phone" class="inline-block h-4 w-4 mr-1" />
+                @Localizer["Phone number"]
+              </label>
+              <input asp-for="PhoneNumber" class="input" tw-validation />
+              <span asp-validation-for="PhoneNumber" class="form-message"></span>
             </div>
-
-            <div class="form-group">
-                <label asp-for="Region">@Localizer["Region"]</label>
-                <input asp-for="Region" class="form-control" />
-                <span asp-validation-for="Region" class="text-danger"></span>
+            <div class="form-item">
+              <label asp-for="Name" class="form-label" tw-validation>
+                <lucideicon name="user-circle" class="inline-block h-4 w-4 mr-1" />
+                @Localizer["Full name"]
+              </label>
+              <input asp-for="Name" class="input" tw-validation />
+              <span asp-validation-for="Name" class="form-message"></span>
             </div>
+          </div>
 
-            <div class="form-group">
-                <label asp-for="PostalCode">@Localizer["PostalCode"]</label>
-                <input asp-for="PostalCode" class="form-control" />
-                <span asp-validation-for="PostalCode" class="text-danger"></span>
+          <div class="form-item">
+            <label asp-for="Website" class="form-label" tw-validation>
+              <lucideicon name="globe" class="inline-block h-4 w-4 mr-1" />
+              @Localizer["Website"]
+            </label>
+            <input asp-for="Website" class="input" tw-validation />
+            <span asp-validation-for="Website" class="form-message"></span>
+          </div>
+
+          <div class="form-item">
+            <label asp-for="Profile" class="form-label" tw-validation>
+              <lucideicon name="link" class="inline-block h-4 w-4 mr-1" />
+              @Localizer["Profile"]
+            </label>
+            <input asp-for="Profile" class="input" tw-validation />
+            <span asp-validation-for="Profile" class="form-message"></span>
+          </div>
+
+          <!-- Address -->
+          <div class="form-item">
+            <label asp-for="StreetAddress" class="form-label" tw-validation>
+              <lucideicon name="map-pin" class="inline-block h-4 w-4 mr-1" />
+              @Localizer["Street address"]
+            </label>
+            <input asp-for="StreetAddress" class="input" tw-validation />
+            <span asp-validation-for="StreetAddress" class="form-message"></span>
+          </div>
+
+          <div class="grid gap-6 md:grid-cols-2">
+            <div class="form-item">
+              <label asp-for="Locality" class="form-label" tw-validation>
+                <lucideicon name="building" class="inline-block h-4 w-4 mr-1" />
+                @Localizer["City"]
+              </label>
+              <input asp-for="Locality" class="input" tw-validation />
+              <span asp-validation-for="Locality" class="form-message"></span>
             </div>
-
-            <div class="form-group">
-                <label asp-for="Country">@Localizer["Country"]</label>
-                <input asp-for="Country" class="form-control" />
-                <span asp-validation-for="Country" class="text-danger"></span>
+            <div class="form-item">
+              <label asp-for="Region" class="form-label" tw-validation>
+                <lucideicon name="map" class="inline-block h-4 w-4 mr-1" />
+                @Localizer["State/Province"]
+              </label>
+              <input asp-for="Region" class="input" tw-validation />
+              <span asp-validation-for="Region" class="form-message"></span>
             </div>
+          </div>
 
-            <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
+          <div class="grid gap-6 md:grid-cols-2">
+            <div class="form-item">
+              <label asp-for="PostalCode" class="form-label" tw-validation>
+                <lucideicon name="hash" class="inline-block h-4 w-4 mr-1" />
+                @Localizer["Postal code"]
+              </label>
+              <input asp-for="PostalCode" class="input" tw-validation />
+              <span asp-validation-for="PostalCode" class="form-message"></span>
+            </div>
+            <div class="form-item">
+              <label asp-for="Country" class="form-label" tw-validation>
+                <lucideicon name="flag" class="inline-block h-4 w-4 mr-1" />
+                @Localizer["Country"]
+              </label>
+              <input asp-for="Country" class="input" tw-validation />
+              <span asp-validation-for="Country" class="form-message"></span>
+            </div>
+          </div>
+
+          <div class="flex gap-3">
+            <button type="submit" class="btn-default">
+              <lucideicon name="save" class="inline-block h-4 w-4 mr-2" />
+              @Localizer["Save"]
+            </button>
+          </div>
         </form>
+      </div>
     </div>
-</div>
+  </div>
+</section>

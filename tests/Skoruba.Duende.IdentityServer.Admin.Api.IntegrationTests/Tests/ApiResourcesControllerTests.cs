@@ -37,10 +37,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Tests
             var response = await Client.GetAsync("api/apiresources");
 
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.Redirect);
-
-            //The redirect to login
-            response.Headers.Location?.ToString().Should().Contain(AuthenticationConsts.AccountLoginPage);
+            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
         }
     }
 }

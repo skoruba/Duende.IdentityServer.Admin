@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, ...</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, ...</value>
+  </resheader>
+  <data name="ServerSideSessionsTitle" xml:space="preserve">
+    <value>Server-side sessions</value>
+  </data>
+  <data name="ServerSideSessionsDescription" xml:space="preserve">
+    <value>Track active server-side sessions and end them when necessary.</value>
+  </data>
+  <data name="ServerSideSessionsPrev" xml:space="preserve">
+    <value>Prev</value>
+  </data>
+  <data name="ServerSideSessionsNext" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="ServerSideSessionsFilterLabel" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="ServerSideSessionsFilterPlaceholder" xml:space="preserve">
+    <value>Subject, session or display name</value>
+  </data>
+  <data name="ServerSideSessionsSearch" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="ServerSideSessionsTotalResultsWithPage" xml:space="preserve">
+    <value>Total Results: {0}, Page {1} of {2}</value>
+  </data>
+  <data name="ServerSideSessionsTotalResults" xml:space="preserve">
+    <value>Total Results: {0}</value>
+  </data>
+  <data name="ServerSideSessionsSubject" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="ServerSideSessionsSession" xml:space="preserve">
+    <value>Session</value>
+  </data>
+  <data name="ServerSideSessionsDisplayName" xml:space="preserve">
+    <value>Display Name</value>
+  </data>
+  <data name="ServerSideSessionsCreated" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="ServerSideSessionsExpires" xml:space="preserve">
+    <value>Expires</value>
+  </data>
+  <data name="ServerSideSessionsDelete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="ServerSideSessionsClients" xml:space="preserve">
+    <value>Clients:</value>
+  </data>
+  <data name="ServerSideSessionsClientsNone" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="ServerSideSessionsNoResults" xml:space="preserve">
+    <value>No server-side sessions found.</value>
+  </data>
+</root>

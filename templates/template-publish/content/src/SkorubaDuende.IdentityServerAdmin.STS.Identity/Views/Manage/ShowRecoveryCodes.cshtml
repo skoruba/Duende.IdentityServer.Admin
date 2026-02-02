@@ -5,21 +5,30 @@
     ViewData["Title"] = Localizer["Title"];
 }
 
-<h4>@ViewData["Title"]</h4>
-<div class="alert alert-warning" role="alert">
-    <p>
-        <span class="fa fa-exclamation-triangle"></span>
-        <strong>@Localizer["SubTitle"]</strong>
-    </p>
-    <p>
-        @Localizer["Info"]
-    </p>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        @for (var row = 0; row < Model.RecoveryCodes.Length; row += 2)
-        {
-            <code>@Model.RecoveryCodes[row]</code><text>&nbsp;</text><code>@Model.RecoveryCodes[row + 1]</code><br />
-        }
+<section class="space-y-6 max-w-2xl">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">@ViewData["Title"]</h2>
+        </div>
+
+        <div class="card-content space-y-6">
+            <div class="alert-default">
+                <lucideicon name="info" class="h-4 w-4" />
+                <div>
+                    <div class="alert-title">@Localizer["SubTitle"]</div>
+                    <div class="alert-description">@Localizer["Info"]</div>
+                </div>
+            </div>
+
+            <div class="grid gap-3 sm:grid-cols-2 font-mono text-sm">
+                @for (var row = 0; row < Model.RecoveryCodes.Length; row += 2)
+                {
+                    <div class="flex items-center justify-between rounded-md border bg-muted/40 px-3 py-2">
+                        <span>@Model.RecoveryCodes[row]</span>
+                        <span>@Model.RecoveryCodes[row + 1]</span>
+                    </div>
+                }
+            </div>
+        </div>
     </div>
-</div>
+</section>

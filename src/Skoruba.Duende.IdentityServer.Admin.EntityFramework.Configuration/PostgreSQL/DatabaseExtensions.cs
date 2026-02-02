@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Skoruba.AuditLogging.EntityFramework.DbContexts;
 using Skoruba.AuditLogging.EntityFramework.Entities;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
 
@@ -30,7 +31,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Post
         /// <param name="connectionStrings"></param>
         /// <param name="databaseMigrations"></param>
         public static void RegisterNpgSqlDbContexts<TIdentityDbContext, TConfigurationDbContext,
-            TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAuditLog>(this IServiceCollection services,
+            TPersistedGrantDbContext, TLogDbContext, TAuditLoggingDbContext, TDataProtectionDbContext, TAdminConfigurationDbContext, TAuditLog>(this IServiceCollection services,
             ConnectionStringsConfiguration connectionStrings,
             DatabaseMigrationsConfiguration databaseMigrations)
             where TIdentityDbContext : DbContext
@@ -39,6 +40,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Post
             where TLogDbContext : DbContext, IAdminLogDbContext
             where TAuditLoggingDbContext : DbContext, IAuditLoggingDbContext<TAuditLog>
             where TDataProtectionDbContext : DbContext, IDataProtectionKeyContext
+            where TAdminConfigurationDbContext : DbContext, IAdminConfigurationStoreDbContext
             where TAuditLog : AuditLog
         {
             var migrationsAssembly = typeof(DatabaseExtensions).GetTypeInfo().Assembly.GetName().Name;
@@ -69,6 +71,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Post
             // DataProtectionKey DB from existing connection
             if (!string.IsNullOrEmpty(connectionStrings.DataProtectionDbConnection))
                 services.AddDbContext<TDataProtectionDbContext>(options => options.UseNpgsql(connectionStrings.DataProtectionDbConnection, sql => sql.MigrationsAssembly(databaseMigrations.DataProtectionDbMigrationsAssembly ?? migrationsAssembly)));
+
+            // Admin configuration DB from existing connection
+            services.AddDbContext<TAdminConfigurationDbContext>(options => options.UseNpgsql(connectionStrings.AdminConfigurationDbConnection,
+                optionsSql => optionsSql.MigrationsAssembly(databaseMigrations.AdminConfigurationDbMigrationsAssembly ?? migrationsAssembly)));
         }
 
         /// <summary>
@@ -105,9 +111,28 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Post
 
             // Operational DB from existing connection
             services.AddOperationalDbContext<TPersistedGrantDbContext>(options => options.ConfigureDbContext = b => b.UseNpgsql(persistedGrantConnectionString, sql => sql.MigrationsAssembly(migrationsAssembly)));
-            
+
             // DataProtectionKey DB from existing connection
             services.AddDbContext<TDataProtectionDbContext>(options => options.UseNpgsql(dataProtectionConnectionString, sql => sql.MigrationsAssembly(migrationsAssembly)));
+        }
+
+        /// <summary>
+        /// Add Data Protection DbContext for storing data protection keys in PostgreSQL.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="connectionString"></param>
+        /// <param name="migrationsAssembly"></param>
+        /// <typeparam name="TDataProtectionDbContext"></typeparam>
+        public static void AddDataProtectionDbContextNpgSql<TDataProtectionDbContext>(
+            this IServiceCollection services,
+            string connectionString,
+            string migrationsAssembly = null)
+            where TDataProtectionDbContext : DbContext, IDataProtectionKeyContext
+        {
+            var assembly = migrationsAssembly ?? typeof(DatabaseExtensions).GetTypeInfo().Assembly.GetName().Name;
+            services.AddDbContext<TDataProtectionDbContext>(options =>
+                options.UseNpgsql(connectionString, x => x.MigrationsAssembly(assembly))
+            );
         }
     }
 }

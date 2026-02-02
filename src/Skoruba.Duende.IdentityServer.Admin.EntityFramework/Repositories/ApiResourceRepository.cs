@@ -30,6 +30,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
 
         public virtual async Task<PagedList<ApiResource>> GetApiResourcesAsync(string search, int page = 1, int pageSize = 10)
         {
+            pageSize = QueryableExtensions.NormalizePageSize(pageSize);
+
             var pagedList = new PagedList<ApiResource>();
             Expression<Func<ApiResource, bool>> searchCondition = x => x.Name.Contains(search);
 
@@ -54,6 +56,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
 
         public virtual async Task<PagedList<ApiResourceProperty>> GetApiResourcePropertiesAsync(int apiResourceId, int page = 1, int pageSize = 10)
         {
+            pageSize = QueryableExtensions.NormalizePageSize(pageSize);
+
             var pagedList = new PagedList<ApiResourceProperty>();
 
             var properties = await DbContext.ApiResourceProperties.Where(x => x.ApiResource.Id == apiResourceId).PageBy(x => x.Id, page, pageSize)
@@ -165,6 +169,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
         
         public virtual async Task<PagedList<ApiResourceSecret>> GetApiSecretsAsync(int apiResourceId, int page = 1, int pageSize = 10)
         {
+            pageSize = QueryableExtensions.NormalizePageSize(pageSize);
+
             var pagedList = new PagedList<ApiResourceSecret>();
             var apiSecrets = await DbContext.ApiSecrets.Where(x => x.ApiResource.Id == apiResourceId).PageBy(x => x.Id, page, pageSize).ToListAsync();
 

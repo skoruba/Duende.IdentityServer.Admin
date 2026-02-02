@@ -1,6 +1,6 @@
 param([string] $migration = 'DbInit', [string] $migrationProviderName = 'All', [string] $targetContext = 'All', [string] $projectName = 'Skoruba.Duende.IdentityServer')
 $currentPath = Get-Location
-Set-Location "../src/$projectName.Admin"
+Set-Location "../src/$projectName.Admin.Api"
 Copy-Item appsettings.json -Destination appsettings-backup.json
 $settings = Get-Content appsettings.json -raw
 
@@ -12,13 +12,13 @@ $targetContexts = @{
     IdentityServerPersistedGrantDbContext = "Migrations/IdentityServerGrants";
     AdminAuditLogDbContext                = "Migrations/AuditLogging";
     IdentityServerDataProtectionDbContext = "Migrations/DataProtection";
+    AdminConfigurationDbContext           = "Migrations/AdminConfiguration";
 }
 
 #Initialize the db providers and it's respective projects
 $dpProviders = @{
     SqlServer  = "..\..\src\$projectName.Admin.EntityFramework.SqlServer\$projectName.Admin.EntityFramework.SqlServer.csproj";
     PostgreSQL = "..\..\src\$projectName.Admin.EntityFramework.PostgreSQL\$projectName.Admin.EntityFramework.PostgreSQL.csproj";
-    MySql      = "..\..\src\$projectName.Admin.EntityFramework.MySql\$projectName.Admin.EntityFramework.MySql.csproj";
 }
 
 Write-Host "Start migrate projects"

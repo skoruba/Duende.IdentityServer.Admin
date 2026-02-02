@@ -2,22 +2,25 @@
 @inject IViewLocalizer Localizer
 @model SkorubaDuende.IdentityServerAdmin.STS.Identity.ViewModels.Account.LogoutViewModel
 
-<div class="logout-container">
-	<div class="page-header">
-		<h1>@Localizer["Title"]</h1>
-	</div>
+<div class="py-8">
+	<div class="flex min-h-[50vh] items-center justify-center">
+		<div class="w-full max-w-md">
+			<div class="mb-6 text-center">
+				<h1 class="text-3xl font-bold mb-2">@Localizer["Title"]</h1>
+			</div>
 
-	<div class="row">
-		<div class="col-sm-6">
-			<p>@Localizer["Message"]</p>
-			<form asp-action="Logout">
-				<input type="hidden" name="logoutId" value="@Model.LogoutId" />
-				<fieldset>
-					<div class="form-group">
-						<button class="btn btn-primary">@Localizer["Yes"]</button>
-					</div>
-				</fieldset>
-			</form>
+			<div class="card">
+				<div class="card-content py-8">
+					<p class="mb-6 text-center text-muted-foreground">@Localizer["Message"]</p>
+					<form asp-action="Logout" class="flex justify-center">
+						<input type="hidden" name="logoutId" value="@Model.LogoutId" />
+						<button class="btn-default">
+							<lucideicon name="log-out" class="inline-block h-4 w-4 mr-2" />
+							@Localizer["Yes"]
+						</button>
+					</form>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

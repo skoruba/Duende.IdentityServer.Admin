@@ -3,17 +3,26 @@
 
 using System;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
+using SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.DbContexts;
+using SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Entities.Identity;
+using SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Helpers;
 using Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers;
 
 namespace SkorubaDuende.IdentityServerAdmin.Admin.Api
 {
     public class Program
     {
-        public static void Main(string[] args)
+        private const string SeedArgs = "/seed";
+        private const string MigrateOnlyArgs = "/migrateonly";
+
+        public static async Task Main(string[] args)
         {
             var configuration = GetConfiguration(args);
 
@@ -24,7 +33,12 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api
             {
                 DockerHelpers.ApplyDockerConfiguration(configuration);
 
-                CreateHostBuilder(args).Build().Run();
+                var host = CreateHostBuilder(args).Build();
+
+                var migrationComplete = await ApplyDbMigrationsWithDataSeedAsync(args, configuration, host);
+                if (await MigrateOnlyOperationAsync(args, host, migrationComplete)) return;
+
+                await host.RunAsync();
             }
             catch (Exception ex)
             {
@@ -32,9 +46,42 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api
             }
             finally
             {
-                Log.CloseAndFlush();
+                await Log.CloseAndFlushAsync();
             }
         }
+
+        private static async Task<bool> MigrateOnlyOperationAsync(string[] args, IHost host, bool migrationComplete)
+        {
+            if (args.All(x => x != MigrateOnlyArgs)) return false;
+
+            await host.StopAsync();
+
+            if (!migrationComplete)
+            {
+                Environment.ExitCode = -1;
+            }
+
+            return true;
+        }
+
+        private static async Task<bool> ApplyDbMigrationsWithDataSeedAsync(string[] args, IConfiguration configuration,
+            IHost host)
+        {
+            var applyDbMigrationWithDataSeedFromProgramArguments = args.Any(x => x == SeedArgs);
+            if (applyDbMigrationWithDataSeedFromProgramArguments) args = args.Except(new[] { SeedArgs }).ToArray();
+
+            var seedConfiguration = configuration.GetSection(nameof(SeedConfiguration)).Get<SeedConfiguration>();
+            var databaseMigrationsConfiguration = configuration.GetSection(nameof(DatabaseMigrationsConfiguration))
+                .Get<DatabaseMigrationsConfiguration>();
+
+            return await DbMigrationHelpers
+                .ApplyDbMigrationsWithDataSeedAsync<IdentityServerConfigurationDbContext, AdminIdentityDbContext,
+                    IdentityServerPersistedGrantDbContext, AdminLogDbContext, AdminAuditLogDbContext,
+                    IdentityServerDataProtectionDbContext, AdminConfigurationDbContext, UserIdentity, UserIdentityRole>(host,
+                    applyDbMigrationWithDataSeedFromProgramArguments, seedConfiguration,
+                    databaseMigrationsConfiguration);
+        }
+
 
         private static IConfiguration GetConfiguration(string[] args)
         {
@@ -65,26 +112,32 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                 .ConfigureAppConfiguration((hostContext, configApp) =>
-                 {
-                     var configurationRoot = configApp.Build();
+                .ConfigureAppConfiguration((hostContext, configApp) =>
+                {
+                    var configurationRoot = configApp.Build();
 
-                     configApp.AddJsonFile("serilog.json", optional: true, reloadOnChange: true);
+                    configApp.AddJsonFile("serilog.json", optional: true, reloadOnChange: true);
+                    configApp.AddJsonFile("identitydata.json", optional: true, reloadOnChange: true);
+                    configApp.AddJsonFile("identityserverdata.json", optional: true, reloadOnChange: true);
 
-                     var env = hostContext.HostingEnvironment;
+                    var env = hostContext.HostingEnvironment;
 
-                     configApp.AddJsonFile($"serilog.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                    configApp.AddJsonFile($"serilog.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                    configApp.AddJsonFile($"identitydata.{env.EnvironmentName}.json", optional: true,
+                        reloadOnChange: true);
+                    configApp.AddJsonFile($"identityserverdata.{env.EnvironmentName}.json", optional: true,
+                        reloadOnChange: true);
 
-                     if (env.IsDevelopment())
-                     {
-                         configApp.AddUserSecrets<Startup>(true);
-                     }
+                    if (env.IsDevelopment())
+                    {
+                        configApp.AddUserSecrets<Startup>(true);
+                    }
 
-                     configurationRoot.AddAzureKeyVaultConfiguration(configApp);
+                    configurationRoot.AddAzureKeyVaultConfiguration(configApp);
 
-                     configApp.AddEnvironmentVariables();
-                     configApp.AddCommandLine(args);
-                 })
+                    configApp.AddEnvironmentVariables();
+                    configApp.AddCommandLine(args);
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.ConfigureKestrel(options => options.AddServerHeader = false);

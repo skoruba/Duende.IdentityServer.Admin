@@ -47,7 +47,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
 
             return Ok(identityResourceApiModel);
         }
-        
+
         [HttpGet(nameof(CanInsertIdentityResource))]
         public async Task<ActionResult<bool>> CanInsertIdentityResource(int id, string name)
         {
@@ -59,7 +59,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
 
             return exists;
         }
-        
+
         [HttpGet(nameof(CanInsertIdentityResourceProperty))]
         public async Task<ActionResult<bool>> CanInsertIdentityResourceProperty(int id, string key)
         {
@@ -75,7 +75,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(IdentityResourceApiDto), 201)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Post([FromBody]IdentityResourceApiDto identityResourceApi)
+        public async Task<ActionResult<IdentityResourceApiDto>> Post([FromBody] IdentityResourceApiDto identityResourceApi)
         {
             var identityResourceDto = identityResourceApi.ToIdentityResourceApiModel<IdentityResourceDto>();
 
@@ -91,21 +91,22 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpPut]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Put([FromBody]IdentityResourceApiDto identityResourceApi)
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Put([FromBody] IdentityResourceApiDto identityResourceApi)
         {
             var identityResource = identityResourceApi.ToIdentityResourceApiModel<IdentityResourceDto>();
 
             await _identityResourceService.GetIdentityResourceAsync(identityResource.Id);
             await _identityResourceService.UpdateIdentityResourceAsync(identityResource);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> Delete(int id)
         {
             var identityResource = new IdentityResourceDto { Id = id };
@@ -113,7 +114,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
             await _identityResourceService.GetIdentityResourceAsync(identityResource.Id);
             await _identityResourceService.DeleteIdentityResourceAsync(identityResource);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpGet("{id}/Properties")]
@@ -137,7 +138,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         [HttpPost("{id}/Properties")]
         [ProducesResponseType(typeof(IdentityResourcePropertyApiDto), 201)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> PostProperty(int id, [FromBody]IdentityResourcePropertyApiDto identityResourcePropertyApi)
+        public async Task<ActionResult<IdentityResourcePropertyApiDto>> PostProperty(int id, [FromBody] IdentityResourcePropertyApiDto identityResourcePropertyApi)
         {
             var identityResourcePropertiesDto = identityResourcePropertyApi.ToIdentityResourceApiModel<IdentityResourcePropertiesDto>();
             identityResourcePropertiesDto.IdentityResourceId = id;
@@ -154,8 +155,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpDelete("Properties/{propertyId}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteProperty(int propertyId)
         {
             var identityResourceProperty = new IdentityResourcePropertiesDto { IdentityResourcePropertyId = propertyId };
@@ -163,7 +164,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
             await _identityResourceService.GetIdentityResourcePropertyAsync(identityResourceProperty.IdentityResourcePropertyId);
             await _identityResourceService.DeleteIdentityResourcePropertyAsync(identityResourceProperty);
 
-            return Ok();
+            return NoContent();
         }
     }
 }

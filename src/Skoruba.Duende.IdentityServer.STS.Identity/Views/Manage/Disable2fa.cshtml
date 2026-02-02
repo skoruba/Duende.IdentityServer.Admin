@@ -4,20 +4,27 @@
     ViewData["Title"] = Localizer["Title"];
 }
 
-<h2>@ViewData["Title"]</h2>
+<section class="space-y-6 max-w-2xl">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">@ViewData["Title"]</h2>
+        </div>
 
-<div class="alert alert-warning" role="alert">
-    <p>
-        <span class="fa fa-exclamation-triangle"></span>
-        <strong>@Localizer["SubTitle"]</strong>
-    </p>
-    <p>
-        @Localizer["Info"] <a asp-action="ResetAuthenticatorWarning"></a>
-    </p>
-</div>
+        <div class="card-content space-y-6">
+            <div class="alert-destructive">
+                <lucideicon name="alert-circle" class="h-4 w-4" />
+                <div>
+                    <div class="alert-title">@Localizer["SubTitle"]</div>
+                    <div class="alert-description">@Localizer["Info"] <a asp-action="ResetAuthenticatorWarning" class="underline underline-offset-4">@Localizer["ResetAuthenticator"]</a></div>
+                </div>
+            </div>
 
-<div>
-    <form asp-action="Disable2fa" method="post" class="form-group">
-        <button class="btn btn-danger" type="submit">@Localizer["Disable2FA"]</button>
-    </form>
-</div>
+            <form asp-action="Disable2fa" method="post">
+                <button class="btn-destructive" type="submit">
+                    <lucideicon name="shield-off" class="inline-block h-4 w-4 mr-2" />
+                    @Localizer["Disable2FA"]
+                </button>
+            </form>
+        </div>
+    </div>
+</section>

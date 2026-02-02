@@ -5,74 +5,91 @@
     ViewData["Title"] = Localizer["Title"];
 }
 
-<div class="row">
-
-    <div class="col-12">
-        <h3>@ViewData["Title"]</h3>
-    </div>
-
+<section class="space-y-6">
     @if (Model.Is2faEnabled)
     {
-        if (Model.RecoveryCodesLeft == 0)
-        {
-            <div class="col-12">
-                <div class="alert alert-danger">
-                    <strong>@Localizer["NoCodes"]</strong>
-                    <p>@Localizer["YouMust"] <a asp-action="GenerateRecoveryCodes">@Localizer["GenerateNewCodes"]</a> @Localizer["BeforeLogin"]</p>
-                </div>
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">@ViewData["Title"]</h2>
             </div>
-        }
-        else if (Model.RecoveryCodesLeft == 1)
-        {
-            <div class="col-12">
-                <div class="alert alert-danger">
-                    <strong>@Localizer["OneCode"]</strong>
-                    <p>@Localizer["YouCanGenerateCodes"] <a asp-action="GenerateRecoveryCodes">@Localizer["GenerateNewCodes"]</a></p>
-                </div>
-            </div>
-        }
-        else if (Model.RecoveryCodesLeft <= 3)
-        {
-            <div class="col-12">
-                <div class="alert alert-warning">
-                    <strong>@Localizer["YouHave"] @Model.RecoveryCodesLeft.ToString() @Localizer["RecoveryCodeLeft"]</strong>
-                    <p>@Localizer["YouShould"] <a asp-action="GenerateRecoveryCodes">@Localizer["GenerateNewCodes"]</a></p>
-                </div>
-            </div>
-        }
+            <div class="card-content space-y-4">
+                @if (Model.RecoveryCodesLeft == 0)
+                {
+                    <div class="alert-destructive">
+                        <lucideicon name="alert-circle" class="h-4 w-4" />
+                        <div>
+                            <div class="alert-title">@Localizer["NoCodes"]</div>
+                            <div class="alert-description">@Localizer["YouMust"] <a asp-action="GenerateRecoveryCodes" class="underline underline-offset-4">@Localizer["GenerateNewCodes"]</a> @Localizer["BeforeLogin"]</div>
+                        </div>
+                    </div>
+                }
+                else if (Model.RecoveryCodesLeft == 1)
+                {
+                    <div class="alert-destructive">
+                        <lucideicon name="alert-circle" class="h-4 w-4" />
+                        <div>
+                            <div class="alert-title">@Localizer["OneCode"]</div>
+                            <div class="alert-description">@Localizer["YouCanGenerateCodes"] <a asp-action="GenerateRecoveryCodes" class="underline underline-offset-4">@Localizer["GenerateNewCodes"]</a></div>
+                        </div>
+                    </div>
+                }
+                else if (Model.RecoveryCodesLeft <= 3)
+                {
+                    <div class="alert-default">
+                        <lucideicon name="info" class="h-4 w-4" />
+                        <div>
+                            <div class="alert-title">@Localizer["YouHave"] @Model.RecoveryCodesLeft.ToString() @Localizer["RecoveryCodeLeft"]</div>
+                            <div class="alert-description">@Localizer["YouShould"] <a asp-action="GenerateRecoveryCodes" class="underline underline-offset-4">@Localizer["GenerateNewCodes"]</a></div>
+                        </div>
+                    </div>
+                }
 
-        if (Model.IsMachineRemembered)
-        {
-            <div class="col-12 mb-3">
-                <form method="post" asp-controller="Manage" asp-action="ForgetTwoFactorClient">
-                    <button type="submit" class="btn btn-info">@Localizer["ForgetBrowser"]</button>
-                </form>
-            </div>
-        }
+                @if (Model.IsMachineRemembered)
+                {
+                    <form method="post" asp-controller="Manage" asp-action="ForgetTwoFactorClient">
+                        <button type="submit" class="btn-outline">@Localizer["ForgetBrowser"]</button>
+                    </form>
+                }
 
-        <div class="col-12">
-            <a asp-action="Disable2faWarning" class="btn btn-dark">@Localizer["Disable2FA"]</a>
-            <a asp-action="GenerateRecoveryCodesWarning" class="btn btn-danger">@Localizer["ResetCodes"]</a>
+                <div class="flex flex-wrap gap-3">
+                    <a asp-action="Disable2faWarning" class="btn-outline">
+                        <lucideicon name="shield-off" class="inline-block h-4 w-4 mr-2" />
+                        @Localizer["Disable2FA"]
+                    </a>
+                    <a asp-action="GenerateRecoveryCodesWarning" class="btn-destructive">
+                        <lucideicon name="refresh-cw" class="inline-block h-4 w-4 mr-2" />
+                        @Localizer["ResetCodes"]
+                    </a>
+                </div>
+            </div>
         </div>
     }
 
-</div>
-
-<div class="row">
-
-    <div class="col-12 mt-3">
-        <h4>@Localizer["AuthenticatorApp"]</h4>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">@Localizer["AuthenticatorApp"]</h3>
+        </div>
+        <div class="card-content">
+            @if (!Model.HasAuthenticator)
+            {
+                <a id="enable-authenticator" asp-action="EnableAuthenticator" class="btn-default">
+                    <lucideicon name="smartphone" class="inline-block h-4 w-4 mr-2" />
+                    @Localizer["AddAuthenticator"]
+                </a>
+            }
+            else
+            {
+                <div class="flex flex-wrap gap-3">
+                    <a id="enable-authenticator" asp-action="EnableAuthenticator" class="btn-default">
+                        <lucideicon name="settings" class="inline-block h-4 w-4 mr-2" />
+                        @Localizer["SetupAuthenticator"]
+                    </a>
+                    <a id="reset-authenticator" asp-action="ResetAuthenticatorWarning" class="btn-destructive">
+                        <lucideicon name="rotate-ccw" class="inline-block h-4 w-4 mr-2" />
+                        @Localizer["ResetAuthenticator"]
+                    </a>
+                </div>
+            }
+        </div>
     </div>
-
-    <div class="col-12">
-        @if (!Model.HasAuthenticator)
-        {
-            <a id="enable-authenticator" asp-action="EnableAuthenticator" class="btn btn-primary">@Localizer["AddAuthenticator"]</a>
-        }
-        else
-        {
-            <a id="enable-authenticator" asp-action="EnableAuthenticator" class="btn btn-primary">@Localizer["SetupAuthenticator"]</a>
-            <a id="reset-authenticator" asp-action="ResetAuthenticatorWarning" class="btn btn-danger">@Localizer["ResetAuthenticator"]</a>
-        }
-    </div>
-</div>
+</section>

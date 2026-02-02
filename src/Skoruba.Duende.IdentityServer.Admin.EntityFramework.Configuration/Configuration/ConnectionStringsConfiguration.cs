@@ -17,11 +17,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Conf
 
 		public string DataProtectionDbConnection { get; set; }
 
+		public string AdminConfigurationDbConnection { get; set; }
+
 		public void SetConnections(string commonConnectionString)
 		{
 			AdminAuditLogDbConnection = commonConnectionString;
 			AdminLogDbConnection = commonConnectionString;
 			ConfigurationDbConnection = commonConnectionString;
+			AdminConfigurationDbConnection = commonConnectionString;
 			DataProtectionDbConnection = commonConnectionString;
 			IdentityDbConnection = commonConnectionString;
 			PersistedGrantDbConnection = commonConnectionString;

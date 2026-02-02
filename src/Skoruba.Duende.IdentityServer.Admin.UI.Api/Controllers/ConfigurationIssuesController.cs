@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Entities;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration.Constants;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.ExceptionHandling;
 
@@ -21,13 +21,22 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers;
 public class ConfigurationIssuesController(IConfigurationIssuesService configurationIssuesService) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<ConfigurationIssueDto>>> Get()
+    public async Task<ActionResult<ConfigurationIssuesPagedDto>> Get([FromQuery] ConfigurationIssuesFilterDto filter)
     {
-        var issues = await configurationIssuesService.GetAllIssuesAsync();
-        
-        return Ok(issues);
+        // Default to skip pagination for backward compatibility
+        if (filter == null)
+        {
+            filter = new ConfigurationIssuesFilterDto { SkipPagination = true };
+        }
+        else if (filter.PageSize <= 0 && !filter.SkipPagination)
+        {
+            filter.SkipPagination = true;
+        }
+
+        var result = await configurationIssuesService.GetIssuesAsync(filter);
+        return Ok(result);
     }
-    
+
     [HttpGet(nameof(GetSummary))]
     public async Task<ActionResult<ConfigurationIssueSummaryDto>> GetSummary()
     {
@@ -35,6 +44,7 @@ public class ConfigurationIssuesController(IConfigurationIssuesService configura
 
         var summary = new ConfigurationIssueSummaryDto
         {
+            Errors = issues.Count(i => i.IssueType == ConfigurationIssueTypeView.Error),
             Warnings = issues.Count(i => i.IssueType == ConfigurationIssueTypeView.Warning),
             Recommendations = issues.Count(i => i.IssueType == ConfigurationIssueTypeView.Recommendation)
         };

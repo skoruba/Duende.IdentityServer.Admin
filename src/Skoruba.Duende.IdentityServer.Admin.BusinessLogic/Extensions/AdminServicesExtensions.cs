@@ -3,9 +3,14 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Resources;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.ConfigurationRules;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Repositories;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Repositories.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Interfaces;
@@ -16,16 +21,17 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Extensions
     {
         public static IServiceCollection AddAdminServices<TAdminDbContext>(
             this IServiceCollection services)
-            where TAdminDbContext : DbContext, IAdminPersistedGrantDbContext, IAdminConfigurationDbContext, IAdminLogDbContext
+            where TAdminDbContext : DbContext, IAdminPersistedGrantDbContext, IAdminConfigurationDbContext, IAdminLogDbContext, IAdminConfigurationStoreDbContext
         {
 
-            return services.AddAdminServices<TAdminDbContext, TAdminDbContext, TAdminDbContext>();
+            return services.AddAdminServices<TAdminDbContext, TAdminDbContext, TAdminDbContext, TAdminDbContext>();
         }
 
-        public static IServiceCollection AddAdminServices<TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext>(this IServiceCollection services)
+        public static IServiceCollection AddAdminServices<TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAdminConfigurationDbContext>(this IServiceCollection services)
             where TPersistedGrantDbContext : DbContext, IAdminPersistedGrantDbContext
             where TConfigurationDbContext : DbContext, IAdminConfigurationDbContext
             where TLogDbContext : DbContext, IAdminLogDbContext
+            where TAdminConfigurationDbContext : DbContext, IAdminConfigurationStoreDbContext
         {
             //Repositories
             services.AddTransient<IClientRepository, ClientRepository<TConfigurationDbContext>>();
@@ -37,7 +43,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Extensions
             services.AddTransient<IKeyRepository, KeyRepository<TPersistedGrantDbContext>>();
             services.AddTransient<ILogRepository, LogRepository<TLogDbContext>>();
             services.AddTransient<IDashboardRepository, DashboardRepository<TConfigurationDbContext>>();
-            services.AddTransient<IConfigurationIssuesRepository, ConfigurationIssuesRepository<TConfigurationDbContext>>();
+            services.AddTransient<IConfigurationIssuesRepository, ConfigurationIssuesRepository<TConfigurationDbContext, TAdminConfigurationDbContext>>();
+
+            // Configuration Rules
+            services.AddTransient<IConfigurationRulesRepository, ConfigurationRulesRepository<TAdminConfigurationDbContext>>();
+            services.AddScoped<IConfigurationRuleValidatorFactory, ConfigurationRuleValidatorFactory>();
+            services.AddScoped<IConfigurationRuleMetadataProvider, ConfigurationRuleMetadataProvider>();
 
             //Services
             services.AddTransient<IClientService, ClientService>();
@@ -50,6 +61,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Extensions
             services.AddTransient<ILogService, LogService>();
             services.AddTransient<IDashboardService, DashboardService>();
             services.AddTransient<IConfigurationIssuesService, ConfigurationIssuesService>();
+            services.AddTransient<IConfigurationRulesService, ConfigurationRulesService>();
 
             //Resources
             services.AddScoped<IApiResourceServiceResources, ApiResourceServiceResources>();

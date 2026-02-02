@@ -132,6 +132,10 @@
   <data name="Grants" xml:space="preserve">
     <value>Concesiones</value>
   </data>
+  <data name="ServerSessionsMenu" xml:space="preserve">
+    <value>Sesiones del servidor</value>
+  </data>
+
   <data name="ManagePersonalData" xml:space="preserve">
     <value>Mis datos personales</value>
   </data>

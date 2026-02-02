@@ -1,0 +1,109 @@
+@model Skoruba.Duende.IdentityServer.STS.Identity.Models.ViewModels.ServerSideSessionsViewModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@{
+    Layout = "_Layout";
+}
+
+<div class="space-y-6">
+    <div class="rounded-lg border border-border bg-background/60 p-4 shadow-sm">
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <p class="text-lg font-semibold text-foreground">@Localizer["ServerSideSessionsTitle"]</p>
+                <p class="text-sm text-muted-foreground">
+                    @Localizer["ServerSideSessionsDescription"]
+                </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+                @if (Model.HasPrevious)
+                {
+                    <a class="inline-flex h-9 items-center justify-center rounded border border-border px-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground transition hover:border-foreground hover:text-foreground"
+                       asp-action="Index"
+                       asp-route-page="@(Model.Page - 1)"
+                       asp-route-filter="@Model.Filter">
+                        @Localizer["ServerSideSessionsPrev"]
+                    </a>
+                }
+                <form method="get" class="flex flex-1 items-center gap-2">
+                    <label class="text-xs font-semibold uppercase tracking-wide text-muted-foreground" for="Filter">@Localizer["ServerSideSessionsFilterLabel"]</label>
+                    <input id="Filter"
+                           name="Filter"
+                           value="@Model.Filter"
+                           class="flex-1 rounded border border-border px-3 py-1.5 text-sm placeholder:text-muted-foreground focus:border-accent focus:outline-none"
+                           placeholder="@Localizer["ServerSideSessionsFilterPlaceholder"]" />
+                    <input type="hidden" name="page" value="1" />
+                    <button type="submit" class="inline-flex h-9 items-center justify-center rounded bg-accent px-3 text-xs font-semibold text-accent-foreground transition hover:bg-accent/90">
+                        @Localizer["ServerSideSessionsSearch"]
+                    </button>
+                </form>
+                @if (Model.HasNext)
+                {
+                    <a class="inline-flex h-9 items-center justify-center rounded border border-border px-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground transition hover:border-foreground hover:text-foreground"
+                       asp-action="Index"
+                       asp-route-page="@(Model.Page + 1)"
+                       asp-route-filter="@Model.Filter">
+                        @Localizer["ServerSideSessionsNext"]
+                    </a>
+                }
+            </div>
+        </div>
+        @if (Model.TotalCount > 0)
+        {
+            <p class="mt-3 text-xs text-muted-foreground">
+                @if (Model.HasNext || Model.Page > 1)
+                {
+                    @Localizer["ServerSideSessionsTotalResultsWithPage", Model.TotalCount, Model.Page, Model.TotalPages]
+                }
+                else
+                {
+                    @Localizer["ServerSideSessionsTotalResults", Model.TotalCount]
+                }
+            </p>
+        }
+    </div>
+
+    <div class="rounded-lg border border-border bg-background/60 p-4 shadow-sm">
+        @if (Model.Sessions?.Any() == true)
+        {
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="text-left text-xs uppercase tracking-widest text-muted-foreground">
+                            <th class="pb-2">@Localizer["ServerSideSessionsDisplayName"]</th>
+                            <th class="pb-2">@Localizer["ServerSideSessionsCreated"]</th>
+                            <th class="pb-2">@Localizer["ServerSideSessionsExpires"]</th>
+                            <th class="pb-2"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-border">
+                        @foreach (var session in Model.Sessions)
+                        {
+                            <tr>
+                                <td>@session.DisplayName</td>
+                                <td>@session.Created</td>
+                                <td>@session.Expires</td>
+                                <td>
+                                    <form asp-action="Delete" method="post" class="m-0">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="SessionId" value="@session.SessionId" />
+                                        <input type="hidden" name="Filter" value="@Model.Filter" />
+                                        <input type="hidden" name="page" value="@Model.Page" />
+                                        <input type="hidden" name="pageSize" value="@Model.PageSize" />
+                                        <button type="submit" class="inline-flex h-8 items-center justify-center rounded border border-transparent bg-red-50 px-3 text-xs font-semibold text-red-600 transition hover:bg-red-100 dark:bg-red-900/10 dark:text-red-400 dark:hover:bg-red-900/20">
+                                            @Localizer["ServerSideSessionsDelete"]
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="flex items-center justify-center py-16 text-sm text-muted-foreground">
+                @Localizer["ServerSideSessionsNoResults"]
+            </div>
+        }
+    </div>
+</div>

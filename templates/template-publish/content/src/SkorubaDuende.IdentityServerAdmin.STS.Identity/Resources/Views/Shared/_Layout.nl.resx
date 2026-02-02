@@ -26,6 +26,10 @@
   <data name="Grants" xml:space="preserve">
     <value>Grants</value>
   </data>
+  <data name="ServerSessionsMenu" xml:space="preserve">
+    <value>Server-sessies</value>
+  </data>
+
   <data name="ManagePersonalData" xml:space="preserve">
     <value>Mijn persoonlijke gegevens</value>
   </data>
@@ -39,6 +43,6 @@
     <value>Instellingen</value>
   </data>
   <data name="Signout" xml:space="preserve">
-    <value>logout</value>
+    <value>Uitloggen</value>
   </data>
 </root>

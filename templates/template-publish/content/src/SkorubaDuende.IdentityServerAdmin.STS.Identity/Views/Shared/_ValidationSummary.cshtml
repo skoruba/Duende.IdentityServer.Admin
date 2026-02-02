@@ -2,8 +2,13 @@
 @inject IViewLocalizer Localizer
 @if (ViewContext.ModelState.IsValid == false)
 {
-	<div class="alert alert-danger">
-		<strong>@Localizer["Title"]</strong>
-		<div asp-validation-summary="All" class="danger"></div>
+	<div class="alert-destructive mb-6">
+		<lucideicon name="alert-circle" class="h-4 w-4" />
+		<div>
+			<h5 class="alert-title">@Localizer["Title"]</h5>
+			<div class="alert-description">
+				<div asp-validation-summary="All"></div>
+			</div>
+		</div>
 	</div>
 }

@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using NetIPNetwork = System.Net.IPNetwork;
+using Duende.IdentityServer;
 using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.EntityFramework.Storage;
 using Microsoft.AspNetCore.Authentication;
@@ -17,13 +20,14 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using IdentityModel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
+using System.IO;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySql;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.PostgreSQL;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.SqlServer;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Helpers;
@@ -34,6 +38,7 @@ using Skoruba.Duende.IdentityServer.STS.Identity.Configuration;
 using Skoruba.Duende.IdentityServer.STS.Identity.Configuration.ApplicationParts;
 using Skoruba.Duende.IdentityServer.STS.Identity.Configuration.Constants;
 using Skoruba.Duende.IdentityServer.STS.Identity.Configuration.Interfaces;
+using Configuration = Skoruba.Duende.IdentityServer.STS.Identity.Configuration;
 using Skoruba.Duende.IdentityServer.STS.Identity.Helpers.Localization;
 using Skoruba.Duende.IdentityServer.STS.Identity.Services;
 
@@ -101,15 +106,59 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
         /// <param name="configuration"></param>
         public static void UseSecurityHeaders(this IApplicationBuilder app, IConfiguration configuration)
         {
-            var forwardingOptions = new ForwardedHeadersOptions()
+            var forwardedHeadersConfig = configuration.GetSection(ConfigurationConsts.ForwardedHeadersConfigurationKey)
+                .Get<Configuration.ForwardedHeadersConfiguration>() ?? new Configuration.ForwardedHeadersConfiguration();
+
+            if (forwardedHeadersConfig.Enabled)
             {
-                ForwardedHeaders = ForwardedHeaders.All
-            };
+                var forwardingOptions = new ForwardedHeadersOptions()
+                {
+                    ForwardedHeaders = ForwardedHeaders.All,
+                    ForwardLimit = forwardedHeadersConfig.ForwardLimit
+                };
 
-            forwardingOptions.KnownNetworks.Clear();
-            forwardingOptions.KnownProxies.Clear();
+                if (forwardedHeadersConfig.AllowAll)
+                {
+                    // Development mode: allow all proxies and networks (insecure)
+                    forwardingOptions.KnownIPNetworks.Clear();
+                    forwardingOptions.KnownProxies.Clear();
+                }
+                else
+                {
+                    // Production mode: only trust configured proxies and networks
+                    if (forwardedHeadersConfig.KnownProxies != null && forwardedHeadersConfig.KnownProxies.Count > 0)
+                    {
+                        forwardingOptions.KnownProxies.Clear();
+                        foreach (var proxy in forwardedHeadersConfig.KnownProxies)
+                        {
+                            if (System.Net.IPAddress.TryParse(proxy, out var ipAddress))
+                            {
+                                forwardingOptions.KnownProxies.Add(ipAddress);
+                            }
+                        }
+                    }
 
-            app.UseForwardedHeaders(forwardingOptions);
+                    if (forwardedHeadersConfig.KnownNetworks != null && forwardedHeadersConfig.KnownNetworks.Count > 0)
+                    {
+                        forwardingOptions.KnownIPNetworks.Clear();
+                        foreach (var network in forwardedHeadersConfig.KnownNetworks)
+                        {
+                            var parts = network.Split('/');
+                            if (parts.Length == 2 &&
+                                IPAddress.TryParse(parts[0], out var prefix) &&
+                                int.TryParse(parts[1], out var prefixLength))
+                            {
+                                forwardingOptions.KnownIPNetworks.Add(new NetIPNetwork(prefix, prefixLength));
+                            }
+                        }
+                    }
+
+                    // If no proxies or networks configured, don't clear defaults (more secure)
+                    // This means it will only trust the loopback by default
+                }
+
+                app.UseForwardedHeaders(forwardingOptions);
+            }
 
             app.UseReferrerPolicy(options => options.NoReferrer());
 
@@ -140,14 +189,13 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
                         options.SelfSrc = true;
                         options.CustomSources = cspTrustedDomains;
                         options.Enabled = true;
-                        options.UnsafeInlineSrc = true;
                     });
                     csp.StyleSources(options =>
                     {
                         options.SelfSrc = true;
                         options.CustomSources = cspTrustedDomains;
                         options.Enabled = true;
-                        options.UnsafeInlineSrc = true;
+                        options.UnsafeInlineSrc = false;
                     });
                     csp.Sandbox(options =>
                     {
@@ -214,9 +262,6 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
                     break;
                 case DatabaseProviderType.PostgreSQL:
                     services.RegisterNpgSqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TDataProtectionDbContext>(identityConnectionString, configurationConnectionString, persistedGrantsConnectionString, dataProtectionConnectionString);
-                    break;
-                case DatabaseProviderType.MySql:
-                    services.RegisterMySqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TDataProtectionDbContext>(identityConnectionString, configurationConnectionString, persistedGrantsConnectionString, dataProtectionConnectionString);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(databaseProvider.ProviderType), $@"The value needs to be one of {string.Join(", ", Enum.GetNames(typeof(DatabaseProviderType)))}.");
@@ -297,7 +342,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
                     AuthenticationHelpers.CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
             });
 
-            
+
 
             services.Configure<IISOptions>(iis =>
             {
@@ -386,6 +431,21 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
 
             builder.AddExtensionGrantValidator<DelegationGrantValidator>();
 
+            // Check if server-side sessions should be enabled from configuration
+            var serverSideSessionsConfig = configuration.GetSection(Configuration.ServerSideSessionsConfiguration.SectionName).Get<Configuration.ServerSideSessionsConfiguration>() ?? new Configuration.ServerSideSessionsConfiguration();
+            var serverSideSessionsEnabled = serverSideSessionsConfig.Enabled;
+
+            if (serverSideSessionsEnabled)
+            {
+                builder.AddServerSideSessions();
+                services.Configure<IdentityServerOptions>(options =>
+                {
+                    options.ServerSideSessions.UserDisplayNameClaimType = JwtClaimTypes.Name;
+                    options.ServerSideSessions.RemoveExpiredSessions = true;
+                    options.ServerSideSessions.ExpiredSessionsTriggerBackchannelLogout = true;
+                });
+            }
+
             return builder;
         }
 
@@ -423,6 +483,9 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
                   }, cookieScheme: null);
             }
         }
+
+
+
 
         /// <summary>
         /// Register middleware for localization
@@ -500,13 +563,6 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
                                 healthQuery: $"SELECT * FROM \"{identityTableName}\" LIMIT 1")
                             .AddNpgSql(dataProtectionDbConnectionString, name: "DataProtectionDb",
                                 healthQuery: $"SELECT * FROM \"{dataProtectionTableName}\"  LIMIT 1");
-                        break;
-                    case DatabaseProviderType.MySql:
-                        healthChecksBuilder
-                            .AddMySql(configurationDbConnectionString, name: "ConfigurationDb")
-                            .AddMySql(persistedGrantsDbConnectionString, name: "PersistentGrantsDb")
-                            .AddMySql(identityDbConnectionString, name: "IdentityDb")
-                            .AddMySql(dataProtectionDbConnectionString, name: "DataProtectionDb");
                         break;
                     default:
                         throw new NotImplementedException($"Health checks not defined for database provider {databaseProvider.ProviderType}");

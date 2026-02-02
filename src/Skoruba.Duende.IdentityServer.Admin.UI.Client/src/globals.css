@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+ 
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+ 
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+ 
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+ 
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+ 
+    --radius: 0.5rem;
+
+    --chart-1: 221.2 83.2% 53.3%;
+    --chart-2: 212 95% 68%;
+    --chart-3: 140 74% 44%;
+    --chart-4: 210 98% 78%;
+    --chart-5: 212 97% 87%;
+
+    --chart-recommendation: 221.2 83.2% 53.3%;
+    --chart-warning: 38 92% 50%;
+    --chart-error: 0 84% 60%;
+
+    /* Dashboard Chart Colors */
+    --chart-primary: 221.2 83.2% 53.3%;
+    --chart-secondary: 262 83% 58%;
+    --chart-accent: 199 89% 48%;
+    --chart-success: 142 76% 36%;
+
+    /* Activity Chart Colors */
+    --chart-activity-normal: 221.2 83.2% 53.3%;
+    --chart-activity-high: 25 95% 53%;
+    --chart-activity-current: 221.2 83.2% 53.3%;
+
+    /* Status Colors */
+    --chart-normal: 220 14% 96%;
+    --chart-today: 221.2 83.2% 53.3%;
+    --chart-high-activity: 25 95% 53%;
+  }
+ 
+  .dark {
+    --background: 224 14% 12%;
+    --foreground: 210 40% 98%;
+ 
+    --card: 224 14% 15%;
+    --card-foreground: 210 40% 98%;
+ 
+    --popover: 222 32% 10%;
+    --popover-foreground: 210 40% 96%;
+ 
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 0 0% 100%;
+ 
+    --secondary: 217 12% 19%;
+    --secondary-foreground: 210 40% 98%;
+ 
+    --muted: 217 12% 18%;
+    --muted-foreground: 215 15% 65%;
+ 
+    --accent: 217 12% 19%;
+    --accent-foreground: 210 40% 98%;
+ 
+    --destructive: 0 72% 46%;
+    --destructive-foreground: 210 40% 98%;
+ 
+    --border: 217 12% 25%;
+    --input: 217 12% 20%;
+    --ring: 221 83% 63%;
+
+    --chart-1: 221.2 83.2% 53.3%;
+    --chart-2: 212 95% 68%;
+    --chart-3: 140 74% 44%;
+    --chart-4: 210 98% 78%;
+    --chart-5: 212 97% 87%;
+
+    --chart-green: 220 70% 50%;
+    --chart-recommendation: 221.2 83.2% 63%;
+    --chart-warning: 38 92% 60%;
+    --chart-error: 0 72% 56%;
+
+    /* Dashboard Chart Colors - Dark Mode */
+    --chart-primary: 221.2 83.2% 63%;
+    --chart-secondary: 262 83% 68%;
+    --chart-accent: 199 89% 58%;
+    --chart-success: 142 76% 46%;
+
+    /* Activity Chart Colors - Dark Mode */
+    --chart-activity-normal: 221.2 83.2% 63%;
+    --chart-activity-high: 25 95% 63%;
+    --chart-activity-current: 221.2 83.2% 63%;
+
+    /* Status Colors - Dark Mode */
+    --chart-normal: 220 13% 18%;
+    --chart-today: 221.2 83.2% 63%;
+    --chart-high-activity: 25 95% 63%;
+  }
+}
+ 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .chart-indicator-normal {
+    @apply bg-slate-400;
+  }
+  
+  .chart-indicator-today {
+    @apply bg-blue-500;
+  }
+  
+  .chart-indicator-high-activity {
+    @apply bg-orange-500;
+  }
+}

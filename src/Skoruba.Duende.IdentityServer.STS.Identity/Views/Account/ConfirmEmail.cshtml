@@ -4,9 +4,13 @@
     ViewData["Title"] = Localizer["Title"];
 }
 
-<h1>@ViewData["Title"]</h1>
-<div>
-    <p>
-        @Localizer["ConfirmMessage"]
-    </p>
+<div class="py-8">
+    <h1 class="text-4xl font-bold mb-6">@ViewData["Title"]</h1>
+    <div class="card">
+        <div class="card-content">
+            <p class="text-lg">
+                @Localizer["ConfirmMessage"]
+            </p>
+        </div>
+    </div>
 </div>

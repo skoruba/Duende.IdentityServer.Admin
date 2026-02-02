@@ -32,4 +32,10 @@
   <data name="Yes" xml:space="preserve">
     <value>Ja, sta toe</value>
   </data>
+  <data name="DescriptionPlaceholder" xml:space="preserve">
+    <value>Beschrijving of naam van het apparaat</value>
+  </data>
+  <data name="DescriptionTitle" xml:space="preserve">
+    <value>Beschrijving</value>
+  </data>
 </root>

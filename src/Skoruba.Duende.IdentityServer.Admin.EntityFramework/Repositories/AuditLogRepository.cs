@@ -70,6 +70,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
             int page = 1,
             int pageSize = 10)
         {
+            pageSize = QueryableExtensions.NormalizePageSize(pageSize);
+
             var pagedList = new PagedList<TAuditLog>();
 
             var query = DbContext.AuditLog
@@ -102,12 +104,18 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
 
         public virtual async Task DeleteLogsOlderThanAsync(DateTime deleteOlderThan)
         {
-            var logsToDelete = await DbContext.AuditLog.Where(x => x.Created.Date < deleteOlderThan.Date).ToListAsync();
+            var threshold = deleteOlderThan.Date;
 
+            if (AutoSaveChanges && DbContext is DbContext efDbContext && efDbContext.Database.IsRelational())
+            {
+                await DbContext.AuditLog.Where(x => x.Created < threshold).ExecuteDeleteAsync();
+                return;
+            }
+
+            var logsToDelete = await DbContext.AuditLog.Where(x => x.Created < threshold).ToListAsync();
             if (logsToDelete.Count == 0) return;
 
             DbContext.AuditLog.RemoveRange(logsToDelete);
-
             await AutoSaveChangesAsync();
         }
 

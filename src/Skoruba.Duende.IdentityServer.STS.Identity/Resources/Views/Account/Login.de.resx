@@ -138,17 +138,29 @@
   <data name="Login" xml:space="preserve">
     <value>Login</value>
   </data>
+  <data name="NoAccount" xml:space="preserve">
+    <value>Sie haben kein Konto?</value>
+  </data>
   <data name="NoSchema" xml:space="preserve">
     <value>Es sind keine Anmeldeschemata für diesen Client konfiguriert.</value>
   </data>
+  <data name="Or" xml:space="preserve">
+    <value>Oder fortfahren mit</value>
+  </data>
   <data name="Password" xml:space="preserve">
     <value>Passwort</value>
+  </data>
+  <data name="PrivacyNotice" xml:space="preserve">
+    <value>Mit der Anmeldung stimmen Sie unseren Nutzungsbedingungen und Datenschutzrichtlinien zu.</value>
   </data>
   <data name="Register" xml:space="preserve">
     <value>Registrieren</value>
   </data>
   <data name="Remember" xml:space="preserve">
     <value>Mein Login errinern</value>
+  </data>
+  <data name="SignUp" xml:space="preserve">
+    <value>Registrieren</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Login</value>

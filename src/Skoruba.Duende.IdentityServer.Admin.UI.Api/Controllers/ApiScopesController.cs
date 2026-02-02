@@ -38,7 +38,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
 
             return Ok(apiScopesApiDto);
         }
-        
+
         [HttpGet(nameof(CanInsertApiScope))]
         public async Task<ActionResult<bool>> CanInsertApiScope(int id, string name)
         {
@@ -48,9 +48,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
                 Name = name
             });
 
-            return exists;
+            return Ok(exists);
         }
-        
+
         [HttpGet(nameof(CanInsertApiScopeProperty))]
         public async Task<ActionResult<bool>> CanInsertApiScopeProperty(int id, string key)
         {
@@ -60,7 +60,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
                 Key = key
             });
 
-            return exists;
+            return Ok(exists);
         }
 
         [HttpGet("{id}")]
@@ -82,12 +82,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(ApiScopeDto), 201)]
+        [ProducesResponseType(typeof(ApiScopeApiDto), 201)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> PostScope([FromBody]ApiScopeApiDto apiScopeApi)
+        public async Task<ActionResult<ApiScopeApiDto>> PostScope([FromBody] ApiScopeApiDto apiScopeApi)
         {
             var apiScope = apiScopeApi.ToApiScopeApiModel<ApiScopeDto>();
-            
+
             if (!apiScope.Id.Equals(default))
             {
                 return BadRequest(_errorResources.CannotSetId());
@@ -96,13 +96,13 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
             var apiScopeId = await _apiScopeService.AddApiScopeAsync(apiScope);
             apiScope.Id = apiScopeId;
 
-            return CreatedAtAction(nameof(GetScope), new {id = apiScopeId}, apiScope);
+            return CreatedAtAction(nameof(GetScope), new { id = apiScopeId }, apiScope);
         }
 
         [HttpPost("{id}/Properties")]
         [ProducesResponseType(typeof(ApiScopePropertyApiDto), 201)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> PostProperty(int id, [FromBody]ApiScopePropertyApiDto apiScopePropertyApi)
+        public async Task<ActionResult<ApiScopePropertyApiDto>> PostProperty(int id, [FromBody] ApiScopePropertyApiDto apiScopePropertyApi)
         {
             var apiResourcePropertiesDto = apiScopePropertyApi.ToApiScopeApiModel<ApiScopePropertiesDto>();
             apiResourcePropertiesDto.ApiScopeId = id;
@@ -128,8 +128,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpDelete("Properties/{propertyId}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteProperty(int propertyId)
         {
             var apiScopePropertiesDto = new ApiScopePropertiesDto { ApiScopePropertyId = propertyId };
@@ -137,26 +137,27 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
             await _apiScopeService.GetApiScopePropertyAsync(apiScopePropertiesDto.ApiScopePropertyId);
             await _apiScopeService.DeleteApiScopePropertyAsync(apiScopePropertiesDto);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpPut]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> PutScope([FromBody]ApiScopeApiDto apiScopeApi)
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> PutScope([FromBody] ApiScopeApiDto apiScopeApi)
         {
             var apiScope = apiScopeApi.ToApiScopeApiModel<ApiScopeDto>();
-            
+
             await _apiScopeService.GetApiScopeAsync(apiScope.Id);
 
             await _apiScopeService.UpdateApiScopeAsync(apiScope);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteScope(int id)
         {
             var apiScope = new ApiScopeDto { Id = id };
@@ -165,7 +166,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
 
             await _apiScopeService.DeleteApiScopeAsync(apiScope);
 
-            return Ok();
+            return NoContent();
         }
     }
 }

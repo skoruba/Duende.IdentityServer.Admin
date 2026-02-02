@@ -1,0 +1,43 @@
+$packagesOutput = ".\packages"
+
+# Clean packages output directory
+if (Test-Path $packagesOutput) {
+    Get-ChildItem -Path $packagesOutput -Force | Remove-Item -Recurse -Force
+}
+
+# Build SPA assets for client before packing
+$clientPath = ".\..\src\Skoruba.Duende.IdentityServer.Admin.UI.Client"
+if (Test-Path $clientPath) {
+    Push-Location $clientPath
+    npm run build:spa
+    if ($LASTEXITCODE -ne 0) {
+        Pop-Location
+        throw "Client build failed (npm run build:spa)."
+    }
+    Pop-Location
+}
+else {
+    throw "Client path not found: $clientPath"
+}
+
+# Business Logic
+dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.BusinessLogic\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.csproj -c Release -o $packagesOutput
+dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.csproj -c Release -o $packagesOutput
+dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared\Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared.csproj -c Release -o $packagesOutput
+dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Shared.Configuration\Skoruba.Duende.IdentityServer.Shared.Configuration.csproj -c Release -o $packagesOutput
+
+# EF
+dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.EntityFramework\Skoruba.Duende.IdentityServer.Admin.EntityFramework.csproj -c Release -o $packagesOutput
+dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.csproj -c Release -o $packagesOutput
+dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.csproj -c Release -o $packagesOutput
+dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.csproj -c Release -o $packagesOutput
+dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.csproj -c Release -o $packagesOutput
+dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.csproj -c Release -o $packagesOutput
+dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage\Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.csproj -c Release -o $packagesOutput
+
+# UI
+dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.UI\Skoruba.Duende.IdentityServer.Admin.UI.csproj -c Release -o $packagesOutput
+dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.UI.Spa\Skoruba.Duende.IdentityServer.Admin.UI.Spa.csproj -c Release -o $packagesOutput
+
+# API
+dotnet pack .\..\src\Skoruba.Duende.IdentityServer.Admin.UI.Api\Skoruba.Duende.IdentityServer.Admin.UI.Api.csproj -c Release -o $packagesOutput

@@ -102,8 +102,9 @@ namespace Skoruba.Duende.IdentityServer.Shared.Configuration.Services
 
             var privateKeyBytes = Convert.FromBase64String(secret.Value);
 
-            var certificateWithPrivateKey = new X509Certificate2(privateKeyBytes,
-                (string)null,
+            var certificateWithPrivateKey = X509CertificateLoader.LoadPkcs12(
+                privateKeyBytes,
+                password: null,
                 X509KeyStorageFlags.MachineKeySet);
 
             return certificateWithPrivateKey;

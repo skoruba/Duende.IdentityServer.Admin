@@ -5,23 +5,31 @@
     ViewData["Title"] = Localizer["Title"];
 }
 
-@await Html.PartialAsync("_ValidationSummary")
+<div class="py-8">
+    <h1 class="text-4xl font-bold mb-2">@ViewData["Title"]</h1>
 
-<h1>@ViewData["Title"]</h1>
-<hr />
-<p>
-    @Localizer["Info"]
-</p>
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <input asp-for="ReturnUrl" type="hidden" />
-            <div class="form-group">
-                <label asp-for="RecoveryCode">@Localizer["Code"]</label>
-                <input asp-for="RecoveryCode" class="form-control" autocomplete="off" autofocus />
-                <span asp-validation-for="RecoveryCode" class="text-danger"></span>
-            </div>
-            <button type="submit" class="btn btn-primary">@Localizer["LogIn"]</button>
-        </form>
+    @await Html.PartialAsync("_ValidationSummary")
+
+    <div class="card mt-6 max-w-md">
+        <div class="card-header">
+            <p class="card-description">@Localizer["Info"]</p>
+        </div>
+        <div class="card-content">
+            <form method="post" class="space-y-6">
+                <input asp-for="ReturnUrl" type="hidden" />
+                <div class="form-item">
+                    <label asp-for="RecoveryCode" class="form-label">
+                        <lucideicon name="key" class="inline-block h-4 w-4 mr-1" />
+                        @Localizer["Code"]
+                    </label>
+                    <input asp-for="RecoveryCode" class="input" autocomplete="off" autofocus tw-validation />
+                    <span asp-validation-for="RecoveryCode" class="form-message"></span>
+                </div>
+                <button type="submit" class="btn-default">
+                    <lucideicon name="log-in" class="inline-block h-4 w-4 mr-2" />
+                    @Localizer["LogIn"]
+                </button>
+            </form>
+        </div>
     </div>
 </div>

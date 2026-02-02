@@ -1,11 +1,7 @@
 {
   "$schema": "http://json.schemastore.org/template",
   "author": "Jan Skoruba",
-  "classifications": [
-    "Web",
-    "Duende IdentityServer",
-    "Admin"
-  ],
+  "classifications": ["Web", "Duende IdentityServer", "Admin"],
   "name": "Skoruba Duende.IdentityServer Admin",
   "identity": "Skoruba.Duende.IdentityServer.Admin",
   "groupIdentity": "Skoruba.Duende.IdentityServer.Admin",
@@ -26,10 +22,10 @@
     },
     "adminpassword": {
       "type": "parameter",
-      "defaultValue": "Pa$$word123",
-      "replaces": "Pa$$word123",
+      "defaultValue": "Passw0rd-123",
+      "replaces": "Passw0rd-123",
       "isRequired": true,
-      "description": "The admin password, that is used to first login (default is Pa$$word123)."
+      "description": "The admin password, that is used to first login (default is Passw0rd-123)."
     },
     "adminemail": {
       "type": "parameter",
@@ -47,8 +43,8 @@
     },
     "adminclientid": {
       "type": "parameter",
-      "defaultValue": "skoruba_identity_admin",
-      "replaces": "skoruba_identity_admin",
+      "defaultValue": "skoruba_identity_admin_v3",
+      "replaces": "skoruba_identity_admin_v3",
       "isRequired": true,
       "description": "The name of client, that is used in the Duende IdentityServer"
     },
@@ -65,6 +61,18 @@
       "defaultValue": "false",
       "isRequired": true,
       "description": "Add docker support for Admin UI"
+    },
+    "requirepushedauthorization": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "true",
+      "description": "Set RequirePushedAuthorization on the admin client."
+    },
+    "admindevport": {
+      "type": "parameter",
+      "defaultValue": "localhost:7127",
+      "replaces": "localhost:50445",
+      "description": "The port number for the Admin project when running in development."
     }
   },
   "sources": [
@@ -78,19 +86,15 @@
             ".dockerignore",
             "docker-compose.yml",
             "docker-compose.override.yml",
-            "docker-compose.vs.debug.yml",
-            "docker-compose.vs.release.yml",
             "src/SkorubaDuende.IdentityServerAdmin.Admin/Dockerfile",
             "src/SkorubaDuende.IdentityServerAdmin.Admin.Api/Dockerfile",
             "src/SkorubaDuende.IdentityServerAdmin.STS.Identity/Dockerfile",
-            "SkorubaDuende.IdentityServerAdmin.AdminUI.sln"            
+            "SkorubaDuende.IdentityServerAdmin.AdminUI.sln"
           ]
         },
         {
           "condition": "(dockersupport)",
-          "exclude": [
-            "SkorubaDuende.IdentityServerAdmin.Admin.sln"
-          ]
+          "exclude": ["SkorubaDuende.IdentityServerAdmin.Admin.sln"]
         }
       ]
     }
@@ -109,9 +113,6 @@
       "path": "src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.csproj"
     },
     {
-      "path": "src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.MySql.csproj"
-    },
-    {
       "path": "src/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL/SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL.csproj"
     },
     {
@@ -125,7 +126,7 @@
     {
       "actionId": "D396686C-DE0E-4DE6-906D-291CD29FC5DE",
       "args": {
-        "primaryOutputIndexes": "0;1;2;3;4;5;6;7"
+        "primaryOutputIndexes": "0;1;2;3;4;5;6"
       },
       "continueOnError": false,
       "manualInstructions": [
@@ -144,5 +145,27 @@
       "actionId": "210D431B-A78B-4D2F-B762-4ED3E3EA9025",
       "continueOnError": true
     }
-  ]
+  ],
+  "specialCustomOperations": {
+    "**/*.json": {
+      "operations": [
+        {
+          "type": "replacement",
+          "condition": "(!requirepushedauthorization)",
+          "configuration": {
+            "original": "\"RequirePushedAuthorization\": true",
+            "replacement": "\"RequirePushedAuthorization\": false"
+          }
+        },
+        {
+          "type": "replacement",
+          "condition": "(requirepushedauthorization)",
+          "configuration": {
+            "original": "\"RequirePushedAuthorization\": false",
+            "replacement": "\"RequirePushedAuthorization\": true"
+          }
+        }
+      ]
+    }
+  }
 }

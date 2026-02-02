@@ -138,17 +138,29 @@
   <data name="Login" xml:space="preserve">
     <value>Login</value>
   </data>
+  <data name="NoAccount" xml:space="preserve">
+    <value>Don't have an account?</value>
+  </data>
   <data name="NoSchema" xml:space="preserve">
     <value>There are no login schemes configured for this client.</value>
   </data>
+  <data name="Or" xml:space="preserve">
+    <value>Or continue with</value>
+  </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
+  </data>
+  <data name="PrivacyNotice" xml:space="preserve">
+    <value>By signing in, you agree to our Terms of Service and Privacy Policy.</value>
   </data>
   <data name="Register" xml:space="preserve">
     <value>Register</value>
   </data>
   <data name="Remember" xml:space="preserve">
     <value>Remember my login</value>
+  </data>
+  <data name="SignUp" xml:space="preserve">
+    <value>Sign up</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Login</value>

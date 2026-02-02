@@ -38,7 +38,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
 
             return Ok(identityProvidersApiDto);
         }
-        
+
         [HttpGet(nameof(CanInsertIdentityProvider))]
         public async Task<ActionResult<bool>> CanInsertIdentityProvider(int id, string schema)
         {
@@ -48,7 +48,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
                 Scheme = schema
             });
 
-            return exists;
+            return Ok(exists);
         }
 
         [HttpGet("{id}")]
@@ -61,9 +61,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(201)]
+        [ProducesResponseType(typeof(IdentityProviderApiDto), 201)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Post([FromBody] IdentityProviderApiDto identityProviderApi)
+        public async Task<ActionResult<IdentityProviderApiDto>> Post([FromBody] IdentityProviderApiDto identityProviderApi)
         {
             var identityProviderDto = identityProviderApi.ToIdentityProviderApiModel<IdentityProviderDto>();
 
@@ -79,6 +79,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpPut]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> Put([FromBody] IdentityProviderApiDto identityProviderApi)
         {
             var identityProvider = identityProviderApi.ToIdentityProviderApiModel<IdentityProviderDto>();
@@ -86,10 +89,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
             await _identityProviderService.GetIdentityProviderAsync(identityProvider.Id);
             await _identityProviderService.UpdateIdentityProviderAsync(identityProvider);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> Delete(int id)
         {
             var identityProvider = new IdentityProviderDto { Id = id };
@@ -97,8 +102,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
             await _identityProviderService.GetIdentityProviderAsync(identityProvider.Id);
             await _identityProviderService.DeleteIdentityProviderAsync(identityProvider);
 
-            return Ok();
+            return NoContent();
         }
-        
+
     }
 }

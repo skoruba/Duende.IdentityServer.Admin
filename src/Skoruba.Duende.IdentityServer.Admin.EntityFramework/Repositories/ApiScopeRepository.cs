@@ -72,6 +72,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
 
         public virtual async Task<PagedList<ApiScopeProperty>> GetApiScopePropertiesAsync(int apiScopeId, int page = 1, int pageSize = 10)
         {
+            pageSize = QueryableExtensions.NormalizePageSize(pageSize);
+
             var pagedList = new PagedList<ApiScopeProperty>();
 
             var apiScopeProperties = DbContext.ApiScopeProperties.Where(x => x.Scope.Id == apiScopeId);
@@ -102,6 +104,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
 
         public virtual async Task<PagedList<ApiScope>> GetApiScopesAsync(string search, int page = 1, int pageSize = 10)
         {
+            pageSize = QueryableExtensions.NormalizePageSize(pageSize);
+
             var pagedList = new PagedList<ApiScope>();
             Expression<Func<ApiScope, bool>> searchCondition = x => x.Name.Contains(search);
 

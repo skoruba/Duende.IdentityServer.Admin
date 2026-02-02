@@ -11,35 +11,35 @@
 	var request_id = Model?.Error?.RequestId;
 }
 
-<div class="error-page">
-	<div class="page-header">
-		<h1>@Localizer["Title"]</h1>
-	</div>
+<div class="py-8">
+	<h1 class="text-4xl font-bold mb-6">@Localizer["Title"]</h1>
 
-	<div class="row">
-		<div class="col-sm-6">
-			<div class="alert alert-danger">
-				@Localizer["Message"]
-
-				@if (error != null)
-				{
-					<strong>
-						<em>
-							: @error
-						</em>
-					</strong>
-
-					if (errorDescription != null)
+	<div class="max-w-2xl">
+		<div class="alert-destructive">
+			<lucideicon name="alert-circle" class="h-4 w-4" />
+			<div>
+				<h5 class="alert-title">@Localizer["Message"]</h5>
+				<div class="alert-description">
+					@if (error != null)
 					{
-						<div>@errorDescription</div>
-					}
-				}
-			</div>
+						<strong>
+							<em>
+								: @error
+							</em>
+						</strong>
 
-			@if (request_id != null)
-			{
-				<div class="request-id">@Localizer["Request"] @request_id</div>
-			}
+						if (errorDescription != null)
+						{
+							<div class="mt-2">@errorDescription</div>
+						}
+					}
+				</div>
+			</div>
 		</div>
+
+		@if (request_id != null)
+		{
+			<div class="mt-4 text-sm text-muted-foreground">@Localizer["Request"] @request_id</div>
+		}
 	</div>
 </div>

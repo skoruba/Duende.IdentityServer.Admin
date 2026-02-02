@@ -5,50 +5,65 @@
     ViewData["Title"] = Localizer["Title"];
 }
 
-@await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
+<section class="space-y-6">
+    @await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
 
-@if (Model.CurrentLogins?.Count > 0)
-{
-    <h4>@Localizer["SubTitle"]</h4>
-    <table class="table">
-        <tbody>
-            @foreach (var login in Model.CurrentLogins)
-            {
-                <tr>
-                    <td>@login.LoginProvider</td>
-                    <td>
-                        @if (Model.ShowRemoveButton)
-                        {
-                            <form asp-action="RemoveLogin" method="post">
-                                <div>
-                                    <input asp-for="@login.LoginProvider" name="LoginProvider" type="hidden" />
-                                    <input asp-for="@login.ProviderKey" name="ProviderKey" type="hidden" />
-                                    <button type="submit" class="btn btn-primary" title="Remove this @login.LoginProvider login from your account">@Localizer["Remove"]</button>
-                                </div>
-                            </form>
-                        }
-                        else
-                        {
-                            @: &nbsp;
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-@if (Model.OtherLogins?.Count > 0)
-{
-    <h4>@Localizer["TitleAddAnotherService"]</h4>
-    <hr />
-    <form asp-action="LinkLogin" method="post" class="form-horizontal">
-        <div id="socialLoginList">
-            <p>
-                @foreach (var provider in Model.OtherLogins)
-                {
-                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                }
-            </p>
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">@Localizer["SubTitle"]</h2>
         </div>
-    </form>
-}
+
+        <div class="card-content space-y-6">
+            @if (Model.CurrentLogins?.Count > 0)
+            {
+                <div class="table-wrapper">
+                    <table class="table">
+                        <tbody class="table-body">
+                        @foreach (var login in Model.CurrentLogins)
+                        {
+                            <tr class="table-row">
+                                <td class="table-cell font-medium">@login.LoginProvider</td>
+                                <td class="table-cell text-right">
+                                    @if (Model.ShowRemoveButton)
+                                    {
+                                        <form asp-action="RemoveLogin" method="post" class="inline">
+                                            <input asp-for="@login.LoginProvider" name="LoginProvider" type="hidden" />
+                                            <input asp-for="@login.ProviderKey" name="ProviderKey" type="hidden" />
+                                            <button type="submit" class="btn-destructive btn-sm" title="Remove this @login.LoginProvider login from your account">
+                                                <lucideicon name="unlink" class="inline-block h-3 w-3 mr-1" />
+                                                @Localizer["Remove"]
+                                            </button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert-default">
+                    <lucideicon name="info" class="h-4 w-4" />
+                    <div>
+                        <div class="alert-description">@Localizer["Title"]</div>
+                    </div>
+                </div>
+            }
+
+            @if (Model.OtherLogins?.Count > 0)
+            {
+                <div class="space-y-3">
+                    <h4 class="text-sm font-semibold uppercase tracking-wide text-muted-foreground">@Localizer["TitleAddAnotherService"]</h4>
+                    <form asp-action="LinkLogin" method="post" class="flex flex-wrap gap-3">
+                        @foreach (var provider in Model.OtherLogins)
+                        {
+                            <button type="submit" class="btn-outline" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                        }
+                    </form>
+                </div>
+            }
+        </div>
+    </div>
+</section>

@@ -5,38 +5,47 @@
     ViewData["Title"] = Localizer["Title"];
 }
 
-@await Html.PartialAsync("_ValidationSummary")
+<div class="py-8">
+    <h1 class="text-4xl font-bold mb-2">@ViewData["Title"]</h1>
 
-<h2>@ViewData["Title"]</h2>
-<hr />
-<p>@Localizer["Info"]</p>
-<div class="row">
-    <div class="col-md-4">
-        <form method="post" asp-route-returnUrl="@Model.ReturnUrl">
-            <input asp-for="RememberMe" type="hidden" />
-            <input asp-for="ReturnUrl" type="hidden" />
-            <div class="form-group">
-                <label asp-for="TwoFactorCode">@Localizer["Code"]</label>
-                <input asp-for="TwoFactorCode" class="form-control" autocomplete="off" autofocus />
-                <span asp-validation-for="TwoFactorCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <div class="checkbox">
-                    <div>                        
-                        @Localizer["Remember"]
-                    </div>
-                    <toggle-button>
-                        <input asp-for="RememberMachine" />
-                    </toggle-button>
+    @await Html.PartialAsync("_ValidationSummary")
+
+    <div class="card mt-6 max-w-md">
+        <div class="card-header">
+            <p class="card-description">@Localizer["Info"]</p>
+        </div>
+        <div class="card-content">
+            <form method="post" asp-route-returnUrl="@Model.ReturnUrl" class="space-y-6">
+                <input asp-for="RememberMe" type="hidden" />
+                <input asp-for="ReturnUrl" type="hidden" />
+                <div class="form-item">
+                    <label asp-for="TwoFactorCode" class="form-label">
+                        <lucideicon name="shield-check" class="inline-block h-4 w-4 mr-1" />
+                        @Localizer["Code"]
+                    </label>
+                    <input asp-for="TwoFactorCode" class="input" autocomplete="off" autofocus tw-validation />
+                    <span asp-validation-for="TwoFactorCode" class="form-message"></span>
                 </div>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">@Localizer["LogIn"]</button>
-            </div>
-        </form>
+                <div class="form-item">
+                    <div class="flex items-center space-x-2">
+                        <input asp-for="RememberMachine" type="checkbox" class="checkbox" id="RememberMachine" />
+                        <label for="RememberMachine" class="label cursor-pointer">
+                            @Localizer["Remember"]
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="btn-default">
+                        <lucideicon name="log-in" class="inline-block h-4 w-4 mr-2" />
+                        @Localizer["LogIn"]
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
+
+    <p class="mt-6">
+        @Localizer["NoAuthenticatorDevice"]
+        <a class="text-primary hover:underline" asp-action="LoginWithRecoveryCode" asp-route-returnUrl="@Model.ReturnUrl">@Localizer["LoginWithRecoveryCode"]</a>
+    </p>
 </div>
-<p>
-    @Localizer["NoAuthenticatorDevice"]
-    <a asp-action="LoginWithRecoveryCode" asp-route-returnUrl="@Model.ReturnUrl">@Localizer["LoginWithRecoveryCode"]</a>
-</p>

@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using IdentityModel;
+using Duende.IdentityServer;
+using Duende.IdentityServer.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Entities.Identity;
 using Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers;
@@ -31,6 +34,10 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity
         {
             var rootConfiguration = CreateRootConfiguration();
             services.AddSingleton(rootConfiguration);
+
+            // Configure ServerSideSessions
+            services.Configure<ServerSideSessionsConfiguration>(Configuration.GetSection(ServerSideSessionsConfiguration.SectionName));
+
             // Register DbContexts for IdentityServer and Identity
             RegisterDbContexts(services);
 
@@ -50,6 +57,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity
             // Including settings for MVC and Localization
             // If you want to change primary keys or use another db model for Asp.Net Core Identity:
             services.AddMvcWithLocalization<UserIdentity, string>(Configuration);
+            services.AddRazorPages();
 
             // Add authorization policies for MVC
             RegisterAuthorization(services);

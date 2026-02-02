@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SendGrid;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
 using Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration.Common;
 using Skoruba.Duende.IdentityServer.Shared.Configuration.Configuration.Email;
 using Skoruba.Duende.IdentityServer.Shared.Configuration.Email;
@@ -18,6 +19,16 @@ namespace Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers
 {
     public static class StartupHelpers
     {
+        public static DatabaseMigrationsConfiguration GetDatabaseMigrationsConfiguration(IConfiguration configuration, string commonMigrationsAssembly = null)
+        {
+            var databaseMigrations = configuration.GetSection(nameof(DatabaseMigrationsConfiguration))
+                .Get<DatabaseMigrationsConfiguration>() ?? new DatabaseMigrationsConfiguration();
+            
+            databaseMigrations.SetMigrationsAssemblies(commonMigrationsAssembly);
+
+            return databaseMigrations;
+        }
+        
         /// <summary>
         /// Add email senders - configuration of sendgrid, smtp senders
         /// </summary>
@@ -44,21 +55,22 @@ namespace Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers
                 services.AddSingleton<IEmailSender, LogEmailSender>();
             }
         }
-
-        public static void AddDataProtection<TDbContext>(this IServiceCollection services, IConfiguration configuration)
+        
+        public const string DefaultDataProtectionAppName = "Skoruba.Duende.IdentityServer";
+        public static void AddDataProtection<TDbContext>(this IServiceCollection services, IConfiguration configuration, string applicationName = DefaultDataProtectionAppName)
                     where TDbContext : DbContext, IDataProtectionKeyContext
         {
             AddDataProtection<TDbContext>(
                 services,
                 configuration.GetSection(nameof(DataProtectionConfiguration)).Get<DataProtectionConfiguration>(),
-                configuration.GetSection(nameof(AzureKeyVaultConfiguration)).Get<AzureKeyVaultConfiguration>());
+                configuration.GetSection(nameof(AzureKeyVaultConfiguration)).Get<AzureKeyVaultConfiguration>(), applicationName);
         }
 
-        public static void AddDataProtection<TDbContext>(this IServiceCollection services, DataProtectionConfiguration dataProtectionConfiguration, AzureKeyVaultConfiguration azureKeyVaultConfiguration)
+        public static void AddDataProtection<TDbContext>(this IServiceCollection services, DataProtectionConfiguration dataProtectionConfiguration, AzureKeyVaultConfiguration azureKeyVaultConfiguration, string applicationName)
             where TDbContext : DbContext, IDataProtectionKeyContext
         {
             var dataProtectionBuilder = services.AddDataProtection()
-                .SetApplicationName("Skoruba.Duende.IdentityServer")
+                .SetApplicationName(applicationName)
                 .PersistKeysToDbContext<TDbContext>();
 
             if (dataProtectionConfiguration.ProtectKeysWithAzureKeyVault)
