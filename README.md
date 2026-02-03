@@ -16,7 +16,7 @@ Modern admin UI for **Duende IdentityServer** and **ASP.NET Core Identity**.
 - ✅ **Stable (production): v2.7.0**  
   https://github.com/skoruba/Duende.IdentityServer.Admin/tree/release/2.7.0
 
-- 🎉 **Next generation (v3 – preview)** – current prerelease: `3.0.0-preview.21`
+- 🎉 **Next generation (v3 – preview)** – current prerelease: `3.0.0-preview.22`
   - React + TypeScript + Tailwind CSS + shadcn/ui
   - .NET 10 backend REST API
   - New monitoring and wizard flows
@@ -90,10 +90,13 @@ Define and track configuration rules for clients, API resources, and identity re
 > 🔒 **Database note:**  
 > This template includes default EF migrations. Review them and back up your database before applying.
 
+> ℹ️ **Migration note from IdentityServer4.Admin:**  
+> The `UserSecretsId` for Admin, Admin API, and STS projects remains the same as in the older `Skoruba.IdentityServer4.Admin` solution to ease config migration. If you still have secrets from the old project on your machine, they will be reused (e.g., `ApplySeed` could point at your old DB). Change or clear user secrets if you need isolation.
+
 ### 1. Install the template
 
 ```sh
-dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::3.0.0-preview.21
+dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::3.0.0-preview.22
 ```
 
 ### 2. Create a new project

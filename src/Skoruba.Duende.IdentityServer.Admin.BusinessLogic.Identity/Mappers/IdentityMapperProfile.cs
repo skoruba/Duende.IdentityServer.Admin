@@ -79,15 +79,13 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Mappers
             CreateMap<PagedList<TUserClaim>, TUserClaimsDto>(MemberList.Destination)
                 .ForMember(x => x.Claims,
                     opt => opt.MapFrom(src => src.Data));
-            
+
             CreateMap<PagedList<TRoleClaim>, TRoleClaimsDto>(MemberList.Destination)
                 .ForMember(x => x.Claims,
                     opt => opt.MapFrom(src => src.Data));
 
             CreateMap<List<UserLoginInfo>, TUserProvidersDto>(MemberList.Destination)
                 .ForMember(x => x.Providers, opt => opt.MapFrom(src => src));
-
-            CreateMap<UserLoginInfo, TUserProviderDto>(MemberList.Destination);
 
             CreateMap<TRoleClaim, TRoleClaimDto>(MemberList.Destination)
                 .ForMember(x => x.ClaimId, opt => opt.MapFrom(src => src.Id));

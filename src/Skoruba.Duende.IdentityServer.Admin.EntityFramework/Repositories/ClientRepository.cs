@@ -44,6 +44,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
                 .Include(x => x.IdentityProviderRestrictions)
                 .Include(x => x.AllowedCorsOrigins)
                 .Include(x => x.Properties)
+                .AsSplitQuery()
                 .Where(x => x.Id == clientId)
                 .AsNoTracking()
                 .SingleOrDefaultAsync();
@@ -384,6 +385,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
                 .Include(x => x.IdentityProviderRestrictions)
                 .Include(x => x.AllowedCorsOrigins)
                 .Include(x => x.Properties)
+                .AsSplitQuery()
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == client.Id);
 
