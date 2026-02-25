@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Entities.Identity;
+using Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Middlewares;
 using Skoruba.Duende.IdentityServer.Shared.Configuration.Constants;
@@ -50,9 +51,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.Configuration.Test
             }).AddCookie(JwtBearerDefaults.AuthenticationScheme);
         }
 
-        public override void RegisterAuthorization(IServiceCollection services)
+        public override void RegisterAuthorization(IServiceCollection services, AdminApiConfiguration adminApiConfiguration)
         {
-            services.AddAuthorizationPolicies();
+            services.AddAuthorizationPolicies(adminApiConfiguration);
         }
 
         public override void UseAuthentication(IApplicationBuilder app)

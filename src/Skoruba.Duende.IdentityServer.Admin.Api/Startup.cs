@@ -55,7 +55,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api
             RegisterAuthentication(services);
 
             // Add authorization services
-            RegisterAuthorization(services);
+            RegisterAuthorization(services, adminApiConfiguration);
 
             services.AddIdentityServerAdminApi<AdminIdentityDbContext, IdentityServerConfigurationDbContext, IdentityServerPersistedGrantDbContext, IdentityServerDataProtectionDbContext, AdminLogDbContext, AdminAuditLogDbContext, AdminConfigurationDbContext, AuditLog,
                 IdentityUserDto, IdentityRoleDto, UserIdentity, UserIdentityRole, string, UserIdentityUserClaim, UserIdentityUserRole,
@@ -116,9 +116,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api
             services.AddApiAuthentication<AdminIdentityDbContext, UserIdentity, UserIdentityRole>(Configuration);
         }
 
-        public virtual void RegisterAuthorization(IServiceCollection services)
+        public virtual void RegisterAuthorization(IServiceCollection services, AdminApiConfiguration adminApiConfiguration)
         {
-            services.AddAuthorizationPolicies();
+            services.AddAuthorizationPolicies(adminApiConfiguration);
         }
 
         public virtual void UseAuthentication(IApplicationBuilder app)
