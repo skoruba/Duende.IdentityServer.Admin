@@ -3,6 +3,7 @@
 
 using AutoMapper;
 using Duende.IdentityServer.EntityFramework.Entities;
+using Microsoft.Extensions.Logging.Abstractions;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Common;
 
@@ -12,7 +13,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Mappers
     {
         static ApiResourceMappers()
         {
-            Mapper = new MapperConfiguration(cfg => cfg.AddProfile<ApiResourceMapperProfile>())
+            Mapper = new MapperConfiguration(cfg => cfg.AddProfile<ApiResourceMapperProfile>(), NullLoggerFactory.Instance)
                 .CreateMapper();
         }
 

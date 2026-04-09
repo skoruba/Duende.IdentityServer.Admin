@@ -3,6 +3,7 @@
 
 using AutoMapper;
 using Duende.IdentityServer.EntityFramework.Entities;
+using Microsoft.Extensions.Logging.Abstractions;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Grant;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Entities;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Common;
@@ -13,7 +14,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Mappers
     {
         static PersistedGrantMappers()
         {
-            Mapper = new MapperConfiguration(cfg =>cfg.AddProfile<PersistedGrantMapperProfile>())
+            Mapper = new MapperConfiguration(cfg => cfg.AddProfile<PersistedGrantMapperProfile>(), NullLoggerFactory.Instance)
                 .CreateMapper();
         }
 

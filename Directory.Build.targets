@@ -19,10 +19,7 @@
                  Condition="'%(_AllResolvedFromPackages.NuGetPackageId)' == 'FluentAssertions'
                             AND $([MSBuild]::VersionGreaterThanOrEquals('%(_AllResolvedFromPackages.NuGetPackageVersion)', '8.0.0'))" />
 
-      <!-- Rule: block AutoMapper >= 15.0.0 -->
-      <_Unwanted Include="@(_AllResolvedFromPackages)"
-                 Condition="'%(_AllResolvedFromPackages.NuGetPackageId)' == 'AutoMapper'
-                            AND $([MSBuild]::VersionGreaterThanOrEquals('%(_AllResolvedFromPackages.NuGetPackageVersion)', '15.0.0'))" />
+      <!-- Rule: block AutoMapper >= 15.0.0 - REMOVED to allow upgrade to 16.X -->
     </ItemGroup>
 
     <!-- Optional: log any detected blocked packages -->

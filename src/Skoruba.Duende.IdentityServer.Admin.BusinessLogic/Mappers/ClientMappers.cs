@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using AutoMapper;
 using Duende.IdentityServer.EntityFramework.Entities;
+using Microsoft.Extensions.Logging.Abstractions;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Shared.Dtos.Common;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Common;
@@ -14,7 +15,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Mappers
     {
         static ClientMappers()
         {
-            Mapper = new MapperConfiguration(cfg => cfg.AddProfile<ClientMapperProfile>())
+            Mapper = new MapperConfiguration(cfg => cfg.AddProfile<ClientMapperProfile>(), NullLoggerFactory.Instance)
                 .CreateMapper();
         }
 

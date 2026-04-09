@@ -284,3 +284,4 @@ __pycache__/
 appsettings.*.json
 
 /shared/nginx/certs/
+/src/Skoruba.Duende.IdentityServer.Admin.UI.Client/package-lock.json

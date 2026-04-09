@@ -3,6 +3,7 @@
 
 using AutoMapper;
 using Duende.IdentityServer.EntityFramework.Entities;
+using Microsoft.Extensions.Logging.Abstractions;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Grant;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Key;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Common;
@@ -15,7 +16,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Mappers
 
         static KeyMappers()
         {
-            Mapper = new MapperConfiguration(cfg => cfg.AddProfile<KeyMapperProfile>())
+            Mapper = new MapperConfiguration(cfg => cfg.AddProfile<KeyMapperProfile>(), NullLoggerFactory.Instance)
                 .CreateMapper();
         }
 

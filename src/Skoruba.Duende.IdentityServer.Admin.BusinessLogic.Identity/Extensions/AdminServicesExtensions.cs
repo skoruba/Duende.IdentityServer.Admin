@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Identity;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Mappers.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Resources;
@@ -33,7 +34,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Extensions
             {
                 foreach (var profileType in builder.ProfileTypes)
                     cfg.AddProfile(profileType);
-            }));
+            }, NullLoggerFactory.Instance));
 
             services.AddScoped<IMapper>(sp => new Mapper(sp.GetRequiredService<IConfigurationProvider>(), sp.GetService));
 

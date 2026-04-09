@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Mappers
 {
@@ -6,7 +7,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Mappers
     {
         static KeyApiMappers()
         {
-            Mapper = new MapperConfiguration(cfg => cfg.AddProfile<KeyApiMapperProfile>())
+            Mapper = new MapperConfiguration(cfg => cfg.AddProfile<KeyApiMapperProfile>(), NullLoggerFactory.Instance)
                 .CreateMapper();
         }
 

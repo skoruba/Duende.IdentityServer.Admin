@@ -8,6 +8,7 @@ using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Skoruba.AuditLogging.Services;
@@ -76,7 +77,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
                         UserIdentityUserToken,
                         UsersDto<UserDto<string>, string>, RolesDto<RoleDto<string>, string>, UserRolesDto<RoleDto<string>, string>,
                         UserClaimsDto<UserClaimDto<string>, string>, UserProviderDto<string>, UserProvidersDto<UserProviderDto<string>, string>,
-                        RoleClaimsDto<RoleClaimDto<string>, string>, UserClaimDto<string>, RoleClaimDto<string>>>())
+                        RoleClaimsDto<RoleClaimDto<string>, string>, UserClaimDto<string>, RoleClaimDto<string>>>(), NullLoggerFactory.Instance)
                 .CreateMapper();
         }
 

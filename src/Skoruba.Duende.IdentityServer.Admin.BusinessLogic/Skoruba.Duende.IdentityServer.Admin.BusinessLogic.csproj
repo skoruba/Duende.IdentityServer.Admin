@@ -6,8 +6,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AutoMapper" Version="14.0.0" />
+		<PackageReference Include="AutoMapper" Version="16.0.0" />
 		<PackageReference Include="Duende.IdentityServer.EntityFramework" Version="7.4.5" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.5" />
 	</ItemGroup>
 
 	<ItemGroup>

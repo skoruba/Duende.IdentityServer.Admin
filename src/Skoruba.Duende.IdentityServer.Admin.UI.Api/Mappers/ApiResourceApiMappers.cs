@@ -1,7 +1,8 @@
-﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
+// Copyright (c) Jan �koruba. All Rights Reserved.
 // Licensed under the Apache License, Version 2.0.
 
 using AutoMapper;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Mappers
 {
@@ -9,7 +10,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Mappers
     {
         static ApiResourceApiMappers()
         {
-            Mapper = new MapperConfiguration(cfg => cfg.AddProfile<ApiResourceApiMapperProfile>())
+            Mapper = new MapperConfiguration(cfg => cfg.AddProfile<ApiResourceApiMapperProfile>(), NullLoggerFactory.Instance)
                 .CreateMapper();
         }
 
