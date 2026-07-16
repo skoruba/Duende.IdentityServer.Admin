@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Validation;
@@ -16,7 +17,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
 
         public string GrantType => "delegation";
 
-        public async Task ValidateAsync(ExtensionGrantValidationContext context)
+        public async Task ValidateAsync(ExtensionGrantValidationContext context, CancellationToken cancellationToken = default)
         {
             var userToken = context.Request.Raw.Get("token");
 
@@ -26,7 +27,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
                 return;
             }
 
-            var result = await _validator.ValidateAccessTokenAsync(userToken);
+            var result = await _validator.ValidateAccessTokenAsync(userToken, expectedScope: null, cancellationToken);
             if (result.IsError)
             {
                 context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant);

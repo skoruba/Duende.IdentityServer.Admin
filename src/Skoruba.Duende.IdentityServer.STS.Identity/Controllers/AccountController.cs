@@ -113,7 +113,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
         public async Task<IActionResult> Login(LoginInputModel model, string button)
         {
             // check if we are in the context of an authorization request
-            var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
+            var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl, HttpContext.RequestAborted);
             var isPasskeySubmit = button == "__passkeySubmit";
             var hasPasskeyPayload = !string.IsNullOrEmpty(model.Passkey?.CredentialJson) || !string.IsNullOrEmpty(model.Passkey?.Error);
             if (!isPasskeySubmit && HttpContext.Request.HasFormContentType)
@@ -130,7 +130,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
                     // if the user cancels, send a result back into IdentityServer as if they 
                     // denied the consent (even if this client does not require consent).
                     // this will send back an access denied OIDC error response to the client.
-                    await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
+                    await _interaction.DenyAuthorizationAsync(context, InteractionError.AccessDenied, HttpContext.RequestAborted);
 
                     // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
                     if (context.IsNativeClient())
@@ -191,7 +191,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
 
             if (result?.Succeeded == true && user != null)
             {
-                await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName));
+                await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName), HttpContext.RequestAborted);
 
                 if (context != null)
                 {
@@ -233,7 +233,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
 
             var loginFailureReason = isPasskeySubmit ? "invalid passkey" : "invalid credentials";
             var loginFailureMessage = isPasskeySubmit ? AccountOptions.InvalidPasskeyErrorMessage : AccountOptions.InvalidCredentialsErrorMessage;
-            await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, loginFailureReason, clientId: context?.Client.ClientId));
+            await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, loginFailureReason, clientId: context?.Client.ClientId), HttpContext.RequestAborted);
             ModelState.AddModelError(string.Empty, loginFailureMessage);
 
             // something went wrong, show form with error
@@ -278,7 +278,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
                 await _signInManager.SignOutAsync();
 
                 // raise the logout event
-                await _events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));
+                await _events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()), HttpContext.RequestAborted);
             }
 
             // check if we need to trigger sign-out at an upstream identity provider
@@ -561,7 +561,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
 
             if (result.Succeeded)
             {
-                await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName));
+                await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName), HttpContext.RequestAborted);
                 return LocalRedirect(string.IsNullOrEmpty(model.ReturnUrl) ? "~/" : model.ReturnUrl);
             }
 
@@ -618,7 +618,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
 
             if (result.Succeeded)
             {
-                await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName));
+                await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName), HttpContext.RequestAborted);
                 return LocalRedirect(string.IsNullOrEmpty(model.ReturnUrl) ? "~/" : model.ReturnUrl);
             }
 
@@ -747,7 +747,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
 
         private async Task<LoginViewModel> BuildLoginViewModelAsync(string returnUrl)
         {
-            var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
+            var context = await _interaction.GetAuthorizationContextAsync(returnUrl, HttpContext.RequestAborted);
             if (context?.IdP != null && await _schemeProvider.GetSchemeAsync(context.IdP) != null)
             {
                 var local = context.IdP == IdentityServerConstants.LocalIdentityProvider;
@@ -778,7 +778,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
                     AuthenticationScheme = x.Name
                 }).ToList();
 
-            var dynamicSchemes = (await _identityProviderStore.GetAllSchemeNamesAsync())
+            var dynamicSchemes = (await _identityProviderStore.GetAllSchemeNamesAsync(HttpContext.RequestAborted))
                 .Where(x => x.Enabled)
                 .Select(x => new ExternalProvider
                 {
@@ -791,7 +791,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
             var allowLocal = true;
             if (context?.Client.ClientId != null)
             {
-                var client = await _clientStore.FindEnabledClientByIdAsync(context.Client.ClientId);
+                var client = await _clientStore.FindEnabledClientByIdAsync(context.Client.ClientId, HttpContext.RequestAborted);
                 if (client != null)
                 {
                     allowLocal = client.EnableLocalLogin;
@@ -832,7 +832,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
                 return vm;
             }
 
-            var context = await _interaction.GetLogoutContextAsync(logoutId);
+            var context = await _interaction.GetLogoutContextAsync(logoutId, HttpContext.RequestAborted);
             if (context?.ShowSignoutPrompt == false)
             {
                 // it's safe to automatically sign-out
@@ -848,7 +848,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
         private async Task<LoggedOutViewModel> BuildLoggedOutViewModelAsync(string logoutId)
         {
             // get context information (client name, post logout redirect URI and iframe for federated signout)
-            var logout = await _interaction.GetLogoutContextAsync(logoutId);
+            var logout = await _interaction.GetLogoutContextAsync(logoutId, HttpContext.RequestAborted);
 
             var vm = new LoggedOutViewModel
             {
@@ -872,7 +872,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
                             // if there's no current logout context, we need to create one
                             // this captures necessary info from the current logged in user
                             // before we signout and redirect away to the external IdP for signout
-                            vm.LogoutId = await _interaction.CreateLogoutContextAsync();
+                            vm.LogoutId = await _interaction.CreateLogoutContextAsync(HttpContext.RequestAborted);
                         }
 
                         vm.ExternalAuthenticationScheme = idp;
