@@ -34,11 +34,10 @@ export async function createConfidentialClientViaWizard(
   await page.locator('textarea[name="description"]').fill(data.description);
   await page.getByRole("button", { name: UI_TEXT.actions.next }).click();
 
-  const wizardItemInput = page
-    .getByPlaceholder(UI_TEXT.placeholders.enterItem)
-    .first();
-  await wizardItemInput.fill(data.redirectUri);
-  await page.getByRole("button", { name: UI_TEXT.actions.addItem }).click();
+  await expect(page.locator('input[name="redirectUri"]')).toBeVisible({
+    timeout: 30_000,
+  });
+  await page.locator('input[name="redirectUri"]').fill(data.redirectUri);
   await page.locator('input[name="logoutUri"]').fill(data.logoutUri);
   await page.getByRole("button", { name: UI_TEXT.actions.next }).click();
 
