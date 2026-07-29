@@ -23,9 +23,6 @@
   <data name="PersonalInformation" xml:space="preserve">
     <value>Persoonlijke informatie</value>
   </data>
-  <data name="Remember" xml:space="preserve">
-    <value>Onthoud Mijn Keuze</value>
-  </data>
   <data name="SubTitle" xml:space="preserve">
     <value>vraagt om uw toestemming</value>
   </data>

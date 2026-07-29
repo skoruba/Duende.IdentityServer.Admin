@@ -113,7 +113,10 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
 
                     grantedConsent = new ConsentResponse
                     {
-                        RememberConsent = model.RememberConsent,
+                        // RFC 8628: the device that starts the flow is not the device the user
+                        // authenticates on, so persisted consent could be replayed against an
+                        // attacker-controlled device. Device flow consent is never remembered.
+                        RememberConsent = false,
                         ScopesValuesConsented = scopes.ToArray(),
                         Description = model.Description
                     };
@@ -167,13 +170,11 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
                 UserCode = userCode,
                 Description = model?.Description,
 
-                RememberConsent = model?.RememberConsent ?? true,
                 ScopesConsented = model?.ScopesConsented ?? Enumerable.Empty<string>(),
 
                 ClientName = request.Client.ClientName ?? request.Client.ClientId,
                 ClientUrl = request.Client.ClientUri,
-                ClientLogoUrl = request.Client.LogoUri,
-                AllowRememberConsent = request.Client.AllowRememberConsent
+                ClientLogoUrl = request.Client.LogoUri
             };
 
             vm.IdentityScopes = request.ValidatedResources.Resources.IdentityResources.Select(x => CreateScopeViewModel(x, vm.ScopesConsented.Contains(x.Name) || model == null)).ToArray();

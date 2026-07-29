@@ -129,9 +129,6 @@
   <data name="PersonalInformation" xml:space="preserve">
     <value>Información personal</value>
   </data>
-  <data name="Remember" xml:space="preserve">
-    <value>Recuerda mi decisión</value>
-  </data>
   <data name="SubTitle" xml:space="preserve">
     <value>esta preguntado por tu permiso</value>
   </data>
