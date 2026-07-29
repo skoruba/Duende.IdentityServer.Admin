@@ -13,7 +13,7 @@ rather than a rewrite.
 - Five new configuration rules for clients:
   - `ClientNameMustStartWith` and `ClientNameMustNotContain`
   - `ClientIdMustStartWith` and `ClientIdMustNotContain`
-  - `ClientScopeMustExist`, which reports clients still allowing a scope that no longer exists as an API scope or identity resource ([#68](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/176))
+  - `ClientScopeMustExist`, which reports clients still allowing a scope that no longer exists as an API scope or identity resource ([#176](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/176))
 - Playwright coverage for the JWK secret type: key pair generation, public-key-only storage, masked private key with copy and download in JWK and PEM form, the discard confirmation, EC key generation, and value validation
 
 ### Changed
