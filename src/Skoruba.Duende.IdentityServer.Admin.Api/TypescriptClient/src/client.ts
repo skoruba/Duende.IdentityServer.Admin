@@ -8810,6 +8810,11 @@ export enum ConfigurationRuleType {
     IdentityResourceNameMustStartWith = "IdentityResourceNameMustStartWith",
     ScopeIsUnused = "ScopeIsUnused",
     SecretIsExpiredInDays = "SecretIsExpiredInDays",
+    ClientNameMustStartWith = "ClientNameMustStartWith",
+    ClientNameMustNotContain = "ClientNameMustNotContain",
+    ClientIdMustStartWith = "ClientIdMustStartWith",
+    ClientIdMustNotContain = "ClientIdMustNotContain",
+    ClientScopeMustExist = "ClientScopeMustExist",
 }
 
 export enum ConfigurationIssueType {

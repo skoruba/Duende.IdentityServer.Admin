@@ -17,7 +17,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.10")
+                .HasAnnotation("ProductVersion", "10.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -255,6 +255,66 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             MessageTemplate = "Client '{clientName}' has a secret ({secretType}) that {status} in {daysUntilExpiry} day(s) on {expirationDate}",
                             ResourceType = 0,
                             RuleType = 15
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Configuration = "{\"prefixes\": [\"Client \"]}",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FixDescription = "Navigate to Client Details → Basics tab and rename the client to start with one of the required prefixes: {allowedPrefixes}.",
+                            IsEnabled = false,
+                            IssueType = 0,
+                            MessageTemplate = "Client '{actualName}' must start with one of: {allowedPrefixes}",
+                            ResourceType = 0,
+                            RuleType = 16
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Configuration = "{\"forbiddenStrings\": [\"test\", \"temp\", \"debug\"]}",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FixDescription = "Navigate to Client Details → Basics tab and rename the client to remove forbidden strings from the name.",
+                            IsEnabled = false,
+                            IssueType = 0,
+                            MessageTemplate = "Client '{clientName}' contains forbidden string(s): {forbiddenStrings}",
+                            ResourceType = 0,
+                            RuleType = 17
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Configuration = "{\"prefixes\": [\"client_\"]}",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FixDescription = "Navigate to Client Details → Basics tab and rename the Client ID to start with one of the required prefixes: {allowedPrefixes}.",
+                            IsEnabled = false,
+                            IssueType = 0,
+                            MessageTemplate = "Client ID '{actualClientId}' must start with one of: {allowedPrefixes}",
+                            ResourceType = 0,
+                            RuleType = 18
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Configuration = "{\"forbiddenStrings\": [\"test\", \"temp\", \"debug\"]}",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FixDescription = "Navigate to Client Details → Basics tab and rename the Client ID to remove forbidden strings from it.",
+                            IsEnabled = false,
+                            IssueType = 0,
+                            MessageTemplate = "Client ID '{clientId}' contains forbidden string(s): {forbiddenStrings}",
+                            ResourceType = 0,
+                            RuleType = 19
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Configuration = "{\"excludeScopes\": [\"offline_access\"]}",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FixDescription = "Navigate to Client Details → Resources tab → Allowed Scopes section and remove the scope(s) that no longer exist: {missingScopes}.",
+                            IsEnabled = false,
+                            IssueType = 0,
+                            MessageTemplate = "Client '{clientName}' allows {count} scope(s) that no longer exist: {missingScopes}",
+                            ResourceType = 0,
+                            RuleType = 20
                         });
                 });
 #pragma warning restore 612, 618

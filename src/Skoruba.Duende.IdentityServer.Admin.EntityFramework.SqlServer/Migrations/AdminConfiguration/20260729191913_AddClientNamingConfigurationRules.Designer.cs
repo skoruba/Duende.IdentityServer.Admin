@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 
@@ -11,9 +12,11 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migrations.AdminConfiguration
 {
     [DbContext(typeof(AdminConfigurationDbContext))]
-    partial class AdminConfigurationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260729191913_AddClientNamingConfigurationRules")]
+    partial class AddClientNamingConfigurationRules
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -303,18 +306,6 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migratio
                             MessageTemplate = "Client ID '{clientId}' contains forbidden string(s): {forbiddenStrings}",
                             ResourceType = 0,
                             RuleType = 19
-                        },
-                        new
-                        {
-                            Id = 21,
-                            Configuration = "{\"excludeScopes\": [\"offline_access\"]}",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            FixDescription = "Navigate to Client Details → Resources tab → Allowed Scopes section and remove the scope(s) that no longer exist: {missingScopes}.",
-                            IsEnabled = false,
-                            IssueType = 0,
-                            MessageTemplate = "Client '{clientName}' allows {count} scope(s) that no longer exist: {missingScopes}",
-                            ResourceType = 0,
-                            RuleType = 20
                         });
                 });
 #pragma warning restore 612, 618
