@@ -12,6 +12,7 @@ import { SecretsFormData } from "@/components/SecretForm/SecretForm";
 import { client } from "@skoruba/duende.identityserver.admin.api.client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { INT_MAX } from "@/helpers/NumberHelper";
+import { humanizePascalCase } from "@/helpers/StringHelper";
 import { queryKeys, queryWithoutCache } from "./QueryKeys";
 import { getNowForUnspecifiedDb } from "@/helpers/DateTimeHelper";
 
@@ -184,7 +185,10 @@ const fetchSecretTypes = async (): Promise<SelectItem[]> => {
   const clientClient = new client.ClientsClient(ApiHelper.getApiBaseUrl());
   const data = await clientClient.getSecretTypes();
 
-  return data.map((x) => ({ value: x.id!, label: x.text! }));
+  return data.map((x) => ({
+    value: x.id!,
+    label: humanizePascalCase(x.text!),
+  }));
 };
 
 export const useClientScopes = (
