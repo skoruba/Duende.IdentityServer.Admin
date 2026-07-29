@@ -40,12 +40,7 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import DualListSelectorAdapter from "@/components/ui/DualListSelectorAdapter";
 import InputWithTable from "@/components/ui/inputwithtable";
-import {
-  FieldValues,
-  Path,
-  useFormContext,
-  Control,
-} from "react-hook-form";
+import { FieldValues, Path, useFormContext, Control } from "react-hook-form";
 import { Item } from "../ui/dualListselector";
 import {
   generateRandomClientId,
@@ -103,6 +98,7 @@ type TextareaFieldProps = {
 type SelectFieldProps = {
   field: FieldAdapter;
   options: { value: string; label: string }[];
+  onValueChange?: (value: string) => void;
 };
 
 type DualListFieldProps = {
@@ -279,7 +275,10 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
         onChange={field.onChange}
         onBlur={field.onBlur}
         ref={field.ref}
-        className={cn("resize-none", monospace && "break-all font-mono text-xs")}
+        className={cn(
+          "resize-none",
+          monospace && "break-all font-mono text-xs",
+        )}
         maxLength={maxLength}
         rows={rows}
       />
@@ -288,17 +287,26 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
   </FormControl>
 );
 
-const SelectField: React.FC<SelectFieldProps> = ({ field, options }) => {
+const SelectField: React.FC<SelectFieldProps> = ({
+  field,
+  options,
+  onValueChange,
+}) => {
   const { t } = useTranslation();
   const selectValue =
     field.value === null || field.value === undefined
       ? ""
       : String(field.value);
 
+  const handleValueChange = (value: string) => {
+    field.onChange(value);
+    onValueChange?.(value);
+  };
+
   return (
     <FormControl>
       <Select
-        onValueChange={field.onChange}
+        onValueChange={handleValueChange}
         defaultValue={selectValue || undefined}
         value={selectValue}
       >
@@ -350,7 +358,7 @@ const DateField: React.FC<DateFieldProps> = ({ field }) => {
               variant="outline"
               className={cn(
                 "w-full pl-3 pr-10 justify-start text-left font-normal",
-                !selectedDate && "text-muted-foreground"
+                !selectedDate && "text-muted-foreground",
               )}
             >
               {selectedDate ? (
@@ -487,6 +495,7 @@ type FormRowProps<T extends FieldValues> = {
     | "searchDropdown";
   selectSettings?: {
     options?: { value: string; label: string }[];
+    onValueChange?: (value: string) => void;
   };
   inputSettings?: {
     copyToClipboard?: boolean;
@@ -525,7 +534,9 @@ export const FormRow = <T extends FieldValues>({
   className,
   required = false,
   type = "input",
-  selectSettings: { options } = { options: [] },
+  selectSettings: { options, onValueChange: onSelectValueChange } = {
+    options: [],
+  },
   inputSettings: {
     copyToClipboard = false,
     generateRandomValue = RandomValues.None,
@@ -600,6 +611,7 @@ export const FormRow = <T extends FieldValues>({
                   <SelectField
                     field={field}
                     options={options!}
+                    onValueChange={onSelectValueChange}
                   />
                 )}
                 {type === "dualList" && (

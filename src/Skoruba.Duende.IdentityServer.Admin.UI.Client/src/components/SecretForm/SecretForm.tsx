@@ -6,7 +6,7 @@ import { RandomValues } from "@/helpers/CryptoHelper";
 import { useSecretTypes } from "@/services/ClientServices";
 import { TFunction } from "i18next";
 import { KeyRound } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -98,10 +98,7 @@ const jwkError = (message: string): PublicJwkInspection => ({
  * reported as a warning, because IdentityServer - not this form - decides what it
  * accepts, and there is no other way to enter the value.
  */
-const inspectPublicJwk = (
-  value: string,
-  t: TFunction,
-): PublicJwkInspection => {
+const inspectPublicJwk = (value: string, t: TFunction): PublicJwkInspection => {
   if (!value.trim()) {
     return jwkError(t("Validation.SecretValueRequired"));
   }
@@ -192,7 +189,10 @@ export const createSecretFormSchema = (t: TFunction) =>
         }
       }
 
-      if (data.secretType === SecretTypes.SharedSecret && !data.secretHashType) {
+      if (
+        data.secretType === SecretTypes.SharedSecret &&
+        !data.secretHashType
+      ) {
         ctx.addIssue({
           code: "custom",
           message: t("Validation.SecretHashTypeRequiredForSharedSecret"),
@@ -246,18 +246,9 @@ const SecretForm = ({ form }: SecretFormProps) => {
     });
   };
 
-  // The formats are not interchangeable - a JWK left behind in a shared secret
-  // field would silently be hashed and stored as one.
-  const previousSecretType = useRef(secretType);
-
-  useEffect(() => {
-    if (previousSecretType.current === secretType) {
-      return;
-    }
-
-    previousSecretType.current = secretType;
+  const handleSecretTypeChange = () => {
     form.resetField("secretValue", { defaultValue: "" });
-  }, [secretType, form]);
+  };
 
   if (secretTypesLoading) {
     return <Loading />;
@@ -273,6 +264,7 @@ const SecretForm = ({ form }: SecretFormProps) => {
         type="select"
         selectSettings={{
           options: secretTypes,
+          onValueChange: handleSecretTypeChange,
         }}
       />
       <hr className="my-4" />
