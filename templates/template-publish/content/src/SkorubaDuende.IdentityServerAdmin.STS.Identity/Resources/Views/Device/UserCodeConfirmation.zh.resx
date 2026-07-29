@@ -129,9 +129,6 @@
   <data name="PersonalInformation" xml:space="preserve">
     <value>个人信息</value>
   </data>
-  <data name="Remember" xml:space="preserve">
-    <value>记住我的决定</value>
-  </data>
   <data name="SubTitle" xml:space="preserve">
     <value>正在请求您的许可</value>
   </data>

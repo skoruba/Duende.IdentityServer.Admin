@@ -88,7 +88,38 @@
     "FormRow": {
       "SelectOption": "Select an option",
       "PickDate": "Pick a date",
-      "CopiedToClipboard": "Copied to clipboard!"
+      "CopiedToClipboard": "Copied to clipboard!",
+      "CopyToClipboardFailed": "The value could not be copied. Copying requires a secure context (HTTPS or localhost) and clipboard permission."
+    },
+    "CopyableCode": {
+      "ClickToCopy": "Click to copy"
+    },
+    "GenerateJwkDialog": {
+      "Title": "Generate JWK key pair",
+      "Description": "The key pair is generated in your browser. The private key is never sent to the server.",
+      "Algorithm": "Algorithm",
+      "AlgorithmInfo": "RS256 is the most widely supported. The ES variants produce shorter keys and faster signatures - ES256 is the common choice.",
+      "KeySize": "Key size",
+      "KeySizeOption": "{{bits}} bits",
+      "SetupTip": "The public key is stored as the client secret. The private key stays with you and has to be configured in the client application.",
+      "Generate": "Generate key pair",
+      "GenerationFailed": "The key pair could not be generated. Key generation requires a secure context (HTTPS or localhost).",
+      "PrivateKeyWarning": "The private key is shown only now. It is never stored here and cannot be recovered - copy or download it before you continue.",
+      "KeyId": "Key ID",
+      "PrivateKey": "Private key",
+      "PublicKey": "Public key",
+      "PrivateKeyInfo": "Configure this key in the client application and never share it. You can copy or download it without revealing it.",
+      "PublicKeyInfo": "This key is stored as the secret value. It is safe to share.",
+      "Copy": "Copy",
+      "Download": "Download",
+      "Reveal": "Reveal private key",
+      "Hide": "Hide",
+      "Acknowledge": "I have securely saved the private key",
+      "UsePublicKey": "Use public key",
+      "PublicKeyApplied": "The public key has been inserted into the secret value",
+      "DiscardConfirm": "Discard the generated key pair? The private key will be lost.",
+      "KeepKeys": "Keep keys",
+      "Discard": "Discard"
     },
     "InputWithTable": {
       "AddItem": "Add Item",
@@ -165,7 +196,17 @@
     "AtLeastOneItemField": "At least one item is required for {{field}}.",
     "PasswordRequired": "Password is required.",
     "PasswordMinLength": "Password must be at least {{min}} characters.",
-    "PasswordsMustMatch": "Passwords do not match."
+    "PasswordsMustMatch": "Passwords do not match.",
+    "JwkInvalidJson": "JWK must be valid JSON.",
+    "JwkMustBeObject": "JWK must be a single public key object.",
+    "JwkPublicOnly": "JWK must contain only public key material. Remove the private '{{member}}' member.",
+    "JwkSetNotSupported": "A JWK Set is not supported here. Paste a single public key object instead of the surrounding 'keys' array.",
+    "JwkKeyTypeRequired": "JWK must contain a 'kty' member.",
+    "JwkRsaRequiredMembers": "RSA JWK must contain public 'n' and 'e' members, or an 'x5c' certificate chain.",
+    "JwkEcRequiredMembers": "EC JWK must contain public 'crv', 'x', and 'y' members, or an 'x5c' certificate chain.",
+    "JwkOkpRequiredMembers": "OKP JWK must contain public 'crv' and 'x' members.",
+    "JwkSymmetricNotSupported": "Symmetric keys are not supported as a JWK secret. Use the SharedSecret type instead.",
+    "JwkUnknownKeyType": "Unrecognized key type '{{kty}}'. Make sure your IdentityServer supports it."
   },
   "Actions": {
     "Actions": "Actions",
@@ -371,7 +412,14 @@
     "Actions": {
       "Added": "The secret has been added successfully"
     },
-    "ValueWarning": "Copy the new API secret value. You won't be able to retrieve it after you perform this operation."
+    "ValueWarning": "Copy the new API secret value. You won't be able to retrieve it after you perform this operation.",
+    "PlainValueTip": "This secret type is stored as it is - it is not hashed and stays readable after saving.",
+    "Jwk": {
+      "GenerateAction": "Generate JWK key pair",
+      "ValuePlaceholder": "Paste the public key as a JSON Web Key, or generate a new key pair",
+      "ValueTip": "This value is the public key and is stored as it is - it is not hashed. Keep the matching private key in the client application only.",
+      "PublicKeyValidated": "Public JWK detected. No private key fields found."
+    }
   },
   "Claim": {
     "Key": "Claim Key",
@@ -441,7 +489,7 @@
       "MachineClientType": "Machine client",
       "HighSecureClientType": "High Secure Web Client",
       "Validation": {
-        "RedirectUrisRequired": "Add at least one redirect URI and click Add item.",
+        "RedirectUriRequired": "Redirect URI is required.",
         "ScopesRequired": "Select at least one scope before continuing."
       }
     },
@@ -453,7 +501,7 @@
       "RequiredConsent": "Require Consent",
       "NoRequiredConsent": "Not Require Consent",
       "NoDescription": "No Description",
-      "RedirectUris": "Redirect URIs",
+      "RedirectUri": "Redirect URI",
       "LogoutUri": "Logout URI",
       "ClientSecret": "Client Secret"
     },
@@ -554,6 +602,8 @@
       "IdentityProviderRestrictions_Label": "Identity Provider Restrictions",
       "PostLogoutRedirectUris_Info": "Specifies allowed URIs to redirect to after logout",
       "PostLogoutRedirectUris_Label": "Post Logout Redirect Uris",
+      "PostLogoutRedirectUri_Label": "Post Logout Redirect Uri",
+      "RedirectUri_Label": "Redirect Uri",
       "RedirectUris_Info": "Specifies the allowed URIs to return tokens or authorization codes to",
       "RedirectUris_Label": "Redirect Uris",
       "BackChannelLogoutSessionRequired_Info": "Specifies if the user’s session id should be sent in the request to the BackChannelLogoutUri. Defaults to true.",

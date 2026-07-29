@@ -107,6 +107,7 @@ public class ConfigurationIssuesRepository<TDbContext, TRulesDbContext> : IConfi
                 .Include(c => c.RedirectUris)
                 .Include(c => c.PostLogoutRedirectUris)
                 .Include(c => c.ClientSecrets)
+                .AsSplitQuery()
                 .AsNoTracking()
                 .ToListAsync();
 

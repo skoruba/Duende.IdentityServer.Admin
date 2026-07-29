@@ -14,20 +14,22 @@ import { Trans, useTranslation } from "react-i18next";
 import { urlValidationSchema } from "../../Common/UrlListValidatorSchema";
 import { useClientWizard } from "@/contexts/ClientWizardContext";
 import { TFunction } from "i18next";
+import { CopyableCode } from "@/components/CopyableCode/CopyableCode";
 import { Tip } from "@/components/Tip/Tip";
 
 const formSchema = (t: TFunction) =>
   z.object({
-    redirectUris: z
-      .array(urlValidationSchema(t))
-      .min(1, { message: t("Client.Wizard.Validation.RedirectUrisRequired") }),
+    redirectUri: z
+      .string()
+      .min(1, { message: t("Client.Wizard.Validation.RedirectUriRequired") })
+      .pipe(urlValidationSchema(t)),
     logoutUri: urlValidationSchema(t).or(z.literal("")).optional(),
   });
 
 export type UrisFormData = z.infer<ReturnType<typeof formSchema>>;
 
 const defaultValues = {
-  redirectUris: [],
+  redirectUri: "",
   logoutUri: "",
 };
 
@@ -62,26 +64,22 @@ export const ClientUrisStep = () => {
             i18nKey="Client.Tips.RedirectUris"
             components={{
               strong: <strong />,
-              code: <code />,
+              code: <CopyableCode />,
               br: <br />,
             }}
           />
         </Tip>
 
         <FormRow
-          name="redirectUris"
-          label={t("Client.Label.RedirectUris_Label")}
+          name="redirectUri"
+          label={t("Client.Label.RedirectUri_Label")}
           description={t("Client.Label.RedirectUris_Info")}
-          type="inputWithTable"
           required
           includeSeparator
-          inputWithTableSettings={{
-            validationSchema: urlValidationSchema(t),
-          }}
         />
         <FormRow
           name="logoutUri"
-          label={t("Client.Label.PostLogoutRedirectUris_Label")}
+          label={t("Client.Label.PostLogoutRedirectUri_Label")}
           description={t("Client.Label.PostLogoutRedirectUris_Info")}
         />
         <div className="flex justify-between mt-4">

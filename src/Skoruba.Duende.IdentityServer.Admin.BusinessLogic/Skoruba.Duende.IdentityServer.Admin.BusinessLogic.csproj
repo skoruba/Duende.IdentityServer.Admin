@@ -6,7 +6,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Duende.IdentityServer.EntityFramework" Version="7.4.7" />
+		<PackageReference Include="Duende.IdentityServer.EntityFramework" Version="8.0.2" />
 		<PackageReference Include="Riok.Mapperly" Version="4.3.1" />
 	</ItemGroup>
 
@@ -74,7 +74,6 @@
 	</ItemGroup>
 
 </Project>
-
 
 
 

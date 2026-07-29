@@ -129,9 +129,6 @@
   <data name="PersonalInformation" xml:space="preserve">
     <value>Личная информация</value>
   </data>
-  <data name="Remember" xml:space="preserve">
-    <value>Запомнить мой выбор</value>
-  </data>
   <data name="SubTitle" xml:space="preserve">
     <value>запрашивает ваше разрешение</value>
   </data>

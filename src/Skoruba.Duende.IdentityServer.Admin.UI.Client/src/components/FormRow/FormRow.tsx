@@ -40,19 +40,14 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import DualListSelectorAdapter from "@/components/ui/DualListSelectorAdapter";
 import InputWithTable from "@/components/ui/inputwithtable";
-import {
-  FieldValues,
-  Path,
-  useFormContext,
-  Control,
-} from "react-hook-form";
+import { FieldValues, Path, useFormContext, Control } from "react-hook-form";
 import { Item } from "../ui/dualListselector";
-import { toast } from "../ui/use-toast";
 import {
   generateRandomClientId,
   generateRandomSharedSecret,
   RandomValues,
 } from "@/helpers/CryptoHelper";
+import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 import {
   secondsToFormattedTime,
   secondsToFormattedTimeLabels,
@@ -95,11 +90,15 @@ type TextareaFieldProps = {
   field: FieldAdapter;
   placeholder?: string;
   maxLength?: number;
+  copyToClipboard?: boolean;
+  monospace?: boolean;
+  rows?: number;
 };
 
 type SelectFieldProps = {
   field: FieldAdapter;
   options: { value: string; label: string }[];
+  onValueChange?: (value: string) => void;
 };
 
 type DualListFieldProps = {
@@ -178,6 +177,32 @@ const SwitchField: React.FC<SwitchFieldProps> = ({
   </FormItem>
 );
 
+const CopyToClipboardButton: React.FC<{ value: unknown }> = ({ value }) => {
+  const copyToClipboard = useCopyToClipboard();
+
+  const isEmpty = value === null || value === undefined || value === "";
+
+  const handleCopyToClipboard = () => {
+    if (isEmpty) {
+      return;
+    }
+
+    copyToClipboard(String(value));
+  };
+
+  return (
+    <Button
+      type="button"
+      variant="outline"
+      onClick={handleCopyToClipboard}
+      className="ms-1"
+      disabled={isEmpty}
+    >
+      <ClipboardCopy />
+    </Button>
+  );
+};
+
 const InputField: React.FC<InputFieldProps> = ({
   field,
   placeholder,
@@ -186,17 +211,10 @@ const InputField: React.FC<InputFieldProps> = ({
   maxLength,
   inputType = "text",
 }) => {
-  const { t } = useTranslation();
-
-  const handleCopyToClipboard = () => {
-    if (field.value !== null && field.value !== undefined) {
-      navigator.clipboard.writeText(String(field.value)).then(() => {
-        toast({
-          title: t("Components.FormRow.CopiedToClipboard"),
-        });
-      });
-    }
-  };
+  const showRandomValue = [
+    RandomValues.ClientId,
+    RandomValues.SharedSecret,
+  ].includes(generateRandomValue);
 
   const handleRandomValue = () => {
     if (generateRandomValue === RandomValues.SharedSecret) {
@@ -208,7 +226,7 @@ const InputField: React.FC<InputFieldProps> = ({
 
   return (
     <FormControl>
-      <div className={generateRandomValue ? "flex" : ""}>
+      <div className={showRandomValue || copyToClipboard ? "flex" : ""}>
         <Input
           placeholder={placeholder}
           name={field.name}
@@ -224,9 +242,7 @@ const InputField: React.FC<InputFieldProps> = ({
           maxLength={maxLength}
           type={inputType}
         />
-        {[RandomValues.ClientId, RandomValues.SharedSecret].includes(
-          generateRandomValue
-        ) && (
+        {showRandomValue && (
           <Button
             type="button"
             onClick={handleRandomValue}
@@ -236,17 +252,7 @@ const InputField: React.FC<InputFieldProps> = ({
             <Shuffle />
           </Button>
         )}
-        {copyToClipboard && (
-          <Button
-            type="button"
-            variant={"outline"}
-            onClick={handleCopyToClipboard}
-            className="ms-1"
-            disabled={field.value === null || field.value === undefined || field.value === ""}
-          >
-            <ClipboardCopy />
-          </Button>
-        )}
+        {copyToClipboard && <CopyToClipboardButton value={field.value} />}
       </div>
     </FormControl>
   );
@@ -256,32 +262,51 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
   field,
   placeholder,
   maxLength,
+  copyToClipboard,
+  monospace,
+  rows,
 }) => (
   <FormControl>
-    <Textarea
-      placeholder={placeholder}
-      name={field.name}
-      value={typeof field.value === "string" ? field.value : ""}
-      onChange={field.onChange}
-      onBlur={field.onBlur}
-      ref={field.ref}
-      className="resize-none"
-      maxLength={maxLength}
-    />
+    <div className={copyToClipboard ? "flex items-start" : ""}>
+      <Textarea
+        placeholder={placeholder}
+        name={field.name}
+        value={typeof field.value === "string" ? field.value : ""}
+        onChange={field.onChange}
+        onBlur={field.onBlur}
+        ref={field.ref}
+        className={cn(
+          "resize-none",
+          monospace && "break-all font-mono text-xs",
+        )}
+        maxLength={maxLength}
+        rows={rows}
+      />
+      {copyToClipboard && <CopyToClipboardButton value={field.value} />}
+    </div>
   </FormControl>
 );
 
-const SelectField: React.FC<SelectFieldProps> = ({ field, options }) => {
+const SelectField: React.FC<SelectFieldProps> = ({
+  field,
+  options,
+  onValueChange,
+}) => {
   const { t } = useTranslation();
   const selectValue =
     field.value === null || field.value === undefined
       ? ""
       : String(field.value);
 
+  const handleValueChange = (value: string) => {
+    field.onChange(value);
+    onValueChange?.(value);
+  };
+
   return (
     <FormControl>
       <Select
-        onValueChange={field.onChange}
+        onValueChange={handleValueChange}
         defaultValue={selectValue || undefined}
         value={selectValue}
       >
@@ -333,7 +358,7 @@ const DateField: React.FC<DateFieldProps> = ({ field }) => {
               variant="outline"
               className={cn(
                 "w-full pl-3 pr-10 justify-start text-left font-normal",
-                !selectedDate && "text-muted-foreground"
+                !selectedDate && "text-muted-foreground",
               )}
             >
               {selectedDate ? (
@@ -470,10 +495,16 @@ type FormRowProps<T extends FieldValues> = {
     | "searchDropdown";
   selectSettings?: {
     options?: { value: string; label: string }[];
+    onValueChange?: (value: string) => void;
   };
   inputSettings?: {
     copyToClipboard?: boolean;
     generateRandomValue?: RandomValues;
+  };
+  textareaSettings?: {
+    copyToClipboard?: boolean;
+    monospace?: boolean;
+    rows?: number;
   };
   dualListSettings?: {
     initialItems?: Item[];
@@ -503,10 +534,17 @@ export const FormRow = <T extends FieldValues>({
   className,
   required = false,
   type = "input",
-  selectSettings: { options } = { options: [] },
+  selectSettings: { options, onValueChange: onSelectValueChange } = {
+    options: [],
+  },
   inputSettings: {
     copyToClipboard = false,
     generateRandomValue = RandomValues.None,
+  } = {},
+  textareaSettings: {
+    copyToClipboard: textareaCopyToClipboard = false,
+    monospace = false,
+    rows,
   } = {},
   dualListSettings: { initialItems } = { initialItems: [] },
   searchDropdownSettings: { items } = { items: [] },
@@ -560,12 +598,20 @@ export const FormRow = <T extends FieldValues>({
                   />
                 )}
                 {type === "textarea" && (
-                  <TextareaField field={field} placeholder={placeholder} />
+                  <TextareaField
+                    field={field}
+                    placeholder={placeholder}
+                    maxLength={maxLength}
+                    copyToClipboard={textareaCopyToClipboard}
+                    monospace={monospace}
+                    rows={rows}
+                  />
                 )}
                 {type === "select" && (
                   <SelectField
                     field={field}
                     options={options!}
+                    onValueChange={onSelectValueChange}
                   />
                 )}
                 {type === "dualList" && (

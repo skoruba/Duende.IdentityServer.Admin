@@ -105,6 +105,36 @@ public static class ConfigurationRuleSeedHelper
             "Client '{clientName}' has a secret ({secretType}) that {status} in {daysUntilExpiry} day(s) on {expirationDate}",
             "Navigate to Client Details → Advanced tab → Authentication → Secrets section, remove the expired secret and add a new one with proper expiration date.",
             "{\"warningDays\": 30, \"includeAlreadyExpired\": true}"
+        ),
+
+        [ConfigurationRuleType.ClientNameMustStartWith] = (
+            "Client '{actualName}' must start with one of: {allowedPrefixes}",
+            "Navigate to Client Details → Basics tab and rename the client to start with one of the required prefixes: {allowedPrefixes}.",
+            "{\"prefixes\": [\"Client \"]}"
+        ),
+
+        [ConfigurationRuleType.ClientNameMustNotContain] = (
+            "Client '{clientName}' contains forbidden string(s): {forbiddenStrings}",
+            "Navigate to Client Details → Basics tab and rename the client to remove forbidden strings from the name.",
+            "{\"forbiddenStrings\": [\"test\", \"temp\", \"debug\"]}"
+        ),
+
+        [ConfigurationRuleType.ClientIdMustStartWith] = (
+            "Client ID '{actualClientId}' must start with one of: {allowedPrefixes}",
+            "Navigate to Client Details → Basics tab and rename the Client ID to start with one of the required prefixes: {allowedPrefixes}.",
+            "{\"prefixes\": [\"client_\"]}"
+        ),
+
+        [ConfigurationRuleType.ClientIdMustNotContain] = (
+            "Client ID '{clientId}' contains forbidden string(s): {forbiddenStrings}",
+            "Navigate to Client Details → Basics tab and rename the Client ID to remove forbidden strings from it.",
+            "{\"forbiddenStrings\": [\"test\", \"temp\", \"debug\"]}"
+        ),
+
+        [ConfigurationRuleType.ClientScopeMustExist] = (
+            "Client '{clientName}' allows {count} scope(s) that no longer exist: {missingScopes}",
+            "Navigate to Client Details → Resources tab → Allowed Scopes section and remove the scope(s) that no longer exist: {missingScopes}.",
+            "{\"excludeScopes\": [\"offline_access\"]}"
         )
     };
 
@@ -143,7 +173,14 @@ public static class ConfigurationRuleSeedHelper
             (ConfigurationRuleType.IdentityResourceMustBeEnabled, ConfigurationResourceType.IdentityResource, ConfigurationIssueType.Warning),
             (ConfigurationRuleType.IdentityResourceNameMustStartWith, ConfigurationResourceType.IdentityResource, ConfigurationIssueType.Warning),
             (ConfigurationRuleType.ScopeIsUnused, ConfigurationResourceType.ApiScope, ConfigurationIssueType.Recommendation),
-            (ConfigurationRuleType.SecretIsExpiredInDays, ConfigurationResourceType.Client, ConfigurationIssueType.Warning)
+            (ConfigurationRuleType.SecretIsExpiredInDays, ConfigurationResourceType.Client, ConfigurationIssueType.Warning),
+
+            // Appended at the end - the seeded Ids of the rules above must stay stable
+            (ConfigurationRuleType.ClientNameMustStartWith, ConfigurationResourceType.Client, ConfigurationIssueType.Warning),
+            (ConfigurationRuleType.ClientNameMustNotContain, ConfigurationResourceType.Client, ConfigurationIssueType.Warning),
+            (ConfigurationRuleType.ClientIdMustStartWith, ConfigurationResourceType.Client, ConfigurationIssueType.Warning),
+            (ConfigurationRuleType.ClientIdMustNotContain, ConfigurationResourceType.Client, ConfigurationIssueType.Warning),
+            (ConfigurationRuleType.ClientScopeMustExist, ConfigurationResourceType.Client, ConfigurationIssueType.Warning)
         };
 
         int id = 1;

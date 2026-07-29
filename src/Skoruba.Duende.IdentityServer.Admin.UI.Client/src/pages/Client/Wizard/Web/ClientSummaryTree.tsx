@@ -13,6 +13,7 @@ import {
 import { useFormState } from "@/contexts/FormContext";
 import { useClientWizard } from "@/contexts/ClientWizardContext";
 import { ClientWizardFormSummaryData } from "./ClientSummaryStep";
+import { humanizePascalCase } from "@/helpers/StringHelper";
 import { startCase } from "lodash";
 import React from "react";
 import { useTranslation } from "react-i18next";
@@ -212,9 +213,9 @@ const ClientWebSummaryTree = () => {
         : [
             {
               step: 2,
-              name: t("Client.Summary.RedirectUris"),
+              name: t("Client.Summary.RedirectUri"),
               type: OAuthNodeType.URI,
-              value: formData.redirectUris,
+              value: formData.redirectUri,
             },
             ...(formData.logoutUri
               ? [
@@ -240,7 +241,7 @@ const ClientWebSummaryTree = () => {
               step: 4,
               name: t("Client.Summary.ClientSecret"),
               type: OAuthNodeType.Secret,
-              value: [startCase(formData.secretType)],
+              value: [humanizePascalCase(formData.secretType)],
             },
           ]),
     ],

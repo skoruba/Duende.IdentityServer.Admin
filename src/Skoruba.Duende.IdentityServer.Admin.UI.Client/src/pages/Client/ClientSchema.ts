@@ -317,7 +317,7 @@ export const mapFormDataToCreateClient = (
     description: formData.description ?? clientDefaultValues.description,
     requireConsent:
       formData.requireConsent ?? clientDefaultValues.requireConsent!,
-    redirectUris: formData.redirectUris ?? clientDefaultValues.redirectUris,
+    redirectUris: formData.redirectUri ? [formData.redirectUri] : [],
     postLogoutRedirectUris: formData.logoutUri ? [formData.logoutUri] : [],
     allowedScopes: (formData.scopes ?? []).map((scope) => scope.id),
     allowedGrantTypes: grantTypes,

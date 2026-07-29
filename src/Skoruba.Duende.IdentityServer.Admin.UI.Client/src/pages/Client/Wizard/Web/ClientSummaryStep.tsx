@@ -63,7 +63,7 @@ const ClientSummaryStep = () => {
   const getFilteredFormData = (): Partial<ClientWizardFormSummaryData> => {
     const {
       requireConsent,
-      redirectUris,
+      redirectUri,
       logoutUri,
       secretType,
       secretValue,
@@ -77,7 +77,7 @@ const ClientSummaryStep = () => {
     return {
       ...rest,
       ...(excludeOptions?.consent ? {} : { requireConsent }),
-      ...(excludeOptions?.uris ? {} : { redirectUris, logoutUri }),
+      ...(excludeOptions?.uris ? {} : { redirectUri, logoutUri }),
       ...(excludeOptions?.secrets
         ? {}
         : { secretType, secretValue, secretDescription, expiration }),

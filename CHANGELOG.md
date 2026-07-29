@@ -1,5 +1,46 @@
 # Changelog
 
+## [3.1.0] - 2026-07-29
+
+This release moves the solution to **Duende IdentityServer 8**. Everything else builds
+on the 3.0.0 architecture, so upgrading from 3.0.0 is a package and migration step
+rather than a rewrite.
+
+### Added
+
+- **JWK client secrets** as a first-class secret type. The value is entered as a public JSON Web Key and validated before it can be saved - private key material, JWK Sets, and symmetric keys are rejected, while unknown key types only warn, because IdentityServer decides what it accepts
+- **In-browser key pair generation** for JWK secrets via the Web Crypto API (RS256/ES256/ES384/ES512). The private key never leaves the page: it is shown masked, can be copied or downloaded as JWK or PEM, and the public key is applied only after the user confirms they saved it
+- Five new configuration rules for clients:
+  - `ClientNameMustStartWith` and `ClientNameMustNotContain`
+  - `ClientIdMustStartWith` and `ClientIdMustNotContain`
+  - `ClientScopeMustExist`, which reports clients still allowing a scope that no longer exists as an API scope or identity resource ([#176](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/176))
+- Playwright coverage for the JWK secret type: key pair generation, public-key-only storage, masked private key with copy and download in JWK and PEM form, the discard confirmation, EC key generation, and value validation
+
+### Changed
+
+- Updated the solution to Duende IdentityServer 8.0.2, including EF migrations for the configuration, persisted grant, and identity stores
+- Only `SharedSecret` is hashed, so the "you cannot retrieve it" warning and password masking are limited to that type; X509 types now state that the value is stored as it is
+- Switching the client secret type clears the value, so a JWK cannot end up hashed as a shared secret or the other way round
+- Secret type names are humanized for display only; the value sent to the API stays exactly as the backend expects it
+- The client creation wizard takes a single redirect URI instead of a list
+- Clipboard copying moved into a shared hook that reports failures instead of rejecting unhandled outside a secure context
+- Updated `react-router-dom` to 7.18.2 and `postcss` to 8.5.25 in the Admin UI, and forced `brace-expansion` to 5.0.8 in the STS, clearing the actionable npm audit findings
+
+### Fixed
+
+- **Device flow consent is never remembered** ([RFC 8628](https://www.rfc-editor.org/rfc/rfc8628)). The device that starts a device flow is not the device the user authenticates on, so persisted consent could be replayed against an attacker-controlled device. `ConsentResponse.RememberConsent` is now always false for device flow, the "Remember My Decision" checkbox is gone from the user code confirmation page, and the device view model no longer fills `AllowRememberConsent`, so a forged POST cannot re-enable it either
+- Configuration issue loading no longer builds a cartesian product across five client collections. A single client with a few hundred redirect URIs was enough to make the dashboard and the navigation summary time out ([#67](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/67))
+- The client secret value is no longer lost when navigating back to the secret step of the client wizard. Restoring the saved step data looked like a secret type change and cleared the value
+- Corrected the interaction denial method in `AccountController`
+
+### Breaking Changes
+
+- Duende IdentityServer 8 requires new EF migrations for the configuration, persisted grant, and identity stores. Review them and back up your database before applying
+- The IdentityServer 8 configuration and persisted grant migrations create the SAML tables (`SamlServiceProviders`, `SamlSigninStates`, `SamlLogoutSessions`, and related). The schema is created, but **managing SAML service providers from the Admin UI is not part of this release** and is planned for 3.2.0
+- The client creation wizard now takes a single redirect URI. Custom forks of the wizard steps need updating
+
+---
+
 ## [3.0.0] - 2026-07-15
 
 ### Added

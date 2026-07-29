@@ -23,6 +23,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import AddSecretForm from "@/components/AddSecretForm/AddSecretForm";
+import { humanizePascalCase } from "@/helpers/StringHelper";
 import { SecretsFormData } from "@/components/SecretForm/SecretForm";
 import { useTranslation } from "react-i18next";
 import { SecretData, SecretsData } from "@/models/Common/CommonModels";
@@ -97,6 +98,7 @@ const SecretsTable: React.FC<SecretsTableProps> = ({
     {
       accessorKey: "type",
       header: t("Client.Label.SecretType_Label"),
+      cell: ({ row }) => humanizePascalCase(row.original.type ?? ""),
     },
     {
       accessorKey: "description",

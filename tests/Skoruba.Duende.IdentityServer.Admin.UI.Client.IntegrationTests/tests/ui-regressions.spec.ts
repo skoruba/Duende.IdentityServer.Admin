@@ -5,6 +5,7 @@ import {
   type LoginCredentials,
 } from "./helpers/auth";
 import { findClientRow } from "./helpers/client-list";
+import { clickRowMenuItem } from "./helpers/list-page";
 import { clickPageSave } from "./helpers/ui-navigation";
 
 const seedData = loadE2ESeedData();
@@ -46,10 +47,7 @@ test.describe("Admin UI regressions", () => {
 
     await page.route("**/api/Clients/*", deleteClientHandler);
 
-    await targetRow
-      .getByRole("button", { name: "Open menu", exact: true })
-      .click();
-    await page.getByRole("menuitem", { name: "Delete", exact: true }).click();
+    await clickRowMenuItem(page, targetRow, "Delete");
 
     const deleteDialog = page.getByRole("alertdialog");
     await expect(deleteDialog).toBeVisible();

@@ -38,11 +38,19 @@ configuration health, auditing, and security from one modern interface.
 
 > [!IMPORTANT]
 >
-> ## Version 3.0.0 is here 🚀
+> ## Version 3.1.0 is here 🚀
 >
-> **Version 3.0.0** is the stable release of **Skoruba Duende IdentityServer Admin**.
-> It delivers a completely redesigned administration experience built with
+> **Version 3.1.0** moves the solution to **Duende IdentityServer 8**, on top of the
+> redesigned administration experience introduced in 3.0.0 and built with
 > **React, TypeScript, Tailwind CSS, shadcn/ui, and .NET 10**.
+>
+> It also adds **JWK client secrets** with in-browser key pair generation, new
+> **configuration rules** for client naming and orphaned scopes, and a set of
+> security and performance fixes.
+>
+> ⚠️ Upgrading from 3.0.0 requires new EF migrations. See the
+> [changelog](CHANGELOG.md) for details, and note that managing SAML service
+> providers from the Admin UI is not part of this release.
 >
 > See the [roadmap and changelog](#-roadmap--changelog) for release history and upcoming features.
 
@@ -53,7 +61,7 @@ configuration health, auditing, and security from one modern interface.
 |     | Area                  | Highlights                                                                  |
 | --- | --------------------- | --------------------------------------------------------------------------- |
 | 🧭  | **New Admin UI**      | React, TypeScript, Tailwind CSS, and shadcn/ui                              |
-| ⚙️  | **Modern backend**    | .NET 10 and Duende IdentityServer 7.4.7                                     |
+| ⚙️  | **Modern backend**    | .NET 10 and Duende IdentityServer 8.0.2                                     |
 | 📊  | **Monitoring**        | Dashboards, configuration rules, and issue tracking                         |
 | 🧙  | **Client management** | Improved workflows and guided client creation wizard                        |
 | 🔐  | **Authentication**    | Passkey support in STS Identity                                             |
@@ -112,7 +120,8 @@ Define and track configuration rules for clients, API resources, and identity re
 
 - Flag deprecated OAuth 2.1 flows
 - Enforce required scopes
-- Validate naming conventions
+- Validate naming conventions for clients, scopes, and resources
+- Detect client scopes that no longer exist
 - Warn about expired client secrets
 
 #### 🧱 Configuration Rules
@@ -134,7 +143,7 @@ Define and track configuration rules for clients, API resources, and identity re
 - .NET 10 SDK
 - Node.js 18+ and npm (required for the React client)
 - SQL Server (default LocalDB) or PostgreSQL
-- Duende IdentityServer 7.4.7
+- Duende IdentityServer 8.0.2
 
 > **Note:** Using older .NET versions may cause 502.5 errors on IIS or application startup failures.
 
@@ -151,7 +160,7 @@ Define and track configuration rules for clients, API resources, and identity re
 ### 1. Install the template
 
 ```sh
-dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::3.0.0
+dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::3.1.0
 ```
 
 ### 2. Create a new project
@@ -784,8 +793,9 @@ For detailed release history and upcoming features, see [CHANGELOG.md](CHANGELOG
 
 **Upcoming releases:**
 
-### 3.1.0
+### 3.2.0
 
+- Manage SAML service providers from the Admin UI (schema ships with IdentityServer 8 in 3.1.0)
 - Add support for importing/exporting IdentityServer data in JSON format ([20](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/20))
 
 ### 4.0.0
