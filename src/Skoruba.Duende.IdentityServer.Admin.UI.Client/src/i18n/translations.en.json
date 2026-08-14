@@ -178,6 +178,10 @@
     },
     "SearchDropdown": {
       "Search": "Search"
+    },
+    "CodeBlock": {
+      "Copy": "Copy snippet",
+      "Download": "Download file"
     }
   },
   "Validation": {
@@ -516,6 +520,8 @@
       "SecretsDescription": "Manage client secrets for authentication and secure access.",
       "Advanced": "Advanced",
       "AdvancedDescription": "Advanced settings for the client, including grant types, token settings, consent screen options, and more.",
+      "Integration": "Integration",
+      "IntegrationDescription": "Ready-to-use setup code for an application that connects to this client. It is generated from the settings on the other tabs and follows your changes before you even save them.",
       "CloneClient": "Clone Client",
       "DeleteClient": "Delete Client",
       "RedirectUris": "Redirect Uris",
@@ -694,6 +700,66 @@
       "Actions": {
         "Cloned": "Client has been cloned successfully!"
       }
+    },
+    "Integration": {
+      "UnsupportedGrantTypes": "The setup code is generated for the authorization code and client credentials flows only. Add one of them on the Advanced / Grant Types tab.",
+      "CopyAll": "Copy all",
+      "Options": {
+        "Authority": "Authority",
+        "AuthorityInfo": "Base address of IdentityServer. The discovery document is loaded from this address followed by /.well-known/openid-configuration.",
+        "ApiBaseUrl": "API base address",
+        "ApiBaseUrlInfo": "Base address of the API the application calls with the access token.",
+        "AppName": "Application name",
+        "AppNameInfo": "Used for the cookie, the token client and the HttpClient names. Derived from the client id when left empty.",
+        "ClientAuthentication": "Client authentication",
+        "ClientAuthenticationInfo": "How the application proves its identity at the token endpoint.",
+        "ClientAuthenticationJwkFound": "This client has a JWK secret registered, so private key JWT is preselected.",
+        "SharedSecret": "Shared secret",
+        "PrivateKeyJwt": "Private key JWT (JWK)",
+        "UseUserSecrets": "Keep secrets out of the code",
+        "UseUserSecretsInfo": "Reads the client secret from configuration and adds the matching dotnet user-secrets commands.",
+        "Scopes": "Requested scopes",
+        "ScopesInfo": "Taken from the scopes allowed for this client. Click a scope to leave it out of the snippet."
+      },
+      "Scenarios": {
+        "AuthorizationCode": "ASP.NET Core web app",
+        "ClientCredentials": "Worker / API to API"
+      },
+      "Steps": {
+        "Packages": "Install the packages",
+        "PackagesDescription": "Run these in the application project. The snippets assume the implicit usings of the .NET 10 template.",
+        "Settings": "Add the application settings",
+        "SettingsDescription": "Authority and client id live here, so the rest of the code reads them from one place.",
+        "Secret": "Store the client secret",
+        "SecretDescription": "The secret belongs in user secrets during development and in your secret store in production - never in source control.",
+        "SigningKey": "Store the private key",
+        "SigningKeyDescription": "The public half of this key is already registered as the client's secret. The application signs its assertions with the private half.",
+        "DPoPKey": "Generate the DPoP proof key",
+        "DPoPKeyDescription": "Unlike the client credential, this key does not exist yet - it is the application's own and is registered nowhere, so generate it first.",
+        "Program": "Configure the application",
+        "ProgramDescription": "Everything below is derived from this client, including the callback paths and the requested scopes.",
+        "WorkerProgramDescription": "Duende.AccessTokenManagement requests, caches and renews the access token for you.",
+        "Assertion": "Sign the client assertion",
+        "AssertionDescription": "Access token management asks this service for a freshly signed assertion every time it authenticates at the token endpoint.",
+        "Worker": "Call the API",
+        "WorkerDescription": "The registered HttpClient attaches the access token to every request."
+      },
+      "Notes": {
+        "SecretNotStored": "The secret value is not stored here and cannot be read back - use the value you received when the secret was created, or add a new one on the Secrets tab.",
+        "MissingOpenIdScope": "The openid scope is not among the allowed scopes. The authorization code flow needs it to return an identity token.",
+        "PkceDisabled": "PKCE is turned off for this client. Turn on Require PKCE on the Advanced / Authorization tab unless you have a reason not to.",
+        "PublicClient": "This client has no secret, so it is treated as a public client. Only PKCE protects the authorization code.",
+        "NoRedirectUri": "No redirect URI is configured. The callback path in the snippet is a default - add the matching URI on the Urls tab.",
+        "DPoPRequired": "This client requires DPoP, so every access token is bound to the proof key configured above.",
+        "InlineSecret": "The secret is written directly into the code. That is fine for a quick test, but move it to user secrets or your secret store before committing.",
+        "IdentityScopesSkipped": "The identity scopes ({{scopes}}) were left out - the client credentials flow issues no identity token.",
+        "NoApiScope": "No API scope is selected. A client credentials client needs at least one API scope to get a usable access token.",
+        "MachineClientWithoutSecret": "This client has no secret. The client credentials flow cannot authenticate without a secret or a client assertion.",
+        "PrivateJwkNeverLeavesTheApp": "Only the public JWK belongs in the client secret - the private key stays with the application and must never be sent to IdentityServer.",
+        "SigningAlgorithm": "The signing algorithm is read from the key itself - a JWK generated on the Secrets tab always carries its <code>alg</code>, and the curve is used as a fallback.",
+        "DPoPProofKey": "Keep the same key across restarts, otherwise access tokens issued earlier stop working - they are bound to the previous key.",
+        "AssertionServiceNamespace": "<code>IClientAssertionService</code> lives in the <code>Duende.AccessTokenManagement</code> namespace - it comes with the package installed in the first step, no extra reference is needed."
+      }
     }
   },
   "Role": {
@@ -714,7 +780,6 @@
       "UsersInRole": "Users in Role",
       "UsersInRoleShow": "View users in role"
     },
-
     "Actions": {
       "Deleted": "Role has been deleted successfully!",
       "Created": "Role has been created successfully!",

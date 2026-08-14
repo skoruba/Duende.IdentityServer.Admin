@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { t } from "i18next";
 import {
+  Code2,
   Copy,
   Globe,
   Key,
@@ -12,6 +13,7 @@ import {
 } from "lucide-react";
 import AdvancedSettingsTab from "./Tabs/AdvancedSettingsTab";
 import BasicsTab from "./Tabs/BasicsTab";
+import IntegrationTab from "./Tabs/IntegrationTab";
 import ResourcesTab from "./Tabs/ResourcesTab";
 import SecretsTab from "./Tabs/SecretsTab";
 import UrlsTab from "./Tabs/UrlsTab";
@@ -56,6 +58,11 @@ const ClientEditTabs = ({ onClientDelete }: ClientEditTabsProps) => {
             <SlidersHorizontal className="h-4 w-4" />
             {t("Client.Tabs.Advanced")}
           </TabsTrigger>
+
+          <TabsTrigger value="integration" className="flex items-center gap-2">
+            <Code2 className="h-4 w-4" />
+            {t("Client.Tabs.Integration")}
+          </TabsTrigger>
         </TabsList>
 
         <div className="inline-flex">
@@ -93,6 +100,10 @@ const ClientEditTabs = ({ onClientDelete }: ClientEditTabsProps) => {
 
       <TabsContent value="advanced_settings">
         <AdvancedSettingsTab />
+      </TabsContent>
+
+      <TabsContent value="integration">
+        <IntegrationTab />
       </TabsContent>
     </Tabs>
   );

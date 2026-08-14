@@ -28,6 +28,7 @@ import {
   isJwkGenerationSupported,
 } from "@/helpers/JwkHelper";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
+import { downloadTextFile } from "@/lib/utils";
 import {
   ClipboardCopy,
   Download,
@@ -133,19 +134,6 @@ const GenerateJwkDialog = ({
     close();
   };
 
-  // This is the only way the private key ever leaves the dialog, so the link has
-  // to be in the document and the URL must stay alive until the download starts.
-  const handleDownload = (value: string, fileName: string) => {
-    const url = URL.createObjectURL(new Blob([value], { type: "text/plain" }));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = fileName;
-    link.style.display = "none";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    setTimeout(() => URL.revokeObjectURL(url), 0);
-  };
 
   const renderKeyPanel = ({
     jwk,
@@ -208,7 +196,7 @@ const GenerateJwkDialog = ({
             variant="outline"
             size="sm"
             onClick={() =>
-              handleDownload(
+              downloadTextFile(
                 value,
                 `${fileName}.${format === "jwk" ? "json" : "pem"}`,
               )
