@@ -1,5 +1,12 @@
+import { SettingsTabs } from "@/components/SettingsTabs/SettingsTabs";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import {
+  ClientCapabilitiesProvider,
+  useClientCapabilities,
+  useClientCapabilitiesOverride,
+} from "@/contexts/ClientCapabilitiesContext";
 import { t } from "i18next";
 import {
   Code2,
@@ -24,48 +31,81 @@ type ClientEditTabsProps = {
   onClientDelete: () => void;
 };
 
-const ClientEditTabs = ({ onClientDelete }: ClientEditTabsProps) => {
-  const { clientId } = useParams<{ clientId: string }>();
+/** Lets the user bring back the settings the grant types hide. */
+const ShowAllSettingsToggle = () => {
+  const { hasHiddenSettings, isShowingAllSettings, setShowAllSettings } =
+    useClientCapabilitiesOverride();
+
+  if (!hasHiddenSettings) {
+    return null;
+  }
 
   return (
-    <Tabs defaultValue="basics">
-      <div className="flex justify-between">
-        <TabsList>
-          <TabsTrigger value="basics" className="flex items-center gap-2">
-            <Settings className="h-4 w-4" />
-            {t("Client.Tabs.Basics")}
-          </TabsTrigger>
+    <div className="flex items-center gap-2 me-2">
+      <Switch
+        id="show-all-settings"
+        checked={isShowingAllSettings}
+        onCheckedChange={setShowAllSettings}
+      />
+      <Label
+        htmlFor="show-all-settings"
+        className="cursor-pointer text-xs font-normal text-muted-foreground"
+      >
+        {t("Client.Tabs.ShowAllSettings")}
+      </Label>
+    </div>
+  );
+};
 
-          <TabsTrigger value="urls" className="flex items-center gap-2">
-            <Globe className="h-4 w-4" />
-            {t("Client.Tabs.Urls")}
-          </TabsTrigger>
+const ClientEditTabsContent = ({ onClientDelete }: ClientEditTabsProps) => {
+  const { clientId } = useParams<{ clientId: string }>();
+  const capabilities = useClientCapabilities();
 
-          <TabsTrigger value="scopes" className="flex items-center gap-2">
-            <ShieldCheck className="h-4 w-4" />
-            {t("Client.Tabs.Scopes")}
-          </TabsTrigger>
+  return (
+    <SettingsTabs
+      tabs={[
+        {
+          value: "basics",
+          label: t("Client.Tabs.Basics"),
+          icon: Settings,
+          content: <BasicsTab />,
+        },
+        {
+          value: "urls",
+          label: t("Client.Tabs.Urls"),
+          icon: Globe,
+          content: <UrlsTab />,
+          isVisible: capabilities.usesBrowserFlow,
+        },
+        {
+          value: "scopes",
+          label: t("Client.Tabs.Scopes"),
+          icon: ShieldCheck,
+          content: <ResourcesTab />,
+        },
+        {
+          value: "secrets",
+          label: t("Client.Tabs.Secrets"),
+          icon: Key,
+          content: <SecretsTab />,
+        },
+        {
+          value: "advanced_settings",
+          label: t("Client.Tabs.Advanced"),
+          icon: SlidersHorizontal,
+          content: <AdvancedSettingsTab />,
+        },
+        {
+          value: "integration",
+          label: t("Client.Tabs.Integration"),
+          icon: Code2,
+          content: <IntegrationTab />,
+        },
+      ]}
+      actions={
+        <div className="inline-flex items-center">
+          <ShowAllSettingsToggle />
 
-          <TabsTrigger value="secrets" className="flex items-center gap-2">
-            <Key className="h-4 w-4" />
-            {t("Client.Tabs.Secrets")}
-          </TabsTrigger>
-
-          <TabsTrigger
-            value="advanced_settings"
-            className="flex items-center gap-2"
-          >
-            <SlidersHorizontal className="h-4 w-4" />
-            {t("Client.Tabs.Advanced")}
-          </TabsTrigger>
-
-          <TabsTrigger value="integration" className="flex items-center gap-2">
-            <Code2 className="h-4 w-4" />
-            {t("Client.Tabs.Integration")}
-          </TabsTrigger>
-        </TabsList>
-
-        <div className="inline-flex">
           <Button variant="outline" className="ms-1 me-1" asChild>
             <a
               href={ClientCloneUrl.replace(":clientId", clientId!)}
@@ -80,33 +120,15 @@ const ClientEditTabs = ({ onClientDelete }: ClientEditTabsProps) => {
             {t("Client.Tabs.DeleteClient")}
           </Button>
         </div>
-      </div>
-
-      <TabsContent value="basics">
-        <BasicsTab />
-      </TabsContent>
-
-      <TabsContent value="urls">
-        <UrlsTab />
-      </TabsContent>
-
-      <TabsContent value="scopes">
-        <ResourcesTab />
-      </TabsContent>
-
-      <TabsContent value="secrets">
-        <SecretsTab />
-      </TabsContent>
-
-      <TabsContent value="advanced_settings">
-        <AdvancedSettingsTab />
-      </TabsContent>
-
-      <TabsContent value="integration">
-        <IntegrationTab />
-      </TabsContent>
-    </Tabs>
+      }
+    />
   );
 };
+
+const ClientEditTabs = (props: ClientEditTabsProps) => (
+  <ClientCapabilitiesProvider>
+    <ClientEditTabsContent {...props} />
+  </ClientCapabilitiesProvider>
+);
 
 export default ClientEditTabs;

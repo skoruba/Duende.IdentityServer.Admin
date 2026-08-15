@@ -522,6 +522,7 @@
       "AdvancedDescription": "Advanced settings for the client, including grant types, token settings, consent screen options, and more.",
       "Integration": "Integration",
       "IntegrationDescription": "Ready-to-use setup code for an application that connects to this client. It is generated from the settings on the other tabs and follows your changes before you even save them.",
+      "ShowAllSettings": "Show all settings",
       "CloneClient": "Clone Client",
       "DeleteClient": "Delete Client",
       "RedirectUris": "Redirect Uris",
