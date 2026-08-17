@@ -70,6 +70,7 @@ const AdvancedSettingsTab = () => {
               label: t("Client.Tabs.Authorization"),
               icon: ShieldCheck,
               content: <AuthorizationSettingsTab />,
+              isVisible: capabilities.usesUserAuthentication,
             },
             {
               value: "token",

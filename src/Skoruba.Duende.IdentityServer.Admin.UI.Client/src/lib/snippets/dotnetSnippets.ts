@@ -132,6 +132,24 @@ const derivePath = (uris: string[], fallback: string): string => {
   return fallback;
 };
 
+/** An API scope is one the token endpoint can put in an access token. */
+const hasApiScope = (scopes: string[]): boolean =>
+  scopes.some((scope) => !IDENTITY_ONLY_SCOPES.has(scope));
+
+/**
+ * Duende's access token management backs the API HttpClient, the refresh token,
+ * the DPoP proof and the client assertion, so any of them pulls it in.
+ */
+const needsTokenManagement = (
+  clientConfig: SnippetClientConfig,
+  options: SnippetOptions,
+  scopes: string[],
+): boolean =>
+  hasApiScope(scopes) ||
+  clientConfig.allowOfflineAccess ||
+  clientConfig.requireDPoP ||
+  (clientConfig.requireClientSecret && options.clientAuthentication === "jwk");
+
 /**
  * Reduces a value to `[a-z0-9-]`, which both a cookie name and a named
  * HttpClient accept. Run it over whatever the user types too - a cookie name is
@@ -246,8 +264,8 @@ const credentialStep = (
         code: [
           "dotnet user-secrets init",
           isJwk
-            ? `dotnet user-secrets set "${signingJwkKey(section)}" "${JWK_PLACEHOLDER}"`
-            : `dotnet user-secrets set "${secretKey(section)}" "${SECRET_PLACEHOLDER}"`,
+            ? `dotnet user-secrets set "${signingJwkKey(section)}" '${JWK_PLACEHOLDER}'`
+            : `dotnet user-secrets set "${secretKey(section)}" '${SECRET_PLACEHOLDER}'`,
         ].join("\n"),
       },
     ],
@@ -297,7 +315,7 @@ const dPoPKeyStep = (
       {
         id: "dpop-user-secrets",
         language: "bash",
-        code: `dotnet user-secrets set "${dPoPKey(section)}" "${DPOP_KEY_PLACEHOLDER}"`,
+        code: `dotnet user-secrets set "${dPoPKey(section)}" '${DPOP_KEY_PLACEHOLDER}'`,
       },
     ],
     notes: [{ key: "Client.Integration.Notes.DPoPProofKey" }],
@@ -426,12 +444,10 @@ const buildAuthorizationCodeProgram = (
   const useJwkAuth =
     clientConfig.requireClientSecret && options.clientAuthentication === "jwk";
 
-  // Only these two need a managed HttpClient for calling APIs.
-  const useApiHttpClient =
-    clientConfig.allowOfflineAccess || clientConfig.requireDPoP;
+  // An API scope means there is something to call with the access token.
+  const useApiHttpClient = hasApiScope(scopes);
 
-  // private_key_jwt runs through the same library, so it pulls it in as well.
-  const useTokenManagement = useApiHttpClient || useJwkAuth;
+  const useTokenManagement = needsTokenManagement(clientConfig, options, scopes);
 
   const duendeUsings: string[] = [];
 
@@ -542,7 +558,7 @@ const buildAuthorizationCodeProgram = (
       tokenManagement.push(
         clientConfig.allowOfflineAccess
           ? "// Refreshes the access token in the background using the refresh token"
-          : "// Hooks the client assertion into the code exchange",
+          : "// Manages the access token acquired during sign-in",
         "builder.Services.AddOpenIdConnectAccessTokenManagement();",
       );
     }
@@ -608,7 +624,7 @@ export const buildAuthorizationCodeSnippet = (
 
   const packages = [PACKAGE_OIDC];
 
-  if (clientConfig.allowOfflineAccess || clientConfig.requireDPoP || useJwkAuth) {
+  if (needsTokenManagement(clientConfig, options, scopes)) {
     packages.push(PACKAGE_ATM_OIDC);
   }
 

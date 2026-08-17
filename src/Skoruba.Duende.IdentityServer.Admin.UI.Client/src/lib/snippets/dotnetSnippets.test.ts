@@ -175,6 +175,38 @@ describe("buildAuthorizationCodeSnippet", () => {
     expect(codeOf(document, "assertion")).toContain("key.Alg ??");
   });
 
+  it("registers the API HttpClient for a plain API scope, without offline access", () => {
+    const document = buildAuthorizationCodeSnippet(
+      client({
+        scopes: ["openid", "profile", "invoices.read"],
+        allowOfflineAccess: false,
+        requireDPoP: false,
+      }),
+      options(),
+    );
+
+    expect(codeOf(document, "packages")).toContain(
+      "Duende.AccessTokenManagement.OpenIdConnect",
+    );
+    expect(codeOf(document, "program")).toContain(
+      'AddUserAccessTokenHttpClient("api"',
+    );
+  });
+
+  it("leaves the API HttpClient out when only identity scopes are requested", () => {
+    const document = buildAuthorizationCodeSnippet(
+      client({ scopes: ["openid", "profile"] }),
+      options(),
+    );
+
+    expect(codeOf(document, "packages")).not.toContain(
+      "Duende.AccessTokenManagement.OpenIdConnect",
+    );
+    expect(codeOf(document, "program")).not.toContain(
+      "AddUserAccessTokenHttpClient",
+    );
+  });
+
   it("reads the authority and client id from configuration", () => {
     const document = buildAuthorizationCodeSnippet(
       client({ clientId: "configured_client" }),
@@ -236,6 +268,30 @@ describe("buildClientCredentialsSnippet", () => {
     expect(stepIds(buildClientCredentialsSnippet(client(), options()))).toEqual(
       expect.arrayContaining(["worker"]),
     );
+  });
+});
+
+describe("shell snippets", () => {
+  // A real JWK is full of double quotes, so the value cannot be double quoted.
+  it.each([
+    ["the client secret", options(), "credential"],
+    ["the signing key", options({ clientAuthentication: "jwk" }), "credential"],
+  ])("single quotes %s value", (_label, snippetOptions, stepId) => {
+    const code = codeOf(
+      buildAuthorizationCodeSnippet(client(), snippetOptions),
+      stepId,
+    );
+
+    expect(code).toMatch(/dotnet user-secrets set "[^"]+" '[^']+'/);
+  });
+
+  it("single quotes the DPoP proof key value", () => {
+    const code = codeOf(
+      buildAuthorizationCodeSnippet(client({ requireDPoP: true }), options()),
+      "dpop-key",
+    );
+
+    expect(code).toMatch(/dotnet user-secrets set "[^"]+" '[^']+'/);
   });
 });
 

@@ -18,6 +18,7 @@ const AuthorizationSettingsTab = () => {
           label: t("Client.Tabs.PushAuthorization"),
           icon: Send,
           content: <PushAuthorizationTab />,
+          isVisible: capabilities.usesBrowserFlow,
         },
         {
           value: "pkce",
@@ -38,6 +39,7 @@ const AuthorizationSettingsTab = () => {
           label: t("Client.Tabs.OtherSettings"),
           icon: Settings,
           content: <OtherSettingsTab />,
+          isVisible: capabilities.usesUserAuthentication,
         },
       ]}
     />
