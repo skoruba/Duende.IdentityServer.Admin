@@ -1,3 +1,5 @@
+import { GrantTypeIds } from "@/models/Clients/ClientModels";
+
 /**
  * Derives what a client can actually do from its grant types, so the edit form
  * can leave out settings that have no effect - a client credentials client has
@@ -7,18 +9,6 @@
  * property only exists on clients created by the wizard, so imported or
  * API-created clients would behave differently.
  */
-
-/** Grant type ids as returned by the API - see ClientConsts.GetGrantTypes(). */
-export const GrantTypeIds = {
-  AuthorizationCode: "authorization_code",
-  Implicit: "implicit",
-  ClientCredentials: "client_credentials",
-  Hybrid: "hybrid",
-  Password: "password",
-  DeviceCode: "urn:ietf:params:oauth:grant-type:device_code",
-  Delegation: "delegation",
-  Ciba: "urn:openid:params:grant-type:ciba",
-} as const;
 
 export type ClientCapabilities = {
   /** Redirect, logout and CORS URIs - only browser-based flows use them. */

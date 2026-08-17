@@ -70,10 +70,17 @@ export type ClientWizardConfig = {
   steps: ClientStep[];
 };
 
-export enum GrantTypes {
-  AuthorizationCode = "authorization_code",
-  ClientCreadentials = "client_credentials",
-}
+/** Grant type ids as returned by the API - see ClientConsts.GetGrantTypes(). */
+export const GrantTypeIds = {
+  AuthorizationCode: "authorization_code",
+  Implicit: "implicit",
+  ClientCredentials: "client_credentials",
+  Hybrid: "hybrid",
+  Password: "password",
+  DeviceCode: "urn:ietf:params:oauth:grant-type:device_code",
+  Delegation: "delegation",
+  Ciba: "urn:openid:params:grant-type:ciba",
+} as const;
 
 export enum DPoPMode {
   Custom = 0,

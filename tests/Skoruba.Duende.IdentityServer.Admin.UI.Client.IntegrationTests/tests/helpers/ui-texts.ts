@@ -26,6 +26,9 @@ export const UI_TEXT = {
     duplicateRuleError:
       "This rule type already exists. Each rule type can only be configured once.",
   },
+  clientTabs: {
+    showAllSettings: "Show all settings",
+  },
   wizard: {
     addNewClient: "Add New Client",
     newClientDialog: "New Client",

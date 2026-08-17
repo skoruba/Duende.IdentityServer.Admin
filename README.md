@@ -749,6 +749,17 @@ The solution contains **unit and integration tests** for all major components.
 - `Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests` – API integration tests
 - `Skoruba.Duende.IdentityServer.STS.IntegrationTests` – STS integration tests
 - `Skoruba.Duende.IdentityServer.Admin.UI.Client.IntegrationTests` – Playwright UI integration tests (OIDC login flow + Admin UI assertions)
+- `Skoruba.Duende.IdentityServer.Admin.UI.Client` – Vitest unit tests for the Admin UI's pure logic (client capabilities, snippet generation, syntax highlighting)
+
+### UI Unit Tests (Vitest)
+
+These need no running services:
+
+```sh
+cd src/Skoruba.Duende.IdentityServer.Admin.UI.Client
+npm install
+npm test
+```
 
 ### UI Integration Tests (Playwright)
 

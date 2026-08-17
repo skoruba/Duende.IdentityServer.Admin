@@ -23,7 +23,7 @@ import {
   flattenSnippetDocument,
   toApplicationName,
 } from "@/lib/snippets/dotnetSnippets";
-import { GrantTypes } from "@/models/Clients/ClientModels";
+import { GrantTypeIds } from "@/models/Clients/ClientModels";
 import { getClientSecrets } from "@/services/ClientServices";
 import { queryKeys } from "@/services/QueryKeys";
 import { useQuery } from "@tanstack/react-query";
@@ -155,11 +155,11 @@ const IntegrationTab = () => {
   const scenarios = useMemo(() => {
     const available: Scenario[] = [];
 
-    if (grantTypeIds.has(GrantTypes.AuthorizationCode)) {
+    if (grantTypeIds.has(GrantTypeIds.AuthorizationCode)) {
       available.push("authorization_code");
     }
 
-    if (grantTypeIds.has(GrantTypes.ClientCreadentials)) {
+    if (grantTypeIds.has(GrantTypeIds.ClientCredentials)) {
       available.push("client_credentials");
     }
 

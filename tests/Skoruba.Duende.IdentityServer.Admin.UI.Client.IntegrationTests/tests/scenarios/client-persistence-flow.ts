@@ -4,6 +4,7 @@ import {
   ensureLoggedInAndOpenClients,
   type LoginCredentials,
 } from "../helpers/auth";
+import { showAllClientSettings } from "../helpers/client-tabs";
 import { openClientDetailFromClients } from "../helpers/client-list";
 import { createConfidentialClientViaWizard } from "../helpers/client-wizard";
 import {
@@ -113,6 +114,10 @@ export async function runCreateUpdateAndVerifyClientPersistence(
     });
 
     await expect(page.locator('input[name="clientId"]')).toHaveValue(createdClientId);
+
+    // The wizard creates a confidential client, so CIBA and device flow are
+    // hidden - this walk covers every field, hidden or not.
+    await showAllClientSettings(page);
 
     const basicsPanel = page.getByRole("tabpanel", { name: "Basics", exact: true });
     await expect(basicsPanel).toBeVisible();
@@ -507,6 +512,8 @@ export async function runCreateUpdateAndVerifyClientPersistence(
     ]);
 
     await openClientDetailFromClients(page, updatedClientId, credentials);
+
+    await showAllClientSettings(page);
 
     const reopenedBasicsPanel = page.getByRole("tabpanel", {
       name: "Basics",

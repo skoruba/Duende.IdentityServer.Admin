@@ -1,5 +1,33 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- **Client integration snippets.** A new *Integration* tab on the client detail generates the .NET 10 wire-up for the client being edited - NuGet packages, `appsettings.json`, the matching `dotnet user-secrets` commands, and `Program.cs`. Only the authorization code and client credentials flows are generated, and everything is derived from the form, so the snippets follow changes before they are saved: callback paths come from the redirect URIs, the scope list from the allowed scopes, PKCE and pushed authorization from their switches
+- Client authentication in the generated code can be a shared secret or **private_key_jwt**, which adds a `ClientAssertionService` reading the signing algorithm from the JWK itself. The mode is preselected from the client's registered secrets, so a client holding a JWK secret gets the assertion variant without asking
+- A separate step generates the **DPoP proof key** when the client requires DPoP, which - unlike the client credential - is the application's own key and is registered nowhere
+- Syntax highlighting for the generated C#, shell, and JSON with copy and download per block. The tokenizer is built in, so no highlighting library enters the bundle
+- **Capability-driven client edit form.** Tabs whose settings the client's grant types make irrelevant are left out: a client credentials client no longer offers URLs, authentication and logout, consent, device flow, CIBA, PKCE, identity token, or refresh token. A *Show all settings* switch brings them all back for the cases the grant types do not describe
+- Playwright coverage for the hidden tabs and the override switch
+- Vitest unit tests for the Admin UI's pure logic - client capabilities, snippet generation, and the snippet tokenizer - runnable with `npm test` without any running services
+
+### Changed
+
+- The client edit tabs are declared as data and rendered through a shared `SettingsTabs` component, which keeps the selection valid when the visible set changes while the form is open
+- Identity resources are left out of the client scope picker for clients without a user flow, because they cannot be issued without one
+- Grant type ids moved into a single `GrantTypeIds` constant covering all ids the API returns, replacing the two-value `GrantTypes` enum
+- Downloading generated content reuses one helper shared with the JWK dialog
+
+### Fixed
+
+- The advanced client settings rendered an *Other Settings* panel that had no matching tab trigger and could never be opened
+
+### Breaking Changes
+
+- `GrantTypes` in the Admin UI client is replaced by `GrantTypeIds`, which also fixes the `ClientCreadentials` misspelling. Forks referencing the enum need updating
+- Custom forks of the client edit tabs need to move from hand-written `Tabs` markup to the `SettingsTabs` component to keep working with hidden tabs
+
 ## [3.1.0] - 2026-07-29
 
 This release moves the solution to **Duende IdentityServer 8**. Everything else builds
