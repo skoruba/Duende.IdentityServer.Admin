@@ -239,6 +239,37 @@ describe("buildClientCredentialsSnippet", () => {
   });
 });
 
+describe("names in the generated code", () => {
+  it("names the HttpClient after the API rather than the application", () => {
+    const program = codeOf(
+      buildAuthorizationCodeSnippet(
+        client({ allowOfflineAccess: true }),
+        options({ appName: "my-web-app" }),
+      ),
+      "program",
+    );
+
+    expect(program).toContain('AddUserAccessTokenHttpClient("api"');
+    expect(program).toContain('options.Cookie.Name = "__Host-my-web-app";');
+  });
+
+  it("keeps the token client tied to the application, unlike the HttpClient", () => {
+    const document = buildClientCredentialsSnippet(
+      client(),
+      options({ appName: "my-worker" }),
+    );
+
+    expect(codeOf(document, "program")).toContain('.AddClient("my-worker"');
+    expect(codeOf(document, "program")).toContain(
+      'AddClientCredentialsHttpClient("api"',
+    );
+    expect(codeOf(document, "program")).toContain(
+      'ClientCredentialsClientName.Parse("my-worker")',
+    );
+    expect(codeOf(document, "worker")).toContain('CreateClient("api")');
+  });
+});
+
 describe("toApplicationName", () => {
   it.each([
     ["my_web_app", "my-web-app"],
@@ -246,7 +277,10 @@ describe("toApplicationName", () => {
     ["--weird--", "weird"],
     ["", "my-app"],
     ["***", "my-app"],
-  ])("turns %j into %j", (clientId, expected) => {
-    expect(toApplicationName(clientId)).toBe(expected);
+    // Whatever the user types goes through here too: "__Host-My App" would not
+    // be a valid cookie name.
+    ["My App", "my-app"],
+  ])("turns %j into %j", (value, expected) => {
+    expect(toApplicationName(value)).toBe(expected);
   });
 });

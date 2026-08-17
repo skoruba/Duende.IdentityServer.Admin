@@ -176,8 +176,9 @@ const IntegrationTab = () => {
     [scopes, excludedScopes],
   );
 
-  const applicationName =
-    appNameOverride.trim() || toApplicationName(clientId ?? "");
+  const applicationName = toApplicationName(
+    appNameOverride.trim() || clientId || "",
+  );
 
   const clientConfig: SnippetClientConfig = useMemo(
     () => ({

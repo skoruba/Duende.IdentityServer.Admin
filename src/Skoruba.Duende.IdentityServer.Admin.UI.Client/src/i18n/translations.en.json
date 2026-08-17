@@ -711,7 +711,7 @@
         "ApiBaseUrl": "API base address",
         "ApiBaseUrlInfo": "Base address of the API the application calls with the access token.",
         "AppName": "Application name",
-        "AppNameInfo": "Used for the cookie, the token client and the HttpClient names. Derived from the client id when left empty.",
+        "AppNameInfo": "Names the application itself - the cookie and the token client. Derived from the client id when left empty.",
         "ClientAuthentication": "Client authentication",
         "ClientAuthenticationInfo": "How the application proves its identity at the token endpoint.",
         "ClientAuthenticationJwkFound": "This client has a JWK secret registered, so private key JWT is preselected.",
