@@ -40,17 +40,13 @@ configuration health, auditing, and security from one modern interface.
 >
 > ## Version 3.1.0 is here 🚀
 >
-> **Version 3.1.0** moves the solution to **Duende IdentityServer 8**, on top of the
-> redesigned administration experience introduced in 3.0.0 and built with
-> **React, TypeScript, Tailwind CSS, shadcn/ui, and .NET 10**.
->
-> It also adds **JWK client secrets** with in-browser key pair generation, new
-> **configuration rules** for client naming and orphaned scopes, and a set of
-> security and performance fixes.
+> **Version 3.1.0** moves the solution to **Duende IdentityServer 8** and adds an
+> **Integration tab** that turns a configured client into ready-to-use .NET 10
+> setup code.
 >
 > ⚠️ Upgrading from 3.0.0 requires new EF migrations. See the
-> [changelog](CHANGELOG.md) for details, and note that managing SAML service
-> providers from the Admin UI is not part of this release.
+> [changelog](CHANGELOG.md) for the full list of changes, and note that managing
+> SAML service providers from the Admin UI is not part of this release.
 >
 > See the [roadmap and changelog](#-roadmap--changelog) for release history and upcoming features.
 
@@ -64,6 +60,7 @@ configuration health, auditing, and security from one modern interface.
 | ⚙️  | **Modern backend**    | .NET 10 and Duende IdentityServer 8.0.2                                     |
 | 📊  | **Monitoring**        | Dashboards, configuration rules, and issue tracking                         |
 | 🧙  | **Client management** | Improved workflows and guided client creation wizard                        |
+| 🧾  | **Integration code**  | Generated .NET 10 setup for the client you are editing                      |
 | 🔐  | **Authentication**    | Passkey support in STS Identity                                             |
 | 🧩  | **Mapping**           | Mapperly-based mapping pipeline and customization points                    |
 | 🛡️  | **Security**          | Hardened audit logging and stronger validation                              |
@@ -113,6 +110,9 @@ Explore the redesigned administration experience, built with **Tailwind CSS** an
 ### 💼 Client Management
 
 ![Admin-Client-Edit](docs/Images/client-edit.png)
+
+The client detail shows only the tabs a client's grant types make relevant, and the
+**Integration** tab generates the .NET 10 setup code for that client.
 
 ### 📡 Monitoring
 

@@ -1,6 +1,12 @@
 # Changelog
 
-## [Unreleased]
+## [3.1.0] - 2026-08-17
+
+This release moves the solution to **Duende IdentityServer 8** and adds a way to get
+from a configured client to working application code: the new **Integration** tab
+generates the .NET 10 wire-up for the client you are looking at. Everything else
+builds on the 3.0.0 architecture, so upgrading from 3.0.0 is a package and migration
+step rather than a rewrite.
 
 ### Added
 
@@ -11,32 +17,8 @@
 - **Capability-driven client edit form.** Tabs whose settings the client's grant types make irrelevant are left out: a client credentials client no longer offers URLs, authentication and logout, consent, device flow, CIBA, PKCE, identity token, or refresh token. A *Show all settings* switch brings them all back for the cases the grant types do not describe
 - Playwright coverage for the hidden tabs and the override switch
 - Vitest unit tests for the Admin UI's pure logic - client capabilities, snippet generation, and the snippet tokenizer - runnable with `npm test` without any running services
-
-### Changed
-
-- The client edit tabs are declared as data and rendered through a shared `SettingsTabs` component, which keeps the selection valid when the visible set changes while the form is open
-- Identity resources are left out of the client scope picker for clients without a user flow, because they cannot be issued without one
-- Grant type ids moved into a single `GrantTypeIds` constant covering all ids the API returns, replacing the two-value `GrantTypes` enum
-- Downloading generated content reuses one helper shared with the JWK dialog
-
-### Fixed
-
-- The advanced client settings rendered an *Other Settings* panel that had no matching tab trigger and could never be opened
-
-### Breaking Changes
-
-- `GrantTypes` in the Admin UI client is replaced by `GrantTypeIds`, which also fixes the `ClientCreadentials` misspelling. Forks referencing the enum need updating
-- Custom forks of the client edit tabs need to move from hand-written `Tabs` markup to the `SettingsTabs` component to keep working with hidden tabs
-
-## [3.1.0] - 2026-07-29
-
-This release moves the solution to **Duende IdentityServer 8**. Everything else builds
-on the 3.0.0 architecture, so upgrading from 3.0.0 is a package and migration step
-rather than a rewrite.
-
-### Added
-
 - **JWK client secrets** as a first-class secret type. The value is entered as a public JSON Web Key and validated before it can be saved - private key material, JWK Sets, and symmetric keys are rejected, while unknown key types only warn, because IdentityServer decides what it accepts
+- The STS accepts `private_key_jwt` client authentication, so a client holding a JWK secret can actually use it. Without `AddJwtBearerClientAuthentication()` the token request fails with `invalid_client`
 - **In-browser key pair generation** for JWK secrets via the Web Crypto API (RS256/ES256/ES384/ES512). The private key never leaves the page: it is shown masked, can be copied or downloaded as JWK or PEM, and the public key is applied only after the user confirms they saved it
 - Five new configuration rules for clients:
   - `ClientNameMustStartWith` and `ClientNameMustNotContain`
@@ -46,6 +28,10 @@ rather than a rewrite.
 
 ### Changed
 
+- The client edit tabs are declared as data and rendered through a shared `SettingsTabs` component, which keeps the selection valid when the visible set changes while the form is open
+- Identity resources are left out of the client scope picker for clients without a user flow, because they cannot be issued without one
+- Grant type ids moved into a single `GrantTypeIds` constant covering all ids the API returns, replacing the two-value `GrantTypes` enum
+- Downloading generated content reuses one helper shared with the JWK dialog
 - Updated the solution to Duende IdentityServer 8.0.2, including EF migrations for the configuration, persisted grant, and identity stores
 - Only `SharedSecret` is hashed, so the "you cannot retrieve it" warning and password masking are limited to that type; X509 types now state that the value is stored as it is
 - Switching the client secret type clears the value, so a JWK cannot end up hashed as a shared secret or the other way round
@@ -56,6 +42,7 @@ rather than a rewrite.
 
 ### Fixed
 
+- The advanced client settings rendered an *Other Settings* panel that had no matching tab trigger and could never be opened
 - **Device flow consent is never remembered** ([RFC 8628](https://www.rfc-editor.org/rfc/rfc8628)). The device that starts a device flow is not the device the user authenticates on, so persisted consent could be replayed against an attacker-controlled device. `ConsentResponse.RememberConsent` is now always false for device flow, the "Remember My Decision" checkbox is gone from the user code confirmation page, and the device view model no longer fills `AllowRememberConsent`, so a forged POST cannot re-enable it either
 - Configuration issue loading no longer builds a cartesian product across five client collections. A single client with a few hundred redirect URIs was enough to make the dashboard and the navigation summary time out ([#67](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/67))
 - The client secret value is no longer lost when navigating back to the secret step of the client wizard. Restoring the saved step data looked like a secret type change and cleared the value
@@ -63,11 +50,11 @@ rather than a rewrite.
 
 ### Breaking Changes
 
+- `GrantTypes` in the Admin UI client is replaced by `GrantTypeIds`, which also fixes the `ClientCreadentials` misspelling. Forks referencing the enum need updating
+- Custom forks of the client edit tabs need to move from hand-written `Tabs` markup to the `SettingsTabs` component to keep working with hidden tabs
 - Duende IdentityServer 8 requires new EF migrations for the configuration, persisted grant, and identity stores. Review them and back up your database before applying
 - The IdentityServer 8 configuration and persisted grant migrations create the SAML tables (`SamlServiceProviders`, `SamlSigninStates`, `SamlLogoutSessions`, and related). The schema is created, but **managing SAML service providers from the Admin UI is not part of this release** and is planned for 3.2.0
 - The client creation wizard now takes a single redirect URI. Custom forks of the wizard steps need updating
-
----
 
 ## [3.0.0] - 2026-07-15
 
@@ -375,3 +362,4 @@ If no critical issues are reported, this release candidate is intended to be pro
 
 For history before the Duende rebranding, see the IdentityServer4.Admin repository history at:  
 https://github.com/skoruba/IdentityServer4.Admin
+

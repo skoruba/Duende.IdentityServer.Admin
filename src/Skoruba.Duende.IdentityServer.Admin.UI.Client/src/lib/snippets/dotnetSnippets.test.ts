@@ -65,16 +65,51 @@ describe("buildAuthorizationCodeSnippet", () => {
     );
   });
 
-  it("falls back to the defaults when the URIs are not absolute yet", () => {
+  it("says nothing about the callback paths when they are the framework defaults", () => {
     const program = codeOf(
       buildAuthorizationCodeSnippet(
-        client({ redirectUris: ["not-a-uri"], postLogoutRedirectUris: [] }),
+        client({
+          // Neither is usable, so both fall back to what ASP.NET Core already does.
+          redirectUris: ["not-a-uri"],
+          postLogoutRedirectUris: [],
+        }),
         options(),
       ),
       "program",
     );
 
-    expect(program).toContain('options.CallbackPath = "/signin-oidc";');
+    expect(program).not.toContain("options.CallbackPath");
+    expect(program).not.toContain("options.SignedOutCallbackPath");
+    expect(program).not.toContain("Must match the URIs registered");
+  });
+
+  it("mentions only the callback path that actually differs", () => {
+    const program = codeOf(
+      buildAuthorizationCodeSnippet(
+        client({
+          redirectUris: ["https://app.example.com/callback/oidc"],
+          postLogoutRedirectUris: ["https://app.example.com/signout-callback-oidc"],
+        }),
+        options(),
+      ),
+      "program",
+    );
+
+    expect(program).toContain('options.CallbackPath = "/callback/oidc";');
+    expect(program).not.toContain("options.SignedOutCallbackPath");
+  });
+
+  it("only mentions PKCE when it is turned off, because it is on by default", () => {
+    expect(
+      codeOf(buildAuthorizationCodeSnippet(client(), options()), "program"),
+    ).not.toContain("options.UsePkce");
+
+    expect(
+      codeOf(
+        buildAuthorizationCodeSnippet(client({ requirePkce: false }), options()),
+        "program",
+      ),
+    ).toContain("options.UsePkce = false;");
   });
 
   it("orders identity scopes first and offline_access last", () => {
@@ -146,6 +181,20 @@ describe("buildAuthorizationCodeSnippet", () => {
     ).not.toContain("PushedAuthorizationBehavior");
   });
 
+  it("keeps the notes to the things the code does not already show", () => {
+    const document = buildAuthorizationCodeSnippet(
+      client({ requireDPoP: true }),
+      options({ clientAuthentication: "jwk" }),
+    );
+
+    // One per step at most, apart from the DPoP key which has two distinct
+    // consequences - the restart and the API side.
+    expect(noteKeys(document, "credential")).toHaveLength(1);
+    expect(noteKeys(document, "dpop-key")).toHaveLength(2);
+    expect(noteKeys(document, "assertion")).toHaveLength(1);
+    expect(noteKeys(document, "program")).toHaveLength(0);
+  });
+
   it("adds a separate proof key step when the client requires DPoP", () => {
     const document = buildAuthorizationCodeSnippet(
       client({ requireDPoP: true }),
@@ -157,6 +206,11 @@ describe("buildAuthorizationCodeSnippet", () => {
     const dPoPStep = codeOf(document, "dpop-key");
     expect(dPoPStep).toContain("JsonWebKeyConverter.ConvertFromRSASecurityKey");
     expect(dPoPStep).toContain('dotnet user-secrets set "Oidc:DPoPJsonWebKey"');
+
+    // The API has to validate the proof, which no generated code covers.
+    expect(noteKeys(document, "dpop-key")).toContain(
+      "Client.Integration.Notes.DPoPApiSide",
+    );
   });
 
   it("replaces the secret with a signed assertion for private_key_jwt", () => {
@@ -171,8 +225,19 @@ describe("buildAuthorizationCodeSnippet", () => {
       "AddTransient<IClientAssertionService, ClientAssertionService>()",
     );
     expect(codeOf(document, "credential")).toContain("Oidc:SigningJwk");
+    // User secrets are development-only, and the tab has to say so.
+    expect(noteKeys(document, "credential")).toContain(
+      "Client.Integration.Notes.CredentialStorage",
+    );
     // The algorithm is read from the key rather than hard-coded.
-    expect(codeOf(document, "assertion")).toContain("key.Alg ??");
+    expect(codeOf(document, "assertion")).toContain(
+      "new SigningCredentials(key, key.Alg",
+    );
+
+    // Client assertions need turning on at the authorization server too.
+    expect(noteKeys(document, "assertion")).toContain(
+      "Client.Integration.Notes.AssertionServerSupport",
+    );
   });
 
   it("registers the API HttpClient for a plain API scope, without offline access", () => {
@@ -268,6 +333,54 @@ describe("buildClientCredentialsSnippet", () => {
     expect(stepIds(buildClientCredentialsSnippet(client(), options()))).toEqual(
       expect.arrayContaining(["worker"]),
     );
+  });
+});
+
+describe("whitespace", () => {
+  // Options come and go as the client changes, and a removed line used to
+  // leave the blank line that separated it behind.
+  const everyShape = (): SnippetDocument[] => {
+    const shapes: SnippetDocument[] = [];
+
+    for (const clientAuthentication of ["shared_secret", "jwk"] as const) {
+      for (const requireDPoP of [false, true]) {
+        for (const requireClientSecret of [false, true]) {
+          for (const allowOfflineAccess of [false, true]) {
+            const config = client({
+              requireDPoP,
+              requireClientSecret,
+              allowOfflineAccess,
+            });
+            const opts = options({ clientAuthentication });
+
+            shapes.push(buildAuthorizationCodeSnippet(config, opts));
+            shapes.push(buildClientCredentialsSnippet(config, opts));
+          }
+        }
+      }
+    }
+
+    return shapes;
+  };
+
+  it("never leaves a double blank line in a generated block", () => {
+    const offenders = everyShape()
+      .flatMap((document) => document.steps)
+      .flatMap((step) => step.blocks)
+      .filter((block) => /\n[ \t]*\n[ \t]*\n/.test(block.code))
+      .map((block) => block.id);
+
+    expect(offenders).toEqual([]);
+  });
+
+  it("never starts or ends a block with a blank line", () => {
+    const offenders = everyShape()
+      .flatMap((document) => document.steps)
+      .flatMap((step) => step.blocks)
+      .filter((block) => block.code !== block.code.trim())
+      .map((block) => block.id);
+
+    expect(offenders).toEqual([]);
   });
 });
 

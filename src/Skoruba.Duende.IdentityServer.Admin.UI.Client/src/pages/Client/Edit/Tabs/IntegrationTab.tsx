@@ -1,5 +1,10 @@
 import { CardWrapper } from "@/components/CardWrapper/CardWrapper";
 import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -27,7 +32,7 @@ import { GrantTypeIds } from "@/models/Clients/ClientModels";
 import { getClientSecrets } from "@/services/ClientServices";
 import { queryKeys } from "@/services/QueryKeys";
 import { useQuery } from "@tanstack/react-query";
-import { ClipboardCopy, Code2, Globe, Server } from "lucide-react";
+import { ChevronDown, ClipboardCopy, Code2, Globe, Server } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -132,6 +137,8 @@ const IntegrationTab = () => {
   const [selectedScenario, setSelectedScenario] = useState<Scenario | null>(
     null,
   );
+  // The values persist, so the panel is worth its space only while editing them.
+  const [areOptionsOpen, setOptionsOpen] = useState(false);
 
   // A registered JWK secret means the client authenticates with private_key_jwt.
   const clientSecrets = useQuery({
@@ -256,112 +263,135 @@ const IntegrationTab = () => {
       icon={Code2}
     >
       <div className="space-y-6">
-        <div className="rounded-lg border bg-muted/30 p-4">
-          <div className="grid gap-4 md:grid-cols-3">
-            <OptionField
-              label={t("Client.Integration.Options.Authority")}
-              description={t("Client.Integration.Options.AuthorityInfo")}
-              value={authority}
-              placeholder={DEFAULT_AUTHORITY}
-              onChange={setAuthority}
+        <Collapsible
+          open={areOptionsOpen}
+          onOpenChange={setOptionsOpen}
+          className="rounded-lg border bg-muted/30"
+        >
+          <CollapsibleTrigger className="flex w-full items-center gap-2 px-4 py-3 text-left">
+            <ChevronDown
+              className={cn(
+                "h-4 w-4 flex-shrink-0 text-muted-foreground transition-transform",
+                areOptionsOpen && "rotate-180",
+              )}
             />
-            <OptionField
-              label={t("Client.Integration.Options.ApiBaseUrl")}
-              description={t("Client.Integration.Options.ApiBaseUrlInfo")}
-              value={apiBaseUrl}
-              placeholder={DEFAULT_API_BASE_URL}
-              onChange={setApiBaseUrl}
-            />
-            <OptionField
-              label={t("Client.Integration.Options.AppName")}
-              description={t("Client.Integration.Options.AppNameInfo")}
-              value={appNameOverride}
-              placeholder={applicationName}
-              onChange={setAppNameOverride}
-            />
-          </div>
+            <span className="text-sm font-medium">
+              {t("Client.Integration.Options.Title")}
+            </span>
+            <span className="ms-auto truncate font-mono text-xs text-muted-foreground">
+              {[options.authority, options.appName].join(" · ")}
+            </span>
+          </CollapsibleTrigger>
 
-          {requireClientSecret && (
-            <div className="mt-4 space-y-1.5 border-t pt-4">
-              <Label>
-                {t("Client.Integration.Options.ClientAuthentication")}
-              </Label>
-              <Select
-                value={clientAuthentication}
-                onValueChange={(value) =>
-                  setAuthenticationOverride(value as ClientAuthentication)
-                }
-              >
-                <SelectTrigger className="md:w-1/3">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="shared_secret">
-                    {t("Client.Integration.Options.SharedSecret")}
-                  </SelectItem>
-                  <SelectItem value="jwk">
-                    {t("Client.Integration.Options.PrivateKeyJwt")}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-muted-foreground">
-                {hasJwkSecret
-                  ? t("Client.Integration.Options.ClientAuthenticationJwkFound")
-                  : t("Client.Integration.Options.ClientAuthenticationInfo")}
-              </p>
+          <CollapsibleContent className="border-t p-4">
+            <div className="grid gap-4 md:grid-cols-3">
+              <OptionField
+                label={t("Client.Integration.Options.Authority")}
+                description={t("Client.Integration.Options.AuthorityInfo")}
+                value={authority}
+                placeholder={DEFAULT_AUTHORITY}
+                onChange={setAuthority}
+              />
+              <OptionField
+                label={t("Client.Integration.Options.ApiBaseUrl")}
+                description={t("Client.Integration.Options.ApiBaseUrlInfo")}
+                value={apiBaseUrl}
+                placeholder={DEFAULT_API_BASE_URL}
+                onChange={setApiBaseUrl}
+              />
+              <OptionField
+                label={t("Client.Integration.Options.AppName")}
+                description={t("Client.Integration.Options.AppNameInfo")}
+                value={appNameOverride}
+                placeholder={applicationName}
+                onChange={setAppNameOverride}
+              />
             </div>
-          )}
 
-          <div className="mt-4 flex items-center justify-between gap-4 border-t pt-4">
-            <div>
-              <Label>{t("Client.Integration.Options.UseUserSecrets")}</Label>
-              <p className="text-xs text-muted-foreground">
-                {t("Client.Integration.Options.UseUserSecretsInfo")}
-              </p>
-            </div>
-            <Switch
-              checked={useUserSecrets}
-              onCheckedChange={setUseUserSecrets}
-            />
-          </div>
-
-          {scopes.length > 0 && (
-            <div className="mt-4 space-y-2 border-t pt-4">
-              <Label>{t("Client.Integration.Options.Scopes")}</Label>
-              <p className="text-xs text-muted-foreground">
-                {t("Client.Integration.Options.ScopesInfo")}
-              </p>
-              <div className="flex flex-wrap gap-2 pt-1">
-                {scopes.map((scope) => {
-                  const isSelected = !excludedScopes.includes(scope);
-
-                  return (
-                    <button
-                      key={scope}
-                      type="button"
-                      aria-pressed={isSelected}
-                      onClick={() =>
-                        setExcludedScopes((current) =>
-                          isSelected
-                            ? [...current, scope]
-                            : current.filter((item) => item !== scope),
-                        )
-                      }
-                      className={cn(
-                        "rounded-full border px-3 py-1 font-mono text-xs transition-colors",
-                        isSelected
-                          ? "border-primary bg-primary/10 text-primary"
-                          : "border-input bg-background text-muted-foreground line-through",
-                      )}
-                    >
-                      {scope}
-                    </button>
-                  );
-                })}
+            {requireClientSecret && (
+              <div className="mt-4 space-y-1.5 border-t pt-4">
+                <Label>
+                  {t("Client.Integration.Options.ClientAuthentication")}
+                </Label>
+                <Select
+                  value={clientAuthentication}
+                  onValueChange={(value) =>
+                    setAuthenticationOverride(value as ClientAuthentication)
+                  }
+                >
+                  <SelectTrigger className="md:w-1/3">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="shared_secret">
+                      {t("Client.Integration.Options.SharedSecret")}
+                    </SelectItem>
+                    <SelectItem value="jwk">
+                      {t("Client.Integration.Options.PrivateKeyJwt")}
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground">
+                  {hasJwkSecret
+                    ? t(
+                        "Client.Integration.Options.ClientAuthenticationJwkFound",
+                      )
+                    : t("Client.Integration.Options.ClientAuthenticationInfo")}
+                </p>
               </div>
+            )}
+
+            <div className="mt-4 flex items-center justify-between gap-4 border-t pt-4">
+              <div>
+                <Label>{t("Client.Integration.Options.UseUserSecrets")}</Label>
+                <p className="text-xs text-muted-foreground">
+                  {t("Client.Integration.Options.UseUserSecretsInfo")}
+                </p>
+              </div>
+              <Switch
+                checked={useUserSecrets}
+                onCheckedChange={setUseUserSecrets}
+              />
             </div>
-          )}
-        </div>
+
+            {scopes.length > 0 && (
+              <div className="mt-4 space-y-2 border-t pt-4">
+                <Label>{t("Client.Integration.Options.Scopes")}</Label>
+                <p className="text-xs text-muted-foreground">
+                  {t("Client.Integration.Options.ScopesInfo")}
+                </p>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {scopes.map((scope) => {
+                    const isSelected = !excludedScopes.includes(scope);
+
+                    return (
+                      <button
+                        key={scope}
+                        type="button"
+                        aria-pressed={isSelected}
+                        onClick={() =>
+                          setExcludedScopes((current) =>
+                            isSelected
+                              ? [...current, scope]
+                              : current.filter((item) => item !== scope),
+                          )
+                        }
+                        className={cn(
+                          "rounded-full border px-3 py-1 font-mono text-xs transition-colors",
+                          isSelected
+                            ? "border-primary bg-primary/10 text-primary"
+                            : "border-input bg-background text-muted-foreground line-through",
+                        )}
+                      >
+                        {scope}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </CollapsibleContent>
+        </Collapsible>
 
         <Tabs
           value={activeScenario}

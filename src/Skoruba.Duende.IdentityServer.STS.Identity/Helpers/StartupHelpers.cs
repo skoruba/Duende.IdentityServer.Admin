@@ -483,7 +483,8 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
                 })
                 .AddConfigurationStore<TConfigurationDbContext>()
                 .AddOperationalStore<TPersistedGrantDbContext>()
-                .AddAspNetIdentity<TUserIdentity>();
+                .AddAspNetIdentity<TUserIdentity>()
+                .AddJwtBearerClientAuthentication();
 
             services.ConfigureOptions<OpenIdClaimsMappingConfig>();
 

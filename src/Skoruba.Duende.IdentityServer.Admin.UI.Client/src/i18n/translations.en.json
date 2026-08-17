@@ -706,6 +706,7 @@
       "UnsupportedGrantTypes": "The setup code is generated for the authorization code and client credentials flows only. Add one of them on the Advanced / Grant Types tab.",
       "CopyAll": "Copy all",
       "Options": {
+        "Title": "Settings",
         "Authority": "Authority",
         "AuthorityInfo": "Base address of IdentityServer. The discovery document is loaded from this address followed by /.well-known/openid-configuration.",
         "ApiBaseUrl": "API base address",
@@ -732,7 +733,7 @@
         "Settings": "Add the application settings",
         "SettingsDescription": "Authority and client id live here, so the rest of the code reads them from one place.",
         "Secret": "Store the client secret",
-        "SecretDescription": "The secret belongs in user secrets during development and in your secret store in production - never in source control.",
+        "SecretDescription": "Put the secret the client was created with into the application's user secrets.",
         "SigningKey": "Store the private key",
         "SigningKeyDescription": "The public half of this key is already registered as the client's secret. The application signs its assertions with the private half.",
         "DPoPKey": "Generate the DPoP proof key",
@@ -746,20 +747,18 @@
         "WorkerDescription": "The registered HttpClient attaches the access token to every request."
       },
       "Notes": {
-        "SecretNotStored": "The secret value is not stored here and cannot be read back - use the value you received when the secret was created, or add a new one on the Secrets tab.",
         "MissingOpenIdScope": "The openid scope is not among the allowed scopes. The authorization code flow needs it to return an identity token.",
         "PkceDisabled": "PKCE is turned off for this client. Turn on Require PKCE on the Advanced / Authorization tab unless you have a reason not to.",
         "PublicClient": "This client has no secret, so it is treated as a public client. Only PKCE protects the authorization code.",
         "NoRedirectUri": "No redirect URI is configured. The callback path in the snippet is a default - add the matching URI on the Urls tab.",
-        "DPoPRequired": "This client requires DPoP, so every access token is bound to the proof key configured above.",
         "InlineSecret": "The secret is written directly into the code. That is fine for a quick test, but move it to user secrets or your secret store before committing.",
         "IdentityScopesSkipped": "The identity scopes ({{scopes}}) were left out - the client credentials flow issues no identity token.",
         "NoApiScope": "No API scope is selected. A client credentials client needs at least one API scope to get a usable access token.",
         "MachineClientWithoutSecret": "This client has no secret. The client credentials flow cannot authenticate without a secret or a client assertion.",
-        "PrivateJwkNeverLeavesTheApp": "Only the public JWK belongs in the client secret - the private key stays with the application and must never be sent to IdentityServer.",
-        "SigningAlgorithm": "The signing algorithm is read from the key itself - a JWK generated on the Secrets tab always carries its <code>alg</code>, and the curve is used as a fallback.",
         "DPoPProofKey": "Keep the same key across restarts, otherwise access tokens issued earlier stop working - they are bound to the previous key.",
-        "AssertionServiceNamespace": "<code>IClientAssertionService</code> lives in the <code>Duende.AccessTokenManagement</code> namespace - it comes with the package installed in the first step, no extra reference is needed."
+        "AssertionServerSupport": "IdentityServer has to accept client assertions for this to work. In Duende IdentityServer that is <code>AddJwtBearerClientAuthentication()</code> - without it the token request fails with <code>invalid_client</code> and the log says the client secret validation failed.",
+        "DPoPApiSide": "The API has to validate the proof as well, or it will accept the token as a plain bearer one. In ASP.NET Core that means the <code>Duende.AspNetCore.Authentication.JwtBearer</code> package and a <code>ConfigureDPoPTokensForScheme</code> call next to <code>AddJwtBearer</code>. With replay detection turned on it also needs a HybridCache registered under <code>ProofTokenReplayHybridCache</code>.",
+        "CredentialStorage": "User secrets are a development convenience. In production load these values from a secure store - Azure Key Vault, AWS Secrets Manager or HashiCorp Vault - and keep them out of <code>appsettings.json</code> and source control."
       }
     }
   },
