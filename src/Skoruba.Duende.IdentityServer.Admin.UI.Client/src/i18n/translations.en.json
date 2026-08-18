@@ -518,6 +518,7 @@
       "ScopesDescription": "Manage the Identity and API scopes that the client can access.",
       "Secrets": "Secrets",
       "SecretsDescription": "Manage client secrets for authentication and secure access.",
+      "SecretsNotUsed": "Require Client Secret is off, so IdentityServer does not authenticate this client at the token endpoint and never validates the secrets below. Turn it on for an application that can keep a secret.",
       "Advanced": "Advanced",
       "AdvancedDescription": "Advanced settings for the client, including grant types, token settings, consent screen options, and more.",
       "Integration": "Integration",

@@ -42,6 +42,7 @@ step rather than a rewrite.
 
 ### Fixed
 
+- **The wizard created public clients that required a client secret.** The Public client type never asks for a secret, but the created client still ended up with `RequireClientSecret = true`, so it could not authenticate at the token endpoint. The type now enforces `RequireClientSecret = false` and shows it on the summary step
 - The advanced client settings rendered an *Other Settings* panel that had no matching tab trigger and could never be opened
 - **Device flow consent is never remembered** ([RFC 8628](https://www.rfc-editor.org/rfc/rfc8628)). The device that starts a device flow is not the device the user authenticates on, so persisted consent could be replayed against an attacker-controlled device. `ConsentResponse.RememberConsent` is now always false for device flow, the "Remember My Decision" checkbox is gone from the user code confirmation page, and the device view model no longer fills `AllowRememberConsent`, so a forged POST cannot re-enable it either
 - Configuration issue loading no longer builds a cartesian product across five client collections. A single client with a few hundred redirect URIs was enough to make the dashboard and the navigation summary time out ([#67](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/67))

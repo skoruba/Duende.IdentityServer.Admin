@@ -62,9 +62,13 @@ export const clientTypeRules: Record<ClientType, ClientTypeRuleSet> = {
   [ClientType.Public]: {
     enforcedValues: {
       requirePkce: true,
+      requireClientSecret: false,
     },
-    descriptionLabels: ["Client.Label.RequirePkce_Label"],
-    lockedFields: ["requirePkce"],
+    descriptionLabels: [
+      "Client.Label.RequirePkce_Label",
+      "Client.Label.RequireClientSecret_Label",
+    ],
+    lockedFields: ["requirePkce", "requireClientSecret"],
   },
   [ClientType.HighSecure]: {
     enforcedValues: {
