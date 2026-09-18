@@ -1116,7 +1116,14 @@ export declare enum ConfigurationRuleType {
     IdentityResourceMustBeEnabled = "IdentityResourceMustBeEnabled",
     IdentityResourceNameMustStartWith = "IdentityResourceNameMustStartWith",
     ScopeIsUnused = "ScopeIsUnused",
-    SecretIsExpiredInDays = "SecretIsExpiredInDays"
+    SecretIsExpiredInDays = "SecretIsExpiredInDays",
+    ClientNameMustStartWith = "ClientNameMustStartWith",
+    ClientNameMustNotContain = "ClientNameMustNotContain",
+    ClientIdMustStartWith = "ClientIdMustStartWith",
+    ClientIdMustNotContain = "ClientIdMustNotContain",
+    ClientScopeMustExist = "ClientScopeMustExist",
+    ClientSigningAlgorithmsMustBeFapiCompliant = "ClientSigningAlgorithmsMustBeFapiCompliant",
+    ApiResourceSigningAlgorithmsMustBeFapiCompliant = "ApiResourceSigningAlgorithmsMustBeFapiCompliant"
 }
 export declare enum ConfigurationIssueType {
     Warning = "Warning",

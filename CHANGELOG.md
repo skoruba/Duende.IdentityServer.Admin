@@ -1,6 +1,6 @@
 # Changelog
 
-## [3.1.0] - 2026-08-17
+## [3.1.0] - 2026-09-16
 
 This release moves the solution to **Duende IdentityServer 8** and adds a way to get
 from a configured client to working application code: the new **Integration** tab
@@ -12,18 +12,21 @@ step rather than a rewrite.
 
 - **Client integration snippets.** A new *Integration* tab on the client detail generates the .NET 10 wire-up for the client being edited - NuGet packages, `appsettings.json`, the matching `dotnet user-secrets` commands, and `Program.cs`. Only the authorization code and client credentials flows are generated, and everything is derived from the form, so the snippets follow changes before they are saved: callback paths come from the redirect URIs, the scope list from the allowed scopes, PKCE and pushed authorization from their switches
 - Client authentication in the generated code can be a shared secret or **private_key_jwt**, which adds a `ClientAssertionService` reading the signing algorithm from the JWK itself. The mode is preselected from the client's registered secrets, so a client holding a JWK secret gets the assertion variant without asking
-- A separate step generates the **DPoP proof key** when the client requires DPoP, which - unlike the client credential - is the application's own key and is registered nowhere
+- A separate step generates the **DPoP proof key** when the client requires DPoP, which - unlike the client credential - is the application's own key and is registered nowhere. The key follows the *Keep secrets out of the code* switch like the client credential: stored in user secrets, or inlined with a warning
 - Syntax highlighting for the generated C#, shell, and JSON with copy and download per block. The tokenizer is built in, so no highlighting library enters the bundle
 - **Capability-driven client edit form.** Tabs whose settings the client's grant types make irrelevant are left out: a client credentials client no longer offers URLs, authentication and logout, consent, device flow, CIBA, PKCE, identity token, or refresh token. A *Show all settings* switch brings them all back for the cases the grant types do not describe
 - Playwright coverage for the hidden tabs and the override switch
 - Vitest unit tests for the Admin UI's pure logic - client capabilities, snippet generation, and the snippet tokenizer - runnable with `npm test` without any running services
 - **JWK client secrets** as a first-class secret type. The value is entered as a public JSON Web Key and validated before it can be saved - private key material, JWK Sets, and symmetric keys are rejected, while unknown key types only warn, because IdentityServer decides what it accepts
 - The STS accepts `private_key_jwt` client authentication, so a client holding a JWK secret can actually use it. Without `AddJwtBearerClientAuthentication()` the token request fails with `invalid_client`
-- **In-browser key pair generation** for JWK secrets via the Web Crypto API (RS256/ES256/ES384/ES512). The private key never leaves the page: it is shown masked, can be copied or downloaded as JWK or PEM, and the public key is applied only after the user confirms they saved it
-- Five new configuration rules for clients:
+- Optional `Fapi2SecurityProfile:Enabled` configuration applies FAPI 2.0 cryptographic restrictions to the STS: PS256 signing keys, PS256/ES256 for DPoP, client assertions and request objects, and a 10-second JWT clock skew. The signing key restriction applies to automatic key management only; a custom signing credential is left as configured. Client and sender-constrained-token requirements remain explicit deployment configuration
+- **In-browser key pair generation** for JWK secrets via the Web Crypto API (PS256/ES256/RS256/ES384/ES512). The private key never leaves the page: it is shown masked, can be copied or downloaded as JWK or PEM, and the public key is applied only after the user confirms they saved it. PS256 and ES256 are marked as FAPI 2.0 compliant and PS256 is the default; picking one of the others warns that it falls outside the profile
+- Seven new configuration rules:
   - `ClientNameMustStartWith` and `ClientNameMustNotContain`
   - `ClientIdMustStartWith` and `ClientIdMustNotContain`
   - `ClientScopeMustExist`, which reports clients still allowing a scope that no longer exists as an API scope or identity resource ([#176](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/176))
+  - `ClientSigningAlgorithmsMustBeFapiCompliant`, which reports signing algorithms outside the FAPI 2.0 set. The profile's section 5.4 is a closed enumeration, so the longer RS/PS/ES variants are non-conformant despite the larger key. Both the allowed identity token signing algorithms and the `alg` of JWK secrets are checked; disabled by default and the permitted set is configurable
+  - `ApiResourceSigningAlgorithmsMustBeFapiCompliant`, the API resource counterpart: the access token signing algorithm is decided by the API resource, so a resource allowing RS256 makes every client requesting its scopes non-conformant. Disabled by default, same configurable set
 - Playwright coverage for the JWK secret type: key pair generation, public-key-only storage, masked private key with copy and download in JWK and PEM form, the discard confirmation, EC key generation, and value validation
 
 ### Changed
@@ -39,6 +42,7 @@ step rather than a rewrite.
 - The client creation wizard takes a single redirect URI instead of a list
 - Clipboard copying moved into a shared hook that reports failures instead of rejecting unhandled outside a secure context
 - Updated `react-router-dom` to 7.18.2 and `postcss` to 8.5.25 in the Admin UI, and forced `brace-expansion` to 5.0.8 in the STS, clearing the actionable npm audit findings
+- Updated the Admin UI to `@skoruba/duende.identityserver.admin.api.client` 3.1.1, which carries the new configuration rule types, and to Vitest 5, together with transitive updates from `npm audit fix`, leaving `npm audit` clean
 
 ### Fixed
 
@@ -54,6 +58,7 @@ step rather than a rewrite.
 - `GrantTypes` in the Admin UI client is replaced by `GrantTypeIds`, which also fixes the `ClientCreadentials` misspelling. Forks referencing the enum need updating
 - Custom forks of the client edit tabs need to move from hand-written `Tabs` markup to the `SettingsTabs` component to keep working with hidden tabs
 - Duende IdentityServer 8 requires new EF migrations for the configuration, persisted grant, and identity stores. Review them and back up your database before applying
+- The admin configuration store gets one migration, `AddNamingScopeAndFapiRules`, which seeds the seven new configuration rules (Ids 17 to 23, all disabled). Apply it together with the IdentityServer 8 migrations
 - The IdentityServer 8 configuration and persisted grant migrations create the SAML tables (`SamlServiceProviders`, `SamlSigninStates`, `SamlLogoutSessions`, and related). The schema is created, but **managing SAML service providers from the Admin UI is not part of this release** and is planned for 3.2.0
 - The client creation wizard now takes a single redirect URI. Custom forks of the wizard steps need updating
 
@@ -363,4 +368,3 @@ If no critical issues are reported, this release candidate is intended to be pro
 
 For history before the Duende rebranding, see the IdentityServer4.Admin repository history at:  
 https://github.com/skoruba/IdentityServer4.Admin
-

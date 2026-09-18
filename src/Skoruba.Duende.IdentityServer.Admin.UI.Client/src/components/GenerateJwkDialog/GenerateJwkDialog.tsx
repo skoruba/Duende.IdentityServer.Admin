@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -25,6 +26,7 @@ import {
   JwkModulusLength,
   generateJwkKeyPair,
   isEcAlgorithm,
+  isFapiSigningAlgorithm,
   isJwkGenerationSupported,
 } from "@/helpers/JwkHelper";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
@@ -53,9 +55,11 @@ type GenerateJwkDialogProps = {
 
 const modulusLengths: JwkModulusLength[] = [2048, 3072, 4096];
 
+/** FAPI 2.0 permitted algorithms come first - see isFapiSigningAlgorithm. */
 const algorithms: { value: JwkAlgorithm; label: string }[] = [
-  { value: "RS256", label: "RS256 (RSA)" },
+  { value: "PS256", label: "PS256 (RSA-PSS)" },
   { value: "ES256", label: "ES256 (EC P-256)" },
+  { value: "RS256", label: "RS256 (RSA)" },
   { value: "ES384", label: "ES384 (EC P-384)" },
   { value: "ES512", label: "ES512 (EC P-521)" },
 ];
@@ -76,7 +80,7 @@ const GenerateJwkDialog = ({
   const { t } = useTranslation();
   const copyToClipboard = useCopyToClipboard();
 
-  const [algorithm, setAlgorithm] = useState<JwkAlgorithm>("RS256");
+  const [algorithm, setAlgorithm] = useState<JwkAlgorithm>("PS256");
   const [modulusLength, setModulusLength] = useState<JwkModulusLength>(2048);
   const [isGenerating, setIsGenerating] = useState(false);
   const [keyPair, setKeyPair] = useState<GeneratedJwkKeyPair | null>(null);
@@ -238,7 +242,14 @@ const GenerateJwkDialog = ({
                   <SelectContent>
                     {algorithms.map(({ value, label }) => (
                       <SelectItem key={value} value={value}>
-                        {label}
+                        <span className="flex items-center gap-2">
+                          {label}
+                          {isFapiSigningAlgorithm(value) && (
+                            <Badge variant="secondary">
+                              {t("Components.GenerateJwkDialog.FapiCompliant")}
+                            </Badge>
+                          )}
+                        </span>
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -246,6 +257,13 @@ const GenerateJwkDialog = ({
                 <p className="text-sm text-muted-foreground">
                   {t("Components.GenerateJwkDialog.AlgorithmInfo")}
                 </p>
+                {!isFapiSigningAlgorithm(algorithm) && (
+                  <Warning>
+                    {t("Components.GenerateJwkDialog.NonFapiAlgorithmWarning", {
+                      algorithm,
+                    })}
+                  </Warning>
+                )}
               </div>
 
               {!isEcAlgorithm(algorithm) && (

@@ -1,4 +1,4 @@
-export type JwkAlgorithm = "RS256" | "ES256" | "ES384" | "ES512";
+export type JwkAlgorithm = "PS256" | "RS256" | "ES256" | "ES384" | "ES512";
 
 export type JwkModulusLength = 2048 | 3072 | 4096;
 
@@ -10,6 +10,21 @@ const ecCurves: Partial<Record<JwkAlgorithm, string>> = {
   ES384: "P-384",
   ES512: "P-521",
 };
+
+/**
+ * Signing algorithms permitted by the FAPI 2.0 Security Profile, section 5.4.
+ *
+ * The profile also permits EdDSA (Ed25519), which is deliberately left out: neither
+ * .NET nor Microsoft.IdentityModel can validate EdDSA without a third party provider,
+ * so a key generated here would be rejected by IdentityServer.
+ *
+ * RS256 (RSASSA-PKCS1-v1_5), ES384 and ES512 are outside the permitted set - they stay
+ * available for deployments that do not target FAPI.
+ */
+export const fapiSigningAlgorithms: readonly JwkAlgorithm[] = ["PS256", "ES256"];
+
+export const isFapiSigningAlgorithm = (algorithm: JwkAlgorithm): boolean =>
+  fapiSigningAlgorithms.includes(algorithm);
 
 export const isEcAlgorithm = (algorithm: JwkAlgorithm): boolean =>
   algorithm in ecCurves;
@@ -75,14 +90,18 @@ const getKeyGenParams = (
 ): RsaHashedKeyGenParams | EcKeyGenParams => {
   const namedCurve = ecCurves[algorithm];
 
-  return namedCurve
-    ? { name: "ECDSA", namedCurve }
-    : {
-        name: "RSASSA-PKCS1-v1_5",
-        modulusLength,
-        publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
-        hash: "SHA-256",
-      };
+  if (namedCurve) {
+    return { name: "ECDSA", namedCurve };
+  }
+
+  // PS256 is RSASSA-PSS, RS256 is the older RSASSA-PKCS1-v1_5. The key material is
+  // the same RSA pair, but Web Crypto needs the padding scheme up front.
+  return {
+    name: algorithm === "PS256" ? "RSA-PSS" : "RSASSA-PKCS1-v1_5",
+    modulusLength,
+    publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
+    hash: "SHA-256",
+  };
 };
 
 /**
@@ -138,5 +157,6 @@ export const generateJwkKeyPair = async (
 export default {
   isJwkGenerationSupported,
   isEcAlgorithm,
+  isFapiSigningAlgorithm,
   generateJwkKeyPair,
 };

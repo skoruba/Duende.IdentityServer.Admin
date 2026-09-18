@@ -8314,6 +8314,13 @@ var ConfigurationRuleType;
     ConfigurationRuleType["IdentityResourceNameMustStartWith"] = "IdentityResourceNameMustStartWith";
     ConfigurationRuleType["ScopeIsUnused"] = "ScopeIsUnused";
     ConfigurationRuleType["SecretIsExpiredInDays"] = "SecretIsExpiredInDays";
+    ConfigurationRuleType["ClientNameMustStartWith"] = "ClientNameMustStartWith";
+    ConfigurationRuleType["ClientNameMustNotContain"] = "ClientNameMustNotContain";
+    ConfigurationRuleType["ClientIdMustStartWith"] = "ClientIdMustStartWith";
+    ConfigurationRuleType["ClientIdMustNotContain"] = "ClientIdMustNotContain";
+    ConfigurationRuleType["ClientScopeMustExist"] = "ClientScopeMustExist";
+    ConfigurationRuleType["ClientSigningAlgorithmsMustBeFapiCompliant"] = "ClientSigningAlgorithmsMustBeFapiCompliant";
+    ConfigurationRuleType["ApiResourceSigningAlgorithmsMustBeFapiCompliant"] = "ApiResourceSigningAlgorithmsMustBeFapiCompliant";
 })(ConfigurationRuleType || (exports.ConfigurationRuleType = ConfigurationRuleType = {}));
 var ConfigurationIssueType;
 (function (ConfigurationIssueType) {

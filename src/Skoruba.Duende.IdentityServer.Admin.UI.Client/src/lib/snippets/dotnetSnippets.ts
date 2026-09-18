@@ -279,45 +279,65 @@ const credentialStep = (
 /**
  * The DPoP proof key, which does not exist yet - it belongs to the application
  * alone and is registered nowhere, so it has to be generated first.
+ *
+ * Where it goes follows the "keep secrets out of the code" switch, like the client
+ * credential does. With user secrets the step also initialises them when no
+ * credential step ran before it (a public client has none).
  */
 const dPoPKeyStep = (
   section: string,
   clientConfig: SnippetClientConfig,
+  options: SnippetOptions,
 ): SnippetStep | null => {
   if (!clientConfig.requireDPoP) {
     return null;
+  }
+
+  const blocks: SnippetBlock[] = [
+    {
+      id: "dpop-generate",
+      language: "csharp",
+      code: [
+        "using System.Security.Cryptography;",
+        "using System.Text.Json;",
+        "using Microsoft.IdentityModel.Tokens;",
+        "",
+        "var rsa = new RsaSecurityKey(RSA.Create(2048));",
+        "var jwk = JsonWebKeyConverter.ConvertFromRSASecurityKey(rsa);",
+        'jwk.Alg = "PS256";',
+        "",
+        "Console.WriteLine(JsonSerializer.Serialize(jwk));",
+      ].join("\n"),
+    },
+  ];
+
+  const notes: SnippetMessage[] = [
+    { key: "Client.Integration.Notes.DPoPProofKey" },
+    { key: "Client.Integration.Notes.DPoPApiSide" },
+  ];
+
+  if (options.useUserSecrets) {
+    const hasCredentialStep =
+      credentialStep(section, clientConfig, options) !== null;
+
+    blocks.push({
+      id: "dpop-user-secrets",
+      language: "bash",
+      code: [
+        ...(hasCredentialStep ? [] : ["dotnet user-secrets init"]),
+        `dotnet user-secrets set "${dPoPKey(section)}" '${DPOP_KEY_PLACEHOLDER}'`,
+      ].join("\n"),
+    });
+  } else {
+    notes.push({ key: "Client.Integration.Notes.DPoPKeyInline" });
   }
 
   return {
     id: "dpop-key",
     titleKey: "Client.Integration.Steps.DPoPKey",
     descriptionKey: "Client.Integration.Steps.DPoPKeyDescription",
-    blocks: [
-      {
-        id: "dpop-generate",
-        language: "csharp",
-        code: [
-          "using System.Security.Cryptography;",
-          "using System.Text.Json;",
-          "using Microsoft.IdentityModel.Tokens;",
-          "",
-          "var rsa = new RsaSecurityKey(RSA.Create(2048));",
-          "var jwk = JsonWebKeyConverter.ConvertFromRSASecurityKey(rsa);",
-          'jwk.Alg = "PS256";',
-          "",
-          "Console.WriteLine(JsonSerializer.Serialize(jwk));",
-        ].join("\n"),
-      },
-      {
-        id: "dpop-user-secrets",
-        language: "bash",
-        code: `dotnet user-secrets set "${dPoPKey(section)}" '${DPOP_KEY_PLACEHOLDER}'`,
-      },
-    ],
-    notes: [
-      { key: "Client.Integration.Notes.DPoPProofKey" },
-      { key: "Client.Integration.Notes.DPoPApiSide" },
-    ],
+    blocks,
+    notes,
   };
 };
 
@@ -328,6 +348,16 @@ const secretExpression = (
   useUserSecrets
     ? `builder.Configuration[${csharpString(configurationKey)}]`
     : csharpString(SECRET_PLACEHOLDER);
+
+/**
+ * The DPoP proof key is a private key, so unlike the shared secret it is never a
+ * reasonable thing to leave in the code - the inline form exists only so the
+ * generated program compiles and runs when user secrets are switched off.
+ */
+const dPoPKeyExpression = (section: string, useUserSecrets: boolean): string =>
+  useUserSecrets
+    ? `DPoPProofKey.Parse(builder.Configuration[${csharpString(dPoPKey(section))}]!)`
+    : `DPoPProofKey.Parse(${csharpString(DPOP_KEY_PLACEHOLDER)})`;
 
 /**
  * private_key_jwt support: Duende's access token management asks this service
@@ -541,7 +571,7 @@ const buildAuthorizationCodeProgram = (
       tokenManagement.push(
         "builder.Services.AddOpenIdConnectAccessTokenManagement(options =>",
         "{",
-        `    options.DPoPJsonWebKey = DPoPProofKey.Parse(builder.Configuration[${csharpString(dPoPKey(OIDC_SECTION))}]!);`,
+        `    options.DPoPJsonWebKey = ${dPoPKeyExpression(OIDC_SECTION, options.useUserSecrets)};`,
         "});",
       );
     } else {
@@ -622,7 +652,7 @@ export const buildAuthorizationCodeSnippet = (
 
   const oidcSteps = [
     credentialStep(OIDC_SECTION, clientConfig, options),
-    dPoPKeyStep(OIDC_SECTION, clientConfig),
+    dPoPKeyStep(OIDC_SECTION, clientConfig, options),
   ].filter((step) => step !== null);
 
   steps.push(...oidcSteps);
@@ -712,7 +742,7 @@ const buildClientCredentialsProgram = (
   if (clientConfig.requireDPoP) {
     clientOptions.push(
       "",
-      `        client.DPoPJsonWebKey = DPoPProofKey.Parse(builder.Configuration[${csharpString(dPoPKey(CLIENT_CREDENTIALS_SECTION))}]!);`,
+      `        client.DPoPJsonWebKey = ${dPoPKeyExpression(CLIENT_CREDENTIALS_SECTION, options.useUserSecrets)};`,
     );
   }
 
@@ -794,7 +824,7 @@ export const buildClientCredentialsSnippet = (
 
   const machineSteps = [
     credentialStep(CLIENT_CREDENTIALS_SECTION, clientConfig, options),
-    dPoPKeyStep(CLIENT_CREDENTIALS_SECTION, clientConfig),
+    dPoPKeyStep(CLIENT_CREDENTIALS_SECTION, clientConfig, options),
   ].filter((step) => step !== null);
 
   steps.push(...machineSteps);

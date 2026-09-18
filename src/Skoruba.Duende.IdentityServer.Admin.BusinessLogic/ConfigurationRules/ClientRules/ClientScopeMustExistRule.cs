@@ -1,6 +1,7 @@
 // Copyright (c) Jan Škoruba. All Rights Reserved.
 // Licensed under the Apache License, Version 2.0.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.ConfigurationRules;
@@ -31,7 +32,7 @@ public class ClientScopeMustExistRule : ConfigurationRuleValidatorBase, IConfigu
             var missingScopes = client.AllowedScopes
                 .Select(cs => cs.Scope)
                 .Where(scope => !existingScopes.Contains(scope) &&
-                                !excludeScopes.Contains(scope.ToLowerInvariant()))
+                                !excludeScopes.Contains(scope, StringComparer.OrdinalIgnoreCase))
                 .Distinct()
                 .ToList();
 

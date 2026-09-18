@@ -474,6 +474,54 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 DefaultFixDescription = "Navigate to Client Details → Resources tab → Allowed Scopes section and remove the scope(s) that no longer exist: {missingScopes}."
             },
 
+            [ConfigurationRuleType.ClientSigningAlgorithmsMustBeFapiCompliant] = new ConfigurationRuleMetadataDto
+            {
+                RuleType = nameof(ConfigurationRuleType.ClientSigningAlgorithmsMustBeFapiCompliant),
+                DisplayName = "Client Signing Algorithms Must Be FAPI 2.0 Compliant",
+                Description = "Detects clients signing with an algorithm outside this deployment's FAPI 2.0 allow-list. Section 5.4 of the profile is a closed enumeration - PS256, ES256 and EdDSA - so the longer RS/PS/ES variants are non-conformant despite the larger key. Both the allowed identity token signing algorithms and the algorithm of JWK secrets are checked.",
+                ResourceType = nameof(ConfigurationResourceType.Client),
+                Parameters = new List<ConfigurationRuleParameterDto>
+                {
+                    new ConfigurationRuleParameterDto
+                    {
+                        Name = "allowedAlgorithms",
+                        DisplayName = "Allowed Algorithms",
+                        Description = "Signing algorithms enabled by this deployment's FAPI profile. Defaults to PS256 and ES256; FAPI also permits EdDSA (Ed25519), but enable it here only after configuring compatible validation support.",
+                        Type = "array",
+                        Required = false,
+                        DefaultValue = new[] { "PS256", "ES256" }
+                    }
+                },
+                DefaultConfiguration = "{\"allowedAlgorithms\": [\"PS256\", \"ES256\"]}",
+                ExampleConfiguration = "{\"allowedAlgorithms\": [\"PS256\", \"ES256\", \"EdDSA\"]}",
+                DefaultMessageTemplate = "Client '{clientName}' uses {count} signing algorithm(s) outside this deployment's FAPI 2.0 allow-list: {algorithms}",
+                DefaultFixDescription = "Navigate to Client Details → Advanced tab → Token → Identity Token, find 'Allowed Identity Token Signing Algorithms' field and keep only {allowedAlgorithms}. If a JWK secret carries an algorithm outside this deployment's allow-list, regenerate the key in Client Details → Secrets tab and update the client application."
+            },
+
+            [ConfigurationRuleType.ApiResourceSigningAlgorithmsMustBeFapiCompliant] = new ConfigurationRuleMetadataDto
+            {
+                RuleType = nameof(ConfigurationRuleType.ApiResourceSigningAlgorithmsMustBeFapiCompliant),
+                DisplayName = "API Resource Signing Algorithms Must Be FAPI 2.0 Compliant",
+                Description = "Detects API resources whose allowed access token signing algorithms fall outside this deployment's FAPI 2.0 allow-list. The access token algorithm is decided by the API resource, not the client - every access token issued for the resource's scopes is signed with one of these algorithms, so a single non-conformant resource affects every client requesting it. An empty list means the server default and is not reported.",
+                ResourceType = nameof(ConfigurationResourceType.ApiResource),
+                Parameters = new List<ConfigurationRuleParameterDto>
+                {
+                    new ConfigurationRuleParameterDto
+                    {
+                        Name = "allowedAlgorithms",
+                        DisplayName = "Allowed Algorithms",
+                        Description = "Signing algorithms enabled by this deployment's FAPI profile. Defaults to PS256 and ES256; FAPI also permits EdDSA (Ed25519), but enable it here only after configuring compatible validation support.",
+                        Type = "array",
+                        Required = false,
+                        DefaultValue = new[] { "PS256", "ES256" }
+                    }
+                },
+                DefaultConfiguration = "{\"allowedAlgorithms\": [\"PS256\", \"ES256\"]}",
+                ExampleConfiguration = "{\"allowedAlgorithms\": [\"PS256\", \"ES256\", \"EdDSA\"]}",
+                DefaultMessageTemplate = "API Resource '{resourceName}' allows {count} access token signing algorithm(s) outside this deployment's FAPI 2.0 allow-list: {algorithms}",
+                DefaultFixDescription = "Navigate to API Resource Details → Basic Information section, find 'Allowed Access Token Signing Algorithms' field and keep only {allowedAlgorithms}."
+            },
+
             // Security Rules
             [ConfigurationRuleType.ScopeIsUnused] = new ConfigurationRuleMetadataDto
             {

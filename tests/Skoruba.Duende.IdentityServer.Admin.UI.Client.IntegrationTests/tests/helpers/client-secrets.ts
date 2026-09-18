@@ -33,6 +33,7 @@ async function pickSelectOption(
   page: Page,
   trigger: Locator,
   optionLabel: string,
+  exact = true,
 ): Promise<void> {
   await expect(trigger).toBeVisible();
   await trigger.click();
@@ -40,7 +41,7 @@ async function pickSelectOption(
   // Scoped to the open listbox so the hidden native select's options cannot match.
   await page
     .getByRole("listbox")
-    .getByRole("option", { name: optionLabel, exact: true })
+    .getByRole("option", { name: optionLabel, exact })
     .click();
   await expect(trigger).toContainText(optionLabel);
 }
@@ -64,13 +65,29 @@ export async function openGenerateJwkDialog(page: Page): Promise<Locator> {
   return dialog;
 }
 
-/** Algorithm is the first select in the generate dialog, key size the second. */
+/**
+ * Algorithm is the first select in the generate dialog, key size the second.
+ * FAPI-permitted algorithms carry a badge inside the option, so the option's
+ * name is longer than the label and cannot be matched exactly.
+ */
 export async function selectJwkAlgorithm(
   page: Page,
   jwkDialog: Locator,
   optionLabel: string,
 ): Promise<void> {
-  await pickSelectOption(page, getSelectTrigger(jwkDialog), optionLabel);
+  await pickSelectOption(page, getSelectTrigger(jwkDialog), optionLabel, false);
+}
+
+/** Opens the algorithm select and hands back its options for inspection. */
+export async function openJwkAlgorithmOptions(
+  page: Page,
+  jwkDialog: Locator,
+): Promise<Locator> {
+  await getSelectTrigger(jwkDialog).click();
+
+  const listbox = page.getByRole("listbox");
+  await expect(listbox).toBeVisible();
+  return listbox.getByRole("option");
 }
 
 export async function generateJwkKeyPair(jwkDialog: Locator): Promise<void> {
@@ -124,6 +141,40 @@ export async function readSecretValueAsJwk(
   return JSON.parse(value) as Record<string, unknown>;
 }
 
+async function confirmSecretRowDelete(page: Page, row: Locator): Promise<void> {
+  await row.getByRole("button", { name: "Delete", exact: true }).click();
+
+  const confirmDialog = page.getByRole("alertdialog");
+  await expect(confirmDialog).toBeVisible();
+  await confirmDialog
+    .getByRole("button", { name: "Delete", exact: true })
+    .click();
+  await expect(confirmDialog).toBeHidden();
+}
+
+/**
+ * Removes what an aborted run left behind. A test that depends on which secret
+ * types the client has cannot start from a leftover JWK secret.
+ */
+export async function deleteSecretRowsByDescriptionPrefix(
+  page: Page,
+  secretsPanel: Locator,
+  descriptionPrefix: string,
+): Promise<void> {
+  // Every seeded client has a secret, so a row means the table has loaded.
+  await expect(secretsPanel.locator("table tbody tr").first()).toBeVisible();
+
+  const staleRows = secretsPanel.locator("table tbody tr", {
+    hasText: descriptionPrefix,
+  });
+
+  while ((await staleRows.count()) > 0) {
+    const remainingCount = (await staleRows.count()) - 1;
+    await confirmSecretRowDelete(page, staleRows.first());
+    await expect(staleRows).toHaveCount(remainingCount);
+  }
+}
+
 export async function deleteSecretRowByDescription(
   page: Page,
   secretsPanel: Locator,
@@ -132,13 +183,7 @@ export async function deleteSecretRowByDescription(
   const row = secretsPanel.locator("table tbody tr", { hasText: description });
   await expect(row).toBeVisible();
 
-  await row.getByRole("button", { name: "Delete", exact: true }).click();
-
-  const confirmDialog = page.getByRole("alertdialog");
-  await expect(confirmDialog).toBeVisible();
-  await confirmDialog
-    .getByRole("button", { name: "Delete", exact: true })
-    .click();
+  await confirmSecretRowDelete(page, row);
 
   await expect(row).toHaveCount(0);
 }

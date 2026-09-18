@@ -30,6 +30,8 @@ public class ConfigurationRuleValidatorFactory : IConfigurationRuleValidatorFact
             ConfigurationRuleType.ClientIdMustStartWith => new ClientIdMustStartWithRule(),
             ConfigurationRuleType.ClientIdMustNotContain => new ClientIdMustNotContainRule(),
             ConfigurationRuleType.ClientScopeMustExist => new ClientScopeMustExistRule(),
+            ConfigurationRuleType.ClientSigningAlgorithmsMustBeFapiCompliant => new ClientSigningAlgorithmsMustBeFapiCompliantRule(),
+            ConfigurationRuleType.ApiResourceSigningAlgorithmsMustBeFapiCompliant => new ApiResourceSigningAlgorithmsMustBeFapiCompliantRule(),
             ConfigurationRuleType.ApiScopeNameMustStartWith => new ApiScopeNameMustStartWithRule(),
             ConfigurationRuleType.ApiScopeNameMustNotContain => new ApiScopeNameMustNotContainRule(),
             ConfigurationRuleType.ApiScopeMustHaveDisplayName => new ApiScopeMustHaveDisplayNameRule(),

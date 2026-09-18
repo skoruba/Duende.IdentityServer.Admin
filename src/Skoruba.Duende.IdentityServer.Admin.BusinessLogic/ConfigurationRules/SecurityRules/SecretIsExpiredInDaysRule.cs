@@ -37,7 +37,7 @@ public class SecretIsExpiredInDaysRule : ConfigurationRuleValidatorBase, IConfig
             var secret = item.Secret;
             var client = item.Client;
             var daysUntilExpiry = (int)(secret.Expiration.Value - now).TotalDays;
-            var isExpired = daysUntilExpiry < 0;
+            var isExpired = secret.Expiration.Value <= now;
 
             var parameters = new Dictionary<string, string>
             {

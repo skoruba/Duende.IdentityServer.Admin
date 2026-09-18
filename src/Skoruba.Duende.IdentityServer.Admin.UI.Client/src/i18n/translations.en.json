@@ -98,7 +98,9 @@
       "Title": "Generate JWK key pair",
       "Description": "The key pair is generated in your browser. The private key is never sent to the server.",
       "Algorithm": "Algorithm",
-      "AlgorithmInfo": "RS256 is the most widely supported. The ES variants produce shorter keys and faster signatures - ES256 is the common choice.",
+      "AlgorithmInfo": "PS256 and ES256 are supported by this generator and permitted by the FAPI 2.0 Security Profile. FAPI also permits EdDSA with Ed25519, which this generator does not offer. ES256 produces shorter keys and faster signatures, PS256 is the choice when the client application only supports RSA.",
+      "FapiCompliant": "FAPI 2.0",
+      "NonFapiAlgorithmWarning": "{{algorithm}} is not permitted by the FAPI 2.0 Security Profile. This generator's FAPI-compatible choices are PS256 and ES256; the profile also permits EdDSA with Ed25519.",
       "KeySize": "Key size",
       "KeySizeOption": "{{bits}} bits",
       "SetupTip": "The public key is stored as the client secret. The private key stays with you and has to be configured in the client application.",
@@ -757,6 +759,7 @@
         "NoApiScope": "No API scope is selected. A client credentials client needs at least one API scope to get a usable access token.",
         "MachineClientWithoutSecret": "This client has no secret. The client credentials flow cannot authenticate without a secret or a client assertion.",
         "DPoPProofKey": "Keep the same key across restarts, otherwise access tokens issued earlier stop working - they are bound to the previous key.",
+        "DPoPKeyInline": "The proof key is a private key and is written directly into the code because secrets are kept inline. Move it to user secrets or your secret store before committing.",
         "AssertionServerSupport": "IdentityServer has to accept client assertions for this to work. In Duende IdentityServer that is <code>AddJwtBearerClientAuthentication()</code> - without it the token request fails with <code>invalid_client</code> and the log says the client secret validation failed.",
         "DPoPApiSide": "The API has to validate the proof as well, or it will accept the token as a plain bearer one. In ASP.NET Core that means the <code>Duende.AspNetCore.Authentication.JwtBearer</code> package and a <code>ConfigureDPoPTokensForScheme</code> call next to <code>AddJwtBearer</code>. With replay detection turned on it also needs a HybridCache registered under <code>ProofTokenReplayHybridCache</code>.",
         "CredentialStorage": "User secrets are a development convenience. In production load these values from a secure store - Azure Key Vault, AWS Secrets Manager or HashiCorp Vault - and keep them out of <code>appsettings.json</code> and source control."

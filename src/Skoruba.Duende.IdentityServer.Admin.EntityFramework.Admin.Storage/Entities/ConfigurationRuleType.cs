@@ -36,5 +36,7 @@ public enum ConfigurationRuleType
     ClientNameMustNotContain,
     ClientIdMustStartWith,
     ClientIdMustNotContain,
-    ClientScopeMustExist
+    ClientScopeMustExist,
+    ClientSigningAlgorithmsMustBeFapiCompliant,
+    ApiResourceSigningAlgorithmsMustBeFapiCompliant
 }

@@ -26,8 +26,49 @@ export const UI_TEXT = {
     duplicateRuleError:
       "This rule type already exists. Each rule type can only be configured once.",
   },
+  configurationIssues: {
+    pageTitle: "Configuration Issues",
+    filters: "Filters",
+    searchPlaceholder: "Search resources or messages...",
+    showIssues: "Show issues",
+  },
   clientTabs: {
     showAllSettings: "Show all settings",
+  },
+  grantTypes: {
+    authorizationCode: "Authorization Code",
+    clientCredentials: "Client Credentials",
+  },
+  integration: {
+    tab: "Integration",
+    settings: "Settings",
+    authority: "Authority",
+    apiBaseUrl: "API base address",
+    appName: "Application name",
+    sharedSecret: "Shared secret",
+    privateKeyJwt: "Private key JWT (JWK)",
+    jwkFoundHint:
+      "This client has a JWK secret registered, so private key JWT is preselected.",
+    noJwkHint: "How the application proves its identity at the token endpoint.",
+    copyAll: "Copy all",
+    unsupportedGrantTypes:
+      "The setup code is generated for the authorization code and client credentials flows only.",
+    scenarios: {
+      webApp: "ASP.NET Core web app",
+      worker: "Worker / API to API",
+    },
+    steps: {
+      storeSecret: "Store the client secret",
+      storePrivateKey: "Store the private key",
+      signAssertion: "Sign the client assertion",
+    },
+    notes: {
+      pkceDisabled: "PKCE is turned off for this client.",
+      publicClient:
+        "This client has no secret, so it is treated as a public client.",
+      inlineSecret: "The secret is written directly into the code.",
+      noApiScope: "No API scope is selected.",
+    },
   },
   wizard: {
     addNewClient: "Add New Client",
@@ -63,9 +104,14 @@ export const UI_TEXT = {
     discard: "Discard",
     publicKeyValidated: "Public JWK detected. No private key fields found.",
     algorithms: {
-      rs256: "RS256 (RSA)",
+      ps256: "PS256 (RSA-PSS)",
       es256: "ES256 (EC P-256)",
+      rs256: "RS256 (RSA)",
+      es384: "ES384 (EC P-384)",
     },
+    fapiBadge: "FAPI 2.0",
+    nonFapiWarningSuffix:
+      "is not permitted by the FAPI 2.0 Security Profile.",
     validation: {
       privateMember:
         "JWK must contain only public key material. Remove the private 'd' member.",

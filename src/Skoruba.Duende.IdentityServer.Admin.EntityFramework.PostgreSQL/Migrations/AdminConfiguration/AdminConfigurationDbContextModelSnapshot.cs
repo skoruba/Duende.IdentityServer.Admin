@@ -315,6 +315,30 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             MessageTemplate = "Client '{clientName}' allows {count} scope(s) that no longer exist: {missingScopes}",
                             ResourceType = 0,
                             RuleType = 20
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Configuration = "{\"allowedAlgorithms\": [\"PS256\", \"ES256\"]}",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FixDescription = "Navigate to Client Details → Advanced tab → Token → Identity Token, find 'Allowed Identity Token Signing Algorithms' field and keep only {allowedAlgorithms}. If a JWK secret carries an algorithm outside this deployment's allow-list, regenerate the key in Client Details → Secrets tab and update the client application.",
+                            IsEnabled = false,
+                            IssueType = 0,
+                            MessageTemplate = "Client '{clientName}' uses {count} signing algorithm(s) outside this deployment's FAPI 2.0 allow-list: {algorithms}",
+                            ResourceType = 0,
+                            RuleType = 21
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Configuration = "{\"allowedAlgorithms\": [\"PS256\", \"ES256\"]}",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            FixDescription = "Navigate to API Resource Details → Basic Information section, find 'Allowed Access Token Signing Algorithms' field and keep only {allowedAlgorithms}.",
+                            IsEnabled = false,
+                            IssueType = 0,
+                            MessageTemplate = "API Resource '{resourceName}' allows {count} access token signing algorithm(s) outside this deployment's FAPI 2.0 allow-list: {algorithms}",
+                            ResourceType = 2,
+                            RuleType = 22
                         });
                 });
 #pragma warning restore 612, 618

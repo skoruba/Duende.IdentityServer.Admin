@@ -13,6 +13,7 @@ import {
   getSecretValueTextarea,
   openAddSecretDialog,
   openGenerateJwkDialog,
+  openJwkAlgorithmOptions,
   openSecretsTab,
   readSecretValueAsJwk,
   selectJwkAlgorithm,
@@ -93,7 +94,7 @@ test.describe("Client secrets - JWK", () => {
 
     const publicJwk = await readSecretValueAsJwk(addSecretDialog);
     expect(publicJwk.kty).toBe("RSA");
-    expect(publicJwk.alg).toBe("RS256");
+    expect(publicJwk.alg).toBe("PS256");
     expect(publicJwk.use).toBe("sig");
     expect(publicJwk.e).toBe("AQAB");
     expect(typeof publicJwk.n).toBe("string");
@@ -272,6 +273,53 @@ test.describe("Client secrets - JWK", () => {
     expect(typeof publicJwk.x).toBe("string");
     expect(typeof publicJwk.y).toBe("string");
     expect(publicJwk).not.toHaveProperty("d");
+  });
+
+  test("marks the FAPI 2.0 algorithms and warns about the others", async ({
+    page,
+  }) => {
+    const addSecretDialog = await openAddSecretDialog(page);
+    await selectSecretType(page, addSecretDialog, UI_TEXT.secrets.jwkType);
+
+    const jwkDialog = await openGenerateJwkDialog(page);
+    const getNonFapiWarning = (algorithm: string) =>
+      jwkDialog.getByText(`${algorithm} ${UI_TEXT.jwk.nonFapiWarningSuffix}`);
+    const anyNonFapiWarning = jwkDialog.getByText(
+      UI_TEXT.jwk.nonFapiWarningSuffix,
+    );
+
+    // The default is a FAPI algorithm, so the dialog opens without a warning.
+    await expect(
+      jwkDialog.locator('button[role="combobox"]').first(),
+    ).toContainText(UI_TEXT.jwk.algorithms.ps256);
+    await expect(anyNonFapiWarning).toHaveCount(0);
+
+    const options = await openJwkAlgorithmOptions(page, jwkDialog);
+    for (const fapiAlgorithm of [
+      UI_TEXT.jwk.algorithms.ps256,
+      UI_TEXT.jwk.algorithms.es256,
+    ]) {
+      await expect(options.filter({ hasText: fapiAlgorithm })).toContainText(
+        UI_TEXT.jwk.fapiBadge,
+      );
+    }
+
+    const rs256Option = options.filter({ hasText: UI_TEXT.jwk.algorithms.rs256 });
+    await expect(rs256Option).not.toContainText(UI_TEXT.jwk.fapiBadge);
+    await expect(
+      options.filter({ hasText: UI_TEXT.jwk.algorithms.es384 }),
+    ).not.toContainText(UI_TEXT.jwk.fapiBadge);
+
+    await rs256Option.click();
+    await expect(getNonFapiWarning("RS256")).toBeVisible();
+
+    // A longer curve is still outside the profile - its list is a closed one.
+    await selectJwkAlgorithm(page, jwkDialog, UI_TEXT.jwk.algorithms.es384);
+    await expect(getNonFapiWarning("ES384")).toBeVisible();
+    await expect(getNonFapiWarning("RS256")).toHaveCount(0);
+
+    await selectJwkAlgorithm(page, jwkDialog, UI_TEXT.jwk.algorithms.es256);
+    await expect(anyNonFapiWarning).toHaveCount(0);
   });
 
   test("rejects JWK values that are not a single public key", async ({ page }) => {

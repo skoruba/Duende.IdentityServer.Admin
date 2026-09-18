@@ -8815,6 +8815,8 @@ export enum ConfigurationRuleType {
     ClientIdMustStartWith = "ClientIdMustStartWith",
     ClientIdMustNotContain = "ClientIdMustNotContain",
     ClientScopeMustExist = "ClientScopeMustExist",
+    ClientSigningAlgorithmsMustBeFapiCompliant = "ClientSigningAlgorithmsMustBeFapiCompliant",
+    ApiResourceSigningAlgorithmsMustBeFapiCompliant = "ApiResourceSigningAlgorithmsMustBeFapiCompliant",
 }
 
 export enum ConfigurationIssueType {

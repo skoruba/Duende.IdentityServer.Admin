@@ -1,6 +1,7 @@
 // Copyright (c) Jan Škoruba. All Rights Reserved.
 // Licensed under the Apache License, Version 2.0.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.ConfigurationRules;
@@ -41,7 +42,7 @@ public class ScopeIsUnusedRule : ConfigurationRuleValidatorBase, IConfigurationR
         // Find unused scopes (excluding standard OIDC scopes)
         var unusedScopes = allScopes
             .Where(scope => !usedScopes.Contains(scope) &&
-                           !excludeScopes.Contains(scope.ToLowerInvariant()))
+                           !excludeScopes.Contains(scope, StringComparer.OrdinalIgnoreCase))
             .ToList();
 
         var issues = new List<ConfigurationIssueView>();

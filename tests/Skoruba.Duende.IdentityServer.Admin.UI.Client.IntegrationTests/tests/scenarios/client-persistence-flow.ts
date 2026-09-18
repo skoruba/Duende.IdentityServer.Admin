@@ -513,13 +513,17 @@ export async function runCreateUpdateAndVerifyClientPersistence(
 
     await openClientDetailFromClients(page, updatedClientId, credentials);
 
-    await showAllClientSettings(page);
-
     const reopenedBasicsPanel = page.getByRole("tabpanel", {
       name: "Basics",
       exact: true,
     });
     await expect(page.locator('input[name="clientId"]')).toHaveValue(updatedClientId);
+
+    // The update selected every grant type, so nothing is hidden any more and
+    // the "show all settings" switch is gone - every tab is already there.
+    await expect(
+      page.getByRole("switch", { name: UI_TEXT.clientTabs.showAllSettings }),
+    ).toHaveCount(0);
     await expect(page.locator('input[name="clientName"]')).toHaveValue(updatedClientName);
     await expect(page.locator('textarea[name="description"]')).toHaveValue(updatedDescription);
     await expectSwitchByLabel(
