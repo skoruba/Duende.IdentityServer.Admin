@@ -11,9 +11,19 @@ export type WizardClientInput = {
   secretDescription: string;
 };
 
-export async function createConfidentialClientViaWizard(
+export type WizardClientBasics = Omit<
+  WizardClientInput,
+  "secretValue" | "secretDescription"
+>;
+
+/**
+ * Opens the wizard for one client type. Every type card has the same "Create"
+ * button, so the card is found by its heading - without a title the first card,
+ * the confidential client, is used.
+ */
+export async function openClientWizard(
   page: Page,
-  data: WizardClientInput,
+  clientTypeTitle?: string,
 ): Promise<void> {
   await page.getByRole("button", { name: UI_TEXT.wizard.addNewClient }).click();
 
@@ -21,14 +31,35 @@ export async function createConfidentialClientViaWizard(
     name: UI_TEXT.wizard.newClientDialog,
   });
   await expect(clientTypeDialog).toBeVisible();
-  await clientTypeDialog
-    .getByRole("button", { name: UI_TEXT.actions.create })
-    .first()
-    .click();
+
+  const createButtons = clientTypeDialog.getByRole("button", {
+    name: UI_TEXT.actions.create,
+  });
+
+  if (clientTypeTitle) {
+    const heading = clientTypeDialog.getByRole("heading", {
+      name: clientTypeTitle,
+      exact: true,
+    });
+    // The button sits in the same text block as the heading of its card.
+    await heading
+      .locator("xpath=ancestor::div[1]")
+      .getByRole("button", { name: UI_TEXT.actions.create })
+      .click();
+  } else {
+    await createButtons.first().click();
+  }
 
   await expect(page.locator('input[name="clientId"]')).toBeVisible({
     timeout: 60_000,
   });
+}
+
+/** Walks the basics, URIs and scopes steps and stops on the secret step. */
+export async function fillWizardUpToSecretStep(
+  page: Page,
+  data: WizardClientBasics,
+): Promise<void> {
   await page.locator('input[name="clientId"]').fill(data.clientId);
   await page.locator('input[name="clientName"]').fill(data.clientName);
   await page.locator('textarea[name="description"]').fill(data.description);
@@ -51,13 +82,15 @@ export async function createConfidentialClientViaWizard(
     .click();
   await page.getByRole("button", { name: UI_TEXT.actions.next }).click();
 
-  await expect(page.locator('input[name="secretValue"]')).toBeVisible({
+  await expect(
+    page.locator('textarea[name="secretDescription"]'),
+  ).toBeVisible({
     timeout: 30_000,
   });
-  await page.locator('input[name="secretValue"]').fill(data.secretValue);
-  await page
-    .locator('textarea[name="secretDescription"]')
-    .fill(data.secretDescription);
+}
+
+/** Leaves the secret step, saves on the review step and waits for the client detail. */
+export async function finishWizardFromSecretStep(page: Page): Promise<void> {
   await page.getByRole("button", { name: UI_TEXT.actions.next }).click();
 
   await expect(
@@ -70,4 +103,22 @@ export async function createConfidentialClientViaWizard(
   await expect(page).toHaveURL(/\/client\/\d+(?:[/?#]|$)/i, {
     timeout: 60_000,
   });
+}
+
+export async function createConfidentialClientViaWizard(
+  page: Page,
+  data: WizardClientInput,
+): Promise<void> {
+  await openClientWizard(page);
+  await fillWizardUpToSecretStep(page, data);
+
+  await expect(page.locator('input[name="secretValue"]')).toBeVisible({
+    timeout: 30_000,
+  });
+  await page.locator('input[name="secretValue"]').fill(data.secretValue);
+  await page
+    .locator('textarea[name="secretDescription"]')
+    .fill(data.secretDescription);
+
+  await finishWizardFromSecretStep(page);
 }

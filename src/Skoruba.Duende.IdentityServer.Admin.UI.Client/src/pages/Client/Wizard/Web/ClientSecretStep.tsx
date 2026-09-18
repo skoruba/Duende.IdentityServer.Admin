@@ -16,7 +16,12 @@ import SecretForm, {
 import { useClientWizard } from "@/contexts/ClientWizardContext";
 import { Trans, useTranslation } from "react-i18next";
 import { Tip } from "@/components/Tip/Tip";
-import { ClientType } from "@/models/Clients/ClientModels";
+import { Warning } from "@/components/Warning/Warning";
+import {
+  clientTypeRules,
+  getSecretStepNotice,
+} from "@/pages/Client/Wizard/Common/ClientTypeRules";
+import { useMemo } from "react";
 import { combineDateTimeForUnspecifiedDb } from "@/helpers/DateTimeHelper";
 
 export const SecretStep = () => {
@@ -27,13 +32,28 @@ export const SecretStep = () => {
 
   const { onValidation, clientType } = useClientWizard();
 
+  // The client type decides what the step starts with - JWK for a high security
+  // client. It is only a starting point: a value entered earlier still wins.
+  const stepDefaultValues = useMemo(
+    () => ({
+      ...defaultValues,
+      secretType: clientType
+        ? clientTypeRules[clientType].defaultSecretType
+        : defaultValues.secretType,
+    }),
+    [clientType],
+  );
+
   const form = useForm<SecretsFormData>({
-    defaultValues,
+    defaultValues: stepDefaultValues,
     resolver: zodResolver(secretFormSchema(t)),
     mode: "onChange",
   });
 
-  useDirtyReset(form, formData, defaultValues);
+  useDirtyReset(form, formData, stepDefaultValues);
+
+  const notice = getSecretStepNotice(clientType, form.watch("secretType"));
+  const NoticeBox = notice?.kind === "warning" ? Warning : Tip;
   useTrackErrorState(onValidation, form.formState.errors, form.getValues());
   useDirtyFormState(form, "secret");
 
@@ -55,13 +75,13 @@ export const SecretStep = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        {clientType === ClientType.HighSecure && (
-          <Tip>
+        {notice && (
+          <NoticeBox>
             <Trans
-              i18nKey="Client.Tips.HighSecureAuth"
+              i18nKey={notice.messageKey as never}
               components={{ strong: <strong /> }}
             />
-          </Tip>
+          </NoticeBox>
         )}
 
         <SecretForm form={form} />

@@ -1,4 +1,4 @@
-import { ClientType } from "@/models/Clients/ClientModels";
+import { ClientType, SecretTypes } from "@/models/Clients/ClientModels";
 import type { TFunction } from "i18next";
 
 type TranslationKey = string;
@@ -16,6 +16,12 @@ export interface ClientTypeRuleSet {
   enforcedValues: EnforcedValues;
   descriptionLabels: string[];
   lockedFields: (keyof NonNullable<EnforcedValues>)[];
+  /**
+   * What the secret step starts with. A default rather than an enforced value:
+   * the type can be changed, because not every client library can sign an
+   * assertion and mTLS is a valid choice for a high security client as well.
+   */
+  defaultSecretType: string;
 }
 
 export const enforcedFieldMeta: Record<
@@ -58,6 +64,7 @@ export const clientTypeRules: Record<ClientType, ClientTypeRuleSet> = {
     },
     descriptionLabels: ["Client.Label.RequirePkce_Label"],
     lockedFields: ["requirePkce"],
+    defaultSecretType: SecretTypes.SharedSecret,
   },
   [ClientType.Public]: {
     enforcedValues: {
@@ -69,6 +76,7 @@ export const clientTypeRules: Record<ClientType, ClientTypeRuleSet> = {
       "Client.Label.RequireClientSecret_Label",
     ],
     lockedFields: ["requirePkce", "requireClientSecret"],
+    defaultSecretType: SecretTypes.SharedSecret,
   },
   [ClientType.HighSecure]: {
     enforcedValues: {
@@ -95,10 +103,35 @@ export const clientTypeRules: Record<ClientType, ClientTypeRuleSet> = {
       "requireClientSecret",
       "authorizationCodeLifetime",
     ],
+    defaultSecretType: SecretTypes.Jwk,
   },
   [ClientType.Machine]: {
     enforcedValues: {},
     descriptionLabels: [],
     lockedFields: [],
+    defaultSecretType: SecretTypes.SharedSecret,
   },
+};
+
+/** What the wizard's secret step has to tell the user about the chosen secret type. */
+export type SecretStepNotice =
+  | { kind: "tip"; messageKey: TranslationKey }
+  | { kind: "warning"; messageKey: TranslationKey };
+
+/**
+ * The high security type exists for FAPI 2.0 style clients, and the profile
+ * allows private_key_jwt or mTLS only. A shared secret stays possible - the
+ * edit form would allow it anyway - but not without saying what it costs.
+ */
+export const getSecretStepNotice = (
+  clientType: ClientType | undefined,
+  secretType: string | undefined,
+): SecretStepNotice | null => {
+  if (clientType !== ClientType.HighSecure) {
+    return null;
+  }
+
+  return secretType === SecretTypes.SharedSecret
+    ? { kind: "warning", messageKey: "Client.Tips.HighSecureSharedSecret" }
+    : { kind: "tip", messageKey: "Client.Tips.HighSecureAuth" };
 };

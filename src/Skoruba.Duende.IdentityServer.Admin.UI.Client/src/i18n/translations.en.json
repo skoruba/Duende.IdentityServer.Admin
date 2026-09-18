@@ -463,7 +463,8 @@
       "NoScopes": "Do not see the scope you need? Just create an",
       "NoScopesIdentityResource": "Identity Resource",
       "NoScopesApiResource": "API Resource",
-      "HighSecureAuth": "For <strong>High Secure Clients</strong>, it is recommended to use asymmetric client authentication, providing a public key e.g., a <strong>JSON Web Key (JWK)</strong> to achieve a higher level of security.",
+      "HighSecureAuth": "A <strong>High Secure Client</strong> follows the FAPI 2.0 Security Profile, which allows asymmetric client authentication only - <strong>private key JWT</strong> or mutual TLS. That is why a <strong>JSON Web Key (JWK)</strong> is preselected: generate a key pair below, register the public key here and keep the private key in the client application.",
+      "HighSecureSharedSecret": "A shared secret is symmetric client authentication, which the FAPI 2.0 Security Profile does not allow. The client will still work with PKCE, DPoP and pushed authorization, but it will <strong>not be FAPI 2.0 compliant</strong>. Switch back to <strong>JWK</strong> unless the client application cannot sign a client assertion.",
       "RedirectUris": "<strong>RedirectUris</strong> specify the allowed URIs where tokens or authorization codes are sent after login<br />(e.g., <code>https://my-app.com/signin-oidc</code>).<br /><strong>PostLogoutRedirectUris</strong> specify the allowed URIs to redirect users to after logout<br />(e.g., <code>https://my-app.com/signout-callback-oidc</code>).<br /><br />After creating the client, you can further adjust logout settings under the <strong>URLs → Logout URIs</strong> section."
     },
     "Actions": {
@@ -760,6 +761,7 @@
         "MachineClientWithoutSecret": "This client has no secret. The client credentials flow cannot authenticate without a secret or a client assertion.",
         "DPoPProofKey": "Keep the same key across restarts, otherwise access tokens issued earlier stop working - they are bound to the previous key.",
         "DPoPKeyInline": "The proof key is a private key and is written directly into the code because secrets are kept inline. Move it to user secrets or your secret store before committing.",
+        "AssertionSignInVersion": "The sign-in itself - the pushed authorization request and the authorization code exchange - sends the client assertion only since <code>Duende.AccessTokenManagement.OpenIdConnect</code> 4.2.0. With an older version the sign-in fails with <code>invalid_client</code>, so update the package instead of wiring the OpenID Connect events by hand.",
         "AssertionServerSupport": "IdentityServer has to accept client assertions for this to work. In Duende IdentityServer that is <code>AddJwtBearerClientAuthentication()</code> - without it the token request fails with <code>invalid_client</code> and the log says the client secret validation failed.",
         "DPoPApiSide": "The API has to validate the proof as well, or it will accept the token as a plain bearer one. In ASP.NET Core that means the <code>Duende.AspNetCore.Authentication.JwtBearer</code> package and a <code>ConfigureDPoPTokensForScheme</code> call next to <code>AddJwtBearer</code>. With replay detection turned on it also needs a HybridCache registered under <code>ProofTokenReplayHybridCache</code>.",
         "CredentialStorage": "User secrets are a development convenience. In production load these values from a secure store - Azure Key Vault, AWS Secrets Manager or HashiCorp Vault - and keep them out of <code>appsettings.json</code> and source control."

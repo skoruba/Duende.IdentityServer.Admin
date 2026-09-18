@@ -4,7 +4,10 @@ import {
   ensureLoggedInAndOpenClients,
   type LoginCredentials,
 } from "./helpers/auth";
-import { findClientRow } from "./helpers/client-list";
+import {
+  findClientRow,
+  openClientDetailFromClients,
+} from "./helpers/client-list";
 import { clickRowMenuItem } from "./helpers/list-page";
 import { clickPageSave } from "./helpers/ui-navigation";
 
@@ -228,5 +231,47 @@ test.describe("Admin UI regressions", () => {
         { exact: true },
       ),
     ).toBeVisible();
+  });
+
+  test("dual list keeps its move buttons inside the column when the names are long", async ({
+    page,
+  }) => {
+    // Narrow enough for the seeded scope names not to fit next to the button.
+    await page.setViewportSize({ width: 700, height: 900 });
+    await openClientDetailFromClients(page, seedData.expectedClientId, credentials);
+    await page.getByRole("tab", { name: "Scopes", exact: true }).click();
+
+    const scopesPanel = page.getByRole("tabpanel", { name: "Scopes", exact: true });
+    await expect(scopesPanel.locator("tbody tr").first()).toBeVisible();
+
+    // A long name used to widen the table instead of being truncated, which
+    // pushed the button out of the column and behind a horizontal scrollbar.
+    const columns = await scopesPanel
+      .locator("div.max-h-\\[300px\\]")
+      .evaluateAll((boxes) =>
+        boxes.map((box) => {
+          const scrollBox = box.querySelector("div.overflow-auto") ?? box;
+          const rightEdge = box.getBoundingClientRect().left + box.clientWidth;
+          const leftEdge = box.getBoundingClientRect().left;
+          const buttons = Array.from(box.querySelectorAll("tbody button"));
+
+          return {
+            rows: buttons.length,
+            hasHorizontalScroll: scrollBox.scrollWidth > scrollBox.clientWidth + 1,
+            clippedButtons: buttons.filter((button) => {
+              const rect = button.getBoundingClientRect();
+              return rect.right > rightEdge + 1 || rect.left < leftEdge - 1;
+            }).length,
+          };
+        }),
+      );
+
+    expect(columns).toHaveLength(2);
+    expect(columns.reduce((total, column) => total + column.rows, 0)).toBeGreaterThan(0);
+
+    for (const column of columns) {
+      expect(column.hasHorizontalScroll).toBe(false);
+      expect(column.clippedButtons).toBe(0);
+    }
   });
 });

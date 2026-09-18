@@ -240,6 +240,42 @@ describe("buildAuthorizationCodeSnippet", () => {
     );
   });
 
+  it("leaves the sign-in assertion to access token management and says which version does it", () => {
+    const document = buildAuthorizationCodeSnippet(
+      client({ requirePushedAuthorization: true }),
+      options({ clientAuthentication: "jwk" }),
+    );
+
+    // Duende.AccessTokenManagement.OpenIdConnect 4.2.0 puts the assertion into the
+    // pushed authorization request and the code exchange on its own. Events
+    // generated here would sign a second assertion for the same request.
+    expect(codeOf(document, "program")).not.toContain("OnPushAuthorization");
+    expect(codeOf(document, "program")).not.toContain(
+      "OnAuthorizationCodeReceived",
+    );
+    expect(noteKeys(document, "packages")).toContain(
+      "Client.Integration.Notes.AssertionSignInVersion",
+    );
+  });
+
+  it("says nothing about the package version while a shared secret is used", () => {
+    const document = buildAuthorizationCodeSnippet(client(), options());
+
+    expect(noteKeys(document, "packages")).toHaveLength(0);
+  });
+
+  it("keeps the sign-in note out of the worker, which never signs a user in", () => {
+    const document = buildClientCredentialsSnippet(
+      client(),
+      options({ clientAuthentication: "jwk" }),
+    );
+
+    expect(noteKeys(document, "assertion")).toContain(
+      "Client.Integration.Notes.AssertionServerSupport",
+    );
+    expect(noteKeys(document, "packages")).toHaveLength(0);
+  });
+
   it("registers the API HttpClient for a plain API scope, without offline access", () => {
     const document = buildAuthorizationCodeSnippet(
       client({

@@ -1,7 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { clientTypeRules } from "./ClientTypeRules";
+import { clientTypeRules, getSecretStepNotice } from "./ClientTypeRules";
 import { mapFormDataToCreateClient } from "../../ClientSchema";
-import { ClientType, GrantTypeIds } from "@/models/Clients/ClientModels";
+import {
+  ClientType,
+  GrantTypeIds,
+  SecretTypes,
+} from "@/models/Clients/ClientModels";
+import translations from "@/i18n/translations.en.json";
 
 /**
  * The wizard applies the rules of the chosen client type over the collected
@@ -45,6 +50,76 @@ describe("client type rules", () => {
         Object.keys(enforcedValues).sort(),
       );
       expect(descriptionLabels).toHaveLength(lockedFields.length);
+    }
+  });
+
+  it("starts a high security client with a JWK and everything else with a shared secret", () => {
+    // FAPI 2.0 allows private_key_jwt or mTLS only, so the wizard must not
+    // lead a high security client to a shared secret by default.
+    expect(clientTypeRules[ClientType.HighSecure].defaultSecretType).toBe(
+      SecretTypes.Jwk,
+    );
+
+    for (const clientType of Object.values(ClientType)) {
+      if (clientType !== ClientType.HighSecure) {
+        expect(clientTypeRules[clientType].defaultSecretType).toBe(
+          SecretTypes.SharedSecret,
+        );
+      }
+    }
+  });
+
+  it("does not enforce the secret type, because mTLS is a valid choice too", () => {
+    expect(
+      Object.keys(clientTypeRules[ClientType.HighSecure].enforcedValues),
+    ).not.toContain("secretType");
+  });
+});
+
+describe("getSecretStepNotice", () => {
+  it("explains the preselected JWK to a high security client", () => {
+    expect(getSecretStepNotice(ClientType.HighSecure, SecretTypes.Jwk)).toEqual({
+      kind: "tip",
+      messageKey: "Client.Tips.HighSecureAuth",
+    });
+  });
+
+  it("warns a high security client that switches to a shared secret", () => {
+    expect(
+      getSecretStepNotice(ClientType.HighSecure, SecretTypes.SharedSecret),
+    ).toEqual({
+      kind: "warning",
+      messageKey: "Client.Tips.HighSecureSharedSecret",
+    });
+  });
+
+  it("does not warn about certificate based secrets, which mTLS uses", () => {
+    expect(
+      getSecretStepNotice(ClientType.HighSecure, "X509Thumbprint")?.kind,
+    ).toBe("tip");
+  });
+
+  it("stays quiet for the other client types, whatever the secret", () => {
+    for (const clientType of Object.values(ClientType)) {
+      if (clientType === ClientType.HighSecure) {
+        continue;
+      }
+
+      for (const secretType of Object.values(SecretTypes)) {
+        expect(getSecretStepNotice(clientType, secretType)).toBeNull();
+      }
+    }
+
+    expect(getSecretStepNotice(undefined, SecretTypes.SharedSecret)).toBeNull();
+  });
+
+  it("only refers to messages that exist", () => {
+    const tips = translations.Client.Tips as Record<string, string>;
+
+    for (const secretType of Object.values(SecretTypes)) {
+      const notice = getSecretStepNotice(ClientType.HighSecure, secretType);
+
+      expect(tips[notice!.messageKey.replace("Client.Tips.", "")]).toBeTruthy();
     }
   });
 });

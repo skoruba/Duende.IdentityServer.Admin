@@ -82,6 +82,12 @@ export const GrantTypeIds = {
   Ciba: "urn:openid:params:grant-type:ciba",
 } as const;
 
+/** Secret types as returned by the API - see ClientConsts.GetSecretTypes(). */
+export const SecretTypes = {
+  SharedSecret: "SharedSecret",
+  Jwk: "JWK",
+} as const;
+
 export enum DPoPMode {
   Custom = 0,
   Iat = 1,

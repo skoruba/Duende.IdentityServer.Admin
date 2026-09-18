@@ -3,6 +3,7 @@ import GenerateJwkDialog from "@/components/GenerateJwkDialog/GenerateJwkDialog"
 import Loading from "@/components/Loading/Loading";
 import { Button } from "@/components/ui/button";
 import { RandomValues } from "@/helpers/CryptoHelper";
+import { SecretTypes } from "@/models/Clients/ClientModels";
 import { useSecretTypes } from "@/services/ClientServices";
 import { TFunction } from "i18next";
 import { KeyRound } from "lucide-react";
@@ -13,12 +14,6 @@ import { z } from "zod";
 import { Success } from "../Success/Success";
 import { Tip } from "../Tip/Tip";
 import { Warning } from "../Warning/Warning";
-
-/** Secret types as returned by the API - see ClientConsts.GetSecretTypes(). */
-export const SecretTypes = {
-  SharedSecret: "SharedSecret",
-  Jwk: "JWK",
-} as const;
 
 export const defaultValues = {
   secretType: "SharedSecret" as const,

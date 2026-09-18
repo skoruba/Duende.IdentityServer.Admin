@@ -191,7 +191,10 @@ const orderScopes = (scopes: string[], allowOfflineAccess: boolean): string[] =>
   return unique.sort((left, right) => weight(left) - weight(right));
 };
 
-const packageStep = (packages: string[]): SnippetStep => ({
+const packageStep = (
+  packages: string[],
+  notes: SnippetMessage[] = [],
+): SnippetStep => ({
   id: "packages",
   titleKey: "Client.Integration.Steps.Packages",
   descriptionKey: "Client.Integration.Steps.PackagesDescription",
@@ -204,6 +207,7 @@ const packageStep = (packages: string[]): SnippetStep => ({
       ].join("\n"),
     },
   ],
+  notes,
 });
 
 /**
@@ -645,8 +649,15 @@ export const buildAuthorizationCodeSnippet = (
     packages.push(PACKAGE_ATM_OIDC);
   }
 
+  // No OpenID Connect events are generated for private_key_jwt on purpose: access
+  // token management hooks the pushed authorization request and the code exchange
+  // itself and takes the assertion from IClientAssertionService - since 4.2.0.
+  const packageNotes: SnippetMessage[] = useJwkAuth
+    ? [{ key: "Client.Integration.Notes.AssertionSignInVersion" }]
+    : [];
+
   const steps: SnippetStep[] = [
-    packageStep(packages),
+    packageStep(packages, packageNotes),
     appSettingsStep(OIDC_SECTION, clientConfig, options),
   ];
 

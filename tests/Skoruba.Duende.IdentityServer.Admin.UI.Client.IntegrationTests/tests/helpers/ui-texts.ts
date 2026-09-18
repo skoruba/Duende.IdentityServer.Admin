@@ -68,12 +68,17 @@ export const UI_TEXT = {
         "This client has no secret, so it is treated as a public client.",
       inlineSecret: "The secret is written directly into the code.",
       noApiScope: "No API scope is selected.",
+      assertionSignInVersion:
+        "sends the client assertion only since Duende.AccessTokenManagement.OpenIdConnect 4.2.0",
     },
   },
   wizard: {
     addNewClient: "Add New Client",
     newClientDialog: "New Client",
     reviewAndSubmit: "Review and Submit",
+    highSecureClientType: "High Secure Web Client",
+    jwkPreselectedTip: "is preselected",
+    sharedSecretWarning: "not be FAPI 2.0 compliant",
   },
   secrets: {
     addSecret: "Add Secret",

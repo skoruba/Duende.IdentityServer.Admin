@@ -14,10 +14,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { SecretTypes } from "@/components/SecretForm/SecretForm";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
+import { hasUsableJwkSecret } from "@/lib/clients/clientSecrets";
 import { cn } from "@/lib/utils";
 import {
   ClientAuthentication,
@@ -140,16 +140,14 @@ const IntegrationTab = () => {
   // The values persist, so the panel is worth its space only while editing them.
   const [areOptionsOpen, setOptionsOpen] = useState(false);
 
-  // A registered JWK secret means the client authenticates with private_key_jwt.
+  // A usable JWK secret means the client authenticates with private_key_jwt.
   const clientSecrets = useQuery({
     queryKey: [queryKeys.clientSecrets, "integration", resourceId],
     queryFn: () => getClientSecrets(Number(resourceId), 0, 100),
     enabled: !!resourceId,
   });
 
-  const hasJwkSecret = (clientSecrets.data?.items ?? []).some(
-    (secret) => secret.type === SecretTypes.Jwk,
-  );
+  const hasJwkSecret = hasUsableJwkSecret(clientSecrets.data?.items ?? []);
 
   const clientAuthentication: ClientAuthentication =
     authenticationOverride ?? (hasJwkSecret ? "jwk" : "shared_secret");

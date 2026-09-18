@@ -366,6 +366,8 @@ test.describe("Client integration tab", () => {
     await expectSnippetToContain(panel, 'dotnet user-secrets set "Oidc:SigningJwk"');
     await expectSnippetToContain(panel, "class ClientAssertionService");
     await expectSnippetNotToContain(panel, "options.ClientSecret");
+    // The package sends the assertion at sign-in by itself, but only a recent one.
+    await expect(panel.getByText(TEXT.notes.assertionSignInVersion)).toBeVisible();
 
     // The preselection is a default - the user can still go back to the shared secret.
     await selectClientAuthentication(page, panel, TEXT.sharedSecret);
@@ -373,6 +375,7 @@ test.describe("Client integration tab", () => {
     await expect(getSnippetStepHeading(panel, TEXT.steps.signAssertion)).toHaveCount(0);
     await expectSnippetToContain(panel, 'dotnet user-secrets set "Oidc:ClientSecret"');
     await expectSnippetNotToContain(panel, "Oidc:SigningJwk");
+    await expect(panel.getByText(TEXT.notes.assertionSignInVersion)).toHaveCount(0);
     await expect(panel.getByText(TEXT.jwkFoundHint)).toBeVisible();
 
     secretsPanel = await openSecretsTab(page);
