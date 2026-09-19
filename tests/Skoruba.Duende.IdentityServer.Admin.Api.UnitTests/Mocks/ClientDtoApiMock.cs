@@ -178,7 +178,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Mocks
                 .StrictMode(false)
                 .RuleFor(o => o.Id, id)
                 .RuleFor(o => o.Type, f => f.PickRandom(ClientConsts.GetSecretTypes()))
-                .RuleFor(o => o.Value, f => Guid.NewGuid().ToString());
+                // A JWK secret is validated by the API - its value has to be a public JSON Web Key
+                .RuleFor(o => o.Value, (f, o) => o.Type == "JWK"
+                    ? "{\"kty\":\"RSA\",\"n\":\"" + Guid.NewGuid().ToString("N") + "\",\"e\":\"AQAB\"}"
+                    : Guid.NewGuid().ToString());
 
             return clientSecretFaker;
         }
