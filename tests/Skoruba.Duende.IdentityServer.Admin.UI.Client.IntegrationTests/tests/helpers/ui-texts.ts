@@ -79,6 +79,8 @@ export const UI_TEXT = {
     highSecureClientType: "High Secure Web Client",
     jwkPreselectedTip: "is preselected",
     sharedSecretWarning: "not be FAPI 2.0 compliant",
+    clientIdCopyButton: "Click to copy",
+    copiedToClipboard: "Copied to clipboard!",
     dPoPClockSkewLabel: "DPoP Clock Skew",
     highSecureDPoPClockSkewSummary: "30 s",
     highSecureDPoPClockSkewValue: "00:00:30",
@@ -105,7 +107,7 @@ export const UI_TEXT = {
     download: "Download",
     acknowledge: "I have securely saved the private key",
     usePublicKey: "Use public key",
-    publicKeyApplied: "The public key has been inserted into the secret value",
+    publicKeyApplied: "Public key inserted.",
     discardConfirm:
       "Discard the generated key pair? The private key will be lost.",
     keepKeys: "Keep keys",

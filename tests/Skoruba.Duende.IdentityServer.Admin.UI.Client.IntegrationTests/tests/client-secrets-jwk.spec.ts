@@ -19,6 +19,7 @@ import {
   selectJwkAlgorithm,
   selectSecretType,
 } from "./helpers/client-secrets";
+import { expectNoToast } from "./helpers/ui-navigation";
 import { UI_TEXT } from "./helpers/ui-texts";
 
 const seedData = loadE2ESeedData();
@@ -85,12 +86,12 @@ test.describe("Client secrets - JWK", () => {
 
     await acknowledgeAndUsePublicKey(jwkDialog);
 
+    // The key is confirmed where it landed - under the field, and for as long as the
+    // field holds it - instead of in a toast that is gone before it is read.
     await expect(
-      page.getByText(UI_TEXT.jwk.publicKeyApplied, { exact: true }),
+      addSecretDialog.getByText(UI_TEXT.jwk.publicKeyApplied, { exact: true }),
     ).toBeVisible();
-    await expect(
-      addSecretDialog.getByText(UI_TEXT.jwk.publicKeyValidated, { exact: true }),
-    ).toBeVisible();
+    await expectNoToast(page);
 
     const publicJwk = await readSecretValueAsJwk(addSecretDialog);
     expect(publicJwk.kty).toBe("RSA");

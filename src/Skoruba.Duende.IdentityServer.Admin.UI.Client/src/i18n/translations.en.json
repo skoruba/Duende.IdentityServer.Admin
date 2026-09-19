@@ -209,7 +209,6 @@
       "Hide": "Hide",
       "Acknowledge": "I have securely saved the private key",
       "UsePublicKey": "Use public key",
-      "PublicKeyApplied": "The public key has been inserted into the secret value",
       "DiscardConfirm": "Discard the generated key pair? The private key will be lost.",
       "KeepKeys": "Keep keys",
       "Discard": "Discard"
@@ -515,7 +514,9 @@
       "GenerateAction": "Generate JWK key pair",
       "ValuePlaceholder": "Paste the public key as a JSON Web Key, or generate a new key pair",
       "ValueTip": "This value is the public key and is stored as it is - it is not hashed. Keep the matching private key in the client application only.",
-      "PublicKeyValidated": "Public JWK detected. No private key fields found."
+      "PublicKeyValidated": "Public JWK detected. No private key fields found.",
+      "GeneratedKeyApplied_Title": "Public key inserted.",
+      "GeneratedKeyApplied": "It comes from the key pair you just generated - no private key fields found."
     }
   },
   "Claim": {

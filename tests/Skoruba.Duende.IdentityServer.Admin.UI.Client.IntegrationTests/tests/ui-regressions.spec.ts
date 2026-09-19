@@ -9,7 +9,9 @@ import {
   openClientDetailFromClients,
 } from "./helpers/client-list";
 import { clickRowMenuItem } from "./helpers/list-page";
-import { clickPageSave } from "./helpers/ui-navigation";
+import { openClientWizard } from "./helpers/client-wizard";
+import { clickPageSave, expectNoToast } from "./helpers/ui-navigation";
+import { UI_TEXT } from "./helpers/ui-texts";
 
 const seedData = loadE2ESeedData();
 const credentials: LoginCredentials = {
@@ -30,6 +32,36 @@ const createEmptyConfigurationIssuesResponse = () => ({
 });
 
 test.describe("Admin UI regressions", () => {
+  test("copying a value is confirmed on the button instead of in a toast", async ({
+    page,
+    context,
+  }) => {
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await ensureLoggedInAndOpenClients(page, credentials);
+    await openClientWizard(page);
+
+    const clientId = "copy_feedback_ui_test";
+    await page.locator('input[name="clientId"]').fill(clientId);
+
+    const copyButton = page.getByRole("button", {
+      name: UI_TEXT.wizard.clientIdCopyButton,
+      exact: true,
+    });
+    const confirmation = copyButton.getByRole("status");
+
+    await expect(confirmation).toHaveText("");
+    await copyButton.click();
+
+    await expect(confirmation).toHaveText(UI_TEXT.wizard.copiedToClipboard);
+    await expectNoToast(page);
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+      clientId,
+    );
+
+    // The confirmation is momentary - the button goes back to offering a copy.
+    await expect(confirmation).toHaveText("", { timeout: 10_000 });
+  });
+
   test("delete action from clients grid does not leave the page blocked", async ({
     page,
   }) => {

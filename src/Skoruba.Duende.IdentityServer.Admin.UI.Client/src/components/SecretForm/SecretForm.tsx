@@ -220,6 +220,9 @@ const SecretForm = ({ form }: SecretFormProps) => {
   const { t } = useTranslation();
 
   const [isJwkDialogOpen, setIsJwkDialogOpen] = useState(false);
+  const [appliedPublicJwk, setAppliedPublicJwk] = useState<string | null>(
+    null,
+  );
 
   const { data: secretTypes, isLoading: secretTypesLoading } = useSecretTypes();
 
@@ -234,12 +237,37 @@ const SecretForm = ({ form }: SecretFormProps) => {
   const hasValidPublicJwk = !!jwkInspection && !jwkInspection.error;
   const jwkWarning = jwkInspection?.warning ?? null;
 
+  // The generated key is confirmed where it lands instead of in a toast: the field is
+  // highlighted once, and only for as long as it still holds that key
+  const isGeneratedKeyApplied =
+    isJwk && appliedPublicJwk !== null && secretValue === appliedPublicJwk;
+
   const handleUsePublicKey = (publicJwk: string) => {
     form.setValue("secretValue", publicJwk, {
       shouldDirty: true,
       shouldValidate: true,
     });
+    setAppliedPublicJwk(publicJwk);
   };
+
+  // What stands under the JWK value. A generated key says so for as long as the field
+  // holds it - a confirmation that stays is one that cannot be missed, unlike a toast
+  // or an animation, which are gone by the time the eye gets there.
+  const jwkNotice = !hasValidPublicJwk ? null : jwkWarning ? (
+    <Warning className="mt-2">{jwkWarning}</Warning>
+  ) : isGeneratedKeyApplied ? (
+    <Success
+      key={appliedPublicJwk}
+      className="mt-2 animate-in fade-in-0 slide-in-from-top-2 duration-500"
+    >
+      <strong className="font-semibold text-foreground">
+        {t("ClientSecret.Jwk.GeneratedKeyApplied_Title")}
+      </strong>{" "}
+      {t("ClientSecret.Jwk.GeneratedKeyApplied")}
+    </Success>
+  ) : (
+    <Success className="mt-2">{t("ClientSecret.Jwk.PublicKeyValidated")}</Success>
+  );
 
   const handleSecretTypeChange = () => {
     form.resetField("secretValue", { defaultValue: "" });
@@ -295,16 +323,13 @@ const SecretForm = ({ form }: SecretFormProps) => {
               copyToClipboard: true,
               monospace: true,
               rows: 6,
+              highlightKey: isGeneratedKeyApplied
+                ? appliedPublicJwk
+                : undefined,
             }}
           />
-          {hasValidPublicJwk &&
-            (jwkWarning ? (
-              <Warning className="mt-2">{jwkWarning}</Warning>
-            ) : (
-              <Success className="mt-2">
-                {t("ClientSecret.Jwk.PublicKeyValidated")}
-              </Success>
-            ))}
+          {/* Always mounted: a live region that arrives together with its text is not announced reliably */}
+          <div role="status">{jwkNotice}</div>
           <Button
             type="button"
             variant="outline"

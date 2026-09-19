@@ -1,5 +1,4 @@
 import { CardWrapper } from "@/components/CardWrapper/CardWrapper";
-import { Button } from "@/components/ui/button";
 import {
   Collapsible,
   CollapsibleContent,
@@ -16,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
+import { CopyButton } from "@/components/CopyButton/CopyButton";
 import { hasUsableJwkSecret } from "@/lib/clients/clientSecrets";
 import { cn } from "@/lib/utils";
 import {
@@ -32,7 +31,7 @@ import { GrantTypeIds } from "@/models/Clients/ClientModels";
 import { getClientSecrets } from "@/services/ClientServices";
 import { queryKeys } from "@/services/QueryKeys";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronDown, ClipboardCopy, Code2, Globe, Server } from "lucide-react";
+import { ChevronDown, Code2, Globe, Server } from "lucide-react";
 import { useEffect, useId, useMemo, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -113,7 +112,6 @@ const OptionField = ({
 
 const IntegrationTab = () => {
   const { t } = useTranslation();
-  const copyToClipboard = useCopyToClipboard();
   const { control } = useFormContext<ClientEditFormData>();
   const { clientId: resourceId } = useParams<{ clientId: string }>();
   const clientAuthenticationId = useId();
@@ -443,19 +441,14 @@ const IntegrationTab = () => {
               )}
             </TabsList>
 
-            <Button
-              type="button"
+            <CopyButton
+              value={() => flattenSnippetDocument(documents[activeScenario])}
               variant="outline"
               size="sm"
-              onClick={() =>
-                copyToClipboard(
-                  flattenSnippetDocument(documents[activeScenario]),
-                )
-              }
+              iconClassName="me-2 h-4 w-4"
             >
-              <ClipboardCopy className="me-2 h-4 w-4" />
               {t("Client.Integration.CopyAll")}
-            </Button>
+            </CopyButton>
           </div>
 
           {scenarios.map((scenario) => (

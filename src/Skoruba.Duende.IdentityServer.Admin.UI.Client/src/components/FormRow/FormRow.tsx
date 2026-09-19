@@ -33,7 +33,6 @@ import {
   Shuffle,
   CalendarIcon,
   BadgeInfo,
-  ClipboardCopy,
   X,
 } from "lucide-react";
 import { format } from "date-fns";
@@ -47,7 +46,7 @@ import {
   generateRandomSharedSecret,
   RandomValues,
 } from "@/helpers/CryptoHelper";
-import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
+import { CopyButton } from "@/components/CopyButton/CopyButton";
 import {
   secondsToFormattedTime,
   secondsToFormattedTimeLabels,
@@ -93,6 +92,7 @@ type TextareaFieldProps = {
   copyToClipboard?: boolean;
   monospace?: boolean;
   rows?: number;
+  highlightKey?: string;
 };
 
 type SelectFieldProps = {
@@ -178,28 +178,19 @@ const SwitchField: React.FC<SwitchFieldProps> = ({
 );
 
 const CopyToClipboardButton: React.FC<{ value: unknown }> = ({ value }) => {
-  const copyToClipboard = useCopyToClipboard();
+  const { t } = useTranslation();
 
   const isEmpty = value === null || value === undefined || value === "";
 
-  const handleCopyToClipboard = () => {
-    if (isEmpty) {
-      return;
-    }
-
-    copyToClipboard(String(value));
-  };
-
   return (
-    <Button
-      type="button"
+    <CopyButton
+      value={() => String(value)}
       variant="outline"
-      onClick={handleCopyToClipboard}
       className="ms-1"
       disabled={isEmpty}
-    >
-      <ClipboardCopy />
-    </Button>
+      title={t("Components.CopyableCode.ClickToCopy")}
+      aria-label={t("Components.CopyableCode.ClickToCopy")}
+    />
   );
 };
 
@@ -265,23 +256,34 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
   copyToClipboard,
   monospace,
   rows,
+  highlightKey,
 }) => (
   <FormControl>
     <div className={copyToClipboard ? "flex items-start" : ""}>
-      <Textarea
-        placeholder={placeholder}
-        name={field.name}
-        value={typeof field.value === "string" ? field.value : ""}
-        onChange={field.onChange}
-        onBlur={field.onBlur}
-        ref={field.ref}
-        className={cn(
-          "resize-none",
-          monospace && "break-all font-mono text-xs",
+      <div className="relative w-full min-w-0">
+        <Textarea
+          placeholder={placeholder}
+          name={field.name}
+          value={typeof field.value === "string" ? field.value : ""}
+          onChange={field.onChange}
+          onBlur={field.onBlur}
+          ref={field.ref}
+          className={cn(
+            "resize-none",
+            monospace && "break-all font-mono text-xs",
+          )}
+          maxLength={maxLength}
+          rows={rows}
+        />
+        {/* Keyed, so a new value replays the animation without remounting the textarea */}
+        {highlightKey && (
+          <span
+            key={highlightKey}
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 rounded-md animate-field-applied"
+          />
         )}
-        maxLength={maxLength}
-        rows={rows}
-      />
+      </div>
       {copyToClipboard && <CopyToClipboardButton value={field.value} />}
     </div>
   </FormControl>
@@ -505,6 +507,11 @@ type FormRowProps<T extends FieldValues> = {
     copyToClipboard?: boolean;
     monospace?: boolean;
     rows?: number;
+    /**
+     * Draws the eye to the textarea once, and again whenever the key changes - for a value
+     * that something else than the user wrote there.
+     */
+    highlightKey?: string;
   };
   dualListSettings?: {
     initialItems?: Item[];
@@ -545,6 +552,7 @@ export const FormRow = <T extends FieldValues>({
     copyToClipboard: textareaCopyToClipboard = false,
     monospace = false,
     rows,
+    highlightKey,
   } = {},
   dualListSettings: { initialItems } = { initialItems: [] },
   searchDropdownSettings: { items } = { items: [] },
@@ -605,6 +613,7 @@ export const FormRow = <T extends FieldValues>({
                     copyToClipboard={textareaCopyToClipboard}
                     monospace={monospace}
                     rows={rows}
+                    highlightKey={highlightKey}
                   />
                 )}
                 {type === "select" && (

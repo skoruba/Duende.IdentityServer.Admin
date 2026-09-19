@@ -1,5 +1,5 @@
+import { CopyStatusIcon } from "@/components/CopyButton/CopyButton";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
-import { ClipboardCopy } from "lucide-react";
 import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -13,7 +13,7 @@ interface CopyableCodeProps {
  */
 export const CopyableCode = ({ children }: CopyableCodeProps) => {
   const { t } = useTranslation();
-  const copyToClipboard = useCopyToClipboard();
+  const { copy, copied } = useCopyToClipboard();
 
   // Trans passes the tag content either as a string or as an array of strings.
   const value = Array.isArray(children)
@@ -25,12 +25,12 @@ export const CopyableCode = ({ children }: CopyableCodeProps) => {
       <code>{value}</code>
       <button
         type="button"
-        onClick={() => copyToClipboard(value)}
+        onClick={() => copy(value)}
         title={t("Components.CopyableCode.ClickToCopy")}
         aria-label={t("Components.CopyableCode.ClickToCopy")}
         className="rounded p-0.5 text-muted-foreground hover:bg-accent hover:text-foreground"
       >
-        <ClipboardCopy className="h-3.5 w-3.5" />
+        <CopyStatusIcon copied={copied} className="h-3.5 w-3.5" />
       </button>
     </span>
   );

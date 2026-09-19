@@ -29,10 +29,9 @@ import {
   isFapiSigningAlgorithm,
   isJwkGenerationSupported,
 } from "@/helpers/JwkHelper";
-import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
+import { CopyButton } from "@/components/CopyButton/CopyButton";
 import { downloadTextFile } from "@/lib/utils";
 import {
-  ClipboardCopy,
   Download,
   Eye,
   EyeOff,
@@ -78,7 +77,6 @@ const GenerateJwkDialog = ({
   onUsePublicKey,
 }: GenerateJwkDialogProps) => {
   const { t } = useTranslation();
-  const copyToClipboard = useCopyToClipboard();
   const algorithmId = useId();
   const keySizeId = useId();
 
@@ -148,8 +146,8 @@ const GenerateJwkDialog = ({
       return;
     }
 
+    // No toast: the form shows the key arriving, and confirms it right under the field
     onUsePublicKey(keyPair.publicJwkCompact);
-    toast({ title: t("Components.GenerateJwkDialog.PublicKeyApplied") });
     close();
   };
 
@@ -200,15 +198,14 @@ const GenerateJwkDialog = ({
               {t("Components.GenerateJwkDialog.Hide")}
             </Button>
           )}
-          <Button
-            type="button"
+          <CopyButton
+            value={value}
             variant="outline"
             size="sm"
-            onClick={() => copyToClipboard(value)}
+            iconClassName="me-2 h-4 w-4"
           >
-            <ClipboardCopy className="me-2 h-4 w-4" />
             {t("Components.GenerateJwkDialog.Copy")}
-          </Button>
+          </CopyButton>
           <Button
             type="button"
             variant="outline"

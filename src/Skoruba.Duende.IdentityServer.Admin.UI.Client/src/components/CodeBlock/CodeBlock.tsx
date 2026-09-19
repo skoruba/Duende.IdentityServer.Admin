@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
+import { CopyButton } from "@/components/CopyButton/CopyButton";
 import {
   SnippetLanguage,
   TOKEN_CLASS_NAMES,
   tokenizeCode,
 } from "@/lib/highlight/highlightCode";
 import { cn, downloadTextFile } from "@/lib/utils";
-import { ClipboardCopy, Download } from "lucide-react";
+import { Download } from "lucide-react";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -38,7 +38,6 @@ export const CodeBlock = ({
   className,
 }: CodeBlockProps) => {
   const { t } = useTranslation();
-  const copyToClipboard = useCopyToClipboard();
 
   const tokens = useMemo(() => tokenizeCode(code, language), [code, language]);
 
@@ -75,17 +74,15 @@ export const CodeBlock = ({
           </Button>
         )}
 
-        <Button
-          type="button"
+        <CopyButton
+          value={code}
           variant="ghost"
           size="sm"
           className="h-7 px-2"
-          onClick={() => copyToClipboard(code)}
+          iconClassName="h-3.5 w-3.5"
           title={t("Components.CodeBlock.Copy")}
           aria-label={t("Components.CodeBlock.Copy")}
-        >
-          <ClipboardCopy className="h-3.5 w-3.5" />
-        </Button>
+        />
       </div>
 
       <pre className="overflow-x-auto p-4 font-mono text-xs leading-relaxed">
