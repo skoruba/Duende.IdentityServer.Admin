@@ -13,6 +13,26 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // The Ids 17 to 23 are reserved for the rules seeded below. 3.0.0 lets administrators delete a rule
+            // and create it again, so a re-created rule can already sit on one of them. Such rows move to a
+            // fresh Id first. RuleType is unique, hence the temp table. The sequence moves past the reserved
+            // range beforehand, so the moved rows do not land on it again.
+            migrationBuilder.Sql(@"
+SELECT setval(pg_get_serial_sequence('""ConfigurationRules""', 'Id'), GREATEST((SELECT COALESCE(MAX(""Id""), 0) FROM ""ConfigurationRules""), 23));
+
+CREATE TEMP TABLE ""_MovedConfigurationRules"" AS
+SELECT ""RuleType"", ""ResourceType"", ""IssueType"", ""IsEnabled"", ""Configuration"", ""MessageTemplate"", ""FixDescription"", ""CreatedAt"", ""UpdatedAt""
+FROM ""ConfigurationRules""
+WHERE ""Id"" BETWEEN 17 AND 23;
+
+DELETE FROM ""ConfigurationRules"" WHERE ""Id"" BETWEEN 17 AND 23;
+
+INSERT INTO ""ConfigurationRules"" (""RuleType"", ""ResourceType"", ""IssueType"", ""IsEnabled"", ""Configuration"", ""MessageTemplate"", ""FixDescription"", ""CreatedAt"", ""UpdatedAt"")
+SELECT ""RuleType"", ""ResourceType"", ""IssueType"", ""IsEnabled"", ""Configuration"", ""MessageTemplate"", ""FixDescription"", ""CreatedAt"", ""UpdatedAt""
+FROM ""_MovedConfigurationRules"";
+
+DROP TABLE ""_MovedConfigurationRules"";");
+
             migrationBuilder.InsertData(
                 table: "ConfigurationRules",
                 columns: new[] { "Id", "Configuration", "CreatedAt", "FixDescription", "IsEnabled", "IssueType", "MessageTemplate", "ResourceType", "RuleType", "UpdatedAt" },

@@ -98,8 +98,11 @@ export function CommandPalette() {
   const searchEnabled = open && searchTerm.length >= MIN_SEARCH_LENGTH;
 
   useEffect(() => {
+    // Ctrl+K stays with the text fields on Apple keyboards, where it deletes to the end of the line
+    const mac = isMac();
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key.toLowerCase() === "k" && (e.metaKey || e.ctrlKey)) {
+      // Autofill dispatches keydown events that carry no key
+      if (e.key?.toLowerCase() === "k" && (mac ? e.metaKey : e.ctrlKey)) {
         e.preventDefault();
         setOpen((current) => !current);
       }

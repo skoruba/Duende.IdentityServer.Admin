@@ -40,7 +40,8 @@ export const downloadTextFile = (
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-  setTimeout(() => URL.revokeObjectURL(url), 0);
+  // Revoking right away can cancel the download in Safari, which reads the blob after the click returns
+  setTimeout(() => URL.revokeObjectURL(url), 60_000);
 };
 
 export const getBaseHref = (): string => {

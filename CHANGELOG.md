@@ -1,6 +1,6 @@
 # Changelog
 
-## [3.1.0] - 2026-09-16
+## [3.1.0] - 2026-09-19
 
 This release moves the solution to **Duende IdentityServer 8** and adds a way to get
 from a configured client to working application code: the new **Integration** tab
@@ -27,7 +27,7 @@ step rather than a rewrite.
 - **Capability-driven client edit form.** Tabs whose settings the client's grant types make irrelevant are left out: a client credentials client no longer offers URLs, authentication and logout, consent, device flow, CIBA, PKCE, identity token, or refresh token. A *Show all settings* switch brings them all back for the cases the grant types do not describe
 - Playwright coverage for the hidden tabs and the override switch
 - Vitest unit tests for the Admin UI's pure logic - client capabilities, snippet generation, and the snippet tokenizer - runnable with `npm test` without any running services
-- **JWK client secrets** as a first-class secret type. The value is entered as a public JSON Web Key and validated before it can be saved - private key material, JWK Sets, and symmetric keys are rejected, while unknown key types only warn, because IdentityServer decides what it accepts
+- **JWK client secrets** as a first-class secret type. The value is entered as a public JSON Web Key and validated before it can be saved - private key material, JWK Sets, and symmetric keys are rejected, while unknown key types only warn, because IdentityServer decides what it accepts. The API enforces the same boundary for every caller: `POST .../Secrets` answers 400 for a JWK value that is not a JSON object, carries private key material anywhere in it, is a JWK Set, states no `kty`, or is a symmetric key
 - The STS accepts `private_key_jwt` client authentication, so a client holding a JWK secret can actually use it. Without `AddJwtBearerClientAuthentication()` the token request fails with `invalid_client`
 - Optional `Fapi2SecurityProfile:Enabled` configuration applies FAPI 2.0 cryptographic restrictions to the STS: PS256 signing keys, PS256/ES256 for DPoP, client assertions and request objects, and a 10-second JWT clock skew. The signing key restriction applies to automatic key management only; a custom signing credential is left as configured. Client and sender-constrained-token requirements remain explicit deployment configuration
 - **In-browser key pair generation** for JWK secrets via the Web Crypto API (PS256/ES256/RS256/ES384/ES512). The private key never leaves the page: it is shown masked, can be copied or downloaded as JWK or PEM, and the public key is applied only after the user confirms they saved it. PS256 and ES256 are marked as FAPI 2.0 compliant and PS256 is the default; picking one of the others warns that it falls outside the profile
@@ -69,16 +69,26 @@ step rather than a rewrite.
 - Configuration issue loading no longer builds a cartesian product across five client collections. A single client with a few hundred redirect URIs was enough to make the dashboard and the navigation summary time out ([#67](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/67))
 - The client secret value is no longer lost when navigating back to the secret step of the client wizard. Restoring the saved step data looked like a secret type change and cleared the value
 - Corrected the interaction denial method in `AccountController`
+- Relative times in recent activity were shifted by the difference between the server's and the browser's time zone. The audit library stamps entries with the server's local time and the API returned them without an offset, so the browser read them in its own zone - with the API in a UTC container and an administrator in Prague, a change made seconds ago showed as *2 hours ago*. Audit entries are now serialized with the server's UTC offset. The audit log page therefore shows its timestamps in the browser's time zone as well
+- The signing keys list sent a zero-based page index to a one-based API, so its first two pages showed the same keys
+- The `delegation` extension grant answered 500 instead of `invalid_grant` for a token without a `sub` claim, such as one issued for client credentials
+- Closing the key pair dialog while a large RSA key was still being generated left the finished private key in the closed dialog, and the next open started on its result. A generation that was closed is now discarded
+- The key pair dialog explains why generation is unavailable outside a secure context instead of only disabling the button
+- Generated downloads keep their object URL for a minute. Revoking it right after the click can cancel the download in Safari, which would lose a private key the user believes they saved
+- ⌘K alone opens the command palette on Apple keyboards. Ctrl+K stays with the text fields there, where it deletes to the end of the line
+- A failed environment lookup no longer keeps the environment badge hidden until the cache expires
+- The generated `dotnet user-secrets` commands for JWK values point out that Windows PowerShell 5.1 drops the double quotes inside the JSON, and generated C# string literals escape line breaks and tabs
 
 ### Breaking Changes
 
 - `GrantTypes` in the Admin UI client is replaced by `GrantTypeIds`, which also fixes the `ClientCreadentials` misspelling. Forks referencing the enum need updating
 - Custom forks of the client edit tabs need to move from hand-written `Tabs` markup to the `SettingsTabs` component to keep working with hidden tabs
 - Duende IdentityServer 8 requires new EF migrations for the configuration, persisted grant, and identity stores. Review them and back up your database before applying
-- The admin configuration store gets one migration, `AddNamingScopeAndFapiRules`, which seeds the seven new configuration rules (Ids 17 to 23, all disabled). Apply it together with the IdentityServer 8 migrations
+- The admin configuration store gets one migration, `AddNamingScopeAndFapiRules`, which seeds the seven new configuration rules (Ids 17 to 23, all disabled). Apply it together with the IdentityServer 8 migrations. 3.0.0 lets administrators delete a rule and create it again, which can already occupy one of those Ids; the migration moves such a rule to a new Id first instead of failing on a primary key conflict
 - The IdentityServer 8 configuration and persisted grant migrations create the SAML tables (`SamlServiceProviders`, `SamlSigninStates`, `SamlLogoutSessions`, and related). The schema is created, but **managing SAML service providers from the Admin UI is not part of this release** and is planned for 3.2.0
 - The client creation wizard now takes a single redirect URI. Custom forks of the wizard steps need updating
 - `IAuditLogRepository`, `IAuditLogService`, and `IDashboardService` each gain one method for the recent audit changes (`GetRecentChangesAsync`, `GetRecentAuditChangesAsync`). Forks deriving from the built-in classes inherit it; forks implementing the interfaces themselves need to add it
+- The constructors of `ClientSecretAddedEvent`, `ClientSecretDeletedEvent`, `ApiSecretAddedEvent`, and `ApiSecretDeletedEvent` take the owning resource name as an additional parameter, and `InfoController` takes `IWebHostEnvironment`. The audit `Data` JSON stays additive, but forks that raise these events or derive from the controller need to pass the new argument
 
 ## [3.0.0] - 2026-07-15
 

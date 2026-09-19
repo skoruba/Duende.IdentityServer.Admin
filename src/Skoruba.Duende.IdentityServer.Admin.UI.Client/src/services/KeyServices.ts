@@ -8,12 +8,12 @@ import i18next from "@/i18n/config";
 
 const getClient = () => new client.KeysClient(ApiHelper.getApiBaseUrl());
 
-export const useKeys = (page: number = 0, pageSize: number = 10) => {
+export const useKeys = (pageIndex: number = 0, pageSize: number = 10) => {
   return useQuery({
-    queryKey: [queryKeys.keys, page, pageSize],
+    queryKey: [queryKeys.keys, pageIndex, pageSize],
     queryFn: async () => {
       const keysClient = getClient();
-      const keys = await keysClient.get(page, pageSize);
+      const keys = await keysClient.get(pageIndex + 1, pageSize);
 
       return {
         keys: keys.keys ?? [],

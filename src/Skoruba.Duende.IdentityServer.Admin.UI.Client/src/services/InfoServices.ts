@@ -42,7 +42,9 @@ export const useEnvironmentInfo = () =>
       }
     },
     retry: false,
-    staleTime: Infinity,
+    // The environment does not change while the app runs, but a failed request
+    // must not keep the badge hidden for good
+    staleTime: (query) => (query.state.data ? Infinity : 0),
   });
 
 const HEALTH_REFETCH_MS = 60_000;

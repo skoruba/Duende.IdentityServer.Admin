@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0",
+  "version": "3.1.0",
   "name": "skoruba-duende-identity-server-admin-sts",
   "description": "The administration for the Duende IdentityServer and Asp.Net Core Identity",
   "author": "Jan Skoruba & jan@skoruba.com",

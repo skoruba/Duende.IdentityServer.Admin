@@ -2,11 +2,13 @@
 // Licensed under the Apache License, Version 2.0.
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers;
 
 namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Dtos.Clients
 {
-    public class ClientSecretApiDto
+    public class ClientSecretApiDto : IValidatableObject
     {
         [Required]
         public string Type { get; set; } = "SharedSecret";
@@ -23,5 +25,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Dtos.Clients
         public DateTime? Expiration { get; set; }
         
         public DateTime Created { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            return JwkSecretValidator.Validate(Type, Value, nameof(Value));
+        }
     }
 }

@@ -39,7 +39,7 @@ import {
   KeyRound,
   Loader2,
 } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Tip } from "../Tip/Tip";
 import { Warning } from "../Warning/Warning";
@@ -88,9 +88,12 @@ const GenerateJwkDialog = ({
   const [isAcknowledged, setIsAcknowledged] = useState(false);
   const [isDiscarding, setIsDiscarding] = useState(false);
   const [isPrivateKeyRevealed, setIsPrivateKeyRevealed] = useState(false);
+  // Closing the dialog invalidates a generation still in flight - a large RSA key takes seconds
+  const generationId = useRef(0);
 
   // Drops the generated key material from memory together with the dialog state.
   const close = () => {
+    generationId.current++;
     setKeyPair(null);
     setIsAcknowledged(false);
     setIsDiscarding(false);
@@ -115,16 +118,24 @@ const GenerateJwkDialog = ({
   };
 
   const handleGenerate = async () => {
+    const id = ++generationId.current;
     setIsGenerating(true);
     try {
-      setKeyPair(await generateJwkKeyPair(algorithm, modulusLength));
+      const pair = await generateJwkKeyPair(algorithm, modulusLength);
+      if (id === generationId.current) {
+        setKeyPair(pair);
+      }
     } catch {
-      toast({
-        variant: "destructive",
-        title: t("Components.GenerateJwkDialog.GenerationFailed"),
-      });
+      if (id === generationId.current) {
+        toast({
+          variant: "destructive",
+          title: t("Components.GenerateJwkDialog.GenerationFailed"),
+        });
+      }
     } finally {
-      setIsGenerating(false);
+      if (id === generationId.current) {
+        setIsGenerating(false);
+      }
     }
   };
 
@@ -292,6 +303,12 @@ const GenerateJwkDialog = ({
               )}
 
               <Tip>{t("Components.GenerateJwkDialog.SetupTip")}</Tip>
+
+              {!isJwkGenerationSupported() && (
+                <Warning>
+                  {t("Components.GenerateJwkDialog.SecureContextRequired")}
+                </Warning>
+              )}
             </div>
 
             <DialogFooter>

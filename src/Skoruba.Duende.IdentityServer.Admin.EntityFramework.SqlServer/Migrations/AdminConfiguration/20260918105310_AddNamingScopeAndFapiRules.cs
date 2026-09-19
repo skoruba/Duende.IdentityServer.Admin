@@ -13,6 +13,29 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.SqlServer.Migratio
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // The Ids 17 to 23 are reserved for the rules seeded below. 3.0.0 lets administrators delete a rule
+            // and create it again, which hands out the next identity value, so a re-created rule can already
+            // sit on one of them. Such rows move to a fresh Id first. RuleType is unique, hence the temp table.
+            migrationBuilder.Sql(@"
+IF EXISTS (SELECT 1 FROM [ConfigurationRules] WHERE [Id] BETWEEN 17 AND 23)
+BEGIN
+    SELECT [RuleType], [ResourceType], [IssueType], [IsEnabled], [Configuration], [MessageTemplate], [FixDescription], [CreatedAt], [UpdatedAt]
+    INTO #MovedConfigurationRules
+    FROM [ConfigurationRules]
+    WHERE [Id] BETWEEN 17 AND 23;
+
+    DELETE FROM [ConfigurationRules] WHERE [Id] BETWEEN 17 AND 23;
+
+    IF IDENT_CURRENT('[ConfigurationRules]') < 23
+        DBCC CHECKIDENT ('[ConfigurationRules]', RESEED, 23) WITH NO_INFOMSGS;
+
+    INSERT INTO [ConfigurationRules] ([RuleType], [ResourceType], [IssueType], [IsEnabled], [Configuration], [MessageTemplate], [FixDescription], [CreatedAt], [UpdatedAt])
+    SELECT [RuleType], [ResourceType], [IssueType], [IsEnabled], [Configuration], [MessageTemplate], [FixDescription], [CreatedAt], [UpdatedAt]
+    FROM #MovedConfigurationRules;
+
+    DROP TABLE #MovedConfigurationRules;
+END");
+
             migrationBuilder.InsertData(
                 table: "ConfigurationRules",
                 columns: new[] { "Id", "Configuration", "CreatedAt", "FixDescription", "IsEnabled", "IssueType", "MessageTemplate", "ResourceType", "RuleType", "UpdatedAt" },

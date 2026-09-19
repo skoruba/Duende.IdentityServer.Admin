@@ -196,6 +196,7 @@
       "SetupTip": "The public key is stored as the client secret. The private key stays with you and has to be configured in the client application.",
       "Generate": "Generate key pair",
       "GenerationFailed": "The key pair could not be generated. Key generation requires a secure context (HTTPS or localhost).",
+      "SecureContextRequired": "Key generation is not available on this page. The browser only offers it in a secure context (HTTPS or localhost). You can still paste a public JWK generated elsewhere.",
       "PrivateKeyWarning": "The private key is shown only now. It is never stored here and cannot be recovered - copy or download it before you continue.",
       "KeyId": "Key ID",
       "PrivateKey": "Private key",

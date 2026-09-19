@@ -34,8 +34,13 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
                 return;
             }
 
-            // get user's identity
-            var sub = result.Claims.FirstOrDefault(c => c.Type == "sub").Value;
+            // get user's identity - a token issued without a user, such as a client credentials one, has no subject to delegate
+            var sub = result.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            if (string.IsNullOrEmpty(sub))
+            {
+                context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant);
+                return;
+            }
 
             context.Result = new GrantValidationResult(sub, GrantType);
             return;
