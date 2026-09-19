@@ -41,6 +41,7 @@ export type AdditionalConfiguration = {
   requirePkce: boolean;
   requireClientSecret: boolean;
   authorizationCodeLifetime: number;
+  dPoPClockSkew: string;
 };
 
 export enum View {

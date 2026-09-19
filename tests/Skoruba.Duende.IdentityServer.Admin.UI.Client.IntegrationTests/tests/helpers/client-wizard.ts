@@ -89,8 +89,14 @@ export async function fillWizardUpToSecretStep(
   });
 }
 
-/** Leaves the secret step, saves on the review step and waits for the client detail. */
-export async function finishWizardFromSecretStep(page: Page): Promise<void> {
+/**
+ * Leaves the secret step, saves on the review step and waits for the client detail.
+ * `reviewSummary` runs on the review step, before anything is saved.
+ */
+export async function finishWizardFromSecretStep(
+  page: Page,
+  reviewSummary?: () => Promise<void>,
+): Promise<void> {
   await page.getByRole("button", { name: UI_TEXT.actions.next }).click();
 
   await expect(
@@ -98,6 +104,7 @@ export async function finishWizardFromSecretStep(page: Page): Promise<void> {
   ).toBeVisible({
     timeout: 30_000,
   });
+  await reviewSummary?.();
   await page.getByRole("button", { name: UI_TEXT.actions.save }).click();
 
   await expect(page).toHaveURL(/\/client\/\d+(?:[/?#]|$)/i, {

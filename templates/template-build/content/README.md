@@ -43,6 +43,7 @@ configuration health, auditing, and security from one modern interface.
 > **Version 3.1.0** moves the solution to **Duende IdentityServer 8** and adds an
 > **Integration tab** that turns a configured client into ready-to-use .NET 10
 > setup code.
+> The STS can also apply an optional [FAPI 2.0 security profile](#-fapi-20-security-profile).
 >
 > ⚠️ Upgrading from 3.0.0 requires new EF migrations. See the
 > [changelog](https://github.com/skoruba/Duende.IdentityServer.Admin/blob/main/CHANGELOG.md) for the full list of changes.
@@ -61,7 +62,7 @@ configuration health, auditing, and security from one modern interface.
 | 🧾  | **Integration code**  | Generated .NET 10 setup for the client you are editing                      |
 | 🔐  | **Authentication**    | Passkey support in STS Identity                                             |
 | 🧩  | **Mapping**           | Mapperly-based mapping pipeline and customization points                    |
-| 🛡️  | **Security**          | Hardened audit logging and stronger validation                              |
+| 🛡️  | **Security**          | Hardened audit logging, stronger validation, optional FAPI 2.0 profile      |
 | 🧪  | **Quality**           | Expanded Playwright UI, Admin API, STS, repository, and audit test coverage |
 
 ---
@@ -75,6 +76,7 @@ configuration health, auditing, and security from one modern interface.
 - [Running via Docker](#-running-via-docker-optional)
 - [EF Core & Data Access](#️-ef-core--data-access)
 - [Authentication & Authorization](#-authentication--authorization)
+- [FAPI 2.0 Security Profile](#-fapi-20-security-profile)
 - [Azure Key Vault Integration](#-azure-key-vault-integration)
 - [Logging](#-logging)
 - [Audit Logging](#-audit-logging)
@@ -414,6 +416,35 @@ dotnet run /seed
 
 ---
 
+## 🔏 FAPI 2.0 Security Profile
+
+The STS can apply the cryptographic restrictions of the [FAPI 2.0 Security Profile](https://openid.net/specs/fapi-security-profile-2_0-final.html) that IdentityServer enforces for the whole server. The profile is off by default:
+
+```json
+"Fapi2SecurityProfile": {
+  "Enabled": true
+}
+```
+
+With the profile on:
+
+| Area                                                              | Effect                                                                                                                                                                                                                                                 |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Token signing                                                     | Automatic key management creates `PS256` keys only. With key management off, the configured signing and validation certificates sign with `PS256` (RSA) or `ES256` (EC P-256) instead of `RS256`; an EC certificate on any other curve stops the STS at startup |
+| DPoP proofs, `private_key_jwt` client assertions, request objects | `PS256` and `ES256` only                                                                                                                                                                                                                               |
+| Client assertions                                                 | The issuer is the only accepted `aud`, and the `typ` header has to be `client-authentication+jwt`                                                                                                                                                      |
+| JWT validation                                                    | 10 seconds of clock skew instead of 5 minutes                                                                                                                                                                                                          |
+
+> [!IMPORTANT]
+> The switch covers what a server-wide option can enforce. It does **not** make a deployment FAPI 2.0 conformant on its own - the profile also sets requirements on every client and on the hosting, and those stay explicit configuration.
+
+- **Clients** need pushed authorization requests, PKCE, sender-constrained access tokens (DPoP or mTLS), `private_key_jwt` or mTLS client authentication instead of a shared secret, and an authorization code lifetime of at most 60 seconds. The _High security_ client type of the wizard preselects all of these together with a JWK secret. To require PAR for every client, set `IdentityServerOptions:PushedAuthorization:Required` to `true`
+- **DPoP clock skew** is a client setting and defaults to 5 minutes, while the profile rejects JWTs dated more than 60 seconds in the future. The _High security_ client type sets it to 30 seconds, the value the profile itself names as enough to rule out clock skew issues; lower it on the other clients that have to conform. Validating proofs by `iat` - the default _DPoP Validation Mode_ - is conformant: the profile makes the server-provided nonce optional for the authorization server, and a client can be switched to it where pre-generated proofs are a concern
+- **Existing configuration** is checked by two configuration rules, `ClientSigningAlgorithmsMustBeFapiCompliant` and `ApiResourceSigningAlgorithmsMustBeFapiCompliant`. Both are disabled by default. Enable them and resolve what they report _before_ turning the profile on: from that moment a client signing its assertions or DPoP proofs with `RS256` is rejected, and a client or API resource that allows only `RS256` tokens is left without an acceptable signing key
+- **TLS** requirements of the profile are up to the hosting environment
+
+---
+
 ## 🔑 Azure Key Vault Integration
 
 Azure Key Vault supports:
@@ -652,6 +683,10 @@ Enable or disable user registration:
   "Enabled": true
 }
 ```
+
+### FAPI 2.0 Security Profile
+
+`Fapi2SecurityProfile:Enabled` applies the FAPI 2.0 cryptographic restrictions to the STS - see [FAPI 2.0 Security Profile](#-fapi-20-security-profile).
 
 ---
 

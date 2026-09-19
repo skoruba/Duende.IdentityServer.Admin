@@ -79,6 +79,9 @@ export const UI_TEXT = {
     highSecureClientType: "High Secure Web Client",
     jwkPreselectedTip: "is preselected",
     sharedSecretWarning: "not be FAPI 2.0 compliant",
+    dPoPClockSkewLabel: "DPoP Clock Skew",
+    highSecureDPoPClockSkewSummary: "30 s",
+    highSecureDPoPClockSkewValue: "00:00:30",
   },
   secrets: {
     addSecret: "Add Secret",

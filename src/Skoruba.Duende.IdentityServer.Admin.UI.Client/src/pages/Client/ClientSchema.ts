@@ -379,7 +379,7 @@ export const mapFormDataToCreateClient = (
     cibaLifetime: clientDefaultValues.cibaLifetime,
     pollingInterval: clientDefaultValues.pollingInterval,
     dPoPValidationMode: Number(clientDefaultValues.dPoPValidationMode!),
-    dPoPClockSkew: clientDefaultValues.dPoPClockSkew!,
+    dPoPClockSkew: formData.dPoPClockSkew ?? clientDefaultValues.dPoPClockSkew!,
     pushedAuthorizationLifetime:
       clientDefaultValues.pushedAuthorizationLifetime,
     initiateLoginUri: clientDefaultValues.initiateLoginUri,

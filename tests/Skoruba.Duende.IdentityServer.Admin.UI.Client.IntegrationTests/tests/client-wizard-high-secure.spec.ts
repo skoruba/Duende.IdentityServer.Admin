@@ -26,7 +26,7 @@ import {
   finishWizardFromSecretStep,
   openClientWizard,
 } from "./helpers/client-wizard";
-import { expectSwitchByLabel } from "./helpers/form-controls";
+import { expectSwitchByLabel, expectTimeByLabel } from "./helpers/form-controls";
 import { UI_TEXT } from "./helpers/ui-texts";
 
 const seedData = loadE2ESeedData();
@@ -96,11 +96,38 @@ test.describe("Client wizard - high secure client", () => {
     await wizard
       .locator('textarea[name="secretDescription"]')
       .fill(secretDescription);
-    await finishWizardFromSecretStep(page);
+
+    // FAPI 2.0 rejects a JWT dated more than 60 seconds ahead, so the review step
+    // has to show the DPoP clock skew the type enforces instead of the 5 minute default.
+    await finishWizardFromSecretStep(page, async () => {
+      const dPoPClockSkewRow = page
+        .getByRole("dialog")
+        .getByText(`${UI_TEXT.wizard.dPoPClockSkewLabel}:`, { exact: true })
+        .locator("..");
+
+      await expect(dPoPClockSkewRow).toContainText(
+        UI_TEXT.wizard.highSecureDPoPClockSkewSummary,
+      );
+    });
 
     await expect(page.locator('input[name="clientId"]')).toHaveValue(clientId, {
       timeout: 60_000,
     });
+
+    // The summary is not just a label - the client is saved with that clock skew.
+    await page.getByRole("tab", { name: "Advanced", exact: true }).click();
+    await page.getByRole("tab", { name: "Tokens", exact: true }).click();
+    await page.getByRole("tab", { name: "DPoP Settings", exact: true }).click();
+    const dPoPSettingsPanel = page.getByRole("tabpanel", {
+      name: "DPoP Settings",
+      exact: true,
+    });
+    await expectSwitchByLabel(dPoPSettingsPanel, "Require DPoP", true);
+    await expectTimeByLabel(
+      dPoPSettingsPanel,
+      UI_TEXT.wizard.dPoPClockSkewLabel,
+      UI_TEXT.wizard.highSecureDPoPClockSkewValue,
+    );
 
     // The key really is the client's secret, next to what the type enforces.
     const secretsPanel = await openSecretsTab(page);

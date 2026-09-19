@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { clientTypeRules, getSecretStepNotice } from "./ClientTypeRules";
+import type { TFunction } from "i18next";
+import {
+  HIGH_SECURE_DPOP_CLOCK_SKEW_SECONDS,
+  clientTypeRules,
+  enforcedFieldMeta,
+  getSecretStepNotice,
+} from "./ClientTypeRules";
 import { mapFormDataToCreateClient } from "../../ClientSchema";
 import {
   ClientType,
@@ -73,6 +79,35 @@ describe("client type rules", () => {
     expect(
       Object.keys(clientTypeRules[ClientType.HighSecure].enforcedValues),
     ).not.toContain("secretType");
+  });
+
+  it("creates a high security client with a DPoP clock skew inside the FAPI 2.0 bounds", () => {
+    // The profile accepts a JWT dated up to 10 seconds in the future and rejects
+    // one dated more than 60 seconds ahead - the 5 minute default is outside of it.
+    expect(HIGH_SECURE_DPOP_CLOCK_SKEW_SECONDS).toBeGreaterThanOrEqual(10);
+    expect(HIGH_SECURE_DPOP_CLOCK_SKEW_SECONDS).toBeLessThanOrEqual(60);
+
+    expect(createViaWizard(ClientType.HighSecure).dPoPClockSkew).toBe(
+      "00:00:30",
+    );
+  });
+
+  it("leaves the DPoP clock skew of the other client types on the default", () => {
+    for (const clientType of Object.values(ClientType)) {
+      if (clientType !== ClientType.HighSecure) {
+        expect(createViaWizard(clientType).dPoPClockSkew).toBe("00:05:00");
+      }
+    }
+  });
+
+  it("shows the enforced DPoP clock skew in seconds, like the code lifetime", () => {
+    const { dPoPClockSkew } = clientTypeRules[ClientType.HighSecure]
+      .enforcedValues;
+    const t = ((key: string) => key) as unknown as TFunction;
+
+    expect(enforcedFieldMeta.dPoPClockSkew.format?.(dPoPClockSkew!, t)).toBe(
+      "30 s",
+    );
   });
 });
 

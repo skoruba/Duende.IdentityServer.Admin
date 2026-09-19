@@ -3,6 +3,34 @@ import type { TFunction } from "i18next";
 
 type TranslationKey = string;
 
+/**
+ * The FAPI 2.0 Security Profile has a JWT dated up to 10 seconds in the future accepted,
+ * allows up to 60 seconds and nothing beyond, and names 30 seconds as the value ecosystems
+ * needed to get rid of clock skew issues. The 5 minute default of IdentityServer is outside
+ * of that, and the JWT clock skew of the server does not cover DPoP proofs - their skew is
+ * a client setting.
+ */
+export const HIGH_SECURE_DPOP_CLOCK_SKEW_SECONDS = 30;
+
+const SECONDS_PER_MINUTE = 60;
+const SECONDS_PER_HOUR = 3600;
+
+/** The API takes the clock skew as a .NET TimeSpan - hh:mm:ss. */
+const secondsToTimeSpan = (totalSeconds: number) =>
+  [
+    Math.floor(totalSeconds / SECONDS_PER_HOUR),
+    Math.floor((totalSeconds % SECONDS_PER_HOUR) / SECONDS_PER_MINUTE),
+    totalSeconds % SECONDS_PER_MINUTE,
+  ]
+    .map((part) => String(part).padStart(2, "0"))
+    .join(":");
+
+const timeSpanToSeconds = (timeSpan: string) => {
+  const [hours, minutes, seconds] = timeSpan.split(":").map(Number);
+
+  return hours * SECONDS_PER_HOUR + minutes * SECONDS_PER_MINUTE + seconds;
+};
+
 export type EnforcedValues = Partial<{
   requirePkce: boolean;
   requireDPoP: boolean;
@@ -10,6 +38,7 @@ export type EnforcedValues = Partial<{
   allowOfflineAccess: boolean;
   requireClientSecret: boolean;
   authorizationCodeLifetime: number;
+  dPoPClockSkew: string;
 }>;
 
 export interface ClientTypeRuleSet {
@@ -28,7 +57,7 @@ export const enforcedFieldMeta: Record<
   keyof NonNullable<EnforcedValues>,
   {
     labelKey: TranslationKey;
-    format?: (value: boolean | number, t: TFunction) => string;
+    format?: (value: boolean | number | string, t: TFunction) => string;
   }
 > = {
   requirePkce: {
@@ -54,6 +83,10 @@ export const enforcedFieldMeta: Record<
   authorizationCodeLifetime: {
     labelKey: "Client.Label.AuthorizationCodeLifetime_Label",
     format: (v) => `${v} s`,
+  },
+  dPoPClockSkew: {
+    labelKey: "Client.Label.DPoPClockSkew_Label",
+    format: (v) => `${timeSpanToSeconds(String(v))} s`,
   },
 };
 
@@ -86,6 +119,7 @@ export const clientTypeRules: Record<ClientType, ClientTypeRuleSet> = {
       allowOfflineAccess: true,
       requireClientSecret: true,
       authorizationCodeLifetime: 60,
+      dPoPClockSkew: secondsToTimeSpan(HIGH_SECURE_DPOP_CLOCK_SKEW_SECONDS),
     },
     descriptionLabels: [
       "Client.Label.RequirePkce_Label",
@@ -94,6 +128,7 @@ export const clientTypeRules: Record<ClientType, ClientTypeRuleSet> = {
       "Client.Label.AllowOfflineAccess_Label",
       "Client.Label.RequireClientSecret_Label",
       "Client.Label.AuthorizationCodeLifetime_Label",
+      "Client.Label.DPoPClockSkew_Label",
     ],
     lockedFields: [
       "requirePkce",
@@ -102,6 +137,7 @@ export const clientTypeRules: Record<ClientType, ClientTypeRuleSet> = {
       "allowOfflineAccess",
       "requireClientSecret",
       "authorizationCodeLifetime",
+      "dPoPClockSkew",
     ],
     defaultSecretType: SecretTypes.Jwk,
   },
