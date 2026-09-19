@@ -84,7 +84,7 @@ step rather than a rewrite.
 - The `*MustStartWith` configuration rules compared the prefix with the culture of the host. On a Czech host `chat-client` did not start with `c`, because *ch* sorts as a single letter there; the comparison is ordinal now
 - Array parameters of a configuration rule accept non-empty strings only. An empty forbidden string matched every name and flagged the whole configuration, and a number silently put the rule back on its defaults. Rules already stored with such an entry ignore it
 - Configuration issues of a client without a name are listed under its client id instead of a blank name
-- `LoginWithRecoveryCode` and the deletion of a server-side session validate the anti-forgery token their forms already sent
+- `LoginWithRecoveryCode`, `ForgetTwoFactorClient`, and the deletion of a server-side session validate the anti-forgery token their forms already sent
 - The `delegation` extension grant answered 500 instead of `invalid_grant` for a token without a `sub` claim, such as one issued for client credentials
 - Closing the key pair dialog while a large RSA key was still being generated left the finished private key in the closed dialog, and the next open started on its result. A generation that was closed is now discarded
 - The key pair dialog explains why generation is unavailable outside a secure context instead of only disabling the button

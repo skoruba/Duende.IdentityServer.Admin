@@ -17,8 +17,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
             // and create it again, so a re-created rule can already sit on one of them. Such rows move to a
             // fresh Id first. RuleType is unique, hence the temp table. The sequence moves past the reserved
             // range beforehand, so the moved rows do not land on it again.
+            // setval runs through PERFORM in its own block: an idempotent script wraps this whole statement
+            // in a PL/pgSQL block, where a bare SELECT fails with "query has no destination for result data".
             migrationBuilder.Sql(@"
-SELECT setval(pg_get_serial_sequence('""ConfigurationRules""', 'Id'), GREATEST((SELECT COALESCE(MAX(""Id""), 0) FROM ""ConfigurationRules""), 23));
+DO $seq$ BEGIN PERFORM setval(pg_get_serial_sequence('""ConfigurationRules""', 'Id'), GREATEST((SELECT COALESCE(MAX(""Id""), 0) FROM ""ConfigurationRules""), 23)); END $seq$;
 
 CREATE TEMP TABLE ""_MovedConfigurationRules"" AS
 SELECT ""RuleType"", ""ResourceType"", ""IssueType"", ""IsEnabled"", ""Configuration"", ""MessageTemplate"", ""FixDescription"", ""CreatedAt"", ""UpdatedAt""

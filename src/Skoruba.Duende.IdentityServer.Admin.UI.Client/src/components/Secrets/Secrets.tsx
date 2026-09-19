@@ -62,7 +62,7 @@ const SecretsTable: React.FC<SecretsTableProps> = ({
   const queryClient = useQueryClient();
 
   const secretsQuery = useQuery({
-    queryKey: [...queryKey, pagination],
+    queryKey: [...queryKey, resourceId, pagination],
     queryFn: () =>
       getSecrets(resourceId, pagination.pageIndex, pagination.pageSize),
     placeholderData: (previousData) => previousData,
