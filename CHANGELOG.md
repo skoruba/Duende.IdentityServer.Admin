@@ -48,7 +48,7 @@ step rather than a rewrite.
 - Identity resources are left out of the client scope picker for clients without a user flow, because they cannot be issued without one
 - Grant type ids moved into a single `GrantTypeIds` constant covering all ids the API returns, replacing the two-value `GrantTypes` enum
 - Downloading generated content reuses one helper shared with the JWK dialog
-- Updated the solution to Duende IdentityServer 8.0.8, including EF migrations for the configuration, persisted grant, and identity stores
+- Updated the solution to Duende IdentityServer 8.0.8, including EF migrations for the configuration and persisted grant stores
 - Only `SharedSecret` is hashed, so the "you cannot retrieve it" warning and password masking are limited to that type; X509 types now state that the value is stored as it is
 - Switching the client secret type clears the value, so a JWK cannot end up hashed as a shared secret or the other way round
 - Secret type names are humanized for display only; the value sent to the API stays exactly as the backend expects it
@@ -99,7 +99,8 @@ step rather than a rewrite.
 
 - `GrantTypes` in the Admin UI client is replaced by `GrantTypeIds`, which also fixes the `ClientCreadentials` misspelling. Forks referencing the enum need updating
 - Custom forks of the client edit tabs need to move from hand-written `Tabs` markup to the `SettingsTabs` component to keep working with hidden tabs
-- Duende IdentityServer 8 requires new EF migrations for the configuration, persisted grant, and identity stores. Review them and back up your database before applying
+- Duende IdentityServer 8 requires new EF migrations for the configuration and persisted grant stores. Review them and back up your database before applying
+- PostgreSQL only: the identity store gets the `IdentitySchemaUpdate` migration, which is unrelated to IdentityServer 8. It turns the key columns `UserLogins.LoginProvider`, `UserLogins.ProviderKey`, `UserTokens.LoginProvider`, and `UserTokens.Name` from `text` into `character varying(450)`, the length the model has asked for since 3.0.0 and SQL Server has always had. 3.0.0 left the PostgreSQL model snapshot out of step with the model, which this settles. Existing values are kept; the migration stops if one of them is longer than 450 characters. SQL Server needs no identity migration
 - The admin configuration store gets one migration, `AddNamingScopeAndFapiRules`, which seeds the seven new configuration rules (Ids 17 to 23, all disabled). Apply it together with the IdentityServer 8 migrations. 3.0.0 lets administrators delete a rule and create it again, which can already occupy one of those Ids; the migration moves such a rule to a new Id first instead of failing on a primary key conflict
 - The IdentityServer 8 configuration and persisted grant migrations create the SAML tables (`SamlServiceProviders`, `SamlSigninStates`, `SamlLogoutSessions`, and related). The schema is created, but **managing SAML service providers from the Admin UI is not part of this release** and is planned for 3.2.0
 - The client creation wizard now takes a single redirect URI. Custom forks of the wizard steps need updating
