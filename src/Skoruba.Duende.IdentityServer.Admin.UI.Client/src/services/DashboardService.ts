@@ -5,7 +5,7 @@ import {
   DashboardIdentityServerResult,
 } from "@/models/Dashboard/DashboardModels";
 import { KeyApiDto } from "@/models/Keys/KeysModel";
-import { getAuditLogs } from "./AuditLogsService";
+import { mapAuditLog } from "./AuditLogsService";
 import {
   ApiResourceEditUrl,
   ApiScopeEditUrl,
@@ -193,35 +193,20 @@ export const useDashboardKeys = () =>
     ...queryWithoutCache,
   });
 
-// Every audit event name ends with one of these verbs or with "Requested".
-// Read events vastly outnumber changes (the dashboard itself produces them),
-// so changes are queried per verb instead of being filtered out of one page.
-const AUDIT_CHANGE_VERBS = [
-  "Added",
-  "Updated",
-  "Deleted",
-  "Saved",
-  "Changed",
-  "Cloned",
-];
-
+// Dashboard/GetRecentAuditChanges leaves the read events out on the server, in one
+// bounded query. Filtering on the client meant one request (and one COUNT over the
+// whole audit log) per change verb.
 export const useRecentAuditChanges = (count: number) =>
   useQuery({
     queryKey: [queryKeys.dashboardRecentAuditLogs, count],
     queryFn: async () => {
-      const pages = await Promise.all(
-        AUDIT_CHANGE_VERBS.map((verb) =>
-          getAuditLogs({ event: `${verb}Event` }, 0, count),
-        ),
+      const dashboardClient = new client.DashboardClient(
+        ApiHelper.getApiBaseUrl(),
       );
 
-      return pages
-        .flatMap((page) => page.items)
-        .sort(
-          (a, b) =>
-            new Date(b.created).getTime() - new Date(a.created).getTime(),
-        )
-        .slice(0, count);
+      return (await dashboardClient.getRecentAuditChanges(count)).map(
+        mapAuditLog,
+      );
     },
     ...queryWithoutCache,
   });

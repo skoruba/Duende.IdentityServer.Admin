@@ -450,6 +450,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
             where TAdminAuditLogDbContext : IAuditLoggingDbContext<AuditLog>, IAuditLoggingDbContext<TAuditLog>
             where TAuditLog : AuditLog, new()
         {
+            // The section is optional: every DashboardConfiguration value has a default.
+            services.AddSingleton(configuration.GetSection(nameof(DashboardConfiguration)).Get<DashboardConfiguration>() ?? new DashboardConfiguration());
+
             services.AddSingleton(configuration.GetSection(nameof(IdentityServerData))
                 .Get<IdentityServerData>());
 

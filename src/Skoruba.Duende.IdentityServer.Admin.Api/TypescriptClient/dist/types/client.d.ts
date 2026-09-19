@@ -251,6 +251,7 @@ export declare class ConfigurationRulesClient extends WebApiClientBase implement
 }
 export interface IDashboardClient {
     getDashboardIdentityServer(auditLogsLastNumberOfDays: number | undefined): Promise<DashboardDto>;
+    getRecentAuditChanges(count: number | null | undefined): Promise<AuditLogDto[]>;
     getDashboardIdentity(): Promise<DashboardIdentityDto>;
 }
 export declare class DashboardClient extends WebApiClientBase implements IDashboardClient {
@@ -262,6 +263,8 @@ export declare class DashboardClient extends WebApiClientBase implements IDashbo
     });
     getDashboardIdentityServer(auditLogsLastNumberOfDays: number | undefined): Promise<DashboardDto>;
     protected processGetDashboardIdentityServer(response: Response): Promise<DashboardDto>;
+    getRecentAuditChanges(count: number | null | undefined): Promise<AuditLogDto[]>;
+    protected processGetRecentAuditChanges(response: Response): Promise<AuditLogDto[]>;
     getDashboardIdentity(): Promise<DashboardIdentityDto>;
     protected processGetDashboardIdentity(response: Response): Promise<DashboardIdentityDto>;
 }
@@ -1224,6 +1227,36 @@ export interface IDashboardAuditLogDto {
     total: number;
     created: Date;
 }
+export declare class AuditLogDto implements IAuditLogDto {
+    id: number;
+    event: string | undefined;
+    source: string | undefined;
+    category: string | undefined;
+    subjectIdentifier: string | undefined;
+    subjectName: string | undefined;
+    subjectType: string | undefined;
+    subjectAdditionalData: string | undefined;
+    action: string | undefined;
+    data: string | undefined;
+    created: Date;
+    constructor(data?: IAuditLogDto);
+    init(_data?: any): void;
+    static fromJS(data: any): AuditLogDto;
+    toJSON(data?: any): any;
+}
+export interface IAuditLogDto {
+    id: number;
+    event: string | undefined;
+    source: string | undefined;
+    category: string | undefined;
+    subjectIdentifier: string | undefined;
+    subjectName: string | undefined;
+    subjectType: string | undefined;
+    subjectAdditionalData: string | undefined;
+    action: string | undefined;
+    data: string | undefined;
+    created: Date;
+}
 export declare class DashboardIdentityDto implements IDashboardIdentityDto {
     usersTotal: number;
     rolesTotal: number;
@@ -1435,36 +1468,6 @@ export interface IAuditLogsDto {
     logs: AuditLogDto[] | undefined;
     totalCount: number;
     pageSize: number;
-}
-export declare class AuditLogDto implements IAuditLogDto {
-    id: number;
-    event: string | undefined;
-    source: string | undefined;
-    category: string | undefined;
-    subjectIdentifier: string | undefined;
-    subjectName: string | undefined;
-    subjectType: string | undefined;
-    subjectAdditionalData: string | undefined;
-    action: string | undefined;
-    data: string | undefined;
-    created: Date;
-    constructor(data?: IAuditLogDto);
-    init(_data?: any): void;
-    static fromJS(data: any): AuditLogDto;
-    toJSON(data?: any): any;
-}
-export interface IAuditLogDto {
-    id: number;
-    event: string | undefined;
-    source: string | undefined;
-    category: string | undefined;
-    subjectIdentifier: string | undefined;
-    subjectName: string | undefined;
-    subjectType: string | undefined;
-    subjectAdditionalData: string | undefined;
-    action: string | undefined;
-    data: string | undefined;
-    created: Date;
 }
 export declare class PersistedGrantSubjectsApiDto implements IPersistedGrantSubjectsApiDto {
     totalCount: number;

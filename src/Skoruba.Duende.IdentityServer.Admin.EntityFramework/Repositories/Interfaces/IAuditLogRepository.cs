@@ -20,6 +20,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Inter
 
         Task<int> GetDashboardAuditLogsAverageAsync(int lastNumberOfDays,
             CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// The newest audit entries that record a change, newest first. Read events
+        /// ("...RequestedEvent") are left out.
+        /// </summary>
+        /// <param name="count">How many changes to return.</param>
+        /// <param name="scanLimit">How many of the newest entries are inspected to find them.</param>
+        Task<List<TAuditLog>> GetRecentChangesAsync(int count, int scanLimit, CancellationToken cancellationToken = default);
         
         Task DeleteLogsOlderThanAsync(DateTime deleteOlderThan);
 

@@ -6,6 +6,20 @@ import {
 import { client } from "@skoruba/duende.identityserver.admin.api.client";
 import { format } from "date-fns";
 
+export const mapAuditLog = (log: client.AuditLogDto): AuditLogData => ({
+  id: log.id,
+  event: log.event,
+  source: log.source,
+  category: log.category,
+  subjectIdentifier: log.subjectIdentifier,
+  subjectName: log.subjectName,
+  subjectType: log.subjectType,
+  subjectAdditionalData: log.subjectAdditionalData,
+  action: log.action,
+  data: log.data,
+  created: log.created,
+});
+
 export const getAuditLogs = async (
   filters: Partial<AuditLogData>,
   page: number,
@@ -29,19 +43,7 @@ export const getAuditLogs = async (
   );
 
   return {
-    items: (auditLogs.logs ?? []).map((log) => ({
-      id: log.id,
-      event: log.event,
-      source: log.source,
-      category: log.category,
-      subjectIdentifier: log.subjectIdentifier,
-      subjectName: log.subjectName,
-      subjectType: log.subjectType,
-      subjectAdditionalData: log.subjectAdditionalData,
-      action: log.action,
-      data: log.data,
-      created: log.created,
-    })),
+    items: (auditLogs.logs ?? []).map(mapAuditLog),
     totalCount: auditLogs.totalCount,
   };
 };

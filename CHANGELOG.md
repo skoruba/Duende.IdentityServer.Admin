@@ -11,6 +11,15 @@ step rather than a rewrite.
 ### Added
 
 - **Actionable dashboard and command palette.** The home page now combines service health, configuration issues, resource counts, audit trends, recent activity, and contextual quick actions. A keyboard-accessible command palette provides fast navigation and search across the Admin UI
+- The dashboard header works as a status bar: the environment and IdentityServer authority the Admin UI manages, the service health with the number of passing checks, the version, and a link to the open configuration issues. Health is reported as *Service healthy*, *degraded*, or *unhealthy*, and as unavailable rather than green when it cannot be read
+- The monitoring card names the most widespread problem of the highest severity by its rule - for example *8 clients affected · Client Access Token Lifetime Too Long* - and each severity links to the issues list filtered to it. Resource tiles show how many clients, API resources, API scopes, and identity resources need attention
+- The audit trend fills days without events, draws the alert threshold (1.5× the average of active days, never below 50 operations a day), marks past days above it, and links to the audit log of an anomalous day. The chart appears once three days have audit data
+- Recent activity lists configuration changes only, labels credential changes as *Sensitive* and role, claim, and grant changes as *Permission change*, and opens a detail with the target, the caller's IP address, the request, the trace id, and the recorded data
+- The command palette opens with Ctrl+K or ⌘K from any page and searches clients, users, API resources, and API scopes alongside navigation and the *new ...* actions
+- `Info/GetEnvironment` returns the hosting environment name and the IdentityServer base URL. `Info/GetHealth` returns the health report for typed clients: unlike `/health`, which answers 503 when something is unhealthy, it always answers 200 and carries the status in the body, reports `Unknown` for hosts that register no health checks, and exposes check names and statuses only. Both require the administration policy
+- `Dashboard/GetRecentAuditChanges` returns the newest audit entries that record a change, leaving the read events out. The audit log is indexed by its primary key only and mostly holds reads, so the query inspects a bounded number of the newest entries in a single statement without a `COUNT`, and its cost does not grow with the size of the log
+- An optional `DashboardConfiguration` section tunes it: `RecentAuditChangesDefaultCount` (8), `RecentAuditChangesMaxCount` (50), and `RecentAuditChangesScanLimit` (5000). Every value has a default, so the section can be left out or set only what it changes
+- The configuration issues list accepts `?type=Error|Warning|Recommendation` and the audit log accepts `?event=` and `?created=yyyy-MM-dd`, so both can be linked to with a filter applied
 - **Client integration snippets.** A new *Integration* tab on the client detail generates the .NET 10 wire-up for the client being edited - NuGet packages, `appsettings.json`, the matching `dotnet user-secrets` commands, and `Program.cs`. Only the authorization code and client credentials flows are generated, and everything is derived from the form, so the snippets follow changes before they are saved: callback paths come from the redirect URIs, the scope list from the allowed scopes, PKCE and pushed authorization from their switches
 - Client authentication in the generated code can be a shared secret or **private_key_jwt**, which adds a `ClientAssertionService` reading the signing algorithm from the JWK itself. The mode is preselected from the client's registered secrets, so a client holding a JWK secret gets the assertion variant without asking
 - A separate step generates the **DPoP proof key** when the client requires DPoP, which - unlike the client credential - is the application's own key and is registered nowhere. The key follows the *Keep secrets out of the code* switch like the client credential: stored in user secrets, or inlined with a warning
@@ -29,6 +38,7 @@ step rather than a rewrite.
   - `ClientSigningAlgorithmsMustBeFapiCompliant`, which reports signing algorithms outside the FAPI 2.0 set. The profile's section 5.4 is a closed enumeration, so the longer RS/PS/ES variants are non-conformant despite the larger key. Both the allowed identity token signing algorithms and the `alg` of JWK secrets are checked; disabled by default and the permitted set is configurable
   - `ApiResourceSigningAlgorithmsMustBeFapiCompliant`, the API resource counterpart: the access token signing algorithm is decided by the API resource, so a resource allowing RS256 makes every client requesting its scopes non-conformant. Disabled by default, same configurable set
 - Playwright coverage for the JWK secret type: key pair generation, public-key-only storage, masked private key with copy and download in JWK and PEM form, the discard confirmation, EC key generation, and value validation
+- Integration tests for the `Info` endpoints, service tests for the owner recorded in secret audit events, and Vitest coverage for the dashboard logic - issue grouping, rule matching, the activity series, and audit event descriptions
 
 ### Changed
 
@@ -43,11 +53,16 @@ step rather than a rewrite.
 - The client creation wizard takes a single redirect URI instead of a list
 - Clipboard copying moved into a shared hook that reports failures instead of rejecting unhandled outside a secure context
 - Updated `react-router-dom` to 7.18.2 and `postcss` to 8.5.25 in the Admin UI, and forced `brace-expansion` to 5.0.8 in the STS, clearing the actionable npm audit findings
-- Updated the Admin UI to `@skoruba/duende.identityserver.admin.api.client` 3.1.1, which carries the new configuration rule types, and to Vitest 5, together with transitive updates from `npm audit fix`, leaving `npm audit` clean
+- Updated the Admin UI to `@skoruba/duende.identityserver.admin.api.client` 3.1.4, which carries the new configuration rule types, the `Info` endpoints, and `Dashboard/GetRecentAuditChanges`, and to Vitest 5, together with transitive updates from `npm audit fix`, leaving `npm audit` clean
+- Configuration issue results are cached in the Admin UI for two minutes instead of being recomputed on every page and window focus - both endpoints validate the whole configuration. Saving a client, API resource, API scope, identity resource, secret, property, or configuration rule refreshes them, and the configuration issues page always loads fresh data
+- The `ClientSecretAdded`, `ClientSecretDeleted`, `ApiSecretAdded`, and `ApiSecretDeleted` audit events carry `ClientName` or `ApiResourceName`. The change is additive; consumers parsing the audit `Data` JSON see one more property. Entries written before the upgrade keep their original shape, and the Admin UI falls back to a link to the owning resource for them
+- *API* is written in capitals throughout the Admin UI, including page titles, buttons, notifications, and audit event names
 
 ### Fixed
 
-- Audit entries for client and API-resource secret changes now retain the owning resource name. Recent activity therefore shows a useful target rather than an opaque database id, including when an API deletes a secret by its id alone
+- Audit entries for client and API-resource secret changes now retain the owning resource name. Recent activity therefore shows a useful target rather than an opaque database id, including when an API deletes a secret by its id alone - such deletions used to be audited with the owner id `0`. A client without a name is recorded under its client id
+- The navigation requested the configuration issue summary before the session was confirmed. Without a session the request answered 401 and the global error handler redirected to the unauthorized page while the login flow was still running
+- The monitoring badge in the mobile navigation left errors out of the count
 - **The wizard created public clients that required a client secret.** The Public client type never asks for a secret, but the created client still ended up with `RequireClientSecret = true`, so it could not authenticate at the token endpoint. The type now enforces `RequireClientSecret = false` and shows it on the summary step
 - The advanced client settings rendered an *Other Settings* panel that had no matching tab trigger and could never be opened
 - **Device flow consent is never remembered** ([RFC 8628](https://www.rfc-editor.org/rfc/rfc8628)). The device that starts a device flow is not the device the user authenticates on, so persisted consent could be replayed against an attacker-controlled device. `ConsentResponse.RememberConsent` is now always false for device flow, the "Remember My Decision" checkbox is gone from the user code confirmation page, and the device view model no longer fills `AllowRememberConsent`, so a forged POST cannot re-enable it either
@@ -63,6 +78,7 @@ step rather than a rewrite.
 - The admin configuration store gets one migration, `AddNamingScopeAndFapiRules`, which seeds the seven new configuration rules (Ids 17 to 23, all disabled). Apply it together with the IdentityServer 8 migrations
 - The IdentityServer 8 configuration and persisted grant migrations create the SAML tables (`SamlServiceProviders`, `SamlSigninStates`, `SamlLogoutSessions`, and related). The schema is created, but **managing SAML service providers from the Admin UI is not part of this release** and is planned for 3.2.0
 - The client creation wizard now takes a single redirect URI. Custom forks of the wizard steps need updating
+- `IAuditLogRepository`, `IAuditLogService`, and `IDashboardService` each gain one method for the recent audit changes (`GetRecentChangesAsync`, `GetRecentAuditChangesAsync`). Forks deriving from the built-in classes inherit it; forks implementing the interfaces themselves need to add it
 
 ## [3.0.0] - 2026-07-15
 
