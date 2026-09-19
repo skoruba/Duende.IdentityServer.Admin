@@ -189,6 +189,14 @@ public class ConfigurationRulesService : IConfigurationRulesService
                                 throw new InvalidOperationException(
                                     $"Required parameter '{paramName}' cannot be an empty array");
                             }
+
+                            // Every array parameter is a list of names - an empty entry would match everything,
+                            // anything but a string would silently fall back to the rule defaults
+                            if (value.EnumerateArray().Any(item => item.ValueKind != JsonValueKind.String || string.IsNullOrWhiteSpace(item.GetString())))
+                            {
+                                throw new InvalidOperationException(
+                                    $"Parameter '{paramName}' must contain non-empty strings only. Value: {value}");
+                            }
                             break;
 
                         default:

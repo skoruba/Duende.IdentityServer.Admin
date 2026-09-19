@@ -67,9 +67,6 @@ const ApiScopeForm: React.FC<ApiScopeFormProps> = ({
       queryClient.invalidateQueries({
         queryKey: [queryKeys.configurationIssues],
       });
-      queryClient.invalidateQueries({
-        queryKey: [queryKeys.configurationIssuesSummary],
-      });
       toast({
         title: <Hoorey />,
         description:

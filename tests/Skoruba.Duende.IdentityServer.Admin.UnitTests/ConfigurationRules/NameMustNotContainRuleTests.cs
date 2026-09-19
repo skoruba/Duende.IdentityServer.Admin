@@ -82,6 +82,20 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.ConfigurationRules
 
         [Theory]
         [MemberData(nameof(Targets))]
+        public void EmptyForbiddenStringsAreIgnored(string target)
+        {
+            var rule = CreateRule(target);
+
+            // Every name contains the empty string - it must not flag the whole configuration
+            rule.Validate(CreateContext(target, "orders"), "{\"forbiddenStrings\": [\"\", null]}").Should().BeEmpty();
+
+            var issues = rule.Validate(CreateContext(target, "orders", "orders_test"), "{\"forbiddenStrings\": [\"\", \"test\"]}");
+            issues.Should().ContainSingle();
+            issues[0].MessageParameters["allForbiddenStrings"].Should().Be("test");
+        }
+
+        [Theory]
+        [MemberData(nameof(Targets))]
         public void ForbiddenStringIsFoundAnywhereAndInAnyCase(string target)
         {
             var rule = CreateRule(target);

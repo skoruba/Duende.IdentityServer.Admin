@@ -497,8 +497,9 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
 
             if (!identityServerOptions.KeyManagement.Enabled)
             {
-                builder.AddCustomSigningCredential(configuration);
-                builder.AddCustomValidationKey(configuration);
+                // Without the automatic key management the profile has to reach the configured certificate as well
+                builder.AddCustomSigningCredential(configuration, fapi2SecurityProfile.Enabled);
+                builder.AddCustomValidationKey(configuration, fapi2SecurityProfile.Enabled);
             }
 
             builder.AddExtensionGrantValidator<DelegationGrantValidator>();
@@ -536,7 +537,8 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
             };
 
             // Replace, rather than append to, a configured/default list so the server
-            // cannot emit a JWT with an algorithm outside this profile.
+            // cannot emit a JWT with an algorithm outside this profile. With the automatic
+            // key management off, AddCustomSigningCredential applies the same restriction.
             options.KeyManagement.SigningAlgorithms.Clear();
             options.KeyManagement.SigningAlgorithms.Add(
                 new SigningAlgorithmOptions(SecurityAlgorithms.RsaSsaPssSha256));
@@ -545,6 +547,9 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
             options.SupportedClientAssertionSigningAlgorithms = supportedAlgorithms;
             options.SupportedRequestObjectSigningAlgorithms = supportedAlgorithms;
             options.JwtValidationClockSkew = TimeSpan.FromSeconds(10);
+
+            // FAPI 2.0 accepts the issuer identifier as the only audience of a private_key_jwt client assertion
+            options.StrictClientAssertionAudienceValidation = true;
         }
 
         /// <summary>

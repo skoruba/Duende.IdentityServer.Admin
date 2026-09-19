@@ -542,6 +542,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> LoginWithRecoveryCode(LoginWithRecoveryCodeViewModel model)
         {
             if (!ModelState.IsValid)

@@ -15,7 +15,9 @@ public class ApiScopeNameMustNotContainRule : ConfigurationRuleValidatorBase, IC
     {
         var config = DeserializeConfiguration<ForbiddenConfig>(configuration);
 
-        if (config.ForbiddenStrings == null || !config.ForbiddenStrings.Any())
+        var forbiddenStrings = GetConfiguredValues(config.ForbiddenStrings);
+
+        if (!forbiddenStrings.Any())
         {
             return new List<ConfigurationIssueView>();
         }
@@ -25,7 +27,7 @@ public class ApiScopeNameMustNotContainRule : ConfigurationRuleValidatorBase, IC
 
         foreach (var scope in scopes)
         {
-            var foundForbiddenStrings = config.ForbiddenStrings
+            var foundForbiddenStrings = forbiddenStrings
                 .Where(forbidden => scope.Name.Contains(forbidden, System.StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
@@ -35,7 +37,7 @@ public class ApiScopeNameMustNotContainRule : ConfigurationRuleValidatorBase, IC
                 {
                     ["scopeName"] = scope.Name,
                     ["forbiddenStrings"] = string.Join(", ", foundForbiddenStrings),
-                    ["allForbiddenStrings"] = string.Join(", ", config.ForbiddenStrings)
+                    ["allForbiddenStrings"] = string.Join(", ", forbiddenStrings)
                 };
 
                 issues.Add(new ConfigurationIssueView

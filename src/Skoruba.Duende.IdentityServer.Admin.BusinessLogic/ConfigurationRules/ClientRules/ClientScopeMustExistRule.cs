@@ -40,7 +40,7 @@ public class ClientScopeMustExistRule : ConfigurationRuleValidatorBase, IConfigu
             {
                 var parameters = new Dictionary<string, string>
                 {
-                    ["clientName"] = client.ClientName ?? client.ClientId,
+                    ["clientName"] = GetDisplayName(client.ClientName, client.ClientId),
                     ["missingScopes"] = string.Join(", ", missingScopes),
                     ["count"] = missingScopes.Count.ToString()
                 };
@@ -48,7 +48,7 @@ public class ClientScopeMustExistRule : ConfigurationRuleValidatorBase, IConfigu
                 issues.Add(new ConfigurationIssueView
                 {
                     ResourceId = client.Id,
-                    ResourceName = client.ClientName ?? client.ClientId,
+                    ResourceName = GetDisplayName(client.ClientName, client.ClientId),
                     Message = FormatMessage(messageTemplate, parameters),
                     FixDescription = FormatMessage(fixDescriptionTemplate, parameters),
                     IssueType = issueType,

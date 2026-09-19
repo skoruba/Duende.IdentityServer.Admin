@@ -15,6 +15,7 @@ import {
 import { client } from "@skoruba/duende.identityserver.admin.api.client";
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys, queryWithoutCache } from "./QueryKeys";
+import { summarizeIssues } from "@/lib/configurationIssues/issueInsights";
 
 export const buildConfigurationIssueLink = (
   resourceId: string,
@@ -34,10 +35,10 @@ export const buildConfigurationIssueLink = (
   }
 };
 
-// Both endpoints run every enabled configuration rule against the whole
+// The endpoint runs every enabled configuration rule against the whole
 // configuration (all clients with their relations), so the result is cached
 // instead of being recomputed on every mount and window focus. It cannot go
-// silently stale: every successful mutation invalidates these queries
+// silently stale: every successful mutation invalidates the query
 // (see the MutationCache in helpers/ErrorHelper.ts).
 const configurationIssuesQueryOptions = {
   staleTime: 2 * 60 * 1000,
@@ -52,36 +53,39 @@ type ConfigurationIssuesQueryOptions = {
   refetchOnMount?: boolean | "always";
 };
 
+const configurationIssuesQuery = {
+  queryKey: [queryKeys.configurationIssues],
+  queryFn: async () => {
+    const configClient = new client.ConfigurationIssuesClient(
+      ApiHelper.getApiBaseUrl(),
+    );
+
+    // Use new API with filter parameters - skip pagination to get all results
+    const result = await configClient.get(null, null, null, 0, 50, true);
+    return result.issues || [];
+  },
+  ...configurationIssuesQueryOptions,
+};
+
 export const useConfigurationIssues = (
   options: ConfigurationIssuesQueryOptions = {},
 ) =>
   useQuery({
-    queryKey: [queryKeys.configurationIssues],
-    queryFn: async () => {
-      const configClient = new client.ConfigurationIssuesClient(
-        ApiHelper.getApiBaseUrl(),
-      );
-
-      // Use new API with filter parameters - skip pagination to get all results
-      const result = await configClient.get(null, null, null, 0, 50, true);
-      return result.issues || [];
-    },
-    ...configurationIssuesQueryOptions,
+    ...configurationIssuesQuery,
     ...options,
   });
 
+/**
+ * The severity counts, taken from the issue list instead of the GetSummary
+ * endpoint. Both run the full validation on the server, and the list is needed
+ * on the dashboard and the detail pages anyway - sharing one query halves the work.
+ */
 export const useConfigurationIssuesSummary = (
   options: ConfigurationIssuesQueryOptions = {},
 ) =>
   useQuery({
-    queryKey: [queryKeys.configurationIssuesSummary],
-    queryFn: async () => {
-      const configClient = new client.ConfigurationIssuesClient(
-        ApiHelper.getApiBaseUrl(),
-      );
-      return await configClient.getSummary();
-    },
-    ...configurationIssuesQueryOptions,
+    ...configurationIssuesQuery,
+    select: summarizeIssues,
     ...options,
   });
 

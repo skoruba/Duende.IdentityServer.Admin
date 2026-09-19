@@ -139,7 +139,7 @@ Define and track configuration rules for clients, API resources, and identity re
 ## ✅ Prerequisites
 
 - .NET 10 SDK
-- Node.js 18+ and npm (required for the React client)
+- Node.js 22.12+ and npm (required for the React client)
 - SQL Server (default LocalDB) or PostgreSQL
 - Duende IdentityServer 8.0.8
 
@@ -311,7 +311,7 @@ docker-compose up -d
 
 Docker images are available on [Docker Hub](https://hub.docker.com/u/skoruba).
 
-To publish images, check `build/publish-docker-images.ps1` and update the profile name.
+To publish images, check `build/publish-docker-images.sh` and update the profile name.
 
 ---
 

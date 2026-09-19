@@ -1,6 +1,7 @@
 // Copyright (c) Jan Škoruba. All Rights Reserved.
 // Licensed under the Apache License, Version 2.0.
 
+using System;
 using System.Collections.Generic;
 using Duende.IdentityServer.EntityFramework.Entities;
 using FluentAssertions;
@@ -128,6 +129,56 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.ConfigurationRules
             var secret = new ClientSecret { Type = "JWK", Value = "{\"kty\":\"RSA\"}" };
 
             Validate(CreateClient(null, secret)).Should().BeEmpty();
+        }
+
+        [Theory]
+        [InlineData("EC", "P-384", "ES384")]
+        [InlineData("EC", "P-521", "ES512")]
+        [InlineData("EC", "secp256k1", "ES256K")]
+        [InlineData("OKP", "Ed448", "EdDSA")]
+        public void JwkWithoutAlgIsReportedWhenItsCurveFixesANonPermittedAlgorithm(string keyType, string curve, string expectedAlgorithm)
+        {
+            var secret = new ClientSecret { Type = "JWK", Value = "{\"kty\":\"" + keyType + "\",\"crv\":\"" + curve + "\"}" };
+
+            var issues = Validate(CreateClient(null, secret));
+
+            issues.Should().ContainSingle();
+            issues[0].MessageParameters["algorithms"].Should().Be(expectedAlgorithm);
+        }
+
+        [Fact]
+        public void JwkWithoutAlgOnAPermittedCurveIsNotReported()
+        {
+            var secret = new ClientSecret { Type = "JWK", Value = "{\"kty\":\"EC\",\"crv\":\"P-256\"}" };
+
+            Validate(CreateClient(null, secret)).Should().BeEmpty();
+        }
+
+        [Fact]
+        public void ExplicitAlgWinsOverTheCurve()
+        {
+            var secret = new ClientSecret { Type = "JWK", Value = "{\"kty\":\"EC\",\"crv\":\"P-384\",\"alg\":\"ES256\"}" };
+
+            Validate(CreateClient(null, secret)).Should().BeEmpty();
+        }
+
+        [Fact]
+        public void ExpiredJwkSecretIsIgnored()
+        {
+            // The client already rotated to ES256 - the dead RS256 key can no longer authenticate it
+            var expired = JwkSecret("RS256");
+            expired.Expiration = DateTime.UtcNow.AddDays(-1);
+
+            Validate(CreateClient(null, expired, JwkSecret("ES256"))).Should().BeEmpty();
+        }
+
+        [Fact]
+        public void JwkSecretExpiringInTheFutureIsStillChecked()
+        {
+            var secret = JwkSecret("RS256");
+            secret.Expiration = DateTime.UtcNow.AddDays(1);
+
+            Validate(CreateClient(null, secret)).Should().ContainSingle();
         }
 
         [Fact]

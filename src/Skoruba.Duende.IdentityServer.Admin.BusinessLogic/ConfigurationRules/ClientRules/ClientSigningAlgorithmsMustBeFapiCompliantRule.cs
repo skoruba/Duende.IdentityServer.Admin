@@ -61,7 +61,7 @@ public class ClientSigningAlgorithmsMustBeFapiCompliantRule : ConfigurationRuleV
             issues.Add(new ConfigurationIssueView
             {
                 ResourceId = client.Id,
-                ResourceName = client.ClientName ?? client.ClientId,
+                ResourceName = GetDisplayName(client.ClientName, client.ClientId),
                 Message = FormatMessage(messageTemplate, parameters),
                 FixDescription = FormatMessage(fixDescriptionTemplate, parameters),
                 IssueType = issueType,
@@ -74,8 +74,10 @@ public class ClientSigningAlgorithmsMustBeFapiCompliantRule : ConfigurationRuleV
     }
 
     /// <summary>
-    /// A JWK secret carries its algorithm in the "alg" member. Secrets that are not
-    /// JWKs, or JWKs without an "alg", say nothing about the signing algorithm.
+    /// A JWK secret carries its algorithm in the "alg" member. Without it the curve of an
+    /// EC or OKP key still fixes the algorithm; an RSA key can sign with any RSA algorithm,
+    /// so it says nothing. Secrets that are not JWKs, and expired ones, are left out - an
+    /// expired key can no longer authenticate the client.
     /// </summary>
     private static IEnumerable<string> GetJwkSecretAlgorithms(Client client)
     {
@@ -88,6 +90,11 @@ public class ClientSigningAlgorithmsMustBeFapiCompliantRule : ConfigurationRuleV
         {
             if (!string.Equals(secret.Type, JwkSecretType, StringComparison.OrdinalIgnoreCase)
                 || string.IsNullOrWhiteSpace(secret.Value))
+            {
+                continue;
+            }
+
+            if (secret.Expiration.HasValue && secret.Expiration.Value <= DateTime.UtcNow)
             {
                 continue;
             }
@@ -106,17 +113,47 @@ public class ClientSigningAlgorithmsMustBeFapiCompliantRule : ConfigurationRuleV
         try
         {
             using var document = JsonDocument.Parse(jwk);
+            var root = document.RootElement;
 
-            return document.RootElement.ValueKind == JsonValueKind.Object
-                   && document.RootElement.TryGetProperty("alg", out var algorithm)
-                   && algorithm.ValueKind == JsonValueKind.String
-                ? algorithm.GetString()
-                : null;
+            if (root.ValueKind != JsonValueKind.Object)
+            {
+                return null;
+            }
+
+            var algorithm = ReadString(root, "alg");
+
+            return !string.IsNullOrWhiteSpace(algorithm)
+                ? algorithm
+                : GetAlgorithmOfCurve(ReadString(root, "kty"), ReadString(root, "crv"));
         }
         catch (JsonException)
         {
             // A malformed secret is not this rule's concern.
             return null;
         }
+    }
+
+    private static string ReadString(JsonElement jwk, string member)
+    {
+        return jwk.TryGetProperty(member, out var value) && value.ValueKind == JsonValueKind.String
+            ? value.GetString()
+            : null;
+    }
+
+    /// <summary>
+    /// RFC 7518 and RFC 8037 bind each curve to a single signing algorithm.
+    /// </summary>
+    private static string GetAlgorithmOfCurve(string keyType, string curve)
+    {
+        return (keyType, curve) switch
+        {
+            ("EC", "P-256") => "ES256",
+            ("EC", "P-384") => "ES384",
+            ("EC", "P-521") => "ES512",
+            ("EC", "secp256k1") => "ES256K",
+            ("OKP", "Ed25519") => "EdDSA",
+            ("OKP", "Ed448") => "EdDSA",
+            _ => null
+        };
     }
 }

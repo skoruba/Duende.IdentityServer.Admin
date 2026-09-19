@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.ConfigurationRules;
@@ -65,6 +66,15 @@ public abstract class ConfigurationRuleValidatorBase
             result = result.Replace($"{{{param.Key}}}", param.Value);
         }
         return result;
+    }
+
+    /// <summary>
+    /// Values of an array parameter that can take part in a comparison. An empty entry would match
+    /// every name and a null one would throw, so neither is allowed to reach the rule.
+    /// </summary>
+    protected static List<string> GetConfiguredValues(IEnumerable<string> values)
+    {
+        return values?.Where(value => !string.IsNullOrWhiteSpace(value)).ToList() ?? new List<string>();
     }
 
     protected static string GetDisplayName(string displayName, string name)

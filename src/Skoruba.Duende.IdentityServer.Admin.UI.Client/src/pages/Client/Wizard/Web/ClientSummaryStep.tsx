@@ -25,6 +25,7 @@ import Hoorey from "@/components/Hoorey/Hoorey";
 import { ClientEditUrl } from "@/routing/Urls";
 import { useNavigateWithBlockerInWizard } from "@/hooks/useConfirmUnsavedChanges";
 import { getNowForUnspecifiedDb } from "@/helpers/DateTimeHelper";
+import { resolveSecretExpiration } from "@/lib/clients/clientSecrets";
 
 export type ClientWizardFormSummaryData = BasicsFormData &
   ScopesFormData &
@@ -105,7 +106,7 @@ const ClientSummaryStep = () => {
         : new client.ClientSecretApiDto({
             id: 0,
             description: formData.secretDescription!,
-            expiration: formData.expiration || undefined,
+            expiration: resolveSecretExpiration(formData) ?? undefined,
             hashType: formData.secretHashType,
             type: formData.secretType!,
             value: formData.secretValue,

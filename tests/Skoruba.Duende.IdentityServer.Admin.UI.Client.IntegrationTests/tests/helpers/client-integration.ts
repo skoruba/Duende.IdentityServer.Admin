@@ -38,7 +38,7 @@ export async function openIntegrationSettings(panel: Locator): Promise<void> {
   await expect(trigger).toHaveAttribute("data-state", "open");
 }
 
-/** The option labels are not bound to their inputs, so the input is the label's sibling. */
+/** The input is the sibling of its label - the exact label match keeps options with a shared prefix apart. */
 export function getIntegrationOptionInput(
   panel: Locator,
   label: string,

@@ -4,6 +4,7 @@ import {
   getIssuesTotal,
   getTopIssueGroups,
   IssueLike,
+  summarizeIssues,
 } from "./issueInsights";
 
 const issue = (
@@ -50,5 +51,27 @@ describe("getIssuesTotal", () => {
   it("treats missing data as zero", () => {
     expect(getIssuesTotal(undefined)).toBe(0);
     expect(getIssuesTotal({ warnings: 2 })).toBe(2);
+  });
+});
+
+describe("summarizeIssues", () => {
+  it("counts every issue by its severity, like the summary endpoint", () => {
+    expect(summarizeIssues(issues)).toEqual({
+      errors: 2,
+      warnings: 3,
+      recommendations: 1,
+    });
+  });
+
+  it("reports zeros for an empty list", () => {
+    expect(summarizeIssues([])).toEqual({
+      errors: 0,
+      warnings: 0,
+      recommendations: 0,
+    });
+  });
+
+  it("adds up to the badge total", () => {
+    expect(getIssuesTotal(summarizeIssues(issues))).toBe(issues.length);
   });
 });

@@ -5,6 +5,7 @@ import {
   SnippetOptions,
   buildAuthorizationCodeSnippet,
   buildClientCredentialsSnippet,
+  csharpString,
   toApplicationName,
 } from "./dotnetSnippets";
 
@@ -565,5 +566,45 @@ describe("DPoP proof key storage", () => {
     expect(codeOf(confidentialClient, "dpop-key")).not.toContain(
       "dotnet user-secrets init",
     );
+  });
+});
+
+describe("csharpString", () => {
+  it.each([
+    ["plain", '"plain"'],
+    ['say "hi"', '"say \\"hi\\""'],
+    ["C:\\temp", '"C:\\\\temp"'],
+    ["a\r\n\tb", '"a\\r\\n\\tb"'],
+    // Each of these ends the line for the C# compiler, not just \r and \n.
+    ["a\u0085b", '"a\\u0085b"'],
+    ["a\u2028b", '"a\\u2028b"'],
+    ["a\u2029b", '"a\\u2029b"'],
+    ["a\0b", '"a\\u0000b"'],
+    ["a\u001bb", '"a\\u001bb"'],
+    ["caf\u00e9", '"caf\\u00e9"'],
+    // Outside the BMP - a surrogate pair of escapes is valid C#.
+    ["\u{1f600}", '"\\ud83d\\ude00"'],
+  ])("writes %j as %s", (value, expected) => {
+    expect(csharpString(value)).toBe(expected);
+  });
+
+  it("keeps a generated literal on a single line of printable ASCII", () => {
+    const literal = csharpString("scope\u2028\u0085\0\n\"x\"");
+
+    expect(literal).toMatch(/^[\x20-\x7e]+$/);
+  });
+
+  it("escapes a scope that would otherwise break out of the snippet", () => {
+    const document = buildClientCredentialsSnippet(
+      client({ scopes: ["api\u2028evil"] }),
+      options(),
+    );
+
+    const code = document.steps
+      .flatMap((step) => step.blocks.map((block) => block.code))
+      .join("\n");
+
+    expect(code).toContain('"api\\u2028evil"');
+    expect(code).not.toContain("\u2028");
   });
 });

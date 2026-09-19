@@ -39,7 +39,7 @@ import {
   KeyRound,
   Loader2,
 } from "lucide-react";
-import { useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Tip } from "../Tip/Tip";
 import { Warning } from "../Warning/Warning";
@@ -79,6 +79,8 @@ const GenerateJwkDialog = ({
 }: GenerateJwkDialogProps) => {
   const { t } = useTranslation();
   const copyToClipboard = useCopyToClipboard();
+  const algorithmId = useId();
+  const keySizeId = useId();
 
   const [algorithm, setAlgorithm] = useState<JwkAlgorithm>("PS256");
   const [modulusLength, setModulusLength] = useState<JwkModulusLength>(2048);
@@ -109,7 +111,9 @@ const GenerateJwkDialog = ({
       return;
     }
 
-    if (keyPair && !isAcknowledged) {
+    // Acknowledging only says the private key is saved - until the public key is
+    // applied (which closes the dialog directly) the key pair is still unused.
+    if (keyPair) {
       setIsDiscarding(true);
       return;
     }
@@ -148,7 +152,6 @@ const GenerateJwkDialog = ({
     toast({ title: t("Components.GenerateJwkDialog.PublicKeyApplied") });
     close();
   };
-
 
   const renderKeyPanel = ({
     jwk,
@@ -242,12 +245,14 @@ const GenerateJwkDialog = ({
           <>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label>{t("Components.GenerateJwkDialog.Algorithm")}</Label>
+                <Label htmlFor={algorithmId}>
+                  {t("Components.GenerateJwkDialog.Algorithm")}
+                </Label>
                 <Select
                   value={algorithm}
                   onValueChange={(value) => setAlgorithm(value as JwkAlgorithm)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger id={algorithmId}>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -279,14 +284,16 @@ const GenerateJwkDialog = ({
 
               {!isEcAlgorithm(algorithm) && (
                 <div className="space-y-2">
-                  <Label>{t("Components.GenerateJwkDialog.KeySize")}</Label>
+                  <Label htmlFor={keySizeId}>
+                    {t("Components.GenerateJwkDialog.KeySize")}
+                  </Label>
                   <Select
                     value={String(modulusLength)}
                     onValueChange={(value) =>
                       setModulusLength(Number(value) as JwkModulusLength)
                     }
                   >
-                    <SelectTrigger>
+                    <SelectTrigger id={keySizeId}>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -348,6 +355,7 @@ const GenerateJwkDialog = ({
                       type="button"
                       size="sm"
                       variant={format === keyFormat ? "secondary" : "ghost"}
+                      aria-pressed={format === keyFormat}
                       onClick={() => setFormat(keyFormat)}
                     >
                       {keyFormat.toUpperCase()}

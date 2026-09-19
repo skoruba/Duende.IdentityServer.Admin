@@ -76,9 +76,6 @@ const ApiResourceForm: React.FC<ApiResourceFormProps> = ({
       queryClient.invalidateQueries({
         queryKey: [queryKeys.configurationIssues],
       });
-      queryClient.invalidateQueries({
-        queryKey: [queryKeys.configurationIssuesSummary],
-      });
       toast({
         title: <Hoorey />,
         description:

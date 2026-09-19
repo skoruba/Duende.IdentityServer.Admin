@@ -77,9 +77,6 @@ const IdentityResourceForm: React.FC<Props> = ({
       queryClient.invalidateQueries({
         queryKey: [queryKeys.configurationIssues],
       });
-      queryClient.invalidateQueries({
-        queryKey: [queryKeys.configurationIssuesSummary],
-      });
       toast({
         title: <Hoorey />,
         description:

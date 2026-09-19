@@ -15,7 +15,9 @@ public class ClientNameMustNotContainRule : ConfigurationRuleValidatorBase, ICon
     {
         var config = DeserializeConfiguration<ForbiddenConfig>(configuration);
 
-        if (config.ForbiddenStrings == null || !config.ForbiddenStrings.Any())
+        var forbiddenStrings = GetConfiguredValues(config.ForbiddenStrings);
+
+        if (!forbiddenStrings.Any())
         {
             return new List<ConfigurationIssueView>();
         }
@@ -26,8 +28,8 @@ public class ClientNameMustNotContainRule : ConfigurationRuleValidatorBase, ICon
 
         foreach (var client in clients)
         {
-            var foundForbiddenStrings = config.ForbiddenStrings
-                .Where(forbidden => client.ClientName.Contains(forbidden, System.StringComparison.OrdinalIgnoreCase))
+            var foundForbiddenStrings = forbiddenStrings
+                .Where(forbidden => (client.ClientName ?? string.Empty).Contains(forbidden, System.StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
             if (foundForbiddenStrings.Any())
@@ -36,7 +38,7 @@ public class ClientNameMustNotContainRule : ConfigurationRuleValidatorBase, ICon
                 {
                     ["clientName"] = client.ClientName,
                     ["forbiddenStrings"] = string.Join(", ", foundForbiddenStrings),
-                    ["allForbiddenStrings"] = string.Join(", ", config.ForbiddenStrings)
+                    ["allForbiddenStrings"] = string.Join(", ", forbiddenStrings)
                 };
 
                 issues.Add(new ConfigurationIssueView

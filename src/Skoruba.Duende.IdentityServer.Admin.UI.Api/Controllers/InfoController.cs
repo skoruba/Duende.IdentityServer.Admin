@@ -60,7 +60,11 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
                 return new SystemHealthApiDto();
             }
 
-            var report = await healthCheckService.CheckHealthAsync(cancellationToken);
+            // The cache is registered with the Admin API services - a host without it still gets a fresh report
+            var reportCache = HttpContext.RequestServices.GetService<SystemHealthReportCache>();
+            var report = reportCache != null
+                ? await reportCache.GetReportAsync(healthCheckService, cancellationToken)
+                : await healthCheckService.CheckHealthAsync(cancellationToken);
 
             return new SystemHealthApiDto
             {

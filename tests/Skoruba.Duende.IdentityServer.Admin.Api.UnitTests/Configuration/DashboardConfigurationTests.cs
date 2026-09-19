@@ -27,6 +27,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Configuration
             dashboard.RecentAuditChangesDefaultCount.Should().Be(8);
             dashboard.RecentAuditChangesMaxCount.Should().Be(50);
             dashboard.RecentAuditChangesScanLimit.Should().Be(5000);
+            dashboard.SystemHealthCacheSeconds.Should().Be(30);
         }
 
         [Fact]

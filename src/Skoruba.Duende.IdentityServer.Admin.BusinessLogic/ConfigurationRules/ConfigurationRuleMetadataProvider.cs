@@ -142,7 +142,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                     {
                         Name = "prefixes",
                         DisplayName = "Required Prefixes",
-                        Description = "The prefix(es) that API scope names must start with. Can be a single string or an array of strings.",
+                        Description = "The prefix(es) that API scope names must start with. A name has to start with at least one of them.",
                         Type = "array",
                         Required = true,
                         DefaultValue = new[] { "scope_" }
@@ -230,7 +230,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                     {
                         Name = "prefixes",
                         DisplayName = "Required Prefixes",
-                        Description = "The prefix(es) that API resource names must start with. Can be a single string or an array of strings.",
+                        Description = "The prefix(es) that API resource names must start with. A name has to start with at least one of them.",
                         Type = "array",
                         Required = true,
                         DefaultValue = new[] { "api." }
@@ -279,7 +279,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                     {
                         Name = "prefixes",
                         DisplayName = "Required Prefixes",
-                        Description = "The prefix(es) that identity resource names must start with. Can be a single string or an array of strings.",
+                        Description = "The prefix(es) that identity resource names must start with. A name has to start with at least one of them.",
                         Type = "array",
                         Required = true,
                         DefaultValue = new[] { "custom." }
@@ -366,7 +366,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                     {
                         Name = "prefixes",
                         DisplayName = "Required Prefixes",
-                        Description = "The prefix(es) that client names must start with. Can be a single string or an array of strings.",
+                        Description = "The prefix(es) that client names must start with. A name has to start with at least one of them.",
                         Type = "array",
                         Required = true,
                         DefaultValue = new[] { "Client " }
@@ -414,7 +414,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                     {
                         Name = "prefixes",
                         DisplayName = "Required Prefixes",
-                        Description = "The prefix(es) that client identifiers must start with. Can be a single string or an array of strings.",
+                        Description = "The prefix(es) that client identifiers must start with. A name has to start with at least one of them.",
                         Type = "array",
                         Required = true,
                         DefaultValue = new[] { "client_" }

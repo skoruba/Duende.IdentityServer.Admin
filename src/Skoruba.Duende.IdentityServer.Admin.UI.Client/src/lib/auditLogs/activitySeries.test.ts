@@ -34,7 +34,6 @@ describe("getActivityInsight", () => {
 
     expect(insight.baseline).toBe(400);
     expect(insight.threshold).toBe(600);
-    expect(insight.ratio).toBeCloseTo(4.2);
     expect(insight.isUnusual).toBe(true);
   });
 

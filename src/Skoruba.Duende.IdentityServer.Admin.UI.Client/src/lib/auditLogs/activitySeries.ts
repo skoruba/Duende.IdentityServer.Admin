@@ -59,8 +59,6 @@ export type ActivityInsight = {
    * the chart draws this line and the status flips exactly when today crosses it.
    */
   threshold: number;
-  /** today / baseline, or undefined when there is no baseline yet. */
-  ratio?: number;
   isUnusual: boolean;
 };
 
@@ -77,7 +75,6 @@ export const getActivityInsight = (series: DailyActivity[]): ActivityInsight => 
     today,
     baseline,
     threshold,
-    ratio: baseline > 0 ? today / baseline : undefined,
     isUnusual: today > threshold,
   };
 };

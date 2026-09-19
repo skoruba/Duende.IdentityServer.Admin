@@ -57,9 +57,6 @@ const ConfigurationRuleModal: React.FC<ConfigurationRuleModalProps> = ({
       queryClient.invalidateQueries({
         queryKey: [queryKeys.configurationIssues],
       });
-      queryClient.invalidateQueries({
-        queryKey: [queryKeys.configurationIssuesSummary],
-      });
       onSuccess();
     },
     onError: () => {

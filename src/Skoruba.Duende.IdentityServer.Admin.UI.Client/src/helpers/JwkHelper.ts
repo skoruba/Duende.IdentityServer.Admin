@@ -153,10 +153,3 @@ export const generateJwkKeyPair = async (
     privatePem: toPem(pkcs8, "PRIVATE KEY"),
   };
 };
-
-export default {
-  isJwkGenerationSupported,
-  isEcAlgorithm,
-  isFapiSigningAlgorithm,
-  generateJwkKeyPair,
-};

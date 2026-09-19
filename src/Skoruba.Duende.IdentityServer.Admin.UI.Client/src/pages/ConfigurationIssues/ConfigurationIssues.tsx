@@ -34,16 +34,30 @@ const ConfigurationIssues: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [resourceTypeFilter, setResourceTypeFilter] =
     useState<ResourceTypeFilter>(ResourceTypeFilterOptions.ALL);
-  const [searchParams] = useSearchParams();
-  // Dashboard severity rows link here with ?type=Error|Warning|Recommendation
-  const initialIssueType =
+  const [searchParams, setSearchParams] = useSearchParams();
+  // Dashboard severity rows link here with ?type=Error|Warning|Recommendation.
+  // The filter lives in the URL, so a bare link clears it and a cleared filter
+  // does not come back on reload.
+  const issueTypeFilter: IssueTypeFilter =
     Object.values(IssueTypeFilterOptions).find(
       (option) => option === searchParams.get("type")
     ) ?? IssueTypeFilterOptions.ALL;
-  const [issueTypeFilter, setIssueTypeFilter] =
-    useState<IssueTypeFilter>(initialIssueType);
+  const setIssueTypeFilter = (value: IssueTypeFilter) => {
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        if (value === IssueTypeFilterOptions.ALL) {
+          next.delete("type");
+        } else {
+          next.set("type", value);
+        }
+        return next;
+      },
+      { replace: true }
+    );
+  };
   const [showFilters, setShowFilters] = useState(
-    initialIssueType !== IssueTypeFilterOptions.ALL
+    issueTypeFilter !== IssueTypeFilterOptions.ALL
   );
 
   const { data, isLoading } = useConfigurationIssues({

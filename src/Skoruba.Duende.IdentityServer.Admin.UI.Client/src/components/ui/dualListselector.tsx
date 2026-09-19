@@ -14,6 +14,10 @@ import { Separator } from "./separator";
 import CustomItemModal from "@/pages/Client/CustomItemModal";
 import { useToast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
+import {
+  mergeDualListItems,
+  rememberDeselectedItems,
+} from "@/lib/dualList/dualListItems";
 
 const MOVE_BUTTON_COLUMN = "w-[88px]";
 
@@ -37,6 +41,9 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
   const { t } = useTranslation();
 
   const [customItems, setCustomItems] = useState<Item[]>([]);
+  // A selected item need not be among initialItems - once removed it has to stay
+  // on the left, or it could not be selected again.
+  const [deselectedItems, setDeselectedItems] = useState<Item[]>([]);
   const [selectedItems, setSelectedItems] =
     useState<Item[]>(initialSelectedItems);
   const [searchTermLeft, setSearchTermLeft] = useState("");
@@ -47,15 +54,21 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
     setSelectedItems(initialSelectedItems);
   }, [initialSelectedItems]);
 
-  const allItems = useMemo(() => {
-    const merged = new Map<string, Item>();
-    [...initialItems, ...selectedItems, ...customItems].forEach((item) => {
-      merged.set(item.id, item);
-    });
-    return Array.from(merged.values());
-  }, [initialItems, selectedItems, customItems]);
+  const allItems = useMemo(
+    () =>
+      mergeDualListItems(
+        initialItems,
+        selectedItems,
+        customItems,
+        deselectedItems,
+      ),
+    [initialItems, selectedItems, customItems, deselectedItems],
+  );
 
   const notifySelectedItemsChange = (newSelected: Item[]) => {
+    setDeselectedItems((prev) =>
+      rememberDeselectedItems(prev, selectedItems, newSelected),
+    );
     setSelectedItems(newSelected);
     onSelectedItemsChange?.(newSelected);
   };

@@ -41,6 +41,35 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Helpers
             results[0].MemberNames.Should().Contain(nameof(ClientSecretApiDto.Value));
         }
 
+        [Theory]
+        [InlineData("{\"kty\":\"RSA\",\"n\":\"abc\",\"e\":\"AQAB\",\"D\":\"private\"}", "'D'")]
+        [InlineData("{\"kty\":\"RSA\",\"n\":\"abc\",\"e\":\"AQAB\",\"Qi\":\"private\"}", "'Qi'")]
+        [InlineData("{\"kty\":\"EC\",\"crv\":\"P-256\",\"x\":\"a\",\"y\":\"b\",\"K\":\"private\"}", "'K'")]
+        public void PrivateKeyMaterial_IsRejectedRegardlessOfMemberCasing(string value, string expectedMember)
+        {
+            // JsonWebKey reads "D" as the private exponent, so the casing must not get it past the validator
+            var results = Validate(new ClientSecretApiDto { Type = "JWK", Value = value });
+
+            results.Should().ContainSingle();
+            results[0].ErrorMessage.Should().Contain(expectedMember);
+        }
+
+        [Theory]
+        [InlineData("jwk")]
+        [InlineData("Jwk")]
+        public void SecretTypeCasing_DoesNotSkipTheValidation(string secretType)
+        {
+            Validate(new ClientSecretApiDto { Type = secretType, Value = PublicRsaJwk }).Should().BeEmpty();
+            Validate(new ClientSecretApiDto { Type = secretType, Value = "{\"kty\":\"RSA\",\"n\":\"abc\",\"e\":\"AQAB\",\"d\":\"private\"}" }).Should().ContainSingle();
+            Validate(new ApiSecretApiDto { Type = secretType, Value = "not json" }).Should().ContainSingle();
+        }
+
+        [Fact]
+        public void SymmetricKeyType_IsRejectedRegardlessOfCasing()
+        {
+            Validate(new ClientSecretApiDto { Type = "JWK", Value = "{\"kty\":\"OCT\"}" }).Should().ContainSingle();
+        }
+
         [Fact]
         public void PublicJwkSet_IsRejected()
         {

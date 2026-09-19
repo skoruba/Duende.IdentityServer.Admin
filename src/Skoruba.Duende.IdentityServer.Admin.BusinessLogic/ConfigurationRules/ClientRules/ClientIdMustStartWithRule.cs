@@ -16,13 +16,9 @@ public class ClientIdMustStartWithRule : ConfigurationRuleValidatorBase, IConfig
         var config = DeserializeConfiguration<PrefixConfig>(configuration);
 
         // Support both single prefix (backward compatibility) and array of prefixes
-        var prefixes = new List<string>();
+        var prefixes = GetConfiguredValues(config.Prefixes);
 
-        if (config.Prefixes != null && config.Prefixes.Any())
-        {
-            prefixes = config.Prefixes.ToList();
-        }
-        else if (!string.IsNullOrWhiteSpace(config.Prefix))
+        if (!prefixes.Any() && !string.IsNullOrWhiteSpace(config.Prefix))
         {
             // Backward compatibility: single prefix as string
             prefixes.Add(config.Prefix);
@@ -39,7 +35,8 @@ public class ClientIdMustStartWithRule : ConfigurationRuleValidatorBase, IConfig
         foreach (var client in clients)
         {
             // Check if client id starts with any of the allowed prefixes
-            var startsWithAnyPrefix = prefixes.Any(prefix => client.ClientId.StartsWith(prefix));
+            // Ordinal - a culture-sensitive comparison depends on the host, e.g. "ch" is a single letter under cs-CZ
+            var startsWithAnyPrefix = prefixes.Any(prefix => client.ClientId.StartsWith(prefix, System.StringComparison.Ordinal));
 
             if (!startsWithAnyPrefix)
             {
@@ -52,7 +49,7 @@ public class ClientIdMustStartWithRule : ConfigurationRuleValidatorBase, IConfig
                 issues.Add(new ConfigurationIssueView
                 {
                     ResourceId = client.Id,
-                    ResourceName = client.ClientName ?? client.ClientId,
+                    ResourceName = GetDisplayName(client.ClientName, client.ClientId),
                     Message = FormatMessage(messageTemplate, parameters),
                     FixDescription = FormatMessage(fixDescriptionTemplate, parameters),
                     IssueType = issueType,

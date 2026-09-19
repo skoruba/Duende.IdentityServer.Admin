@@ -9,6 +9,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using HtmlAgilityPack;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Entities.Identity;
 using Skoruba.Duende.IdentityServer.STS.Identity.Configuration;
 using Skoruba.Duende.IdentityServer.STS.Identity.IntegrationTests.Common;
 using Skoruba.Duende.IdentityServer.STS.Identity.IntegrationTests.Mocks;
@@ -38,6 +41,86 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.IntegrationTests.Tests
 
             //The redirect to login
             registerResponse.Headers.Location.ToString().Should().Be("/");
+        }
+
+        [Fact]
+        public async Task RecoveryCodeLoginIsRejectedWithoutAntiForgeryToken()
+        {
+            Client.DefaultRequestHeaders.Clear();
+
+            var response = await Client.PostAsync("/Account/LoginWithRecoveryCode", new FormUrlEncodedContent(
+                new Dictionary<string, string> { ["RecoveryCode"] = "12345678" }));
+
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
+        public async Task UserIsAbleToLoginWithRecoveryCode()
+        {
+            Client.DefaultRequestHeaders.Clear();
+
+            // A user with two-factor authentication and one recovery code
+            var registerFormData = UserMocks.GenerateRegisterData();
+            await UserMocks.RegisterNewUserAsync(Client, registerFormData);
+            Client.DefaultRequestHeaders.Clear();
+
+            string recoveryCode;
+            using (var scope = TestServer.Services.CreateScope())
+            {
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserIdentity>>();
+                var user = await userManager.FindByNameAsync(registerFormData["UserName"]);
+
+                await userManager.ResetAuthenticatorKeyAsync(user);
+                await userManager.SetTwoFactorEnabledAsync(user, true);
+                recoveryCode = (await userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 1)).Single();
+            }
+
+            // The password alone ends on the second factor
+            const string accountLoginAction = "/Account/Login";
+            var loginPage = await Client.GetAsync(accountLoginAction);
+            var loginDataForm = UserMocks.GenerateLoginData(registerFormData["UserName"], registerFormData["Password"],
+                await loginPage.ExtractAntiForgeryToken());
+
+            var loginResponse = await Client.SendAsync(
+                RequestHelper.CreatePostRequestWithCookies(accountLoginAction, loginDataForm, loginPage));
+
+            loginResponse.StatusCode.Should().Be(HttpStatusCode.Redirect);
+            loginResponse.Headers.Location.ToString().Should().StartWith("/Account/LoginWith2fa");
+
+            // The recovery code form has to carry the anti-forgery token its POST action validates
+            const string recoveryCodeAction = "/Account/LoginWithRecoveryCode";
+            var cookies = CookiesHelper.ExtractCookiesFromResponse(loginPage);
+            foreach (var cookie in CookiesHelper.ExtractCookiesFromResponse(loginResponse))
+            {
+                cookies[cookie.Key] = cookie.Value;
+            }
+
+            var recoveryPage = await Client.SendAsync(
+                CookiesHelper.PutCookiesOnRequest(new HttpRequestMessage(HttpMethod.Get, recoveryCodeAction), cookies));
+            recoveryPage.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var antiForgeryToken = await recoveryPage.ExtractAntiForgeryToken();
+            antiForgeryToken.Should().NotBeNullOrEmpty();
+
+            foreach (var cookie in CookiesHelper.ExtractCookiesFromResponse(recoveryPage))
+            {
+                cookies[cookie.Key] = cookie.Value;
+            }
+
+            var recoveryRequest = new HttpRequestMessage(HttpMethod.Post, recoveryCodeAction)
+            {
+                Content = new FormUrlEncodedContent(new Dictionary<string, string>
+                {
+                    ["RecoveryCode"] = recoveryCode,
+                    [UserMocks.AntiForgeryTokenKey] = antiForgeryToken
+                })
+            };
+
+            var recoveryResponse = await Client.SendAsync(CookiesHelper.PutCookiesOnRequest(recoveryRequest, cookies));
+
+            recoveryResponse.StatusCode.Should().Be(HttpStatusCode.Redirect);
+            recoveryResponse.Headers.Location.ToString().Should().Be("/");
+            CookiesHelper.ExistsCookie(recoveryResponse, ".AspNetCore.Identity.Application").Should().BeTrue();
         }
 
         [Fact]

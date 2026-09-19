@@ -25,5 +25,11 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration
         /// the query cheap on a large log; raise it if changes are rare compared to reads.
         /// </summary>
         public int RecentAuditChangesScanLimit { get; set; } = 5000;
+
+        /// <summary>
+        /// How long the system health report is reused. A report runs every registered health check,
+        /// and the dashboard asks for it from every open tab. Zero turns the reuse off.
+        /// </summary>
+        public int SystemHealthCacheSeconds { get; set; } = 30;
     }
 }

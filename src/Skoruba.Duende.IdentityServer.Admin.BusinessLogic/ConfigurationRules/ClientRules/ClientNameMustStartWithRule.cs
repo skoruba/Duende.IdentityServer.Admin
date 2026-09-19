@@ -16,13 +16,9 @@ public class ClientNameMustStartWithRule : ConfigurationRuleValidatorBase, IConf
         var config = DeserializeConfiguration<PrefixConfig>(configuration);
 
         // Support both single prefix (backward compatibility) and array of prefixes
-        var prefixes = new List<string>();
+        var prefixes = GetConfiguredValues(config.Prefixes);
 
-        if (config.Prefixes != null && config.Prefixes.Any())
-        {
-            prefixes = config.Prefixes.ToList();
-        }
-        else if (!string.IsNullOrWhiteSpace(config.Prefix))
+        if (!prefixes.Any() && !string.IsNullOrWhiteSpace(config.Prefix))
         {
             // Backward compatibility: single prefix as string
             prefixes.Add(config.Prefix);
@@ -40,7 +36,8 @@ public class ClientNameMustStartWithRule : ConfigurationRuleValidatorBase, IConf
         foreach (var client in clients)
         {
             // Check if client name starts with any of the allowed prefixes
-            var startsWithAnyPrefix = prefixes.Any(prefix => client.ClientName.StartsWith(prefix));
+            // Ordinal - a culture-sensitive comparison depends on the host, e.g. "ch" is a single letter under cs-CZ
+            var startsWithAnyPrefix = prefixes.Any(prefix => (client.ClientName ?? string.Empty).StartsWith(prefix, System.StringComparison.Ordinal));
 
             if (!startsWithAnyPrefix)
             {

@@ -23,7 +23,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
 
         public static IEnumerable<ValidationResult> Validate(string secretType, string value, string memberName)
         {
-            if (!string.Equals(secretType, JwkSecretType, StringComparison.Ordinal) || string.IsNullOrWhiteSpace(value))
+            // The type is matched regardless of casing - a "jwk" secret must not slip past the checks below
+            if (!string.Equals(secretType, JwkSecretType, StringComparison.OrdinalIgnoreCase) || string.IsNullOrWhiteSpace(value))
             {
                 yield break;
             }
@@ -74,7 +75,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
                     return "The JWK secret value must state its key type in the 'kty' member.";
                 }
 
-                if (string.Equals(keyType.GetString(), SymmetricKeyType, StringComparison.Ordinal))
+                if (string.Equals(keyType.GetString(), SymmetricKeyType, StringComparison.OrdinalIgnoreCase))
                 {
                     return "Symmetric keys are not supported as a JWK secret.";
                 }
@@ -92,7 +93,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
                 case JsonValueKind.Object:
                     foreach (var property in element.EnumerateObject())
                     {
-                        if (PrivateMembers.Contains(property.Name, StringComparer.Ordinal))
+                        // JsonWebKey reads member names regardless of casing, so "D" is as private as "d"
+                        if (PrivateMembers.Contains(property.Name, StringComparer.OrdinalIgnoreCase))
                         {
                             return property.Name;
                         }

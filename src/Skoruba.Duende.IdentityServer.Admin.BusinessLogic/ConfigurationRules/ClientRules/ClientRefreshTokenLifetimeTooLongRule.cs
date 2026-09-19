@@ -26,7 +26,7 @@ public class ClientRefreshTokenLifetimeTooLongRule : ConfigurationRuleValidatorB
         {
             var parameters = new Dictionary<string, string>
             {
-                ["clientName"] = client.ClientName ?? client.ClientId,
+                ["clientName"] = GetDisplayName(client.ClientName, client.ClientId),
                 ["actualLifetime"] = client.AbsoluteRefreshTokenLifetime.ToString(),
                 ["maxLifetime"] = maxLifetimeSeconds.ToString()
             };
@@ -34,7 +34,7 @@ public class ClientRefreshTokenLifetimeTooLongRule : ConfigurationRuleValidatorB
             issues.Add(new ConfigurationIssueView
             {
                 ResourceId = client.Id,
-                ResourceName = client.ClientName ?? client.ClientId,
+                ResourceName = GetDisplayName(client.ClientName, client.ClientId),
                 Message = FormatMessage(messageTemplate, parameters),
                 FixDescription = FormatMessage(fixDescriptionTemplate, parameters),
                 IssueType = issueType,

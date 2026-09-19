@@ -26,7 +26,7 @@ public class ClientMustHaveScopesRule : ConfigurationRuleValidatorBase, IConfigu
         {
             var parameters = new Dictionary<string, string>
             {
-                ["clientName"] = client.ClientName ?? client.ClientId,
+                ["clientName"] = GetDisplayName(client.ClientName, client.ClientId),
                 ["actualCount"] = client.AllowedScopes.Count.ToString(),
                 ["requiredCount"] = minScopes.ToString()
             };
@@ -34,7 +34,7 @@ public class ClientMustHaveScopesRule : ConfigurationRuleValidatorBase, IConfigu
             issues.Add(new ConfigurationIssueView
             {
                 ResourceId = client.Id,
-                ResourceName = client.ClientName ?? client.ClientId,
+                ResourceName = GetDisplayName(client.ClientName, client.ClientId),
                 Message = FormatMessage(messageTemplate, parameters),
                 FixDescription = FormatMessage(fixDescriptionTemplate, parameters),
                 IssueType = issueType,

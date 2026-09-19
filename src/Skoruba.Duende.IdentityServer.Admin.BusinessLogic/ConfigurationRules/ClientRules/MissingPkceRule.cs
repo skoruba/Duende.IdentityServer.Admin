@@ -19,7 +19,7 @@ public class MissingPkceRule : ConfigurationRuleValidatorBase, IConfigurationRul
             .Select(c => new ConfigurationIssueView
             {
                 ResourceId = c.Id,
-                ResourceName = c.ClientName ?? c.ClientId,
+                ResourceName = GetDisplayName(c.ClientName, c.ClientId),
                 Message = messageTemplate,
                 FixDescription = fixDescriptionTemplate,
                 IssueType = issueType,

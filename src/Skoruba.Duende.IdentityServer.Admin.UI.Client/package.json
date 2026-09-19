@@ -6,6 +6,9 @@
   "author": "Jan Skoruba <jan@skoruba.com>",
   "license": "Apache-2.0",
   "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
   "scripts": {
     "dev": "tsc && vite",
     "build": "tsc && vite build",

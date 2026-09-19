@@ -27,14 +27,9 @@ import {
   getPastAnomalies,
 } from "@/lib/auditLogs/activitySeries";
 import { cn } from "@/lib/utils";
+import { DashboardDataAuditLog } from "@/models/Dashboard/DashboardModels";
 import DashboardCardHeader from "./DashboardCardHeader";
 import HomeQueryErrorState from "./HomeQueryErrorState";
-
-export type DashboardDataAuditLog = {
-  total: number;
-  created: Date;
-  average: number;
-};
 
 const EMPTY_DATA: DashboardDataAuditLog[] = [];
 // Days with audit data needed before the trend chart is shown.

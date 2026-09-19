@@ -32,6 +32,14 @@ const STATUS_STYLES: Record<KnownHealthStatus, { dot: string; text: string }> = 
   [Unhealthy]: { dot: "bg-red-500", text: "text-red-700 dark:text-red-400" },
 };
 
+// Unknown ranks lowest: it never hides a status that was actually reported.
+const STATUS_SEVERITY: Record<client.SystemHealthStatus, number> = {
+  [Unknown]: 0,
+  [Healthy]: 1,
+  [Degraded]: 2,
+  [Unhealthy]: 3,
+};
+
 const useNow = () => {
   const [now, setNow] = useState(() => new Date());
 
@@ -74,14 +82,19 @@ const SystemStatus = ({ version }: { version?: string }) => {
     .filter((entry) => entry.status !== Healthy)
     .map((entry) => entry.name ?? "");
 
-  // IdentityServer reachability is the headline; any other failing check
-  // (databases) downgrades it.
+  // IdentityServer reachability is the headline, unless another failing check
+  // (databases) makes the overall status worse - the headline shows the worse one.
   const identityServerDown =
     !!data &&
     data.identityServerStatus !== Healthy &&
     data.identityServerStatus !== Unknown;
+  const identityServerLeads =
+    identityServerDown &&
+    STATUS_SEVERITY[data.identityServerStatus] >= STATUS_SEVERITY[data.status];
 
-  const reported = identityServerDown ? data.identityServerStatus : data?.status;
+  const reported = identityServerLeads
+    ? data.identityServerStatus
+    : data?.status;
   const status: KnownHealthStatus | undefined =
     reported && reported !== Unknown ? reported : undefined;
 
@@ -93,7 +106,7 @@ const SystemStatus = ({ version }: { version?: string }) => {
           passing: entries.length,
           total: entries.length,
         })
-      : identityServerDown
+      : identityServerLeads
         ? t("Home.Status.IdentityServerUnreachable")
         : t("Home.Status.ChecksFailing", {
             count: failingChecks.length,

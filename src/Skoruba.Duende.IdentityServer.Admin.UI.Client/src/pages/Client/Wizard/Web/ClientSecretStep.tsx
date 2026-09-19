@@ -22,7 +22,6 @@ import {
   getSecretStepNotice,
 } from "@/pages/Client/Wizard/Common/ClientTypeRules";
 import { useMemo } from "react";
-import { combineDateTimeForUnspecifiedDb } from "@/helpers/DateTimeHelper";
 
 export const SecretStep = () => {
   const { t } = useTranslation();
@@ -58,15 +57,11 @@ export const SecretStep = () => {
   useDirtyFormState(form, "secret");
 
   const onSubmit: SubmitHandler<SecretsFormData> = (data) => {
-    const combinedExpiration = combineDateTimeForUnspecifiedDb(
-      data.expiration,
-      data.expirationTime
-    );
-
+    // The raw date and time stay in the wizard state - this step reads them back
+    // when it remounts. They are combined only when the secret is created.
     setFormData((prev) => ({
       ...prev,
       ...data,
-      expiration: data.addExpiration ? combinedExpiration : null,
     }));
 
     onHandleNext();

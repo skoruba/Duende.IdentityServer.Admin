@@ -33,7 +33,7 @@ import { getClientSecrets } from "@/services/ClientServices";
 import { queryKeys } from "@/services/QueryKeys";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronDown, ClipboardCopy, Code2, Globe, Server } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
@@ -50,12 +50,21 @@ const DEFAULT_API_BASE_URL = "https://localhost:5001";
 
 /** Keeps a text option in local storage so it survives navigation and reloads. */
 const useStoredState = (key: string, fallback: string) => {
-  const [value, setValue] = useState(
-    () => localStorage.getItem(key) ?? fallback,
-  );
+  // Storage can be blocked or full - the option then lives for the session only.
+  const [value, setValue] = useState(() => {
+    try {
+      return localStorage.getItem(key) ?? fallback;
+    } catch {
+      return fallback;
+    }
+  });
 
   useEffect(() => {
-    localStorage.setItem(key, value);
+    try {
+      localStorage.setItem(key, value);
+    } catch {
+      // Nothing to do - the value is still kept in the component state.
+    }
   }, [key, value]);
 
   return [value, setValue] as const;
@@ -75,29 +84,40 @@ const OptionField = ({
   value,
   placeholder,
   onChange,
-}: OptionFieldProps) => (
-  <div className="space-y-1.5">
-    <Label>{label}</Label>
-    <Input
-      value={value}
-      placeholder={placeholder}
-      onChange={(event) => onChange(event.target.value)}
-      // The tab lives inside the client form - Enter must not submit it.
-      onKeyDown={(event) => {
-        if (event.key === "Enter") {
-          event.preventDefault();
-        }
-      }}
-    />
-    <p className="text-xs text-muted-foreground">{description}</p>
-  </div>
-);
+}: OptionFieldProps) => {
+  const inputId = useId();
+  const descriptionId = useId();
+
+  return (
+    <div className="space-y-1.5">
+      <Label htmlFor={inputId}>{label}</Label>
+      <Input
+        id={inputId}
+        aria-describedby={descriptionId}
+        value={value}
+        placeholder={placeholder}
+        onChange={(event) => onChange(event.target.value)}
+        // The tab lives inside the client form - Enter must not submit it.
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+          }
+        }}
+      />
+      <p id={descriptionId} className="text-xs text-muted-foreground">
+        {description}
+      </p>
+    </div>
+  );
+};
 
 const IntegrationTab = () => {
   const { t } = useTranslation();
   const copyToClipboard = useCopyToClipboard();
   const { control } = useFormContext<ClientEditFormData>();
   const { clientId: resourceId } = useParams<{ clientId: string }>();
+  const clientAuthenticationId = useId();
+  const useUserSecretsId = useId();
 
   const clientId = useWatch({ control, name: "clientId" });
   const allowedGrantTypes = useWatch({ control, name: "allowedGrantTypes" });
@@ -308,7 +328,7 @@ const IntegrationTab = () => {
 
             {requireClientSecret && (
               <div className="mt-4 space-y-1.5 border-t pt-4">
-                <Label>
+                <Label htmlFor={clientAuthenticationId}>
                   {t("Client.Integration.Options.ClientAuthentication")}
                 </Label>
                 <Select
@@ -317,7 +337,10 @@ const IntegrationTab = () => {
                     setAuthenticationOverride(value as ClientAuthentication)
                   }
                 >
-                  <SelectTrigger className="md:w-1/3">
+                  <SelectTrigger
+                    id={clientAuthenticationId}
+                    className="md:w-1/3"
+                  >
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -341,12 +364,15 @@ const IntegrationTab = () => {
 
             <div className="mt-4 flex items-center justify-between gap-4 border-t pt-4">
               <div>
-                <Label>{t("Client.Integration.Options.UseUserSecrets")}</Label>
+                <Label htmlFor={useUserSecretsId}>
+                  {t("Client.Integration.Options.UseUserSecrets")}
+                </Label>
                 <p className="text-xs text-muted-foreground">
                   {t("Client.Integration.Options.UseUserSecretsInfo")}
                 </p>
               </div>
               <Switch
+                id={useUserSecretsId}
                 checked={useUserSecrets}
                 onCheckedChange={setUseUserSecrets}
               />

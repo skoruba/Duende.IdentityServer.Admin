@@ -34,9 +34,6 @@ const DeleteApiResourceDialog = ({
       queryClient.invalidateQueries({
         queryKey: [queryKeys.configurationIssues],
       });
-      queryClient.invalidateQueries({
-        queryKey: [queryKeys.configurationIssuesSummary],
-      });
     },
   });
 

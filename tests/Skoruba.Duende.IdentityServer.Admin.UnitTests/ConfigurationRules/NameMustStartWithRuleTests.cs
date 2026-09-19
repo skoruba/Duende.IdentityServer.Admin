@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0.
 
 using System;
+using System.Globalization;
 using System.Linq;
 using FluentAssertions;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.ApiResourceRules;
@@ -106,6 +107,36 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.ConfigurationRules
         {
             CreateRule(target).Validate(CreateContext(target, "APP_portal"), Prefixes)
                 .Should().ContainSingle();
+        }
+
+        [Theory]
+        [MemberData(nameof(Targets))]
+        public void PrefixComparisonDoesNotDependOnTheHostCulture(string target)
+        {
+            var originalCulture = CultureInfo.CurrentCulture;
+            try
+            {
+                // Czech sorts "ch" as a single letter, so a culture-sensitive "chat".StartsWith("c") is false
+                CultureInfo.CurrentCulture = new CultureInfo("cs-CZ");
+
+                CreateRule(target).Validate(CreateContext(target, "chat_portal"), "{\"prefixes\": [\"c\"]}")
+                    .Should().BeEmpty();
+            }
+            finally
+            {
+                CultureInfo.CurrentCulture = originalCulture;
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(Targets))]
+        public void EmptyPrefixesAreIgnored(string target)
+        {
+            var rule = CreateRule(target);
+
+            // An empty prefix matches every name and a null one would throw
+            rule.Validate(CreateContext(target, "orders"), "{\"prefixes\": [\"\", null, \"app_\"]}").Should().ContainSingle();
+            rule.Validate(CreateContext(target, "orders"), "{\"prefixes\": [\"\", null]}").Should().BeEmpty();
         }
 
         [Theory]

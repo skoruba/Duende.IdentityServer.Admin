@@ -277,7 +277,7 @@ const SecretForm = ({ form }: SecretFormProps) => {
                 { value: "sha512", label: "SHA-512" },
               ],
             }}
-          />{" "}
+          />
           <hr className="my-4" />
         </>
       )}

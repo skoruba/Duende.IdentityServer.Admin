@@ -41,7 +41,7 @@ public class SecretIsExpiredInDaysRule : ConfigurationRuleValidatorBase, IConfig
 
             var parameters = new Dictionary<string, string>
             {
-                ["clientName"] = client.ClientName ?? client.ClientId,
+                ["clientName"] = GetDisplayName(client.ClientName, client.ClientId),
                 ["clientId"] = client.ClientId,
                 ["secretType"] = secret.Type ?? "SharedSecret",
                 ["secretDescription"] = secret.Description ?? "No description",
@@ -54,7 +54,7 @@ public class SecretIsExpiredInDaysRule : ConfigurationRuleValidatorBase, IConfig
             issues.Add(new ConfigurationIssueView
             {
                 ResourceId = client.Id,
-                ResourceName = client.ClientName ?? client.ClientId,
+                ResourceName = GetDisplayName(client.ClientName, client.ClientId),
                 Message = FormatMessage(messageTemplate, parameters),
                 FixDescription = FormatMessage(fixDescriptionTemplate, parameters),
                 IssueType = isExpired ? ConfigurationIssueTypeView.Error : issueType,

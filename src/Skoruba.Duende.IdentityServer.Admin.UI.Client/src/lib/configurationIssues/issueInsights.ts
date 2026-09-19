@@ -107,3 +107,23 @@ export const getIssuesTotal = (summary?: IssueSummaryLike | null): number =>
   (summary?.errors ?? 0) +
   (summary?.warnings ?? 0) +
   (summary?.recommendations ?? 0);
+
+export type IssueSummary = Required<IssueSummaryLike>;
+
+/**
+ * The per severity counts, exactly as the GetSummary endpoint reports them - it
+ * counts the very same unfiltered issue list on the server.
+ */
+export const summarizeIssues = (
+  issues: Pick<IssueLike, "issueType">[],
+): IssueSummary => {
+  const summary: IssueSummary = { errors: 0, warnings: 0, recommendations: 0 };
+
+  for (const issue of issues) {
+    if (issue.issueType === "Error") summary.errors++;
+    else if (issue.issueType === "Warning") summary.warnings++;
+    else if (issue.issueType === "Recommendation") summary.recommendations++;
+  }
+
+  return summary;
+};
