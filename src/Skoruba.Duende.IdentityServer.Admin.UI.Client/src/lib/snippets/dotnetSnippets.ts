@@ -542,9 +542,9 @@ const buildAuthorizationCodeProgram = (
 
   oidcOptions.push("", '        options.ResponseType = "code";');
 
-  if (!clientConfig.requirePkce) {
-    oidcOptions.push("        options.UsePkce = false;");
-  }
+  // UsePkce is never turned off, whatever the client says. A client that does not require
+  // PKCE still accepts - and validates - a code challenge, so leaving the ASP.NET Core
+  // default on costs nothing, while "UsePkce = false" would only weaken the copied code.
 
   if (clientConfig.requirePushedAuthorization) {
     oidcOptions.push(

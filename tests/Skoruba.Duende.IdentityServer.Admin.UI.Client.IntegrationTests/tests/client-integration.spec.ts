@@ -71,7 +71,7 @@ test.describe("Client integration tab", () => {
 
     let panel = await openIntegrationTab(page);
     await expectSnippetToContain(panel, `"ClientId": "${seedData.expectedClientId}"`);
-    await expectSnippetNotToContain(panel, "options.UsePkce = false;");
+    await expectSnippetNotToContain(panel, "UsePkce");
     await expect(panel.getByText(TEXT.notes.pkceDisabled)).toHaveCount(0);
 
     await page.getByRole("tab", { name: "Basics", exact: true }).click();
@@ -86,7 +86,9 @@ test.describe("Client integration tab", () => {
     panel = await openIntegrationTab(page);
     await expectSnippetToContain(panel, `"ClientId": "${unsavedClientId}"`);
     await expectSnippetNotToContain(panel, `"${seedData.expectedClientId}"`);
-    await expectSnippetToContain(panel, "options.UsePkce = false;");
+    // A client that stops requiring PKCE is warned about, but the code people copy keeps
+    // PKCE on: IdentityServer validates a code challenge whether it is required or not.
+    await expectSnippetNotToContain(panel, "UsePkce");
     await expect(panel.getByText(TEXT.notes.pkceDisabled)).toBeVisible();
 
     // The application name follows the client id until it is overridden.

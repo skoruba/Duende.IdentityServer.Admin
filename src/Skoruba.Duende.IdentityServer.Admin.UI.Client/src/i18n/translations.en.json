@@ -844,7 +844,7 @@
       },
       "Notes": {
         "MissingOpenIdScope": "The openid scope is not among the allowed scopes. The authorization code flow needs it to return an identity token.",
-        "PkceDisabled": "PKCE is turned off for this client. Turn on Require PKCE on the Advanced / Authorization tab unless you have a reason not to.",
+        "PkceDisabled": "This client does not require PKCE. The generated code still uses it - ASP.NET Core sends a code challenge by default and IdentityServer validates it - but nothing stops another application using this client from leaving it out. Turn on Require PKCE on the Advanced / Authorization tab unless you have a reason not to.",
         "PublicClient": "This client has no secret, so it is treated as a public client. Only PKCE protects the authorization code.",
         "NoRedirectUri": "No redirect URI is configured. The callback path in the snippet is a default - add the matching URI on the Urls tab.",
         "InlineSecret": "The secret is written directly into the code. That is fine for a quick test, but move it to user secrets or your secret store before committing.",

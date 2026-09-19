@@ -3,7 +3,6 @@
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <Description>API endpoints for the administration of the Duende IdentityServer</Description>
-        <UserSecretsId>95978cf4-3b90-41eb-83c0-1b5e9c62f1dc</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>

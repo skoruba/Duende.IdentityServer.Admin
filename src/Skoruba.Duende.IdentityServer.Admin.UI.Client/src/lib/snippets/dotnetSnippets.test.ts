@@ -100,17 +100,18 @@ describe("buildAuthorizationCodeSnippet", () => {
     expect(program).not.toContain("options.SignedOutCallbackPath");
   });
 
-  it("only mentions PKCE when it is turned off, because it is on by default", () => {
-    expect(
-      codeOf(buildAuthorizationCodeSnippet(client(), options()), "program"),
-    ).not.toContain("options.UsePkce");
-
-    expect(
-      codeOf(
-        buildAuthorizationCodeSnippet(client({ requirePkce: false }), options()),
-        "program",
-      ),
-    ).toContain("options.UsePkce = false;");
+  it("never turns PKCE off in the generated code, even for a client that does not require it", () => {
+    // ASP.NET Core sends a code challenge by default, and IdentityServer accepts and
+    // validates it whether the client requires PKCE or not. Code that people copy
+    // must not be weaker than the default just because the client allows it.
+    for (const requirePkce of [true, false]) {
+      expect(
+        codeOf(
+          buildAuthorizationCodeSnippet(client({ requirePkce }), options()),
+          "program",
+        ),
+      ).not.toContain("UsePkce");
+    }
   });
 
   it("orders identity scopes first and offline_access last", () => {

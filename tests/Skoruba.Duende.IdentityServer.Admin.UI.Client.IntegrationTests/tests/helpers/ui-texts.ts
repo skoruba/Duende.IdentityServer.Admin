@@ -63,7 +63,7 @@ export const UI_TEXT = {
       signAssertion: "Sign the client assertion",
     },
     notes: {
-      pkceDisabled: "PKCE is turned off for this client.",
+      pkceDisabled: "This client does not require PKCE.",
       publicClient:
         "This client has no secret, so it is treated as a public client.",
       inlineSecret: "The secret is written directly into the code.",
