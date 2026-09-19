@@ -19,6 +19,7 @@ import {
   useNavigateWithBlocker,
 } from "@/hooks/useConfirmUnsavedChanges";
 import { ApiScopeFormMode } from "../Edit/ApiScopeEdit";
+import { configurationChangeMeta } from "@/services/mutationMeta";
 
 interface ApiScopeFormProps {
   mode: ApiScopeFormMode;
@@ -54,6 +55,7 @@ const ApiScopeForm: React.FC<ApiScopeFormProps> = ({
   const { DialogCmp } = useConfirmUnsavedChanges(form.formState.isDirty);
 
   const mutation = useMutation({
+    meta: configurationChangeMeta,
     mutationFn: (data: ApiScopeFormData) =>
       mode === ApiScopeFormMode.Create
         ? createApiScope(data)

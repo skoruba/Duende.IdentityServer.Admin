@@ -4781,6 +4781,10 @@ export interface IInfoClient {
     getApplicationVersion(): Promise<string>;
 
     getApplicationName(): Promise<string>;
+
+    getHealth(): Promise<SystemHealthApiDto>;
+
+    getEnvironment(): Promise<EnvironmentInfoApiDto>;
 }
 
 export class InfoClient extends WebApiClientBase implements IInfoClient {
@@ -4882,6 +4886,94 @@ export class InfoClient extends WebApiClientBase implements IInfoClient {
             });
         }
         return Promise.resolve<string>(null as any);
+    }
+
+    getHealth(): Promise<SystemHealthApiDto> {
+        let url_ = this.baseUrl + "/api/Info/GetHealth";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetHealth(_response);
+        });
+    }
+
+    protected processGetHealth(response: Response): Promise<SystemHealthApiDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = SystemHealthApiDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SystemHealthApiDto>(null as any);
+    }
+
+    getEnvironment(): Promise<EnvironmentInfoApiDto> {
+        let url_ = this.baseUrl + "/api/Info/GetEnvironment";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetEnvironment(_response);
+        });
+    }
+
+    protected processGetEnvironment(response: Response): Promise<EnvironmentInfoApiDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = EnvironmentInfoApiDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<EnvironmentInfoApiDto>(null as any);
     }
 }
 
@@ -9471,6 +9563,145 @@ export interface IIdentityResourcePropertyApiDto {
     id: number;
     key: string | undefined;
     value: string | undefined;
+}
+
+export class SystemHealthApiDto implements ISystemHealthApiDto {
+    status!: SystemHealthStatus;
+    identityServerStatus!: SystemHealthStatus;
+    entries!: SystemHealthEntryApiDto[] | undefined;
+
+    constructor(data?: ISystemHealthApiDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.status = _data["status"];
+            this.identityServerStatus = _data["identityServerStatus"];
+            if (Array.isArray(_data["entries"])) {
+                this.entries = [] as any;
+                for (let item of _data["entries"])
+                    this.entries!.push(SystemHealthEntryApiDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): SystemHealthApiDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SystemHealthApiDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["status"] = this.status;
+        data["identityServerStatus"] = this.identityServerStatus;
+        if (Array.isArray(this.entries)) {
+            data["entries"] = [];
+            for (let item of this.entries)
+                data["entries"].push(item ? item.toJSON() : undefined as any);
+        }
+        return data;
+    }
+}
+
+export interface ISystemHealthApiDto {
+    status: SystemHealthStatus;
+    identityServerStatus: SystemHealthStatus;
+    entries: SystemHealthEntryApiDto[] | undefined;
+}
+
+export enum SystemHealthStatus {
+    Unknown = "Unknown",
+    Healthy = "Healthy",
+    Degraded = "Degraded",
+    Unhealthy = "Unhealthy",
+}
+
+export class SystemHealthEntryApiDto implements ISystemHealthEntryApiDto {
+    name!: string | undefined;
+    status!: SystemHealthStatus;
+
+    constructor(data?: ISystemHealthEntryApiDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.status = _data["status"];
+        }
+    }
+
+    static fromJS(data: any): SystemHealthEntryApiDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SystemHealthEntryApiDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["status"] = this.status;
+        return data;
+    }
+}
+
+export interface ISystemHealthEntryApiDto {
+    name: string | undefined;
+    status: SystemHealthStatus;
+}
+
+export class EnvironmentInfoApiDto implements IEnvironmentInfoApiDto {
+    environmentName!: string | undefined;
+    identityServerBaseUrl!: string | undefined;
+
+    constructor(data?: IEnvironmentInfoApiDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.environmentName = _data["environmentName"];
+            this.identityServerBaseUrl = _data["identityServerBaseUrl"];
+        }
+    }
+
+    static fromJS(data: any): EnvironmentInfoApiDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new EnvironmentInfoApiDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["environmentName"] = this.environmentName;
+        data["identityServerBaseUrl"] = this.identityServerBaseUrl;
+        return data;
+    }
+}
+
+export interface IEnvironmentInfoApiDto {
+    environmentName: string | undefined;
+    identityServerBaseUrl: string | undefined;
 }
 
 export class KeysApiDto implements IKeysApiDto {

@@ -1,4 +1,5 @@
 import { toast } from "@/components/ui/use-toast";
+import { queryKeys } from "@/services/QueryKeys";
 import { client } from "@skoruba/duende.identityserver.admin.api.client";
 import {
   QueryClient,
@@ -195,5 +196,19 @@ export const queryClient = new QueryClient({
   }),
   mutationCache: new MutationCache({
     onError: (error) => handleGlobalError(error),
+    // The issue queries are expensive (every rule over the whole configuration)
+    // and therefore cached. They are refreshed here, in one place, but only for
+    // mutations marked as changing validated configuration - saving a user or a
+    // role must not trigger a full re-validation. See services/mutationMeta.ts.
+    onSuccess: (_data, _variables, _context, mutation) => {
+      if (!mutation.meta?.invalidatesConfigurationIssues) return;
+
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.configurationIssues],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.configurationIssuesSummary],
+      });
+    },
   }),
 });

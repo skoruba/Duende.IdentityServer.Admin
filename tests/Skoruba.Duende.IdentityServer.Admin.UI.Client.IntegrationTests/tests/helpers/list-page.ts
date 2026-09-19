@@ -65,8 +65,11 @@ export async function findSingleRowBySearch({
   timeoutMs = 90_000,
 }: FindSingleRowBySearchOptions): Promise<Locator> {
   const searchInput = page.locator("input[type='text']").first();
+  // exact: the header also has the command palette trigger ("Search… ⌘K"),
+  // which a substring match on "Search" would pick up as well.
   const searchButton = page.getByRole("button", {
     name: UI_TEXT.actions.search,
+    exact: true,
   });
   const timeoutAt = Date.now() + timeoutMs;
 

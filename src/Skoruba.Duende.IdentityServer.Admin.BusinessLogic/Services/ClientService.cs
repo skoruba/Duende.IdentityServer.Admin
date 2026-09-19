@@ -335,6 +335,15 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services
             return standardClaims;
         }
 
+        /// <summary>
+        /// Name a client is audited under. ClientName is optional and may be empty or whitespace,
+        /// which says as little as no name at all - the client id is always present.
+        /// </summary>
+        private static string GetClientAuditName(string clientName, string clientIdentifier)
+        {
+            return string.IsNullOrWhiteSpace(clientName) ? clientIdentifier : clientName;
+        }
+
         public virtual async Task<int> AddClientSecretAsync(ClientSecretsDto clientSecret)
         {
             HashClientSharedSecret(clientSecret);
@@ -342,7 +351,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services
             var clientSecretEntity = clientSecret.ToEntity();
             var added = await ClientRepository.AddClientSecretAsync(clientSecret.ClientId, clientSecretEntity);
 
-            await AuditEventLogger.LogEventAsync(new ClientSecretAddedEvent(clientSecret.ClientId, clientSecret.Type, clientSecret.Expiration));
+            var (clientIdentifier, clientName) = await ClientRepository.GetClientIdAsync(clientSecret.ClientId);
+
+            await AuditEventLogger.LogEventAsync(new ClientSecretAddedEvent(clientSecret.ClientId, GetClientAuditName(clientName, clientIdentifier), clientSecret.Type, clientSecret.Expiration));
 
             return added;
         }
@@ -351,9 +362,15 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services
         {
             var clientSecretEntity = clientSecret.ToEntity();
 
+            // Callers may know only the secret id (the API does), which used to audit the deletion
+            // with ClientId 0. The owning client is read before the secret is gone.
+            var existingSecret = await ClientRepository.GetClientSecretAsync(clientSecret.ClientSecretId);
+            var clientId = existingSecret?.Client?.Id ?? clientSecret.ClientId;
+            var clientName = GetClientAuditName(existingSecret?.Client?.ClientName, existingSecret?.Client?.ClientId);
+
             var deleted = await ClientRepository.DeleteClientSecretAsync(clientSecretEntity);
 
-            await AuditEventLogger.LogEventAsync(new ClientSecretDeletedEvent(clientSecret.ClientId, clientSecret.ClientSecretId));
+            await AuditEventLogger.LogEventAsync(new ClientSecretDeletedEvent(clientId, clientName, clientSecret.ClientSecretId));
 
             return deleted;
         }

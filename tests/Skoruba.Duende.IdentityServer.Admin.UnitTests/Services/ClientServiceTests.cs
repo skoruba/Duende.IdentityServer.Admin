@@ -9,6 +9,7 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using Skoruba.AuditLogging.Events;
 using Skoruba.AuditLogging.Services;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Events.Client;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration;
@@ -825,6 +826,77 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 
                 auditLoggerMock.Verify(x => x.LogEventAsync(It.Is<ClientSecretRequestedEvent>(e =>
                     e.ClientSecret.Value == null)), Times.Once);
+            }
+        }
+
+        [Fact]
+        public async Task ClientSecretAuditEvents_CarryTheOwningClient()
+        {
+            using (var context = GetDbContext())
+            {
+                var auditLoggerMock = new Mock<IAuditEventLogger>();
+                TEvent LoggedEvent<TEvent>() where TEvent : AuditEvent =>
+                    auditLoggerMock.Invocations.Select(x => x.Arguments[0]).OfType<TEvent>().Single();
+
+                var clientService = GetClientService(context, auditLoggerMock.Object);
+
+                var client = ClientDtoMock.GenerateRandomClient(0);
+                await clientService.AddClientAsync(client);
+                var clientEntity = await context.Clients.Where(x => x.ClientId == client.ClientId).SingleAsync();
+
+                var secret = ClientDtoMock.GenerateRandomClientSecret(0, clientEntity.Id);
+                await clientService.AddClientSecretAsync(secret);
+
+                var addedEvent = LoggedEvent<ClientSecretAddedEvent>();
+                addedEvent.ClientId.Should().Be(clientEntity.Id);
+                addedEvent.ClientName.Should().Be(clientEntity.ClientName);
+
+                var secretEntity = await context.ClientSecrets.Where(x => x.Client.Id == clientEntity.Id).SingleAsync();
+                context.ChangeTracker.Clear();
+
+                // The API deletes by secret id alone, which used to audit the deletion with ClientId 0.
+                await clientService.DeleteClientSecretAsync(new ClientSecretsDto { ClientSecretId = secretEntity.Id });
+
+                var deletedEvent = LoggedEvent<ClientSecretDeletedEvent>();
+                deletedEvent.ClientSecretId.Should().Be(secretEntity.Id);
+                deletedEvent.ClientId.Should().Be(clientEntity.Id);
+                deletedEvent.ClientName.Should().Be(clientEntity.ClientName);
+            }
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("   ")]
+        public async Task ClientSecretAuditEvents_UseTheClientIdWhenTheClientHasNoName(string clientName)
+        {
+            using (var context = GetDbContext())
+            {
+                var auditLoggerMock = new Mock<IAuditEventLogger>();
+                TEvent LoggedEvent<TEvent>() where TEvent : AuditEvent =>
+                    auditLoggerMock.Invocations.Select(x => x.Arguments[0]).OfType<TEvent>().Single();
+
+                var clientService = GetClientService(context, auditLoggerMock.Object);
+
+                var client = ClientDtoMock.GenerateRandomClient(0);
+                await clientService.AddClientAsync(client);
+                var clientEntity = await context.Clients.Where(x => x.ClientId == client.ClientId).SingleAsync();
+
+                // ClientName is optional: an empty or whitespace name identifies nothing.
+                clientEntity.ClientName = clientName;
+                await context.SaveChangesAsync();
+                context.ChangeTracker.Clear();
+
+                await clientService.AddClientSecretAsync(ClientDtoMock.GenerateRandomClientSecret(0, clientEntity.Id));
+
+                LoggedEvent<ClientSecretAddedEvent>().ClientName.Should().Be(clientEntity.ClientId);
+
+                var secretEntity = await context.ClientSecrets.Where(x => x.Client.Id == clientEntity.Id).SingleAsync();
+                context.ChangeTracker.Clear();
+
+                await clientService.DeleteClientSecretAsync(new ClientSecretsDto { ClientSecretId = secretEntity.Id });
+
+                LoggedEvent<ClientSecretDeletedEvent>().ClientName.Should().Be(clientEntity.ClientId);
             }
         }
 

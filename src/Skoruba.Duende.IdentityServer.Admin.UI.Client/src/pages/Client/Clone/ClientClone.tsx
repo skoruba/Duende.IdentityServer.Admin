@@ -17,6 +17,7 @@ import { toast } from "@/components/ui/use-toast";
 import { queryKeys } from "@/services/QueryKeys";
 import Hoorey from "@/components/Hoorey/Hoorey";
 import i18next from "@/i18n/config";
+import { configurationChangeMeta } from "@/services/mutationMeta";
 
 const formSchema = z.object({
   clientId: z.string().min(
@@ -72,6 +73,7 @@ export const CloneClient = () => {
   });
 
   const updateClientMutation = useMutation({
+    meta: configurationChangeMeta,
     mutationFn: (data: CloneClientFormData) =>
       cloneClient({
         id: Number(clientId),

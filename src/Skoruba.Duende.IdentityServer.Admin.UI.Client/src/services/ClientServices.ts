@@ -15,6 +15,7 @@ import { INT_MAX } from "@/helpers/NumberHelper";
 import { humanizePascalCase } from "@/helpers/StringHelper";
 import { queryKeys, queryWithoutCache } from "./QueryKeys";
 import { getNowForUnspecifiedDb } from "@/helpers/DateTimeHelper";
+import { configurationChangeMeta } from "@/services/mutationMeta";
 
 export const getClients = async (
   searchTerms: string,
@@ -297,6 +298,7 @@ export const useCreateClient = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
+    meta: configurationChangeMeta,
     mutationFn: async (variables: CreateClientVariables) => {
       const { clientData, secret } = variables;
       const createdClient = await createClient(clientData);

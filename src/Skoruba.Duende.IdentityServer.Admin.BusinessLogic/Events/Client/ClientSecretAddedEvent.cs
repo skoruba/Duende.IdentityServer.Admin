@@ -14,9 +14,17 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Events.Client
 
         public int ClientId { get; set; }
 
-        public ClientSecretAddedEvent(int clientId, string type, DateTime? expiration)
+        /// <summary>
+        /// Name of the owning client at the time of the event, so the audit trail stays
+        /// readable without resolving the id (and after the client is renamed or deleted).
+        /// </summary>
+        public string ClientName { get; set; }
+
+
+        public ClientSecretAddedEvent(int clientId, string clientName, string type, DateTime? expiration)
         {
             ClientId = clientId;
+            ClientName = clientName;
             Type = type;
             Expiration = expiration;
         }

@@ -339,6 +339,8 @@ export declare class IdentityResourcesClient extends WebApiClientBase implements
 export interface IInfoClient {
     getApplicationVersion(): Promise<string>;
     getApplicationName(): Promise<string>;
+    getHealth(): Promise<SystemHealthApiDto>;
+    getEnvironment(): Promise<EnvironmentInfoApiDto>;
 }
 export declare class InfoClient extends WebApiClientBase implements IInfoClient {
     private http;
@@ -351,6 +353,10 @@ export declare class InfoClient extends WebApiClientBase implements IInfoClient 
     protected processGetApplicationVersion(response: Response): Promise<string>;
     getApplicationName(): Promise<string>;
     protected processGetApplicationName(response: Response): Promise<string>;
+    getHealth(): Promise<SystemHealthApiDto>;
+    protected processGetHealth(response: Response): Promise<SystemHealthApiDto>;
+    getEnvironment(): Promise<EnvironmentInfoApiDto>;
+    protected processGetEnvironment(response: Response): Promise<EnvironmentInfoApiDto>;
 }
 export interface IKeysClient {
     get(page: number | undefined, pageSize: number | undefined): Promise<KeysApiDto>;
@@ -1335,6 +1341,50 @@ export interface IIdentityResourcePropertyApiDto {
     id: number;
     key: string | undefined;
     value: string | undefined;
+}
+export declare class SystemHealthApiDto implements ISystemHealthApiDto {
+    status: SystemHealthStatus;
+    identityServerStatus: SystemHealthStatus;
+    entries: SystemHealthEntryApiDto[] | undefined;
+    constructor(data?: ISystemHealthApiDto);
+    init(_data?: any): void;
+    static fromJS(data: any): SystemHealthApiDto;
+    toJSON(data?: any): any;
+}
+export interface ISystemHealthApiDto {
+    status: SystemHealthStatus;
+    identityServerStatus: SystemHealthStatus;
+    entries: SystemHealthEntryApiDto[] | undefined;
+}
+export declare enum SystemHealthStatus {
+    Unknown = "Unknown",
+    Healthy = "Healthy",
+    Degraded = "Degraded",
+    Unhealthy = "Unhealthy"
+}
+export declare class SystemHealthEntryApiDto implements ISystemHealthEntryApiDto {
+    name: string | undefined;
+    status: SystemHealthStatus;
+    constructor(data?: ISystemHealthEntryApiDto);
+    init(_data?: any): void;
+    static fromJS(data: any): SystemHealthEntryApiDto;
+    toJSON(data?: any): any;
+}
+export interface ISystemHealthEntryApiDto {
+    name: string | undefined;
+    status: SystemHealthStatus;
+}
+export declare class EnvironmentInfoApiDto implements IEnvironmentInfoApiDto {
+    environmentName: string | undefined;
+    identityServerBaseUrl: string | undefined;
+    constructor(data?: IEnvironmentInfoApiDto);
+    init(_data?: any): void;
+    static fromJS(data: any): EnvironmentInfoApiDto;
+    toJSON(data?: any): any;
+}
+export interface IEnvironmentInfoApiDto {
+    environmentName: string | undefined;
+    identityServerBaseUrl: string | undefined;
 }
 export declare class KeysApiDto implements IKeysApiDto {
     keys: KeyApiDto[] | undefined;

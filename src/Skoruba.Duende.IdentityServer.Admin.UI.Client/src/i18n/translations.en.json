@@ -4,9 +4,9 @@
     "SubTitle": "Admin UI offers a set of features to manage your Duende IdentityServer, Users and Roles",
     "Clients": "Clients",
     "ClientsDescription": "Manage your clients",
-    "ApiResources": "Api Resources",
+    "ApiResources": "API Resources",
     "ApiResourcesDescription": "Manage your API resources",
-    "ApiScopes": "Api Scopes",
+    "ApiScopes": "API Scopes",
     "ApiScopesDescription": "Manage your API scopes",
     "IdentityResources": "Identity Resources",
     "IdentityResourcesDescription": "Manage your identity resources",
@@ -26,9 +26,6 @@
     "ConfigurationRulesDescription": "Manage configuration validation rules",
     "Keys": "Keys",
     "KeysDescription": "Manage your keys",
-    "Overview": "Overview",
-    "OverviewDescription": "Total count of Identity Server resources and clients",
-    "TotalResources": "Total Resources",
     "ClientsResourcesManagement": "Clients & Resources Management",
     "IdentityManagement": "Identity Management",
     "ProvidersAndKeys": "Providers & Keys",
@@ -36,11 +33,10 @@
     "Logout": "Logout",
     "ClientsChecker": {
       "Title": "Monitoring",
-      "Description": "Check your IdentityServer configuration for potential issues",
+      "Description": "Issues found by configuration rules",
       "Pie": {
-        "NoIssues": "0 issues",
-        "Issues_one": "{{count}} issue",
-        "Issues_other": "{{count}} issues"
+        "IssuesLabel_one": "issue",
+        "IssuesLabel_other": "issues"
       },
       "Legend": {
         "Issues": "Issues",
@@ -56,19 +52,113 @@
       "Warning_other": "{{count}} warnings",
       "Recommendation_one": "{{count}} recommendation",
       "Recommendation_other": "{{count}} recommendations",
-      "Button": "View issues"
+      "Button": "View issues",
+      "ManageRules": "Manage rules",
+      "Affected": {
+        "Client_one": "{{count}} client affected",
+        "Client_other": "{{count}} clients affected",
+        "ApiResource_one": "{{count}} API resource affected",
+        "ApiResource_other": "{{count}} API resources affected",
+        "ApiScope_one": "{{count}} API scope affected",
+        "ApiScope_other": "{{count}} API scopes affected",
+        "IdentityResource_one": "{{count}} identity resource affected",
+        "IdentityResource_other": "{{count}} identity resources affected"
+      },
+      "AllRulesPass": "Your configuration passes all enabled rules."
     },
     "DashboardState": {
       "Title": "Dashboard unavailable",
       "Unauthorized": "Your admin API session is no longer valid. Sign in again to continue.",
       "Forbidden": "You are signed in, but you do not have permission to view dashboard data.",
       "Generic": "Dashboard data could not be loaded."
+    },
+    "RecentActivity": {
+      "Title": "Recent Activity",
+      "Description": "Latest audit changes",
+      "ViewAll": "View all",
+      "Empty": "No changes have been recorded yet.",
+      "Sensitive": "Sensitive",
+      "PermissionChange": "Permission change",
+      "Target": {
+        "Client": "client #{{id}}",
+        "ApiResource": "API resource #{{id}}",
+        "ApiScope": "API scope #{{id}}"
+      }
+    },
+    "Sections": {
+      "ClientsResourcesDescription": "Apps, APIs, scopes and identity data",
+      "IdentityDescription": "People and their permissions",
+      "ProvidersKeysDescription": "External sign-in and token signing",
+      "NewestKey": "newest key",
+      "LastDays": "last {{days}} days",
+      "ViewAuditLogs": "View audit logs",
+      "Ago": "{{age}} ago",
+      "NoIssues": "No issues",
+      "NeedAttention_one": "{{count}} needs attention",
+      "NeedAttention_other": "{{count}} need attention"
+    },
+    "Environment": {
+      "Title": "Environment and IdentityServer this Admin UI manages"
+    },
+    "Status": {
+      "Healthy": "Service healthy",
+      "IdentityServerUnreachable": "IdentityServer unreachable",
+      "ChecksFailing_one": "{{count}} of {{total}} checks failing",
+      "ChecksFailing_other": "{{count}} of {{total}} checks failing",
+      "ChecksPassing": "{{passing}}/{{total}} checks passing",
+      "Checked": "last checked {{age}} ago",
+      "ConfigurationIssues_one": "{{count}} configuration issue",
+      "ConfigurationIssues_other": "{{count}} configuration issues",
+      "Degraded": "Service degraded",
+      "Unhealthy": "Service unhealthy",
+      "LastChecked": "Last checked {{time}}, refreshes every minute",
+      "Unknown": "Health status unavailable"
+    },
+    "ActivityDetail": {
+      "Target": "Target",
+      "PerformedBy": "Performed by",
+      "When": "When",
+      "IpAddress": "IP address",
+      "Request": "Request",
+      "TraceId": "Trace ID",
+      "SubjectId": "Subject ID",
+      "RecordedData": "Recorded data (the state after the change)",
+      "NoData": "This event recorded no additional data.",
+      "OpenInAuditLog": "Open in audit log"
     }
   },
   "Dashboard": {
     "Today": "Today",
     "NoAuditData": "No audit data",
     "Average": "Average"
+  },
+  "CommandPalette": {
+    "Trigger": "Search…",
+    "Title": "Command palette",
+    "Placeholder": "Search clients, users, resources or jump to…",
+    "Empty": "No results found.",
+    "Searching": "Searching…",
+    "Actions": "Quick actions",
+    "GoTo": "Go to",
+    "Dashboard": "Dashboard"
+  },
+  "QuickActions": {
+    "NewClient": "New client",
+    "NewApiResource": "New API resource",
+    "NewApiScope": "New API scope",
+    "NewIdentityResource": "New identity resource",
+    "NewUser": "New user",
+    "NewRole": "New role",
+    "NewIdentityProvider": "New identity provider",
+    "Short": {
+      "Client": "Client",
+      "ApiResource": "API resource",
+      "ApiScope": "API scope",
+      "IdentityResource": "Identity resource",
+      "User": "User",
+      "Role": "Role",
+      "IdentityProvider": "Identity provider"
+    }
   },
   "Errors": {
     "Failed": "Failed",
@@ -255,10 +345,10 @@
     },
     "Actions": {
       "DeleteApiScopeConfirm": "Are you sure you want to delete this api scope <strong>{{apiScopeName}}</strong>?",
-      "Deleted": "Api Scope has been deleted successfully!",
-      "Created": "Api Scope has been created successfully!",
-      "Updated": "Api Scope has been updated successfully!",
-      "Delete": "Delete Api Scope"
+      "Deleted": "API Scope has been deleted successfully!",
+      "Created": "API Scope has been created successfully!",
+      "Updated": "API Scope has been updated successfully!",
+      "Delete": "Delete API Scope"
     },
     "Tabs": {
       "Basics": "Basics",
@@ -269,10 +359,10 @@
       "PropertiesDescription": "Additional properties for the API scope."
     },
     "Create": {
-      "PageTitle": "Api Scope"
+      "PageTitle": "API Scope"
     },
     "Edit": {
-      "PageTitle": "Api Scope"
+      "PageTitle": "API Scope"
     },
     "Section": {
       "Label": {
@@ -296,9 +386,9 @@
     }
   },
   "ApiScopes": {
-    "ApiScopeName": "Api Scope Name",
-    "PageTitle": "Api Scopes",
-    "AddNewApiScope": "Add Api Scope",
+    "ApiScopeName": "API Scope Name",
+    "PageTitle": "API Scopes",
+    "AddNewApiScope": "Add API Scope",
     "SearchPlaceholder": "Search by scope name or ID"
   },
   "IdentityResources": {
@@ -356,16 +446,16 @@
     },
     "Actions": {
       "DeleteApiResourceConfirm": "Are you sure you want to delete this api resource <strong>{{apiResourceName}}<strong>?",
-      "Deleted": "Api Resource has been deleted successfully!",
-      "Created": "Api Resource has been created successfully!",
-      "Updated": "Api Resource has been updated successfully!",
-      "Delete": "Delete Api Resource"
+      "Deleted": "API Resource has been deleted successfully!",
+      "Created": "API Resource has been created successfully!",
+      "Updated": "API Resource has been updated successfully!",
+      "Delete": "Delete API Resource"
     },
     "Create": {
-      "PageTitle": "Api Resource"
+      "PageTitle": "API Resource"
     },
     "Edit": {
-      "PageTitle": "Api Resource"
+      "PageTitle": "API Resource"
     },
     "Tabs": {
       "Basics": "Basics",
@@ -401,9 +491,9 @@
     }
   },
   "ApiResources": {
-    "PageTitle": "Api Resources",
-    "AddNewApiResource": "Add Api Resource",
-    "ApiResourceName": "Api Resource Name",
+    "PageTitle": "API Resources",
+    "AddNewApiResource": "Add API Resource",
+    "ApiResourceName": "API Resource Name",
     "SearchPlaceholder": "Search by resource name or ID"
   },
   "Clients": {
@@ -1039,8 +1129,8 @@
     "Warning": "Warning",
     "Recommendation": "Recommendation",
     "Client": "Client",
-    "ApiScope": "Api Scope",
-    "ApiResource": "Api Resource",
+    "ApiScope": "API Scope",
+    "ApiResource": "API Resource",
     "IdentityResource": "Identity Resource",
     "DuplicateRuleError": "This rule type already exists. Each rule type can only be configured once."
   },
@@ -1063,24 +1153,24 @@
     "SelectDate": "Select date",
     "ClearDate": "Clear date",
     "Action": "Action",
-    "InsufficientData": "Insufficient data for trend visualization",
-    "InsufficientDataDescription": "At least 2 days of audit data are needed to display meaningful trends.",
-    "UnusualActivity": "Unusual activity detected - recent operations are significantly higher than normal",
+    "InsufficientData": "Collecting data for the trend",
+    "InsufficientDataDescription": "{{current}} of {{required}} days with audit data collected.",
+    "UnusualActivity": "Unusual: {{operations}} ops today",
     "ActivityTrend": "Activity over time",
-    "DailyAverage_one": "{{count}} op/day avg",
-    "DailyAverage_other": "{{count}} ops/day avg",
+    "DailyAverage_one": "avg {{count}} per active day",
+    "DailyAverage_other": "avg {{count}} per active day",
     "Operations": "Operations",
-    "HighActivity": "High Activity Detected",
-    "NormalActivity": "Security Activity Normal",
-    "TodaysOperations": "today's operations",
-    "SecurityAlert": "Security Alert",
+    "NormalActivity": "Current activity normal",
     "UnusualActivityDescription": "Recent activity is significantly above normal levels",
-    "AboveAverage": "Above average",
-    "Normal": "Normal",
-    "ThisWeeksOperations": "this week's operations",
-    "WeeklyAverage_one": "{{count}} op/week avg",
-    "WeeklyAverage_other": "{{count}} ops/week avg",
-    "CurrentWeek": "Current week"
+    "Review": "Review today's activity",
+    "AlertThreshold": "Alert threshold · {{threshold}} ops/day",
+    "UnusualActivityBaseline": "vs {{baseline}}/day avg",
+    "BaselineExplanation": "Average of the days with activity in the last {{days}} days, today excluded. The alert threshold is 1.5× this value.",
+    "AnomalyOn": "anomaly on {{date}}",
+    "ReviewAnomaly": "Review {{date}}",
+    "AnomalyDetected": "Anomaly detected",
+    "NormalActivityShort": "Normal",
+    "AnomalyOnShort": "anomaly {{date}}"
   },
   "Pages": {
     "AccessDenied": {

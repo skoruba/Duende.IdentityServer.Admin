@@ -20,6 +20,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { toast } from "../ui/use-toast";
+import { configurationChangeMeta } from "@/services/mutationMeta";
 
 type PropertiesTabProps = {
   resourceId: number;
@@ -61,6 +62,7 @@ const PropertiesApi: React.FC<PropertiesTabProps> = ({
   });
 
   const addMutation = useMutation({
+    meta: configurationChangeMeta,
     mutationFn: (data: { key: string; value: string }) =>
       addProperty(resourceId, data),
     onSuccess: () => {
@@ -74,6 +76,7 @@ const PropertiesApi: React.FC<PropertiesTabProps> = ({
   });
 
   const deleteMutation = useMutation({
+    meta: configurationChangeMeta,
     mutationFn: (id: number) => deleteProperty(id),
     onSuccess: () => {
       toast({

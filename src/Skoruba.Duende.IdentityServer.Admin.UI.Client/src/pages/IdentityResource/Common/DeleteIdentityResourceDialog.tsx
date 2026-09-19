@@ -14,6 +14,7 @@ import { toast } from "@/components/ui/use-toast";
 import { deleteIdentityResource } from "@/services/IdentityResourceServices";
 import { queryKeys } from "@/services/QueryKeys";
 import Hoorey from "@/components/Hoorey/Hoorey";
+import { configurationChangeMeta } from "@/services/mutationMeta";
 
 type DeleteIdentityResourceDialogProps = {
   identityResourceId: number;
@@ -32,6 +33,7 @@ const DeleteIdentityResourceDialog = ({
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
+    meta: configurationChangeMeta,
     mutationFn: () => deleteIdentityResource(identityResourceId),
     onSuccess: () => {
       queryClient.invalidateQueries({

@@ -6,6 +6,7 @@ import { UseModalReturn } from "@/hooks/modalHooks";
 import { toast } from "@/components/ui/use-toast";
 import { CheckCircle } from "lucide-react";
 import { queryKeys } from "@/services/QueryKeys";
+import { configurationChangeMeta } from "@/services/mutationMeta";
 
 type DeleteClientDialogProps = {
   clientName: string;
@@ -25,6 +26,7 @@ const DeleteClientDialog = ({
   const queryClient = useQueryClient();
 
   const removeClient = useMutation({
+    meta: configurationChangeMeta,
     mutationFn: () => deleteClient(Number(clientId)),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.clients] });

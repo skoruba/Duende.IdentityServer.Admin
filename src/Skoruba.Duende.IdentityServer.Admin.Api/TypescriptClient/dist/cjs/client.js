@@ -15,7 +15,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DashboardIdentityDto = exports.DashboardAuditLogDto = exports.DashboardDto = exports.ConfigurationRuleParameterDto = exports.ConfigurationRuleMetadataDto = exports.ConfigurationIssueType = exports.ConfigurationRuleType = exports.ConfigurationRuleDto = exports.ConfigurationRulesDto = exports.ConfigurationIssueSummaryDto = exports.ConfigurationResourceType = exports.ConfigurationIssueTypeView = exports.ConfigurationIssueDto = exports.ConfigurationIssuesPagedDto = exports.ClientClaimsApiDto = exports.ClientPropertiesApiDto = exports.ClientSecretApiDto = exports.ClientSecretsApiDto = exports.ClientCloneApiDto = exports.SelectItemDto = exports.ClientPropertyApiDto = exports.ClientClaimApiDto = exports.ClientApiDto = exports.ClientsApiDto = exports.ApiScopePropertiesApiDto = exports.ApiScopePropertyApiDto = exports.ApiScopeApiDto = exports.ApiScopesApiDto = exports.ApiResourcePropertyApiDto = exports.ApiResourcePropertiesApiDto = exports.ApiSecretApiDto = exports.ApiSecretsApiDto = exports.ProblemDetails = exports.ApiResourceApiDto = exports.ApiResourcesApiDto = exports.UsersClient = exports.RolesClient = exports.PersistedGrantsClient = exports.LogsClient = exports.KeysClient = exports.InfoClient = exports.IdentityResourcesClient = exports.IdentityProvidersClient = exports.DashboardClient = exports.ConfigurationRulesClient = exports.ConfigurationIssuesClient = exports.ClientsClient = exports.ApiScopesClient = exports.ApiResourcesClient = exports.WebApiClientBase = void 0;
-exports.SwaggerException = exports.UserChangePasswordApiDtoOfString = exports.UserProviderDeleteApiDtoOfString = exports.UserProviderApiDtoOfString = exports.UserProvidersApiDtoOfString = exports.UserClaimApiDtoOfString = exports.UserClaimsApiDtoOfString = exports.UserRoleApiDtoOfString = exports.UserRolesApiDtoOfIdentityRoleDto = exports.TKey = exports.RoleClaimApiDto_1 = exports.RoleClaimApiDtoOfString = exports.RoleClaimsApiDtoOfString = exports.IdentityUserDto = exports.UserDtoOfString = exports.BaseUserDtoOfString = exports.IdentityUsersDto = exports.UsersDtoOfIdentityUserDtoAndString = exports.IdentityRolesDto = exports.RolesDtoOfIdentityRoleDtoAndString = exports.IdentityRoleDto = exports.RoleDtoOfString = exports.BaseRoleDtoOfString = exports.PersistedGrantsApiDto = exports.PersistedGrantApiDto = exports.PersistedGrantSubjectApiDto = exports.PersistedGrantSubjectsApiDto = exports.AuditLogDto = exports.AuditLogsDto = exports.KeyApiDto = exports.KeysApiDto = exports.IdentityResourcePropertyApiDto = exports.IdentityResourcePropertiesApiDto = exports.IdentityResourceApiDto = exports.IdentityResourcesApiDto = exports.IdentityProviderApiDto = exports.IdentityProvidersApiDto = void 0;
+exports.SwaggerException = exports.UserChangePasswordApiDtoOfString = exports.UserProviderDeleteApiDtoOfString = exports.UserProviderApiDtoOfString = exports.UserProvidersApiDtoOfString = exports.UserClaimApiDtoOfString = exports.UserClaimsApiDtoOfString = exports.UserRoleApiDtoOfString = exports.UserRolesApiDtoOfIdentityRoleDto = exports.TKey = exports.RoleClaimApiDto_1 = exports.RoleClaimApiDtoOfString = exports.RoleClaimsApiDtoOfString = exports.IdentityUserDto = exports.UserDtoOfString = exports.BaseUserDtoOfString = exports.IdentityUsersDto = exports.UsersDtoOfIdentityUserDtoAndString = exports.IdentityRolesDto = exports.RolesDtoOfIdentityRoleDtoAndString = exports.IdentityRoleDto = exports.RoleDtoOfString = exports.BaseRoleDtoOfString = exports.PersistedGrantsApiDto = exports.PersistedGrantApiDto = exports.PersistedGrantSubjectApiDto = exports.PersistedGrantSubjectsApiDto = exports.AuditLogDto = exports.AuditLogsDto = exports.KeyApiDto = exports.KeysApiDto = exports.EnvironmentInfoApiDto = exports.SystemHealthEntryApiDto = exports.SystemHealthStatus = exports.SystemHealthApiDto = exports.IdentityResourcePropertyApiDto = exports.IdentityResourcePropertiesApiDto = exports.IdentityResourceApiDto = exports.IdentityResourcesApiDto = exports.IdentityProviderApiDto = exports.IdentityProvidersApiDto = void 0;
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 class WebApiClientBase {
@@ -4924,6 +4924,100 @@ class InfoClient extends WebApiClientBase {
         }
         return Promise.resolve(null);
     }
+    getHealth() {
+        let url_ = this.baseUrl + "/api/Info/GetHealth";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
+            return this.processGetHealth(_response);
+        });
+    }
+    processGetHealth(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = SystemHealthApiDto.fromJS(resultData200);
+                return result200;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
+    }
+    getEnvironment() {
+        let url_ = this.baseUrl + "/api/Info/GetEnvironment";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
+            return this.processGetEnvironment(_response);
+        });
+    }
+    processGetEnvironment(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = EnvironmentInfoApiDto.fromJS(resultData200);
+                return result200;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
+    }
 }
 exports.InfoClient = InfoClient;
 class KeysClient extends WebApiClientBase {
@@ -8785,6 +8879,110 @@ class IdentityResourcePropertyApiDto {
     }
 }
 exports.IdentityResourcePropertyApiDto = IdentityResourcePropertyApiDto;
+class SystemHealthApiDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            this.status = _data["status"];
+            this.identityServerStatus = _data["identityServerStatus"];
+            if (Array.isArray(_data["entries"])) {
+                this.entries = [];
+                for (let item of _data["entries"])
+                    this.entries.push(SystemHealthEntryApiDto.fromJS(item));
+            }
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new SystemHealthApiDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        data["status"] = this.status;
+        data["identityServerStatus"] = this.identityServerStatus;
+        if (Array.isArray(this.entries)) {
+            data["entries"] = [];
+            for (let item of this.entries)
+                data["entries"].push(item ? item.toJSON() : undefined);
+        }
+        return data;
+    }
+}
+exports.SystemHealthApiDto = SystemHealthApiDto;
+var SystemHealthStatus;
+(function (SystemHealthStatus) {
+    SystemHealthStatus["Unknown"] = "Unknown";
+    SystemHealthStatus["Healthy"] = "Healthy";
+    SystemHealthStatus["Degraded"] = "Degraded";
+    SystemHealthStatus["Unhealthy"] = "Unhealthy";
+})(SystemHealthStatus || (exports.SystemHealthStatus = SystemHealthStatus = {}));
+class SystemHealthEntryApiDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            this.name = _data["name"];
+            this.status = _data["status"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new SystemHealthEntryApiDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["status"] = this.status;
+        return data;
+    }
+}
+exports.SystemHealthEntryApiDto = SystemHealthEntryApiDto;
+class EnvironmentInfoApiDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            this.environmentName = _data["environmentName"];
+            this.identityServerBaseUrl = _data["identityServerBaseUrl"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new EnvironmentInfoApiDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        data["environmentName"] = this.environmentName;
+        data["identityServerBaseUrl"] = this.identityServerBaseUrl;
+        return data;
+    }
+}
+exports.EnvironmentInfoApiDto = EnvironmentInfoApiDto;
 class KeysApiDto {
     constructor(data) {
         if (data) {

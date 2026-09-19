@@ -7,7 +7,7 @@ import { DataTable } from "@/components/DataTable/DataTable";
 import Loading from "@/components/Loading/Loading";
 import { client } from "@skoruba/duende.identityserver.admin.api.client";
 import Page from "@/components/Page/Page";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Hammer, Cog, Settings, Search, Filter, X } from "lucide-react";
 import { TooltipField } from "@/components/FormRow/FormRow";
 import { IssueTypeBadge } from "./IssueTypeBadge";
@@ -34,12 +34,21 @@ const ConfigurationIssues: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [resourceTypeFilter, setResourceTypeFilter] =
     useState<ResourceTypeFilter>(ResourceTypeFilterOptions.ALL);
-  const [issueTypeFilter, setIssueTypeFilter] = useState<IssueTypeFilter>(
-    IssueTypeFilterOptions.ALL
+  const [searchParams] = useSearchParams();
+  // Dashboard severity rows link here with ?type=Error|Warning|Recommendation
+  const initialIssueType =
+    Object.values(IssueTypeFilterOptions).find(
+      (option) => option === searchParams.get("type")
+    ) ?? IssueTypeFilterOptions.ALL;
+  const [issueTypeFilter, setIssueTypeFilter] =
+    useState<IssueTypeFilter>(initialIssueType);
+  const [showFilters, setShowFilters] = useState(
+    initialIssueType !== IssueTypeFilterOptions.ALL
   );
-  const [showFilters, setShowFilters] = useState(false);
 
-  const { data, isLoading } = useConfigurationIssues();
+  const { data, isLoading } = useConfigurationIssues({
+    refetchOnMount: "always",
+  });
 
   const filteredData = useMemo(() => {
     if (!data || !Array.isArray(data)) return [];

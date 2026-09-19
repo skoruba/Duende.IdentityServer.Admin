@@ -1,6 +1,11 @@
 import { useMemo } from "react";
 import ApiHelper from "@/helpers/ApiHelper";
-import { DashboardIdentityServerResult } from "@/models/Dashboard/DashboardModels";
+import {
+  DashBoardIdentityData,
+  DashboardIdentityServerResult,
+} from "@/models/Dashboard/DashboardModels";
+import { KeyApiDto } from "@/models/Keys/KeysModel";
+import { getAuditLogs } from "./AuditLogsService";
 import {
   ApiResourceEditUrl,
   ApiScopeEditUrl,
@@ -10,7 +15,6 @@ import {
 import { client } from "@skoruba/duende.identityserver.admin.api.client";
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys, queryWithoutCache } from "./QueryKeys";
-import i18next from "@/i18n/config";
 
 export const buildConfigurationIssueLink = (
   resourceId: string,
@@ -30,7 +34,27 @@ export const buildConfigurationIssueLink = (
   }
 };
 
-export const useConfigurationIssues = () =>
+// Both endpoints run every enabled configuration rule against the whole
+// configuration (all clients with their relations), so the result is cached
+// instead of being recomputed on every mount and window focus. It cannot go
+// silently stale: every successful mutation invalidates these queries
+// (see the MutationCache in helpers/ErrorHelper.ts).
+const configurationIssuesQueryOptions = {
+  staleTime: 2 * 60 * 1000,
+  gcTime: 10 * 60 * 1000,
+  refetchOnWindowFocus: false,
+} as const;
+
+type ConfigurationIssuesQueryOptions = {
+  /** The header renders before ProtectedRoute: never query until authenticated. */
+  enabled?: boolean;
+  /** "always" for the page whose whole purpose is showing the current issues. */
+  refetchOnMount?: boolean | "always";
+};
+
+export const useConfigurationIssues = (
+  options: ConfigurationIssuesQueryOptions = {},
+) =>
   useQuery({
     queryKey: [queryKeys.configurationIssues],
     queryFn: async () => {
@@ -42,10 +66,13 @@ export const useConfigurationIssues = () =>
       const result = await configClient.get(null, null, null, 0, 50, true);
       return result.issues || [];
     },
-    ...queryWithoutCache,
+    ...configurationIssuesQueryOptions,
+    ...options,
   });
 
-export const useConfigurationIssuesSummary = () =>
+export const useConfigurationIssuesSummary = (
+  options: ConfigurationIssuesQueryOptions = {},
+) =>
   useQuery({
     queryKey: [queryKeys.configurationIssuesSummary],
     queryFn: async () => {
@@ -54,7 +81,8 @@ export const useConfigurationIssuesSummary = () =>
       );
       return await configClient.getSummary();
     },
-    ...queryWithoutCache,
+    ...configurationIssuesQueryOptions,
+    ...options,
   });
 
 export const useConfigurationIssuesForResource = (
@@ -102,22 +130,6 @@ export const getDashboardIdentityServerData = async (
     identityProvidersTotal: dashboard.identityProvidersTotal,
   };
 
-  const identityServerDataChart = [
-    { name: String(i18next.t("Home.Clients")), total: dashboard.clientsTotal },
-    {
-      name: String(i18next.t("Home.ApiResources")),
-      total: dashboard.apiResourcesTotal,
-    },
-    {
-      name: String(i18next.t("Home.ApiScopes")),
-      total: dashboard.apiScopesTotal,
-    },
-    {
-      name: String(i18next.t("Home.IdentityResources")),
-      total: dashboard.identityResourcesTotal,
-    },
-  ];
-
   const auditLogsData =
     dashboard.auditLogsPerDaysTotal?.map((auditLog) => ({
       total: auditLog.total,
@@ -125,5 +137,91 @@ export const getDashboardIdentityServerData = async (
       created: auditLog.created,
     })) ?? [];
 
-  return { identityServerDataChart, auditLogsData, identityServerData };
+  return { auditLogsData, identityServerData };
 };
+
+export const DASHBOARD_AUDIT_LOG_DAYS = 30;
+const DASHBOARD_KEYS_PAGE_SIZE = 50;
+
+export const useDashboardIdentityServer = () =>
+  useQuery({
+    queryKey: [queryKeys.dashboard],
+    queryFn: () => getDashboardIdentityServerData(DASHBOARD_AUDIT_LOG_DAYS),
+    ...queryWithoutCache,
+  });
+
+export const useDashboardIdentity = () =>
+  useQuery({
+    queryKey: [queryKeys.dashboardIdentity],
+    queryFn: async (): Promise<DashBoardIdentityData> => {
+      const dashboardClient = new client.DashboardClient(
+        ApiHelper.getApiBaseUrl(),
+      );
+      const identity = await dashboardClient.getDashboardIdentity();
+
+      return {
+        usersTotal: identity.usersTotal,
+        rolesTotal: identity.rolesTotal,
+      };
+    },
+    ...queryWithoutCache,
+  });
+
+// The keys endpoint pages by id, so the newest keys are picked on the client.
+export const useDashboardKeys = () =>
+  useQuery({
+    queryKey: [queryKeys.dashboardKeys],
+    queryFn: async () => {
+      const keysClient = new client.KeysClient(ApiHelper.getApiBaseUrl());
+      const result = await keysClient.get(1, DASHBOARD_KEYS_PAGE_SIZE);
+
+      const keys = [...(result.keys ?? [])]
+        .map(
+          (key): KeyApiDto => ({
+            id: key.id ?? "",
+            version: key.version,
+            created: new Date(key.created),
+            use: key.use ?? "",
+            algorithm: key.algorithm ?? "",
+            isX509Certificate: key.isX509Certificate,
+          }),
+        )
+        .sort((a, b) => b.created.getTime() - a.created.getTime());
+
+      return { keys, totalCount: result.totalCount };
+    },
+    ...queryWithoutCache,
+  });
+
+// Every audit event name ends with one of these verbs or with "Requested".
+// Read events vastly outnumber changes (the dashboard itself produces them),
+// so changes are queried per verb instead of being filtered out of one page.
+const AUDIT_CHANGE_VERBS = [
+  "Added",
+  "Updated",
+  "Deleted",
+  "Saved",
+  "Changed",
+  "Cloned",
+];
+
+export const useRecentAuditChanges = (count: number) =>
+  useQuery({
+    queryKey: [queryKeys.dashboardRecentAuditLogs, count],
+    queryFn: async () => {
+      const pages = await Promise.all(
+        AUDIT_CHANGE_VERBS.map((verb) =>
+          getAuditLogs({ event: `${verb}Event` }, 0, count),
+        ),
+      );
+
+      return pages
+        .flatMap((page) => page.items)
+        .sort(
+          (a, b) =>
+            new Date(b.created).getTime() - new Date(a.created).getTime(),
+        )
+        .slice(0, count);
+    },
+    ...queryWithoutCache,
+  });

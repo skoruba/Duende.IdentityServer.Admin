@@ -14,6 +14,7 @@ import { Trans, useTranslation } from "react-i18next";
 import { toast } from "@/components/ui/use-toast";
 import { queryKeys } from "@/services/QueryKeys";
 import Hoorey from "@/components/Hoorey/Hoorey";
+import { configurationChangeMeta } from "@/services/mutationMeta";
 
 type Props = {
   apiScopeId: number;
@@ -32,6 +33,7 @@ const DeleteApiScopeDialog = ({
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
+    meta: configurationChangeMeta,
     mutationFn: () => deleteApiScope(apiScopeId),
     onSuccess: () => {
       toast({

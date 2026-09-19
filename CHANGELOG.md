@@ -10,6 +10,7 @@ step rather than a rewrite.
 
 ### Added
 
+- **Actionable dashboard and command palette.** The home page now combines service health, configuration issues, resource counts, audit trends, recent activity, and contextual quick actions. A keyboard-accessible command palette provides fast navigation and search across the Admin UI
 - **Client integration snippets.** A new *Integration* tab on the client detail generates the .NET 10 wire-up for the client being edited - NuGet packages, `appsettings.json`, the matching `dotnet user-secrets` commands, and `Program.cs`. Only the authorization code and client credentials flows are generated, and everything is derived from the form, so the snippets follow changes before they are saved: callback paths come from the redirect URIs, the scope list from the allowed scopes, PKCE and pushed authorization from their switches
 - Client authentication in the generated code can be a shared secret or **private_key_jwt**, which adds a `ClientAssertionService` reading the signing algorithm from the JWK itself. The mode is preselected from the client's registered secrets, so a client holding a JWK secret gets the assertion variant without asking
 - A separate step generates the **DPoP proof key** when the client requires DPoP, which - unlike the client credential - is the application's own key and is registered nowhere. The key follows the *Keep secrets out of the code* switch like the client credential: stored in user secrets, or inlined with a warning
@@ -35,7 +36,7 @@ step rather than a rewrite.
 - Identity resources are left out of the client scope picker for clients without a user flow, because they cannot be issued without one
 - Grant type ids moved into a single `GrantTypeIds` constant covering all ids the API returns, replacing the two-value `GrantTypes` enum
 - Downloading generated content reuses one helper shared with the JWK dialog
-- Updated the solution to Duende IdentityServer 8.0.2, including EF migrations for the configuration, persisted grant, and identity stores
+- Updated the solution to Duende IdentityServer 8.0.8, including EF migrations for the configuration, persisted grant, and identity stores
 - Only `SharedSecret` is hashed, so the "you cannot retrieve it" warning and password masking are limited to that type; X509 types now state that the value is stored as it is
 - Switching the client secret type clears the value, so a JWK cannot end up hashed as a shared secret or the other way round
 - Secret type names are humanized for display only; the value sent to the API stays exactly as the backend expects it
@@ -46,6 +47,7 @@ step rather than a rewrite.
 
 ### Fixed
 
+- Audit entries for client and API-resource secret changes now retain the owning resource name. Recent activity therefore shows a useful target rather than an opaque database id, including when an API deletes a secret by its id alone
 - **The wizard created public clients that required a client secret.** The Public client type never asks for a secret, but the created client still ended up with `RequireClientSecret = true`, so it could not authenticate at the token endpoint. The type now enforces `RequireClientSecret = false` and shows it on the summary step
 - The advanced client settings rendered an *Other Settings* panel that had no matching tab trigger and could never be opened
 - **Device flow consent is never remembered** ([RFC 8628](https://www.rfc-editor.org/rfc/rfc8628)). The device that starts a device flow is not the device the user authenticates on, so persisted consent could be replayed against an attacker-controlled device. `ConsentResponse.RememberConsent` is now always false for device flow, the "Remember My Decision" checkbox is gone from the user code confirmation page, and the device view model no longer fills `AllowRememberConsent`, so a forged POST cannot re-enable it either

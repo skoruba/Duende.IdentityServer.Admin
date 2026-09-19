@@ -22,6 +22,7 @@ import {
   useConfirmUnsavedChanges,
   useNavigateWithBlocker,
 } from "@/hooks/useConfirmUnsavedChanges";
+import { configurationChangeMeta } from "@/services/mutationMeta";
 
 export enum IdentityResourceFormMode {
   Create = "create",
@@ -62,6 +63,7 @@ const IdentityResourceForm: React.FC<Props> = ({
   const { DialogCmp } = useConfirmUnsavedChanges(form.formState.isDirty);
 
   const mutation = useMutation({
+    meta: configurationChangeMeta,
     mutationFn: (data: IdentityResourceFormData) =>
       mode === IdentityResourceFormMode.Create
         ? createIdentityResource(data)

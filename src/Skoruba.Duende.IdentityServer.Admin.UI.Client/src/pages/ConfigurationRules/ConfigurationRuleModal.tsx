@@ -17,6 +17,7 @@ import { queryKeys } from "@/services/QueryKeys";
 import Loading from "@/components/Loading/Loading";
 import ConfigurationRuleForm from "./ConfigurationRuleForm";
 import { toast } from "@/components/ui/use-toast";
+import { configurationChangeMeta } from "@/services/mutationMeta";
 
 interface ConfigurationRuleModalProps {
   rule: client.ConfigurationRuleDto | null;
@@ -44,6 +45,7 @@ const ConfigurationRuleModal: React.FC<ConfigurationRuleModalProps> = ({
   });
 
   const saveMutation = useMutation({
+    meta: configurationChangeMeta,
     mutationFn: async (data: client.ConfigurationRuleDto) => {
       if (isEditMode && rule) {
         await updateConfigurationRule(rule.id, data);

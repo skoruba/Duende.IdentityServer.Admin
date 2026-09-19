@@ -3,6 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 import { MainNav } from "@/components/MainNav/MainNav";
 import { ModeToggle } from "@/components/ModeToggle/ModeToggle";
+import { CommandPalette } from "@/components/CommandPalette/CommandPalette";
 import AuthHelper from "@/helpers/AuthHelper";
 import { useCsrfToken } from "../hooks/useCsrfToken";
 import { Button } from "../ui/button";
@@ -48,6 +49,8 @@ export function SiteHeader() {
       <div className="container flex h-16 items-center justify-between gap-3">
         <MainNav />
         <nav className="flex items-center gap-2">
+          {isAuthenticated && <CommandPalette />}
+
           <div className="hidden sm:flex items-center text-sm text-muted-foreground">
             <UserCircle2 className="me-1 h-5 w-5" />
             <span

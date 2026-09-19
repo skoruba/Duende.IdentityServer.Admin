@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Page from "@/components/Page/Page";
@@ -16,7 +17,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { format } from "date-fns";
+import { format, isValid, parse } from "date-fns";
 import { queryKeys } from "@/services/QueryKeys";
 import AuditLogDetail from "./AuditLogDetail";
 
@@ -24,9 +25,20 @@ const AuditLogs: React.FC = () => {
   const { t } = useTranslation();
   const { pagination, setPagination } = usePaginationTable();
 
-  const [filters, setFilters] = useState<Partial<AuditLogData>>({});
+  const [searchParams] = useSearchParams();
+  // The dashboard's recent activity links here with ?event=<EventName>
+  const [filters, setFilters] = useState<Partial<AuditLogData>>(() => ({
+    event: searchParams.get("event") ?? undefined,
+  }));
   const [selectedLog, setSelectedLog] = useState<AuditLogData | null>(null);
-  const [date, setDate] = useState<Date | undefined>();
+  // ...and the activity alert with ?created=yyyy-MM-dd
+  const [date, setDate] = useState<Date | undefined>(() => {
+    const created = searchParams.get("created");
+    if (!created || !/^\d{4}-\d{2}-\d{2}$/.test(created)) return undefined;
+
+    const parsed = parse(created, "yyyy-MM-dd", new Date());
+    return isValid(parsed) ? parsed : undefined;
+  });
 
   const filtersToSend = {
     ...filters,
@@ -75,6 +87,7 @@ const AuditLogs: React.FC = () => {
     <div className="grid grid-cols-1 gap-2 md:grid-cols-4 md:items-center">
       <Input
         placeholder={t("AuditLogs.SearchEvent")}
+        value={filters.event ?? ""}
         onChange={(e) => handleChange("event", e.target.value)}
       />
       <Input

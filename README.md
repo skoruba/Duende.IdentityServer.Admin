@@ -45,9 +45,7 @@ configuration health, auditing, and security from one modern interface.
 > setup code.
 >
 > ⚠️ Upgrading from 3.0.0 requires new EF migrations. See the
-> [changelog](CHANGELOG.md) for the full list of changes, and note that managing
-> SAML service providers from the Admin UI is not part of this release.
->
+> [changelog](CHANGELOG.md) for the full list of changes.
 > See the [roadmap and changelog](#-roadmap--changelog) for release history and upcoming features.
 
 ---
@@ -57,7 +55,7 @@ configuration health, auditing, and security from one modern interface.
 |     | Area                  | Highlights                                                                  |
 | --- | --------------------- | --------------------------------------------------------------------------- |
 | 🧭  | **New Admin UI**      | React, TypeScript, Tailwind CSS, and shadcn/ui                              |
-| ⚙️  | **Modern backend**    | .NET 10 and Duende IdentityServer 8.0.2                                     |
+| ⚙️  | **Modern backend**    | .NET 10 and Duende IdentityServer 8.0.8                                     |
 | 📊  | **Monitoring**        | Dashboards, configuration rules, and issue tracking                         |
 | 🧙  | **Client management** | Improved workflows and guided client creation wizard                        |
 | 🧾  | **Integration code**  | Generated .NET 10 setup for the client you are editing                      |
@@ -143,7 +141,7 @@ Define and track configuration rules for clients, API resources, and identity re
 - .NET 10 SDK
 - Node.js 18+ and npm (required for the React client)
 - SQL Server (default LocalDB) or PostgreSQL
-- Duende IdentityServer 8.0.2
+- Duende IdentityServer 8.0.8
 
 > **Note:** Using older .NET versions may cause 502.5 errors on IIS or application startup failures.
 

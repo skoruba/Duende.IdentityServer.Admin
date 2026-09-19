@@ -31,6 +31,7 @@ import {
   combineDateTimeForUnspecifiedDb,
   timeZoneDateFormat,
 } from "@/helpers/DateTimeHelper";
+import { configurationChangeMeta } from "@/services/mutationMeta";
 
 type SecretsTableProps = {
   resourceId: number;
@@ -68,6 +69,7 @@ const SecretsTable: React.FC<SecretsTableProps> = ({
   });
 
   const addMutation = useMutation({
+    meta: configurationChangeMeta,
     mutationFn: (data: SecretsFormData) => addSecret(resourceId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKey });
@@ -76,6 +78,7 @@ const SecretsTable: React.FC<SecretsTableProps> = ({
   });
 
   const deleteMutation = useMutation({
+    meta: configurationChangeMeta,
     mutationFn: (id: number) => deleteSecret(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKey });

@@ -22,6 +22,7 @@ import {
 } from "@/hooks/useConfirmUnsavedChanges";
 import Hoorey from "@/components/Hoorey/Hoorey";
 import FormValidationSummary from "@/components/FormValidationSummary/FormValidationSummary";
+import { configurationChangeMeta } from "@/services/mutationMeta";
 
 export type ClientEditFormType = {
   clientId: string;
@@ -121,6 +122,7 @@ const ClientEditForm = ({ clientId, client }: ClientEditFormType) => {
   const deleteClientModal = useModal();
 
   const updateClientMutation = useMutation({
+    meta: configurationChangeMeta,
     mutationFn: (data: ClientEditFormData) =>
       updateClient(mapFormDataToEditClient(data, Number(clientId))),
     onSuccess: () => {
