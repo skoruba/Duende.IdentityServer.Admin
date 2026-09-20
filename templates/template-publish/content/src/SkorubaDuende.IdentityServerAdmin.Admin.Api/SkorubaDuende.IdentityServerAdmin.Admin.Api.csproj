@@ -17,7 +17,7 @@
 
     
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.10">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.12">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -31,7 +31,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.UI.Api" Version="3.0.0" />
+        <PackageReference Include="Skoruba.Duende.IdentityServer.Admin.UI.Api" Version="3.1.0" />
     </ItemGroup>
 
     

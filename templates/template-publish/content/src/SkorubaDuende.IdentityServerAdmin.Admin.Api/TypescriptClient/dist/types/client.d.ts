@@ -251,6 +251,7 @@ export declare class ConfigurationRulesClient extends WebApiClientBase implement
 }
 export interface IDashboardClient {
     getDashboardIdentityServer(auditLogsLastNumberOfDays: number | undefined): Promise<DashboardDto>;
+    getRecentAuditChanges(count: number | null | undefined): Promise<AuditLogDto[]>;
     getDashboardIdentity(): Promise<DashboardIdentityDto>;
 }
 export declare class DashboardClient extends WebApiClientBase implements IDashboardClient {
@@ -262,6 +263,8 @@ export declare class DashboardClient extends WebApiClientBase implements IDashbo
     });
     getDashboardIdentityServer(auditLogsLastNumberOfDays: number | undefined): Promise<DashboardDto>;
     protected processGetDashboardIdentityServer(response: Response): Promise<DashboardDto>;
+    getRecentAuditChanges(count: number | null | undefined): Promise<AuditLogDto[]>;
+    protected processGetRecentAuditChanges(response: Response): Promise<AuditLogDto[]>;
     getDashboardIdentity(): Promise<DashboardIdentityDto>;
     protected processGetDashboardIdentity(response: Response): Promise<DashboardIdentityDto>;
 }
@@ -339,6 +342,8 @@ export declare class IdentityResourcesClient extends WebApiClientBase implements
 export interface IInfoClient {
     getApplicationVersion(): Promise<string>;
     getApplicationName(): Promise<string>;
+    getHealth(): Promise<SystemHealthApiDto>;
+    getEnvironment(): Promise<EnvironmentInfoApiDto>;
 }
 export declare class InfoClient extends WebApiClientBase implements IInfoClient {
     private http;
@@ -351,6 +356,10 @@ export declare class InfoClient extends WebApiClientBase implements IInfoClient 
     protected processGetApplicationVersion(response: Response): Promise<string>;
     getApplicationName(): Promise<string>;
     protected processGetApplicationName(response: Response): Promise<string>;
+    getHealth(): Promise<SystemHealthApiDto>;
+    protected processGetHealth(response: Response): Promise<SystemHealthApiDto>;
+    getEnvironment(): Promise<EnvironmentInfoApiDto>;
+    protected processGetEnvironment(response: Response): Promise<EnvironmentInfoApiDto>;
 }
 export interface IKeysClient {
     get(page: number | undefined, pageSize: number | undefined): Promise<KeysApiDto>;
@@ -1116,7 +1125,14 @@ export declare enum ConfigurationRuleType {
     IdentityResourceMustBeEnabled = "IdentityResourceMustBeEnabled",
     IdentityResourceNameMustStartWith = "IdentityResourceNameMustStartWith",
     ScopeIsUnused = "ScopeIsUnused",
-    SecretIsExpiredInDays = "SecretIsExpiredInDays"
+    SecretIsExpiredInDays = "SecretIsExpiredInDays",
+    ClientNameMustStartWith = "ClientNameMustStartWith",
+    ClientNameMustNotContain = "ClientNameMustNotContain",
+    ClientIdMustStartWith = "ClientIdMustStartWith",
+    ClientIdMustNotContain = "ClientIdMustNotContain",
+    ClientScopeMustExist = "ClientScopeMustExist",
+    ClientSigningAlgorithmsMustBeFapiCompliant = "ClientSigningAlgorithmsMustBeFapiCompliant",
+    ApiResourceSigningAlgorithmsMustBeFapiCompliant = "ApiResourceSigningAlgorithmsMustBeFapiCompliant"
 }
 export declare enum ConfigurationIssueType {
     Warning = "Warning",
@@ -1209,6 +1225,36 @@ export declare class DashboardAuditLogDto implements IDashboardAuditLogDto {
 }
 export interface IDashboardAuditLogDto {
     total: number;
+    created: Date;
+}
+export declare class AuditLogDto implements IAuditLogDto {
+    id: number;
+    event: string | undefined;
+    source: string | undefined;
+    category: string | undefined;
+    subjectIdentifier: string | undefined;
+    subjectName: string | undefined;
+    subjectType: string | undefined;
+    subjectAdditionalData: string | undefined;
+    action: string | undefined;
+    data: string | undefined;
+    created: Date;
+    constructor(data?: IAuditLogDto);
+    init(_data?: any): void;
+    static fromJS(data: any): AuditLogDto;
+    toJSON(data?: any): any;
+}
+export interface IAuditLogDto {
+    id: number;
+    event: string | undefined;
+    source: string | undefined;
+    category: string | undefined;
+    subjectIdentifier: string | undefined;
+    subjectName: string | undefined;
+    subjectType: string | undefined;
+    subjectAdditionalData: string | undefined;
+    action: string | undefined;
+    data: string | undefined;
     created: Date;
 }
 export declare class DashboardIdentityDto implements IDashboardIdentityDto {
@@ -1329,6 +1375,50 @@ export interface IIdentityResourcePropertyApiDto {
     key: string | undefined;
     value: string | undefined;
 }
+export declare class SystemHealthApiDto implements ISystemHealthApiDto {
+    status: SystemHealthStatus;
+    identityServerStatus: SystemHealthStatus;
+    entries: SystemHealthEntryApiDto[] | undefined;
+    constructor(data?: ISystemHealthApiDto);
+    init(_data?: any): void;
+    static fromJS(data: any): SystemHealthApiDto;
+    toJSON(data?: any): any;
+}
+export interface ISystemHealthApiDto {
+    status: SystemHealthStatus;
+    identityServerStatus: SystemHealthStatus;
+    entries: SystemHealthEntryApiDto[] | undefined;
+}
+export declare enum SystemHealthStatus {
+    Unknown = "Unknown",
+    Healthy = "Healthy",
+    Degraded = "Degraded",
+    Unhealthy = "Unhealthy"
+}
+export declare class SystemHealthEntryApiDto implements ISystemHealthEntryApiDto {
+    name: string | undefined;
+    status: SystemHealthStatus;
+    constructor(data?: ISystemHealthEntryApiDto);
+    init(_data?: any): void;
+    static fromJS(data: any): SystemHealthEntryApiDto;
+    toJSON(data?: any): any;
+}
+export interface ISystemHealthEntryApiDto {
+    name: string | undefined;
+    status: SystemHealthStatus;
+}
+export declare class EnvironmentInfoApiDto implements IEnvironmentInfoApiDto {
+    environmentName: string | undefined;
+    identityServerBaseUrl: string | undefined;
+    constructor(data?: IEnvironmentInfoApiDto);
+    init(_data?: any): void;
+    static fromJS(data: any): EnvironmentInfoApiDto;
+    toJSON(data?: any): any;
+}
+export interface IEnvironmentInfoApiDto {
+    environmentName: string | undefined;
+    identityServerBaseUrl: string | undefined;
+}
 export declare class KeysApiDto implements IKeysApiDto {
     keys: KeyApiDto[] | undefined;
     totalCount: number;
@@ -1378,36 +1468,6 @@ export interface IAuditLogsDto {
     logs: AuditLogDto[] | undefined;
     totalCount: number;
     pageSize: number;
-}
-export declare class AuditLogDto implements IAuditLogDto {
-    id: number;
-    event: string | undefined;
-    source: string | undefined;
-    category: string | undefined;
-    subjectIdentifier: string | undefined;
-    subjectName: string | undefined;
-    subjectType: string | undefined;
-    subjectAdditionalData: string | undefined;
-    action: string | undefined;
-    data: string | undefined;
-    created: Date;
-    constructor(data?: IAuditLogDto);
-    init(_data?: any): void;
-    static fromJS(data: any): AuditLogDto;
-    toJSON(data?: any): any;
-}
-export interface IAuditLogDto {
-    id: number;
-    event: string | undefined;
-    source: string | undefined;
-    category: string | undefined;
-    subjectIdentifier: string | undefined;
-    subjectName: string | undefined;
-    subjectType: string | undefined;
-    subjectAdditionalData: string | undefined;
-    action: string | undefined;
-    data: string | undefined;
-    created: Date;
 }
 export declare class PersistedGrantSubjectsApiDto implements IPersistedGrantSubjectsApiDto {
     totalCount: number;

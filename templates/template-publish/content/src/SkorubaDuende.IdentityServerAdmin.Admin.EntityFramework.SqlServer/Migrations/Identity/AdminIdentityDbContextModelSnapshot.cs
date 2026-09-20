@@ -17,27 +17,10 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer.Migr
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.2")
+                .HasAnnotation("ProductVersion", "10.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Entities.Identity.UserIdentityPasskey", b =>
-                {
-                    b.Property<byte[]>("CredentialId")
-                        .HasMaxLength(1024)
-                        .HasColumnType("varbinary(1024)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("CredentialId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserPasskeys", (string)null);
-                });
 
             modelBuilder.Entity("SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Entities.Identity.UserIdentity", b =>
                 {
@@ -103,6 +86,23 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.SqlServer.Migr
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Entities.Identity.UserIdentityPasskey", b =>
+                {
+                    b.Property<byte[]>("CredentialId")
+                        .HasMaxLength(1024)
+                        .HasColumnType("varbinary(1024)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("CredentialId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserPasskeys", (string)null);
                 });
 
             modelBuilder.Entity("SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Entities.Identity.UserIdentityRole", b =>

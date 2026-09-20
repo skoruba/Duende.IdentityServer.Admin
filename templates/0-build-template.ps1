@@ -21,6 +21,18 @@ function CleanBinObjFolders {
     Get-ChildItem .\ -include bin, obj -Recurse | ForEach-Object ($_) { Remove-Item $_.fullname -Force -Recurse }    
 }
 
+function CleanLocalOnlyFiles {
+
+    # The src folder is copied as it lies on the disk, including what git ignores. Dev logs, npm packages
+    # and the developer signing key belong to the machine that builds the template, never to the package.
+    Get-ChildItem ./$templateSrc -Directory | ForEach-Object {
+        foreach ($localOnly in "Log", "node_modules", "tempkey.jwk") {
+            $path = Join-Path $_.FullName $localOnly
+            if (Test-Path -Path $path) { Remove-Item $path -Force -Recurse }
+        }
+    }
+}
+
 # Copy the local src and tests folders to the project folder instead of cloning from git
 Copy-Item ../src $gitProjectFolder/src -Recurse -Force
 Copy-Item ../tests $gitProjectFolder/tests -Recurse -Force
@@ -71,6 +83,9 @@ Copy-Item ./$gitProjectFolder/Directory.Build.props $templateRoot -recurse -forc
 
 # Clean up created folders
 Remove-Item ./$gitProjectFolder -recurse -force
+
+# Remove logs, node_modules and tempkey.jwk of the local machine
+CleanLocalOnlyFiles
 
 # Clean solution and folders bin, obj
 CleanBinObjFolders

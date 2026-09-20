@@ -17,27 +17,10 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL.Mig
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.2")
+                .HasAnnotation("ProductVersion", "10.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Entities.Identity.UserIdentityPasskey", b =>
-                {
-                    b.Property<byte[]>("CredentialId")
-                        .HasMaxLength(1024)
-                        .HasColumnType("bytea");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("CredentialId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserPasskeys", (string)null);
-                });
 
             modelBuilder.Entity("SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Entities.Identity.UserIdentity", b =>
                 {
@@ -102,6 +85,23 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL.Mig
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Entities.Identity.UserIdentityPasskey", b =>
+                {
+                    b.Property<byte[]>("CredentialId")
+                        .HasMaxLength(1024)
+                        .HasColumnType("bytea");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("CredentialId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserPasskeys", (string)null);
                 });
 
             modelBuilder.Entity("SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Entities.Identity.UserIdentityRole", b =>
@@ -183,12 +183,12 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL.Mig
             modelBuilder.Entity("SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Entities.Identity.UserIdentityUserLogin", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("text");
@@ -225,12 +225,12 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.PostgreSQL.Mig
                         .HasColumnType("text");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("text");
