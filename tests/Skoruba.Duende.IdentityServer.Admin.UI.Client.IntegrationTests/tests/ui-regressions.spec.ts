@@ -191,13 +191,21 @@ test.describe("Admin UI regressions", () => {
       });
     };
 
+    const targetRow = await findClientRow(page, seedData.expectedClientId);
+    const clientUrl = await targetRow
+      .getByRole("link")
+      .first()
+      .getAttribute("href");
+    expect(clientUrl).toBeTruthy();
+
     await page.route(
       configurationIssuesEndpointPattern,
       configurationIssuesHandler,
     );
 
-    const targetRow = await findClientRow(page, seedData.expectedClientId);
-    await targetRow.getByRole("link").first().click();
+    // The issues are one cached query shared with the navigation, which has already loaded
+    // them on the clients page. Only a full load starts with a cold cache and hits the gate.
+    await page.goto(clientUrl!);
 
     await expect(page).toHaveURL(/\/client\/\d+(?:[/?#]|$)/i);
     await expect(
