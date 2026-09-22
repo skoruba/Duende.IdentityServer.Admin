@@ -1,6 +1,6 @@
 import {
   ClientStepType,
-  GrantTypes,
+  GrantTypeIds,
   ClientType,
   ClientWizardExcludeOptions,
   ClientWizardAdditionData,
@@ -35,7 +35,7 @@ export const CLIENT_WIZARD_CONFIG: WizardConfig = {
       { stepType: ClientStepType.Review, component: ClientSummaryStep },
     ],
     excludeOptions: { consent: false, identityResources: false, uris: false },
-    additionalData: { grantTypes: [GrantTypes.AuthorizationCode] },
+    additionalData: { grantTypes: [GrantTypeIds.AuthorizationCode] },
   },
   [ClientType.Machine]: {
     steps: [
@@ -54,7 +54,7 @@ export const CLIENT_WIZARD_CONFIG: WizardConfig = {
       },
     ],
     excludeOptions: { consent: true, identityResources: true, uris: true },
-    additionalData: { grantTypes: [GrantTypes.ClientCreadentials] },
+    additionalData: { grantTypes: [GrantTypeIds.ClientCredentials] },
   },
   [ClientType.Public]: {
     steps: [
@@ -69,7 +69,7 @@ export const CLIENT_WIZARD_CONFIG: WizardConfig = {
       uris: false,
       secrets: true,
     },
-    additionalData: { grantTypes: [GrantTypes.AuthorizationCode] },
+    additionalData: { grantTypes: [GrantTypeIds.AuthorizationCode] },
   },
   [ClientType.HighSecure]: {
     steps: [
@@ -80,7 +80,7 @@ export const CLIENT_WIZARD_CONFIG: WizardConfig = {
       { stepType: ClientStepType.Review, component: ClientSummaryStep },
     ],
     excludeOptions: { consent: false, identityResources: false, uris: false },
-    additionalData: { grantTypes: [GrantTypes.AuthorizationCode] },
+    additionalData: { grantTypes: [GrantTypeIds.AuthorizationCode] },
   },
 };
 

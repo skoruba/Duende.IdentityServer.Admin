@@ -129,9 +129,6 @@
   <data name="PersonalInformation" xml:space="preserve">
     <value>Henkilökohtaisia tietoja</value>
   </data>
-  <data name="Remember" xml:space="preserve">
-    <value>Muista päätökseni</value>
-  </data>
   <data name="SubTitle" xml:space="preserve">
     <value>pyytää lupaa</value>
   </data>

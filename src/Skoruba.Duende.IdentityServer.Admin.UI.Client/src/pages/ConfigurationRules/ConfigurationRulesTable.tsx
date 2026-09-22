@@ -14,6 +14,7 @@ import { useMutation } from "@tanstack/react-query";
 import { IssueTypeBadge } from "../ConfigurationIssues/IssueTypeBadge";
 import { toast } from "@/components/ui/use-toast";
 import type { ColumnDef } from "@tanstack/react-table";
+import { configurationChangeMeta } from "@/services/mutationMeta";
 
 interface ConfigurationRulesTableProps {
   data: client.ConfigurationRulesDto;
@@ -29,6 +30,7 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
   const { t } = useTranslation();
 
   const toggleMutation = useMutation({
+    meta: configurationChangeMeta,
     mutationFn: (id: number) => toggleConfigurationRule(id),
     onSuccess: () => {
       onRefresh();
@@ -43,6 +45,7 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
   });
 
   const deleteMutation = useMutation({
+    meta: configurationChangeMeta,
     mutationFn: (id: number) => deleteConfigurationRule(id),
     onSuccess: () => {
       onRefresh();

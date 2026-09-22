@@ -15,7 +15,7 @@ export default function Layout({ children }: RootLayoutProps) {
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <div className="flex min-h-screen flex-col">
         <SiteHeader />
-        <main className="flex-1">{children}</main>
+        <main className="flex flex-1 flex-col">{children}</main>
         <Footer />
       </div>
       <Toaster />

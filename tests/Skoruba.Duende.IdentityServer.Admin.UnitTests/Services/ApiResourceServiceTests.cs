@@ -9,7 +9,9 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using Skoruba.AuditLogging.Events;
 using Skoruba.AuditLogging.Services;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Events.ApiResource;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Mappers;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Resources;
@@ -337,6 +339,41 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 
                 auditLoggerMock.Verify(x => x.LogEventAsync(It.Is<ApiSecretRequestedEvent>(e =>
                     e.ApiSecret.Value == null)), Times.Once);
+            }
+        }
+
+        [Fact]
+        public async Task ApiSecretAuditEvents_CarryTheOwningApiResource()
+        {
+            using (var context = GetDbContext())
+            {
+                var auditLoggerMock = new Mock<IAuditEventLogger>();
+                TEvent LoggedEvent<TEvent>() where TEvent : AuditEvent =>
+                    auditLoggerMock.Invocations.Select(x => x.Arguments[0]).OfType<TEvent>().Single();
+
+                var apiResourceService = GetApiResourceService(context, auditLoggerMock.Object);
+
+                var apiResource = ApiResourceDtoMock.GenerateRandomApiResource(0);
+                await apiResourceService.AddApiResourceAsync(apiResource);
+                var apiResourceEntity = await context.ApiResources.Where(x => x.Name == apiResource.Name).SingleAsync();
+
+                var secret = ApiResourceDtoMock.GenerateRandomApiSecret(0, apiResourceEntity.Id);
+                await apiResourceService.AddApiSecretAsync(secret);
+
+                var addedEvent = LoggedEvent<ApiSecretAddedEvent>();
+                addedEvent.ApiResourceId.Should().Be(apiResourceEntity.Id);
+                addedEvent.ApiResourceName.Should().Be(apiResourceEntity.Name);
+
+                var secretEntity = await context.ApiSecrets.Where(x => x.ApiResource.Id == apiResourceEntity.Id).SingleAsync();
+                context.ChangeTracker.Clear();
+
+                // The API deletes by secret id alone, which used to audit the deletion with ApiResourceId 0.
+                await apiResourceService.DeleteApiSecretAsync(new ApiSecretsDto { ApiSecretId = secretEntity.Id });
+
+                var deletedEvent = LoggedEvent<ApiSecretDeletedEvent>();
+                deletedEvent.ApiSecretId.Should().Be(secretEntity.Id);
+                deletedEvent.ApiResourceId.Should().Be(apiResourceEntity.Id);
+                deletedEvent.ApiResourceName.Should().Be(apiResourceEntity.Name);
             }
         }
 

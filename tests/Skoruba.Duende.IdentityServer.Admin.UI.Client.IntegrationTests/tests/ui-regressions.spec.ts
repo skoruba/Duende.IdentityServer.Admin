@@ -4,8 +4,14 @@ import {
   ensureLoggedInAndOpenClients,
   type LoginCredentials,
 } from "./helpers/auth";
-import { findClientRow } from "./helpers/client-list";
-import { clickPageSave } from "./helpers/ui-navigation";
+import {
+  findClientRow,
+  openClientDetailFromClients,
+} from "./helpers/client-list";
+import { clickRowMenuItem } from "./helpers/list-page";
+import { openClientWizard } from "./helpers/client-wizard";
+import { clickPageSave, expectNoToast } from "./helpers/ui-navigation";
+import { UI_TEXT } from "./helpers/ui-texts";
 
 const seedData = loadE2ESeedData();
 const credentials: LoginCredentials = {
@@ -26,6 +32,36 @@ const createEmptyConfigurationIssuesResponse = () => ({
 });
 
 test.describe("Admin UI regressions", () => {
+  test("copying a value is confirmed on the button instead of in a toast", async ({
+    page,
+    context,
+  }) => {
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await ensureLoggedInAndOpenClients(page, credentials);
+    await openClientWizard(page);
+
+    const clientId = "copy_feedback_ui_test";
+    await page.locator('input[name="clientId"]').fill(clientId);
+
+    const copyButton = page.getByRole("button", {
+      name: UI_TEXT.wizard.clientIdCopyButton,
+      exact: true,
+    });
+    const confirmation = copyButton.getByRole("status");
+
+    await expect(confirmation).toHaveText("");
+    await copyButton.click();
+
+    await expect(confirmation).toHaveText(UI_TEXT.wizard.copiedToClipboard);
+    await expectNoToast(page);
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+      clientId,
+    );
+
+    // The confirmation is momentary - the button goes back to offering a copy.
+    await expect(confirmation).toHaveText("", { timeout: 10_000 });
+  });
+
   test("delete action from clients grid does not leave the page blocked", async ({
     page,
   }) => {
@@ -46,10 +82,7 @@ test.describe("Admin UI regressions", () => {
 
     await page.route("**/api/Clients/*", deleteClientHandler);
 
-    await targetRow
-      .getByRole("button", { name: "Open menu", exact: true })
-      .click();
-    await page.getByRole("menuitem", { name: "Delete", exact: true }).click();
+    await clickRowMenuItem(page, targetRow, "Delete");
 
     const deleteDialog = page.getByRole("alertdialog");
     await expect(deleteDialog).toBeVisible();
@@ -158,13 +191,21 @@ test.describe("Admin UI regressions", () => {
       });
     };
 
+    const targetRow = await findClientRow(page, seedData.expectedClientId);
+    const clientUrl = await targetRow
+      .getByRole("link")
+      .first()
+      .getAttribute("href");
+    expect(clientUrl).toBeTruthy();
+
     await page.route(
       configurationIssuesEndpointPattern,
       configurationIssuesHandler,
     );
 
-    const targetRow = await findClientRow(page, seedData.expectedClientId);
-    await targetRow.getByRole("link").first().click();
+    // The issues are one cached query shared with the navigation, which has already loaded
+    // them on the clients page. Only a full load starts with a cold cache and hits the gate.
+    await page.goto(clientUrl!);
 
     await expect(page).toHaveURL(/\/client\/\d+(?:[/?#]|$)/i);
     await expect(
@@ -230,5 +271,47 @@ test.describe("Admin UI regressions", () => {
         { exact: true },
       ),
     ).toBeVisible();
+  });
+
+  test("dual list keeps its move buttons inside the column when the names are long", async ({
+    page,
+  }) => {
+    // Narrow enough for the seeded scope names not to fit next to the button.
+    await page.setViewportSize({ width: 700, height: 900 });
+    await openClientDetailFromClients(page, seedData.expectedClientId, credentials);
+    await page.getByRole("tab", { name: "Scopes", exact: true }).click();
+
+    const scopesPanel = page.getByRole("tabpanel", { name: "Scopes", exact: true });
+    await expect(scopesPanel.locator("tbody tr").first()).toBeVisible();
+
+    // A long name used to widen the table instead of being truncated, which
+    // pushed the button out of the column and behind a horizontal scrollbar.
+    const columns = await scopesPanel
+      .locator("div.max-h-\\[300px\\]")
+      .evaluateAll((boxes) =>
+        boxes.map((box) => {
+          const scrollBox = box.querySelector("div.overflow-auto") ?? box;
+          const rightEdge = box.getBoundingClientRect().left + box.clientWidth;
+          const leftEdge = box.getBoundingClientRect().left;
+          const buttons = Array.from(box.querySelectorAll("tbody button"));
+
+          return {
+            rows: buttons.length,
+            hasHorizontalScroll: scrollBox.scrollWidth > scrollBox.clientWidth + 1,
+            clippedButtons: buttons.filter((button) => {
+              const rect = button.getBoundingClientRect();
+              return rect.right > rightEdge + 1 || rect.left < leftEdge - 1;
+            }).length,
+          };
+        }),
+      );
+
+    expect(columns).toHaveLength(2);
+    expect(columns.reduce((total, column) => total + column.rows, 0)).toBeGreaterThan(0);
+
+    for (const column of columns) {
+      expect(column.hasHorizontalScroll).toBe(false);
+      expect(column.clippedButtons).toBe(0);
+    }
   });
 });

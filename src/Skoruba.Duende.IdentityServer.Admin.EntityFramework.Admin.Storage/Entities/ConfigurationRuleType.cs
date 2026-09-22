@@ -29,5 +29,14 @@ public enum ConfigurationRuleType
 
     // Security rules
     ScopeIsUnused,
-    SecretIsExpiredInDays
+    SecretIsExpiredInDays,
+
+    // Client naming rules - appended at the end, the values are persisted as int
+    ClientNameMustStartWith,
+    ClientNameMustNotContain,
+    ClientIdMustStartWith,
+    ClientIdMustNotContain,
+    ClientScopeMustExist,
+    ClientSigningAlgorithmsMustBeFapiCompliant,
+    ApiResourceSigningAlgorithmsMustBeFapiCompliant
 }

@@ -9,11 +9,6 @@ export type DashboardDataAuditLog = {
   average: number;
 };
 
-export type DashboardDataChart = {
-  name: string;
-  total: number;
-};
-
 export type DashboardIdentityServerData = {
   clientsTotal: number;
   apiResourcesTotal: number;
@@ -23,7 +18,6 @@ export type DashboardIdentityServerData = {
 };
 
 export type DashboardIdentityServerResult = {
-  identityServerDataChart: DashboardDataChart[];
   identityServerData: DashboardIdentityServerData;
   auditLogsData: DashboardDataAuditLog[];
 };

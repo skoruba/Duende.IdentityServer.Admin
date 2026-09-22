@@ -19,6 +19,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces
         Task<int> GetDashboardAuditLogsAverageAsync(int lastNumberOfDays,
             CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// The newest audit entries that record a change, newest first, found among the
+        /// <paramref name="scanLimit"/> newest entries.
+        /// </summary>
+        Task<List<AuditLogDto>> GetRecentChangesAsync(int count, int scanLimit, CancellationToken cancellationToken = default);
+
         Task<List<DashboardAuditLogDto>> GetDashboardAuditLogsAsync(int lastNumberOfDays,
             CancellationToken cancellationToken = default);
     }

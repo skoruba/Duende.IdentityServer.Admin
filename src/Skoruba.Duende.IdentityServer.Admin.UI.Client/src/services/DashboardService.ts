@@ -1,6 +1,11 @@
 import { useMemo } from "react";
 import ApiHelper from "@/helpers/ApiHelper";
-import { DashboardIdentityServerResult } from "@/models/Dashboard/DashboardModels";
+import {
+  DashBoardIdentityData,
+  DashboardIdentityServerResult,
+} from "@/models/Dashboard/DashboardModels";
+import { KeyApiDto } from "@/models/Keys/KeysModel";
+import { mapAuditLog } from "./AuditLogsService";
 import {
   ApiResourceEditUrl,
   ApiScopeEditUrl,
@@ -10,7 +15,7 @@ import {
 import { client } from "@skoruba/duende.identityserver.admin.api.client";
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys, queryWithoutCache } from "./QueryKeys";
-import i18next from "@/i18n/config";
+import { summarizeIssues } from "@/lib/configurationIssues/issueInsights";
 
 export const buildConfigurationIssueLink = (
   resourceId: string,
@@ -30,31 +35,58 @@ export const buildConfigurationIssueLink = (
   }
 };
 
-export const useConfigurationIssues = () =>
-  useQuery({
-    queryKey: [queryKeys.configurationIssues],
-    queryFn: async () => {
-      const configClient = new client.ConfigurationIssuesClient(
-        ApiHelper.getApiBaseUrl(),
-      );
+// The endpoint runs every enabled configuration rule against the whole
+// configuration (all clients with their relations), so the result is cached
+// instead of being recomputed on every mount and window focus. It cannot go
+// silently stale: every successful mutation invalidates the query
+// (see the MutationCache in helpers/ErrorHelper.ts).
+const configurationIssuesQueryOptions = {
+  staleTime: 2 * 60 * 1000,
+  gcTime: 10 * 60 * 1000,
+  refetchOnWindowFocus: false,
+} as const;
 
-      // Use new API with filter parameters - skip pagination to get all results
-      const result = await configClient.get(null, null, null, 0, 50, true);
-      return result.issues || [];
-    },
-    ...queryWithoutCache,
+type ConfigurationIssuesQueryOptions = {
+  /** The header renders before ProtectedRoute: never query until authenticated. */
+  enabled?: boolean;
+  /** "always" for the page whose whole purpose is showing the current issues. */
+  refetchOnMount?: boolean | "always";
+};
+
+const configurationIssuesQuery = {
+  queryKey: [queryKeys.configurationIssues],
+  queryFn: async () => {
+    const configClient = new client.ConfigurationIssuesClient(
+      ApiHelper.getApiBaseUrl(),
+    );
+
+    // Use new API with filter parameters - skip pagination to get all results
+    const result = await configClient.get(null, null, null, 0, 50, true);
+    return result.issues || [];
+  },
+  ...configurationIssuesQueryOptions,
+};
+
+export const useConfigurationIssues = (
+  options: ConfigurationIssuesQueryOptions = {},
+) =>
+  useQuery({
+    ...configurationIssuesQuery,
+    ...options,
   });
 
-export const useConfigurationIssuesSummary = () =>
+/**
+ * The severity counts, taken from the issue list instead of the GetSummary
+ * endpoint. Both run the full validation on the server, and the list is needed
+ * on the dashboard and the detail pages anyway - sharing one query halves the work.
+ */
+export const useConfigurationIssuesSummary = (
+  options: ConfigurationIssuesQueryOptions = {},
+) =>
   useQuery({
-    queryKey: [queryKeys.configurationIssuesSummary],
-    queryFn: async () => {
-      const configClient = new client.ConfigurationIssuesClient(
-        ApiHelper.getApiBaseUrl(),
-      );
-      return await configClient.getSummary();
-    },
-    ...queryWithoutCache,
+    ...configurationIssuesQuery,
+    select: summarizeIssues,
+    ...options,
   });
 
 export const useConfigurationIssuesForResource = (
@@ -102,22 +134,6 @@ export const getDashboardIdentityServerData = async (
     identityProvidersTotal: dashboard.identityProvidersTotal,
   };
 
-  const identityServerDataChart = [
-    { name: String(i18next.t("Home.Clients")), total: dashboard.clientsTotal },
-    {
-      name: String(i18next.t("Home.ApiResources")),
-      total: dashboard.apiResourcesTotal,
-    },
-    {
-      name: String(i18next.t("Home.ApiScopes")),
-      total: dashboard.apiScopesTotal,
-    },
-    {
-      name: String(i18next.t("Home.IdentityResources")),
-      total: dashboard.identityResourcesTotal,
-    },
-  ];
-
   const auditLogsData =
     dashboard.auditLogsPerDaysTotal?.map((auditLog) => ({
       total: auditLog.total,
@@ -125,5 +141,76 @@ export const getDashboardIdentityServerData = async (
       created: auditLog.created,
     })) ?? [];
 
-  return { identityServerDataChart, auditLogsData, identityServerData };
+  return { auditLogsData, identityServerData };
 };
+
+export const DASHBOARD_AUDIT_LOG_DAYS = 30;
+const DASHBOARD_KEYS_PAGE_SIZE = 50;
+
+export const useDashboardIdentityServer = () =>
+  useQuery({
+    queryKey: [queryKeys.dashboard],
+    queryFn: () => getDashboardIdentityServerData(DASHBOARD_AUDIT_LOG_DAYS),
+    ...queryWithoutCache,
+  });
+
+export const useDashboardIdentity = () =>
+  useQuery({
+    queryKey: [queryKeys.dashboardIdentity],
+    queryFn: async (): Promise<DashBoardIdentityData> => {
+      const dashboardClient = new client.DashboardClient(
+        ApiHelper.getApiBaseUrl(),
+      );
+      const identity = await dashboardClient.getDashboardIdentity();
+
+      return {
+        usersTotal: identity.usersTotal,
+        rolesTotal: identity.rolesTotal,
+      };
+    },
+    ...queryWithoutCache,
+  });
+
+// The keys endpoint pages by id, so the newest keys are picked on the client.
+export const useDashboardKeys = () =>
+  useQuery({
+    queryKey: [queryKeys.dashboardKeys],
+    queryFn: async () => {
+      const keysClient = new client.KeysClient(ApiHelper.getApiBaseUrl());
+      const result = await keysClient.get(1, DASHBOARD_KEYS_PAGE_SIZE);
+
+      const keys = [...(result.keys ?? [])]
+        .map(
+          (key): KeyApiDto => ({
+            id: key.id ?? "",
+            version: key.version,
+            created: new Date(key.created),
+            use: key.use ?? "",
+            algorithm: key.algorithm ?? "",
+            isX509Certificate: key.isX509Certificate,
+          }),
+        )
+        .sort((a, b) => b.created.getTime() - a.created.getTime());
+
+      return { keys, totalCount: result.totalCount };
+    },
+    ...queryWithoutCache,
+  });
+
+// Dashboard/GetRecentAuditChanges leaves the read events out on the server, in one
+// bounded query. Filtering on the client meant one request (and one COUNT over the
+// whole audit log) per change verb.
+export const useRecentAuditChanges = (count: number) =>
+  useQuery({
+    queryKey: [queryKeys.dashboardRecentAuditLogs, count],
+    queryFn: async () => {
+      const dashboardClient = new client.DashboardClient(
+        ApiHelper.getApiBaseUrl(),
+      );
+
+      return (await dashboardClient.getRecentAuditChanges(count)).map(
+        mapAuditLog,
+      );
+    },
+    ...queryWithoutCache,
+  });

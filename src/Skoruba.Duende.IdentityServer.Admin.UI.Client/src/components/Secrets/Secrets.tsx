@@ -23,6 +23,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import AddSecretForm from "@/components/AddSecretForm/AddSecretForm";
+import { humanizePascalCase } from "@/helpers/StringHelper";
 import { SecretsFormData } from "@/components/SecretForm/SecretForm";
 import { useTranslation } from "react-i18next";
 import { SecretData, SecretsData } from "@/models/Common/CommonModels";
@@ -30,6 +31,7 @@ import {
   combineDateTimeForUnspecifiedDb,
   timeZoneDateFormat,
 } from "@/helpers/DateTimeHelper";
+import { configurationChangeMeta } from "@/services/mutationMeta";
 
 type SecretsTableProps = {
   resourceId: number;
@@ -60,13 +62,14 @@ const SecretsTable: React.FC<SecretsTableProps> = ({
   const queryClient = useQueryClient();
 
   const secretsQuery = useQuery({
-    queryKey: [...queryKey, pagination],
+    queryKey: [...queryKey, resourceId, pagination],
     queryFn: () =>
       getSecrets(resourceId, pagination.pageIndex, pagination.pageSize),
     placeholderData: (previousData) => previousData,
   });
 
   const addMutation = useMutation({
+    meta: configurationChangeMeta,
     mutationFn: (data: SecretsFormData) => addSecret(resourceId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKey });
@@ -75,6 +78,7 @@ const SecretsTable: React.FC<SecretsTableProps> = ({
   });
 
   const deleteMutation = useMutation({
+    meta: configurationChangeMeta,
     mutationFn: (id: number) => deleteSecret(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKey });
@@ -97,6 +101,7 @@ const SecretsTable: React.FC<SecretsTableProps> = ({
     {
       accessorKey: "type",
       header: t("Client.Label.SecretType_Label"),
+      cell: ({ row }) => humanizePascalCase(row.original.type ?? ""),
     },
     {
       accessorKey: "description",

@@ -291,3 +291,6 @@ appsettings.*.json
 
 # macOS Finder metadata
 .DS_Store
+
+# Local sample apps consuming the configured clients - not published yet
+/samples/

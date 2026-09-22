@@ -4,10 +4,17 @@ import Loading from "@/components/Loading/Loading";
 import { useClientScopes } from "@/services/ClientServices";
 import { ShieldCheck } from "lucide-react";
 import { CardWrapper } from "@/components/CardWrapper/CardWrapper";
+import { useClientCapabilities } from "@/contexts/ClientCapabilitiesContext";
 
 const ResourcesTab: React.FC = () => {
   const { t } = useTranslation();
-  const clientResources = useClientScopes(false, false);
+  const capabilities = useClientCapabilities();
+
+  // Identity resources need a user, so a machine client cannot use them.
+  const clientResources = useClientScopes(
+    !capabilities.usesUserAuthentication,
+    false,
+  );
 
   if (clientResources.isLoading) {
     return <Loading />;

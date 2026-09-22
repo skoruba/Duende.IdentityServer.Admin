@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import useSearch from "@/hooks/useSearch";
 import { useQuery } from "@tanstack/react-query";
 import { getClients } from "@/services/ClientServices";
@@ -13,11 +14,22 @@ import { PlusCircle, Search, Laptop } from "lucide-react";
 import ClientsTable from "./ClientsTable";
 import { Input } from "@/components/ui/input";
 import { queryKeys } from "@/services/QueryKeys";
+import { shouldOpenNewClient } from "@/components/CommandPalette/commandPaletteState";
 
 const Clients: React.FC = () => {
   const { pagination, setPagination } = usePaginationTable();
   const { isOpen, closeModal, openModal: showModalAddNewClient } = useModal();
   const { t } = useTranslation();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // The command palette navigates here with a one-off flag to start the wizard.
+  useEffect(() => {
+    if (shouldOpenNewClient(location.state)) {
+      showModalAddNewClient();
+      navigate(location.pathname, { replace: true, state: null });
+    }
+  }, [location.state, location.pathname, navigate, showModalAddNewClient]);
 
   const {
     inputValue,

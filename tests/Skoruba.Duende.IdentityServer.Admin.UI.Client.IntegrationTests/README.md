@@ -22,11 +22,18 @@ The suite covers:
 14. `ApiScopes` list + seeded API scope detail
 15. `ApiScopes` create/edit/persistence flow
 16. `ConfigurationRules` page availability
-17. `ConfigurationRules` create/edit/persistence for different parameter types + duplicate-rule prevention
+17. `ConfigurationRules` create/edit/persistence for different parameter types (including the FAPI 2.0 signing algorithm rules) + duplicate-rule prevention
+18. Client `Secrets` tab: in-browser JWK key pair generation, FAPI 2.0 algorithm marking and JWK validation
+19. `ConfigurationRules` to `ConfigurationIssues`: an enabled rule reports an issue with its placeholders filled in, the issue links to the client, and disabling the rule removes it
+20. Client wizard for the high secure client type: starts with a JWK secret, warns about a shared secret and creates a private key JWT client
+21. Client `Integration` tab: generated setup code follows the unsaved form, grant types, scopes, client authentication and the tab's own settings
 
 ## Test Structure
 
 - `tests/clients.spec.ts` - test orchestration only (short entrypoint)
+- `tests/client-secrets-jwk.spec.ts` - JWK secret generation on the client `Secrets` tab
+- `tests/client-wizard-high-secure.spec.ts` - secret step of the wizard for the high secure client type; deletes the client it creates
+- `tests/client-integration.spec.ts` - setup code generation on the client `Integration` tab; changes the form without saving, only the JWK test writes a secret and removes it again
 - `tests/api-resources.spec.ts` - API resources test orchestration
 - `tests/users.spec.ts` - users test orchestration
 - `tests/roles.spec.ts` - roles test orchestration

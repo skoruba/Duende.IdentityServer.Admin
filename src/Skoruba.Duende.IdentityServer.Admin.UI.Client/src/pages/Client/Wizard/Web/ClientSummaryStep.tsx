@@ -25,6 +25,7 @@ import Hoorey from "@/components/Hoorey/Hoorey";
 import { ClientEditUrl } from "@/routing/Urls";
 import { useNavigateWithBlockerInWizard } from "@/hooks/useConfirmUnsavedChanges";
 import { getNowForUnspecifiedDb } from "@/helpers/DateTimeHelper";
+import { resolveSecretExpiration } from "@/lib/clients/clientSecrets";
 
 export type ClientWizardFormSummaryData = BasicsFormData &
   ScopesFormData &
@@ -40,6 +41,7 @@ export type AdditionalConfiguration = {
   requirePkce: boolean;
   requireClientSecret: boolean;
   authorizationCodeLifetime: number;
+  dPoPClockSkew: string;
 };
 
 export enum View {
@@ -63,7 +65,7 @@ const ClientSummaryStep = () => {
   const getFilteredFormData = (): Partial<ClientWizardFormSummaryData> => {
     const {
       requireConsent,
-      redirectUris,
+      redirectUri,
       logoutUri,
       secretType,
       secretValue,
@@ -77,7 +79,7 @@ const ClientSummaryStep = () => {
     return {
       ...rest,
       ...(excludeOptions?.consent ? {} : { requireConsent }),
-      ...(excludeOptions?.uris ? {} : { redirectUris, logoutUri }),
+      ...(excludeOptions?.uris ? {} : { redirectUri, logoutUri }),
       ...(excludeOptions?.secrets
         ? {}
         : { secretType, secretValue, secretDescription, expiration }),
@@ -105,7 +107,7 @@ const ClientSummaryStep = () => {
         : new client.ClientSecretApiDto({
             id: 0,
             description: formData.secretDescription!,
-            expiration: formData.expiration || undefined,
+            expiration: resolveSecretExpiration(formData) ?? undefined,
             hashType: formData.secretHashType,
             type: formData.secretType!,
             value: formData.secretValue,

@@ -142,7 +142,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                     {
                         Name = "prefixes",
                         DisplayName = "Required Prefixes",
-                        Description = "The prefix(es) that API scope names must start with. Can be a single string or an array of strings.",
+                        Description = "The prefix(es) that API scope names must start with. A name has to start with at least one of them.",
                         Type = "array",
                         Required = true,
                         DefaultValue = new[] { "scope_" }
@@ -230,7 +230,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                     {
                         Name = "prefixes",
                         DisplayName = "Required Prefixes",
-                        Description = "The prefix(es) that API resource names must start with. Can be a single string or an array of strings.",
+                        Description = "The prefix(es) that API resource names must start with. A name has to start with at least one of them.",
                         Type = "array",
                         Required = true,
                         DefaultValue = new[] { "api." }
@@ -279,7 +279,7 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                     {
                         Name = "prefixes",
                         DisplayName = "Required Prefixes",
-                        Description = "The prefix(es) that identity resource names must start with. Can be a single string or an array of strings.",
+                        Description = "The prefix(es) that identity resource names must start with. A name has to start with at least one of them.",
                         Type = "array",
                         Required = true,
                         DefaultValue = new[] { "custom." }
@@ -351,6 +351,175 @@ public class ConfigurationRuleMetadataProvider : IConfigurationRuleMetadataProvi
                 ExampleConfiguration = "{\"maxLifetimeSeconds\": 7776000}",
                 DefaultMessageTemplate = "Client '{clientName}' refresh token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s",
                 DefaultFixDescription = "Navigate to Client Details → Advanced tab → Token, find 'Refresh Token Lifetime' field and reduce the value to {maxLifetime} seconds or less."
+            },
+
+            // Client Naming Rules
+            [ConfigurationRuleType.ClientNameMustStartWith] = new ConfigurationRuleMetadataDto
+            {
+                RuleType = nameof(ConfigurationRuleType.ClientNameMustStartWith),
+                DisplayName = "Client Name Must Start With",
+                Description = "Ensures client names follow a specific naming convention by requiring a prefix or one of multiple allowed prefixes. Clients without a name are skipped.",
+                ResourceType = nameof(ConfigurationResourceType.Client),
+                Parameters = new List<ConfigurationRuleParameterDto>
+                {
+                    new ConfigurationRuleParameterDto
+                    {
+                        Name = "prefixes",
+                        DisplayName = "Required Prefixes",
+                        Description = "The prefix(es) that client names must start with. A name has to start with at least one of them.",
+                        Type = "array",
+                        Required = true,
+                        DefaultValue = new[] { "Client " }
+                    }
+                },
+                DefaultConfiguration = "{\"prefixes\": [\"Client \"]}",
+                ExampleConfiguration = "{\"prefixes\": [\"Internal \", \"Partner \", \"Public \"]}",
+                DefaultMessageTemplate = "Client '{actualName}' must start with one of: {allowedPrefixes}",
+                DefaultFixDescription = "Navigate to Client Details → Basics tab and rename the client to start with one of the required prefixes: {allowedPrefixes}."
+            },
+
+            [ConfigurationRuleType.ClientNameMustNotContain] = new ConfigurationRuleMetadataDto
+            {
+                RuleType = nameof(ConfigurationRuleType.ClientNameMustNotContain),
+                DisplayName = "Client Name Must Not Contain",
+                Description = "Ensures client names do not contain forbidden strings or characters. Clients without a name are skipped.",
+                ResourceType = nameof(ConfigurationResourceType.Client),
+                Parameters = new List<ConfigurationRuleParameterDto>
+                {
+                    new ConfigurationRuleParameterDto
+                    {
+                        Name = "forbiddenStrings",
+                        DisplayName = "Forbidden Strings",
+                        Description = "Array of strings that must not appear in client names",
+                        Type = "array",
+                        Required = true,
+                        DefaultValue = new[] { "test", "temp", "debug" }
+                    }
+                },
+                DefaultConfiguration = "{\"forbiddenStrings\": [\"test\", \"temp\", \"debug\"]}",
+                ExampleConfiguration = "{\"forbiddenStrings\": [\"copy\", \"old\", \"deprecated\"]}",
+                DefaultMessageTemplate = "Client '{clientName}' contains forbidden string(s): {forbiddenStrings}",
+                DefaultFixDescription = "Navigate to Client Details → Basics tab and rename the client to remove forbidden strings from the name."
+            },
+
+            [ConfigurationRuleType.ClientIdMustStartWith] = new ConfigurationRuleMetadataDto
+            {
+                RuleType = nameof(ConfigurationRuleType.ClientIdMustStartWith),
+                DisplayName = "Client ID Must Start With",
+                Description = "Ensures client identifiers follow a specific naming convention by requiring a prefix or one of multiple allowed prefixes.",
+                ResourceType = nameof(ConfigurationResourceType.Client),
+                Parameters = new List<ConfigurationRuleParameterDto>
+                {
+                    new ConfigurationRuleParameterDto
+                    {
+                        Name = "prefixes",
+                        DisplayName = "Required Prefixes",
+                        Description = "The prefix(es) that client identifiers must start with. A name has to start with at least one of them.",
+                        Type = "array",
+                        Required = true,
+                        DefaultValue = new[] { "client_" }
+                    }
+                },
+                DefaultConfiguration = "{\"prefixes\": [\"client_\"]}",
+                ExampleConfiguration = "{\"prefixes\": [\"spa.\", \"mvc.\", \"api.\"]}",
+                DefaultMessageTemplate = "Client ID '{actualClientId}' must start with one of: {allowedPrefixes}",
+                DefaultFixDescription = "Navigate to Client Details → Basics tab and rename the Client ID to start with one of the required prefixes: {allowedPrefixes}."
+            },
+
+            [ConfigurationRuleType.ClientIdMustNotContain] = new ConfigurationRuleMetadataDto
+            {
+                RuleType = nameof(ConfigurationRuleType.ClientIdMustNotContain),
+                DisplayName = "Client ID Must Not Contain",
+                Description = "Ensures client identifiers do not contain forbidden strings or characters.",
+                ResourceType = nameof(ConfigurationResourceType.Client),
+                Parameters = new List<ConfigurationRuleParameterDto>
+                {
+                    new ConfigurationRuleParameterDto
+                    {
+                        Name = "forbiddenStrings",
+                        DisplayName = "Forbidden Strings",
+                        Description = "Array of strings that must not appear in client identifiers",
+                        Type = "array",
+                        Required = true,
+                        DefaultValue = new[] { "test", "temp", "debug" }
+                    }
+                },
+                DefaultConfiguration = "{\"forbiddenStrings\": [\"test\", \"temp\", \"debug\"]}",
+                ExampleConfiguration = "{\"forbiddenStrings\": [\"copy\", \"old\", \"deprecated\"]}",
+                DefaultMessageTemplate = "Client ID '{clientId}' contains forbidden string(s): {forbiddenStrings}",
+                DefaultFixDescription = "Navigate to Client Details → Basics tab and rename the Client ID to remove forbidden strings from it."
+            },
+
+            [ConfigurationRuleType.ClientScopeMustExist] = new ConfigurationRuleMetadataDto
+            {
+                RuleType = nameof(ConfigurationRuleType.ClientScopeMustExist),
+                DisplayName = "Client Scope Must Exist",
+                Description = "Detects clients that still allow a scope which no longer exists as an API scope or identity resource. An allowed scope is stored as a plain name, so deleting the scope leaves the client pointing at nothing.",
+                ResourceType = nameof(ConfigurationResourceType.Client),
+                Parameters = new List<ConfigurationRuleParameterDto>
+                {
+                    new ConfigurationRuleParameterDto
+                    {
+                        Name = "excludeScopes",
+                        DisplayName = "Exclude Scopes",
+                        Description = "Scope names to ignore - protocol scopes such as offline_access are not stored as API scopes and would be reported otherwise",
+                        Type = "array",
+                        Required = false,
+                        DefaultValue = new[] { "offline_access" }
+                    }
+                },
+                DefaultConfiguration = "{\"excludeScopes\": [\"offline_access\"]}",
+                ExampleConfiguration = "{\"excludeScopes\": [\"offline_access\", \"legacy_api\"]}",
+                DefaultMessageTemplate = "Client '{clientName}' allows {count} scope(s) that no longer exist: {missingScopes}",
+                DefaultFixDescription = "Navigate to Client Details → Resources tab → Allowed Scopes section and remove the scope(s) that no longer exist: {missingScopes}."
+            },
+
+            [ConfigurationRuleType.ClientSigningAlgorithmsMustBeFapiCompliant] = new ConfigurationRuleMetadataDto
+            {
+                RuleType = nameof(ConfigurationRuleType.ClientSigningAlgorithmsMustBeFapiCompliant),
+                DisplayName = "Client Signing Algorithms Must Be FAPI 2.0 Compliant",
+                Description = "Detects clients signing with an algorithm outside this deployment's FAPI 2.0 allow-list. Section 5.4 of the profile is a closed enumeration - PS256, ES256 and EdDSA - so the longer RS/PS/ES variants are non-conformant despite the larger key. Both the allowed identity token signing algorithms and the algorithm of JWK secrets are checked.",
+                ResourceType = nameof(ConfigurationResourceType.Client),
+                Parameters = new List<ConfigurationRuleParameterDto>
+                {
+                    new ConfigurationRuleParameterDto
+                    {
+                        Name = "allowedAlgorithms",
+                        DisplayName = "Allowed Algorithms",
+                        Description = "Signing algorithms enabled by this deployment's FAPI profile. Defaults to PS256 and ES256; FAPI also permits EdDSA (Ed25519), but enable it here only after configuring compatible validation support.",
+                        Type = "array",
+                        Required = false,
+                        DefaultValue = new[] { "PS256", "ES256" }
+                    }
+                },
+                DefaultConfiguration = "{\"allowedAlgorithms\": [\"PS256\", \"ES256\"]}",
+                ExampleConfiguration = "{\"allowedAlgorithms\": [\"PS256\", \"ES256\", \"EdDSA\"]}",
+                DefaultMessageTemplate = "Client '{clientName}' uses {count} signing algorithm(s) outside this deployment's FAPI 2.0 allow-list: {algorithms}",
+                DefaultFixDescription = "Navigate to Client Details → Advanced tab → Token → Identity Token, find 'Allowed Identity Token Signing Algorithms' field and keep only {allowedAlgorithms}. If a JWK secret carries an algorithm outside this deployment's allow-list, regenerate the key in Client Details → Secrets tab and update the client application."
+            },
+
+            [ConfigurationRuleType.ApiResourceSigningAlgorithmsMustBeFapiCompliant] = new ConfigurationRuleMetadataDto
+            {
+                RuleType = nameof(ConfigurationRuleType.ApiResourceSigningAlgorithmsMustBeFapiCompliant),
+                DisplayName = "API Resource Signing Algorithms Must Be FAPI 2.0 Compliant",
+                Description = "Detects API resources whose allowed access token signing algorithms fall outside this deployment's FAPI 2.0 allow-list. The access token algorithm is decided by the API resource, not the client - every access token issued for the resource's scopes is signed with one of these algorithms, so a single non-conformant resource affects every client requesting it. An empty list means the server default and is not reported.",
+                ResourceType = nameof(ConfigurationResourceType.ApiResource),
+                Parameters = new List<ConfigurationRuleParameterDto>
+                {
+                    new ConfigurationRuleParameterDto
+                    {
+                        Name = "allowedAlgorithms",
+                        DisplayName = "Allowed Algorithms",
+                        Description = "Signing algorithms enabled by this deployment's FAPI profile. Defaults to PS256 and ES256; FAPI also permits EdDSA (Ed25519), but enable it here only after configuring compatible validation support.",
+                        Type = "array",
+                        Required = false,
+                        DefaultValue = new[] { "PS256", "ES256" }
+                    }
+                },
+                DefaultConfiguration = "{\"allowedAlgorithms\": [\"PS256\", \"ES256\"]}",
+                ExampleConfiguration = "{\"allowedAlgorithms\": [\"PS256\", \"ES256\", \"EdDSA\"]}",
+                DefaultMessageTemplate = "API Resource '{resourceName}' allows {count} access token signing algorithm(s) outside this deployment's FAPI 2.0 allow-list: {algorithms}",
+                DefaultFixDescription = "Navigate to API Resource Details → Basic Information section, find 'Allowed Access Token Signing Algorithms' field and keep only {allowedAlgorithms}."
             },
 
             // Security Rules

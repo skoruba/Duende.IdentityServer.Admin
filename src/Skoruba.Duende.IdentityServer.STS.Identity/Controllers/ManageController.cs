@@ -464,6 +464,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgetTwoFactorClient()
         {
             var user = await _userManager.GetUserAsync(User);

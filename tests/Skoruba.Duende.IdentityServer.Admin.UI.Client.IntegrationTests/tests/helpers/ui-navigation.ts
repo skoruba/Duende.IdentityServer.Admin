@@ -20,6 +20,16 @@ export async function openTabAndWait(
   return panel;
 }
 
+/**
+ * A local action - copying a value, taking over a generated key - confirms itself in
+ * place. The toast region has to stay empty for it.
+ */
+export async function expectNoToast(page: Page): Promise<void> {
+  await expect(
+    page.getByRole("region", { name: /notifications/i }).getByRole("status"),
+  ).toHaveCount(0);
+}
+
 export async function clickPageSave(page: Page): Promise<void> {
   await page
     .locator('button[type="submit"]')

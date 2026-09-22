@@ -473,24 +473,33 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
             var configurationSection = configuration.GetSection(nameof(IdentityServerOptions));
 
             var identityServerOptions = configurationSection.Get<IdentityServerOptions>();
+            var fapi2SecurityProfile = configuration.GetSection(nameof(Fapi2SecurityProfile)).Get<Fapi2SecurityProfile>()
+                ?? new Fapi2SecurityProfile();
 
             var builder = services.AddIdentityServer(options =>
                 {
                     configurationSection.Bind(options);
+
+                    if (fapi2SecurityProfile.Enabled)
+                    {
+                        ApplyFapi2CryptographicProfile(options);
+                    }
 
                     options.DynamicProviders.SignInScheme = IdentityConstants.ExternalScheme;
                     options.DynamicProviders.SignOutScheme = IdentityConstants.ApplicationScheme;
                 })
                 .AddConfigurationStore<TConfigurationDbContext>()
                 .AddOperationalStore<TPersistedGrantDbContext>()
-                .AddAspNetIdentity<TUserIdentity>();
+                .AddAspNetIdentity<TUserIdentity>()
+                .AddJwtBearerClientAuthentication();
 
             services.ConfigureOptions<OpenIdClaimsMappingConfig>();
 
             if (!identityServerOptions.KeyManagement.Enabled)
             {
-                builder.AddCustomSigningCredential(configuration);
-                builder.AddCustomValidationKey(configuration);
+                // Without the automatic key management the profile has to reach the configured certificate as well
+                builder.AddCustomSigningCredential(configuration, fapi2SecurityProfile.Enabled);
+                builder.AddCustomValidationKey(configuration, fapi2SecurityProfile.Enabled);
             }
 
             builder.AddExtensionGrantValidator<DelegationGrantValidator>();
@@ -511,6 +520,36 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
             }
 
             return builder;
+        }
+
+        /// <summary>
+        /// Applies the FAPI 2.0 signing-algorithm and clock-skew restrictions that
+        /// IdentityServer can enforce globally. This deliberately does not claim to
+        /// configure every FAPI requirement; client configuration and sender-constrained
+        /// tokens remain deployment responsibilities.
+        /// </summary>
+        private static void ApplyFapi2CryptographicProfile(IdentityServerOptions options)
+        {
+            var supportedAlgorithms = new List<string>
+            {
+                SecurityAlgorithms.RsaSsaPssSha256,
+                SecurityAlgorithms.EcdsaSha256
+            };
+
+            // Replace, rather than append to, a configured/default list so the server
+            // cannot emit a JWT with an algorithm outside this profile. With the automatic
+            // key management off, AddCustomSigningCredential applies the same restriction.
+            options.KeyManagement.SigningAlgorithms.Clear();
+            options.KeyManagement.SigningAlgorithms.Add(
+                new SigningAlgorithmOptions(SecurityAlgorithms.RsaSsaPssSha256));
+
+            options.DPoP.SupportedDPoPSigningAlgorithms = supportedAlgorithms;
+            options.SupportedClientAssertionSigningAlgorithms = supportedAlgorithms;
+            options.SupportedRequestObjectSigningAlgorithms = supportedAlgorithms;
+            options.JwtValidationClockSkew = TimeSpan.FromSeconds(10);
+
+            // FAPI 2.0 accepts the issuer identifier as the only audience of a private_key_jwt client assertion
+            options.StrictClientAssertionAudienceValidation = true;
         }
 
         /// <summary>

@@ -7,7 +7,7 @@ import { DataTable } from "@/components/DataTable/DataTable";
 import Loading from "@/components/Loading/Loading";
 import { client } from "@skoruba/duende.identityserver.admin.api.client";
 import Page from "@/components/Page/Page";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Hammer, Cog, Settings, Search, Filter, X } from "lucide-react";
 import { TooltipField } from "@/components/FormRow/FormRow";
 import { IssueTypeBadge } from "./IssueTypeBadge";
@@ -34,12 +34,35 @@ const ConfigurationIssues: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [resourceTypeFilter, setResourceTypeFilter] =
     useState<ResourceTypeFilter>(ResourceTypeFilterOptions.ALL);
-  const [issueTypeFilter, setIssueTypeFilter] = useState<IssueTypeFilter>(
-    IssueTypeFilterOptions.ALL
+  const [searchParams, setSearchParams] = useSearchParams();
+  // Dashboard severity rows link here with ?type=Error|Warning|Recommendation.
+  // The filter lives in the URL, so a bare link clears it and a cleared filter
+  // does not come back on reload.
+  const issueTypeFilter: IssueTypeFilter =
+    Object.values(IssueTypeFilterOptions).find(
+      (option) => option === searchParams.get("type")
+    ) ?? IssueTypeFilterOptions.ALL;
+  const setIssueTypeFilter = (value: IssueTypeFilter) => {
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        if (value === IssueTypeFilterOptions.ALL) {
+          next.delete("type");
+        } else {
+          next.set("type", value);
+        }
+        return next;
+      },
+      { replace: true }
+    );
+  };
+  const [showFilters, setShowFilters] = useState(
+    issueTypeFilter !== IssueTypeFilterOptions.ALL
   );
-  const [showFilters, setShowFilters] = useState(false);
 
-  const { data, isLoading } = useConfigurationIssues();
+  const { data, isLoading } = useConfigurationIssues({
+    refetchOnMount: "always",
+  });
 
   const filteredData = useMemo(() => {
     if (!data || !Array.isArray(data)) return [];

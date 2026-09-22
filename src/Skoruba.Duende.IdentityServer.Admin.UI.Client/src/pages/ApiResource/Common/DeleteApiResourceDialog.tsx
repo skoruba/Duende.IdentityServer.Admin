@@ -6,6 +6,7 @@ import { toast } from "@/components/ui/use-toast";
 import { CheckCircle } from "lucide-react";
 import { deleteApiResource } from "@/services/ApiResourceServices";
 import { queryKeys } from "@/services/QueryKeys";
+import { configurationChangeMeta } from "@/services/mutationMeta";
 
 type DeleteApiResourceDialogProps = {
   apiResourceName: string;
@@ -25,15 +26,13 @@ const DeleteApiResourceDialog = ({
   const queryClient = useQueryClient();
 
   const removeApiResource = useMutation({
+    meta: configurationChangeMeta,
     mutationFn: () => deleteApiResource(Number(apiResourceId)),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.apiResources] });
       // Invalidate configuration issues cache when API resource is deleted
       queryClient.invalidateQueries({
         queryKey: [queryKeys.configurationIssues],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [queryKeys.configurationIssuesSummary],
       });
     },
   });

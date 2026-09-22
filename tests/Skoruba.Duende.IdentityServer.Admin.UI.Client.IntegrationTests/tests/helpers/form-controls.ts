@@ -197,6 +197,41 @@ export async function setDualListToAllSelected(
   await selectAll.click();
 }
 
+/**
+ * Moves a single dual list item between the columns. The row buttons carry only
+ * an arrow icon, so the item is found by its label and the column by the bulk
+ * action button above it.
+ */
+export async function setDualListItemSelected(
+  panel: Locator,
+  itemLabel: string,
+  selected: boolean,
+): Promise<void> {
+  const getColumn = (bulkAction: string): Locator =>
+    panel
+      .getByRole("button", { name: bulkAction, exact: true })
+      .first()
+      .locator("xpath=ancestor::div[1]");
+  const getRow = (column: Locator): Locator =>
+    column.locator("tbody tr").filter({
+      has: panel.page().getByRole("cell", { name: itemLabel, exact: true }),
+    });
+
+  const availableRow = getRow(getColumn(UI_TEXT.actions.selectAll));
+  const selectedRow = getRow(getColumn(UI_TEXT.actions.deselectAll));
+  const sourceRow = selected ? availableRow : selectedRow;
+  const targetRow = selected ? selectedRow : availableRow;
+
+  // The items arrive asynchronously - wait until the item shows up somewhere.
+  await expect(sourceRow.or(targetRow)).toBeVisible();
+
+  if ((await targetRow.count()) === 0) {
+    await sourceRow.getByRole("button").click();
+  }
+
+  await expect(targetRow).toBeVisible();
+}
+
 export async function getDualListSelectedRowCount(panel: Locator): Promise<number> {
   const deselectAllButton = panel.getByRole("button", {
     name: UI_TEXT.actions.deselectAll,

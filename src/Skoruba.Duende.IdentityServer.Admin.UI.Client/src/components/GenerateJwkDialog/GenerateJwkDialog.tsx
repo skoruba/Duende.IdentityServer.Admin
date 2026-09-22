@@ -1,0 +1,451 @@
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "@/components/ui/use-toast";
+import {
+  GeneratedJwkKeyPair,
+  JwkAlgorithm,
+  JwkModulusLength,
+  generateJwkKeyPair,
+  isEcAlgorithm,
+  isFapiSigningAlgorithm,
+  isJwkGenerationSupported,
+} from "@/helpers/JwkHelper";
+import { CopyButton } from "@/components/CopyButton/CopyButton";
+import { downloadTextFile } from "@/lib/utils";
+import {
+  Download,
+  Eye,
+  EyeOff,
+  KeyRound,
+  Loader2,
+} from "lucide-react";
+import { useId, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Tip } from "../Tip/Tip";
+import { Warning } from "../Warning/Warning";
+
+type KeyFormat = "jwk" | "pem";
+
+type GenerateJwkDialogProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  /** Called with the public JWK once the user confirms they saved the private key. */
+  onUsePublicKey: (publicJwk: string) => void;
+};
+
+const modulusLengths: JwkModulusLength[] = [2048, 3072, 4096];
+
+/** FAPI 2.0 permitted algorithms come first - see isFapiSigningAlgorithm. */
+const algorithms: { value: JwkAlgorithm; label: string }[] = [
+  { value: "PS256", label: "PS256 (RSA-PSS)" },
+  { value: "ES256", label: "ES256 (EC P-256)" },
+  { value: "RS256", label: "RS256 (RSA)" },
+  { value: "ES384", label: "ES384 (EC P-384)" },
+  { value: "ES512", label: "ES512 (EC P-521)" },
+];
+
+const CodeBlock = ({ value }: { value: string }) => (
+  <ScrollArea className="h-52 rounded-md border bg-muted/50">
+    <pre className="whitespace-pre-wrap break-all p-3 font-mono text-xs">
+      {value}
+    </pre>
+  </ScrollArea>
+);
+
+const GenerateJwkDialog = ({
+  open,
+  onOpenChange,
+  onUsePublicKey,
+}: GenerateJwkDialogProps) => {
+  const { t } = useTranslation();
+  const algorithmId = useId();
+  const keySizeId = useId();
+
+  const [algorithm, setAlgorithm] = useState<JwkAlgorithm>("PS256");
+  const [modulusLength, setModulusLength] = useState<JwkModulusLength>(2048);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [keyPair, setKeyPair] = useState<GeneratedJwkKeyPair | null>(null);
+  const [format, setFormat] = useState<KeyFormat>("jwk");
+  const [isAcknowledged, setIsAcknowledged] = useState(false);
+  const [isDiscarding, setIsDiscarding] = useState(false);
+  const [isPrivateKeyRevealed, setIsPrivateKeyRevealed] = useState(false);
+  // Closing the dialog invalidates a generation still in flight - a large RSA key takes seconds
+  const generationId = useRef(0);
+
+  // Drops the generated key material from memory together with the dialog state.
+  const close = () => {
+    generationId.current++;
+    setKeyPair(null);
+    setIsAcknowledged(false);
+    setIsDiscarding(false);
+    setIsGenerating(false);
+    setIsPrivateKeyRevealed(false);
+    setFormat("jwk");
+    onOpenChange(false);
+  };
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (nextOpen) {
+      onOpenChange(true);
+      return;
+    }
+
+    // Acknowledging only says the private key is saved - until the public key is
+    // applied (which closes the dialog directly) the key pair is still unused.
+    if (keyPair) {
+      setIsDiscarding(true);
+      return;
+    }
+
+    close();
+  };
+
+  const handleGenerate = async () => {
+    const id = ++generationId.current;
+    setIsGenerating(true);
+    try {
+      const pair = await generateJwkKeyPair(algorithm, modulusLength);
+      if (id === generationId.current) {
+        setKeyPair(pair);
+      }
+    } catch {
+      if (id === generationId.current) {
+        toast({
+          variant: "destructive",
+          title: t("Components.GenerateJwkDialog.GenerationFailed"),
+        });
+      }
+    } finally {
+      if (id === generationId.current) {
+        setIsGenerating(false);
+      }
+    }
+  };
+
+  const handleUsePublicKey = () => {
+    if (!keyPair) {
+      return;
+    }
+
+    // No toast: the form shows the key arriving, and confirms it right under the field
+    onUsePublicKey(keyPair.publicJwkCompact);
+    close();
+  };
+
+  const renderKeyPanel = ({
+    jwk,
+    pem,
+    fileName,
+    info,
+    isSensitive = false,
+  }: {
+    jwk: string;
+    pem: string;
+    fileName: string;
+    info: string;
+    isSensitive?: boolean;
+  }) => {
+    const value = format === "jwk" ? jwk : pem;
+    const isMasked = isSensitive && !isPrivateKeyRevealed;
+
+    return (
+      <div className="space-y-2">
+        <p className="text-sm text-muted-foreground">{info}</p>
+        {isMasked ? (
+          <div className="flex h-52 flex-col items-center justify-center gap-3 rounded-md border bg-muted/50">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setIsPrivateKeyRevealed(true)}
+            >
+              <Eye className="me-2 h-4 w-4" />
+              {t("Components.GenerateJwkDialog.Reveal")}
+            </Button>
+          </div>
+        ) : (
+          <CodeBlock value={value} />
+        )}
+        <div className="flex justify-end gap-2">
+          {isSensitive && isPrivateKeyRevealed && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="me-auto"
+              onClick={() => setIsPrivateKeyRevealed(false)}
+            >
+              <EyeOff className="me-2 h-4 w-4" />
+              {t("Components.GenerateJwkDialog.Hide")}
+            </Button>
+          )}
+          <CopyButton
+            value={value}
+            variant="outline"
+            size="sm"
+            iconClassName="me-2 h-4 w-4"
+          >
+            {t("Components.GenerateJwkDialog.Copy")}
+          </CopyButton>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              downloadTextFile(
+                value,
+                `${fileName}.${format === "jwk" ? "json" : "pem"}`,
+              )
+            }
+          >
+            <Download className="me-2 h-4 w-4" />
+            {t("Components.GenerateJwkDialog.Download")}
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <KeyRound className="h-5 w-5" />
+            {t("Components.GenerateJwkDialog.Title")}
+          </DialogTitle>
+          <DialogDescription>
+            {t("Components.GenerateJwkDialog.Description")}
+          </DialogDescription>
+        </DialogHeader>
+
+        {!keyPair ? (
+          <>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor={algorithmId}>
+                  {t("Components.GenerateJwkDialog.Algorithm")}
+                </Label>
+                <Select
+                  value={algorithm}
+                  onValueChange={(value) => setAlgorithm(value as JwkAlgorithm)}
+                >
+                  <SelectTrigger id={algorithmId}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {algorithms.map(({ value, label }) => (
+                      <SelectItem key={value} value={value}>
+                        <span className="flex items-center gap-2">
+                          {label}
+                          {isFapiSigningAlgorithm(value) && (
+                            <Badge variant="secondary">
+                              {t("Components.GenerateJwkDialog.FapiCompliant")}
+                            </Badge>
+                          )}
+                        </span>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-sm text-muted-foreground">
+                  {t("Components.GenerateJwkDialog.AlgorithmInfo")}
+                </p>
+                {!isFapiSigningAlgorithm(algorithm) && (
+                  <Warning>
+                    {t("Components.GenerateJwkDialog.NonFapiAlgorithmWarning", {
+                      algorithm,
+                    })}
+                  </Warning>
+                )}
+              </div>
+
+              {!isEcAlgorithm(algorithm) && (
+                <div className="space-y-2">
+                  <Label htmlFor={keySizeId}>
+                    {t("Components.GenerateJwkDialog.KeySize")}
+                  </Label>
+                  <Select
+                    value={String(modulusLength)}
+                    onValueChange={(value) =>
+                      setModulusLength(Number(value) as JwkModulusLength)
+                    }
+                  >
+                    <SelectTrigger id={keySizeId}>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {modulusLengths.map((length) => (
+                        <SelectItem key={length} value={String(length)}>
+                          {t("Components.GenerateJwkDialog.KeySizeOption", {
+                            bits: length,
+                          })}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+
+              <Tip>{t("Components.GenerateJwkDialog.SetupTip")}</Tip>
+
+              {!isJwkGenerationSupported() && (
+                <Warning>
+                  {t("Components.GenerateJwkDialog.SecureContextRequired")}
+                </Warning>
+              )}
+            </div>
+
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={close}>
+                {t("Actions.Cancel")}
+              </Button>
+              <Button
+                type="button"
+                onClick={handleGenerate}
+                disabled={isGenerating || !isJwkGenerationSupported()}
+              >
+                {isGenerating && (
+                  <Loader2 className="me-2 h-4 w-4 animate-spin" />
+                )}
+                {t("Components.GenerateJwkDialog.Generate")}
+              </Button>
+            </DialogFooter>
+          </>
+        ) : (
+          <>
+            <div className="space-y-4">
+              <Warning>
+                {t("Components.GenerateJwkDialog.PrivateKeyWarning")}
+              </Warning>
+
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="text-sm text-muted-foreground">
+                  {t("Components.GenerateJwkDialog.KeyId")}:{" "}
+                  <span className="font-mono text-foreground">
+                    {keyPair.kid}
+                  </span>
+                </p>
+                <div className="flex gap-1 rounded-md border p-0.5">
+                  {(["jwk", "pem"] as KeyFormat[]).map((keyFormat) => (
+                    <Button
+                      key={keyFormat}
+                      type="button"
+                      size="sm"
+                      variant={format === keyFormat ? "secondary" : "ghost"}
+                      aria-pressed={format === keyFormat}
+                      onClick={() => setFormat(keyFormat)}
+                    >
+                      {keyFormat.toUpperCase()}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
+              <Tabs defaultValue="private">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="private">
+                    {t("Components.GenerateJwkDialog.PrivateKey")}
+                  </TabsTrigger>
+                  <TabsTrigger value="public">
+                    {t("Components.GenerateJwkDialog.PublicKey")}
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value="private">
+                  {renderKeyPanel({
+                    jwk: keyPair.privateJwk,
+                    pem: keyPair.privatePem,
+                    fileName: `jwk-private-${keyPair.kid}`,
+                    info: t("Components.GenerateJwkDialog.PrivateKeyInfo"),
+                    isSensitive: true,
+                  })}
+                </TabsContent>
+                <TabsContent value="public">
+                  {renderKeyPanel({
+                    jwk: keyPair.publicJwk,
+                    pem: keyPair.publicPem,
+                    fileName: `jwk-public-${keyPair.kid}`,
+                    info: t("Components.GenerateJwkDialog.PublicKeyInfo"),
+                  })}
+                </TabsContent>
+              </Tabs>
+            </div>
+
+            {isDiscarding ? (
+              <div className="space-y-3 rounded-lg border border-destructive p-3">
+                <p className="text-sm">
+                  {t("Components.GenerateJwkDialog.DiscardConfirm")}
+                </p>
+                <div className="flex justify-end gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setIsDiscarding(false)}
+                  >
+                    {t("Components.GenerateJwkDialog.KeepKeys")}
+                  </Button>
+                  <Button type="button" variant="destructive" onClick={close}>
+                    {t("Components.GenerateJwkDialog.Discard")}
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <DialogFooter className="flex-col gap-3 sm:flex-col sm:items-stretch sm:space-x-0">
+                <div className="flex items-center justify-between gap-4 rounded-lg border p-3">
+                  <Label
+                    htmlFor="jwk-acknowledgement"
+                    className="font-normal leading-snug"
+                  >
+                    {t("Components.GenerateJwkDialog.Acknowledge")}
+                  </Label>
+                  <Switch
+                    id="jwk-acknowledgement"
+                    checked={isAcknowledged}
+                    onCheckedChange={setIsAcknowledged}
+                  />
+                </div>
+                <div className="flex justify-end gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => handleOpenChange(false)}
+                  >
+                    {t("Actions.Cancel")}
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={handleUsePublicKey}
+                    disabled={!isAcknowledged}
+                  >
+                    {t("Components.GenerateJwkDialog.UsePublicKey")}
+                  </Button>
+                </div>
+              </DialogFooter>
+            )}
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default GenerateJwkDialog;

@@ -30,6 +30,33 @@ export async function ensureLoggedInAndOpenListPage(
   });
 }
 
+/**
+ * Opens a row action menu and picks one of its items.
+ *
+ * The grid re-renders once the search results settle, which unmounts the row and
+ * closes an already open menu. Retrying just the item click cannot recover from
+ * that - the trigger has to be clicked again - so the whole open-and-verify step
+ * is retried instead.
+ */
+export async function clickRowMenuItem(
+  page: Page,
+  row: Locator,
+  itemName: string,
+): Promise<void> {
+  const trigger = row.getByRole("button", {
+    name: UI_TEXT.actions.openMenu,
+    exact: true,
+  });
+  const menuItem = page.getByRole("menuitem", { name: itemName, exact: true });
+
+  // The click has to happen inside the retried block: the menu can close again
+  // between a visibility check and a separate click.
+  await expect(async () => {
+    await trigger.click();
+    await menuItem.click({ timeout: 2_000 });
+  }).toPass({ timeout: 60_000 });
+}
+
 export async function findSingleRowBySearch({
   page,
   searchTerm,
@@ -38,8 +65,11 @@ export async function findSingleRowBySearch({
   timeoutMs = 90_000,
 }: FindSingleRowBySearchOptions): Promise<Locator> {
   const searchInput = page.locator("input[type='text']").first();
+  // exact: the header also has the command palette trigger ("Search… ⌘K"),
+  // which a substring match on "Search" would pick up as well.
   const searchButton = page.getByRole("button", {
     name: UI_TEXT.actions.search,
+    exact: true,
   });
   const timeoutAt = Date.now() + timeoutMs;
 

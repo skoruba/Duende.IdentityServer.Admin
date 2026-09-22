@@ -49,6 +49,13 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services
             return AuditLogRepository.GetDashboardAuditLogsAverageAsync(lastNumberOfDays, cancellationToken);
         }
 
+        public virtual async Task<List<AuditLogDto>> GetRecentChangesAsync(int count, int scanLimit, CancellationToken cancellationToken = default)
+        {
+            var auditLogs = await AuditLogRepository.GetRecentChangesAsync(count, scanLimit, cancellationToken);
+
+            return auditLogs.Select(auditLog => auditLog.ToModel()).ToList();
+        }
+
         public virtual async Task<List<DashboardAuditLogDto>> GetDashboardAuditLogsAsync(int lastNumberOfDays, CancellationToken cancellationToken = default)
         {
            var auditLogs = await AuditLogRepository.GetDashboardAuditLogsAsync(lastNumberOfDays, cancellationToken);

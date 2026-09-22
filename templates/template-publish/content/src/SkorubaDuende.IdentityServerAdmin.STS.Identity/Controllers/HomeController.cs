@@ -64,7 +64,7 @@ namespace SkorubaDuende.IdentityServerAdmin.STS.Identity.Controllers
             var vm = new ErrorViewModel();
 
             // retrieve error details from identityserver
-            var message = await _interaction.GetErrorContextAsync(errorId);
+            var message = await _interaction.GetErrorContextAsync(errorId, HttpContext.RequestAborted);
             if (message != null)
             {
                 vm.Error = message;

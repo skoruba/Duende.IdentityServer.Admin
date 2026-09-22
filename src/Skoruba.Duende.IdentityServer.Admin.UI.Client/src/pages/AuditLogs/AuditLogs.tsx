@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Page from "@/components/Page/Page";
@@ -16,21 +17,71 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { format } from "date-fns";
+import { format, isValid, parse } from "date-fns";
 import { queryKeys } from "@/services/QueryKeys";
 import AuditLogDetail from "./AuditLogDetail";
+
+const CREATED_PARAM_FORMAT = "yyyy-MM-dd";
+// Marks the locations this page has produced itself by changing a filter.
+const FILTER_CHANGE_STATE = "auditLogsFilterChange";
 
 const AuditLogs: React.FC = () => {
   const { t } = useTranslation();
   const { pagination, setPagination } = usePaginationTable();
 
+  const [searchParams, setSearchParams] = useSearchParams();
   const [filters, setFilters] = useState<Partial<AuditLogData>>({});
   const [selectedLog, setSelectedLog] = useState<AuditLogData | null>(null);
-  const [date, setDate] = useState<Date | undefined>();
+
+  // The dashboard's recent activity links here with ?event=<EventName> and the
+  // activity alert with ?created=yyyy-MM-dd. Both filters live in the URL, so a
+  // bare link clears them and a cleared filter does not come back on reload.
+  const eventFilter = searchParams.get("event") ?? undefined;
+  const createdParam = searchParams.get("created");
+  const date = useMemo(() => {
+    if (!createdParam || !/^\d{4}-\d{2}-\d{2}$/.test(createdParam)) {
+      return undefined;
+    }
+
+    const parsed = parse(createdParam, CREATED_PARAM_FORMAT, new Date());
+    return isValid(parsed) ? parsed : undefined;
+  }, [createdParam]);
+
+  // A navigation settles a moment after the key stroke, too late for a controlled
+  // input. The text box keeps its own copy and takes the URL over only when the
+  // location was changed from outside - a menu link, not the filter itself.
+  const location = useLocation();
+  const [eventInput, setEventInput] = useState(eventFilter ?? "");
+  const [syncedLocationKey, setSyncedLocationKey] = useState(location.key);
+  if (syncedLocationKey !== location.key) {
+    setSyncedLocationKey(location.key);
+
+    const state = location.state as { [FILTER_CHANGE_STATE]?: boolean } | null;
+    if (!state?.[FILTER_CHANGE_STATE]) {
+      setEventInput(eventFilter ?? "");
+    }
+  }
+
+  const setSearchParam = (key: string, value: string | undefined) => {
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        if (value) {
+          next.set(key, value);
+        } else {
+          next.delete(key);
+        }
+        return next;
+      },
+      // Typing into the event filter must not fill the browser history.
+      { replace: true, state: { [FILTER_CHANGE_STATE]: true } },
+    );
+  };
 
   const filtersToSend = {
     ...filters,
-    created: date ?? undefined,
+    event: eventFilter,
+    created: date,
   };
 
   const { data, isLoading } = useQuery({
@@ -75,7 +126,11 @@ const AuditLogs: React.FC = () => {
     <div className="grid grid-cols-1 gap-2 md:grid-cols-4 md:items-center">
       <Input
         placeholder={t("AuditLogs.SearchEvent")}
-        onChange={(e) => handleChange("event", e.target.value)}
+        value={eventInput}
+        onChange={(e) => {
+          setEventInput(e.target.value);
+          setSearchParam("event", e.target.value);
+        }}
       />
       <Input
         placeholder={t("AuditLogs.SearchSource")}
@@ -102,7 +157,12 @@ const AuditLogs: React.FC = () => {
               mode="single"
               selected={date}
               onSelect={(selectedDate) => {
-                setDate(selectedDate ?? undefined);
+                setSearchParam(
+                  "created",
+                  selectedDate
+                    ? format(selectedDate, CREATED_PARAM_FORMAT)
+                    : undefined,
+                );
               }}
               initialFocus
             />
@@ -112,10 +172,7 @@ const AuditLogs: React.FC = () => {
         {date && (
           <button
             className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-            onClick={() => {
-              setDate(undefined);
-              handleChange("created", undefined);
-            }}
+            onClick={() => setSearchParam("created", undefined)}
             aria-label={t("AuditLogs.ClearDate")}
           >
             <X className="h-4 w-4" />

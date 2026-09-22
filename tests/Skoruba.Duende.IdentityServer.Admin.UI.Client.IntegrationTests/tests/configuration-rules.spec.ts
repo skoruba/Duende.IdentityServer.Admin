@@ -2,7 +2,10 @@ import { expect, test } from "@playwright/test";
 import { loadE2ESeedData } from "../utils/seed-data";
 import { type LoginCredentials } from "./helpers/auth";
 import { ensureLoggedInAndOpenConfigurationRules } from "./helpers/configuration-rules-list";
-import { runCreateAndVerifyConfigurationRulesFlow } from "./scenarios/configuration-rule-persistence-flow";
+import {
+  runConfigurationRuleReportsIssueFlow,
+  runCreateAndVerifyConfigurationRulesFlow,
+} from "./scenarios/configuration-rule-persistence-flow";
 import { UI_TEXT } from "./helpers/ui-texts";
 
 const seedData = loadE2ESeedData();
@@ -28,5 +31,16 @@ test.describe("Admin UI Configuration Rules", () => {
   }) => {
     test.setTimeout(240_000);
     await runCreateAndVerifyConfigurationRulesFlow(page, credentials);
+  });
+
+  test("enabled rule reports an issue that leads to the client and disappears once disabled", async ({
+    page,
+  }) => {
+    test.setTimeout(240_000);
+    await runConfigurationRuleReportsIssueFlow(
+      page,
+      credentials,
+      seedData.expectedClientId,
+    );
   });
 });

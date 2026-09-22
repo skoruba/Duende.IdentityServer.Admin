@@ -3805,6 +3805,62 @@ export class DashboardClient extends WebApiClientBase {
         }
         return Promise.resolve(null);
     }
+    getRecentAuditChanges(count) {
+        let url_ = this.baseUrl + "/api/Dashboard/GetRecentAuditChanges?";
+        if (count !== undefined && count !== null)
+            url_ += "count=" + encodeURIComponent("" + count) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
+            return this.processGetRecentAuditChanges(_response);
+        });
+    }
+    processGetRecentAuditChanges(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [];
+                    for (let item of resultData200)
+                        result200.push(AuditLogDto.fromJS(item));
+                }
+                else {
+                    result200 = null;
+                }
+                return result200;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
+    }
     getDashboardIdentity() {
         let url_ = this.baseUrl + "/api/Dashboard/GetDashboardIdentity";
         url_ = url_.replace(/[?&]$/, "");
@@ -4891,6 +4947,100 @@ export class InfoClient extends WebApiClientBase {
                 let result200 = null;
                 let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : null;
+                return result200;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
+    }
+    getHealth() {
+        let url_ = this.baseUrl + "/api/Info/GetHealth";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
+            return this.processGetHealth(_response);
+        });
+    }
+    processGetHealth(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = SystemHealthApiDto.fromJS(resultData200);
+                return result200;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
+    }
+    getEnvironment() {
+        let url_ = this.baseUrl + "/api/Info/GetEnvironment";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
+            return this.processGetEnvironment(_response);
+        });
+    }
+    processGetEnvironment(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = EnvironmentInfoApiDto.fromJS(resultData200);
                 return result200;
             });
         }
@@ -8269,6 +8419,13 @@ export var ConfigurationRuleType;
     ConfigurationRuleType["IdentityResourceNameMustStartWith"] = "IdentityResourceNameMustStartWith";
     ConfigurationRuleType["ScopeIsUnused"] = "ScopeIsUnused";
     ConfigurationRuleType["SecretIsExpiredInDays"] = "SecretIsExpiredInDays";
+    ConfigurationRuleType["ClientNameMustStartWith"] = "ClientNameMustStartWith";
+    ConfigurationRuleType["ClientNameMustNotContain"] = "ClientNameMustNotContain";
+    ConfigurationRuleType["ClientIdMustStartWith"] = "ClientIdMustStartWith";
+    ConfigurationRuleType["ClientIdMustNotContain"] = "ClientIdMustNotContain";
+    ConfigurationRuleType["ClientScopeMustExist"] = "ClientScopeMustExist";
+    ConfigurationRuleType["ClientSigningAlgorithmsMustBeFapiCompliant"] = "ClientSigningAlgorithmsMustBeFapiCompliant";
+    ConfigurationRuleType["ApiResourceSigningAlgorithmsMustBeFapiCompliant"] = "ApiResourceSigningAlgorithmsMustBeFapiCompliant";
 })(ConfigurationRuleType || (ConfigurationRuleType = {}));
 export var ConfigurationIssueType;
 (function (ConfigurationIssueType) {
@@ -8448,6 +8605,52 @@ export class DashboardAuditLogDto {
     toJSON(data) {
         data = typeof data === 'object' ? data : {};
         data["total"] = this.total;
+        data["created"] = this.created ? this.created.toISOString() : undefined;
+        return data;
+    }
+}
+export class AuditLogDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            this.id = _data["id"];
+            this.event = _data["event"];
+            this.source = _data["source"];
+            this.category = _data["category"];
+            this.subjectIdentifier = _data["subjectIdentifier"];
+            this.subjectName = _data["subjectName"];
+            this.subjectType = _data["subjectType"];
+            this.subjectAdditionalData = _data["subjectAdditionalData"];
+            this.action = _data["action"];
+            this.data = _data["data"];
+            this.created = _data["created"] ? new Date(_data["created"].toString()) : undefined;
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new AuditLogDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["event"] = this.event;
+        data["source"] = this.source;
+        data["category"] = this.category;
+        data["subjectIdentifier"] = this.subjectIdentifier;
+        data["subjectName"] = this.subjectName;
+        data["subjectType"] = this.subjectType;
+        data["subjectAdditionalData"] = this.subjectAdditionalData;
+        data["action"] = this.action;
+        data["data"] = this.data;
         data["created"] = this.created ? this.created.toISOString() : undefined;
         return data;
     }
@@ -8722,6 +8925,107 @@ export class IdentityResourcePropertyApiDto {
         return data;
     }
 }
+export class SystemHealthApiDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            this.status = _data["status"];
+            this.identityServerStatus = _data["identityServerStatus"];
+            if (Array.isArray(_data["entries"])) {
+                this.entries = [];
+                for (let item of _data["entries"])
+                    this.entries.push(SystemHealthEntryApiDto.fromJS(item));
+            }
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new SystemHealthApiDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        data["status"] = this.status;
+        data["identityServerStatus"] = this.identityServerStatus;
+        if (Array.isArray(this.entries)) {
+            data["entries"] = [];
+            for (let item of this.entries)
+                data["entries"].push(item ? item.toJSON() : undefined);
+        }
+        return data;
+    }
+}
+export var SystemHealthStatus;
+(function (SystemHealthStatus) {
+    SystemHealthStatus["Unknown"] = "Unknown";
+    SystemHealthStatus["Healthy"] = "Healthy";
+    SystemHealthStatus["Degraded"] = "Degraded";
+    SystemHealthStatus["Unhealthy"] = "Unhealthy";
+})(SystemHealthStatus || (SystemHealthStatus = {}));
+export class SystemHealthEntryApiDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            this.name = _data["name"];
+            this.status = _data["status"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new SystemHealthEntryApiDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["status"] = this.status;
+        return data;
+    }
+}
+export class EnvironmentInfoApiDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            this.environmentName = _data["environmentName"];
+            this.identityServerBaseUrl = _data["identityServerBaseUrl"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new EnvironmentInfoApiDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        data["environmentName"] = this.environmentName;
+        data["identityServerBaseUrl"] = this.identityServerBaseUrl;
+        return data;
+    }
+}
 export class KeysApiDto {
     constructor(data) {
         if (data) {
@@ -8833,52 +9137,6 @@ export class AuditLogsDto {
         }
         data["totalCount"] = this.totalCount;
         data["pageSize"] = this.pageSize;
-        return data;
-    }
-}
-export class AuditLogDto {
-    constructor(data) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    this[property] = data[property];
-            }
-        }
-    }
-    init(_data) {
-        if (_data) {
-            this.id = _data["id"];
-            this.event = _data["event"];
-            this.source = _data["source"];
-            this.category = _data["category"];
-            this.subjectIdentifier = _data["subjectIdentifier"];
-            this.subjectName = _data["subjectName"];
-            this.subjectType = _data["subjectType"];
-            this.subjectAdditionalData = _data["subjectAdditionalData"];
-            this.action = _data["action"];
-            this.data = _data["data"];
-            this.created = _data["created"] ? new Date(_data["created"].toString()) : undefined;
-        }
-    }
-    static fromJS(data) {
-        data = typeof data === 'object' ? data : {};
-        let result = new AuditLogDto();
-        result.init(data);
-        return result;
-    }
-    toJSON(data) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["event"] = this.event;
-        data["source"] = this.source;
-        data["category"] = this.category;
-        data["subjectIdentifier"] = this.subjectIdentifier;
-        data["subjectName"] = this.subjectName;
-        data["subjectType"] = this.subjectType;
-        data["subjectAdditionalData"] = this.subjectAdditionalData;
-        data["action"] = this.action;
-        data["data"] = this.data;
-        data["created"] = this.created ? this.created.toISOString() : undefined;
         return data;
     }
 }

@@ -38,16 +38,21 @@ export const queryKeys = {
   secretTypes: "secretTypes",
   signingAlgorithms: "signingAlgorithms",
   dashboard: "dashboard",
+  dashboardIdentity: "dashboardIdentity",
+  dashboardKeys: "dashboardKeys",
+  dashboardRecentAuditLogs: "dashboardRecentAuditLogs",
   configurationIssues: "configurationIssues",
-  configurationIssuesSummary: "configurationIssuesSummary",
   configurationRules: "configurationRules",
   configurationRulesMetadata: "configurationRulesMetadata",
   userExternalApps: "userExternalApps",
   applicationInfo: "applicationInfo",
+  environmentInfo: "environmentInfo",
+  systemHealth: "systemHealth",
   userPersistedGrants: "userPersistedGrants",
   roleClaims: "roleClaims",
   roleUsers: "roleUsers",
   csrfToken: "csrfToken",
+  commandPaletteSearch: "commandPaletteSearch",
 } as const;
 
 export const queryWithoutCache = {

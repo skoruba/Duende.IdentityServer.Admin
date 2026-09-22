@@ -23,6 +23,11 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
     {
         protected readonly TDbContext DbContext;
 
+        /// <summary>
+        /// Every read is audited as "...RequestedEvent", and reads vastly outnumber changes.
+        /// </summary>
+        protected const string ReadEventSuffix = "RequestedEvent";
+
         public AuditLogRepository(TDbContext dbContext)
         {
             DbContext = dbContext;
@@ -44,6 +49,25 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
             return logs;
         }
     
+        public virtual async Task<List<TAuditLog>> GetRecentChangesAsync(int count, int scanLimit, CancellationToken cancellationToken = default)
+        {
+            count = Math.Max(1, count);
+            scanLimit = Math.Max(count, scanLimit);
+
+            // AuditLog is indexed by its primary key only and Event cannot be matched by an index,
+            // so without a bound a log holding nothing but reads would be scanned completely.
+            // One query and no COUNT: the newest entries are read backwards along the primary key
+            // and the scan ends at the limit, however large the table is.
+            return await DbContext.AuditLog
+                .OrderByDescending(x => x.Id)
+                .Take(scanLimit)
+                .Where(x => x.Event != null && !x.Event.EndsWith(ReadEventSuffix))
+                .OrderByDescending(x => x.Id)
+                .Take(count)
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
+        }
+
         public async Task<int> GetDashboardAuditLogsAverageAsync(int lastNumberOfDays, CancellationToken cancellationToken = default)
         {
             var dailyCounts = await DbContext.AuditLog

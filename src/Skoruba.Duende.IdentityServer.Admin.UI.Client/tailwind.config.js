@@ -21,6 +21,7 @@ module.exports = {
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
+        "page-background": "hsl(var(--page-background))",
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -65,10 +66,19 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: 0 },
         },
+        // Points at a field whose value was just written for the user. The ring is held before it
+        // fades: the eye is somewhere else when it starts, and a pulse is over before it arrives
+        "field-applied": {
+          "0%": { boxShadow: "0 0 0 0 hsl(var(--primary) / 0)" },
+          "10%": { boxShadow: "0 0 0 3px hsl(var(--primary) / 0.6)" },
+          "65%": { boxShadow: "0 0 0 3px hsl(var(--primary) / 0.6)" },
+          "100%": { boxShadow: "0 0 0 3px hsl(var(--primary) / 0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "field-applied": "field-applied 2.8s ease-out 0.2s both",
       },
     },
   },

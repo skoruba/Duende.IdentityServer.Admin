@@ -52,6 +52,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
 {
     public static class StartupHelpers
     {
+        private const int IdentityServerHealthCheckTimeoutSeconds = 10;
+
         public static IServiceCollection AddAuditEventLogging<TAuditLoggingDbContext, TAuditLog>(
             this IServiceCollection services, IConfiguration configuration)
             where TAuditLog : AuditLog, new()
@@ -307,7 +309,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
                 .AddDbContextCheck<TLogDbContext>("LogDbContext")
                 .AddDbContextCheck<TAuditLoggingDbContext>("AuditLogDbContext")
                 .AddDbContextCheck<TDataProtectionDbContext>("DataProtectionDbContext")
-                .AddOpenIdConnectServer(oidcSvrUri: new Uri(identityServerUri), name: "Identity Server");
+                // Bounded - an unreachable IdentityServer must not hold the report until the HttpClient gives up
+                .AddOpenIdConnectServer(oidcSvrUri: new Uri(identityServerUri), name: ConfigurationConsts.IdentityServerHealthCheckName,
+                    timeout: TimeSpan.FromSeconds(IdentityServerHealthCheckTimeoutSeconds));
 
             var serviceProvider = services.BuildServiceProvider();
             var scopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
@@ -450,6 +454,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
             where TAdminAuditLogDbContext : IAuditLoggingDbContext<AuditLog>, IAuditLoggingDbContext<TAuditLog>
             where TAuditLog : AuditLog, new()
         {
+            // The section is optional: every DashboardConfiguration value has a default.
+            services.AddSingleton(configuration.GetSection(nameof(DashboardConfiguration)).Get<DashboardConfiguration>() ?? new DashboardConfiguration());
+            services.AddSingleton<SystemHealthReportCache>();
+
             services.AddSingleton(configuration.GetSection(nameof(IdentityServerData))
                 .Get<IdentityServerData>());
 

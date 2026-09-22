@@ -23,6 +23,7 @@ import {
   useConfirmUnsavedChanges,
   useNavigateWithBlocker,
 } from "@/hooks/useConfirmUnsavedChanges";
+import { configurationChangeMeta } from "@/services/mutationMeta";
 
 export enum ApiResourceFormMode {
   Create = "create",
@@ -63,6 +64,7 @@ const ApiResourceForm: React.FC<ApiResourceFormProps> = ({
   const { DialogCmp } = useConfirmUnsavedChanges(form.formState.isDirty);
 
   const mutation = useMutation({
+    meta: configurationChangeMeta,
     mutationFn: (data: ApiResourceFormData) =>
       mode === ApiResourceFormMode.Create
         ? createApiResource(data)
@@ -73,9 +75,6 @@ const ApiResourceForm: React.FC<ApiResourceFormProps> = ({
       // Invalidate configuration issues cache when API resource changes
       queryClient.invalidateQueries({
         queryKey: [queryKeys.configurationIssues],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [queryKeys.configurationIssuesSummary],
       });
       toast({
         title: <Hoorey />,

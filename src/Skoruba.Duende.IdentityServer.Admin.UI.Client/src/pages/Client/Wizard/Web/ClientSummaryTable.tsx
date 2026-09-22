@@ -11,6 +11,7 @@ import { Pencil } from "lucide-react";
 import { useFormState } from "@/contexts/FormContext";
 import { ClientWizardFormSummaryData } from "./ClientSummaryStep";
 import { useClientWizard } from "@/contexts/ClientWizardContext";
+import { humanizePascalCase } from "@/helpers/StringHelper";
 import { useTranslation } from "react-i18next";
 import { clientTypeRules, enforcedFieldMeta } from "../Common/ClientTypeRules";
 
@@ -153,10 +154,10 @@ const ClientSummaryTable = () => {
             <TableBody>
               <TableRow className="flex flex-row">
                 <TableCell className="flex-1 p-2">
-                  {t("Client.Label.RedirectUris_Label")}
+                  {t("Client.Label.RedirectUri_Label")}
                 </TableCell>
                 <TableCell className="flex-1 p-2">
-                  {formData.redirectUris.join(", ")}
+                  {formData.redirectUri}
                 </TableCell>
                 <TableCell className="flex-1 p-2 flex justify-end">
                   {createEditButton(2)}
@@ -164,7 +165,7 @@ const ClientSummaryTable = () => {
               </TableRow>
               <TableRow className="flex flex-row">
                 <TableCell className="flex-1 p-2">
-                  {t("Client.Label.PostLogoutRedirectUris_Label")}
+                  {t("Client.Label.PostLogoutRedirectUri_Label")}
                 </TableCell>
                 <TableCell className="flex-1 p-2">
                   {formData.logoutUri}
@@ -225,7 +226,7 @@ const ClientSummaryTable = () => {
                   {t("Client.Label.SecretType_Label")}
                 </TableCell>
                 <TableCell className="flex-1 p-2">
-                  {formData.secretType}
+                  {humanizePascalCase(formData.secretType)}
                 </TableCell>
                 <TableCell className="flex-1 p-2 flex justify-end">
                   {createEditButton(4)}

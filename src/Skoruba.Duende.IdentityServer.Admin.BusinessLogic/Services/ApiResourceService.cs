@@ -230,7 +230,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services
 
             var added = await ApiResourceRepository.AddApiSecretAsync(apiSecret.ApiResourceId, secret);
 
-            await AuditEventLogger.LogEventAsync(new ApiSecretAddedEvent(apiSecret.ApiResourceId, apiSecret.Type, apiSecret.Expiration));
+            var apiResourceName = await ApiResourceRepository.GetApiResourceNameAsync(apiSecret.ApiResourceId);
+
+            await AuditEventLogger.LogEventAsync(new ApiSecretAddedEvent(apiSecret.ApiResourceId, apiResourceName, apiSecret.Type, apiSecret.Expiration));
 
             return added;
         }
@@ -252,9 +254,15 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services
         {
             var secret = apiSecret.ToEntity();
 
+            // Callers may know only the secret id (the API does), which used to audit the deletion
+            // with ApiResourceId 0. The owning API resource is read before the secret is gone.
+            var existingSecret = await ApiResourceRepository.GetApiSecretAsync(apiSecret.ApiSecretId);
+            var apiResourceId = existingSecret?.ApiResource?.Id ?? apiSecret.ApiResourceId;
+            var apiResourceName = existingSecret?.ApiResource?.Name;
+
             var deleted = await ApiResourceRepository.DeleteApiSecretAsync(secret);
 
-            await AuditEventLogger.LogEventAsync(new ApiSecretDeletedEvent(apiSecret.ApiResourceId, apiSecret.ApiSecretId));
+            await AuditEventLogger.LogEventAsync(new ApiSecretDeletedEvent(apiResourceId, apiResourceName, apiSecret.ApiSecretId));
 
             return deleted;
         }

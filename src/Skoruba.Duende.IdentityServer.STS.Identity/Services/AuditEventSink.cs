@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
 // Licensed under the Apache License, Version 2.0.
 
+using System.Threading;
 using System.Threading.Tasks;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Services;
@@ -14,9 +15,9 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Services
         {
         }
 
-        public override Task PersistAsync(Event evt)
+        public override Task PersistAsync(Event evt, CancellationToken cancellationToken = default)
         {
-            return base.PersistAsync(evt);
+            return base.PersistAsync(evt, cancellationToken);
         }
     }
 }

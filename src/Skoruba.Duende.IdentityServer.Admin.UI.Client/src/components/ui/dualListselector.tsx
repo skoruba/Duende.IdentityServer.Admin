@@ -14,6 +14,12 @@ import { Separator } from "./separator";
 import CustomItemModal from "@/pages/Client/CustomItemModal";
 import { useToast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
+import {
+  mergeDualListItems,
+  rememberDeselectedItems,
+} from "@/lib/dualList/dualListItems";
+
+const MOVE_BUTTON_COLUMN = "w-[88px]";
 
 export interface Item {
   id: string;
@@ -35,6 +41,9 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
   const { t } = useTranslation();
 
   const [customItems, setCustomItems] = useState<Item[]>([]);
+  // A selected item need not be among initialItems - once removed it has to stay
+  // on the left, or it could not be selected again.
+  const [deselectedItems, setDeselectedItems] = useState<Item[]>([]);
   const [selectedItems, setSelectedItems] =
     useState<Item[]>(initialSelectedItems);
   const [searchTermLeft, setSearchTermLeft] = useState("");
@@ -45,15 +54,21 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
     setSelectedItems(initialSelectedItems);
   }, [initialSelectedItems]);
 
-  const allItems = useMemo(() => {
-    const merged = new Map<string, Item>();
-    [...initialItems, ...selectedItems, ...customItems].forEach((item) => {
-      merged.set(item.id, item);
-    });
-    return Array.from(merged.values());
-  }, [initialItems, selectedItems, customItems]);
+  const allItems = useMemo(
+    () =>
+      mergeDualListItems(
+        initialItems,
+        selectedItems,
+        customItems,
+        deselectedItems,
+      ),
+    [initialItems, selectedItems, customItems, deselectedItems],
+  );
 
   const notifySelectedItemsChange = (newSelected: Item[]) => {
+    setDeselectedItems((prev) =>
+      rememberDeselectedItems(prev, selectedItems, newSelected),
+    );
     setSelectedItems(newSelected);
     onSelectedItemsChange?.(newSelected);
   };
@@ -83,7 +98,7 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
     const existsInAll = allItems.some((i) => i.id === label);
     if (!existsInAll) {
       setCustomItems((prev) =>
-        prev.some((i) => i.id === label) ? prev : [...prev, newItem]
+        prev.some((i) => i.id === label) ? prev : [...prev, newItem],
       );
     }
 
@@ -93,7 +108,7 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
 
   const selectAll = () => {
     const toSelect = allItems.filter(
-      (item) => !selectedItems.find((i) => i.id === item.id)
+      (item) => !selectedItems.find((i) => i.id === item.id),
     );
     notifySelectedItemsChange([...selectedItems, ...toSelect]);
   };
@@ -105,25 +120,25 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
   const leftItems = useMemo(
     () =>
       allItems.filter(
-        (item) => !selectedItems.some((sel) => sel.id === item.id)
+        (item) => !selectedItems.some((sel) => sel.id === item.id),
       ),
-    [allItems, selectedItems]
+    [allItems, selectedItems],
   );
 
   const filteredLeft = useMemo(
     () =>
       leftItems.filter((item) =>
-        item.label.toLowerCase().includes(searchTermLeft.toLowerCase())
+        item.label.toLowerCase().includes(searchTermLeft.toLowerCase()),
       ),
-    [leftItems, searchTermLeft]
+    [leftItems, searchTermLeft],
   );
 
   const filteredRight = useMemo(
     () =>
       selectedItems.filter((item) =>
-        item.label.toLowerCase().includes(searchTermRight.toLowerCase())
+        item.label.toLowerCase().includes(searchTermRight.toLowerCase()),
       ),
-    [selectedItems, searchTermRight]
+    [selectedItems, searchTermRight],
   );
 
   return (
@@ -144,7 +159,11 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
         />
         <Separator className="mt-6" />
         <div className="flex-grow overflow-auto max-h-[300px]">
-          <Table>
+          <Table className="table-fixed">
+            <colgroup>
+              <col />
+              <col className={MOVE_BUTTON_COLUMN} />
+            </colgroup>
             <TableHeader>
               <TableRow>
                 <TableHead>{t("Components.DualListSelector.Name")}</TableHead>
@@ -153,7 +172,9 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
             <TableBody>
               {filteredLeft.map((item) => (
                 <TableRow key={item.id}>
-                  <TableCell className="truncate">{item.label}</TableCell>
+                  <TableCell className="truncate" title={item.label}>
+                    {item.label}
+                  </TableCell>
                   <TableCell>
                     <Button
                       type="button"
@@ -186,7 +207,11 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
         />
         <Separator className="mt-6" />
         <div className="flex-grow overflow-auto max-h-[300px]">
-          <Table>
+          <Table className="table-fixed">
+            <colgroup>
+              <col className={MOVE_BUTTON_COLUMN} />
+              <col />
+            </colgroup>
             <TableHeader>
               <TableRow>
                 <TableHead>{t("Components.DualListSelector.Name")}</TableHead>
@@ -214,7 +239,9 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
                       <ArrowLeft />
                     </Button>
                   </TableCell>
-                  <TableCell className="truncate">{item.label}</TableCell>
+                  <TableCell className="truncate" title={item.label}>
+                    {item.label}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

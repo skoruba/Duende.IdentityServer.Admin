@@ -20,69 +20,30 @@ import {
   DropdownMenuTrigger,
   DropdownMenuItem,
 } from "../DropdownMenu/DropdownMenu";
-import {
-  ClientsUrl,
-  ClientEditUrl,
-  ClientCloneUrl,
-  ApiResourcesUrl,
-  ApiResourceEditUrl,
-  ApiResourceCreateUrl,
-  ApiScopesUrl,
-  ApiScopeEditUrl,
-  ApiScopeCreateUrl,
-  IdentityResourcesUrl,
-  IdentityResourceEditUrl,
-  IdentityResourceCreateUrl,
-  UsersUrl,
-  UserEditUrl,
-  UserCreateUrl,
-  RolesUrl,
-  RoleEditUrl,
-  RoleCreateUrl,
-  IdentityProvidersUrl,
-  IdentityProviderEditUrl,
-  IdentityProviderCreateUrl,
-  KeysUrl,
-  AuditLogsUrl,
-  ConfigurationIssuesUrl,
-  ConfigurationRulesUrl,
-} from "@/routing/Urls";
+import { ConfigurationIssuesUrl } from "@/routing/Urls";
 import { useConfigurationIssuesSummary } from "@/services/DashboardService";
+import { useAuth } from "@/contexts/AuthContext";
+import { getIssuesTotal } from "@/lib/configurationIssues/issueInsights";
 import {
   Activity,
   Cog,
   Home,
   KeyRound,
-  Laptop,
-  Cable,
   ShieldCheck,
-  Fingerprint,
   Users,
-  Lock,
-  FileLock2,
   LayoutGrid,
   Menu,
   Loader2,
-  Settings,
 } from "lucide-react";
 
 import { ACCENTS } from "@/lib/accents";
-
-type Kind = keyof typeof ACCENTS;
-type IconType = React.ComponentType<React.SVGProps<SVGSVGElement>>;
-
-type NavItem = {
-  translationKey: string;
-  href: string;
-  activeBasePaths?: string[];
-  icon: IconType;
-  kind: Kind;
-};
-
-function getBasePath(route: string) {
-  const idx = route.indexOf("/:");
-  return idx === -1 ? route : route.slice(0, idx);
-}
+import {
+  NavItem,
+  clientsResourcesItems,
+  identityItems,
+  providersKeysItems,
+  monitoringItems,
+} from "./navItems";
 
 function isActive(item: NavItem, pathname: string) {
   if (item.activeBasePaths?.length) {
@@ -93,133 +54,18 @@ function isActive(item: NavItem, pathname: string) {
   return pathname === item.href;
 }
 
-const clientsResourcesItems: NavItem[] = [
-  {
-    translationKey: "Home.Clients",
-    href: ClientsUrl,
-    activeBasePaths: [
-      ClientsUrl,
-      getBasePath(ClientEditUrl),
-      getBasePath(ClientCloneUrl),
-    ],
-    icon: Laptop,
-    kind: "management",
-  },
-  {
-    translationKey: "Home.ApiResources",
-    href: ApiResourcesUrl,
-    activeBasePaths: [
-      ApiResourcesUrl,
-      getBasePath(ApiResourceEditUrl),
-      getBasePath(ApiResourceCreateUrl),
-    ],
-    icon: Cable,
-    kind: "management",
-  },
-  {
-    translationKey: "Home.ApiScopes",
-    href: ApiScopesUrl,
-    activeBasePaths: [
-      ApiScopesUrl,
-      getBasePath(ApiScopeEditUrl),
-      getBasePath(ApiScopeCreateUrl),
-    ],
-    icon: ShieldCheck,
-    kind: "management",
-  },
-  {
-    translationKey: "Home.IdentityResources",
-    href: IdentityResourcesUrl,
-    activeBasePaths: [
-      IdentityResourcesUrl,
-      getBasePath(IdentityResourceEditUrl),
-      getBasePath(IdentityResourceCreateUrl),
-    ],
-    icon: Fingerprint,
-    kind: "management",
-  },
-];
-
-const identityItems: NavItem[] = [
-  {
-    translationKey: "Home.Users",
-    href: UsersUrl,
-    activeBasePaths: [
-      UsersUrl,
-      getBasePath(UserEditUrl),
-      getBasePath(UserCreateUrl),
-    ],
-    icon: Users,
-    kind: "identity",
-  },
-  {
-    translationKey: "Home.Roles",
-    href: RolesUrl,
-    activeBasePaths: [
-      RolesUrl,
-      getBasePath(RoleEditUrl),
-      getBasePath(RoleCreateUrl),
-    ],
-    icon: Lock,
-    kind: "identity",
-  },
-];
-
-const providersKeysItems: NavItem[] = [
-  {
-    translationKey: "Home.IdentityProviders",
-    href: IdentityProvidersUrl,
-    activeBasePaths: [
-      IdentityProvidersUrl,
-      getBasePath(IdentityProviderEditUrl),
-      getBasePath(IdentityProviderCreateUrl),
-    ],
-    icon: KeyRound,
-    kind: "providers",
-  },
-  {
-    translationKey: "Home.Keys",
-    href: KeysUrl,
-    activeBasePaths: [KeysUrl],
-    icon: FileLock2,
-    kind: "providers",
-  },
-];
-
-const monitoringItems: NavItem[] = [
-  {
-    translationKey: "Home.AuditLogs",
-    href: AuditLogsUrl,
-    activeBasePaths: [AuditLogsUrl],
-    icon: Activity,
-    kind: "monitoring",
-  },
-  {
-    translationKey: "Home.ConfigurationIssues",
-    href: ConfigurationIssuesUrl,
-    activeBasePaths: [ConfigurationIssuesUrl],
-    icon: Cog,
-    kind: "monitoring",
-  },
-  {
-    translationKey: "Home.ConfigurationRules",
-    href: ConfigurationRulesUrl,
-    activeBasePaths: [ConfigurationRulesUrl],
-    icon: Settings,
-    kind: "monitoring",
-  },
-];
-
 function NavDropdown({
   label,
   icon,
   children,
   badge,
+  active = false,
 }: {
   label: string;
   icon: JSX.Element;
   children: React.ReactNode;
   badge?: React.ReactNode;
+  active?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const btnRef = useRef<HTMLButtonElement>(null);
@@ -230,9 +76,12 @@ function NavDropdown({
         "px-3",
         "focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-none",
         "data-[state=open]:bg-transparent data-[state=open]:shadow-none data-[state=open]:ring-0",
-        "data-[state=open]:outline-none"
+        "data-[state=open]:outline-none",
+        // Current section: primary tint plus an underline sitting on the header border
+        active &&
+          "relative bg-primary/5 text-primary hover:bg-primary/10 hover:text-primary after:absolute after:inset-x-3 after:-bottom-3 after:h-0.5 after:rounded-full after:bg-primary"
       ),
-    []
+    [active]
   );
 
   return (
@@ -244,7 +93,12 @@ function NavDropdown({
       }}
     >
       <DropdownMenuTrigger asChild>
-        <Button ref={btnRef} variant="ghost" className={triggerClass}>
+        <Button
+          ref={btnRef}
+          variant="ghost"
+          className={triggerClass}
+          aria-current={active ? "page" : undefined}
+        >
           {icon}
           <span className="ml-2">{label}</span>
           {badge && <span className="ml-2">{badge}</span>}
@@ -264,10 +118,20 @@ export function MainNav() {
     (key: string) => String(t(key as never)),
     [t]
   );
-  const { data, isLoading } = useConfigurationIssuesSummary();
+  // The header renders before ProtectedRoute. Querying a protected API without a
+  // session answers 401, and the global query error handler would then redirect
+  // to /unauthorized while the login flow is still running.
+  const { isAuthenticated } = useAuth();
+  const { data, isLoading } = useConfigurationIssuesSummary({
+    enabled: isAuthenticated,
+  });
 
-  const issuesCount =
-    (data?.errors ?? 0) + (data?.warnings ?? 0) + (data?.recommendations ?? 0);
+  const issuesCount = getIssuesTotal(data);
+  // Without a session the count is unknown - show nothing rather than "0".
+  const showIssuesBadge = isLoading || data !== undefined;
+
+  const isGroupActive = (items: NavItem[]) =>
+    items.some((item) => isActive(item, location.pathname));
 
   const renderDropdownItem = (item: NavItem, onAfterClick?: () => void) => {
     const accent = ACCENTS[item.kind];
@@ -311,6 +175,7 @@ export function MainNav() {
 
       <div className="hidden items-center gap-1 lg:flex">
         <NavDropdown
+          active={isGroupActive(clientsResourcesItems)}
           label={t("Home.ClientsResourcesManagement")}
           icon={<LayoutGrid className="h-4 w-4" />}
         >
@@ -320,6 +185,7 @@ export function MainNav() {
         </NavDropdown>
 
         <NavDropdown
+          active={isGroupActive(identityItems)}
           label={t("Home.IdentityManagement")}
           icon={<Users className="h-4 w-4" />}
         >
@@ -329,6 +195,7 @@ export function MainNav() {
         </NavDropdown>
 
         <NavDropdown
+          active={isGroupActive(providersKeysItems)}
           label={t("Home.ProvidersAndKeys")}
           icon={<KeyRound className="h-4 w-4" />}
         >
@@ -338,16 +205,19 @@ export function MainNav() {
         </NavDropdown>
 
         <NavDropdown
+          active={isGroupActive(monitoringItems)}
           label={t("Home.Monitoring")}
           icon={<Activity className="h-4 w-4" />}
           badge={
-            <Badge variant="secondary">
-              {isLoading ? (
-                <Loader2 className="h-3 w-3 animate-spin" />
-              ) : (
-                issuesCount
-              )}
-            </Badge>
+            showIssuesBadge && (
+              <Badge variant="secondary">
+                {isLoading ? (
+                  <Loader2 className="h-3 w-3 animate-spin" />
+                ) : (
+                  issuesCount
+                )}
+              </Badge>
+            )
           }
         >
           <div className="grid min-w-[420px] grid-cols-1 gap-2">
@@ -372,13 +242,15 @@ export function MainNav() {
                   <Cog className={cn("h-3.5 w-3.5", ACCENTS.monitoring.text)} />
                 </span>
                 <span>{t("Home.ConfigurationIssues")}</span>
-                <Badge variant="secondary" className="ml-2">
-                  {isLoading ? (
-                    <Loader2 className="h-3 w-3 animate-spin" />
-                  ) : (
-                    issuesCount
-                  )}
-                </Badge>
+                {showIssuesBadge && (
+                  <Badge variant="secondary" className="ml-2">
+                    {isLoading ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      issuesCount
+                    )}
+                  </Badge>
+                )}
               </Link>
             </DropdownMenuItem>
             {renderDropdownItem(monitoringItems[2])}
@@ -396,14 +268,18 @@ export function MainNav() {
 function MobileNav() {
   const location = useLocation();
   const { t } = useTranslation();
-  const { data, isLoading } = useConfigurationIssuesSummary();
+  const { isAuthenticated } = useAuth();
+  const { data, isLoading } = useConfigurationIssuesSummary({
+    enabled: isAuthenticated,
+  });
   const [open, setOpen] = useState(false);
   const translate = useCallback(
     (key: string) => String(t(key as never)),
     [t]
   );
 
-  const issuesCount = (data?.recommendations ?? 0) + (data?.warnings ?? 0);
+  const issuesCount = getIssuesTotal(data);
+  const showIssuesBadge = isLoading || data !== undefined;
 
   const groups = [
     {
@@ -453,7 +329,7 @@ function MobileNav() {
             <Icon className={cn("h-3.5 w-3.5", accent.text)} />
           </span>
         <span>{translate(it.translationKey)}</span>
-        {it.href === ConfigurationIssuesUrl && (
+        {it.href === ConfigurationIssuesUrl && showIssuesBadge && (
           <Badge variant="secondary" className="ml-auto">
             {isLoading ? (
               <Loader2 className="h-3 w-3 animate-spin" />
@@ -504,7 +380,8 @@ function MobileNav() {
               <div className="flex items-center gap-2 px-3 text-xs uppercase text-muted-foreground">
                 {g.icon}
                 <span>{g.title}</span>
-                {String(g.title).toLowerCase().includes("monitor") && (
+                {showIssuesBadge &&
+                  String(g.title).toLowerCase().includes("monitor") && (
                   <Badge variant="secondary" className="ml-2">
                     {isLoading ? (
                       <Loader2 className="h-3 w-3 animate-spin" />

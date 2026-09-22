@@ -6,10 +6,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="10.0.10" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="10.0.12" />
 		<PackageReference Include="Skoruba.AuditLogging.EntityFramework" Version="3.0.0" />
-		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage" Version="3.0.0" />
-		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration" Version="3.0.0" />
+		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage" Version="3.1.0" />
+		<PackageReference Include="Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration" Version="3.1.0" />
 	</ItemGroup>
 </Project>
 

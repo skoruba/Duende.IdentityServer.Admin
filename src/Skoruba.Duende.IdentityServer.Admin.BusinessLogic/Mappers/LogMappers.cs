@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
 // Licensed under the Apache License, Version 2.0.
 
+using System;
 using System.Linq;
 using Riok.Mapperly.Abstractions;
 using Skoruba.AuditLogging.EntityFramework.Entities;
@@ -21,7 +22,17 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Mappers
         [MapperIgnoreTarget(nameof(Log.PropertiesXml))]
         public static partial Log ToLog(LogDto source);
 
+        [MapProperty(nameof(AuditLog.Created), nameof(AuditLogDto.Created), Use = nameof(ToServerLocalTime))]
         public static partial AuditLogDto ToAuditLogDto(AuditLog source);
+
+        // The audit library stamps entries with DateTime.Now and the database hands them back without a kind.
+        // Marked as local, the value is serialized with the server's UTC offset, so a browser in another
+        // time zone reads the same instant instead of shifting it by the difference.
+        [UserMapping(Default = false)]
+        private static DateTime ToServerLocalTime(DateTime created)
+        {
+            return created.Kind == DateTimeKind.Unspecified ? DateTime.SpecifyKind(created, DateTimeKind.Local) : created;
+        }
     }
 
     public static class LogMappers

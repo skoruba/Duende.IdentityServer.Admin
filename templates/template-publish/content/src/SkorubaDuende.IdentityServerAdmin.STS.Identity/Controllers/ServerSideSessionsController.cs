@@ -88,6 +88,7 @@ public class ServerSideSessionsController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(string sessionId, string filter, int page = 1, int pageSize = 20)
     {
         if (!IsServerSideSessionsEnabled())

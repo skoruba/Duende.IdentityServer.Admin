@@ -12,8 +12,10 @@ import { SecretsFormData } from "@/components/SecretForm/SecretForm";
 import { client } from "@skoruba/duende.identityserver.admin.api.client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { INT_MAX } from "@/helpers/NumberHelper";
+import { humanizePascalCase } from "@/helpers/StringHelper";
 import { queryKeys, queryWithoutCache } from "./QueryKeys";
 import { getNowForUnspecifiedDb } from "@/helpers/DateTimeHelper";
+import { configurationChangeMeta } from "@/services/mutationMeta";
 
 export const getClients = async (
   searchTerms: string,
@@ -184,7 +186,10 @@ const fetchSecretTypes = async (): Promise<SelectItem[]> => {
   const clientClient = new client.ClientsClient(ApiHelper.getApiBaseUrl());
   const data = await clientClient.getSecretTypes();
 
-  return data.map((x) => ({ value: x.id!, label: x.text! }));
+  return data.map((x) => ({
+    value: x.id!,
+    label: humanizePascalCase(x.text!),
+  }));
 };
 
 export const useClientScopes = (
@@ -293,6 +298,7 @@ export const useCreateClient = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
+    meta: configurationChangeMeta,
     mutationFn: async (variables: CreateClientVariables) => {
       const { clientData, secret } = variables;
       const createdClient = await createClient(clientData);
@@ -307,9 +313,6 @@ export const useCreateClient = () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.clients] });
       queryClient.invalidateQueries({
         queryKey: [queryKeys.configurationIssues],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [queryKeys.configurationIssuesSummary],
       });
     },
   });

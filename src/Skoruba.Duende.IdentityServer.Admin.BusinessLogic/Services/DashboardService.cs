@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Dashboard;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Log;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Interfaces;
 
@@ -34,5 +36,10 @@ public class DashboardService : IDashboardService
             AuditLogsPerDaysTotal = auditLogs,
             IdentityProvidersTotal = dashBoardData.IdentityProvidersTotal
        };
+    }
+
+    public virtual Task<List<AuditLogDto>> GetRecentAuditChangesAsync(int count, int scanLimit, CancellationToken cancellationToken = default)
+    {
+        return AuditLogService.GetRecentChangesAsync(count, scanLimit, cancellationToken);
     }
 }

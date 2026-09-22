@@ -32,7 +32,7 @@ public class ClientAccessTokenLifetimeTooLongRule : ConfigurationRuleValidatorBa
             issues.Add(new ConfigurationIssueView
             {
                 ResourceId = client.Id,
-                ResourceName = client.ClientName,
+                ResourceName = GetDisplayName(client.ClientName, client.ClientId),
                 Message = FormatMessage(messageTemplate, parameters),
                 FixDescription = FormatMessage(fixDescriptionTemplate, parameters),
                 IssueType = issueType,

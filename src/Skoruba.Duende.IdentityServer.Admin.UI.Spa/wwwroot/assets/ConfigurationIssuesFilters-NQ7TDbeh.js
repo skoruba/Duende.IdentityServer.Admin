@@ -1,0 +1,1 @@
+const E={ALL_RESOURCE_TYPES:"all",ALL_ISSUE_TYPES:"all"},e={ALL:E.ALL_RESOURCE_TYPES,CLIENT:"Client",API_SCOPE:"ApiScope",API_RESOURCE:"ApiResource",IDENTITY_RESOURCE:"IdentityResource"},R={ALL:E.ALL_ISSUE_TYPES,ERROR:"Error",WARNING:"Warning",RECOMMENDATION:"Recommendation"};export{R as I,e as R};

@@ -18,5 +18,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration.Constants
         public const string DataProtectionDbConnectionStringKey = "DataProtectionDbConnection";
 
         public const string ResourcesPath = "Resources";
+
+        public const string IdentityServerHealthCheckName = "Identity Server";
     }
 }

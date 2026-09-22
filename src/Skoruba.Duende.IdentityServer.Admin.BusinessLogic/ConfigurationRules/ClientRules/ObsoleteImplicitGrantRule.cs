@@ -18,7 +18,7 @@ public class ObsoleteImplicitGrantRule : ConfigurationRuleValidatorBase, IConfig
             .Select(c => new ConfigurationIssueView
             {
                 ResourceId = c.Id,
-                ResourceName = c.ClientName,
+                ResourceName = GetDisplayName(c.ClientName, c.ClientId),
                 Message = messageTemplate,
                 FixDescription = fixDescriptionTemplate,
                 IssueType = issueType,

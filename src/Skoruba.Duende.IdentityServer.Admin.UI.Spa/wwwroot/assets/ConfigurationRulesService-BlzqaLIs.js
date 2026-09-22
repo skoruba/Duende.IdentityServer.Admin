@@ -1,0 +1,1 @@
+import{bT as n,bk as o}from"./index-C2RZ8P2e.js";const t=new n(o.getApiBaseUrl()),s=async()=>await t.get(),u=async a=>{await t.post(a)},l=async(a,e)=>{await t.put(a,e)},g=async a=>{await t.delete(a)},r=async a=>{await t.toggleRule(a)},c=async()=>await t.getAllMetadata();export{c as a,u as c,g as d,s as g,r as t,l as u};

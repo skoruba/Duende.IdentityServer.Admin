@@ -16,13 +16,9 @@ public class ApiScopeNameMustStartWithRule : ConfigurationRuleValidatorBase, ICo
         var config = DeserializeConfiguration<PrefixConfig>(configuration);
 
         // Support both single prefix (backward compatibility) and array of prefixes
-        var prefixes = new List<string>();
+        var prefixes = GetConfiguredValues(config.Prefixes);
 
-        if (config.Prefixes != null && config.Prefixes.Any())
-        {
-            prefixes = config.Prefixes.ToList();
-        }
-        else if (!string.IsNullOrWhiteSpace(config.Prefix))
+        if (!prefixes.Any() && !string.IsNullOrWhiteSpace(config.Prefix))
         {
             // Backward compatibility: single prefix as string
             prefixes.Add(config.Prefix);
@@ -39,7 +35,8 @@ public class ApiScopeNameMustStartWithRule : ConfigurationRuleValidatorBase, ICo
         foreach (var scope in scopes)
         {
             // Check if scope name starts with any of the allowed prefixes
-            var startsWithAnyPrefix = prefixes.Any(prefix => scope.Name.StartsWith(prefix));
+            // Ordinal - a culture-sensitive comparison depends on the host, e.g. "ch" is a single letter under cs-CZ
+            var startsWithAnyPrefix = prefixes.Any(prefix => scope.Name.StartsWith(prefix, System.StringComparison.Ordinal));
 
             if (!startsWithAnyPrefix)
             {

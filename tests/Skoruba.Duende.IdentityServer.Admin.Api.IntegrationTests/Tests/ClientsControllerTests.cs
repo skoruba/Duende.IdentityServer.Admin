@@ -30,6 +30,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Tests
         private const string ClaimTypePrefix = "client_claim_type";
         private const string ClaimValuePrefix = "client_claim_value";
         private const string SecretValuePrefix = "client_secret_value";
+        private const string SharedSecretType = "SharedSecret";
         private const string ClientPropertyKeyPrefix = "client_property_key";
         private const string ClientPropertyValuePrefix = "client_property_value";
         private const string DefaultMachineGrantType = "client_credentials";
@@ -181,6 +182,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Tests
         {
             var secret = ClientDtoApiMock.GenerateRandomClientSecret(0);
             secret.Id = 0;
+            // The mock picks a random secret type - a JWK one would be rejected, its value has to be a JSON Web Key
+            secret.Type = SharedSecretType;
             secret.Value = UniqueValue(SecretValuePrefix);
 
             var route = $"{ById(ClientsRoute, clientId)}/{SecretsRouteSegment}";
@@ -583,6 +586,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Tests
 
                 var createRequest = ClientDtoApiMock.GenerateRandomClientSecret(0);
                 createRequest.Id = NonDefaultEntityId;
+                // Pinned so the 400 comes from the id check, not from the JWK value validation
+                createRequest.Type = SharedSecretType;
                 createRequest.Value = UniqueValue(SecretValuePrefix);
 
                 var response = await Client.PostAsJsonAsync($"{ById(ClientsRoute, createdClientId)}/{SecretsRouteSegment}", createRequest);
