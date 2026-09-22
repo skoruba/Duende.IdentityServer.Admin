@@ -30,7 +30,7 @@ configuration health, auditing, and security from one modern interface.
 
 <p align="center">
   <img
-    src="docs/Images/light.png"
+    src="docs/Images/light-v2.png"
     alt="Skoruba Duende IdentityServer Admin dashboard"
     width="100%"
   />
@@ -101,15 +101,15 @@ Explore the redesigned administration experience, built with **Tailwind CSS** an
 
 ### 🌙 Dashboard (Dark)
 
-![Admin-preview](docs/Images/dark.png)
+![Admin-preview](docs/Images/dark-v2.png)
 
 ### 🧙‍♂️ Client Creation – Wizard Flow
 
-![Admin-Client-Wizard](docs/Images/client-wizard.png)
+![Admin-Client-Wizard](docs/Images/client-wizard-v2.png)
 
 ### 💼 Client Management
 
-![Admin-Client-Edit](docs/Images/client-edit.png)
+![Admin-Client-Edit](docs/Images/client-edit-v2.png)
 
 The client detail shows only the tabs a client's grant types make relevant, and the
 **Integration** tab generates the .NET 10 setup code for that client.
@@ -428,12 +428,12 @@ The STS can apply the cryptographic restrictions of the [FAPI 2.0 Security Profi
 
 With the profile on:
 
-| Area                                                              | Effect                                                                                                                                                                                                                                                 |
-| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Area                                                              | Effect                                                                                                                                                                                                                                                          |
+| ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Token signing                                                     | Automatic key management creates `PS256` keys only. With key management off, the configured signing and validation certificates sign with `PS256` (RSA) or `ES256` (EC P-256) instead of `RS256`; an EC certificate on any other curve stops the STS at startup |
-| DPoP proofs, `private_key_jwt` client assertions, request objects | `PS256` and `ES256` only                                                                                                                                                                                                                               |
-| Client assertions                                                 | The issuer is the only accepted `aud`, and the `typ` header has to be `client-authentication+jwt`                                                                                                                                                      |
-| JWT validation                                                    | 10 seconds of clock skew instead of 5 minutes                                                                                                                                                                                                          |
+| DPoP proofs, `private_key_jwt` client assertions, request objects | `PS256` and `ES256` only                                                                                                                                                                                                                                        |
+| Client assertions                                                 | The issuer is the only accepted `aud`, and the `typ` header has to be `client-authentication+jwt`                                                                                                                                                               |
+| JWT validation                                                    | 10 seconds of clock skew instead of 5 minutes                                                                                                                                                                                                                   |
 
 > [!IMPORTANT]
 > The switch covers what a server-wide option can enforce. It does **not** make a deployment FAPI 2.0 conformant on its own - the profile also sets requirements on every client and on the hosting, and those stay explicit configuration.
