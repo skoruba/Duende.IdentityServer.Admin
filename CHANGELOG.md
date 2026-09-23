@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.1.1] - 2026-09-22
+
+### Fixed
+
+- The *Integration* tab generated code with `https://localhost:44310` as the authority on every instance until an address was typed into the snippet options, so a deployed Admin UI handed out snippets pointing at localhost. The default is now the IdentityServer the Admin UI is configured with, as reported by `Info/GetEnvironment`, and the localhost address remains the fallback only for a backend that reports none. An authority typed into the options still wins and is the only value kept in the browser; the localhost default that 3.1.0 stored on its own is ignored, so the tab picks up the configured address after the upgrade
+
+### Changed
+
+- The API base address in the generated code is `https://your-api.example` until one is set in the snippet options, and the *Program.cs* step warns about it wherever the code registers an API client. It used to be `https://localhost:5001`, an address that looks real but matches nothing: the Admin UI cannot know the API the application will call
+
 ## [3.1.0] - 2026-09-19
 
 This release moves the solution to **Duende IdentityServer 8** and adds a way to get

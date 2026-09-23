@@ -160,7 +160,7 @@ Define and track configuration rules for clients, API resources, and identity re
 ### 1. Install the template
 
 ```sh
-dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::3.1.0
+dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::3.1.1
 ```
 
 ### 2. Create a new project
