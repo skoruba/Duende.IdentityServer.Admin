@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, type JSX } from "react";
 
 export type GuardProps = {
   isAuthenticated: boolean;

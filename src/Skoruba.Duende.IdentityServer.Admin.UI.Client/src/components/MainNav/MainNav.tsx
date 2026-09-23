@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState, type JSX } from "react";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/Icons/Icons";
 import { ModeToggle } from "@/components/ModeToggle/ModeToggle";

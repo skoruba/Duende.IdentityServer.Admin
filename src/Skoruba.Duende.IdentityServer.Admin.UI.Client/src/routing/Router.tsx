@@ -1,4 +1,4 @@
-import { lazy } from "react";
+import { lazy, type JSX } from "react";
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import Layout from "@/components/Layout/Layout";
 
