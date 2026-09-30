@@ -60,7 +60,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Constants
                 ("password", "Password", true),
                 ("urn:ietf:params:oauth:grant-type:device_code", "Device", false),
                 ("delegation", "Delegation", false),
-                ("urn:openid:params:grant-type:ciba", "CIBA", false)
+                ("urn:openid:params:grant-type:ciba", "CIBA", false),
+                ("urn:ietf:params:oauth:grant-type:token-exchange", "Token Exchange", false)
             };
 
             return includeObsoleteGrants == false ? 
