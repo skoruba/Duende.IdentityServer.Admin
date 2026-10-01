@@ -4,6 +4,7 @@ import App from "./App.tsx";
 import "./globals.css";
 import Loading from "./components/Loading/Loading.tsx";
 import { AuthProvider } from "./contexts/AuthContext.tsx";
+import { UiConfigurationProvider } from "./contexts/UiConfigurationContext.tsx";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./helpers/ErrorHelper.ts";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -13,9 +14,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <Suspense fallback={<Loading />}>
-            <App />
-          </Suspense>
+          <UiConfigurationProvider>
+            <Suspense fallback={<Loading />}>
+              <App />
+            </Suspense>
+          </UiConfigurationProvider>
         </AuthProvider>
       </QueryClientProvider>
     </ErrorBoundary>

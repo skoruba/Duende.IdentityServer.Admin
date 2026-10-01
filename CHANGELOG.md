@@ -6,6 +6,10 @@
 
 - Updated Duende IdentityServer to 8.0.9, which fixes the insufficient validation of pushed authorization requests ([GHSA-mxv6-xwqj-ww2p](https://github.com/DuendeSoftware/products/security/advisories/GHSA-mxv6-xwqj-ww2p), high). The PAR endpoint is enabled by default, and any client able to authenticate to it could push a request on behalf of another client at the same IdentityServer; a pushed request is now bound to the client that authenticated. The STS leaves `PushedAuthorization.AllowUnregisteredPushedRedirectUris` at its default `false`, so the two weaknesses that depend on that option did not apply to it unless a deployment turned the option on. The update needs no new EF migrations
 
+### Added
+
+- `AdminConfiguration:BasicConfiguration:IdentityManagementEnabled` (default `true`) switches the user and role management off in the Admin UI for deployments that keep their users outside ASP.NET Core Identity ([#314](https://github.com/skoruba/Duende.IdentityServer.Admin/discussions/314)). With `false`, the *Identity Management* menu, the dashboard card with the user and role counts, the *New user* and *New role* quick actions and the user search of the command palette are gone, and the user and role pages lead to the dashboard. The Admin UI host serves the flag at `GET /configuration`, an anonymous endpoint the SPA reads at startup next to the session; a host without the endpoint keeps the full UI. The flag affects the UI only, the Admin API keeps serving its identity endpoints
+
 ### Fixed
 
 - The *Integration* tab generated code with `https://localhost:44310` as the authority on every instance until an address was typed into the snippet options, so a deployed Admin UI handed out snippets pointing at localhost. The default is now the IdentityServer the Admin UI is configured with, as reported by `Info/GetEnvironment`, and the localhost address remains the fallback only for a backend that reports none. An authority typed into the options still wins and is the only value kept in the browser; the localhost default that 3.1.0 stored on its own is ignored, so the tab picks up the configured address after the upgrade

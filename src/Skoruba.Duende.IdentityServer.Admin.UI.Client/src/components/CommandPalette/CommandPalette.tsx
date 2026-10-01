@@ -48,6 +48,7 @@ import { getUsers } from "@/services/UserServices";
 import { getApiResources } from "@/services/ApiResourceServices";
 import { getApiScopes } from "@/services/ApiScopeServices";
 import { queryKeys } from "@/services/QueryKeys";
+import { useUiConfiguration } from "@/contexts/UiConfigurationContext";
 import { OPEN_NEW_CLIENT_STATE } from "./commandPaletteState";
 
 const MIN_SEARCH_LENGTH = 2;
@@ -93,6 +94,7 @@ export function CommandPalette() {
   const [selected, setSelected] = useState("");
 
   const translate = useCallback((key: string) => String(t(key as never)), [t]);
+  const { identityManagementEnabled } = useUiConfiguration();
 
   const searchTerm = useDebouncedValue(query.trim(), SEARCH_DEBOUNCE_MS);
   const searchEnabled = open && searchTerm.length >= MIN_SEARCH_LENGTH;
@@ -127,16 +129,26 @@ export function CommandPalette() {
   );
 
   const search = useQuery({
-    queryKey: [queryKeys.commandPaletteSearch, searchTerm],
+    queryKey: [
+      queryKeys.commandPaletteSearch,
+      searchTerm,
+      identityManagementEnabled,
+    ],
     enabled: searchEnabled,
     retry: false,
     staleTime: 30_000,
     queryFn: async () => {
+      // Without identity management the users are not asked for at all
+      const searchUsers = async () =>
+        identityManagementEnabled
+          ? (await getUsers(searchTerm, 0, SEARCH_PAGE_SIZE)).items
+          : [];
+
       // A missing permission on one resource must not hide the other results.
       const [clients, users, apiResources, apiScopes] = await Promise.allSettled(
         [
           getClients(searchTerm, 0, SEARCH_PAGE_SIZE),
-          getUsers(searchTerm, 0, SEARCH_PAGE_SIZE),
+          searchUsers(),
           getApiResources(searchTerm, 0, SEARCH_PAGE_SIZE),
           getApiScopes(searchTerm, 0, SEARCH_PAGE_SIZE),
         ],
@@ -144,7 +156,7 @@ export function CommandPalette() {
 
       return {
         clients: clients.status === "fulfilled" ? clients.value.items : [],
-        users: users.status === "fulfilled" ? users.value.items : [],
+        users: users.status === "fulfilled" ? users.value : [],
         apiResources:
           apiResources.status === "fulfilled" ? apiResources.value.items : [],
         apiScopes: apiScopes.status === "fulfilled" ? apiScopes.value.items : [],
@@ -164,8 +176,12 @@ export function CommandPalette() {
         ["QuickActions.NewApiResource", ApiResourceCreateUrl],
         ["QuickActions.NewApiScope", ApiScopeCreateUrl],
         ["QuickActions.NewIdentityResource", IdentityResourceCreateUrl],
-        ["QuickActions.NewUser", UserCreateUrl],
-        ["QuickActions.NewRole", RoleCreateUrl],
+        ...(identityManagementEnabled
+          ? [
+              ["QuickActions.NewUser", UserCreateUrl],
+              ["QuickActions.NewRole", RoleCreateUrl],
+            ]
+          : []),
         ["QuickActions.NewIdentityProvider", IdentityProviderCreateUrl],
       ].map(([key, url]) => ({
         id: key,
@@ -174,7 +190,7 @@ export function CommandPalette() {
         onSelect: () => go(url),
       })),
     ],
-    [t, translate, go],
+    [t, translate, go, identityManagementEnabled],
   );
 
   const pages: PaletteItem[] = useMemo(
@@ -187,7 +203,7 @@ export function CommandPalette() {
       },
       ...[
         ...clientsResourcesItems,
-        ...identityItems,
+        ...(identityManagementEnabled ? identityItems : []),
         ...providersKeysItems,
         ...monitoringItems,
       ].map((item) => ({
@@ -197,7 +213,7 @@ export function CommandPalette() {
         onSelect: () => go(item.href),
       })),
     ],
-    [t, translate, go],
+    [t, translate, go, identityManagementEnabled],
   );
 
   const matches = (item: PaletteItem) =>
@@ -337,7 +353,11 @@ export function CommandPalette() {
             <CommandInput
               value={query}
               onValueChange={setQuery}
-              placeholder={t("CommandPalette.Placeholder")}
+              placeholder={
+                identityManagementEnabled
+                  ? t("CommandPalette.Placeholder")
+                  : t("CommandPalette.PlaceholderWithoutUsers")
+              }
             />
             <CommandList className="max-h-[420px]">
               {!hasResults && !isSearching && (

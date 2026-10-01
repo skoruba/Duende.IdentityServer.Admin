@@ -24,6 +24,10 @@ export default defineConfig(({ command }) => {
         target,
         secure: false,
       },
+      "^/configuration$": {
+        target,
+        secure: false,
+      },
       "/account/login": {
         target,
         secure: false,
