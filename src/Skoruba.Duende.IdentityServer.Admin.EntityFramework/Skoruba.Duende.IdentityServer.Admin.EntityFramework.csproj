@@ -6,7 +6,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Duende.IdentityServer.EntityFramework" Version="8.0.8" />
+		<PackageReference Include="Duende.IdentityServer.EntityFramework" Version="8.0.9" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.12" />
 		<PackageReference Include="Skoruba.AuditLogging.EntityFramework" Version="3.0.0" />
 	</ItemGroup>
