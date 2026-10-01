@@ -316,6 +316,13 @@ Docker images are available on [Docker Hub](https://hub.docker.com/u/skoruba).
 
 To publish images, check `build/publish-docker-images.sh` and update the profile name.
 
+#### Admin UI and Admin API in one container
+
+For hosting platforms that charge per container (for example DigitalOcean App Platform), the image
+`skoruba/duende-identityserver-admin-with-api` runs the Admin UI and the Admin API together: the Admin UI listens on
+port `8080` and proxies the API calls to the Admin API, which listens only inside the container.
+See [deploy/admin-with-api/README.md](deploy/admin-with-api/README.md) for the setup and the environment variables.
+
 ---
 
 ## 🗄️ EF Core & Data Access

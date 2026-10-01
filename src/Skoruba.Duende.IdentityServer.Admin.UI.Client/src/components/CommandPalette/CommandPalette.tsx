@@ -168,7 +168,7 @@ export function CommandPalette() {
     () => [
       {
         id: "new-client",
-        label: t("Clients.AddNewClient"),
+        label: t("QuickActions.NewClient"),
         icon: PlusCircle,
         onSelect: () => go(ClientsUrl, OPEN_NEW_CLIENT_STATE),
       },
