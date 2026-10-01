@@ -28,8 +28,9 @@ RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
 
 COPY . .
 
-RUN dotnet publish -a $TARGETARCH "src/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj" -c Release -o /app/publish/api
-RUN dotnet publish -a $TARGETARCH "src/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj" -c Release -o /app/publish/admin
+# ReadyToRun: precompiled code instead of JIT-compiled code in memory, about 100 MiB less for the two processes
+RUN dotnet publish -a $TARGETARCH "src/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj" -c Release -p:PublishReadyToRun=true -o /app/publish/api
+RUN dotnet publish -a $TARGETARCH "src/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj" -c Release -p:PublishReadyToRun=true -o /app/publish/admin
 
 FROM base AS final
 WORKDIR /app

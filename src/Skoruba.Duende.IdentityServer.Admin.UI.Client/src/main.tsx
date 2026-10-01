@@ -2,7 +2,8 @@ import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./globals.css";
-import StartupScreen from "./components/StartupScreen/StartupScreen.tsx";
+import "./i18n/config";
+import Loading from "./components/Loading/Loading.tsx";
 import { AuthProvider } from "./contexts/AuthContext.tsx";
 import { UiConfigurationProvider } from "./contexts/UiConfigurationContext.tsx";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -15,7 +16,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <UiConfigurationProvider>
-            <Suspense fallback={<StartupScreen />}>
+            <Suspense fallback={<Loading fullscreen />}>
               <App />
             </Suspense>
           </UiConfigurationProvider>

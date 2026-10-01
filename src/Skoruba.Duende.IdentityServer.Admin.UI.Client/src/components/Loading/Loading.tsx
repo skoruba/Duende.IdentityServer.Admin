@@ -14,13 +14,19 @@ const sizeMap = {
   lg: "h-12 w-12 border-4",
 };
 
+const spinnerClass =
+  "inline-block animate-spin rounded-full border-solid border-current border-r-transparent align-[-0.125em] text-muted-foreground motion-reduce:animate-[spin_1.5s_linear_infinite]";
+
+// The fullscreen variant is the one loading screen of the app: the static splash in
+// index.html, the Suspense fallback, the session check before the router and the pages
+// loading their data all render this markup, so the screen stays the same from the
+// first paint until the page shows its content.
 const Loading = ({
   fullscreen = false,
   size = "md",
   delayMs = 0,
 }: LoadingProps) => {
   const { t } = useTranslation();
-  const sizeClass = sizeMap[size];
 
   const [show, setShow] = useState(delayMs === 0);
 
@@ -36,28 +42,25 @@ const Loading = ({
 
   if (!show) return null;
 
-  const spinner = (
-    <div
-      className={clsx(
-        "animate-spin rounded-full border-solid border-current border-r-transparent",
-        sizeClass,
-        "inline-block align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-      )}
-      role="status"
-    >
-      <span className="sr-only">{t("Components.Loading.Loading")}</span>
-    </div>
-  );
-
   if (fullscreen) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
-        {spinner}
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
+        role="status"
+      >
+        <div className="flex items-center gap-3 text-sm text-muted-foreground">
+          <div className={clsx(spinnerClass, sizeMap.sm)} />
+          <span>{t("Components.Loading.Loading")}</span>
+        </div>
       </div>
     );
   }
 
-  return spinner;
+  return (
+    <div className={clsx(spinnerClass, sizeMap[size])} role="status">
+      <span className="sr-only">{t("Components.Loading.Loading")}</span>
+    </div>
+  );
 };
 
 export default Loading;

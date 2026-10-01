@@ -10,13 +10,15 @@
   <body class="min-h-screen bg-background font-sans antialiased">
     <div id="root">
       <div
-        class="min-h-screen flex items-center justify-center"
+        class="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
         role="status"
-        aria-label="Loading"
       >
-        <div
-          class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent text-muted-foreground"
-        ></div>
+        <div class="flex items-center gap-3 text-sm text-muted-foreground">
+          <div
+            class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent align-[-0.125em] text-muted-foreground"
+          ></div>
+          <span>Loading...</span>
+        </div>
       </div>
     </div>
     <script type="module" src="src/main.tsx"></script>

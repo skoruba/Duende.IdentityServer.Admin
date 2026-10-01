@@ -260,8 +260,7 @@
       "Name": "Name"
     },
     "Loading": {
-      "Loading": "Loading...",
-      "CheckingSession": "Checking session..."
+      "Loading": "Loading..."
     },
     "ModeToggle": {
       "Light": "Light",
