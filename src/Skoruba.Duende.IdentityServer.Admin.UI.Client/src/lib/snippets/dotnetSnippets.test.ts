@@ -8,6 +8,7 @@ import {
   csharpString,
   toApplicationName,
 } from "./dotnetSnippets";
+import { PLACEHOLDER_API_BASE_URL } from "./snippetOptions";
 
 const client = (
   overrides: Partial<SnippetClientConfig> = {},
@@ -27,7 +28,7 @@ const client = (
 const options = (overrides: Partial<SnippetOptions> = {}): SnippetOptions => ({
   authority: "https://localhost:44310",
   appName: "my-app",
-  apiBaseUrl: "https://localhost:5001",
+  apiBaseUrl: "https://api.example.test",
   useUserSecrets: true,
   clientAuthentication: "shared_secret",
   ...overrides,
@@ -46,6 +47,13 @@ const noteKeys = (document: SnippetDocument, stepId: string) =>
   (document.steps.find((step) => step.id === stepId)?.notes ?? []).map(
     (note) => note.key,
   );
+
+const warningKeys = (document: SnippetDocument, stepId: string) =>
+  (document.steps.find((step) => step.id === stepId)?.warnings ?? []).map(
+    (warning) => warning.key,
+  );
+
+const API_PLACEHOLDER = "Client.Integration.Notes.ApiBaseUrlPlaceholder";
 
 describe("buildAuthorizationCodeSnippet", () => {
   it("takes the callback paths from the client's URIs", () => {
@@ -195,6 +203,37 @@ describe("buildAuthorizationCodeSnippet", () => {
     expect(noteKeys(document, "dpop-key")).toHaveLength(2);
     expect(noteKeys(document, "assertion")).toHaveLength(1);
     expect(noteKeys(document, "program")).toHaveLength(0);
+  });
+
+  it("warns when the API client would call the placeholder address", () => {
+    const document = buildAuthorizationCodeSnippet(
+      client(),
+      options({ apiBaseUrl: PLACEHOLDER_API_BASE_URL }),
+    );
+
+    expect(codeOf(document, "program")).toContain(
+      `new Uri("${PLACEHOLDER_API_BASE_URL}/")`,
+    );
+    expect(warningKeys(document, "program")).toContain(API_PLACEHOLDER);
+  });
+
+  it("does not warn about the API address when no API client is generated", () => {
+    const document = buildAuthorizationCodeSnippet(
+      client({ scopes: ["openid", "profile"] }),
+      options({ apiBaseUrl: PLACEHOLDER_API_BASE_URL }),
+    );
+
+    expect(codeOf(document, "program")).not.toContain("AddUserAccessTokenHttpClient");
+    expect(warningKeys(document, "program")).not.toContain(API_PLACEHOLDER);
+  });
+
+  it("does not warn about an API address the user set", () => {
+    const document = buildAuthorizationCodeSnippet(
+      client(),
+      options({ apiBaseUrl: "https://api.example.test" }),
+    );
+
+    expect(warningKeys(document, "program")).not.toContain(API_PLACEHOLDER);
   });
 
   it("adds a separate proof key step when the client requires DPoP", () => {
@@ -356,6 +395,24 @@ describe("buildClientCredentialsSnippet", () => {
       .warnings!.map((warning) => warning.key);
 
     expect(warnings).toContain("Client.Integration.Notes.NoApiScope");
+  });
+
+  it("warns about the placeholder API address, which the worker always calls", () => {
+    const document = buildClientCredentialsSnippet(
+      client(),
+      options({ apiBaseUrl: PLACEHOLDER_API_BASE_URL }),
+    );
+
+    expect(codeOf(document, "program")).toContain(
+      `new Uri("${PLACEHOLDER_API_BASE_URL}/")`,
+    );
+    expect(warningKeys(document, "program")).toContain(API_PLACEHOLDER);
+    expect(
+      warningKeys(
+        buildClientCredentialsSnippet(client(), options()),
+        "program",
+      ),
+    ).not.toContain(API_PLACEHOLDER);
   });
 
   it("uses its own configuration section so both snippets can coexist", () => {

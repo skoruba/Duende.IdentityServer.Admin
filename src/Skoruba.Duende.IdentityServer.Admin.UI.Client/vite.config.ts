@@ -109,7 +109,12 @@ export default defineConfig(({ command }) => {
         output: {
           manualChunks: {
             // Split vendor libraries into separate chunks
-            "react-vendor": ["react", "react-dom", "react-router-dom"],
+            "react-vendor": [
+              "react",
+              "react-dom",
+              "react-dom/client",
+              "react-router-dom",
+            ],
             "ui-vendor": [
               "@radix-ui/react-dialog",
               "@radix-ui/react-dropdown-menu",

@@ -164,7 +164,7 @@ const AuditLogs: React.FC = () => {
                     : undefined,
                 );
               }}
-              initialFocus
+              autoFocus
             />
           </PopoverContent>
         </Popover>

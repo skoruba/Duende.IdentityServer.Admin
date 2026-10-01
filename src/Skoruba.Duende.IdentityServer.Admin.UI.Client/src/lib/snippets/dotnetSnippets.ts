@@ -1,3 +1,4 @@
+import { isPlaceholderApiBaseUrl } from "./snippetOptions";
 import { SnippetLanguage } from "@/lib/highlight/highlightCode";
 
 /**
@@ -132,6 +133,10 @@ export const csharpString = (value: string) =>
 
 /** Trailing slashes break `new Uri(base)` + relative path composition. */
 const trimTrailingSlash = (value: string) => value.replace(/\/+$/, "");
+
+const API_PLACEHOLDER_WARNING: SnippetMessage = {
+  key: "Client.Integration.Notes.ApiBaseUrlPlaceholder",
+};
 
 const ensureTrailingSlash = (value: string) =>
   value.endsWith("/") ? value : `${value}/`;
@@ -717,6 +722,11 @@ export const buildAuthorizationCodeSnippet = (
     warnings.push({ key: "Client.Integration.Notes.InlineSecret" });
   }
 
+  // The API client is only generated for an API scope - see the program builder.
+  if (hasApiScope(scopes) && isPlaceholderApiBaseUrl(options.apiBaseUrl)) {
+    warnings.push(API_PLACEHOLDER_WARNING);
+  }
+
   steps.push({
     id: "program",
     titleKey: "Client.Integration.Steps.Program",
@@ -886,6 +896,10 @@ export const buildClientCredentialsSnippet = (
 
   if (!options.useUserSecrets && clientConfig.requireClientSecret) {
     warnings.push({ key: "Client.Integration.Notes.InlineSecret" });
+  }
+
+  if (isPlaceholderApiBaseUrl(options.apiBaseUrl)) {
+    warnings.push(API_PLACEHOLDER_WARNING);
   }
 
   steps.push({
