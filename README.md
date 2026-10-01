@@ -56,7 +56,7 @@ configuration health, auditing, and security from one modern interface.
 |     | Area                  | Highlights                                                                  |
 | --- | --------------------- | --------------------------------------------------------------------------- |
 | 🧭  | **New Admin UI**      | React, TypeScript, Tailwind CSS, and shadcn/ui                              |
-| ⚙️  | **Modern backend**    | .NET 10 and Duende IdentityServer 8.0.8                                     |
+| ⚙️  | **Modern backend**    | .NET 10 and Duende IdentityServer 8.0.9                                     |
 | 📊  | **Monitoring**        | Dashboards, configuration rules, and issue tracking                         |
 | 🧙  | **Client management** | Improved workflows and guided client creation wizard                        |
 | 🧾  | **Integration code**  | Generated .NET 10 setup for the client you are editing                      |
@@ -143,7 +143,7 @@ Define and track configuration rules for clients, API resources, and identity re
 - .NET 10 SDK
 - Node.js 22.12+ and npm (required for the React client)
 - SQL Server (default LocalDB) or PostgreSQL
-- Duende IdentityServer 8.0.8
+- Duende IdentityServer 8.0.9
 
 > **Note:** Using older .NET versions may cause 502.5 errors on IIS or application startup failures.
 
