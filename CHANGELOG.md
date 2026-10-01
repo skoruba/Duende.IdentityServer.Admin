@@ -1,6 +1,6 @@
 # Changelog
 
-## [3.1.1] - 2026-09-22
+## [3.2.0] - Unreleased
 
 ### Fixed
 
@@ -9,6 +9,12 @@
 ### Changed
 
 - The API base address in the generated code is `https://your-api.example` until one is set in the snippet options, and the *Program.cs* step warns about it wherever the code registers an API client. It used to be `https://localhost:5001`, an address that looks real but matches nothing: the Admin UI cannot know the API the application will call
+- The Admin UI runs on **React 19** (19.3.0, with `@types/react` and `@types/react-dom` 19.3.0). Its dependencies moved along: the Radix UI primitives to their React 19 releases, `react-day-picker` from 8 to 10, and `date-fns` from 3 to 4. The calendar of the date fields and the audit log filter is restyled for the class names of `react-day-picker` 10 and focuses the picked day through `autoFocus` instead of the removed `initialFocus`. `react-dom/client` is bundled into the `react-vendor` chunk with the rest of React
+
+### Breaking Changes
+
+- Forks of the Admin UI need React 19 typings: `JSX` is no longer a global namespace and has to be imported (`import type { JSX } from "react"`), `useRef` takes an initial value, and `React.ElementRef` is deprecated in favour of `React.ComponentRef`, which the built-in components use now
+- Custom forks of the `Calendar` component need the `react-day-picker` 10 API: the `classNames` keys are renamed (`caption` to `month_caption`, `nav_button_previous` to `button_previous`, `day_selected` to the `data-selected` attribute, and so on) and the `IconLeft`/`IconRight` components are replaced by a single `Chevron`
 
 ## [3.1.0] - 2026-09-19
 
