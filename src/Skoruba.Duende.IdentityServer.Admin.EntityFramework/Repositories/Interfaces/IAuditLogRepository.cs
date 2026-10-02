@@ -15,9 +15,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Inter
     {
         Task<PagedList<TAuditLog>> GetAsync(string @event, string source, string category, DateOnly? created, string subjectIdentifier, string subjectName, int page = 1, int pageSize = 10);
 
+        /// <summary>
+        /// How many entries were written on each day of the last <paramref name="lastNumberOfDays"/>,
+        /// oldest day first. Days without entries are left out; a non-positive number of days gives an empty list.
+        /// </summary>
         Task<List<DashboardAuditLogDataView>> GetDashboardAuditLogsAsync(int lastNumberOfDays,
             CancellationToken cancellationToken = default);
 
+        [Obsolete("The average is derived from the daily totals of GetDashboardAuditLogsAsync; computing it separately ran the same query twice.")]
         Task<int> GetDashboardAuditLogsAverageAsync(int lastNumberOfDays,
             CancellationToken cancellationToken = default);
 

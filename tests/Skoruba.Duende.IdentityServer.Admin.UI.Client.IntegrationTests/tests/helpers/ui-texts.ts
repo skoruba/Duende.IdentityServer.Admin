@@ -32,6 +32,10 @@ export const UI_TEXT = {
     newUser: "New user",
     newRole: "New role",
   },
+  home: {
+    dashboardUnavailable: "Dashboard unavailable",
+    dashboardDataFailed: "Dashboard data could not be loaded.",
+  },
   placeholders: {
     enterItem: "Enter item",
     search: "Search",

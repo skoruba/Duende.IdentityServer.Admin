@@ -139,8 +139,7 @@ export const ClientsResourcesCard = ({
   className?: string;
 }) => {
   const { t } = useTranslation();
-  const { data, isLoading, error } = useDashboardIdentityServer();
-  const totals = data?.identityServerData;
+  const { data: totals, isLoading, error } = useDashboardIdentityServer();
   const issues = useConfigurationIssues();
 
   const attention = useMemo(
@@ -284,7 +283,7 @@ export const ProvidersKeysCard = ({ className }: { className?: string }) => {
       columns="grid-cols-2"
       stats={{
         [IdentityProvidersUrl]: {
-          value: identityServer.data?.identityServerData.identityProvidersTotal,
+          value: identityServer.data?.identityProvidersTotal,
           isLoading: identityServer.isLoading,
         },
         [KeysUrl]: { value: keys.data?.totalCount, isLoading: keys.isLoading },

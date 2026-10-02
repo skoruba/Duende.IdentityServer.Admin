@@ -20,22 +20,38 @@ public class DashboardService : IDashboardService
         AuditLogService = auditLogService;
     }
 
-    public async Task<DashboardDto> GetDashboardIdentityServerAsync(int auditLogsLastNumberOfDays, CancellationToken cancellationToken = default)
+    public virtual async Task<DashboardDto> GetDashboardIdentityServerAsync(int auditLogsLastNumberOfDays, CancellationToken cancellationToken = default)
     {
-       var dashBoardData = await DashboardRepository.GetDashboardIdentityServerAsync(auditLogsLastNumberOfDays, cancellationToken);
-       var auditLogs = await AuditLogService.GetDashboardAuditLogsAsync(auditLogsLastNumberOfDays, cancellationToken);
-       var auditLogsAverage = await AuditLogService.GetDashboardAuditLogsAverageAsync(auditLogsLastNumberOfDays, cancellationToken);
-       
-       return new DashboardDto
-       {
+        var dashBoardData = await DashboardRepository.GetDashboardIdentityServerAsync(auditLogsLastNumberOfDays, cancellationToken);
+        var auditLogs = await GetDashboardAuditLogStatisticsAsync(auditLogsLastNumberOfDays, cancellationToken);
+
+        return new DashboardDto
+        {
             ClientsTotal = dashBoardData.ClientsTotal,
             ApiResourcesTotal = dashBoardData.ApiResourcesTotal,
             ApiScopesTotal = dashBoardData.ApiScopesTotal,
             IdentityResourcesTotal = dashBoardData.IdentityResourcesTotal,
-            AuditLogsAvg = auditLogsAverage,
-            AuditLogsPerDaysTotal = auditLogs,
+            AuditLogsAvg = auditLogs.AuditLogsAvg,
+            AuditLogsPerDaysTotal = auditLogs.AuditLogsPerDaysTotal,
             IdentityProvidersTotal = dashBoardData.IdentityProvidersTotal
-       };
+        };
+    }
+
+    public virtual async Task<DashboardAuditLogStatisticsDto> GetDashboardAuditLogStatisticsAsync(int lastNumberOfDays, CancellationToken cancellationToken = default)
+    {
+        if (lastNumberOfDays <= 0)
+        {
+            return new DashboardAuditLogStatisticsDto();
+        }
+
+        var auditLogsPerDay = await AuditLogService.GetDashboardAuditLogsAsync(lastNumberOfDays, cancellationToken);
+
+        return new DashboardAuditLogStatisticsDto
+        {
+            AuditLogsPerDaysTotal = auditLogsPerDay,
+            // One query serves both numbers: the average used to be a second pass over the same rows.
+            AuditLogsAvg = auditLogsPerDay.Count > 0 ? (long)auditLogsPerDay.Average(x => x.Total) : 0
+        };
     }
 
     public virtual Task<List<AuditLogDto>> GetRecentAuditChangesAsync(int count, int scanLimit, CancellationToken cancellationToken = default)

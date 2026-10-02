@@ -45,7 +45,8 @@ configuration health, auditing, and security from one modern interface.
 > setup code.
 > The STS can also apply an optional [FAPI 2.0 security profile](#-fapi-20-security-profile).
 >
-> ⚠️ Upgrading from 3.0.0 requires new EF migrations. See the
+> ⚠️ Upgrading from 3.0.0 requires new EF migrations, and 3.2.0 adds an index on the `AuditLog`
+> table (migration `AddAuditLogCreatedIndex`). See the
 > [changelog](CHANGELOG.md) for the full list of changes.
 > See the [roadmap and changelog](#-roadmap--changelog) for release history and upcoming features.
 
