@@ -15,8 +15,8 @@ export default defineConfig(({ command }) => {
   const target = env.ASPNETCORE_HTTPS_PORT
     ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}`
     : env.ASPNETCORE_URLS
-    ? env.ASPNETCORE_URLS.split(";")[0]
-    : "https://localhost:7127";
+      ? env.ASPNETCORE_URLS.split(";")[0]
+      : "https://localhost:7127";
 
   const server: import("vite").ServerOptions = {
     proxy: {
@@ -84,7 +84,7 @@ export default defineConfig(({ command }) => {
             "Pem",
             "--no-password",
           ],
-          { stdio: "inherit" }
+          { stdio: "inherit" },
         ).status
       ) {
         throw new Error("Could not create certificate.");
@@ -98,6 +98,7 @@ export default defineConfig(({ command }) => {
   }
 
   return {
+    base: "./",
     plugins: [react(), svgr()],
     resolve: {
       alias: {
