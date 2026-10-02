@@ -251,6 +251,7 @@ export declare class ConfigurationRulesClient extends WebApiClientBase implement
 }
 export interface IDashboardClient {
     getDashboardIdentityServer(auditLogsLastNumberOfDays: number | undefined): Promise<DashboardDto>;
+    getDashboardAuditLogStatistics(lastNumberOfDays: number | undefined): Promise<DashboardAuditLogStatisticsDto>;
     getRecentAuditChanges(count: number | null | undefined): Promise<AuditLogDto[]>;
     getDashboardIdentity(): Promise<DashboardIdentityDto>;
 }
@@ -263,6 +264,8 @@ export declare class DashboardClient extends WebApiClientBase implements IDashbo
     });
     getDashboardIdentityServer(auditLogsLastNumberOfDays: number | undefined): Promise<DashboardDto>;
     protected processGetDashboardIdentityServer(response: Response): Promise<DashboardDto>;
+    getDashboardAuditLogStatistics(lastNumberOfDays: number | undefined): Promise<DashboardAuditLogStatisticsDto>;
+    protected processGetDashboardAuditLogStatistics(response: Response): Promise<DashboardAuditLogStatisticsDto>;
     getRecentAuditChanges(count: number | null | undefined): Promise<AuditLogDto[]>;
     protected processGetRecentAuditChanges(response: Response): Promise<AuditLogDto[]>;
     getDashboardIdentity(): Promise<DashboardIdentityDto>;
@@ -1226,6 +1229,18 @@ export declare class DashboardAuditLogDto implements IDashboardAuditLogDto {
 export interface IDashboardAuditLogDto {
     total: number;
     created: Date;
+}
+export declare class DashboardAuditLogStatisticsDto implements IDashboardAuditLogStatisticsDto {
+    auditLogsAvg: number;
+    auditLogsPerDaysTotal: DashboardAuditLogDto[] | undefined;
+    constructor(data?: IDashboardAuditLogStatisticsDto);
+    init(_data?: any): void;
+    static fromJS(data: any): DashboardAuditLogStatisticsDto;
+    toJSON(data?: any): any;
+}
+export interface IDashboardAuditLogStatisticsDto {
+    auditLogsAvg: number;
+    auditLogsPerDaysTotal: DashboardAuditLogDto[] | undefined;
 }
 export declare class AuditLogDto implements IAuditLogDto {
     id: number;

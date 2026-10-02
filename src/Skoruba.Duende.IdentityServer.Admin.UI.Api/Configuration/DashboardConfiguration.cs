@@ -27,6 +27,13 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration
         public int RecentAuditChangesScanLimit { get; set; } = 5000;
 
         /// <summary>
+        /// The longest window, in days, a caller can ask the audit log statistics for. The statistics
+        /// group the audit entries of the window by day; the bound keeps one request from grouping
+        /// the whole log. The Admin UI asks for 30 days.
+        /// </summary>
+        public int AuditLogStatisticsMaxDays { get; set; } = 365;
+
+        /// <summary>
         /// How long the system health report is reused. A report runs every registered health check,
         /// and the dashboard asks for it from every open tab. Zero turns the reuse off.
         /// </summary>
