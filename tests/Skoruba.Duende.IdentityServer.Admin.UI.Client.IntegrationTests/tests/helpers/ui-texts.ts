@@ -15,6 +15,10 @@ export const UI_TEXT = {
     invalidCredentials: "Invalid username or password",
     consentAllow: "Yes, Allow",
   },
+  home: {
+    dashboardUnavailable: "Dashboard unavailable",
+    dashboardDataFailed: "Dashboard data could not be loaded.",
+  },
   placeholders: {
     enterItem: "Enter item",
     search: "Search",
