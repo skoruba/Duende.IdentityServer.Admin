@@ -867,7 +867,7 @@ For detailed release history and upcoming features, see [CHANGELOG.md](CHANGELOG
 
 **Upcoming releases:**
 
-### 3.2.0
+### 3.3.0
 
 - Manage SAML service providers from the Admin UI (schema ships with IdentityServer 8 in 3.1.0)
 - Add support for importing/exporting IdentityServer data in JSON format ([20](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/20))
