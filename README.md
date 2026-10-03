@@ -38,12 +38,10 @@ configuration health, auditing, and security from one modern interface.
 
 > [!IMPORTANT]
 >
-> ## Version 3.1.0 is here 🚀
+> ## Version 3.2.0 is here 🚀
 >
-> **Version 3.1.0** moves the solution to **Duende IdentityServer 8** and adds an
-> **Integration tab** that turns a configured client into ready-to-use .NET 10
-> setup code.
-> The STS can also apply an optional [FAPI 2.0 security profile](#-fapi-20-security-profile).
+> **Version 3.2.0** moves the Admin UI to **React 19** and updates **Duende IdentityServer to 8.0.9**
+> (a security fix for pushed authorization requests).
 >
 > ⚠️ Upgrading from 3.0.0 requires new EF migrations, and 3.2.0 adds an index on the `AuditLog`
 > table (migration `AddAuditLogCreatedIndex`). See the
@@ -690,7 +688,7 @@ The Admin UI host (`Skoruba.Duende.IdentityServer.Admin`) reads its settings fro
 }
 ```
 
-With `false`, the *Identity Management* menu, the dashboard card with the user and role counts, the *New user* and *New role* quick actions and the user search of the command palette are gone, and the user and role pages lead to the dashboard. The host serves the flag at `GET /configuration`, which the SPA reads at startup. The flag affects the UI only - the Admin API keeps serving its identity endpoints.
+With `false`, the _Identity Management_ menu, the dashboard card with the user and role counts, the _New user_ and _New role_ quick actions and the user search of the command palette are gone, and the user and role pages lead to the dashboard. The host serves the flag at `GET /configuration`, which the SPA reads at startup. The flag affects the UI only - the Admin API keeps serving its identity endpoints.
 
 ---
 
