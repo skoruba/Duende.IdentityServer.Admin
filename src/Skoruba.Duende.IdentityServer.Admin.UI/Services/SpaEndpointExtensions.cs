@@ -4,11 +4,15 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using Skoruba.Duende.IdentityServer.Admin.UI.Services.AntiForgeryProtection;
+using Skoruba.Duende.IdentityServer.Admin.UI.Services.UiConfiguration;
 
 namespace Skoruba.Duende.IdentityServer.Admin.UI.Services;
 
 public static class SpaEndpointExtensions
 {
+    private const string UiConfigurationPath = "/configuration";
+
     private static async Task ServeSpaIndexHtml(HttpContext context, string basePath)
     {
         var env = context.RequestServices.GetRequiredService<IWebHostEnvironment>();
@@ -48,5 +52,21 @@ public static class SpaEndpointExtensions
         {
             await ServeSpaIndexHtml(context, basePath);
         });
+    }
+
+    /// <summary>
+    /// Serves the host configuration the SPA reads at startup (GET /configuration). The SPA fetches it
+    /// before the session is known, so the endpoint is anonymous and carries no secrets.
+    /// </summary>
+    public static void MapUiConfiguration(this IEndpointRouteBuilder endpoints, SkorubaAdminUIOptions options)
+    {
+        var configuration = new UiConfigurationDto
+        {
+            IdentityManagementEnabled = options.AdminConfiguration.BasicConfiguration.IdentityManagementEnabled
+        };
+
+        endpoints.MapGet(UiConfigurationPath, () => Results.Ok(configuration))
+            .WithMetadata(new AntiForgeryProtectionAttribute())
+            .AllowAnonymous();
     }
 }

@@ -130,5 +130,68 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
             (await repository.GetRecentChangesAsync(10, DefaultScanLimit)).Select(x => x.Event)
                 .Should().Equal("ClientAddedEvent");
         }
+
+        private static async Task SeedCreatedAsync(AdminAuditLogDbContext context, params DateTime[] created)
+        {
+            foreach (var date in created)
+            {
+                context.AuditLog.Add(new AuditLog { Event = "ClientsRequestedEvent", Created = date, Data = "{}" });
+            }
+
+            await context.SaveChangesAsync();
+        }
+
+        [Fact]
+        public async Task GetDashboardAuditLogsAsync_CountsTheEntriesOfEachDayInTheWindow_OldestDayFirst()
+        {
+            using var context = GetDbContext();
+            var today = DateTime.Now.Date;
+            await SeedCreatedAsync(context,
+                today.AddHours(9),
+                today.AddDays(-2).AddHours(15),
+                today.AddHours(10),
+                // Outside a 7-day window.
+                today.AddDays(-10).AddHours(12));
+
+            var repository = new AuditLogRepository<AdminAuditLogDbContext, AuditLog>(context);
+
+            var perDay = await repository.GetDashboardAuditLogsAsync(7);
+
+            perDay.Select(x => (x.Created, x.Total)).Should().Equal(
+                (today.AddDays(-2), 1),
+                (today, 2));
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-7)]
+        public async Task GetDashboardAuditLogsAsync_ReturnsNothingForANonPositiveWindow(int lastNumberOfDays)
+        {
+            using var context = GetDbContext();
+            await SeedCreatedAsync(context, DateTime.Now);
+
+            var repository = new AuditLogRepository<AdminAuditLogDbContext, AuditLog>(context);
+
+            (await repository.GetDashboardAuditLogsAsync(lastNumberOfDays)).Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task GetDashboardAuditLogsAverageAsync_IsTheMeanOfTheDaysWithEntries()
+        {
+            using var context = GetDbContext();
+            var today = DateTime.Now.Date;
+            // 3 entries today and 1 two days ago: (3 + 1) / 2 days with entries = 2.
+            await SeedCreatedAsync(context,
+                today.AddHours(8),
+                today.AddHours(9),
+                today.AddHours(10),
+                today.AddDays(-2).AddHours(12));
+
+            var repository = new AuditLogRepository<AdminAuditLogDbContext, AuditLog>(context);
+
+#pragma warning disable CS0618 // Kept for callers of the previous API; it must still answer the same.
+            (await repository.GetDashboardAuditLogsAverageAsync(7)).Should().Be(2);
+#pragma warning restore CS0618
+        }
     }
 }

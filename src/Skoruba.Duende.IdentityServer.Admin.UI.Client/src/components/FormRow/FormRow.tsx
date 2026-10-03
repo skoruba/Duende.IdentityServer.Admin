@@ -388,7 +388,7 @@ const DateField: React.FC<DateFieldProps> = ({ field }) => {
             mode="single"
             selected={selectedDate}
             onSelect={(date) => field.onChange(date ?? null)}
-            initialFocus
+            autoFocus
           />
         </PopoverContent>
       </Popover>

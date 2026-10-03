@@ -1,5 +1,5 @@
-import { lazy } from "react";
-import { createBrowserRouter, Outlet } from "react-router-dom";
+import { lazy, type JSX } from "react";
+import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
 import Layout from "@/components/Layout/Layout";
 
 // Lazy load all page components for better code splitting
@@ -89,6 +89,7 @@ import {
 } from "./Urls";
 import ProtectedRoute from "./ProtectedRoute";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUiConfiguration } from "@/contexts/UiConfigurationContext";
 import MinimalLayout from "@/components/Layout/MinimalLayout";
 
 const baseHref = getBaseHref();
@@ -101,6 +102,19 @@ const RouteGuard = ({ children }: { children: JSX.Element }) => {
       {children}
     </ProtectedRoute>
   );
+};
+
+// Identity management can be switched off in the host configuration
+// (AdminConfiguration:BasicConfiguration:IdentityManagementEnabled). Its pages
+// then lead to the dashboard, like the menu entries that are no longer there.
+const IdentityRouteGuard = ({ children }: { children: JSX.Element }) => {
+  const { identityManagementEnabled } = useUiConfiguration();
+
+  if (!identityManagementEnabled) {
+    return <Navigate to={HomeUrl} replace />;
+  }
+
+  return <RouteGuard>{children}</RouteGuard>;
 };
 
 export const router = createBrowserRouter(
@@ -220,49 +234,49 @@ export const router = createBrowserRouter(
         {
           path: UsersUrl,
           element: (
-            <RouteGuard>
+            <IdentityRouteGuard>
               <Users />
-            </RouteGuard>
+            </IdentityRouteGuard>
           ),
         },
         {
           path: UserCreateUrl,
           element: (
-            <RouteGuard>
+            <IdentityRouteGuard>
               <UserCreate />
-            </RouteGuard>
+            </IdentityRouteGuard>
           ),
         },
         {
           path: UserEditUrl,
           element: (
-            <RouteGuard>
+            <IdentityRouteGuard>
               <UserEdit />
-            </RouteGuard>
+            </IdentityRouteGuard>
           ),
         },
         {
           path: RolesUrl,
           element: (
-            <RouteGuard>
+            <IdentityRouteGuard>
               <Roles />
-            </RouteGuard>
+            </IdentityRouteGuard>
           ),
         },
         {
           path: RoleCreateUrl,
           element: (
-            <RouteGuard>
+            <IdentityRouteGuard>
               <RoleCreate />
-            </RouteGuard>
+            </IdentityRouteGuard>
           ),
         },
         {
           path: RoleEditUrl,
           element: (
-            <RouteGuard>
+            <IdentityRouteGuard>
               <RoleEdit />
-            </RouteGuard>
+            </IdentityRouteGuard>
           ),
         },
         {
@@ -324,9 +338,9 @@ export const router = createBrowserRouter(
         {
           path: RoleUsersUrl,
           element: (
-            <RouteGuard>
+            <IdentityRouteGuard>
               <RoleUsers />
-            </RouteGuard>
+            </IdentityRouteGuard>
           ),
         },
         { path: NotFoundUrl, element: <div>404</div> },

@@ -7,6 +7,7 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Tests.Base;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Dashboard;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Log;
 using Xunit;
 
@@ -14,6 +15,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Tests
 {
     public class DashboardControllerTests : AdminApiTestBase
     {
+        private const string DashboardIdentityServerRoute = "api/dashboard/GetDashboardIdentityServer";
+        private const string AuditLogStatisticsRoute = "api/dashboard/GetDashboardAuditLogStatistics";
         private const string RecentAuditChangesRoute = "api/dashboard/GetRecentAuditChanges";
         private const string ReadEventSuffix = "RequestedEvent";
 
@@ -62,6 +65,85 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Tests
             ClearAuthorization();
 
             var response = await Client.GetAsync(RecentAuditChangesRoute);
+
+            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        }
+
+        [Fact]
+        public async Task GetDashboardIdentityServerWithoutAuditLogDaysLeavesTheStatisticsOut()
+        {
+            SetupAdminAuthorization();
+
+            // Any audited request writes an entry, so the audit log is not empty here.
+            (await Client.GetAsync(RolesRoute)).EnsureSuccessStatusCode();
+
+            var response = await Client.GetAsync($"{DashboardIdentityServerRoute}?auditLogsLastNumberOfDays=0");
+
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var dashboard = await response.Content.ReadFromJsonAsync<DashboardDto>();
+            dashboard.Should().NotBeNull();
+            dashboard!.AuditLogsPerDaysTotal.Should().BeEmpty();
+            dashboard.AuditLogsAvg.Should().Be(0);
+        }
+
+        [Fact]
+        public async Task GetDashboardIdentityServerWithAuditLogDaysStillCarriesTheStatistics()
+        {
+            SetupAdminAuthorization();
+
+            (await Client.GetAsync(RolesRoute)).EnsureSuccessStatusCode();
+
+            var response = await Client.GetAsync($"{DashboardIdentityServerRoute}?auditLogsLastNumberOfDays=7");
+
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var dashboard = await response.Content.ReadFromJsonAsync<DashboardDto>();
+            dashboard!.AuditLogsPerDaysTotal.Should().NotBeEmpty();
+            dashboard.AuditLogsAvg.Should().BeGreaterThan(0);
+        }
+
+        [Fact]
+        public async Task GetDashboardAuditLogStatisticsReportsTheEntriesPerDayAndTheirAverage()
+        {
+            SetupAdminAuthorization();
+
+            (await Client.GetAsync(RolesRoute)).EnsureSuccessStatusCode();
+
+            var response = await Client.GetAsync($"{AuditLogStatisticsRoute}?lastNumberOfDays=30");
+
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var statistics = await response.Content.ReadFromJsonAsync<DashboardAuditLogStatisticsDto>();
+            statistics.Should().NotBeNull();
+            statistics!.AuditLogsPerDaysTotal.Should().NotBeEmpty();
+            statistics.AuditLogsPerDaysTotal.Should().BeInAscendingOrder(x => x.Created);
+            statistics.AuditLogsPerDaysTotal.Should().OnlyContain(x => x.Total > 0);
+            statistics.AuditLogsAvg.Should().BeGreaterThan(0);
+        }
+
+        [Fact]
+        public async Task GetDashboardAuditLogStatisticsForANonPositiveWindowIsEmpty()
+        {
+            SetupAdminAuthorization();
+
+            (await Client.GetAsync(RolesRoute)).EnsureSuccessStatusCode();
+
+            var response = await Client.GetAsync($"{AuditLogStatisticsRoute}?lastNumberOfDays=-1");
+
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var statistics = await response.Content.ReadFromJsonAsync<DashboardAuditLogStatisticsDto>();
+            statistics!.AuditLogsPerDaysTotal.Should().BeEmpty();
+            statistics.AuditLogsAvg.Should().Be(0);
+        }
+
+        [Fact]
+        public async Task GetDashboardAuditLogStatisticsWithoutPermissions()
+        {
+            ClearAuthorization();
+
+            var response = await Client.GetAsync(AuditLogStatisticsRoute);
 
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
         }

@@ -27,8 +27,16 @@ import {
   flattenSnippetDocument,
   toApplicationName,
 } from "@/lib/snippets/dotnetSnippets";
+import {
+  FALLBACK_AUTHORITY,
+  LEGACY_API_BASE_URL,
+  PLACEHOLDER_API_BASE_URL,
+  readStoredOption,
+  resolveDefaultAuthority,
+} from "@/lib/snippets/snippetOptions";
 import { GrantTypeIds } from "@/models/Clients/ClientModels";
 import { getClientSecrets } from "@/services/ClientServices";
+import { useEnvironmentInfo } from "@/services/InfoServices";
 import { queryKeys } from "@/services/QueryKeys";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronDown, Code2, Globe, Server } from "lucide-react";
@@ -44,23 +52,28 @@ type Scenario = "authorization_code" | "client_credentials";
 const AUTHORITY_STORAGE_KEY = "skoruba_snippet_authority";
 const API_BASE_URL_STORAGE_KEY = "skoruba_snippet_api_base_url";
 
-const DEFAULT_AUTHORITY = "https://localhost:44310";
-const DEFAULT_API_BASE_URL = "https://localhost:5001";
-
-/** Keeps a text option in local storage so it survives navigation and reloads. */
-const useStoredState = (key: string, fallback: string) => {
+/**
+ * Keeps an option the user typed in local storage so it survives navigation and
+ * reloads. Empty means "not set": the option then follows its default, which is
+ * why only a typed value is stored.
+ */
+const useStoredOption = (key: string, legacyDefault: string) => {
   // Storage can be blocked or full - the option then lives for the session only.
   const [value, setValue] = useState(() => {
     try {
-      return localStorage.getItem(key) ?? fallback;
+      return readStoredOption(localStorage.getItem(key), legacyDefault);
     } catch {
-      return fallback;
+      return "";
     }
   });
 
   useEffect(() => {
     try {
-      localStorage.setItem(key, value);
+      if (value) {
+        localStorage.setItem(key, value);
+      } else {
+        localStorage.removeItem(key);
+      }
     } catch {
       // Nothing to do - the value is still kept in the component state.
     }
@@ -137,13 +150,19 @@ const IntegrationTab = () => {
     name: "postLogoutRedirectUris",
   });
 
-  const [authority, setAuthority] = useStoredState(
+  const [authority, setAuthority] = useStoredOption(
     AUTHORITY_STORAGE_KEY,
-    DEFAULT_AUTHORITY,
+    FALLBACK_AUTHORITY,
   );
-  const [apiBaseUrl, setApiBaseUrl] = useStoredState(
+  const [apiBaseUrl, setApiBaseUrl] = useStoredOption(
     API_BASE_URL_STORAGE_KEY,
-    DEFAULT_API_BASE_URL,
+    LEGACY_API_BASE_URL,
+  );
+  // The IdentityServer this Admin UI manages is the authority the generated
+  // application talks to, unless the user points the snippets elsewhere.
+  const { data: environment } = useEnvironmentInfo();
+  const defaultAuthority = resolveDefaultAuthority(
+    environment?.identityServerBaseUrl,
   );
   const [appNameOverride, setAppNameOverride] = useState("");
   const [useUserSecrets, setUseUserSecrets] = useState(true);
@@ -230,14 +249,15 @@ const IntegrationTab = () => {
 
   const options: SnippetOptions = useMemo(
     () => ({
-      authority: authority.trim() || DEFAULT_AUTHORITY,
+      authority: authority.trim() || defaultAuthority,
       appName: applicationName,
-      apiBaseUrl: apiBaseUrl.trim() || DEFAULT_API_BASE_URL,
+      apiBaseUrl: apiBaseUrl.trim() || PLACEHOLDER_API_BASE_URL,
       useUserSecrets,
       clientAuthentication,
     }),
     [
       authority,
+      defaultAuthority,
       applicationName,
       apiBaseUrl,
       useUserSecrets,
@@ -305,14 +325,14 @@ const IntegrationTab = () => {
                 label={t("Client.Integration.Options.Authority")}
                 description={t("Client.Integration.Options.AuthorityInfo")}
                 value={authority}
-                placeholder={DEFAULT_AUTHORITY}
+                placeholder={defaultAuthority}
                 onChange={setAuthority}
               />
               <OptionField
                 label={t("Client.Integration.Options.ApiBaseUrl")}
                 description={t("Client.Integration.Options.ApiBaseUrlInfo")}
                 value={apiBaseUrl}
-                placeholder={DEFAULT_API_BASE_URL}
+                placeholder={PLACEHOLDER_API_BASE_URL}
                 onChange={setApiBaseUrl}
               />
               <OptionField

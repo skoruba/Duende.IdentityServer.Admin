@@ -1,5 +1,7 @@
 import ApiHelper from "@/helpers/ApiHelper";
 import { client } from "@skoruba/duende.identityserver.admin.api.client";
+import { useQuery } from "@tanstack/react-query";
+import { queryKeys } from "./QueryKeys";
 
 const apiClient = new client.ConfigurationRulesClient(
   ApiHelper.getApiBaseUrl()
@@ -42,6 +44,16 @@ export const getConfigurationRulesMetadata = async (): Promise<
 > => {
   return await apiClient.getAllMetadata();
 };
+
+// The metadata describes the rule types the API implements and changes only with
+// the API itself, so the rules list and the rule form share one cached copy.
+export const useConfigurationRulesMetadata = (enabled = true) =>
+  useQuery({
+    queryKey: [queryKeys.configurationRulesMetadata],
+    queryFn: getConfigurationRulesMetadata,
+    staleTime: Infinity,
+    enabled,
+  });
 
 export const getConfigurationRuleMetadata = async (
   ruleType: client.ConfigurationRuleType

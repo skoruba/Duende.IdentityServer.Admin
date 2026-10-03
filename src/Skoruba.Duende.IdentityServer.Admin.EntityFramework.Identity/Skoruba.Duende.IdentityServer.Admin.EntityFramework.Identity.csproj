@@ -6,7 +6,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Duende.IdentityServer.EntityFramework" Version="8.0.8" />
+		<PackageReference Include="Duende.IdentityServer.EntityFramework" Version="8.0.9" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.12" />
 	</ItemGroup>
 

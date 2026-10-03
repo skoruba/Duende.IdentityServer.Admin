@@ -4,6 +4,7 @@ import { useApplicationInformation } from "@/services/InfoServices";
 import Loading from "@/components/Loading/Loading";
 import { Button } from "@/components/ui/button";
 import useModal from "@/hooks/modalHooks";
+import { useUiConfiguration } from "@/contexts/UiConfigurationContext";
 import ClientsWizardModals from "@/pages/Clients/ClientsWizardModals";
 import AuditLogs from "./AuditLogs";
 import ConfigurationIssuesSummary from "./ConfigurationIssuesSummary";
@@ -19,6 +20,7 @@ const Home = () => {
   const { t } = useTranslation();
   const { data: applicationInfo, isLoading } = useApplicationInformation();
   const { isOpen, closeModal, openModal } = useModal();
+  const { identityManagementEnabled } = useUiConfiguration();
 
   if (isLoading) return <Loading fullscreen />;
 
@@ -53,9 +55,18 @@ const Home = () => {
         />
         <ConfigurationIssuesSummary className="md:col-span-2 lg:col-span-5" />
 
-        <IdentityCard className="lg:col-span-4" />
-        <ProvidersKeysCard className="lg:col-span-4" />
-        <AuditLogs className="md:col-span-2 lg:col-span-4" />
+        {identityManagementEnabled ? (
+          <>
+            <IdentityCard className="lg:col-span-4" />
+            <ProvidersKeysCard className="lg:col-span-4" />
+            <AuditLogs className="md:col-span-2 lg:col-span-4" />
+          </>
+        ) : (
+          <>
+            <ProvidersKeysCard className="md:col-span-2 lg:col-span-6" />
+            <AuditLogs className="md:col-span-2 lg:col-span-6" />
+          </>
+        )}
 
         <RecentActivity className="md:col-span-2 lg:col-span-12" />
       </div>

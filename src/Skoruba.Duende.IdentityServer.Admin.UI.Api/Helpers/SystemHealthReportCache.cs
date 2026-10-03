@@ -12,10 +12,18 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
     /// <summary>
     /// The dashboard polls the health report from every open tab, and a report runs every
     /// registered check - databases and the IdentityServer discovery. The last report is
-    /// therefore shared for a short while instead of being computed per request.
+    /// therefore shared for a short while instead of being computed per request. A report that is not
+    /// healthy is shared for <see cref="NotHealthyCacheDuration"/> at most, so that a check which failed
+    /// once does not stay on the dashboard for the whole cache duration.
     /// </summary>
     public class SystemHealthReportCache(DashboardConfiguration dashboardConfiguration, TimeProvider timeProvider = null)
     {
+        /// <summary>
+        /// How long a degraded or unhealthy report is reused. The IdentityServer discovery typically fails
+        /// once right after the start of a container on a small instance and passes on the next run.
+        /// </summary>
+        public static readonly TimeSpan NotHealthyCacheDuration = TimeSpan.FromSeconds(5);
+
         private readonly TimeProvider _timeProvider = timeProvider ?? TimeProvider.System;
         private readonly SemaphoreSlim _refreshLock = new(1, 1);
 
@@ -47,7 +55,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
 
                 var report = await healthCheckService.CheckHealthAsync(cancellationToken);
 
-                _validUntil = _timeProvider.GetUtcNow().Add(cacheDuration);
+                var reuseFor = report.Status == HealthStatus.Healthy || NotHealthyCacheDuration > cacheDuration
+                    ? cacheDuration
+                    : NotHealthyCacheDuration;
+                _validUntil = _timeProvider.GetUtcNow().Add(reuseFor);
                 Volatile.Write(ref _report, report);
 
                 return report;
