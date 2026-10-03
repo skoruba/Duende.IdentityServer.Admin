@@ -323,6 +323,7 @@ For hosting platforms that charge per container (for example DigitalOcean App Pl
 `skoruba/duende-identityserver-admin-with-api` runs the Admin UI and the Admin API together: the Admin UI listens on
 port `8080` and proxies the API calls to the Admin API, which listens only inside the container.
 It is built from `deploy/admin-with-api/Dockerfile` and takes the same environment variables as the two separate images.
+Give it 1 GB of memory; it runs on 512 MB, but close to the limit.
 
 ---
 

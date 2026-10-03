@@ -28,9 +28,8 @@ RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
 
 COPY . .
 
-# ReadyToRun: precompiled code instead of JIT-compiled code in memory, about 100 MiB less for the two processes
-RUN dotnet publish -a $TARGETARCH "src/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj" -c Release -p:PublishReadyToRun=true -o /app/publish/api
-RUN dotnet publish -a $TARGETARCH "src/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj" -c Release -p:PublishReadyToRun=true -o /app/publish/admin
+RUN dotnet publish -a $TARGETARCH "src/Skoruba.Duende.IdentityServer.Admin.Api/Skoruba.Duende.IdentityServer.Admin.Api.csproj" -c Release -o /app/publish/api
+RUN dotnet publish -a $TARGETARCH "src/Skoruba.Duende.IdentityServer.Admin/Skoruba.Duende.IdentityServer.Admin.csproj" -c Release -o /app/publish/admin
 
 FROM base AS final
 WORKDIR /app
@@ -39,10 +38,9 @@ COPY --from=build /app/publish/admin ./admin
 COPY deploy/admin-with-api/entrypoint.sh ./entrypoint.sh
 RUN sed -i 's/\r$//' ./entrypoint.sh && chmod +x ./entrypoint.sh
 
-# The Admin API address is internal to the container, the Admin UI proxies to it.
-# Workstation GC keeps the memory of the two processes low on a small instance.
+# The Admin UI proxies to the Admin API inside the container (see entrypoint.sh).
+# Workstation GC: server GC would size a heap for every core of the host, in each of the two processes.
 ENV ASPNETCORE_FORWARDEDHEADERS_ENABLED=true \
-    ADMIN_API_INTERNAL_URL=http://127.0.0.1:5000 \
     AdminConfiguration__ApiConfiguration__ApiRemoteConfiguration__RemoteUrl=http://127.0.0.1:5000 \
     DOTNET_gcServer=0
 

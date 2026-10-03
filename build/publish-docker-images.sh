@@ -28,7 +28,7 @@ docker buildx create --use
 cd ..
 
 # Build and push docker images with platforms specified
+docker buildx build --platform $platforms $(tags duende-identityserver-admin-with-api) --push --no-cache -f deploy/admin-with-api/Dockerfile .
 docker buildx build --platform $platforms $(tags duende-identityserver-admin) --push --no-cache -f src/Skoruba.Duende.IdentityServer.Admin/Dockerfile .
 docker buildx build --platform $platforms $(tags duende-identityserver-admin-api) --push --no-cache -f src/Skoruba.Duende.IdentityServer.Admin.Api/Dockerfile .
-docker buildx build --platform $platforms $(tags duende-identityserver-admin-with-api) --push --no-cache -f deploy/admin-with-api/Dockerfile .
 docker buildx build --platform $platforms $(tags duende-identityserver-sts-identity) --push --no-cache -f src/Skoruba.Duende.IdentityServer.STS.Identity/Dockerfile .
