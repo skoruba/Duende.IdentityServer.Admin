@@ -2,147 +2,110 @@
 
 ## [3.2.0] - 2026-10-03
 
+### Upgrading
+
+- New EF migration `AddAuditLogCreatedIndex` (SQL Server, PostgreSQL) adds the index `IX_AuditLog_Created`. On a large `AuditLog` table, create it ahead of the upgrade (e.g. `CREATE INDEX IX_AuditLog_Created ON AuditLog (Created) WITH (ONLINE = ON)`); the migration skips an existing index
+- Forks of the Admin UI need React 19 and `react-day-picker` 10, see Breaking Changes below
+
 ### Security
 
-- Updated Duende IdentityServer to 8.0.9, which fixes the insufficient validation of pushed authorization requests ([GHSA-mxv6-xwqj-ww2p](https://github.com/DuendeSoftware/products/security/advisories/GHSA-mxv6-xwqj-ww2p), high). The PAR endpoint is enabled by default, and any client able to authenticate to it could push a request on behalf of another client at the same IdentityServer; a pushed request is now bound to the client that authenticated. The STS leaves `PushedAuthorization.AllowUnregisteredPushedRedirectUris` at its default `false`, so the two weaknesses that depend on that option did not apply to it unless a deployment turned the option on. The update needs no new EF migrations
+- Duende IdentityServer 8.0.9 fixes insufficient validation of pushed authorization requests ([GHSA-mxv6-xwqj-ww2p](https://github.com/DuendeSoftware/products/security/advisories/GHSA-mxv6-xwqj-ww2p), high): a pushed request is now bound to the client that authenticated. No new EF migrations
 
 ### Added
 
-- `Dashboard/GetDashboardAuditLogStatistics?lastNumberOfDays=30` serves the audit log chart of the dashboard: the entries per day and their daily average, from one query. The statistics used to travel with the counters in `GetDashboardIdentityServer`, so the slowest table of the system held the counters of clients, resources, scopes and identity providers back. `GetDashboardIdentityServer` keeps its shape for existing callers; the Admin UI asks it for `auditLogsLastNumberOfDays=0` now, which leaves the audit log out entirely. The window of both endpoints is capped by `DashboardConfiguration:AuditLogStatisticsMaxDays` (default `365`)
-- An index on `AuditLog.Created` (`IX_AuditLog_Created`), for the dashboard statistics, the audit log filter by date and the cleanup of old entries, which all select by `Created` and scanned the whole table so far. **Requires the new EF migration** `AddAuditLogCreatedIndex` (SQL Server and PostgreSQL); the migration skips the index when it already exists, so on a large table it can be created ahead of the upgrade, e.g. `CREATE INDEX IX_AuditLog_Created ON AuditLog (Created) WITH (ONLINE = ON)` on Azure SQL or SQL Server Enterprise, where the application would otherwise hold the table while `ApplyDatabaseMigrations` builds the index at startup
-- `AdminConfiguration:BasicConfiguration:IdentityManagementEnabled` (default `true`) switches the user and role management off in the Admin UI for deployments that keep their users outside ASP.NET Core Identity ([#314](https://github.com/skoruba/Duende.IdentityServer.Admin/discussions/314)). With `false`, the *Identity Management* menu, the dashboard card with the user and role counts, the *New user* and *New role* quick actions and the user search of the command palette are gone, and the user and role pages lead to the dashboard. The Admin UI host serves the flag at `GET /configuration`, an anonymous endpoint the SPA reads at startup next to the session; a host without the endpoint keeps the full UI. The flag affects the UI only, the Admin API keeps serving its identity endpoints
-- A Docker image that runs the Admin UI and the Admin API in one container, built from `deploy/admin-with-api/Dockerfile`, for hosting platforms that charge per container such as DigitalOcean App Platform. The Admin UI listens on port `8080` and proxies `/identity-server-admin-api/*` to the Admin API, which listens on `127.0.0.1:5000` inside the container only; when either process exits, the container exits so the platform restarts it. `build/publish-docker-images.sh` publishes it as `skoruba/duende-identityserver-admin-with-api`. A 1 GB instance is recommended; 512 MB runs, but close to its limit
+- `AdminConfiguration:BasicConfiguration:IdentityManagementEnabled` (default `true`) hides user and role management in the Admin UI for deployments that keep users outside ASP.NET Core Identity ([#314](https://github.com/skoruba/Duende.IdentityServer.Admin/discussions/314)). UI only; the Admin API keeps its identity endpoints
+- Docker image `skoruba/duende-identityserver-admin-with-api` running the Admin UI and the Admin API in one container (`deploy/admin-with-api`), for platforms that charge per container. 1 GB RAM recommended
+- `Dashboard/GetDashboardAuditLogStatistics` serves the dashboard audit chart separately from the counters; the window is capped by `DashboardConfiguration:AuditLogStatisticsMaxDays` (default `365`)
 
 ### Fixed
 
-- The Admin UI did not load when hosted under a path prefix (`AdminConfiguration:BasicConfiguration:BasePath` set to `/admin/web`, for example) behind a reverse proxy or ingress that forwards only that prefix: the built `index.html` and the chunk loader referenced the scripts, styles, and lazy chunks as `/assets/...` from the domain root, ignoring the `<base href>` the host rewrites at runtime, so the browser asked for them outside the prefix. The bundle is now built with a relative base and every asset resolves against the configured base path. Kestrel alone answered at the domain root as well, which is why the problem did not show up without a proxy in front ([#321](https://github.com/skoruba/Duende.IdentityServer.Admin/discussions/321))
-- Logout answered 403 *Invalid CSRF token* when the Admin UI ran under a base path: the antiforgery cookie `__Host-SkorubaBFF-CSRF` was issued with the base path as its `Path`, and browsers drop a `__Host-` cookie whose path is anything but `/`, so the cookie never reached the logout request. The cookie is now issued with `Path=/`, as the authentication cookie already was ([#323](https://github.com/skoruba/Duende.IdentityServer.Admin/discussions/323))
-- The dashboard failed as a whole when the audit log statistics ran into the SQL command timeout ([#322](https://github.com/skoruba/Duende.IdentityServer.Admin/discussions/322)), which happened on an `AuditLog` table of some 800,000 rows with the primary key as its only index: the counters of clients, resources, scopes, identity resources and identity providers stayed in their loading state for minutes, because the one request that served both the counters and the statistics was retried three times at 30 seconds each. The counters now come from a request that does not touch the audit log, the chart from `GetDashboardAuditLogStatistics`, which is not retried and reports its failure in its own card; the statistics are one grouped query instead of two over the same rows, served by the new index, and are cancelled with the HTTP request when the dashboard is left
-- The first load of the Admin UI went through four different loaders: a bare spinner in the top left corner of a white page, a centered *Checking session...*, a small spinner while the page code loaded and a large black spinner while the dashboard loaded its data. There is one loading screen now, a small centered spinner with *Loading...*, from the static splash in `index.html` through the session check and the page code to the data of the page; the full-page loaders of the other pages use it as well, and the inline spinners take the muted text colour
-- The command palette listed the client action as *Add New Client* next to *New API resource*, *New user* and the other actions; it is *New client* now
-- The dashboard header showed *Unhealthy* for up to a minute and a half after a health check failed once, typically the IdentityServer discovery right after the start of a container on a small instance: the Admin API reused the failed report for the whole `SystemHealthCacheSeconds` and the dashboard asked again only after a minute. A degraded or unhealthy report is now reused for 5 seconds at most, and the dashboard polls every 10 seconds instead of 60 while the report is not healthy or the request failed
-- `docker-compose.yml` (and the one in the project template) seeded the Admin UI client with `/signin-oidc` as the front-channel logout URI, so a front-channel logout from the STS hit the sign-in callback; it is `/signout-oidc` now, as in `identityserverdata.json`
-- The Admin UI Dockerfile (and the ones in the project templates) no longer upgrades npm to `npm@latest` during the build: the newest npm requires a newer Node than the `node:22` tag may carry and the build failed with `EBADENGINE`; the npm that ships with the Node image builds the SPA
-- The *Integration* tab generated code with `https://localhost:44310` as the authority on every instance until an address was typed into the snippet options, so a deployed Admin UI handed out snippets pointing at localhost. The default is now the IdentityServer the Admin UI is configured with, as reported by `Info/GetEnvironment`, and the localhost address remains the fallback only for a backend that reports none. An authority typed into the options still wins and is the only value kept in the browser; the localhost default that 3.1.0 stored on its own is ignored, so the tab picks up the configured address after the upgrade
+- Dashboard timed out on a large `AuditLog` table ([#322](https://github.com/skoruba/Duende.IdentityServer.Admin/discussions/322)): the counters and the audit chart now load independently and the statistics use one indexed query
+- Admin UI did not load under a path prefix behind a reverse proxy ([#321](https://github.com/skoruba/Duende.IdentityServer.Admin/discussions/321))
+- Logout returned 403 *Invalid CSRF token* under a base path ([#323](https://github.com/skoruba/Duende.IdentityServer.Admin/discussions/323))
+- Dashboard showed *Unhealthy* for up to 90 seconds after a single failed health check
+- *Integration* tab generated `https://localhost:44310` as the authority instead of the configured IdentityServer
+- `docker-compose.yml` seeded the Admin UI client with `/signin-oidc` as the front-channel logout URI instead of `/signout-oidc`
+- Admin UI Docker build failed with `EBADENGINE` (it no longer upgrades to `npm@latest`)
+- First load of the Admin UI shows one loading screen instead of four different spinners
+- Command palette: *Add New Client* renamed to *New client*
 
 ### Changed
 
-- The list of configuration rules names each rule as the rule form does (*Missing PKCE*, *Client Redirect URIs Must Use HTTPS*) instead of by its type identifier (`MissingPkce`), describes what the rule checks instead of showing its message template with the placeholders unfilled, and lists the values the rule checks against, such as the required prefixes or the maximum token lifetime, with the default for a value the stored configuration leaves out
-- The Admin UI uses `@skoruba/duende.identityserver.admin.api.client` 3.2.0, which carries `Dashboard/GetDashboardAuditLogStatistics`
-- The API base address in the generated code is `https://your-api.example` until one is set in the snippet options, and the *Program.cs* step warns about it wherever the code registers an API client. It used to be `https://localhost:5001`, an address that looks real but matches nothing: the Admin UI cannot know the API the application will call
-- The Admin UI runs on **React 19** (19.3.0, with `@types/react` and `@types/react-dom` 19.3.0). Its dependencies moved along: the Radix UI primitives to their React 19 releases, `react-day-picker` from 8 to 10, and `date-fns` from 3 to 4. The calendar of the date fields and the audit log filter is restyled for the class names of `react-day-picker` 10 and focuses the picked day through `autoFocus` instead of the removed `initialFocus`. `react-dom/client` is bundled into the `react-vendor` chunk with the rest of React
+- Admin UI runs on **React 19**, together with Radix UI, `react-day-picker` 10 and `date-fns` 4
+- Configuration rules list shows readable names, descriptions and checked values instead of type identifiers
+- Generated code uses `https://your-api.example` as the API placeholder (was `https://localhost:5001`) and warns until it is set
+- Admin UI uses `@skoruba/duende.identityserver.admin.api.client` 3.2.0
 
 ### Breaking Changes
 
-- Forks of the Admin UI need React 19 typings: `JSX` is no longer a global namespace and has to be imported (`import type { JSX } from "react"`), `useRef` takes an initial value, and `React.ElementRef` is deprecated in favour of `React.ComponentRef`, which the built-in components use now
-- Custom forks of the `Calendar` component need the `react-day-picker` 10 API: the `classNames` keys are renamed (`caption` to `month_caption`, `nav_button_previous` to `button_previous`, `day_selected` to the `data-selected` attribute, and so on) and the `IconLeft`/`IconRight` components are replaced by a single `Chevron`
+- Forks of the Admin UI need React 19 typings: `import type { JSX } from "react"`, `useRef` with an initial value, `React.ComponentRef` instead of `React.ElementRef`
+- Forks of the `Calendar` component need the `react-day-picker` 10 API (renamed `classNames` keys, a single `Chevron` instead of `IconLeft`/`IconRight`)
 
 ## [3.1.0] - 2026-09-19
 
-This release moves the solution to **Duende IdentityServer 8** and adds a way to get
-from a configured client to working application code: the new **Integration** tab
-generates the .NET 10 wire-up for the client you are looking at. Everything else
-builds on the 3.0.0 architecture, so upgrading from 3.0.0 is a package and migration
-step rather than a rewrite.
+Moves the solution to **Duende IdentityServer 8** and adds the **Integration** tab, which generates .NET 10 code for a configured client. Upgrading from 3.0.0 is a package and migration step, not a rewrite.
+
+### Upgrading
+
+- Duende IdentityServer 8 brings EF migrations for the configuration and persisted grant stores. Back up the database before applying them. They also create the SAML tables; managing SAML service providers from the Admin UI is not part of this release
+- PostgreSQL only: identity migration `IdentitySchemaUpdate` changes `UserLogins.LoginProvider`, `UserLogins.ProviderKey`, `UserTokens.LoginProvider` and `UserTokens.Name` from `text` to `character varying(450)`; it stops if an existing value is longer
+- Admin configuration store migration `AddNamingScopeAndFapiRules` seeds seven new configuration rules (Ids 17–23, disabled); a user-created rule occupying one of those Ids is moved to a new Id
+- Building the Admin UI requires Node.js 22.12 or newer
 
 ### Added
 
-- **Actionable dashboard and command palette.** The home page now combines service health, configuration issues, resource counts, audit trends, recent activity, and contextual quick actions. A keyboard-accessible command palette provides fast navigation and search across the Admin UI
-- The dashboard header works as a status bar: the environment and IdentityServer authority the Admin UI manages, the service health with the number of passing checks, the version, and a link to the open configuration issues. Health is reported as *Service healthy*, *degraded*, or *unhealthy*, and as unavailable rather than green when it cannot be read
-- The monitoring card names the most widespread problem of the highest severity by its rule - for example *8 clients affected · Client Access Token Lifetime Too Long* - and each severity links to the issues list filtered to it. Resource tiles show how many clients, API resources, API scopes, and identity resources need attention
-- The audit trend fills days without events, draws the alert threshold (1.5× the average of active days, never below 50 operations a day), marks past days above it, and links to the audit log of an anomalous day. The chart appears once three days have audit data
-- Recent activity lists configuration changes only, labels credential changes as *Sensitive* and role, claim, and grant changes as *Permission change*, and opens a detail with the target, the caller's IP address, the request, the trace id, and the recorded data
-- The command palette opens with Ctrl+K or ⌘K from any page and searches clients, users, API resources, and API scopes alongside navigation and the *new ...* actions
-- `Info/GetEnvironment` returns the hosting environment name and the IdentityServer base URL. `Info/GetHealth` returns the health report for typed clients: unlike `/health`, which answers 503 when something is unhealthy, it always answers 200 and carries the status in the body, reports `Unknown` for hosts that register no health checks, and exposes check names and statuses only. A report runs every registered check and the dashboard asks for it from every open tab, so the last report is shared for `SystemHealthCacheSeconds` and concurrent callers wait for one run; the IdentityServer discovery check gives up after 10 seconds instead of holding the report until the HTTP client times out. Both require the administration policy
-- `Dashboard/GetRecentAuditChanges` returns the newest audit entries that record a change, leaving the read events out. The audit log is indexed by its primary key only and mostly holds reads, so the query inspects a bounded number of the newest entries in a single statement without a `COUNT`, and its cost does not grow with the size of the log
-- An optional `DashboardConfiguration` section tunes it: `RecentAuditChangesDefaultCount` (8), `RecentAuditChangesMaxCount` (50), `RecentAuditChangesScanLimit` (5000), and `SystemHealthCacheSeconds` (30). Every value has a default, so the section can be left out or set only what it changes
-- The configuration issues list accepts `?type=Error|Warning|Recommendation` and the audit log accepts `?event=` and `?created=yyyy-MM-dd`, so both can be linked to with a filter applied
-- **Client integration snippets.** A new *Integration* tab on the client detail generates the .NET 10 wire-up for the client being edited - NuGet packages, `appsettings.json`, the matching `dotnet user-secrets` commands, and `Program.cs`. Only the authorization code and client credentials flows are generated, and everything is derived from the form, so the snippets follow changes before they are saved: callback paths come from the redirect URIs, the scope list from the allowed scopes, pushed authorization from its switch. PKCE is always left on in the generated code: IdentityServer validates a code challenge whether the client requires PKCE or not, so a client that does not require it gets a warning instead of `UsePkce = false` in code that is meant to be copied
-- Client authentication in the generated code can be a shared secret or **private_key_jwt**, which adds a `ClientAssertionService` reading the signing algorithm from the JWK itself. The mode is preselected from the client's registered secrets, so a client holding a JWK secret gets the assertion variant without asking
-- A separate step generates the **DPoP proof key** when the client requires DPoP, which - unlike the client credential - is the application's own key and is registered nowhere. The key follows the *Keep secrets out of the code* switch like the client credential: stored in user secrets, or inlined with a warning
-- Syntax highlighting for the generated C#, shell, and JSON with copy and download per block. The tokenizer is built in, so no highlighting library enters the bundle
-- **Capability-driven client edit form.** Tabs whose settings the client's grant types make irrelevant are left out: a client credentials client no longer offers URLs, authentication and logout, consent, device flow, CIBA, PKCE, identity token, or refresh token. A *Show all settings* switch brings them all back for the cases the grant types do not describe
-- Playwright coverage for the hidden tabs and the override switch
-- Vitest unit tests for the Admin UI's pure logic - client capabilities, snippet generation, the snippet tokenizer, the wizard secret expiration, and the dual list - runnable with `npm test` without any running services
-- **JWK client secrets** as a first-class secret type. The value is entered as a public JSON Web Key and validated before it can be saved - private key material, JWK Sets, and symmetric keys are rejected, while unknown key types only warn, because IdentityServer decides what it accepts. The API enforces the same boundary for every caller: `POST .../Secrets` answers 400 for a JWK value that is not a JSON object, carries private key material anywhere in it, is a JWK Set, states no `kty`, or is a symmetric key. Member names and the secret type are matched regardless of casing, because `JsonWebKey` reads `"D"` as the private exponent just like `"d"`
-- The STS accepts `private_key_jwt` client authentication, so a client holding a JWK secret can actually use it. Without `AddJwtBearerClientAuthentication()` the token request fails with `invalid_client`
-- Optional `Fapi2SecurityProfile:Enabled` configuration applies FAPI 2.0 cryptographic restrictions to the STS: PS256 signing keys, PS256/ES256 for DPoP, client assertions and request objects, and a 10-second JWT clock skew, and strict audience validation of `private_key_jwt` client assertions (the issuer as the only `aud`, `typ` of `client-authentication+jwt`). With automatic key management off, the configured signing and validation certificates follow the profile as well - PS256 for an RSA certificate, ES256 for a P-256 one - instead of the RS256 default. An EC certificate on any other curve stops the STS at startup: ES256 is ECDSA over P-256 only, and IdentityServer does not check the curve of a certificate, so a P-384 or P-521 key would sign tokens that merely claim to be ES256. Client and sender-constrained-token requirements remain explicit deployment configuration
-- **In-browser key pair generation** for JWK secrets via the Web Crypto API (PS256/ES256/RS256/ES384/ES512). The private key never leaves the page: it is shown masked, can be copied or downloaded as JWK or PEM, and the public key is applied only after the user confirms they saved it. PS256 and ES256 are marked as FAPI 2.0 compliant and PS256 is the default; picking one of the others warns that it falls outside the profile
-- Seven new configuration rules:
-  - `ClientNameMustStartWith` and `ClientNameMustNotContain`
-  - `ClientIdMustStartWith` and `ClientIdMustNotContain`
-  - `ClientScopeMustExist`, which reports clients still allowing a scope that no longer exists as an API scope or identity resource ([#176](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/176))
-  - `ClientSigningAlgorithmsMustBeFapiCompliant`, which reports signing algorithms outside the FAPI 2.0 set. The profile's section 5.4 is a closed enumeration, so the longer RS/PS/ES variants are non-conformant despite the larger key. Both the allowed identity token signing algorithms and the `alg` of JWK secrets are checked; a JWK without `alg` is judged by its curve where the curve fixes the algorithm (P-384, P-521, secp256k1, Ed448), and expired secrets are left out. Disabled by default and the permitted set is configurable
-  - `ApiResourceSigningAlgorithmsMustBeFapiCompliant`, the API resource counterpart: the access token signing algorithm is decided by the API resource, so a resource allowing RS256 makes every client requesting its scopes non-conformant. Disabled by default, same configurable set
-- The *High security* client type of the wizard preselects a JWK secret, and the secret step explains the choice - a tip for the JWK, a warning when a shared secret is picked instead
-- The *High security* client type sets the DPoP clock skew to 30 seconds and shows it on the review step. The FAPI 2.0 Security Profile rejects a JWT dated more than 60 seconds ahead and names 30 seconds as the value that rules out clock skew issues, while IdentityServer defaults to 5 minutes - and the skew of DPoP proofs is a client setting the server-wide JWT clock skew does not reach. Proofs stay validated by `iat`, which is conformant: the server-provided nonce is optional for the authorization server
-- Playwright coverage for the JWK secret type: key pair generation, public-key-only storage, masked private key with copy and download in JWK and PEM form, the discard confirmation, EC key generation, and value validation
-- Integration tests for the `Info` endpoints, service tests for the owner recorded in secret audit events, and Vitest coverage for the dashboard logic - issue grouping, rule matching, the activity series, and audit event descriptions
+- **Dashboard** with a service health status bar, configuration issues by severity, resource counts, an audit trend with anomaly threshold, and recent configuration changes with detail
+- **Command palette** (Ctrl+K / ⌘K) for navigation and search across clients, users, API resources and API scopes
+- **Integration tab** on the client detail: generates NuGet packages, `appsettings.json`, `dotnet user-secrets` commands and `Program.cs` for the authorization code and client credentials flows, including `private_key_jwt` and a DPoP proof key
+- **JWK client secrets**, validated in the UI and the API (private key material, JWK Sets and symmetric keys are rejected), with in-browser key pair generation (PS256, ES256, RS256, ES384, ES512); the private key never leaves the browser
+- STS accepts `private_key_jwt` client authentication
+- Optional **FAPI 2.0** profile in the STS (`Fapi2SecurityProfile:Enabled`): PS256/ES256 only, 10-second clock skew, strict client assertion audience
+- **Capability-driven client form**: tabs irrelevant to the client's grant types are hidden; *Show all settings* brings them back
+- Seven configuration rules: `ClientNameMustStartWith`, `ClientNameMustNotContain`, `ClientIdMustStartWith`, `ClientIdMustNotContain`, `ClientScopeMustExist` ([#176](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/176)), and the FAPI rules `ClientSigningAlgorithmsMustBeFapiCompliant` and `ApiResourceSigningAlgorithmsMustBeFapiCompliant` (disabled by default)
+- Wizard *High security* client type preselects a JWK secret and sets the DPoP clock skew to 30 seconds
+- API endpoints `Info/GetEnvironment`, `Info/GetHealth` and `Dashboard/GetRecentAuditChanges`, tuned by the optional `DashboardConfiguration` section (`RecentAuditChangesDefaultCount`, `RecentAuditChangesMaxCount`, `RecentAuditChangesScanLimit`, `SystemHealthCacheSeconds`)
+- Linkable filters: `?type=` on configuration issues, `?event=` and `?created=` on the audit log
+- Vitest unit tests for the Admin UI (`npm test`), more Playwright and integration tests
 
 ### Changed
 
-- The client edit tabs are declared as data and rendered through a shared `SettingsTabs` component, which keeps the selection valid when the visible set changes while the form is open
-- Identity resources are left out of the client scope picker for clients without a user flow, because they cannot be issued without one
-- Grant type ids moved into a single `GrantTypeIds` constant covering all ids the API returns, replacing the two-value `GrantTypes` enum
-- Downloading generated content reuses one helper shared with the JWK dialog
-- Updated the solution to Duende IdentityServer 8.0.8, including EF migrations for the configuration and persisted grant stores
-- Only `SharedSecret` is hashed, so the "you cannot retrieve it" warning and password masking are limited to that type; X509 types now state that the value is stored as it is
-- Switching the client secret type clears the value, so a JWK cannot end up hashed as a shared secret or the other way round
-- Secret type names are humanized for display only; the value sent to the API stays exactly as the backend expects it
-- The client creation wizard takes a single redirect URI instead of a list
-- Clipboard copying moved into a shared hook that reports failures instead of rejecting unhandled outside a secure context
-- Local actions confirm themselves in place instead of raising a toast. A copy button turns its icon into a check mark for a moment - every button on its own, so the public and the private key panel do not light up together - and only a failed copy still gets a toast, because it needs the explanation. A generated public key is confirmed under the secret value field - *Public key inserted* - for as long as the field holds it, and the field is ringed for a moment to show where the key went; a confirmation that stays cannot be missed the way a toast or an animation can. Both are announced to screen readers
-- Updated `react-router-dom` to 7.18.2 and `postcss` to 8.5.25 in the Admin UI, and forced `brace-expansion` to 5.0.12 in the STS, clearing the actionable npm audit findings. `minimatch` 9 keeps the patched 2.x line, because it cannot load the ESM-only 5.x
-- Updated the Admin UI to `@skoruba/duende.identityserver.admin.api.client` 3.1.4, which carries the new configuration rule types, the `Info` endpoints, and `Dashboard/GetRecentAuditChanges`, and to Vitest 5, together with transitive updates from `npm audit fix`, leaving `npm audit` clean
-- Configuration issue results are cached in the Admin UI for two minutes instead of being recomputed on every page and window focus - both endpoints validate the whole configuration. Saving a client, API resource, API scope, identity resource, secret, property, or configuration rule refreshes them, and the configuration issues page always loads fresh data. The severity counts in the navigation and on the dashboard are taken from the same issue list instead of `ConfigurationIssues/GetSummary`, which ran the whole validation a second time; the endpoint stays available for other callers
-- The `ClientSecretAdded`, `ClientSecretDeleted`, `ApiSecretAdded`, and `ApiSecretDeleted` audit events carry `ClientName` or `ApiResourceName`. The change is additive; consumers parsing the audit `Data` JSON see one more property. Entries written before the upgrade keep their original shape, and the Admin UI falls back to a link to the owning resource for them
-- The Admin UI states its Node.js requirement - `engines` and `.nvmrc` ask for Node.js 22.12 or newer, which Vitest 5 needs; CI and the Docker image already build with Node.js 22
-- *API* is written in capitals throughout the Admin UI, including page titles, buttons, notifications, and audit event names
+- Updated to Duende IdentityServer 8.0.8
+- Configuration issues are cached in the Admin UI for two minutes and refreshed on save; the navigation and dashboard counts reuse the same list
+- Secret audit events (`ClientSecretAdded`, `ClientSecretDeleted`, `ApiSecretAdded`, `ApiSecretDeleted`) carry the owning resource name
+- Only `SharedSecret` is hashed and masked; switching the secret type clears the value
+- Client wizard takes a single redirect URI
+- Identity resources are left out of the scope picker for clients without a user flow
+- Copy and other local actions confirm in place instead of with a toast
+- Updated npm dependencies (`react-router-dom` 7.18.2, `postcss` 8.5.25, Vitest 5); `npm audit` is clean
+- *API* is capitalized throughout the Admin UI
 
 ### Fixed
 
-- Audit entries for client and API-resource secret changes now retain the owning resource name. Recent activity therefore shows a useful target rather than an opaque database id, including when an API deletes a secret by its id alone - such deletions used to be audited with the owner id `0`. A client without a name is recorded under its client id
-- The navigation requested the configuration issue summary before the session was confirmed. Without a session the request answered 401 and the global error handler redirected to the unauthorized page while the login flow was still running
-- The monitoring badge in the mobile navigation left errors out of the count
-- **The wizard created public clients that required a client secret.** The Public client type never asks for a secret, but the created client still ended up with `RequireClientSecret = true`, so it could not authenticate at the token endpoint. The type now enforces `RequireClientSecret = false` and shows it on the summary step
-- The advanced client settings rendered an *Other Settings* panel that had no matching tab trigger and could never be opened
-- **Device flow consent is never remembered** ([RFC 8628](https://www.rfc-editor.org/rfc/rfc8628)). The device that starts a device flow is not the device the user authenticates on, so persisted consent could be replayed against an attacker-controlled device. `ConsentResponse.RememberConsent` is now always false for device flow, the "Remember My Decision" checkbox is gone from the user code confirmation page, and the device view model no longer fills `AllowRememberConsent`, so a forged POST cannot re-enable it either
-- Configuration issue loading no longer builds a cartesian product across five client collections. A single client with a few hundred redirect URIs was enough to make the dashboard and the navigation summary time out ([#67](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/67))
-- The client secret value is no longer lost when navigating back to the secret step of the client wizard. Restoring the saved step data looked like a secret type change and cleared the value
+- **Device flow consent is no longer remembered** ([RFC 8628](https://www.rfc-editor.org/rfc/rfc8628)), also enforced server-side
+- **Wizard created public clients that required a client secret**
+- Configuration issues timed out for clients with many redirect URIs ([#67](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/67))
+- Audit timestamps were sent without a UTC offset, so times were shifted by the time zone difference
+- Secret audit entries lost their owning resource (owner id `0` when deleted by id)
+- `LoginWithRecoveryCode`, `ForgetTwoFactorClient` and server-side session deletion now validate the anti-forgery token
+- `delegation` grant returned 500 instead of `invalid_grant` for a token without `sub`
+- `*MustStartWith` rules compared culture-sensitively (on a Czech host `chat-client` did not start with `c`)
+- Configuration rule array parameters accept non-empty strings only
+- Signing keys list showed the same keys on its first two pages
+- Wizard lost the secret value when going back, and shifted the secret expiration by a day on each pass
+- Navigation requested the issue summary before the session was confirmed and redirected to *unauthorized* during login
+- System status headline hid an unhealthy database behind a degraded IdentityServer
+- Generated C# string literals escape non-ASCII characters and line breaks
+- Key pair dialog asks before dropping an unapplied key and discards a generation that was closed
 - Corrected the interaction denial method in `AccountController`
-- Relative times in recent activity were shifted by the difference between the server's and the browser's time zone. The audit library stamps entries with the server's local time and the API returned them without an offset, so the browser read them in its own zone - with the API in a UTC container and an administrator in Prague, a change made seconds ago showed as *2 hours ago*. Audit entries are now serialized with the server's UTC offset. The audit log page therefore shows its timestamps in the browser's time zone as well
-- The signing keys list sent a zero-based page index to a one-based API, so its first two pages showed the same keys
-- The expiration of a wizard secret moved by a day each time the secret step was passed again. The step stored the date already shifted for the API, and the next pass shifted it once more - in UTC+2 for any time after 22:00. The wizard keeps the picked date and time now and combines them only when the client is created
-- Closing the key pair dialog after confirming the private key was saved dropped the key pair without asking. The confirmation only says the private key is stored; until the public key is applied the pair is unused, so closing asks first
-- A selected scope that is not among the offered ones - an identity resource on a client without a user flow - disappeared from both lists when removed and could not be selected again. It stays on the left now
-- The `?event=`, `?created=`, and `?type=` filters of the audit log and the configuration issues live in the URL instead of being read once. The menu link clears a filter that arrived with a dashboard link, and a cleared filter does not come back on reload
-- The key pair dialog and the *Integration* tab bind their labels to the selects, inputs, and the switch, and the JWK/PEM toggle reports its state, so assistive technology announces the controls by name
-- The system status headline shows the more severe of the overall and the IdentityServer status. A degraded IdentityServer used to hide an unhealthy database check
-- Generated C# string literals escape every character outside printable ASCII. U+0085, U+2028, and U+2029 end a line in C#, so a pasted value carrying one produced a snippet that did not compile
-- The *Integration* tab no longer fails to render when the browser blocks `localStorage`
-- The `*MustStartWith` configuration rules compared the prefix with the culture of the host. On a Czech host `chat-client` did not start with `c`, because *ch* sorts as a single letter there; the comparison is ordinal now
-- Array parameters of a configuration rule accept non-empty strings only. An empty forbidden string matched every name and flagged the whole configuration, and a number silently put the rule back on its defaults. Rules already stored with such an entry ignore it
-- Configuration issues of a client without a name are listed under its client id instead of a blank name
-- `LoginWithRecoveryCode`, `ForgetTwoFactorClient`, and the deletion of a server-side session validate the anti-forgery token their forms already sent
-- The `delegation` extension grant answered 500 instead of `invalid_grant` for a token without a `sub` claim, such as one issued for client credentials
-- Closing the key pair dialog while a large RSA key was still being generated left the finished private key in the closed dialog, and the next open started on its result. A generation that was closed is now discarded
-- The key pair dialog explains why generation is unavailable outside a secure context instead of only disabling the button
-- Generated downloads keep their object URL for a minute. Revoking it right after the click can cancel the download in Safari, which would lose a private key the user believes they saved
-- ⌘K alone opens the command palette on Apple keyboards. Ctrl+K stays with the text fields there, where it deletes to the end of the line
-- A failed environment lookup no longer keeps the environment badge hidden until the cache expires
-- The generated `dotnet user-secrets` commands for JWK values point out that Windows PowerShell 5.1 drops the double quotes inside the JSON, and generated C# string literals escape line breaks and tabs
+- Smaller UI fixes: mobile monitoring badge count, unreachable *Other Settings* panel, a removed scope disappearing from the dual list, filters kept in the URL, Safari cancelling downloads, ⌘K on Apple keyboards, *Integration* tab with blocked `localStorage`, accessibility labels, clients without a name in configuration issues
 
 ### Breaking Changes
 
-- `GrantTypes` in the Admin UI client is replaced by `GrantTypeIds`, which also fixes the `ClientCreadentials` misspelling. Forks referencing the enum need updating
-- Custom forks of the client edit tabs need to move from hand-written `Tabs` markup to the `SettingsTabs` component to keep working with hidden tabs
-- Duende IdentityServer 8 requires new EF migrations for the configuration and persisted grant stores. Review them and back up your database before applying
-- PostgreSQL only: the identity store gets the `IdentitySchemaUpdate` migration, which is unrelated to IdentityServer 8. It turns the key columns `UserLogins.LoginProvider`, `UserLogins.ProviderKey`, `UserTokens.LoginProvider`, and `UserTokens.Name` from `text` into `character varying(450)`, the length the model has asked for since 3.0.0 and SQL Server has always had. 3.0.0 left the PostgreSQL model snapshot out of step with the model, which this settles. Existing values are kept; the migration stops if one of them is longer than 450 characters. SQL Server needs no identity migration
-- The admin configuration store gets one migration, `AddNamingScopeAndFapiRules`, which seeds the seven new configuration rules (Ids 17 to 23, all disabled). Apply it together with the IdentityServer 8 migrations. 3.0.0 lets administrators delete a rule and create it again, which can already occupy one of those Ids; the migration moves such a rule to a new Id first instead of failing on a primary key conflict
-- The IdentityServer 8 configuration and persisted grant migrations create the SAML tables (`SamlServiceProviders`, `SamlSigninStates`, `SamlLogoutSessions`, and related). The schema is created, but **managing SAML service providers from the Admin UI is not part of this release** and is planned for 3.2.0
-- The client creation wizard now takes a single redirect URI. Custom forks of the wizard steps need updating
-- `IAuditLogRepository`, `IAuditLogService`, and `IDashboardService` each gain one method for the recent audit changes (`GetRecentChangesAsync`, `GetRecentAuditChangesAsync`). Forks deriving from the built-in classes inherit it; forks implementing the interfaces themselves need to add it
-- The constructors of `ClientSecretAddedEvent`, `ClientSecretDeletedEvent`, `ApiSecretAddedEvent`, and `ApiSecretDeletedEvent` take the owning resource name as an additional parameter, and `InfoController` takes `IWebHostEnvironment`. The audit `Data` JSON stays additive, but forks that raise these events or derive from the controller need to pass the new argument
+- `GrantTypes` in the Admin UI client is replaced by `GrantTypeIds`
+- Forks of the client edit tabs need the `SettingsTabs` component
+- Forks of the wizard steps need updating for the single redirect URI
+- `IAuditLogRepository`, `IAuditLogService` and `IDashboardService` gain a method for recent audit changes
+- The secret event constructors take the owning resource name; `InfoController` takes `IWebHostEnvironment`
 
 ## [3.0.0] - 2026-07-15
 
