@@ -126,7 +126,7 @@ Define and track configuration rules for clients, API resources, and identity re
 
 #### 🧱 Configuration Rules
 
-![Configuration-Rules](docs/Images/configuration-rules.png)
+![Configuration-Rules](docs/Images/configuration-rules-v2.png)
 
 #### 🧩 Configuration Issues
 
