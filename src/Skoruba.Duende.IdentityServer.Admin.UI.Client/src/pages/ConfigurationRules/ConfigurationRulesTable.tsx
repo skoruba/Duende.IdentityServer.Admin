@@ -9,7 +9,9 @@ import { Badge } from "@/components/ui/badge";
 import {
   toggleConfigurationRule,
   deleteConfigurationRule,
+  useConfigurationRulesMetadata,
 } from "@/services/ConfigurationRulesService";
+import { summarizeRule } from "@/lib/configurationRules/summarizeRule";
 import { useMutation } from "@tanstack/react-query";
 import { IssueTypeBadge } from "../ConfigurationIssues/IssueTypeBadge";
 import { toast } from "@/components/ui/use-toast";
@@ -28,6 +30,9 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
   onRefresh,
 }) => {
   const { t } = useTranslation();
+  const { data: metadata } = useConfigurationRulesMetadata();
+  const formatBoolean = (value: boolean) =>
+    value ? t("Actions.Yes") : t("Actions.No");
 
   const toggleMutation = useMutation({
     meta: configurationChangeMeta,
@@ -121,12 +126,35 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
       accessorKey: "ruleType",
       header: t("ConfigurationRules.RuleType"),
       cell: ({ row }) => {
+        const summary = summarizeRule(row.original, metadata, formatBoolean);
+
         return (
-          <div>
-            <div className="font-medium">{row.original.ruleType}</div>
-            <div className="text-xs text-muted-foreground">
-              {row.original.messageTemplate}
+          <div className="space-y-1">
+            <div className="font-medium" title={row.original.ruleType}>
+              {summary.name}
             </div>
+            {summary.description && (
+              <div className="text-xs text-muted-foreground">
+                {summary.description}
+              </div>
+            )}
+            {summary.parameters.length > 0 && (
+              <div className="flex flex-wrap gap-x-3 gap-y-1 pt-0.5 text-xs text-muted-foreground">
+                {summary.parameters.map((parameter) => (
+                  <span key={parameter.label}>
+                    {parameter.label}:{" "}
+                    {parameter.values.map((value, index) => (
+                      <code
+                        key={index}
+                        className="mr-1 whitespace-pre rounded bg-muted px-1 py-0.5 font-mono text-foreground last:mr-0"
+                      >
+                        {value}
+                      </code>
+                    ))}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         );
       },

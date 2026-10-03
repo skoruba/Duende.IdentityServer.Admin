@@ -86,6 +86,7 @@ configuration health, auditing, and security from one modern interface.
 - [Health Checks](#-health-checks)
 - [Localization](#-localization)
 - [API & Swagger](#-api--swagger)
+- [Admin UI Configuration](#-admin-ui-configuration)
 - [STS Configuration](#️-sts-configuration)
 - [Identity Mapping Customization](#-identity-mapping-customization)
 - [Solution Overview](#-solution-overview)
@@ -315,6 +316,14 @@ docker-compose up -d
 Docker images are available on [Docker Hub](https://hub.docker.com/u/skoruba).
 
 To publish images, check `build/publish-docker-images.sh` and update the profile name.
+
+#### Admin UI and Admin API in one container
+
+For hosting platforms that charge per container (for example DigitalOcean App Platform), the image
+`skoruba/duende-identityserver-admin-with-api` runs the Admin UI and the Admin API together: the Admin UI listens on
+port `8080` and proxies the API calls to the Admin API, which listens only inside the container.
+It is built from `deploy/admin-with-api/Dockerfile` and takes the same environment variables as the two separate images.
+Give it 1 GB of memory; it runs on 512 MB, but close to the limit.
 
 ---
 
@@ -660,6 +669,28 @@ https://localhost:44302/swagger
   "OidcApiName": "skoruba_identity_admin_api"
 }
 ```
+
+---
+
+## 🧭 Admin UI Configuration
+
+The Admin UI host (`Skoruba.Duende.IdentityServer.Admin`) reads its settings from the `AdminConfiguration` section of `appsettings.json`.
+
+### Identity Management
+
+`IdentityManagementEnabled` shows or hides the user and role management (ASP.NET Core Identity) in the Admin UI. Switch it off when the users live elsewhere and the Admin UI should manage the IdentityServer configuration only:
+
+```json
+"AdminConfiguration": {
+  "BasicConfiguration": {
+    "Title": "Skoruba Duende IdentityServer Admin UI",
+    "BasePath": "/",
+    "IdentityManagementEnabled": false
+  }
+}
+```
+
+With `false`, the *Identity Management* menu, the dashboard card with the user and role counts, the *New user* and *New role* quick actions and the user search of the command palette are gone, and the user and role pages lead to the dashboard. The host serves the flag at `GET /configuration`, which the SPA reads at startup. The flag affects the UI only - the Admin API keeps serving its identity endpoints.
 
 ---
 

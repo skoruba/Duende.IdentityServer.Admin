@@ -15,6 +15,23 @@ export const UI_TEXT = {
     invalidCredentials: "Invalid username or password",
     consentAllow: "Yes, Allow",
   },
+  navigation: {
+    clientsResources: "Clients & Resources Management",
+    identityManagement: "Identity Management",
+    providersKeys: "Providers & Keys",
+    users: "Users",
+    roles: "Roles",
+  },
+  commandPalette: {
+    trigger: "Search…",
+    placeholder: "Search clients, users, resources or jump to…",
+    placeholderWithoutUsers: "Search clients, resources or jump to…",
+    searching: "Searching…",
+  },
+  quickActions: {
+    newUser: "New user",
+    newRole: "New role",
+  },
   home: {
     dashboardUnavailable: "Dashboard unavailable",
     dashboardDataFailed: "Dashboard data could not be loaded.",

@@ -136,6 +136,7 @@
     "Trigger": "Search…",
     "Title": "Command palette",
     "Placeholder": "Search clients, users, resources or jump to…",
+    "PlaceholderWithoutUsers": "Search clients, resources or jump to…",
     "Empty": "No results found.",
     "Searching": "Searching…",
     "Actions": "Quick actions",
@@ -259,8 +260,7 @@
       "Name": "Name"
     },
     "Loading": {
-      "Loading": "Loading...",
-      "CheckingSession": "Checking session..."
+      "Loading": "Loading..."
     },
     "ModeToggle": {
       "Light": "Light",

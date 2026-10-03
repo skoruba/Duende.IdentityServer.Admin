@@ -48,6 +48,14 @@ export const useEnvironmentInfo = () =>
   });
 
 const HEALTH_REFETCH_MS = 60_000;
+const HEALTH_RETRY_MS = 10_000;
+
+const healthRefetchMs = (data: client.SystemHealthApiDto | null | undefined) =>
+  data === null ||
+  data?.status === client.SystemHealthStatus.Degraded ||
+  data?.status === client.SystemHealthStatus.Unhealthy
+    ? HEALTH_RETRY_MS
+    : HEALTH_REFETCH_MS;
 
 // Info/GetHealth always answers 200 with the status in the body (unlike /health,
 // which answers 503), so an unhealthy system is data, not a failed request.
@@ -58,12 +66,14 @@ export const useSystemHealth = () =>
     queryKey: [queryKeys.systemHealth],
     queryFn: async (): Promise<client.SystemHealthApiDto | null> => {
       try {
-        return await new client.InfoClient(ApiHelper.getApiBaseUrl()).getHealth();
+        return await new client.InfoClient(
+          ApiHelper.getApiBaseUrl(),
+        ).getHealth();
       } catch {
         return null;
       }
     },
     retry: false,
-    refetchInterval: HEALTH_REFETCH_MS,
-    staleTime: HEALTH_REFETCH_MS,
+    refetchInterval: (query) => healthRefetchMs(query.state.data),
+    staleTime: (query) => healthRefetchMs(query.state.data),
   });
