@@ -82,10 +82,10 @@ const ClientWebSummaryTree = () => {
   }) => {
     const renderValueLine = (line: DisplayLine, index?: number) => (
       <li key={index ?? 0} className="flex items-start gap-4 mb-1 group">
-        <div className="flex-shrink-0 p-2 rounded-lg bg-primary/5 group-hover:bg-primary/10 transition-colors">
+        <div className="shrink-0 p-2 rounded-lg bg-primary/5 group-hover:bg-primary/10 transition-colors">
           {getIcon(type)}
         </div>
-        <span className="text-sm leading-relaxed break-words pt-0.5">
+        <span className="text-sm leading-relaxed wrap-break-word pt-0.5">
           {line}
         </span>
       </li>
@@ -97,7 +97,7 @@ const ClientWebSummaryTree = () => {
           avatar ? "w-[400px] min-h-[180px]" : "w-[320px] min-h-[140px]"
         } shrink-0 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${
           avatar
-            ? "bg-gradient-to-br from-primary/5 to-background border-primary/20"
+            ? "bg-linear-to-br from-primary/5 to-background border-primary/20"
             : "hover:border-primary/10"
         }`}
       >
@@ -248,7 +248,7 @@ const ClientWebSummaryTree = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-background via-muted/20 to-background p-4 rounded-xl border shadow-sm">
+    <div className="bg-linear-to-br from-background via-muted/20 to-background p-4 rounded-xl border shadow-xs">
       <div className="relative w-full overflow-x-auto pb-2">
         <div className="relative left-1/2 -translate-x-1/2 inline-block">
           <Tree

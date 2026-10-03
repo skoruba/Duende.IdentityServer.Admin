@@ -80,7 +80,7 @@ const AuditLogs: React.FC<{ className?: string }> = ({ className }) => {
     `${AuditLogsUrl}?created=${format(date, "yyyy-MM-dd")}`;
 
   const footerLinkClass =
-    "inline-flex items-center gap-1 rounded-md text-xs font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+    "inline-flex items-center gap-1 rounded-md text-xs font-medium transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring";
   const attentionLinkClass =
     "text-amber-700 hover:text-amber-800 dark:text-amber-400 dark:hover:text-amber-300";
 

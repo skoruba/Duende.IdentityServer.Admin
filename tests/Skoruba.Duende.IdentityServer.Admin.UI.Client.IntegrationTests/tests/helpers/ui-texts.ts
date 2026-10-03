@@ -29,6 +29,7 @@ export const UI_TEXT = {
     searching: "Searching…",
   },
   quickActions: {
+    newClient: "New client",
     newUser: "New user",
     newRole: "New role",
   },

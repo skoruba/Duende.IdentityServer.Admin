@@ -27,10 +27,10 @@ const Home = () => {
   return (
     <div className="flex-1 bg-page-background">
     <section id="features" className="container space-y-5 py-6">
-      <header className="rounded-2xl border bg-card px-6 py-4 shadow-sm md:px-7 md:py-5">
+      <header className="rounded-2xl border bg-card px-6 py-4 shadow-xs md:px-7 md:py-5">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
-            <h1 className="font-heading text-xl font-semibold leading-tight tracking-tight md:text-2xl">
+            <h1 className="font-heading text-xl font-semibold leading-tight tracking-tight md:text-2xl md:leading-8">
               {applicationInfo?.applicationName ?? t("Home.Title")}
             </h1>
             <SystemStatus version={applicationInfo?.applicationVersion} />

@@ -43,7 +43,7 @@ const Field = ({
         className={
           mono
             ? "mt-0.5 break-all font-mono text-xs"
-            : "mt-0.5 break-words text-sm font-medium"
+            : "mt-0.5 wrap-break-word text-sm font-medium"
         }
       >
         {children}
@@ -72,7 +72,7 @@ const ActivityDetailDialog = ({
       // The event recorded only an id - one click shows which entity it is.
       <Link
         to={targetHref}
-        className="inline-flex items-center gap-1 rounded-sm text-primary hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="inline-flex items-center gap-1 rounded-sm text-primary hover:underline focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
       >
         {t(getTargetLabelKey(target), { id: target.id })}
         <ArrowRight className="h-3.5 w-3.5" />

@@ -13,9 +13,9 @@
       @await Html.PartialAsync("_ValidationSummary")
       @await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
 
-      <div class="grid gap-6 md:grid-cols-[180px,1fr]">
+      <div class="grid gap-6 md:grid-cols-[180px_1fr]">
         <div class="flex items-start">
-          <img-gravatar email="@Model.Email" class="rounded-full border shadow-sm" size="150" />
+          <img-gravatar email="@Model.Email" class="rounded-full border shadow-xs" size="150" />
         </div>
 
         <form method="post" class="space-y-6">

@@ -28,6 +28,7 @@ The suite covers:
 20. Client wizard for the high secure client type: starts with a JWK secret, warns about a shared secret and creates a private key JWT client
 21. Client `Integration` tab: generated setup code follows the unsaved form, grant types, scopes, client authentication and the tab's own settings
 22. Identity management switched off (`AdminConfiguration:BasicConfiguration:IdentityManagementEnabled`): users and roles leave the navigation, the dashboard and the command palette, no identity endpoint is called, and the user and role pages lead to the dashboard
+23. Styling of the Admin UI and the STS login page: the design tokens on the page and its controls, shadows, corners and form spacing, focus rings, hover and dialog animations, the dark theme, the container and the responsive variants
 
 ## Test Structure
 
@@ -36,6 +37,7 @@ The suite covers:
 - `tests/client-wizard-high-secure.spec.ts` - secret step of the wizard for the high secure client type; deletes the client it creates
 - `tests/client-integration.spec.ts` - setup code generation on the client `Integration` tab; changes the form without saving, only the JWK test writes a secret and removes it again
 - `tests/identity-management-disabled.spec.ts` - the Admin UI without identity management; answers `GET /configuration` of the host itself, so it needs no change to the running environment
+- `tests/styling.spec.ts` - computed styles of the Admin UI and the STS login page, compared with the design tokens of the page instead of fixed values; catches what a Tailwind or component library upgrade changes first
 - `tests/api-resources.spec.ts` - API resources test orchestration
 - `tests/users.spec.ts` - users test orchestration
 - `tests/roles.spec.ts` - roles test orchestration

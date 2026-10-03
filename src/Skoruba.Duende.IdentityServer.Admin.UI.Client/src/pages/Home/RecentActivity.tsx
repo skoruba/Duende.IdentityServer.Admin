@@ -150,7 +150,7 @@ const RecentActivity = ({ className }: { className?: string }) => {
                       setSelected(log);
                     }}
                     aria-haspopup="dialog"
-                    className="group grid w-full text-left grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3 rounded-lg px-2 py-2.5 transition-colors hover:bg-primary/[0.04] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring md:grid-cols-[auto_minmax(0,1fr)_minmax(0,7rem)_7.5rem_1rem] xl:grid-cols-[auto_minmax(0,1fr)_minmax(0,14rem)_7.5rem_1rem]"
+                    className="group grid w-full text-left grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3 rounded-lg px-2 py-2.5 transition-colors hover:bg-primary/4 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring md:grid-cols-[auto_minmax(0,1fr)_minmax(0,7rem)_7.5rem_1rem] xl:grid-cols-[auto_minmax(0,1fr)_minmax(0,14rem)_7.5rem_1rem]"
                   >
                     <span
                       className={cn(

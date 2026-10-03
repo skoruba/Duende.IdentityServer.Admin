@@ -185,7 +185,7 @@ async function createRule(
       );
     }
 
-    await deleteRuleByTypeIfPresent(page, definition.ruleType);
+    await deleteRuleByTypeIfPresent(page, definition.optionDisplayName);
     await createRule(page, definition, false);
     return;
   }
@@ -208,7 +208,7 @@ async function verifySavedRuleInEditDialog(
   page: Page,
   definition: RuleDefinition,
 ): Promise<void> {
-  const dialog = await openEditRuleDialog(page, definition.ruleType);
+  const dialog = await openEditRuleDialog(page, definition.optionDisplayName);
 
   await expect(dialog.locator('input[name="messageTemplate"]')).toHaveValue(
     definition.messageTemplate,
@@ -245,7 +245,7 @@ async function verifyDuplicateRuleTypePrevention(
   await expect(saveButton).toBeDisabled();
   await closeDialog(dialog);
 
-  const ruleRows = findConfigurationRuleRowsByType(page, definition.ruleType);
+  const ruleRows = findConfigurationRuleRowsByType(page, definition.optionDisplayName);
   await expect(ruleRows).toHaveCount(1);
 }
 
@@ -357,13 +357,13 @@ export async function runCreateAndVerifyConfigurationRulesFlow(
   logStep("opened configuration rules list");
 
   for (const definition of definitions) {
-    await deleteRuleByTypeIfPresent(page, definition.ruleType);
+    await deleteRuleByTypeIfPresent(page, definition.optionDisplayName);
     logStep(`removed existing '${definition.ruleType}' entries`);
 
     await createRule(page, definition);
     logStep(`created '${definition.ruleType}'`);
 
-    await verifyRuleRow(page, definition.ruleType);
+    await verifyRuleRow(page, definition.optionDisplayName);
     logStep(`verified '${definition.ruleType}' is present and enabled`);
 
     await verifySavedRuleInEditDialog(page, definition);
@@ -464,9 +464,9 @@ export async function runConfigurationRuleReportsIssueFlow(
   };
 
   await ensureLoggedInAndOpenConfigurationRules(page, credentials);
-  await deleteRuleByTypeIfPresent(page, definition.ruleType);
+  await deleteRuleByTypeIfPresent(page, definition.optionDisplayName);
   await createRule(page, definition);
-  await verifyRuleRow(page, definition.ruleType);
+  await verifyRuleRow(page, definition.optionDisplayName);
   logStep(`created and enabled '${definition.ruleType}'`);
 
   try {
@@ -497,7 +497,7 @@ export async function runConfigurationRuleReportsIssueFlow(
   } finally {
     // An enabled rule nobody can satisfy would report every client in the store.
     await ensureLoggedInAndOpenConfigurationRules(page, credentials);
-    await setRuleEnabled(page, definition.ruleType, false);
+    await setRuleEnabled(page, definition.optionDisplayName, false);
     logStep(`disabled '${definition.ruleType}'`);
   }
 

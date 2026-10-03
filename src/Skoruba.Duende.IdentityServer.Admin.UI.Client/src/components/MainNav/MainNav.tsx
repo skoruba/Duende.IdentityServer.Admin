@@ -75,9 +75,9 @@ function NavDropdown({
     () =>
       cn(
         "px-3",
-        "focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-none",
+        "focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-hidden",
         "data-[state=open]:bg-transparent data-[state=open]:shadow-none data-[state=open]:ring-0",
-        "data-[state=open]:outline-none",
+        "data-[state=open]:outline-hidden",
         // Current section: primary tint plus an underline sitting on the header border
         active &&
           "relative bg-primary/5 text-primary hover:bg-primary/10 hover:text-primary after:absolute after:inset-x-3 after:-bottom-3 after:h-0.5 after:rounded-full after:bg-primary"

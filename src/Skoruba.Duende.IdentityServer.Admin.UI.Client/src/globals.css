@@ -1,7 +1,198 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
- 
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* The theme is switched by the ThemeProvider through the `dark` class on <html>, never by the OS setting alone. */
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * The design tokens below (`:root` and `.dark`) are exposed as Tailwind utilities here: `bg-primary`,
+ * `border-border`, `rounded-md`, `animate-accordion-down`. `inline` writes `hsl(var(--primary))` into the
+ * utility itself, so a token changed by `.dark` is picked up where the utility is used.
+ */
+@theme inline {
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-page-background: hsl(var(--page-background));
+  --color-foreground: hsl(var(--foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-field-applied: field-applied 2.8s ease-out 0.2s both;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
+  /* Points at a field whose value was just written for the user. The ring is held before it
+     fades: the eye is somewhere else when it starts, and a pulse is over before it arrives */
+  @keyframes field-applied {
+    0% {
+      box-shadow: 0 0 0 0 hsl(var(--primary) / 0);
+    }
+    10% {
+      box-shadow: 0 0 0 3px hsl(var(--primary) / 0.6);
+    }
+    65% {
+      box-shadow: 0 0 0 3px hsl(var(--primary) / 0.6);
+    }
+    100% {
+      box-shadow: 0 0 0 3px hsl(var(--primary) / 0);
+    }
+  }
+}
+
+/*
+ * The Tailwind 3 values of what Tailwind 4 changed in its default theme: the system font stack, which 4.3
+ * replaced with a list of named fonts that differs from the system UI font on Linux, the line heights, and
+ * the palette colors the Admin UI uses, which moved to OKLCH and render a noticeably different red, amber
+ * and blue. Delete the block to adopt the Tailwind 4 theme.
+ */
+@theme {
+  --font-sans:
+    ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji";
+
+  /*
+   * The Tailwind 3 line heights are lengths, which an element with another font size inside a `text-sm`
+   * parent inherits as they are. Tailwind 4 keeps them as ratios, so such an element would get a line of
+   * its own size - a `text-[10px]` shortcut badge in a `text-sm` button loses a third of its height.
+   */
+  --text-xs--line-height: 1rem;
+  --text-sm--line-height: 1.25rem;
+  --text-base--line-height: 1.5rem;
+  --text-lg--line-height: 1.75rem;
+  --text-xl--line-height: 1.75rem;
+  --text-2xl--line-height: 2rem;
+  --text-3xl--line-height: 2.25rem;
+  --text-4xl--line-height: 2.5rem;
+
+  --color-amber-300: #fcd34d;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
+  --color-amber-700: #b45309;
+  --color-amber-800: #92400e;
+  --color-blue-50: #eff6ff;
+  --color-blue-300: #93c5fd;
+  --color-blue-400: #60a5fa;
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+  --color-blue-700: #1d4ed8;
+  --color-blue-800: #1e40af;
+  --color-blue-950: #172554;
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+  --color-emerald-600: #059669;
+  --color-emerald-700: #047857;
+  --color-gray-50: #f9fafb;
+  --color-gray-300: #d1d5db;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-green-500: #22c55e;
+  --color-indigo-400: #818cf8;
+  --color-indigo-500: #6366f1;
+  --color-indigo-600: #4f46e5;
+  --color-orange-100: #ffedd5;
+  --color-orange-200: #fed7aa;
+  --color-orange-400: #fb923c;
+  --color-orange-500: #f97316;
+  --color-orange-600: #ea580c;
+  --color-orange-800: #9a3412;
+  --color-orange-950: #431407;
+  --color-red-50: #fef2f2;
+  --color-red-100: #fee2e2;
+  --color-red-200: #fecaca;
+  --color-red-300: #fca5a5;
+  --color-red-400: #f87171;
+  --color-red-500: #ef4444;
+  --color-red-600: #dc2626;
+  --color-red-700: #b91c1c;
+  --color-red-800: #991b1b;
+  --color-red-950: #450a0a;
+  --color-sky-300: #7dd3fc;
+  --color-sky-400: #38bdf8;
+  --color-sky-600: #0284c7;
+  --color-sky-700: #0369a1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-violet-400: #a78bfa;
+  --color-violet-600: #7c3aed;
+}
+
+/* The container as the Admin UI has always had it: full width with a 2rem gutter, capped at 1400px. */
+@utility container {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: 2rem;
+  /* Tailwind 4 caps the container at every breakpoint; these two rules come after its caps and undo them. */
+  @media (width >= 40rem) {
+    max-width: none;
+  }
+  @media (width >= 1400px) {
+    max-width: 1400px;
+  }
+}
+
+/*
+ * `space-x-*` and `space-y-*` as Tailwind 3 laid them out: a gap above every sibling but the first, hidden
+ * siblings left out. Tailwind 4 puts the gap below every sibling but the last, which moves content wherever
+ * a hidden element leads or ends a group. Delete the two utilities to adopt the Tailwind 4 layout.
+ */
+@utility space-y-* {
+  > :not(:last-child) {
+    margin-bottom: 0;
+  }
+  > :not([hidden]) ~ :not([hidden]) {
+    margin-top: calc(var(--spacing) * --value(number));
+    margin-top: --value([length]);
+  }
+}
+
+@utility space-x-* {
+  > :not(:last-child) {
+    margin-inline-end: 0;
+  }
+  > :not([hidden]) ~ :not([hidden]) {
+    margin-inline-start: calc(var(--spacing) * --value(number));
+    margin-inline-start: --value([length]);
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -124,13 +315,36 @@
     --chart-high-activity: 25 95% 63%;
   }
 }
- 
+
 @layer base {
-  * {
+  /* Tailwind 4 changed these defaults; the Admin UI keeps the Tailwind 3 behaviour its components were built for. */
+  *,
+  ::before,
+  ::after,
+  ::backdrop,
+  ::file-selector-button {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  input::placeholder,
+  textarea::placeholder {
+    color: #9ca3af;
+  }
+  /* Tailwind 4 resets the browser's 1px cell padding, which the calendar and the table toolbars were laid out with. */
+  th,
+  td {
+    padding: 1px;
+  }
+  /* tw-animate-css eases with `ease`; tailwindcss-animate eased every enter and exit animation like a transition. */
+  .animate-in,
+  .animate-out {
+    --tw-ease: cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
@@ -138,11 +352,11 @@
   .chart-indicator-normal {
     @apply bg-slate-400;
   }
-  
+
   .chart-indicator-today {
     @apply bg-blue-500;
   }
-  
+
   .chart-indicator-high-activity {
     @apply bg-orange-500;
   }

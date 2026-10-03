@@ -71,7 +71,7 @@ const ResourceConfigurationIssues: React.FC<
   const toggleCollapsed = () => setCollapsed((prev) => !prev);
 
   return (
-    <section className="mb-6 rounded-lg border border-border/50 bg-background/60 p-4 text-sm shadow-sm">
+    <section className="mb-6 rounded-lg border border-border/50 bg-background/60 p-4 text-sm shadow-xs">
       <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm font-semibold text-foreground">

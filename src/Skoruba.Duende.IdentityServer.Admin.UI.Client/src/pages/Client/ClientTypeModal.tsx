@@ -83,7 +83,7 @@ const ClientTypeModal = ({
         <div className="m-6">
           <div
             id="features-stats"
-            className="mx-auto grid justify-center gap-4 sm:grid-cols-1 md:max-w-[64rem] md:grid-cols-2"
+            className="mx-auto grid justify-center gap-4 sm:grid-cols-1 md:max-w-5xl md:grid-cols-2"
           >
             <ClientTypeItem
               onClientTypeSelected={handleClientTypeSelected}

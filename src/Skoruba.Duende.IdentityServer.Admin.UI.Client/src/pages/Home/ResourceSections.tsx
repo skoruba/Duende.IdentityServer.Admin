@@ -42,7 +42,7 @@ import { getDashboardErrorKey } from "./dashboardErrors";
 type Stat = { value?: number; isLoading: boolean; context?: StatTileContext };
 
 const quickActionClass =
-  "inline-flex max-w-full items-center gap-1 rounded-md text-xs font-medium text-muted-foreground transition-colors hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+  "inline-flex max-w-full items-center gap-1 rounded-md text-xs font-medium text-muted-foreground transition-colors hover:text-primary focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring";
 
 // The plus icon already says "new", so the visible text is just the noun
 // ("+ Identity resource"); the full phrase stays as the accessible name.

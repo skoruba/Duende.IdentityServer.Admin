@@ -307,7 +307,7 @@ const IntegrationTab = () => {
           <CollapsibleTrigger className="flex w-full items-center gap-2 px-4 py-3 text-left">
             <ChevronDown
               className={cn(
-                "h-4 w-4 flex-shrink-0 text-muted-foreground transition-transform",
+                "h-4 w-4 shrink-0 text-muted-foreground transition-transform",
                 areOptionsOpen && "rotate-180",
               )}
             />

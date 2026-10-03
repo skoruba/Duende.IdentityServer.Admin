@@ -114,7 +114,7 @@ export const CodeBlockStep = ({
 }: CodeBlockStepProps) => (
   <div className="space-y-2">
     <div className="flex items-center gap-2">
-      <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
+      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
         {step}
       </span>
       <h4 className="text-sm font-semibold">{title}</h4>

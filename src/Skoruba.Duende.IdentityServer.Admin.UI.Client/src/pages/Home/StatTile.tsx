@@ -69,7 +69,7 @@ const StatTile = ({
       className={cn(
         "group relative flex min-w-0 flex-col rounded-xl border border-transparent bg-muted/40 p-3.5 transition-all duration-200",
         "hover:border-primary/50 hover:bg-card hover:shadow-lg hover:shadow-primary/5 hover:ring-2 hover:ring-primary/15 motion-safe:hover:-translate-y-0.5",
-        "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring",
       )}
     >
       <span className="flex items-start justify-between">

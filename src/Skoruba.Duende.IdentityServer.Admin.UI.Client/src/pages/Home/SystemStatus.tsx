@@ -184,7 +184,7 @@ const SystemStatus = ({ version }: { version?: string }) => {
         <Link
           to={ConfigurationIssuesUrl}
           className={cn(
-            "ml-1 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+            "ml-1 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring",
             issuesTone,
           )}
         >

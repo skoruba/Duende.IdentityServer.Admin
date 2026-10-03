@@ -158,7 +158,7 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
           placeholder={t("Components.DualListSelector.SearchPlaceholder")}
         />
         <Separator className="mt-6" />
-        <div className="flex-grow overflow-auto max-h-[300px]">
+        <div className="grow overflow-auto max-h-[300px]">
           <Table className="table-fixed">
             <colgroup>
               <col />
@@ -206,7 +206,7 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
           placeholder={t("Components.DualListSelector.SearchPlaceholder")}
         />
         <Separator className="mt-6" />
-        <div className="flex-grow overflow-auto max-h-[300px]">
+        <div className="grow overflow-auto max-h-[300px]">
           <Table className="table-fixed">
             <colgroup>
               <col className={MOVE_BUTTON_COLUMN} />

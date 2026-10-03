@@ -107,7 +107,7 @@ function LegendItem({
   return to ? (
     <Link
       to={to}
-      className={`${className} hover:border-primary/40 hover:bg-card hover:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-ring`}
+      className={`${className} hover:border-primary/40 hover:bg-card hover:shadow-xs focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring`}
     >
       {content}
     </Link>
@@ -261,7 +261,7 @@ export function ConfigurationIssuesSummary({
           aria-busy
           className="flex flex-1 items-center justify-center gap-8 px-5 pb-5"
         >
-          <div className="h-[148px] w-[148px] shrink-0 animate-pulse rounded-full border-[20px] border-muted" />
+          <div className="h-[148px] w-[148px] shrink-0 animate-pulse rounded-full border-20 border-muted" />
           <div className="hidden flex-1 space-y-2 sm:block">
             {Array.from({ length: 3 }).map((_, i) => (
               <div key={i} className="h-9 animate-pulse rounded-lg bg-muted/60" />

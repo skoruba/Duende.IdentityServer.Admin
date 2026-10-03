@@ -1,5 +1,26 @@
 # Changelog
 
+## [3.2.1] - Unreleased
+
+### Security
+
+- `npm audit` reported `braces` (stack exhaustion, [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm), high) in the build tooling of the Admin UI and the STS, pulled in by Tailwind CSS 3 and `cpy-cli`. Nothing of it ships to a browser or a server, and no fixed `braces` exists; both projects now build without it and `npm audit` is clean
+
+### Changed
+
+- The Admin UI and the STS build their stylesheets with **Tailwind CSS 4.3** (`@tailwindcss/vite` in the Admin UI, `@tailwindcss/cli` in the STS). The configuration lives in the stylesheets (`src/globals.css`, `Styles/app.css`) instead of `tailwind.config.js`, `tailwindcss-animate` is replaced by `tw-animate-css`, `tailwind-merge` is 3.x, and the Admin UI build no longer needs PostCSS and autoprefixer
+- The look of both applications is unchanged. The stylesheets keep the Tailwind 3 palette values, line heights, font stack, `container`, `space-x`/`space-y` layout and the default border color, placeholder color and button cursor, which Tailwind 4 changed; each is a marked block that can be deleted to adopt the Tailwind 4 defaults. Verified by a pixel comparison of about 90 Admin UI and STS screens in light and dark mode
+- The STS `icons:lucide` script runs `copy-all-icons.js` instead of `cpy-cli` and `rimraf`
+- The Playwright specs for the configuration rules and for identity management switched off follow the 3.2.0 renames: a rule is looked up by the name the list shows, and the command palette action is *New client*
+
+### Added
+
+- Playwright `styling.spec.ts` checks what a stylesheet migration breaks first: the design tokens on the page and its controls, shadows, corners and form spacing, focus rings, hover and dialog animations, the dark theme, the container and the responsive variants, for the Admin UI and the STS login page
+
+### Breaking Changes
+
+- Forks of the Admin UI and the STS need Tailwind 4: `npx @tailwindcss/upgrade` renames the utilities (`shadow-sm` to `shadow-xs`, `outline-none` to `outline-hidden`, `bg-gradient-to-*` to `bg-linear-to-*`, `flex-shrink-0` to `shrink-0`, `bg-[--var]` to `bg-(--var)`) and theme customizations move from `tailwind.config.js` to `@theme` in the stylesheet. The STS classes other classes are built from (`btn`, `badge`, `alert`, `label`) are `@utility` definitions now, because Tailwind 4 can only `@apply` a utility
+
 ## [3.2.0] - 2026-10-03
 
 ### Upgrading

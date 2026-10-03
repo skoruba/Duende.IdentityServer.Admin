@@ -7,6 +7,7 @@ import child_process from "child_process";
 import { env } from "process";
 import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig(({ command }) => {
   const isDevServer = command === "serve";
@@ -103,7 +104,7 @@ export default defineConfig(({ command }) => {
 
   return {
     base: "./",
-    plugins: [react(), svgr()],
+    plugins: [react(), svgr(), tailwindcss()],
     resolve: {
       alias: {
         "@": fileURLToPath(new URL("./src", import.meta.url)),

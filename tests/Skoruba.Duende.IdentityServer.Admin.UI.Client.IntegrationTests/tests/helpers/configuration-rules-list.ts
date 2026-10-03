@@ -16,18 +16,19 @@ export async function ensureLoggedInAndOpenConfigurationRules(
   ).toBeVisible();
 }
 
+/** The list names a rule as the rule form does ("Missing PKCE"), not by its type identifier. */
 export function findConfigurationRuleRowsByType(
   page: Page,
-  ruleType: string,
+  ruleName: string,
 ): Locator {
-  return page.locator("table tbody tr").filter({ hasText: ruleType });
+  return page.locator("table tbody tr").filter({ hasText: ruleName });
 }
 
 export async function findConfigurationRuleRowByType(
   page: Page,
-  ruleType: string,
+  ruleName: string,
 ): Promise<Locator> {
-  const rows = findConfigurationRuleRowsByType(page, ruleType);
+  const rows = findConfigurationRuleRowsByType(page, ruleName);
   const timeoutAt = Date.now() + 90_000;
 
   while (Date.now() < timeoutAt) {
@@ -39,5 +40,5 @@ export async function findConfigurationRuleRowByType(
     await page.waitForTimeout(500);
   }
 
-  throw new Error(`Configuration rule '${ruleType}' was not found in list.`);
+  throw new Error(`Configuration rule '${ruleName}' was not found in list.`);
 }
