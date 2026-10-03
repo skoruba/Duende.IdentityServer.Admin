@@ -17,10 +17,6 @@ const sizeMap = {
 const spinnerClass =
   "inline-block animate-spin rounded-full border-solid border-current border-r-transparent align-[-0.125em] text-muted-foreground motion-reduce:animate-[spin_1.5s_linear_infinite]";
 
-// The fullscreen variant is the one loading screen of the app: the static splash in
-// index.html, the Suspense fallback, the session check before the router and the pages
-// loading their data all render this markup, so the screen stays the same from the
-// first paint until the page shows its content.
 const Loading = ({
   fullscreen = false,
   size = "md",
