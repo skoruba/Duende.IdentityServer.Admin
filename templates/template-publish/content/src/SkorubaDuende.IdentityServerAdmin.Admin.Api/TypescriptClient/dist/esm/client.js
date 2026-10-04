@@ -3805,6 +3805,57 @@ export class DashboardClient extends WebApiClientBase {
         }
         return Promise.resolve(null);
     }
+    getDashboardAuditLogStatistics(lastNumberOfDays) {
+        let url_ = this.baseUrl + "/api/Dashboard/GetDashboardAuditLogStatistics?";
+        if (lastNumberOfDays === null)
+            throw new globalThis.Error("The parameter 'lastNumberOfDays' cannot be null.");
+        else if (lastNumberOfDays !== undefined)
+            url_ += "lastNumberOfDays=" + encodeURIComponent("" + lastNumberOfDays) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
+            return this.processGetDashboardAuditLogStatistics(_response);
+        });
+    }
+    processGetDashboardAuditLogStatistics(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = DashboardAuditLogStatisticsDto.fromJS(resultData200);
+                return result200;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
+    }
     getRecentAuditChanges(count) {
         let url_ = this.baseUrl + "/api/Dashboard/GetRecentAuditChanges?";
         if (count !== undefined && count !== null)
@@ -8606,6 +8657,42 @@ export class DashboardAuditLogDto {
         data = typeof data === 'object' ? data : {};
         data["total"] = this.total;
         data["created"] = this.created ? this.created.toISOString() : undefined;
+        return data;
+    }
+}
+export class DashboardAuditLogStatisticsDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            this.auditLogsAvg = _data["auditLogsAvg"];
+            if (Array.isArray(_data["auditLogsPerDaysTotal"])) {
+                this.auditLogsPerDaysTotal = [];
+                for (let item of _data["auditLogsPerDaysTotal"])
+                    this.auditLogsPerDaysTotal.push(DashboardAuditLogDto.fromJS(item));
+            }
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new DashboardAuditLogStatisticsDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        data["auditLogsAvg"] = this.auditLogsAvg;
+        if (Array.isArray(this.auditLogsPerDaysTotal)) {
+            data["auditLogsPerDaysTotal"] = [];
+            for (let item of this.auditLogsPerDaysTotal)
+                data["auditLogsPerDaysTotal"].push(item ? item.toJSON() : undefined);
+        }
         return data;
     }
 }

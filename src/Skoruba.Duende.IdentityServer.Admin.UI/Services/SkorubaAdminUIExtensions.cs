@@ -50,6 +50,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Services
 
             webApp.MapSpa(basePath);
 
+            webApp.MapUiConfiguration(options);
+
             webApp.AddRemoteApisProxy();
 
             return app;

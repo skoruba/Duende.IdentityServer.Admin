@@ -24,9 +24,14 @@ function CleanBinObjFolders {
 function CleanLocalOnlyFiles {
 
     # The src folder is copied as it lies on the disk, including what git ignores. Dev logs, npm packages
-    # and the developer signing key belong to the machine that builds the template, never to the package.
+    # (also nested ones such as Admin.Api/TypescriptClient) and the developer signing key belong to the
+    # machine that builds the template, never to the package.
+    Get-ChildItem ./$templateSrc -Directory -Recurse -Filter node_modules |
+        Where-Object { Test-Path $_.FullName } |
+        ForEach-Object { Remove-Item $_.FullName -Force -Recurse }
+
     Get-ChildItem ./$templateSrc -Directory | ForEach-Object {
-        foreach ($localOnly in "Log", "node_modules", "tempkey.jwk") {
+        foreach ($localOnly in "Log", "tempkey.jwk") {
             $path = Join-Path $_.FullName $localOnly
             if (Test-Path -Path $path) { Remove-Item $path -Force -Recurse }
         }

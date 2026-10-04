@@ -18,7 +18,7 @@ import { Card, CardContent } from "@/components/Card/Card";
 import { AuditLogsUrl } from "@/routing/Urls";
 import {
   DASHBOARD_AUDIT_LOG_DAYS,
-  useDashboardIdentityServer,
+  useDashboardAuditLogStatistics,
 } from "@/services/DashboardService";
 import {
   buildDailySeries,
@@ -50,8 +50,10 @@ const formatCompactNumber = (value: number) =>
 
 const AuditLogs: React.FC<{ className?: string }> = ({ className }) => {
   const { t } = useTranslation();
-  const dashboard = useDashboardIdentityServer();
-  const data = dashboard.data?.auditLogsData ?? EMPTY_DATA;
+  // Its own query: the audit log is the largest table and may be slow or down,
+  // which must not hold the counters of the other cards back (#322).
+  const dashboard = useDashboardAuditLogStatistics();
+  const data = dashboard.data ?? EMPTY_DATA;
 
   const { series, insight, axisTicks, anomalies } = useMemo(() => {
     const series = buildDailySeries(data).map((day) => ({

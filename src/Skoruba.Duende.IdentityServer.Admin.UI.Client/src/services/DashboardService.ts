@@ -2,7 +2,8 @@ import { useMemo } from "react";
 import ApiHelper from "@/helpers/ApiHelper";
 import {
   DashBoardIdentityData,
-  DashboardIdentityServerResult,
+  DashboardDataAuditLog,
+  DashboardIdentityServerData,
 } from "@/models/Dashboard/DashboardModels";
 import { KeyApiDto } from "@/models/Keys/KeysModel";
 import { mapAuditLog } from "./AuditLogsService";
@@ -117,31 +118,21 @@ export const useConfigurationIssuesForResource = (
   };
 };
 
-export const getDashboardIdentityServerData = async (
-  auditLogsLastNumberOfDays: number,
-): Promise<DashboardIdentityServerResult> => {
+// The counters only: 0 days leaves the audit log statistics out of the response,
+// so the counters never wait for the audit log, the largest table of the system.
+// The statistics have their own query (useDashboardAuditLogStatistics) and card.
+export const getDashboardIdentityServerData = async (): Promise<DashboardIdentityServerData> => {
   const dashboardClient = new client.DashboardClient(ApiHelper.getApiBaseUrl());
 
-  const dashboard = await dashboardClient.getDashboardIdentityServer(
-    auditLogsLastNumberOfDays,
-  );
+  const dashboard = await dashboardClient.getDashboardIdentityServer(0);
 
-  const identityServerData = {
+  return {
     clientsTotal: dashboard.clientsTotal,
     apiResourcesTotal: dashboard.apiResourcesTotal,
     apiScopesTotal: dashboard.apiScopesTotal,
     identityResourcesTotal: dashboard.identityResourcesTotal,
     identityProvidersTotal: dashboard.identityProvidersTotal,
   };
-
-  const auditLogsData =
-    dashboard.auditLogsPerDaysTotal?.map((auditLog) => ({
-      total: auditLog.total,
-      average: dashboard.auditLogsAvg,
-      created: auditLog.created,
-    })) ?? [];
-
-  return { auditLogsData, identityServerData };
 };
 
 export const DASHBOARD_AUDIT_LOG_DAYS = 30;
@@ -150,7 +141,33 @@ const DASHBOARD_KEYS_PAGE_SIZE = 50;
 export const useDashboardIdentityServer = () =>
   useQuery({
     queryKey: [queryKeys.dashboard],
-    queryFn: () => getDashboardIdentityServerData(DASHBOARD_AUDIT_LOG_DAYS),
+    queryFn: getDashboardIdentityServerData,
+    ...queryWithoutCache,
+  });
+
+export const getDashboardAuditLogStatistics = async (
+  lastNumberOfDays: number,
+): Promise<DashboardDataAuditLog[]> => {
+  const dashboardClient = new client.DashboardClient(ApiHelper.getApiBaseUrl());
+
+  const statistics =
+    await dashboardClient.getDashboardAuditLogStatistics(lastNumberOfDays);
+
+  return (statistics.auditLogsPerDaysTotal ?? []).map((day) => ({
+    total: day.total,
+    average: statistics.auditLogsAvg,
+    created: day.created,
+  }));
+};
+
+// Not retried: the statistics fail when the audit log query runs into the SQL
+// command timeout, and three retries at 30 seconds each kept the card loading
+// for minutes. The card reports the failure and the next mount asks again.
+export const useDashboardAuditLogStatistics = () =>
+  useQuery({
+    queryKey: [queryKeys.dashboardAuditLogStatistics, DASHBOARD_AUDIT_LOG_DAYS],
+    queryFn: () => getDashboardAuditLogStatistics(DASHBOARD_AUDIT_LOG_DAYS),
+    retry: false,
     ...queryWithoutCache,
   });
 

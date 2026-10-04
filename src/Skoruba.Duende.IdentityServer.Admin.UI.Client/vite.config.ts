@@ -15,12 +15,16 @@ export default defineConfig(({ command }) => {
   const target = env.ASPNETCORE_HTTPS_PORT
     ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}`
     : env.ASPNETCORE_URLS
-    ? env.ASPNETCORE_URLS.split(";")[0]
-    : "https://localhost:7127";
+      ? env.ASPNETCORE_URLS.split(";")[0]
+      : "https://localhost:7127";
 
   const server: import("vite").ServerOptions = {
     proxy: {
       "^/user$": {
+        target,
+        secure: false,
+      },
+      "^/configuration$": {
         target,
         secure: false,
       },
@@ -84,7 +88,7 @@ export default defineConfig(({ command }) => {
             "Pem",
             "--no-password",
           ],
-          { stdio: "inherit" }
+          { stdio: "inherit" },
         ).status
       ) {
         throw new Error("Could not create certificate.");
@@ -98,6 +102,7 @@ export default defineConfig(({ command }) => {
   }
 
   return {
+    base: "./",
     plugins: [react(), svgr()],
     resolve: {
       alias: {
@@ -109,7 +114,12 @@ export default defineConfig(({ command }) => {
         output: {
           manualChunks: {
             // Split vendor libraries into separate chunks
-            "react-vendor": ["react", "react-dom", "react-router-dom"],
+            "react-vendor": [
+              "react",
+              "react-dom",
+              "react-dom/client",
+              "react-router-dom",
+            ],
             "ui-vendor": [
               "@radix-ui/react-dialog",
               "@radix-ui/react-dropdown-menu",

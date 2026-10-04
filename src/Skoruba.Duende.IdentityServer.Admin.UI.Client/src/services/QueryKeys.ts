@@ -38,6 +38,7 @@ export const queryKeys = {
   secretTypes: "secretTypes",
   signingAlgorithms: "signingAlgorithms",
   dashboard: "dashboard",
+  dashboardAuditLogStatistics: "dashboardAuditLogStatistics",
   dashboardIdentity: "dashboardIdentity",
   dashboardKeys: "dashboardKeys",
   dashboardRecentAuditLogs: "dashboardRecentAuditLogs",

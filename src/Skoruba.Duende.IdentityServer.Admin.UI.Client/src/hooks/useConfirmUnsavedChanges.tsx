@@ -59,7 +59,7 @@ export function useNavigateWithBlockerInWizard() {
 
 export function useConfirmUnsavedChanges(isDirty: boolean) {
   const [open, setOpen] = useState(false);
-  const resolver = useRef<(confirmed: boolean) => void>();
+  const resolver = useRef<((confirmed: boolean) => void) | undefined>(undefined);
   const { t } = useTranslation();
 
   const blocker = useBlocker(

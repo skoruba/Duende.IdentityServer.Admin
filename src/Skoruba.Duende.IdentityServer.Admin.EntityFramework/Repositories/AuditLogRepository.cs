@@ -33,10 +33,23 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
             DbContext = dbContext;
         }
         
-        public async Task<List<DashboardAuditLogDataView>> GetDashboardAuditLogsAsync(int lastNumberOfDays, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// How many entries were written on each day of the last <paramref name="lastNumberOfDays"/>,
+        /// oldest day first; days without entries are left out. The filter on Created is served by
+        /// IX_AuditLog_Created, so the query touches the window only, not the whole log.
+        /// </summary>
+        public virtual async Task<List<DashboardAuditLogDataView>> GetDashboardAuditLogsAsync(int lastNumberOfDays, CancellationToken cancellationToken = default)
         {
+            if (lastNumberOfDays <= 0)
+            {
+                return new List<DashboardAuditLogDataView>();
+            }
+
+            // Local time on purpose: the audit logging sink stamps Created with DateTime.Now.
+            var from = DateTime.Now.AddDays(-lastNumberOfDays);
+
             var logs = await DbContext.AuditLog
-                .Where(x => x.Created > DateTime.Now.AddDays(-lastNumberOfDays))
+                .Where(x => x.Created >= from)
                 .GroupBy(x => x.Created.Date)
                 .OrderBy(x => x.Key)
                 .Select(x => new DashboardAuditLogDataView
@@ -68,17 +81,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<int> GetDashboardAuditLogsAverageAsync(int lastNumberOfDays, CancellationToken cancellationToken = default)
+        [Obsolete("The average is derived from the daily totals of GetDashboardAuditLogsAsync; computing it separately ran the same query twice.")]
+        public virtual async Task<int> GetDashboardAuditLogsAverageAsync(int lastNumberOfDays, CancellationToken cancellationToken = default)
         {
-            var dailyCounts = await DbContext.AuditLog
-                .Where(a => a.Created >= DateTime.Now.AddDays(-lastNumberOfDays))
-                .GroupBy(a => a.Created.Date)
-                .Select(g => g.Count())
-                .ToListAsync(cancellationToken: cancellationToken);
+            var dailyCounts = await GetDashboardAuditLogsAsync(lastNumberOfDays, cancellationToken);
 
             if (dailyCounts.Count > 0)
             {
-                return (int)dailyCounts.Average();
+                return (int)dailyCounts.Average(x => x.Total);
             }
 
             return 0;

@@ -44,6 +44,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services
             await AuditLogRepository.DeleteLogsOlderThanAsync(deleteOlderThan);
         }
 
+        [Obsolete("The average is derived from the daily totals of GetDashboardAuditLogsAsync; computing it separately ran the same query twice.")]
         public virtual Task<int> GetDashboardAuditLogsAverageAsync(int lastNumberOfDays, CancellationToken cancellationToken = default)
         {
             return AuditLogRepository.GetDashboardAuditLogsAverageAsync(lastNumberOfDays, cancellationToken);

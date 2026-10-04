@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,9 +6,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Skoruba Duende IdentityServer Admin</title>
     <base href="/" id="dynamic-base" />
+    <style>
+      .splash {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: hsl(0 0% 100%);
+        color: hsl(215.4 16.3% 46.9%);
+        font:
+          0.875rem/1.25rem ui-sans-serif,
+          system-ui,
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      .splash-content {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .splash-spinner {
+        width: 1rem;
+        height: 1rem;
+        box-sizing: border-box;
+        border: 2px solid currentColor;
+        border-right-color: transparent;
+        border-radius: 9999px;
+        animation: splash-spin 1s linear infinite;
+      }
+      @keyframes splash-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
   </head>
   <body class="min-h-screen bg-background font-sans antialiased">
-    <div id="root"></div>
+    <div id="root">
+      <div class="splash" role="status">
+        <div class="splash-content">
+          <div class="splash-spinner"></div>
+          <span>Loading...</span>
+        </div>
+      </div>
+    </div>
     <script type="module" src="src/main.tsx"></script>
   </body>
 </html>

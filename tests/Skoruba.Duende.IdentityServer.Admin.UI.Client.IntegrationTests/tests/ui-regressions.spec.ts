@@ -20,6 +20,8 @@ const credentials: LoginCredentials = {
 };
 
 const dashboardEndpointPattern = "**/api/Dashboard/GetDashboardIdentityServer?*";
+const auditLogStatisticsEndpointPattern =
+  "**/api/Dashboard/GetDashboardAuditLogStatistics?*";
 const configurationIssuesEndpointPattern = "**/api/ConfigurationIssues?*";
 const createEmptyConfigurationIssuesResponse = () => ({
   issues: [],
@@ -32,6 +34,43 @@ const createEmptyConfigurationIssuesResponse = () => ({
 });
 
 test.describe("Admin UI regressions", () => {
+  test("dashboard counters do not wait for the audit log statistics", async ({
+    page,
+  }) => {
+    await ensureLoggedInAndOpenClients(page, credentials);
+
+    // The statistics fail the way a large AuditLog table without an index did:
+    // the request ends in an error instead of data (#322).
+    await page.route(auditLogStatisticsEndpointPattern, (route) =>
+      route.fulfill({
+        status: 500,
+        contentType: "application/json",
+        body: JSON.stringify({ title: "Execution Timeout Expired." }),
+      }),
+    );
+    const countersRequest = page.waitForRequest(dashboardEndpointPattern);
+
+    await page.goto("/");
+
+    // The counters are asked for without the audit log statistics...
+    const countersUrl = new URL((await countersRequest).url());
+    expect(countersUrl.searchParams.get("auditLogsLastNumberOfDays")).toBe("0");
+
+    // ...and show their numbers instead of staying in the loading state.
+    const clientsTile = page.locator('#features-stats a[href$="/clients"]');
+    await expect(clientsTile).toContainText(/\d/);
+    await expect(clientsTile).not.toContainText("–");
+
+    // Only the audit log card reports the failure.
+    const failedCard = page
+      .getByRole("alert")
+      .filter({ hasText: UI_TEXT.home.dashboardUnavailable });
+    await expect(failedCard).toContainText(UI_TEXT.home.dashboardDataFailed);
+    await expect(
+      page.getByText(UI_TEXT.home.dashboardDataFailed),
+    ).toHaveCount(1);
+  });
+
   test("copying a value is confirmed on the button instead of in a toast", async ({
     page,
     context,

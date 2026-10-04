@@ -78,6 +78,7 @@ public static class StartupService
         services.AddAntiforgery(o =>
         {
             o.Cookie.Name = "__Host-SkorubaBFF-CSRF";
+            o.Cookie.Path = "/";
             o.Cookie.HttpOnly = true;
             o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             o.Cookie.SameSite = SameSiteMode.Strict;

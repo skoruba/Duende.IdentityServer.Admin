@@ -18,7 +18,7 @@ const COPIED_FEEDBACK_MS = 1800;
 export const useCopyToClipboard = () => {
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
-  const resetTimer = useRef<ReturnType<typeof setTimeout>>();
+  const resetTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => () => clearTimeout(resetTimer.current), []);
 

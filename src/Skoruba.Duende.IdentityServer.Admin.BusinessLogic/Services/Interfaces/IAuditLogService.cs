@@ -16,6 +16,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces
 
         Task DeleteLogsOlderThanAsync(DateTime deleteOlderThan);
 
+        [Obsolete("The average is derived from the daily totals of GetDashboardAuditLogsAsync; computing it separately ran the same query twice.")]
         Task<int> GetDashboardAuditLogsAverageAsync(int lastNumberOfDays,
             CancellationToken cancellationToken = default);
 
@@ -25,6 +26,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces
         /// </summary>
         Task<List<AuditLogDto>> GetRecentChangesAsync(int count, int scanLimit, CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// How many entries were written on each day of the last <paramref name="lastNumberOfDays"/>,
+        /// oldest day first. Days without entries are left out.
+        /// </summary>
         Task<List<DashboardAuditLogDto>> GetDashboardAuditLogsAsync(int lastNumberOfDays,
             CancellationToken cancellationToken = default);
     }

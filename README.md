@@ -12,7 +12,7 @@ configuration health, auditing, and security from one modern interface.
 <br />
 
 [![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
-[![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue?style=for-the-badge)](LICENSE)
 [![Discord](https://img.shields.io/badge/Discord-Skoruba-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/qTqQCSKWkX)
 
@@ -38,14 +38,13 @@ configuration health, auditing, and security from one modern interface.
 
 > [!IMPORTANT]
 >
-> ## Version 3.1.0 is here 🚀
+> ## Version 3.2.0 is here 🚀
 >
-> **Version 3.1.0** moves the solution to **Duende IdentityServer 8** and adds an
-> **Integration tab** that turns a configured client into ready-to-use .NET 10
-> setup code.
-> The STS can also apply an optional [FAPI 2.0 security profile](#-fapi-20-security-profile).
+> **Version 3.2.0** moves the Admin UI to **React 19** and updates **Duende IdentityServer to 8.0.9**
+> (a security fix for pushed authorization requests).
 >
-> ⚠️ Upgrading from 3.0.0 requires new EF migrations. See the
+> ⚠️ Upgrading from 3.0.0 requires new EF migrations, and 3.2.0 adds an index on the `AuditLog`
+> table (migration `AddAuditLogCreatedIndex`). See the
 > [changelog](CHANGELOG.md) for the full list of changes.
 > See the [roadmap and changelog](#-roadmap--changelog) for release history and upcoming features.
 
@@ -56,7 +55,7 @@ configuration health, auditing, and security from one modern interface.
 |     | Area                  | Highlights                                                                  |
 | --- | --------------------- | --------------------------------------------------------------------------- |
 | 🧭  | **New Admin UI**      | React, TypeScript, Tailwind CSS, and shadcn/ui                              |
-| ⚙️  | **Modern backend**    | .NET 10 and Duende IdentityServer 8.0.8                                     |
+| ⚙️  | **Modern backend**    | .NET 10 and Duende IdentityServer 8.0.9                                     |
 | 📊  | **Monitoring**        | Dashboards, configuration rules, and issue tracking                         |
 | 🧙  | **Client management** | Improved workflows and guided client creation wizard                        |
 | 🧾  | **Integration code**  | Generated .NET 10 setup for the client you are editing                      |
@@ -85,6 +84,7 @@ configuration health, auditing, and security from one modern interface.
 - [Health Checks](#-health-checks)
 - [Localization](#-localization)
 - [API & Swagger](#-api--swagger)
+- [Admin UI Configuration](#-admin-ui-configuration)
 - [STS Configuration](#️-sts-configuration)
 - [Identity Mapping Customization](#-identity-mapping-customization)
 - [Solution Overview](#-solution-overview)
@@ -126,7 +126,7 @@ Define and track configuration rules for clients, API resources, and identity re
 
 #### 🧱 Configuration Rules
 
-![Configuration-Rules](docs/Images/configuration-rules.png)
+![Configuration-Rules](docs/Images/configuration-rules-v2.png)
 
 #### 🧩 Configuration Issues
 
@@ -143,7 +143,7 @@ Define and track configuration rules for clients, API resources, and identity re
 - .NET 10 SDK
 - Node.js 22.12+ and npm (required for the React client)
 - SQL Server (default LocalDB) or PostgreSQL
-- Duende IdentityServer 8.0.8
+- Duende IdentityServer 8.0.9
 
 > **Note:** Using older .NET versions may cause 502.5 errors on IIS or application startup failures.
 
@@ -160,7 +160,7 @@ Define and track configuration rules for clients, API resources, and identity re
 ### 1. Install the template
 
 ```sh
-dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::3.1.0
+dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::3.2.0
 ```
 
 ### 2. Create a new project
@@ -314,6 +314,14 @@ docker-compose up -d
 Docker images are available on [Docker Hub](https://hub.docker.com/u/skoruba).
 
 To publish images, check `build/publish-docker-images.sh` and update the profile name.
+
+#### Admin UI and Admin API in one container
+
+For hosting platforms that charge per container (for example DigitalOcean App Platform), the image
+`skoruba/duende-identityserver-admin-with-api` runs the Admin UI and the Admin API together: the Admin UI listens on
+port `8080` and proxies the API calls to the Admin API, which listens only inside the container.
+It is built from `deploy/admin-with-api/Dockerfile` and takes the same environment variables as the two separate images.
+Give it 1 GB of memory; it runs on 512 MB, but close to the limit.
 
 ---
 
@@ -662,6 +670,28 @@ https://localhost:44302/swagger
 
 ---
 
+## 🧭 Admin UI Configuration
+
+The Admin UI host (`Skoruba.Duende.IdentityServer.Admin`) reads its settings from the `AdminConfiguration` section of `appsettings.json`.
+
+### Identity Management
+
+`IdentityManagementEnabled` shows or hides the user and role management (ASP.NET Core Identity) in the Admin UI. Switch it off when the users live elsewhere and the Admin UI should manage the IdentityServer configuration only:
+
+```json
+"AdminConfiguration": {
+  "BasicConfiguration": {
+    "Title": "Skoruba Duende IdentityServer Admin UI",
+    "BasePath": "/",
+    "IdentityManagementEnabled": false
+  }
+}
+```
+
+With `false`, the _Identity Management_ menu, the dashboard card with the user and role counts, the _New user_ and _New role_ quick actions and the user search of the command palette are gone, and the user and role pages lead to the dashboard. The host serves the flag at `GET /configuration`, which the SPA reads at startup. The flag affects the UI only - the Admin API keeps serving its identity endpoints.
+
+---
+
 ## ⚙️ STS Configuration
 
 ### Login Method
@@ -837,7 +867,7 @@ For detailed release history and upcoming features, see [CHANGELOG.md](CHANGELOG
 
 **Upcoming releases:**
 
-### 3.2.0
+### 3.3.0
 
 - Manage SAML service providers from the Admin UI (schema ships with IdentityServer 8 in 3.1.0)
 - Add support for importing/exporting IdentityServer data in JSON format ([20](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/20))

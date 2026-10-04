@@ -3714,6 +3714,8 @@ export interface IDashboardClient {
 
     getDashboardIdentityServer(auditLogsLastNumberOfDays: number | undefined): Promise<DashboardDto>;
 
+    getDashboardAuditLogStatistics(lastNumberOfDays: number | undefined): Promise<DashboardAuditLogStatisticsDto>;
+
     getRecentAuditChanges(count: number | null | undefined): Promise<AuditLogDto[]>;
 
     getDashboardIdentity(): Promise<DashboardIdentityDto>;
@@ -3776,6 +3778,54 @@ export class DashboardClient extends WebApiClientBase implements IDashboardClien
             });
         }
         return Promise.resolve<DashboardDto>(null as any);
+    }
+
+    getDashboardAuditLogStatistics(lastNumberOfDays: number | undefined): Promise<DashboardAuditLogStatisticsDto> {
+        let url_ = this.baseUrl + "/api/Dashboard/GetDashboardAuditLogStatistics?";
+        if (lastNumberOfDays === null)
+            throw new globalThis.Error("The parameter 'lastNumberOfDays' cannot be null.");
+        else if (lastNumberOfDays !== undefined)
+            url_ += "lastNumberOfDays=" + encodeURIComponent("" + lastNumberOfDays) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetDashboardAuditLogStatistics(_response);
+        });
+    }
+
+    protected processGetDashboardAuditLogStatistics(response: Response): Promise<DashboardAuditLogStatisticsDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = DashboardAuditLogStatisticsDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<DashboardAuditLogStatisticsDto>(null as any);
     }
 
     getRecentAuditChanges(count: number | null | undefined): Promise<AuditLogDto[]> {
@@ -9234,6 +9284,54 @@ export class DashboardAuditLogDto implements IDashboardAuditLogDto {
 export interface IDashboardAuditLogDto {
     total: number;
     created: Date;
+}
+
+export class DashboardAuditLogStatisticsDto implements IDashboardAuditLogStatisticsDto {
+    auditLogsAvg!: number;
+    auditLogsPerDaysTotal!: DashboardAuditLogDto[] | undefined;
+
+    constructor(data?: IDashboardAuditLogStatisticsDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.auditLogsAvg = _data["auditLogsAvg"];
+            if (Array.isArray(_data["auditLogsPerDaysTotal"])) {
+                this.auditLogsPerDaysTotal = [] as any;
+                for (let item of _data["auditLogsPerDaysTotal"])
+                    this.auditLogsPerDaysTotal!.push(DashboardAuditLogDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): DashboardAuditLogStatisticsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new DashboardAuditLogStatisticsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["auditLogsAvg"] = this.auditLogsAvg;
+        if (Array.isArray(this.auditLogsPerDaysTotal)) {
+            data["auditLogsPerDaysTotal"] = [];
+            for (let item of this.auditLogsPerDaysTotal)
+                data["auditLogsPerDaysTotal"].push(item ? item.toJSON() : undefined as any);
+        }
+        return data;
+    }
+}
+
+export interface IDashboardAuditLogStatisticsDto {
+    auditLogsAvg: number;
+    auditLogsPerDaysTotal: DashboardAuditLogDto[] | undefined;
 }
 
 export class AuditLogDto implements IAuditLogDto {

@@ -16,8 +16,3 @@ export type DashboardIdentityServerData = {
   identityResourcesTotal: number;
   identityProvidersTotal: number;
 };
-
-export type DashboardIdentityServerResult = {
-  identityServerData: DashboardIdentityServerData;
-  auditLogsData: DashboardDataAuditLog[];
-};

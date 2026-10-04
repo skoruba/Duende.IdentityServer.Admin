@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { client } from "@skoruba/duende.identityserver.admin.api.client";
 import {
   Dialog,
@@ -9,9 +9,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import {
-  getConfigurationRulesMetadata,
   createConfigurationRule,
   updateConfigurationRule,
+  useConfigurationRulesMetadata,
 } from "@/services/ConfigurationRulesService";
 import { queryKeys } from "@/services/QueryKeys";
 import Loading from "@/components/Loading/Loading";
@@ -38,11 +38,8 @@ const ConfigurationRuleModal: React.FC<ConfigurationRuleModalProps> = ({
   const isEditMode = !!rule;
   const queryClient = useQueryClient();
 
-  const { data: metadata, isLoading: metadataLoading } = useQuery({
-    queryKey: ["configurationRulesMetadata"],
-    queryFn: getConfigurationRulesMetadata,
-    enabled: isOpen,
-  });
+  const { data: metadata, isLoading: metadataLoading } =
+    useConfigurationRulesMetadata(isOpen);
 
   const saveMutation = useMutation({
     meta: configurationChangeMeta,

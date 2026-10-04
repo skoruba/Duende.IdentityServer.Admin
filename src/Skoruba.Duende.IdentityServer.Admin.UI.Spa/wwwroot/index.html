@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,15 +6,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Skoruba Duende IdentityServer Admin</title>
     <base href="/" id="dynamic-base" />
-    <script type="module" crossorigin src="/assets/index-C2RZ8P2e.js"></script>
-    <link rel="modulepreload" crossorigin href="/assets/i18n-vendor-ffDkBlNu.js">
-    <link rel="modulepreload" crossorigin href="/assets/react-vendor-KcUGDdos.js">
-    <link rel="modulepreload" crossorigin href="/assets/ui-vendor-DeJ3DEX7.js">
-    <link rel="modulepreload" crossorigin href="/assets/utils-DGPSIAD8.js">
-    <link rel="modulepreload" crossorigin href="/assets/form-vendor-7KFYHE5n.js">
-    <link rel="stylesheet" crossorigin href="/assets/index-e782fUS1.css">
+    <style>
+      .splash {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: hsl(0 0% 100%);
+        color: hsl(215.4 16.3% 46.9%);
+        font:
+          0.875rem/1.25rem ui-sans-serif,
+          system-ui,
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      .splash-content {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .splash-spinner {
+        width: 1rem;
+        height: 1rem;
+        box-sizing: border-box;
+        border: 2px solid currentColor;
+        border-right-color: transparent;
+        border-radius: 9999px;
+        animation: splash-spin 1s linear infinite;
+      }
+      @keyframes splash-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/index-Bp1AyEGW.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/i18n-vendor-myjn-ygD.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-vendor-cJB-u7KS.js">
+    <link rel="modulepreload" crossorigin href="./assets/ui-vendor-DCX2XAku.js">
+    <link rel="modulepreload" crossorigin href="./assets/utils-CNKg40l-.js">
+    <link rel="modulepreload" crossorigin href="./assets/form-vendor-BjswvqLj.js">
+    <link rel="stylesheet" crossorigin href="./assets/index-QSxT3WFC.css">
   </head>
   <body class="min-h-screen bg-background font-sans antialiased">
-    <div id="root"></div>
+    <div id="root">
+      <div class="splash" role="status">
+        <div class="splash-content">
+          <div class="splash-spinner"></div>
+          <span>Loading...</span>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

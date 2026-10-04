@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState, type JSX } from "react";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/Icons/Icons";
 import { ModeToggle } from "@/components/ModeToggle/ModeToggle";
@@ -23,6 +23,7 @@ import {
 import { ConfigurationIssuesUrl } from "@/routing/Urls";
 import { useConfigurationIssuesSummary } from "@/services/DashboardService";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUiConfiguration } from "@/contexts/UiConfigurationContext";
 import { getIssuesTotal } from "@/lib/configurationIssues/issueInsights";
 import {
   Activity,
@@ -122,6 +123,7 @@ export function MainNav() {
   // session answers 401, and the global query error handler would then redirect
   // to /unauthorized while the login flow is still running.
   const { isAuthenticated } = useAuth();
+  const { identityManagementEnabled } = useUiConfiguration();
   const { data, isLoading } = useConfigurationIssuesSummary({
     enabled: isAuthenticated,
   });
@@ -184,15 +186,17 @@ export function MainNav() {
           </div>
         </NavDropdown>
 
-        <NavDropdown
-          active={isGroupActive(identityItems)}
-          label={t("Home.IdentityManagement")}
-          icon={<Users className="h-4 w-4" />}
-        >
-          <div className="grid min-w-[360px] grid-cols-1 gap-2">
-            {identityItems.map((it) => renderDropdownItem(it))}
-          </div>
-        </NavDropdown>
+        {identityManagementEnabled && (
+          <NavDropdown
+            active={isGroupActive(identityItems)}
+            label={t("Home.IdentityManagement")}
+            icon={<Users className="h-4 w-4" />}
+          >
+            <div className="grid min-w-[360px] grid-cols-1 gap-2">
+              {identityItems.map((it) => renderDropdownItem(it))}
+            </div>
+          </NavDropdown>
+        )}
 
         <NavDropdown
           active={isGroupActive(providersKeysItems)}
@@ -269,6 +273,7 @@ function MobileNav() {
   const location = useLocation();
   const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
+  const { identityManagementEnabled } = useUiConfiguration();
   const { data, isLoading } = useConfigurationIssuesSummary({
     enabled: isAuthenticated,
   });
@@ -287,11 +292,15 @@ function MobileNav() {
       icon: <LayoutGrid className="h-4 w-4" />,
       items: clientsResourcesItems,
     },
-    {
-      title: t("Home.IdentityManagement"),
-      icon: <ShieldCheck className="h-4 w-4" />,
-      items: identityItems,
-    },
+    ...(identityManagementEnabled
+      ? [
+          {
+            title: t("Home.IdentityManagement"),
+            icon: <ShieldCheck className="h-4 w-4" />,
+            items: identityItems,
+          },
+        ]
+      : []),
     {
       title: t("Home.ProvidersAndKeys"),
       icon: <ShieldCheck className="h-4 w-4" />,

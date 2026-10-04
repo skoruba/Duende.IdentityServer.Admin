@@ -22,5 +22,16 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.DbConte
         }
 
         public DbSet<AuditLog> AuditLog { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // The dashboard statistics, the audit log filter by date and the cleanup of old
+            // entries all select by Created. Without the index each of them scanned the whole
+            // table, and on a large log the dashboard ran into the SQL command timeout (#322).
+            modelBuilder.Entity<AuditLog>()
+                .HasIndex(x => x.Created);
+        }
     }
 }

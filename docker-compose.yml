@@ -32,6 +32,7 @@ services:
       - 'AdminConfiguration__ApiConfiguration__ApiRemoteConfiguration__RemoteUrl=https://admin-api.skoruba.local'
       - 'AdminConfiguration__BasicConfiguration__Title=Skoruba Duende IdentityServer Admin'
       - 'AdminConfiguration__BasicConfiguration__BasePath=/'
+      - 'AdminConfiguration__BasicConfiguration__IdentityManagementEnabled=true'
       - ForwardedHeadersConfiguration__Enabled=true
       - ForwardedHeadersConfiguration__AllowAll=true
       - ForwardedHeadersConfiguration__ForwardLimit=1
@@ -67,7 +68,7 @@ services:
       - 'ConnectionStrings__DataProtectionDbConnection=Server=db;Database=IdentityServerAdmin;User Id=sa;Password=${DB_PASSWORD:-Password_123};MultipleActiveResultSets=true;TrustServerCertificate=True'
       - 'IdentityServerData__Clients__0__ClientUri=https://admin.skoruba.local'
       - 'IdentityServerData__Clients__0__RedirectUris__0=https://admin.skoruba.local/signin-oidc'
-      - 'IdentityServerData__Clients__0__FrontChannelLogoutUri=https://admin.skoruba.local/signin-oidc'
+      - 'IdentityServerData__Clients__0__FrontChannelLogoutUri=https://admin.skoruba.local/signout-oidc'
       - 'IdentityServerData__Clients__0__PostLogoutRedirectUris__0=https://admin.skoruba.local/signout-callback-oidc'
       - 'IdentityServerData__Clients__0__AllowedCorsOrigins__0=https://admin.skoruba.local'
       - 'IdentityServerData__Clients__1__RedirectUris__0=https://admin-api.skoruba.local/swagger/oauth2-redirect.html'

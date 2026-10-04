@@ -38,6 +38,31 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Helpers
         }
 
         [Fact]
+        public async Task NotHealthyReportIsReusedOnlyBriefly()
+        {
+            var clock = new ManualTimeProvider();
+            var healthChecks = new CountingHealthCheckService { NextStatus = HealthStatus.Unhealthy };
+            var cache = new SystemHealthReportCache(new DashboardConfiguration { SystemHealthCacheSeconds = 30 }, clock);
+
+            var failed = await cache.GetReportAsync(healthChecks, CancellationToken.None);
+            clock.Advance(TimeSpan.FromSeconds(4));
+            var reused = await cache.GetReportAsync(healthChecks, CancellationToken.None);
+
+            failed.Status.Should().Be(HealthStatus.Unhealthy);
+            reused.Should().BeSameAs(failed);
+            healthChecks.Runs.Should().Be(1);
+
+            clock.Advance(TimeSpan.FromSeconds(2));
+            var recovered = await cache.GetReportAsync(healthChecks, CancellationToken.None);
+            clock.Advance(TimeSpan.FromSeconds(29));
+            var stillReused = await cache.GetReportAsync(healthChecks, CancellationToken.None);
+
+            recovered.Status.Should().Be(HealthStatus.Healthy);
+            stillReused.Should().BeSameAs(recovered);
+            healthChecks.Runs.Should().Be(2);
+        }
+
+        [Fact]
         public async Task ConcurrentCallersShareOneRun()
         {
             var healthChecks = new CountingHealthCheckService(TimeSpan.FromMilliseconds(100));
@@ -85,6 +110,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Helpers
 
             public bool FailNextRun { get; set; }
 
+            public HealthStatus NextStatus { get; set; } = HealthStatus.Healthy;
+
             public override async Task<HealthReport> CheckHealthAsync(Func<HealthCheckRegistration, bool> predicate,
                 CancellationToken cancellationToken = default)
             {
@@ -101,7 +128,13 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.UnitTests.Helpers
                     throw new InvalidOperationException("The health checks could not run.");
                 }
 
-                return new HealthReport(new Dictionary<string, HealthReportEntry>(), TimeSpan.Zero);
+                var status = NextStatus;
+                NextStatus = HealthStatus.Healthy;
+
+                return new HealthReport(new Dictionary<string, HealthReportEntry>
+                {
+                    ["check"] = new HealthReportEntry(status, null, TimeSpan.Zero, null, null)
+                }, TimeSpan.Zero);
             }
         }
 
