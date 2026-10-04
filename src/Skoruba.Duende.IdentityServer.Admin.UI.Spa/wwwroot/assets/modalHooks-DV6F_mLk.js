@@ -1,1 +1,0 @@
-import{a}from"./i18n-vendor-ffDkBlNu.js";const p=(o=!1)=>{const[l,e]=a.useState(o??!1),t=a.useCallback(()=>{e(!0)},[]),c=a.useCallback(()=>{e(!1)},[]),n=a.useCallback(s=>{if(typeof s=="boolean"){e(s);return}e(r=>!r)},[]),u=a.useCallback(s=>{e(s)},[]);return{isOpen:l,openModal:t,closeModal:c,toggleModal:n,setValue:u}};export{p as u};
