@@ -156,6 +156,7 @@ const AuditLogs: React.FC = () => {
             <Calendar
               mode="single"
               selected={date}
+              defaultMonth={date}
               onSelect={(selectedDate) => {
                 setSearchParam(
                   "created",

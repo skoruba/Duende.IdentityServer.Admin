@@ -42,6 +42,8 @@ function Calendar({
         month: "space-y-4",
         month_caption: "relative flex h-7 items-center justify-center",
         caption_label: "text-sm font-medium",
+        // The nav comes before the (relative) month caption in the DOM, so it
+        // needs its own stacking order or the caption swallows the clicks.
         nav: "absolute inset-x-0 top-0 z-10 flex items-center justify-between",
         button_previous: cn(
           buttonVariants({ variant: "outline" }),
