@@ -11,6 +11,7 @@ import {
 import { clickRowMenuItem } from "./helpers/list-page";
 import { openClientWizard } from "./helpers/client-wizard";
 import { clickPageSave, expectNoToast } from "./helpers/ui-navigation";
+import { openUserDetailFromList } from "./helpers/users-list";
 import { UI_TEXT } from "./helpers/ui-texts";
 
 const seedData = loadE2ESeedData();
@@ -352,5 +353,32 @@ test.describe("Admin UI regressions", () => {
       expect(column.hasHorizontalScroll).toBe(false);
       expect(column.clippedButtons).toBe(0);
     }
+  });
+
+  test("date picker moves to another month with its navigation buttons", async ({
+    page,
+  }) => {
+    await openUserDetailFromList(page, seedData.expectedUserName, credentials);
+
+    const basicsPanel = page.getByRole("tabpanel", { name: /Basics/i });
+    await expect(basicsPanel).toBeVisible();
+    await basicsPanel.getByRole("button").first().click();
+
+    const calendar = page.getByRole("dialog");
+    const shownMonth = calendar.getByRole("status");
+    await expect(shownMonth).toBeVisible();
+    const initialMonth = ((await shownMonth.textContent()) ?? "").trim();
+
+    // The month caption used to lie on top of the navigation and took its
+    // clicks, so only the month the picker opened on could be chosen.
+    await calendar
+      .getByRole("button", { name: "Go to the Next Month", exact: true })
+      .click();
+    await expect(shownMonth).not.toHaveText(initialMonth);
+
+    await calendar
+      .getByRole("button", { name: "Go to the Previous Month", exact: true })
+      .click();
+    await expect(shownMonth).toHaveText(initialMonth);
   });
 });
