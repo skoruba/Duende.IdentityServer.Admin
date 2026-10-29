@@ -503,8 +503,11 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
             //Remove old relations
             await RemoveClientRelationsAsync(client, updateClientClaims, updateClientProperties);
 
-            //Update with new data
-            DbContext.Clients.Update(client);
+            //Update with new data, the time stamps are kept by the server
+            client.Updated = DateTime.UtcNow;
+            var entry = DbContext.Clients.Update(client);
+            entry.Property(x => x.Created).IsModified = false;
+            entry.Property(x => x.LastAccessed).IsModified = false;
 
             return await AutoSaveChangesAsync();
         }

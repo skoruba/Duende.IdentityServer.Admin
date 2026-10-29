@@ -297,5 +297,33 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
 					options => options.Excluding(o => o.Id).Excluding(x => x.IdentityResource));
 			}
 		}
+
+        [Fact]
+        public async Task UpdateIdentityResourceAsyncKeepsValuesTheUpdateDoesNotCarry()
+        {
+            using (var context = GetDbContext())
+            {
+                var identityResourceRepository = GetIdentityResourceRepository(context);
+
+                var identityResource = IdentityResourceMock.GenerateRandomIdentityResource(0);
+                identityResource.Created = new DateTime(2020, 1, 2, 3, 4, 5, DateTimeKind.Utc);
+                identityResource.NonEditable = true;
+                await identityResourceRepository.AddIdentityResourceAsync(identityResource);
+                context.ChangeTracker.Clear();
+
+                //The update comes without these values, as from the API
+                var updatedIdentityResource = IdentityResourceMock.GenerateRandomIdentityResource(identityResource.Id);
+                updatedIdentityResource.Created = DateTime.UtcNow;
+                updatedIdentityResource.NonEditable = false;
+                await identityResourceRepository.UpdateIdentityResourceAsync(updatedIdentityResource);
+                context.ChangeTracker.Clear();
+
+                var storedIdentityResource = await context.IdentityResources.SingleAsync(x => x.Id == identityResource.Id);
+                storedIdentityResource.Created.Should().Be(identityResource.Created);
+                storedIdentityResource.Updated.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMinutes(1));
+                storedIdentityResource.NonEditable.Should().BeTrue();
+                storedIdentityResource.Name.Should().Be(updatedIdentityResource.Name);
+            }
+        }
 	}
 }

@@ -7,8 +7,10 @@ import {
 import { showAllClientSettings } from "../helpers/client-tabs";
 import { openClientDetailFromClients } from "../helpers/client-list";
 import { createConfidentialClientViaWizard } from "../helpers/client-wizard";
+import { apiGet } from "../helpers/admin-api";
 import {
   addInputWithTableItemByLabel,
+  clearNumberByLabel,
   expectInputWithTableHasItem,
   expectNumberByLabel,
   expectSelectValueByLabel,
@@ -19,8 +21,10 @@ import {
   fillTextInputByLabel,
   fillTimeByLabel,
   getSelectValueByLabel,
+  removeTableRowByCell,
   selectDifferentOptionByLabel,
   setDualListToAllSelected,
+  setDualListToNoneSelected,
   setSwitchByLabel,
 } from "../helpers/form-controls";
 import { clickPageSave } from "../helpers/ui-navigation";
@@ -900,4 +904,319 @@ export async function runCreateUpdateAndVerifyClientPersistence(
     await expect(
       reopenedClientPropertiesPanel.getByRole("cell", { name: updatedPropertyValue }),
     ).toBeVisible();
+
+    await runClearAndVerifyClientPersistence(page, credentials, {
+      clientId: updatedClientId,
+      redirectUris: [wizardRedirectUri, updatedRedirectUri],
+      postLogoutRedirectUris: [wizardLogoutUri, updatedPostLogoutRedirectUri],
+      corsOrigin: updatedCorsOrigin,
+      identityProviderRestriction: updatedIdentityProviderRestriction,
+      signingAlgorithm: signingAlgorithmValue,
+      claimKey: updatedClaimKey,
+      propertyKey: updatedPropertyKey,
+      switchValues,
+    });
+}
+
+type FilledClient = {
+  clientId: string;
+  redirectUris: string[];
+  postLogoutRedirectUris: string[];
+  corsOrigin: string;
+  identityProviderRestriction: string;
+  signingAlgorithm: string;
+  claimKey: string;
+  propertyKey: string;
+  switchValues: Record<SwitchField, boolean>;
+};
+
+type SwitchField =
+  | "enabled"
+  | "frontChannelLogoutSessionRequired"
+  | "backChannelLogoutSessionRequired"
+  | "requireClientSecret"
+  | "allowOfflineAccess"
+  | "enableLocalLogin"
+  | "coordinateLifetimeWithUserSession"
+  | "requirePushedAuthorization"
+  | "requirePkce"
+  | "allowPlainTextPkce"
+  | "requireRequestObject"
+  | "alwaysIncludeUserClaimsInIdToken"
+  | "includeJti"
+  | "allowAccessTokenViaBrowser"
+  | "updateAccessTokenClaimsOnRefresh"
+  | "requireDPoP"
+  | "requireConsent"
+  | "allowRememberConsent"
+  | "alwaysSendClientClaims";
+
+/** Where every switch lives and which API field it writes. */
+const switchFields: Record<
+  SwitchField,
+  { tabs: string[]; label: string; apiField: string }
+> = {
+  enabled: { tabs: ["Basics"], label: "Enabled", apiField: "enabled" },
+  frontChannelLogoutSessionRequired: {
+    tabs: ["Urls", "Logout Uris"],
+    label: "Front Channel Logout Session Required",
+    apiField: "frontChannelLogoutSessionRequired",
+  },
+  backChannelLogoutSessionRequired: {
+    tabs: ["Urls", "Logout Uris"],
+    label: "Back Channel Logout Session Required",
+    apiField: "backChannelLogoutSessionRequired",
+  },
+  requireClientSecret: {
+    tabs: ["Secrets"],
+    label: "Require Client Secret",
+    apiField: "requireClientSecret",
+  },
+  allowOfflineAccess: {
+    tabs: ["Secrets"],
+    label: "Allow Offline Access",
+    apiField: "allowOfflineAccess",
+  },
+  enableLocalLogin: {
+    tabs: ["Advanced", "Authentication"],
+    label: "Enable Local Login",
+    apiField: "enableLocalLogin",
+  },
+  coordinateLifetimeWithUserSession: {
+    tabs: ["Advanced", "Authentication"],
+    label: "Coordinate Lifetime With User Session",
+    apiField: "coordinateLifetimeWithUserSession",
+  },
+  requirePushedAuthorization: {
+    tabs: ["Advanced", "Authorization", "Pushed Authorization"],
+    label: "Require Pushed Authorization",
+    apiField: "requirePushedAuthorization",
+  },
+  requirePkce: {
+    tabs: ["Advanced", "Authorization", "PKCE"],
+    label: "Require Pkce",
+    apiField: "requirePkce",
+  },
+  allowPlainTextPkce: {
+    tabs: ["Advanced", "Authorization", "PKCE"],
+    label: "Allow Plain Text Pkce",
+    apiField: "allowPlainTextPkce",
+  },
+  requireRequestObject: {
+    tabs: ["Advanced", "Authorization", "Other Settings"],
+    label: "Require Request Object",
+    apiField: "requireRequestObject",
+  },
+  alwaysIncludeUserClaimsInIdToken: {
+    tabs: ["Advanced", "Tokens", "Identity Token"],
+    label: "Always Include User Claims In IdToken",
+    apiField: "alwaysIncludeUserClaimsInIdToken",
+  },
+  includeJti: {
+    tabs: ["Advanced", "Tokens", "Identity Token"],
+    label: "Include Jwt Id",
+    apiField: "includeJwtId",
+  },
+  allowAccessTokenViaBrowser: {
+    tabs: ["Advanced", "Tokens", "Access Token"],
+    label: "Allow Access Token Via Browser",
+    apiField: "allowAccessTokensViaBrowser",
+  },
+  updateAccessTokenClaimsOnRefresh: {
+    tabs: ["Advanced", "Tokens", "Access Token"],
+    label: "Update Access Token Claims On Refresh",
+    apiField: "updateAccessTokenClaimsOnRefresh",
+  },
+  requireDPoP: {
+    tabs: ["Advanced", "Tokens", "DPoP Settings"],
+    label: "Require DPoP",
+    apiField: "requireDPoP",
+  },
+  requireConsent: {
+    tabs: ["Advanced", "Consent"],
+    label: "Require Consent",
+    apiField: "requireConsent",
+  },
+  allowRememberConsent: {
+    tabs: ["Advanced", "Consent"],
+    label: "Allow Remember Consent",
+    apiField: "allowRememberConsent",
+  },
+  alwaysSendClientClaims: {
+    tabs: ["Advanced", "Client Claims"],
+    label: "Always Send Client Claims",
+    apiField: "alwaysSendClientClaims",
+  },
+};
+
+async function openClientTab(page: Page, tabs: string[]) {
+  for (const tab of tabs) {
+    await page.getByRole("tab", { name: tab, exact: true }).click();
+  }
+
+  const panel = page.getByRole("tabpanel", {
+    name: tabs[tabs.length - 1],
+    exact: true,
+  });
+  await expect(panel).toBeVisible();
+  return panel;
+}
+
+function expectEmpty(stored: Record<string, unknown>, field: string): void {
+  const value = stored[field];
+  expect(
+    value === null || value === "" || (Array.isArray(value) && value.length === 0),
+    `${field} has to stay empty after it was cleared, but is ${JSON.stringify(value)}`,
+  ).toBe(true);
+}
+
+/**
+ * The second pass goes the other way: every optional value is cleared, every
+ * list emptied and every switch flipped. Values the form leaves out of the
+ * request get the server's default instead of the empty value, which only an
+ * empty value can reveal - so the stored client is read back through the API.
+ */
+async function runClearAndVerifyClientPersistence(
+  page: Page,
+  credentials: LoginCredentials,
+  filled: FilledClient,
+): Promise<void> {
+  const id = /\/client\/(\d+)/i.exec(page.url())?.[1];
+  expect(id, "the client detail URL carries the id").toBeTruthy();
+
+  const basicsPanel = await openClientTab(page, ["Basics"]);
+  await basicsPanel.locator('textarea[name="description"]').fill("");
+
+  const redirectUrisPanel = await openClientTab(page, ["Urls", "Redirect Uris"]);
+  for (const uri of [...filled.redirectUris, ...filled.postLogoutRedirectUris]) {
+    await removeTableRowByCell(redirectUrisPanel, uri);
+  }
+
+  const logoutUrisPanel = await openClientTab(page, ["Urls", "Logout Uris"]);
+  await fillTextInputByLabel(logoutUrisPanel, "Front Channel Logout Uri", "");
+  await fillTextInputByLabel(logoutUrisPanel, "Back Channel Logout Uri", "");
+
+  const corsOriginsPanel = await openClientTab(page, ["Urls", "Cors Origins"]);
+  await removeTableRowByCell(corsOriginsPanel, filled.corsOrigin);
+
+  const authenticationPanel = await openClientTab(page, [
+    "Advanced",
+    "Authentication",
+  ]);
+  await removeTableRowByCell(
+    authenticationPanel,
+    filled.identityProviderRestriction,
+  );
+  await clearNumberByLabel(authenticationPanel, "User Sso Lifetime");
+
+  const pushedAuthorizationPanel = await openClientTab(page, [
+    "Advanced",
+    "Authorization",
+    "Pushed Authorization",
+  ]);
+  await clearNumberByLabel(pushedAuthorizationPanel, "Pushed Authorization Lifetime");
+
+  const cibaPanel = await openClientTab(page, ["Advanced", "Authorization", "CIBA"]);
+  await clearNumberByLabel(cibaPanel, "Ciba Lifetime");
+  await clearNumberByLabel(cibaPanel, "Polling Interval");
+
+  const otherSettingsPanel = await openClientTab(page, [
+    "Advanced",
+    "Authorization",
+    "Other Settings",
+  ]);
+  await fillTextInputByLabel(otherSettingsPanel, "Pair Wise Subject Salt", "");
+  await fillTextInputByLabel(otherSettingsPanel, "Initiate Login Uri", "");
+
+  const identityTokenPanel = await openClientTab(page, [
+    "Advanced",
+    "Tokens",
+    "Identity Token",
+  ]);
+  await removeTableRowByCell(identityTokenPanel, filled.signingAlgorithm);
+
+  const consentPanel = await openClientTab(page, ["Advanced", "Consent"]);
+  await clearNumberByLabel(consentPanel, "Consent Lifetime");
+  await fillTextInputByLabel(consentPanel, "Client Uri", "");
+  await fillTextInputByLabel(consentPanel, "Logo Uri", "");
+
+  const deviceFlowPanel = await openClientTab(page, ["Advanced", "Device Flow"]);
+  await fillTextInputByLabel(deviceFlowPanel, "User Code Type", "");
+
+  const clientClaimsPanel = await openClientTab(page, ["Advanced", "Client Claims"]);
+  await fillTextInputByLabel(clientClaimsPanel, "Client Claims Prefix", "");
+  await removeTableRowByCell(clientClaimsPanel, filled.claimKey);
+
+  const clientPropertiesPanel = await openClientTab(page, [
+    "Advanced",
+    "Client Properties",
+  ]);
+  await removeTableRowByCell(clientPropertiesPanel, filled.propertyKey);
+
+  for (const [field, location] of Object.entries(switchFields)) {
+    const panel = await openClientTab(page, location.tabs);
+    await setSwitchByLabel(
+      panel,
+      location.label,
+      !filled.switchValues[field as SwitchField],
+    );
+  }
+
+  // Emptying the lists last - without grant types the form hides the tabs
+  // that belong to them.
+  await setDualListToNoneSelected(await openClientTab(page, ["Scopes"]));
+  await setDualListToNoneSelected(await openClientTab(page, ["Advanced"]));
+
+  await Promise.all([
+    page.waitForURL(/\/clients(?:[/?#]|$)/i, { timeout: 60_000 }),
+    clickPageSave(page),
+  ]);
+
+  const stored = await apiGet(page, `Clients/${id}`);
+
+  for (const field of [
+    "description",
+    "frontChannelLogoutUri",
+    "backChannelLogoutUri",
+    "pairWiseSubjectSalt",
+    "initiateLoginUri",
+    "clientUri",
+    "logoUri",
+    "userCodeType",
+    "clientClaimsPrefix",
+    "userSsoLifetime",
+    "pushedAuthorizationLifetime",
+    "cibaLifetime",
+    "pollingInterval",
+    "consentLifetime",
+    "redirectUris",
+    "postLogoutRedirectUris",
+    "allowedCorsOrigins",
+    "identityProviderRestrictions",
+    "allowedIdentityTokenSigningAlgorithms",
+    "allowedScopes",
+    "allowedGrantTypes",
+    "claims",
+  ]) {
+    expectEmpty(stored, field);
+  }
+
+  // The wizard marks the client type with a property of its own.
+  expect(
+    (stored.properties as Array<{ key: string }>).map((property) => property.key),
+  ).not.toContain(filled.propertyKey);
+
+  for (const [field, location] of Object.entries(switchFields)) {
+    expect(stored[location.apiField], `${location.apiField} after flipping`).toBe(
+      !filled.switchValues[field as SwitchField],
+    );
+  }
+
+  // The form shows what got stored, not a default in its place.
+  await openClientDetailFromClients(page, filled.clientId, credentials);
+  const reopenedClientClaimsPanel = await openClientTab(page, [
+    "Advanced",
+    "Client Claims",
+  ]);
+  await expectTextInputByLabel(reopenedClientClaimsPanel, "Client Claims Prefix", "");
 }

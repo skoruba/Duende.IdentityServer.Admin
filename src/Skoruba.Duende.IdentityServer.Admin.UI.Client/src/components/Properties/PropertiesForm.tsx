@@ -1,3 +1,4 @@
+import { useCallback, useMemo } from "react";
 import { useFormContext, useFieldArray } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/DataTable/DataTable";
@@ -32,47 +33,56 @@ const PropertiesForm = () => {
     closeModal();
   };
 
-  const handleRemoveProperty = (index: number) => {
-    remove(index);
-    if (pagination.pageIndex > 0 && fields.length % pagination.pageSize === 1) {
-      setPagination((prev) => ({
-        ...prev,
-        pageIndex: prev.pageIndex - 1,
-      }));
-    }
-  };
+  const handleRemoveProperty = useCallback(
+    (index: number) => {
+      remove(index);
+      if (pagination.pageIndex > 0 && fields.length % pagination.pageSize === 1) {
+        setPagination((prev) => ({
+          ...prev,
+          pageIndex: prev.pageIndex - 1,
+        }));
+      }
+    },
+    [remove, setPagination, pagination.pageIndex, pagination.pageSize, fields.length],
+  );
 
   const paginatedData = fields.slice(
     pagination.pageIndex * pagination.pageSize,
     (pagination.pageIndex + 1) * pagination.pageSize
   );
 
-  const columns = [
-    {
-      accessorKey: "key",
-      header: t("Property.Key"),
-    },
-    {
-      accessorKey: "value",
-      header: t("Property.Value"),
-    },
-    {
-      id: "actions",
-      cell: ({ row }: { row: { index: number } }) => (
-        <Button
-          variant="ghost"
-          onClick={() =>
-            handleRemoveProperty(
-              pagination.pageIndex * pagination.pageSize + row.index
-            )
-          }
-          className="text-red-500"
-        >
-          <Trash className="h-4 w-4" />
-        </Button>
-      ),
-    },
-  ];
+  // A new cell renderer on every render remounts the button: a re-render
+  // between mousedown and mouseup (e.g. a field losing focus) swallows the click.
+  const columns = useMemo(
+    () => [
+      {
+        accessorKey: "key",
+        header: t("Property.Key"),
+      },
+      {
+        accessorKey: "value",
+        header: t("Property.Value"),
+      },
+      {
+        id: "actions",
+        cell: ({ row }: { row: { index: number } }) => (
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() =>
+              handleRemoveProperty(
+                pagination.pageIndex * pagination.pageSize + row.index
+              )
+            }
+            className="text-red-500"
+          >
+            <Trash className="h-4 w-4" />
+          </Button>
+        ),
+      },
+    ],
+    [t, handleRemoveProperty, pagination.pageIndex, pagination.pageSize],
+  );
 
   return (
     <>

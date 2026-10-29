@@ -9,7 +9,11 @@ import {
   keepPreviousData,
 } from "@tanstack/react-query";
 import { queryKeys } from "./QueryKeys";
-import { combineDateTime, getDateAndTime } from "@/helpers/DateTimeHelper";
+import {
+  combineDateTime,
+  combineDateTimeKeepingStored,
+  getDateAndTime,
+} from "@/helpers/DateTimeHelper";
 
 const getClient = () => new client.UsersClient(ApiHelper.getApiBaseUrl());
 
@@ -168,6 +172,7 @@ export const getUser = async (id: string): Promise<UserFormData> => {
     accessFailedCount: user.accessFailedCount ?? 0,
     lockoutEndDate: date,
     lockoutEndTime: time,
+    lockoutEnd: user.lockoutEnd ?? null,
   };
 };
 
@@ -198,7 +203,11 @@ export const updateUser = async (
 ): Promise<void> => {
   const usersClient = new client.UsersClient(ApiHelper.getApiBaseUrl());
 
-  const lockoutEnd = combineDateTime(data.lockoutEndDate, data.lockoutEndTime);
+  const lockoutEnd = combineDateTimeKeepingStored(
+    data.lockoutEnd,
+    data.lockoutEndDate,
+    data.lockoutEndTime,
+  );
 
   await usersClient.put(
     new client.IdentityUserDto({

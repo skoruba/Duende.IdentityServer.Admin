@@ -998,5 +998,35 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 option => option.Excluding(x => x.Path.EndsWith("Id"))
                     .Excluding(x => x.Path.EndsWith("Client")));
         }
+
+        [Fact]
+        public async Task UpdateClientAsyncKeepsTimeStampsTheUpdateDoesNotCarry()
+        {
+            using (var context = GetDbContext())
+            {
+                var clientRepository = GetClientRepository(context);
+
+                var client = ClientMock.GenerateRandomClient(0);
+                client.Created = new DateTime(2020, 1, 2, 3, 4, 5, DateTimeKind.Utc);
+                client.LastAccessed = new DateTime(2021, 2, 3, 4, 5, 6, DateTimeKind.Utc);
+                client.Updated = null;
+                await clientRepository.AddClientAsync(client);
+                context.ChangeTracker.Clear();
+
+                //The update comes without the time stamps, as from the API
+                var updatedClient = ClientMock.GenerateRandomClient(client.Id);
+                updatedClient.Created = DateTime.UtcNow;
+                updatedClient.LastAccessed = null;
+                updatedClient.Updated = null;
+                await clientRepository.UpdateClientAsync(updatedClient);
+                context.ChangeTracker.Clear();
+
+                var storedClient = await context.Clients.SingleAsync(x => x.Id == client.Id);
+                storedClient.Created.Should().Be(client.Created);
+                storedClient.LastAccessed.Should().Be(client.LastAccessed);
+                storedClient.Updated.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMinutes(1));
+                storedClient.ClientName.Should().Be(updatedClient.ClientName);
+            }
+        }
     }
 }

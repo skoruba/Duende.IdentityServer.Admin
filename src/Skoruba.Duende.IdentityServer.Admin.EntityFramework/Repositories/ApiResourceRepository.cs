@@ -151,8 +151,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
             await RemoveApiResourceClaimsAsync(apiResource);
             await RemoveApiResourceScopesAsync(apiResource);
 
-            //Update with new data
-            DbContext.ApiResources.Update(apiResource);
+            //Update with new data, keeping the values the update does not carry
+            apiResource.Updated = DateTime.UtcNow;
+            var entry = DbContext.ApiResources.Update(apiResource);
+            entry.Property(x => x.Created).IsModified = false;
+            entry.Property(x => x.LastAccessed).IsModified = false;
+            entry.Property(x => x.NonEditable).IsModified = false;
 
             return await AutoSaveChangesAsync();
         }

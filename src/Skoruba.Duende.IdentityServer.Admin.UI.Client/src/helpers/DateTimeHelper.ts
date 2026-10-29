@@ -65,6 +65,24 @@ export const combineDateTime = (
   );
 };
 
+/**
+ * The date and time inputs work in minutes. As long as they still show the
+ * stored value, the stored value goes back - seconds included.
+ */
+export const combineDateTimeKeepingStored = (
+  stored: Date | null | undefined,
+  date: Date | null | undefined,
+  time: string | null | undefined
+) => {
+  const combined = combineDateTime(date, time);
+  if (!stored || !combined) return combined;
+
+  const shown = getDateAndTime(stored);
+  const storedAsShown = combineDateTime(shown.date, shown.time);
+
+  return storedAsShown?.getTime() === combined.getTime() ? stored : combined;
+};
+
 export const secondsToFormattedTimeLabels = {
   week: "week",
   weeks: "weeks",

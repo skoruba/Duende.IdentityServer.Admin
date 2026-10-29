@@ -180,8 +180,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
             //Remove old relations
             await RemoveApiScopeClaimsAsync(apiScope);
 
-            //Update with new data
-            DbContext.ApiScopes.Update(apiScope);
+            //Update with new data, keeping the values the update does not carry
+            apiScope.Updated = DateTime.UtcNow;
+            var entry = DbContext.ApiScopes.Update(apiScope);
+            entry.Property(x => x.Created).IsModified = false;
+            entry.Property(x => x.LastAccessed).IsModified = false;
+            entry.Property(x => x.NonEditable).IsModified = false;
 
             return await AutoSaveChangesAsync();
         }

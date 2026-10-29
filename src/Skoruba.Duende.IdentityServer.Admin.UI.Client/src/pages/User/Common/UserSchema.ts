@@ -17,6 +17,7 @@ export const formSchema = z.object({
   accessFailedCount: z.number().optional(),
   lockoutEndDate: z.date().nullable().optional(),
   lockoutEndTime: z.string().nullable().optional(),
+  lockoutEnd: z.date().nullable().optional(),
 });
 
 export type UserFormData = z.infer<typeof formSchema>;
@@ -32,4 +33,5 @@ export const defaultUserFormData: UserFormData = {
   accessFailedCount: 0,
   lockoutEndDate: null,
   lockoutEndTime: null,
+  lockoutEnd: null,
 };

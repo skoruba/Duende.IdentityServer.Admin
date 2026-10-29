@@ -3,6 +3,7 @@
 
 using System.Net;
 using System.Net.Http.Json;
+using System.Text.Json.Nodes;
 using System.Collections.Generic;
 using System;
 using System.Linq;
@@ -470,6 +471,41 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Tests
 
                 var getDeletedResponse = await Client.GetAsync(ById(ClientsRoute, createdClient.Id));
                 getDeletedResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            }
+            finally
+            {
+                if (createdClientId > 0)
+                {
+                    await SafeDeleteAsync(ClientsRoute, createdClientId);
+                }
+            }
+        }
+
+        [Fact]
+        public async Task ClientUpdateWithEmptyClaimsPrefixKeepsItEmpty()
+        {
+            SetupAdminAuthorization();
+
+            var uniqueClientId = UniqueValue(ClientIdPrefix);
+            var createdClientId = 0;
+
+            try
+            {
+                var createdClient = await CreateMachineClientAsync(uniqueClientId);
+                createdClientId = createdClient.Id;
+
+                var getResponse = await Client.GetAsync(ById(ClientsRoute, createdClientId));
+                getResponse.EnsureSuccessStatusCode();
+                var updateRequest = await getResponse.Content.ReadFromJsonAsync<JsonObject>();
+                updateRequest!["clientClaimsPrefix"] = string.Empty;
+
+                var updateResponse = await Client.PutAsJsonAsync(ClientsRoute, updateRequest);
+                updateResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+                var getUpdatedResponse = await Client.GetAsync(ById(ClientsRoute, createdClientId));
+                getUpdatedResponse.EnsureSuccessStatusCode();
+                var updatedDetail = await getUpdatedResponse.Content.ReadFromJsonAsync<ClientApiDto>();
+                updatedDetail!.ClientClaimsPrefix.Should().BeEmpty();
             }
             finally
             {
