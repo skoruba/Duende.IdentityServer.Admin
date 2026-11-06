@@ -9,9 +9,24 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfac
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.ClientRules;
 
-public class ClientNameMustStartWithRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
+public class ClientNameMustStartWithRule : ConfigurationRuleBase
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
+    public override string Key => ConfigurationRuleKeys.ClientNameMustStartWith;
+    public override ConfigurationResourceType ResourceType => ConfigurationResourceType.Client;
+    public override string DisplayName => "Client Name Must Start With";
+    public override string Description => "Ensures client names follow a specific naming convention by requiring a prefix or one of multiple allowed prefixes. Clients without a name are skipped.";
+
+    public override IReadOnlyList<ConfigurationRuleParameter> Parameters { get; } =
+    [
+        ConfigurationRuleParameter.Array("prefixes", "Required Prefixes", "The prefix(es) that client names must start with. A name has to start with at least one of them.", defaultValue: new[] { "Client " }, required: true)
+    ];
+
+    public override string DefaultConfiguration => "{\"prefixes\": [\"Client \"]}";
+    public override string ExampleConfiguration => "{\"prefixes\": [\"Internal \", \"Partner \", \"Public \"]}";
+    public override string DefaultMessageTemplate => "Client '{actualName}' must start with one of: {allowedPrefixes}";
+    public override string DefaultFixDescription => "Navigate to Client Details → Basics tab and rename the client to start with one of the required prefixes: {allowedPrefixes}.";
+
+    public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<PrefixConfig>(configuration);
 

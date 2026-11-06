@@ -9,9 +9,16 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfac
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.ClientRules;
 
-public class MissingPkceRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
+public class MissingPkceRule : ConfigurationRuleBase
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
+    public override string Key => ConfigurationRuleKeys.MissingPkce;
+    public override ConfigurationResourceType ResourceType => ConfigurationResourceType.Client;
+    public override string DisplayName => "Missing PKCE";
+    public override string Description => "Detects clients using authorization code flow without PKCE (Proof Key for Code Exchange).";
+    public override string DefaultMessageTemplate => "Client uses authorization code flow without PKCE";
+    public override string DefaultFixDescription => "Navigate to Client Details → Advanced tab → Authentication, scroll down and enable 'Require Proof Key for Code Exchange (PKCE)' toggle.";
+
+    public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         return context.Clients
             .Where(c => c.AllowedGrantTypes.Any(g => g.GrantType == "authorization_code")

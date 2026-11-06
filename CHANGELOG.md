@@ -1,5 +1,39 @@
 # Changelog
 
+## [Unreleased]
+
+### Upgrading
+
+- New EF migration `ConfigurationRuleKeys` (SQL Server, PostgreSQL) changes `ConfigurationRules.RuleType` from a number to the key of the rule (`MissingPkce`, ...). A number the migration does not know - a custom rule stored under a value such as `1000` - becomes the text `"1000"`. No rule can be registered under it, because a custom key needs a namespace, so the list marks the row *Unknown rule* and validation skips it. Register the rule under a namespaced key and rename the row, which keeps its configuration, severity and texts: `UPDATE [ConfigurationRules] SET [RuleType] = 'Contoso.MyRule' WHERE [RuleType] = '1000'` (SQL Server) or `UPDATE "ConfigurationRules" SET "RuleType" = 'Contoso.MyRule' WHERE "RuleType" = '1000'` (PostgreSQL). The key is unique: if `SeedConfiguration:ApplyConfigurationRulesSeed` has already added a row for the new key, delete that row first. Alternatively delete the old row and create the rule again in the Admin UI
+- The Admin UI needs the Admin API TypeScript client regenerated for this version: `ConfigurationRuleDto.ruleType` is a string and the `ConfigurationRuleType` enum is gone
+
+### Added
+
+- Custom configuration rules ([#340](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/340)): derive from `ConfigurationRuleBase<TConfiguration>`, register with `services.AddConfigurationRule<TRule>()` or `AddConfigurationRulesFromAssemblyContaining<T>()`, and the rule is offered under *Configuration Rules*, where it is created like a built-in one. No migration involved. A rule may take constructor dependencies, scoped ones included; a rule that cannot be registered - a key without a namespace, a duplicate key - stops the host from starting
+- The Admin API project contains an example custom rule, `Contoso.ClientSecretMustExpireWithinOneYear` in `ConfigurationRules/`, and registers every rule of the project in `Startup`
+- `SeedConfiguration:ApplyConfigurationRulesSeed` (default `false`) creates a disabled row for every registered rule that has none on startup
+- A stored rule no registered rule describes is marked *Unknown rule* in the list; validation skips it. It can be disabled or deleted; it can be enabled and its settings edited once the rule is registered again
+
+### Changed
+
+- Rule metadata lives in the rule classes; `ConfigurationRuleMetadataProvider` and `ConfigurationRuleValidatorFactory` read from the new `IConfigurationRuleRegistry`
+- Configuration rules and the *Rule Type* list are ordered by resource type and name
+
+### Fixed
+
+- A rule with parameters whose fix description was cleared is no longer skipped by the validation
+- A number parameter only accepts a whole number: a fraction or a value out of the int range was saved and left the rule on its default configuration
+- The *Enabled* switch does not validate the configuration of the rule again
+- The rule form saves a number parameter with only a minimum or only a maximum; it failed with "Number must be less than or equal to null"
+
+### Breaking Changes
+
+- The `ConfigurationRuleType` enum is replaced by string keys (`ConfigurationRuleKeys`): `ConfigurationRule.RuleType`, `ConfigurationRuleDto.RuleType`, `IConfigurationRuleValidatorFactory.Create`, `IConfigurationRuleMetadataProvider.GetMetadata` and `IConfigurationRulesRepository.RuleTypeExistsAsync` take a string. Code that replaced the factory or the metadata provider to add rules registers them with `AddConfigurationRule` instead
+- `POST /api/ConfigurationRules` with a key no registered rule has returns 409
+- `PUT /api/ConfigurationRules/{id}` with a `ruleType` other than the stored one returns 409 instead of saving the other fields and keeping the stored key; the configuration is validated against the stored rule. A rule no registered rule describes returns 409 as well
+- `POST` and `PUT /api/ConfigurationRules` with a fraction for a number parameter return 409
+- `PATCH /api/ConfigurationRules/{id}/toggle` that would enable a rule no registered rule describes returns 409
+
 ## [3.2.0] - 2026-10-03
 
 ### Upgrading

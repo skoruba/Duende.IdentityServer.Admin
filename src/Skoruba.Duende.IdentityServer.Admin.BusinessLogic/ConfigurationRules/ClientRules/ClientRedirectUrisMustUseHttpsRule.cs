@@ -9,9 +9,24 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfac
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.ClientRules;
 
-public class ClientRedirectUrisMustUseHttpsRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
+public class ClientRedirectUrisMustUseHttpsRule : ConfigurationRuleBase
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
+    public override string Key => ConfigurationRuleKeys.ClientRedirectUrisMustUseHttps;
+    public override ConfigurationResourceType ResourceType => ConfigurationResourceType.Client;
+    public override string DisplayName => "Client Redirect URIs Must Use HTTPS";
+    public override string Description => "Ensures all client redirect URIs use HTTPS protocol for security.";
+
+    public override IReadOnlyList<ConfigurationRuleParameter> Parameters { get; } =
+    [
+        ConfigurationRuleParameter.Boolean("allowLocalhost", "Allow Localhost", "Allow HTTP for localhost and 127.0.0.1 addresses (useful for development)", defaultValue: true)
+    ];
+
+    public override string DefaultConfiguration => "{\"allowLocalhost\": true}";
+    public override string ExampleConfiguration => "{\"allowLocalhost\": false}";
+    public override string DefaultMessageTemplate => "Client has {count} non-HTTPS redirect URI(s): {uris}";
+    public override string DefaultFixDescription => "Navigate to Client Details → URLs tab → Redirect URIs section and update all HTTP URIs to use HTTPS protocol.";
+
+    public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<HttpsConfig>(configuration);
 

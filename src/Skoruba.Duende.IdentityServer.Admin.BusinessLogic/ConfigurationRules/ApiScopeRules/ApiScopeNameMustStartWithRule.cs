@@ -9,9 +9,24 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfac
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.ApiScopeRules;
 
-public class ApiScopeNameMustStartWithRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
+public class ApiScopeNameMustStartWithRule : ConfigurationRuleBase
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
+    public override string Key => ConfigurationRuleKeys.ApiScopeNameMustStartWith;
+    public override ConfigurationResourceType ResourceType => ConfigurationResourceType.ApiScope;
+    public override string DisplayName => "API Scope Name Must Start With";
+    public override string Description => "Ensures API scope names follow a specific naming convention by requiring a prefix or one of multiple allowed prefixes.";
+
+    public override IReadOnlyList<ConfigurationRuleParameter> Parameters { get; } =
+    [
+        ConfigurationRuleParameter.Array("prefixes", "Required Prefixes", "The prefix(es) that API scope names must start with. A name has to start with at least one of them.", defaultValue: new[] { "scope_" }, required: true)
+    ];
+
+    public override string DefaultConfiguration => "{\"prefixes\": [\"scope_\"]}";
+    public override string ExampleConfiguration => "{\"prefixes\": [\"api.\", \"scope_\", \"resource.\"]}";
+    public override string DefaultMessageTemplate => "API Scope '{actualName}' must start with one of: {allowedPrefixes}";
+    public override string DefaultFixDescription => "Navigate to API Scope Details → Basic Information section and rename the scope to start with one of the required prefixes: {allowedPrefixes}.";
+
+    public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<PrefixConfig>(configuration);
 

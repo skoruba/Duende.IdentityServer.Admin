@@ -14,6 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Skoruba.AuditLogging.EntityFramework.DbContexts;
 using Skoruba.AuditLogging.EntityFramework.Entities;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.ConfigurationRules;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
@@ -56,16 +58,68 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Helpers
                     migrationComplete = await EnsureDatabasesMigratedAsync<TIdentityDbContext, TIdentityServerDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLogDbContext, TDataProtectionDbContext, TAdminConfigurationDbContext>(services);
                 }
 
+                var seedComplete = true;
+
                 if ((seedConfiguration != null && seedConfiguration.ApplySeed)
                     || (applyDbMigrationWithDataSeedFromProgramArguments))
                 {
-                    var seedComplete = await EnsureSeedDataAsync<TIdentityServerDbContext, TUser, TRole>(services);
-
-                    return migrationComplete && seedComplete;
+                    seedComplete = await EnsureSeedDataAsync<TIdentityServerDbContext, TUser, TRole>(services);
                 }
+
+                if (seedConfiguration != null && seedConfiguration.ApplyConfigurationRulesSeed)
+                {
+                    await EnsureConfigurationRulesSeededAsync<TAdminConfigurationDbContext>(services);
+                }
+
+                return migrationComplete && seedComplete;
+            }
+        }
+
+        /// <summary>
+        /// Adds a disabled row with the rule's defaults for every registered configuration rule
+        /// that has no row yet - built-in rules an administrator deleted as well as custom rules
+        /// registered with <c>AddConfigurationRule</c>. Rows that exist are left alone.
+        /// Returns the number of rows added.
+        /// </summary>
+        public static async Task<int> EnsureConfigurationRulesSeededAsync<TAdminConfigurationDbContext>(IServiceProvider serviceProvider)
+            where TAdminConfigurationDbContext : DbContext, IAdminConfigurationStoreDbContext
+        {
+            using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
+
+            var registry = scope.ServiceProvider.GetService<IConfigurationRuleRegistry>();
+            if (registry == null)
+            {
+                return 0;
             }
 
-            return migrationComplete;
+            var context = scope.ServiceProvider.GetRequiredService<TAdminConfigurationDbContext>();
+            var existingKeys = (await context.ConfigurationRules.Select(rule => rule.RuleType).ToListAsync())
+                .ToHashSet(StringComparer.Ordinal);
+
+            var added = 0;
+            foreach (var descriptor in registry.Rules.Where(descriptor => !existingKeys.Contains(descriptor.Key)))
+            {
+                var rule = descriptor.Metadata;
+                context.ConfigurationRules.Add(new ConfigurationRule
+                {
+                    RuleType = rule.Key,
+                    ResourceType = rule.ResourceType,
+                    IssueType = ConfigurationIssueType.Recommendation,
+                    IsEnabled = false,
+                    Configuration = rule.DefaultConfiguration,
+                    MessageTemplate = rule.DefaultMessageTemplate,
+                    FixDescription = rule.DefaultFixDescription,
+                    CreatedAt = DateTime.UtcNow
+                });
+                added++;
+            }
+
+            if (added > 0)
+            {
+                await context.SaveChangesAsync();
+            }
+
+            return added;
         }
 
         public static async Task<bool> EnsureDatabasesMigratedAsync<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TLogDbContext, TAuditLogDbContext, TDataProtectionDbContext, TAdminConfigurationDbContext>(IServiceProvider services)

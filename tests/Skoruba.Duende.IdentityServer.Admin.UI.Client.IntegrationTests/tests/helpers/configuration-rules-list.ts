@@ -16,11 +16,17 @@ export async function ensureLoggedInAndOpenConfigurationRules(
   ).toBeVisible();
 }
 
+/**
+ * The list shows the readable name of a rule; its key is the title of the name cell,
+ * so a seeded built-in rule is found by key as well as one the test created.
+ */
 export function findConfigurationRuleRowsByType(
   page: Page,
   ruleType: string,
 ): Locator {
-  return page.locator("table tbody tr").filter({ hasText: ruleType });
+  return page
+    .locator("table tbody tr")
+    .filter({ has: page.locator(`[title="${ruleType}"]`) });
 }
 
 export async function findConfigurationRuleRowByType(

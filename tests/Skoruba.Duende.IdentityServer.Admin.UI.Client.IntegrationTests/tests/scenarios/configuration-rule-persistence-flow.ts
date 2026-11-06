@@ -357,21 +357,67 @@ export async function runCreateAndVerifyConfigurationRulesFlow(
   logStep("opened configuration rules list");
 
   for (const definition of definitions) {
-    await deleteRuleByTypeIfPresent(page, definition.ruleType);
-    logStep(`removed existing '${definition.ruleType}' entries`);
-
-    await createRule(page, definition);
-    logStep(`created '${definition.ruleType}'`);
-
-    await verifyRuleRow(page, definition.ruleType);
-    logStep(`verified '${definition.ruleType}' is present and enabled`);
-
-    await verifySavedRuleInEditDialog(page, definition);
-    logStep(`verified persisted values for '${definition.ruleType}'`);
-
-    await verifyDuplicateRuleTypePrevention(page, definition);
-    logStep(`verified duplicate prevention for '${definition.ruleType}'`);
+    await createAndVerifyRule(page, definition, logStep);
   }
+}
+
+/**
+ * The Admin API host registers ConfigurationRules/ClientSecretMustExpireWithinOneYearRule next to
+ * the built-in rules, so the dialog offers it from the metadata and the API stores it like any other.
+ * Its number parameter has a minimum and no maximum.
+ */
+export async function runCreateDeploymentConfigurationRuleFlow(
+  page: Page,
+  credentials: LoginCredentials,
+): Promise<void> {
+  const logStep = createDebugLogger("deployment-configuration-rule-flow");
+  const marker = faker.string.alphanumeric({ length: 8, casing: "lower" });
+  const maxDays = faker.number.int({ min: 400, max: 1000 });
+
+  const definition: RuleDefinition = {
+    ruleType: "Contoso.ClientSecretMustExpireWithinOneYear",
+    optionDisplayName: "Client Secret Must Expire Within One Year",
+    resourceType: "Client",
+    issueType: "Warning",
+    messageTemplate: `UI test message ${marker} (deployment)`,
+    fixDescription: `UI test fix ${marker} (deployment)`,
+    fillParameters: async (dialog) => {
+      const maxDaysInput = dialog.getByRole("spinbutton").first();
+      await expect(maxDaysInput).toHaveValue("365");
+      await maxDaysInput.fill(String(maxDays));
+    },
+    assertParameters: async (dialog) => {
+      await expect(dialog.getByRole("spinbutton").first()).toHaveValue(
+        String(maxDays),
+      );
+    },
+  };
+
+  await ensureLoggedInAndOpenConfigurationRules(page, credentials);
+  logStep("opened configuration rules list");
+
+  await createAndVerifyRule(page, definition, logStep);
+}
+
+async function createAndVerifyRule(
+  page: Page,
+  definition: RuleDefinition,
+  logStep: (message: string) => void,
+): Promise<void> {
+  await deleteRuleByTypeIfPresent(page, definition.ruleType);
+  logStep(`removed existing '${definition.ruleType}' entries`);
+
+  await createRule(page, definition);
+  logStep(`created '${definition.ruleType}'`);
+
+  await verifyRuleRow(page, definition.ruleType);
+  logStep(`verified '${definition.ruleType}' is present and enabled`);
+
+  await verifySavedRuleInEditDialog(page, definition);
+  logStep(`verified persisted values for '${definition.ruleType}'`);
+
+  await verifyDuplicateRuleTypePrevention(page, definition);
+  logStep(`verified duplicate prevention for '${definition.ruleType}'`);
 }
 
 async function openConfigurationIssues(

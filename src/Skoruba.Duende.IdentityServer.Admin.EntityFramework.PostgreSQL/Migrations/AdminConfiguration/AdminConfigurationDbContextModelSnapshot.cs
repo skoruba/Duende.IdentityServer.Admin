@@ -17,7 +17,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.10")
+                .HasAnnotation("ProductVersion", "10.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -54,8 +54,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                     b.Property<int>("ResourceType")
                         .HasColumnType("integer");
 
-                    b.Property<int>("RuleType")
-                        .HasColumnType("integer");
+                    b.Property<string>("RuleType")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp without time zone");
@@ -77,7 +79,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 2,
                             MessageTemplate = "Client uses obsolete implicit grant flow",
                             ResourceType = 0,
-                            RuleType = 0
+                            RuleType = "ObsoleteImplicitGrant"
                         },
                         new
                         {
@@ -88,7 +90,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 2,
                             MessageTemplate = "Client uses obsolete password grant flow",
                             ResourceType = 0,
-                            RuleType = 1
+                            RuleType = "ObsoletePasswordGrant"
                         },
                         new
                         {
@@ -99,7 +101,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 0,
                             MessageTemplate = "Client uses authorization code flow without PKCE",
                             ResourceType = 0,
-                            RuleType = 2
+                            RuleType = "MissingPkce"
                         },
                         new
                         {
@@ -111,7 +113,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 2,
                             MessageTemplate = "Client '{clientName}' has {actualCount} allowed scope(s), but requires at least {requiredCount}",
                             ResourceType = 0,
-                            RuleType = 4
+                            RuleType = "ClientMustHaveScopes"
                         },
                         new
                         {
@@ -123,7 +125,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 2,
                             MessageTemplate = "API Resource '{resourceName}' has {actualCount} scope(s), but requires at least {requiredCount}",
                             ResourceType = 2,
-                            RuleType = 10
+                            RuleType = "ApiResourceMustHaveScopes"
                         },
                         new
                         {
@@ -135,7 +137,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 2,
                             MessageTemplate = "Client has {count} non-HTTPS redirect URI(s): {uris}",
                             ResourceType = 0,
-                            RuleType = 3
+                            RuleType = "ClientRedirectUrisMustUseHttps"
                         },
                         new
                         {
@@ -147,7 +149,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 0,
                             MessageTemplate = "Access token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s",
                             ResourceType = 0,
-                            RuleType = 5
+                            RuleType = "ClientAccessTokenLifetimeTooLong"
                         },
                         new
                         {
@@ -159,7 +161,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 0,
                             MessageTemplate = "Client '{clientName}' refresh token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s",
                             ResourceType = 0,
-                            RuleType = 6
+                            RuleType = "ClientRefreshTokenLifetimeTooLong"
                         },
                         new
                         {
@@ -171,7 +173,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 0,
                             MessageTemplate = "API Scope '{actualName}' must start with one of: {allowedPrefixes}",
                             ResourceType = 3,
-                            RuleType = 7
+                            RuleType = "ApiScopeNameMustStartWith"
                         },
                         new
                         {
@@ -183,7 +185,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 0,
                             MessageTemplate = "API Scope '{scopeName}' contains forbidden string(s): {forbiddenStrings}",
                             ResourceType = 3,
-                            RuleType = 8
+                            RuleType = "ApiScopeNameMustNotContain"
                         },
                         new
                         {
@@ -194,7 +196,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 1,
                             MessageTemplate = "API Scope is missing a display name",
                             ResourceType = 3,
-                            RuleType = 9
+                            RuleType = "ApiScopeMustHaveDisplayName"
                         },
                         new
                         {
@@ -206,7 +208,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 0,
                             MessageTemplate = "API Resource '{actualName}' must start with one of: {allowedPrefixes}",
                             ResourceType = 2,
-                            RuleType = 11
+                            RuleType = "ApiResourceNameMustStartWith"
                         },
                         new
                         {
@@ -218,7 +220,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 0,
                             MessageTemplate = "Required identity resource '{resourceName}' ({displayName}) is disabled",
                             ResourceType = 1,
-                            RuleType = 12
+                            RuleType = "IdentityResourceMustBeEnabled"
                         },
                         new
                         {
@@ -230,7 +232,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 0,
                             MessageTemplate = "Identity Resource '{actualName}' must start with one of: {allowedPrefixes}",
                             ResourceType = 1,
-                            RuleType = 13
+                            RuleType = "IdentityResourceNameMustStartWith"
                         },
                         new
                         {
@@ -242,7 +244,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 1,
                             MessageTemplate = "API Scope '{scopeName}'{displayNameSuffix} is not used by any clients or API resources",
                             ResourceType = 3,
-                            RuleType = 14
+                            RuleType = "ScopeIsUnused"
                         },
                         new
                         {
@@ -254,7 +256,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 0,
                             MessageTemplate = "Client '{clientName}' has a secret ({secretType}) that {status} in {daysUntilExpiry} day(s) on {expirationDate}",
                             ResourceType = 0,
-                            RuleType = 15
+                            RuleType = "SecretIsExpiredInDays"
                         },
                         new
                         {
@@ -266,7 +268,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 0,
                             MessageTemplate = "Client '{actualName}' must start with one of: {allowedPrefixes}",
                             ResourceType = 0,
-                            RuleType = 16
+                            RuleType = "ClientNameMustStartWith"
                         },
                         new
                         {
@@ -278,7 +280,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 0,
                             MessageTemplate = "Client '{clientName}' contains forbidden string(s): {forbiddenStrings}",
                             ResourceType = 0,
-                            RuleType = 17
+                            RuleType = "ClientNameMustNotContain"
                         },
                         new
                         {
@@ -290,7 +292,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 0,
                             MessageTemplate = "Client ID '{actualClientId}' must start with one of: {allowedPrefixes}",
                             ResourceType = 0,
-                            RuleType = 18
+                            RuleType = "ClientIdMustStartWith"
                         },
                         new
                         {
@@ -302,7 +304,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 0,
                             MessageTemplate = "Client ID '{clientId}' contains forbidden string(s): {forbiddenStrings}",
                             ResourceType = 0,
-                            RuleType = 19
+                            RuleType = "ClientIdMustNotContain"
                         },
                         new
                         {
@@ -314,7 +316,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 0,
                             MessageTemplate = "Client '{clientName}' allows {count} scope(s) that no longer exist: {missingScopes}",
                             ResourceType = 0,
-                            RuleType = 20
+                            RuleType = "ClientScopeMustExist"
                         },
                         new
                         {
@@ -326,7 +328,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 0,
                             MessageTemplate = "Client '{clientName}' uses {count} signing algorithm(s) outside this deployment's FAPI 2.0 allow-list: {algorithms}",
                             ResourceType = 0,
-                            RuleType = 21
+                            RuleType = "ClientSigningAlgorithmsMustBeFapiCompliant"
                         },
                         new
                         {
@@ -338,7 +340,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.PostgreSQL.Migrati
                             IssueType = 0,
                             MessageTemplate = "API Resource '{resourceName}' allows {count} access token signing algorithm(s) outside this deployment's FAPI 2.0 allow-list: {algorithms}",
                             ResourceType = 2,
-                            RuleType = 22
+                            RuleType = "ApiResourceSigningAlgorithmsMustBeFapiCompliant"
                         });
                 });
 #pragma warning restore 612, 618

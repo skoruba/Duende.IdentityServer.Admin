@@ -223,7 +223,7 @@ export interface IConfigurationRulesClient {
     delete(id: number): Promise<FileResponse>;
     toggleRule(id: number): Promise<FileResponse>;
     getAllMetadata(): Promise<ConfigurationRuleMetadataDto[]>;
-    getMetadata(ruleType: ConfigurationRuleType): Promise<ConfigurationRuleMetadataDto>;
+    getMetadata(ruleType: string): Promise<ConfigurationRuleMetadataDto>;
 }
 export declare class ConfigurationRulesClient extends WebApiClientBase implements IConfigurationRulesClient {
     private http;
@@ -246,7 +246,7 @@ export declare class ConfigurationRulesClient extends WebApiClientBase implement
     protected processToggleRule(response: Response): Promise<FileResponse>;
     getAllMetadata(): Promise<ConfigurationRuleMetadataDto[]>;
     protected processGetAllMetadata(response: Response): Promise<ConfigurationRuleMetadataDto[]>;
-    getMetadata(ruleType: ConfigurationRuleType): Promise<ConfigurationRuleMetadataDto>;
+    getMetadata(ruleType: string): Promise<ConfigurationRuleMetadataDto>;
     protected processGetMetadata(response: Response): Promise<ConfigurationRuleMetadataDto>;
 }
 export interface IDashboardClient {
@@ -1086,7 +1086,7 @@ export interface IConfigurationRulesDto {
 }
 export declare class ConfigurationRuleDto implements IConfigurationRuleDto {
     id: number;
-    ruleType: ConfigurationRuleType;
+    ruleType: string;
     resourceType: ConfigurationResourceType;
     issueType: ConfigurationIssueType;
     isEnabled: boolean;
@@ -1102,7 +1102,7 @@ export declare class ConfigurationRuleDto implements IConfigurationRuleDto {
 }
 export interface IConfigurationRuleDto {
     id: number;
-    ruleType: ConfigurationRuleType;
+    ruleType: string;
     resourceType: ConfigurationResourceType;
     issueType: ConfigurationIssueType;
     isEnabled: boolean;
@@ -1111,31 +1111,6 @@ export interface IConfigurationRuleDto {
     fixDescription: string | undefined;
     createdAt: Date;
     updatedAt: Date | undefined;
-}
-export declare enum ConfigurationRuleType {
-    ObsoleteImplicitGrant = "ObsoleteImplicitGrant",
-    ObsoletePasswordGrant = "ObsoletePasswordGrant",
-    MissingPkce = "MissingPkce",
-    ClientRedirectUrisMustUseHttps = "ClientRedirectUrisMustUseHttps",
-    ClientMustHaveScopes = "ClientMustHaveScopes",
-    ClientAccessTokenLifetimeTooLong = "ClientAccessTokenLifetimeTooLong",
-    ClientRefreshTokenLifetimeTooLong = "ClientRefreshTokenLifetimeTooLong",
-    ApiScopeNameMustStartWith = "ApiScopeNameMustStartWith",
-    ApiScopeNameMustNotContain = "ApiScopeNameMustNotContain",
-    ApiScopeMustHaveDisplayName = "ApiScopeMustHaveDisplayName",
-    ApiResourceMustHaveScopes = "ApiResourceMustHaveScopes",
-    ApiResourceNameMustStartWith = "ApiResourceNameMustStartWith",
-    IdentityResourceMustBeEnabled = "IdentityResourceMustBeEnabled",
-    IdentityResourceNameMustStartWith = "IdentityResourceNameMustStartWith",
-    ScopeIsUnused = "ScopeIsUnused",
-    SecretIsExpiredInDays = "SecretIsExpiredInDays",
-    ClientNameMustStartWith = "ClientNameMustStartWith",
-    ClientNameMustNotContain = "ClientNameMustNotContain",
-    ClientIdMustStartWith = "ClientIdMustStartWith",
-    ClientIdMustNotContain = "ClientIdMustNotContain",
-    ClientScopeMustExist = "ClientScopeMustExist",
-    ClientSigningAlgorithmsMustBeFapiCompliant = "ClientSigningAlgorithmsMustBeFapiCompliant",
-    ApiResourceSigningAlgorithmsMustBeFapiCompliant = "ApiResourceSigningAlgorithmsMustBeFapiCompliant"
 }
 export declare enum ConfigurationIssueType {
     Warning = "Warning",

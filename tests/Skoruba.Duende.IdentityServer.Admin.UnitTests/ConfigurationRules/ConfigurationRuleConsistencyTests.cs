@@ -8,7 +8,6 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using Duende.IdentityServer.EntityFramework.Entities;
 using FluentAssertions;
-using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.ConfigurationRules;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Helpers;
@@ -17,17 +16,17 @@ using Xunit;
 namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.ConfigurationRules
 {
     /// <summary>
-    /// A rule type lives in four places - the enum, the validator factory, the metadata
-    /// shown in the UI and the seeded defaults. Nothing but these tests ties them
-    /// together, so a rule added to the enum alone would only fail at runtime.
+    /// A built-in rule lives in three places - its key in <see cref="ConfigurationRuleKeys"/>,
+    /// its class (metadata and check) and the seeded defaults. Nothing but these tests ties
+    /// them together, so a key added without a class would only fail at runtime.
     /// </summary>
     public class ConfigurationRuleConsistencyTests
     {
         private static readonly Regex Placeholder = new(@"\{\w+\}", RegexOptions.Compiled);
 
-        public static TheoryData<ConfigurationRuleType> RuleTypes => new(Enum.GetValues<ConfigurationRuleType>());
+        public static TheoryData<string> RuleTypes => new(ConfigurationRuleKeys.BuiltIn);
 
-        private static ConfigurationRule GetSeededRule(ConfigurationRuleType ruleType)
+        private static ConfigurationRule GetSeededRule(string ruleType)
             => ConfigurationRuleSeedHelper.GetSeedData().Single(rule => rule.RuleType == ruleType);
 
         /// <summary>
@@ -71,53 +70,84 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.ConfigurationRules
         }
 
         [Fact]
+        public void BuiltInKeysAreWellFormedAndUnique()
+        {
+            ConfigurationRuleKeys.BuiltIn.Should().OnlyHaveUniqueItems();
+
+            foreach (var key in ConfigurationRuleKeys.BuiltIn)
+            {
+                ConfigurationRuleKeys.IsWellFormed(key).Should().BeTrue(key);
+                ConfigurationRuleKeys.IsCustom(key).Should().BeFalse($"a built-in key has no namespace, but '{key}' has one");
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(RuleTypes))]
+        public void EveryBuiltInKeyIsRegisteredAsBuiltIn(string ruleType)
+        {
+            var descriptor = BuiltInRules.Registry.Find(ruleType);
+
+            descriptor.Should().NotBeNull();
+            descriptor.IsBuiltIn.Should().BeTrue();
+            descriptor.Metadata.Key.Should().Be(ruleType);
+        }
+
+        [Fact]
+        public void RegistryHoldsNothingBeyondTheBuiltInKeys()
+        {
+            BuiltInRules.Registry.Rules.Select(descriptor => descriptor.Key)
+                .Should().BeEquivalentTo(ConfigurationRuleKeys.BuiltIn);
+        }
+
+        [Fact]
         public void EveryRuleTypeHasItsOwnValidator()
         {
-            var factory = new ConfigurationRuleValidatorFactory();
-
-            var validatorTypes = Enum.GetValues<ConfigurationRuleType>()
-                .Select(ruleType => factory.Create(ruleType).GetType())
+            var validatorTypes = ConfigurationRuleKeys.BuiltIn
+                .Select(ruleType => BuiltInRules.Factory.Create(ruleType).GetType())
                 .ToList();
 
-            // Two rule types sharing a validator is a copy and paste slip in the factory.
+            // Two rule types sharing a validator is a copy and paste slip in the registration.
             validatorTypes.Should().OnlyHaveUniqueItems();
         }
 
         [Theory]
         [MemberData(nameof(RuleTypes))]
-        public void ValidatorIsNamedAfterItsRuleType(ConfigurationRuleType ruleType)
+        public void ValidatorIsNamedAfterItsRuleType(string ruleType)
         {
-            new ConfigurationRuleValidatorFactory().Create(ruleType).GetType().Name
-                .Should().Be($"{ruleType}Rule");
+            BuiltInRules.Factory.Create(ruleType).GetType().Name.Should().Be($"{ruleType}Rule");
         }
 
         [Theory]
         [MemberData(nameof(RuleTypes))]
-        public void RuleTypeIsDescribedForTheUi(ConfigurationRuleType ruleType)
+        public void RuleTypeIsDescribedForTheUi(string ruleType)
         {
-            var metadata = new ConfigurationRuleMetadataProvider().GetMetadata(ruleType);
+            var metadata = BuiltInRules.MetadataProvider.GetMetadata(ruleType);
 
             metadata.Should().NotBeNull();
-            metadata.RuleType.Should().Be(ruleType.ToString());
+            metadata.RuleType.Should().Be(ruleType);
             metadata.DisplayName.Should().NotBeNullOrWhiteSpace();
             metadata.Description.Should().NotBeNullOrWhiteSpace();
             metadata.DefaultMessageTemplate.Should().NotBeNullOrWhiteSpace();
             metadata.DefaultFixDescription.Should().NotBeNullOrWhiteSpace();
             Enum.TryParse<ConfigurationResourceType>(metadata.ResourceType, out _).Should().BeTrue();
+
+            // The Admin UI renders an input per parameter type and knows these four.
+            metadata.Parameters.Select(parameter => parameter.Type)
+                .Should().BeSubsetOf(new[] { "string", "number", "boolean", "array" });
         }
 
         [Fact]
         public void MetadataDescribesNothingBeyondTheRuleTypes()
         {
-            new ConfigurationRuleMetadataProvider().GetAllMetadata()
-                .Should().HaveCount(Enum.GetValues<ConfigurationRuleType>().Length);
+            BuiltInRules.MetadataProvider.GetAllMetadata()
+                .Should().HaveCount(ConfigurationRuleKeys.BuiltIn.Count);
         }
 
         [Theory]
         [MemberData(nameof(RuleTypes))]
-        public void RuleTypeIsSeededOnceAndAgreesWithItsMetadata(ConfigurationRuleType ruleType)
+        public void RuleTypeIsSeededOnceAndAgreesWithItsMetadata(string ruleType)
         {
-            var metadata = new ConfigurationRuleMetadataProvider().GetMetadata(ruleType);
+            var metadata = BuiltInRules.MetadataProvider.GetMetadata(ruleType);
 
             var seededRule = GetSeededRule(ruleType);
 
@@ -129,9 +159,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.ConfigurationRules
 
         [Theory]
         [MemberData(nameof(RuleTypes))]
-        public void ConfigurationsUseOnlyTheDeclaredParameters(ConfigurationRuleType ruleType)
+        public void ConfigurationsUseOnlyTheDeclaredParameters(string ruleType)
         {
-            var metadata = new ConfigurationRuleMetadataProvider().GetMetadata(ruleType);
+            var metadata = BuiltInRules.MetadataProvider.GetMetadata(ruleType);
             var declaredParameters = (metadata.Parameters ?? []).Select(parameter => parameter.Name).ToList();
 
             foreach (var configuration in new[] { metadata.DefaultConfiguration, metadata.ExampleConfiguration })
@@ -150,11 +180,11 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.ConfigurationRules
 
         [Theory]
         [MemberData(nameof(RuleTypes))]
-        public void SeededRuleReportsAnIssueWithEveryPlaceholderFilledIn(ConfigurationRuleType ruleType)
+        public void SeededRuleReportsAnIssueWithEveryPlaceholderFilledIn(string ruleType)
         {
             var seededRule = GetSeededRule(ruleType);
 
-            var issues = new ConfigurationRuleValidatorFactory().Create(ruleType).ValidateWithContext(
+            var issues = BuiltInRules.Factory.Create(ruleType).ValidateWithContext(
                 CreateContextBreakingEveryRule(),
                 seededRule.Configuration,
                 seededRule.MessageTemplate,
@@ -176,14 +206,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.ConfigurationRules
 
         [Theory]
         [MemberData(nameof(RuleTypes))]
-        public void ClientWithoutANameIsReportedUnderItsClientId(ConfigurationRuleType ruleType)
+        public void ClientWithoutANameIsReportedUnderItsClientId(string ruleType)
         {
             var context = CreateContextBreakingEveryRule();
             context.Clients.ForEach(client => client.ClientName = null);
             var clientIdsById = context.Clients.ToDictionary(client => client.Id, client => client.ClientId);
             var seededRule = GetSeededRule(ruleType);
 
-            var clientIssues = new ConfigurationRuleValidatorFactory().Create(ruleType)
+            var clientIssues = BuiltInRules.Factory.Create(ruleType)
                 .Validate(context, seededRule.Configuration)
                 .Where(issue => issue.ResourceType == ConfigurationResourceType.Client);
 
@@ -197,11 +227,21 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.ConfigurationRules
 
         [Theory]
         [MemberData(nameof(RuleTypes))]
-        public void RuleCopesWithAnEmptyStoreAndNoConfiguration(ConfigurationRuleType ruleType)
+        public void RuleCopesWithAnEmptyStoreAndNoConfiguration(string ruleType)
         {
-            new ConfigurationRuleValidatorFactory().Create(ruleType)
+            BuiltInRules.Factory.Create(ruleType)
                 .Validate(new ValidationContext(), configuration: null)
                 .Should().BeEmpty();
+        }
+
+        [Fact]
+        public void FactoryCreatesAFreshInstanceForEveryRun()
+        {
+            var first = BuiltInRules.Factory.Create(ConfigurationRuleKeys.MissingPkce);
+            var second = BuiltInRules.Factory.Create(ConfigurationRuleKeys.MissingPkce);
+
+            // A rule may keep the state of one run, so two runs must never share an instance.
+            second.Should().NotBeSameAs(first);
         }
 
         [Fact]
@@ -211,29 +251,29 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.ConfigurationRules
             // the end of the list - never in between.
             var expectedOrder = new[]
             {
-                ConfigurationRuleType.ObsoleteImplicitGrant,
-                ConfigurationRuleType.ObsoletePasswordGrant,
-                ConfigurationRuleType.MissingPkce,
-                ConfigurationRuleType.ClientMustHaveScopes,
-                ConfigurationRuleType.ApiResourceMustHaveScopes,
-                ConfigurationRuleType.ClientRedirectUrisMustUseHttps,
-                ConfigurationRuleType.ClientAccessTokenLifetimeTooLong,
-                ConfigurationRuleType.ClientRefreshTokenLifetimeTooLong,
-                ConfigurationRuleType.ApiScopeNameMustStartWith,
-                ConfigurationRuleType.ApiScopeNameMustNotContain,
-                ConfigurationRuleType.ApiScopeMustHaveDisplayName,
-                ConfigurationRuleType.ApiResourceNameMustStartWith,
-                ConfigurationRuleType.IdentityResourceMustBeEnabled,
-                ConfigurationRuleType.IdentityResourceNameMustStartWith,
-                ConfigurationRuleType.ScopeIsUnused,
-                ConfigurationRuleType.SecretIsExpiredInDays,
-                ConfigurationRuleType.ClientNameMustStartWith,
-                ConfigurationRuleType.ClientNameMustNotContain,
-                ConfigurationRuleType.ClientIdMustStartWith,
-                ConfigurationRuleType.ClientIdMustNotContain,
-                ConfigurationRuleType.ClientScopeMustExist,
-                ConfigurationRuleType.ClientSigningAlgorithmsMustBeFapiCompliant,
-                ConfigurationRuleType.ApiResourceSigningAlgorithmsMustBeFapiCompliant
+                ConfigurationRuleKeys.ObsoleteImplicitGrant,
+                ConfigurationRuleKeys.ObsoletePasswordGrant,
+                ConfigurationRuleKeys.MissingPkce,
+                ConfigurationRuleKeys.ClientMustHaveScopes,
+                ConfigurationRuleKeys.ApiResourceMustHaveScopes,
+                ConfigurationRuleKeys.ClientRedirectUrisMustUseHttps,
+                ConfigurationRuleKeys.ClientAccessTokenLifetimeTooLong,
+                ConfigurationRuleKeys.ClientRefreshTokenLifetimeTooLong,
+                ConfigurationRuleKeys.ApiScopeNameMustStartWith,
+                ConfigurationRuleKeys.ApiScopeNameMustNotContain,
+                ConfigurationRuleKeys.ApiScopeMustHaveDisplayName,
+                ConfigurationRuleKeys.ApiResourceNameMustStartWith,
+                ConfigurationRuleKeys.IdentityResourceMustBeEnabled,
+                ConfigurationRuleKeys.IdentityResourceNameMustStartWith,
+                ConfigurationRuleKeys.ScopeIsUnused,
+                ConfigurationRuleKeys.SecretIsExpiredInDays,
+                ConfigurationRuleKeys.ClientNameMustStartWith,
+                ConfigurationRuleKeys.ClientNameMustNotContain,
+                ConfigurationRuleKeys.ClientIdMustStartWith,
+                ConfigurationRuleKeys.ClientIdMustNotContain,
+                ConfigurationRuleKeys.ClientScopeMustExist,
+                ConfigurationRuleKeys.ClientSigningAlgorithmsMustBeFapiCompliant,
+                ConfigurationRuleKeys.ApiResourceSigningAlgorithmsMustBeFapiCompliant
             };
 
             var seedData = ConfigurationRuleSeedHelper.GetSeedData();
@@ -248,11 +288,11 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.ConfigurationRules
             ConfigurationRuleSeedHelper.GetSeedData().Where(rule => rule.IsEnabled).Select(rule => rule.RuleType)
                 .Should().BeEquivalentTo(new[]
                 {
-                    ConfigurationRuleType.ObsoleteImplicitGrant,
-                    ConfigurationRuleType.ObsoletePasswordGrant,
-                    ConfigurationRuleType.MissingPkce,
-                    ConfigurationRuleType.ClientMustHaveScopes,
-                    ConfigurationRuleType.ApiResourceMustHaveScopes
+                    ConfigurationRuleKeys.ObsoleteImplicitGrant,
+                    ConfigurationRuleKeys.ObsoletePasswordGrant,
+                    ConfigurationRuleKeys.MissingPkce,
+                    ConfigurationRuleKeys.ClientMustHaveScopes,
+                    ConfigurationRuleKeys.ApiResourceMustHaveScopes
                 });
         }
 

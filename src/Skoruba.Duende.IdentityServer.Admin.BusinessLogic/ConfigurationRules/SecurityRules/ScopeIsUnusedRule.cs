@@ -10,9 +10,24 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfac
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.SecurityRules;
 
-public class ScopeIsUnusedRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
+public class ScopeIsUnusedRule : ConfigurationRuleBase
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
+    public override string Key => ConfigurationRuleKeys.ScopeIsUnused;
+    public override ConfigurationResourceType ResourceType => ConfigurationResourceType.ApiScope;
+    public override string DisplayName => "Scope Is Unused";
+    public override string Description => "Detects API scopes that are not used by any clients or API resources, which may indicate unnecessary scopes that can be removed.";
+
+    public override IReadOnlyList<ConfigurationRuleParameter> Parameters { get; } =
+    [
+        ConfigurationRuleParameter.Array("excludeScopes", "Exclude Scopes", "List of scope names to exclude from unused scope detection (e.g., standard OIDC scopes)", defaultValue: new[] { "openid", "profile", "email", "address", "phone", "offline_access" })
+    ];
+
+    public override string DefaultConfiguration => "{\"excludeScopes\": [\"openid\", \"profile\", \"email\", \"address\", \"phone\", \"offline_access\"]}";
+    public override string ExampleConfiguration => "{\"excludeScopes\": [\"openid\", \"profile\", \"admin\", \"system\"]}";
+    public override string DefaultMessageTemplate => "API Scope '{scopeName}'{displayNameSuffix} is not used by any clients or API resources";
+    public override string DefaultFixDescription => "This API Scope '{scopeName}' is not used by any clients or API resources. Consider removing it from API Scopes list or assigning it to relevant clients/resources.";
+
+    public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<UnusedScopeConfig>(configuration);
         var excludeScopes = config.ExcludeScopes ?? new[] { "openid", "profile", "email", "address", "phone", "offline_access" };

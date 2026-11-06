@@ -10,9 +10,11 @@ public class ConfigurationRule
     public int Id { get; set; }
 
     /// <summary>
-    /// Type of the rule (e.g., ObsoleteImplicitGrant, MissingPkce, etc.)
+    /// Key of the rule that checks this row, e.g. <c>MissingPkce</c> for a built-in rule or
+    /// <c>Contoso.ClientSecretMustExpireWithinOneYear</c> for a custom one.
+    /// See <see cref="ConfigurationRules.ConfigurationRuleKeys"/>.
     /// </summary>
-    public ConfigurationRuleType RuleType { get; set; }
+    public string RuleType { get; set; }
 
     /// <summary>
     /// Which resource type this rule applies to
@@ -25,24 +27,24 @@ public class ConfigurationRule
     public ConfigurationIssueType IssueType { get; set; }
 
     /// <summary>
-    /// Whether this rule is active and should be checked
+    /// Whether the rule is active
     /// </summary>
     public bool IsEnabled { get; set; }
 
     /// <summary>
-    /// JSON configuration for rules that need additional parameters
-    /// Example: {"prefix": "scope_"} or {"requireHttps": true}
+    /// JSON configuration for the rule (optional)
+    /// Example: {"maxLifetimeSeconds": 3600}
     /// </summary>
     public string Configuration { get; set; }
 
     /// <summary>
-    /// Custom message template that can use placeholders
+    /// Message template for the issue
+    /// Example: "Token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s"
     /// </summary>
     public string MessageTemplate { get; set; }
 
     /// <summary>
-    /// Description of how to fix the issue - shown in UI as guidance
-    /// Example: "Go to the client details → Advanced → Grant Types and replace 'implicit' with 'authorization_code'."
+    /// Description of how to fix the issue
     /// </summary>
     public string FixDescription { get; set; }
 
