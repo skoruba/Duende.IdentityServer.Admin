@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Duende.IdentityServer.EntityFramework.Entities;
@@ -654,6 +655,77 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
 
                 //Assert that clients are same
                 randomClients.Should().BeEquivalentTo(clients.Data);
+            }
+        }
+
+        [Fact]
+        public async Task GetClientsByScopeAsync()
+        {
+            const string usedScope = "used_by_scope_test";
+
+            using (var context = GetDbContext())
+            {
+                var clientRepository = GetClientRepository(context);
+
+                var firstClient = ClientMock.GenerateRandomClient(0);
+                firstClient.AllowedScopes = new List<ClientScope> { new ClientScope { Scope = usedScope } };
+
+                var secondClient = ClientMock.GenerateRandomClient(0);
+                secondClient.AllowedScopes = new List<ClientScope>
+                {
+                    new ClientScope { Scope = "openid" },
+                    new ClientScope { Scope = usedScope }
+                };
+
+                var otherClient = ClientMock.GenerateRandomClient(0);
+                otherClient.AllowedScopes = new List<ClientScope> { new ClientScope { Scope = $"{usedScope}_other" } };
+
+                await clientRepository.AddClientAsync(firstClient);
+                await clientRepository.AddClientAsync(secondClient);
+                await clientRepository.AddClientAsync(otherClient);
+
+                var clients = await clientRepository.GetClientsByScopeAsync(usedScope);
+
+                clients.TotalCount.Should().Be(2);
+                clients.Data.Select(x => x.Id).Should().BeEquivalentTo(new[] { firstClient.Id, secondClient.Id });
+                clients.Data.Select(x => x.ClientId).Should().BeInAscendingOrder();
+
+                var firstPage = await clientRepository.GetClientsByScopeAsync(usedScope, 1, 1);
+
+                firstPage.TotalCount.Should().Be(2);
+                firstPage.Data.Should().ContainSingle();
+            }
+        }
+
+        [Fact]
+        public async Task GetClientCountsByScopesAsync()
+        {
+            using (var context = GetDbContext())
+            {
+                var clientRepository = GetClientRepository(context);
+
+                var firstClient = ClientMock.GenerateRandomClient(0);
+                firstClient.AllowedScopes = new List<ClientScope>
+                {
+                    new ClientScope { Scope = "count_scope_a" },
+                    new ClientScope { Scope = "count_scope_b" }
+                };
+
+                var secondClient = ClientMock.GenerateRandomClient(0);
+                secondClient.AllowedScopes = new List<ClientScope> { new ClientScope { Scope = "count_scope_a" } };
+
+                await clientRepository.AddClientAsync(firstClient);
+                await clientRepository.AddClientAsync(secondClient);
+
+                var counts = await clientRepository.GetClientCountsByScopesAsync(
+                    new[] { "count_scope_a", "count_scope_b", "count_scope_unused", "count_scope_a" });
+
+                counts.Should().BeEquivalentTo(new Dictionary<string, int>
+                {
+                    ["count_scope_a"] = 2,
+                    ["count_scope_b"] = 1,
+                    ["count_scope_unused"] = 0
+                });
             }
         }
 

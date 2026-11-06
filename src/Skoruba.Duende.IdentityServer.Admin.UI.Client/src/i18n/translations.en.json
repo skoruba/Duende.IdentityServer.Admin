@@ -356,7 +356,9 @@
       "UserClaims": "User Claims",
       "UserClaimsDescription": "Manage the user claims that should be included in the access token.",
       "Properties": "Properties",
-      "PropertiesDescription": "Additional properties for the API scope."
+      "PropertiesDescription": "Additional properties for the API scope.",
+      "UsedBy": "Used By",
+      "UsedByDescription": "Clients that allow this scope and API resources that include it."
     },
     "Create": {
       "PageTitle": "API Scope"
@@ -411,7 +413,9 @@
       "UserClaims": "User Claims",
       "UserClaimsDescription": "Manage the user claims that should be included in the identity token.",
       "Properties": "Properties",
-      "PropertiesDescription": "Additional properties for the identity resource."
+      "PropertiesDescription": "Additional properties for the identity resource.",
+      "UsedBy": "Used By",
+      "UsedByDescription": "Clients that allow this identity resource as a scope."
     },
     "Create": {
       "PageTitle": "Identity Resource"
@@ -439,6 +443,18 @@
         "UserClaims_Label": "User Claims"
       }
     }
+  },
+  "ScopeUsage": {
+    "UsedBy": "Used By",
+    "ClientCount_one": "Used by {{count}} client",
+    "ClientCount_other": "Used by {{count}} clients",
+    "Clients": "Clients",
+    "ApiResources": "API Resources",
+    "DisplayName": "Display Name",
+    "Disabled": "Disabled",
+    "NoClientsApiScope": "No client allows this scope.",
+    "NoClientsIdentityResource": "No client allows this identity resource.",
+    "NoApiResources": "No API resource includes this scope."
   },
   "ApiResource": {
     "Tips": {

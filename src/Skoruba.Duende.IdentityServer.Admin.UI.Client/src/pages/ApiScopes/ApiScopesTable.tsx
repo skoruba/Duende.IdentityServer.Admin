@@ -3,6 +3,8 @@ import { ApiScopeEditUrl } from "@/routing/Urls";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import ApiScopesActions from "./ApiScopesActions";
+import ScopeUsageButton from "@/components/ScopeUsage/ScopeUsageButton";
+import { useScopeClientCounts } from "@/components/ScopeUsage/useScopeClientCounts";
 import { ApiScopeData, ApiScopesData } from "@/models/ApiScopes/ApiScopeModels";
 import { PaginationState } from "@tanstack/react-table";
 import { Dispatch, SetStateAction } from "react";
@@ -19,6 +21,9 @@ const ApiScopesTable = ({
   setPagination,
 }: ApiScopesTableProps) => {
   const { t } = useTranslation();
+  const clientCounts = useScopeClientCounts(
+    data.items.map((scope) => scope.name),
+  );
 
   const columns = [
     {
@@ -39,7 +44,15 @@ const ApiScopesTable = ({
     {
       id: "actions",
       cell: ({ row }: { row: { original: ApiScopeData } }) => (
-        <ApiScopesActions scope={row.original} />
+        <div className="flex items-center justify-end gap-2">
+          <ScopeUsageButton
+            scopeKind="apiScope"
+            scopeId={row.original.id}
+            scopeName={row.original.name}
+            clientCount={clientCounts.data?.[row.original.name]}
+          />
+          <ApiScopesActions scope={row.original} />
+        </div>
       ),
     },
   ];

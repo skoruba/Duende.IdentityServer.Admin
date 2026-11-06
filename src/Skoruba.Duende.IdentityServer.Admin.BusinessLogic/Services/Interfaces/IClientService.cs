@@ -30,6 +30,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces
 
         Task<ClientsDto> GetClientsAsync(string search, int page = 1, int pageSize = 10);
 
+        Task<ClientsDto> GetClientsByScopeAsync(string scope, int page = 1, int pageSize = 10);
+
+        Task<Dictionary<string, int>> GetClientCountsByScopesAsync(IEnumerable<string> scopes);
+
         Task<List<string>> GetScopesAsync(string scope, int limit = 0, bool excludeIdentityResources = false,
             bool excludeApiScopes = false);
 

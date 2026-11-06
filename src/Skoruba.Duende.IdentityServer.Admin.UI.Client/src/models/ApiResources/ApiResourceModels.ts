@@ -19,3 +19,15 @@ export interface ApiResourceSecretsData {
   totalCount: number;
   items: ApiResourceSecretData[];
 }
+
+export interface ScopeApiResourceData {
+  id: number;
+  name: string;
+  displayName: string;
+  enabled: boolean;
+}
+
+export interface ScopeApiResourcesData {
+  totalCount: number;
+  items: ScopeApiResourceData[];
+}

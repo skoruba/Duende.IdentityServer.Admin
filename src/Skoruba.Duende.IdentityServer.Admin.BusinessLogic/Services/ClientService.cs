@@ -258,6 +258,21 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services
             return clientsDto;
         }
 
+        public virtual Task<Dictionary<string, int>> GetClientCountsByScopesAsync(IEnumerable<string> scopes)
+        {
+            return ClientRepository.GetClientCountsByScopesAsync(scopes);
+        }
+
+        public virtual async Task<ClientsDto> GetClientsByScopeAsync(string scope, int page = 1, int pageSize = 10)
+        {
+            var pagedList = await ClientRepository.GetClientsByScopeAsync(scope, page, pageSize);
+            var clientsDto = pagedList.ToModel();
+
+            await AuditEventLogger.LogEventAsync(new ClientsRequestedEvent(clientsDto));
+
+            return clientsDto;
+        }
+
         public virtual async Task<List<string>> GetScopesAsync(string scope, int limit = 0, bool excludeIdentityResources = false, bool excludeApiScopes = false)
         {
             var scopes = await ClientRepository.GetScopesAsync(scope, limit, excludeIdentityResources, excludeApiScopes);

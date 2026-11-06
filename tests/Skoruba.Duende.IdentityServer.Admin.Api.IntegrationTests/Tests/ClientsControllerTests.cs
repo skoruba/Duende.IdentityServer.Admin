@@ -60,7 +60,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Tests
                 .ToList() ?? new List<ClientPropertyApiDto>();
         }
 
-        private static ClientApiDto BuildClientCreatePayload(string clientId)
+        internal static ClientApiDto BuildClientCreatePayload(string clientId)
         {
             var payload = ClientDtoApiMock.GenerateRandomClient(0);
 
