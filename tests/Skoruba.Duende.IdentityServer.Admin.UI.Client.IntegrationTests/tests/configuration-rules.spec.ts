@@ -5,6 +5,7 @@ import { ensureLoggedInAndOpenConfigurationRules } from "./helpers/configuration
 import {
   runConfigurationRuleReportsIssueFlow,
   runCreateAndVerifyConfigurationRulesFlow,
+  runCreateDeploymentConfigurationRuleFlow,
 } from "./scenarios/configuration-rule-persistence-flow";
 import { UI_TEXT } from "./helpers/ui-texts";
 
@@ -42,5 +43,12 @@ test.describe("Admin UI Configuration Rules", () => {
       credentials,
       seedData.expectedClientId,
     );
+  });
+
+  test("offers the rule the Admin API registers next to the built-in ones and saves it", async ({
+    page,
+  }) => {
+    test.setTimeout(240_000);
+    await runCreateDeploymentConfigurationRuleFlow(page, credentials);
   });
 });

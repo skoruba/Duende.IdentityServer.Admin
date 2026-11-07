@@ -4,6 +4,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfaces;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.ConfigurationRules;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities;
 
 namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.DbContexts;
@@ -29,7 +30,7 @@ public class AdminConfigurationDbContext : DbContext, IAdminConfigurationStoreDb
         modelBuilder.Entity<ConfigurationRule>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.RuleType).IsRequired();
+            entity.Property(e => e.RuleType).IsRequired().HasMaxLength(ConfigurationRuleKeys.MaxLength);
             entity.Property(e => e.ResourceType).IsRequired();
             entity.Property(e => e.IssueType).IsRequired();
             entity.Property(e => e.IsEnabled).IsRequired();

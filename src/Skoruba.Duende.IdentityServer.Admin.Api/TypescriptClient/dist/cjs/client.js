@@ -14,8 +14,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DashboardAuditLogStatisticsDto = exports.DashboardAuditLogDto = exports.DashboardDto = exports.ConfigurationRuleParameterDto = exports.ConfigurationRuleMetadataDto = exports.ConfigurationIssueType = exports.ConfigurationRuleType = exports.ConfigurationRuleDto = exports.ConfigurationRulesDto = exports.ConfigurationIssueSummaryDto = exports.ConfigurationResourceType = exports.ConfigurationIssueTypeView = exports.ConfigurationIssueDto = exports.ConfigurationIssuesPagedDto = exports.ClientClaimsApiDto = exports.ClientPropertiesApiDto = exports.ClientSecretApiDto = exports.ClientSecretsApiDto = exports.ClientCloneApiDto = exports.SelectItemDto = exports.ClientPropertyApiDto = exports.ClientClaimApiDto = exports.ClientApiDto = exports.ClientsApiDto = exports.ApiScopePropertiesApiDto = exports.ApiScopePropertyApiDto = exports.ApiScopeApiDto = exports.ApiScopesApiDto = exports.ApiResourcePropertyApiDto = exports.ApiResourcePropertiesApiDto = exports.ApiSecretApiDto = exports.ApiSecretsApiDto = exports.ProblemDetails = exports.ApiResourceApiDto = exports.ApiResourcesApiDto = exports.UsersClient = exports.RolesClient = exports.PersistedGrantsClient = exports.LogsClient = exports.KeysClient = exports.InfoClient = exports.IdentityResourcesClient = exports.IdentityProvidersClient = exports.DashboardClient = exports.ConfigurationRulesClient = exports.ConfigurationIssuesClient = exports.ClientsClient = exports.ApiScopesClient = exports.ApiResourcesClient = exports.WebApiClientBase = void 0;
-exports.SwaggerException = exports.UserChangePasswordApiDtoOfString = exports.UserProviderDeleteApiDtoOfString = exports.UserProviderApiDtoOfString = exports.UserProvidersApiDtoOfString = exports.UserClaimApiDtoOfString = exports.UserClaimsApiDtoOfString = exports.UserRoleApiDtoOfString = exports.UserRolesApiDtoOfIdentityRoleDto = exports.TKey = exports.RoleClaimApiDto_1 = exports.RoleClaimApiDtoOfString = exports.RoleClaimsApiDtoOfString = exports.IdentityUserDto = exports.UserDtoOfString = exports.BaseUserDtoOfString = exports.IdentityUsersDto = exports.UsersDtoOfIdentityUserDtoAndString = exports.IdentityRolesDto = exports.RolesDtoOfIdentityRoleDtoAndString = exports.IdentityRoleDto = exports.RoleDtoOfString = exports.BaseRoleDtoOfString = exports.PersistedGrantsApiDto = exports.PersistedGrantApiDto = exports.PersistedGrantSubjectApiDto = exports.PersistedGrantSubjectsApiDto = exports.AuditLogsDto = exports.KeyApiDto = exports.KeysApiDto = exports.EnvironmentInfoApiDto = exports.SystemHealthEntryApiDto = exports.SystemHealthStatus = exports.SystemHealthApiDto = exports.IdentityResourcePropertyApiDto = exports.IdentityResourcePropertiesApiDto = exports.IdentityResourceApiDto = exports.IdentityResourcesApiDto = exports.IdentityProviderApiDto = exports.IdentityProvidersApiDto = exports.DashboardIdentityDto = exports.AuditLogDto = void 0;
+exports.AuditLogDto = exports.DashboardAuditLogStatisticsDto = exports.DashboardAuditLogDto = exports.DashboardDto = exports.ConfigurationRuleParameterDto = exports.ConfigurationRuleMetadataDto = exports.ConfigurationIssueType = exports.ConfigurationRuleDto = exports.ConfigurationRulesDto = exports.ConfigurationIssueSummaryDto = exports.ConfigurationResourceType = exports.ConfigurationIssueTypeView = exports.ConfigurationIssueDto = exports.ConfigurationIssuesPagedDto = exports.ClientClaimsApiDto = exports.ClientPropertiesApiDto = exports.ClientSecretApiDto = exports.ClientSecretsApiDto = exports.ClientCloneApiDto = exports.SelectItemDto = exports.ClientPropertyApiDto = exports.ClientClaimApiDto = exports.ClientApiDto = exports.ClientsApiDto = exports.ApiScopePropertiesApiDto = exports.ApiScopePropertyApiDto = exports.ApiScopeApiDto = exports.ApiScopesApiDto = exports.ApiResourcePropertyApiDto = exports.ApiResourcePropertiesApiDto = exports.ApiSecretApiDto = exports.ApiSecretsApiDto = exports.ProblemDetails = exports.ApiResourceApiDto = exports.ApiResourcesApiDto = exports.UsersClient = exports.RolesClient = exports.PersistedGrantsClient = exports.LogsClient = exports.KeysClient = exports.InfoClient = exports.IdentityResourcesClient = exports.IdentityProvidersClient = exports.DashboardClient = exports.ConfigurationRulesClient = exports.ConfigurationIssuesClient = exports.ClientsClient = exports.ApiScopesClient = exports.ApiResourcesClient = exports.WebApiClientBase = void 0;
+exports.SwaggerException = exports.UserChangePasswordApiDtoOfString = exports.UserProviderDeleteApiDtoOfString = exports.UserProviderApiDtoOfString = exports.UserProvidersApiDtoOfString = exports.UserClaimApiDtoOfString = exports.UserClaimsApiDtoOfString = exports.UserRoleApiDtoOfString = exports.UserRolesApiDtoOfIdentityRoleDto = exports.TKey = exports.RoleClaimApiDto_1 = exports.RoleClaimApiDtoOfString = exports.RoleClaimsApiDtoOfString = exports.IdentityUserDto = exports.UserDtoOfString = exports.BaseUserDtoOfString = exports.IdentityUsersDto = exports.UsersDtoOfIdentityUserDtoAndString = exports.IdentityRolesDto = exports.RolesDtoOfIdentityRoleDtoAndString = exports.IdentityRoleDto = exports.RoleDtoOfString = exports.BaseRoleDtoOfString = exports.PersistedGrantsApiDto = exports.PersistedGrantApiDto = exports.PersistedGrantSubjectApiDto = exports.PersistedGrantSubjectsApiDto = exports.AuditLogsDto = exports.KeyApiDto = exports.KeysApiDto = exports.EnvironmentInfoApiDto = exports.SystemHealthEntryApiDto = exports.SystemHealthStatus = exports.SystemHealthApiDto = exports.IdentityResourcePropertyApiDto = exports.IdentityResourcePropertiesApiDto = exports.IdentityResourceApiDto = exports.IdentityResourcesApiDto = exports.IdentityProviderApiDto = exports.IdentityProvidersApiDto = exports.DashboardIdentityDto = void 0;
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 class WebApiClientBase {
@@ -8497,32 +8497,6 @@ class ConfigurationRuleDto {
     }
 }
 exports.ConfigurationRuleDto = ConfigurationRuleDto;
-var ConfigurationRuleType;
-(function (ConfigurationRuleType) {
-    ConfigurationRuleType["ObsoleteImplicitGrant"] = "ObsoleteImplicitGrant";
-    ConfigurationRuleType["ObsoletePasswordGrant"] = "ObsoletePasswordGrant";
-    ConfigurationRuleType["MissingPkce"] = "MissingPkce";
-    ConfigurationRuleType["ClientRedirectUrisMustUseHttps"] = "ClientRedirectUrisMustUseHttps";
-    ConfigurationRuleType["ClientMustHaveScopes"] = "ClientMustHaveScopes";
-    ConfigurationRuleType["ClientAccessTokenLifetimeTooLong"] = "ClientAccessTokenLifetimeTooLong";
-    ConfigurationRuleType["ClientRefreshTokenLifetimeTooLong"] = "ClientRefreshTokenLifetimeTooLong";
-    ConfigurationRuleType["ApiScopeNameMustStartWith"] = "ApiScopeNameMustStartWith";
-    ConfigurationRuleType["ApiScopeNameMustNotContain"] = "ApiScopeNameMustNotContain";
-    ConfigurationRuleType["ApiScopeMustHaveDisplayName"] = "ApiScopeMustHaveDisplayName";
-    ConfigurationRuleType["ApiResourceMustHaveScopes"] = "ApiResourceMustHaveScopes";
-    ConfigurationRuleType["ApiResourceNameMustStartWith"] = "ApiResourceNameMustStartWith";
-    ConfigurationRuleType["IdentityResourceMustBeEnabled"] = "IdentityResourceMustBeEnabled";
-    ConfigurationRuleType["IdentityResourceNameMustStartWith"] = "IdentityResourceNameMustStartWith";
-    ConfigurationRuleType["ScopeIsUnused"] = "ScopeIsUnused";
-    ConfigurationRuleType["SecretIsExpiredInDays"] = "SecretIsExpiredInDays";
-    ConfigurationRuleType["ClientNameMustStartWith"] = "ClientNameMustStartWith";
-    ConfigurationRuleType["ClientNameMustNotContain"] = "ClientNameMustNotContain";
-    ConfigurationRuleType["ClientIdMustStartWith"] = "ClientIdMustStartWith";
-    ConfigurationRuleType["ClientIdMustNotContain"] = "ClientIdMustNotContain";
-    ConfigurationRuleType["ClientScopeMustExist"] = "ClientScopeMustExist";
-    ConfigurationRuleType["ClientSigningAlgorithmsMustBeFapiCompliant"] = "ClientSigningAlgorithmsMustBeFapiCompliant";
-    ConfigurationRuleType["ApiResourceSigningAlgorithmsMustBeFapiCompliant"] = "ApiResourceSigningAlgorithmsMustBeFapiCompliant";
-})(ConfigurationRuleType || (exports.ConfigurationRuleType = ConfigurationRuleType = {}));
 var ConfigurationIssueType;
 (function (ConfigurationIssueType) {
     ConfigurationIssueType["Warning"] = "Warning";

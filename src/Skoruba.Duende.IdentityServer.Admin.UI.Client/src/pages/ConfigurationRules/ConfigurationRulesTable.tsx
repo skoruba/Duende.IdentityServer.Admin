@@ -12,6 +12,7 @@ import {
   useConfigurationRulesMetadata,
 } from "@/services/ConfigurationRulesService";
 import { summarizeRule } from "@/lib/configurationRules/summarizeRule";
+import { isUnknownRuleType } from "@/lib/configurationRules/ruleTypeSelection";
 import { useMutation } from "@tanstack/react-query";
 import { IssueTypeBadge } from "../ConfigurationIssues/IssueTypeBadge";
 import { toast } from "@/components/ui/use-toast";
@@ -127,11 +128,22 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
       header: t("ConfigurationRules.RuleType"),
       cell: ({ row }) => {
         const summary = summarizeRule(row.original, metadata, formatBoolean);
+        const isUnknown = isUnknownRuleType(metadata, row.original.ruleType);
 
         return (
           <div className="space-y-1">
-            <div className="font-medium" title={row.original.ruleType}>
-              {summary.name}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="font-medium" title={String(row.original.ruleType)}>
+                {summary.name}
+              </span>
+              {isUnknown && (
+                <Badge
+                  variant="destructive"
+                  title={t("ConfigurationRules.UnknownRuleDescription")}
+                >
+                  {t("ConfigurationRules.UnknownRule")}
+                </Badge>
+              )}
             </div>
             {summary.description && (
               <div className="text-xs text-muted-foreground">
@@ -181,7 +193,11 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
           <Switch
             checked={row.original.isEnabled}
             onCheckedChange={() => handleToggle(row.original)}
-            disabled={toggleMutation.isPending}
+            disabled={
+              toggleMutation.isPending ||
+              (!row.original.isEnabled &&
+                isUnknownRuleType(metadata, row.original.ruleType))
+            }
           />
         );
       },
@@ -196,6 +212,7 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
               variant="ghost"
               size="sm"
               onClick={() => onEdit(row.original)}
+              disabled={isUnknownRuleType(metadata, row.original.ruleType)}
             >
               <Edit className="h-4 w-4" />
             </Button>

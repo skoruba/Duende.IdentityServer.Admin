@@ -9,9 +9,24 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfac
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.ApiScopeRules;
 
-public class ApiScopeNameMustNotContainRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
+public class ApiScopeNameMustNotContainRule : ConfigurationRuleBase
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
+    public override string Key => ConfigurationRuleKeys.ApiScopeNameMustNotContain;
+    public override ConfigurationResourceType ResourceType => ConfigurationResourceType.ApiScope;
+    public override string DisplayName => "API Scope Name Must Not Contain";
+    public override string Description => "Ensures API scope names do not contain forbidden strings or characters.";
+
+    public override IReadOnlyList<ConfigurationRuleParameter> Parameters { get; } =
+    [
+        ConfigurationRuleParameter.Array("forbiddenStrings", "Forbidden Strings", "Array of strings that must not appear in scope names", defaultValue: new[] { "test", "temp", "debug" }, required: true)
+    ];
+
+    public override string DefaultConfiguration => "{\"forbiddenStrings\": [\"test\", \"temp\", \"debug\"]}";
+    public override string ExampleConfiguration => "{\"forbiddenStrings\": [\"admin\", \"internal\"]}";
+    public override string DefaultMessageTemplate => "API Scope '{scopeName}' contains forbidden string(s): {forbiddenStrings}";
+    public override string DefaultFixDescription => "Navigate to API Scope Details → Basic Information section and rename the scope to remove forbidden strings from the name.";
+
+    public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<ForbiddenConfig>(configuration);
 

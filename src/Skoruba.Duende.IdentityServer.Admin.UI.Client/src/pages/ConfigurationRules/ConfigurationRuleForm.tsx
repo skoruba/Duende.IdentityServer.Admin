@@ -17,6 +17,10 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { isEnumValue } from "@/lib/type-guards";
+import {
+  isRuleTypeInUse,
+  resolveRuleType,
+} from "@/lib/configurationRules/ruleTypeSelection";
 
 interface ConfigurationRuleFormProps {
   rule: client.ConfigurationRuleDto | null;
@@ -34,23 +38,21 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
   isEditMode,
 }) => {
   const { t } = useTranslation();
-  const [selectedRuleType, setSelectedRuleType] = React.useState<
-    client.ConfigurationRuleType | ""
-  >("");
+  // The key of the rule type, as the Admin API lists it in the metadata; "" until chosen.
+  const [selectedRuleType, setSelectedRuleType] = React.useState("");
   const requiredFieldMessage = useCallback(
     (label: string) => t("Validation.FieldRequired", { field: label }),
     [t]
   );
 
-  const selectedTypeValue = selectedRuleType || rule?.ruleType;
+  const selectedTypeValue =
+    selectedRuleType || (rule ? String(rule.ruleType) : undefined);
   const currentMetadata = metadata?.find(
     (m) => String(m.ruleType) === String(selectedTypeValue)
   );
 
   const isDuplicate =
-    !isEditMode &&
-    selectedRuleType &&
-    existingRules.some((r) => r.ruleType === selectedRuleType);
+    !isEditMode && isRuleTypeInUse(existingRules, selectedRuleType);
 
   const buildSchema = useCallback(() => {
     const baseSchema = {
@@ -87,10 +89,11 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
         case "number":
           {
             let numberSchema = z.number();
-            if (param.minValue !== undefined) {
+            // The Admin API sends a bound the rule leaves open as null
+            if (param.minValue != null) {
               numberSchema = numberSchema.min(param.minValue);
             }
-            if (param.maxValue !== undefined) {
+            if (param.maxValue != null) {
               numberSchema = numberSchema.max(param.maxValue);
             }
             parameterFields[paramName] = param.required
@@ -138,7 +141,7 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
 
   useEffect(() => {
     if (rule && isEditMode) {
-      setSelectedRuleType(rule.ruleType);
+      setSelectedRuleType(String(rule.ruleType));
 
       let configObject: Record<string, unknown> = {};
       try {
@@ -208,7 +211,7 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
 
     const resolvedRuleType = isEditMode
       ? rule?.ruleType
-      : selectedRuleType || undefined;
+      : (selectedRuleType as client.ConfigurationRuleDto["ruleType"]);
     if (!resolvedRuleType) return;
 
     const resolvedResourceType = isEnumValue(
@@ -268,13 +271,9 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
             </Label>
             <Select
               value={selectedRuleType || undefined}
-              onValueChange={(value) => {
-                if (isEnumValue(client.ConfigurationRuleType, value)) {
-                  setSelectedRuleType(value);
-                } else {
-                  setSelectedRuleType("");
-                }
-              }}
+              onValueChange={(value) =>
+                setSelectedRuleType(resolveRuleType(metadata, value))
+              }
             >
               <SelectTrigger>
                 <SelectValue
@@ -376,8 +375,7 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
                         name={paramName}
                         label={param.displayName || paramName}
                         description={`${param.description || ""} ${
-                          param.minValue !== undefined &&
-                          param.maxValue !== undefined
+                          param.minValue != null && param.maxValue != null
                             ? `(${param.minValue} - ${param.maxValue})`
                             : ""
                         }`}

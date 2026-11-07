@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using NSwag.AspNetCore;
 using Skoruba.AuditLogging.EntityFramework.Entities;
 using Skoruba.Duende.IdentityServer.Admin.Api.Configuration;
+using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Extensions;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Entities.Identity;
@@ -63,6 +64,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api
                 IdentityUsersDto, IdentityRolesDto, IdentityUserRolesDto,
                 IdentityUserClaimsDto, IdentityUserProviderDto, IdentityUserProvidersDto, IdentityUserChangePasswordDto,
                 IdentityRoleClaimsDto, IdentityUserClaimDto, IdentityRoleClaimDto>(Configuration, adminApiConfiguration);
+
+            // Add custom configuration rules - every rule in this project, e.g. ConfigurationRules/ClientSecretMustExpireWithinOneYearRule
+            services.AddConfigurationRulesFromAssemblyContaining<Startup>();
 
             services.AddSwaggerServices(adminApiConfiguration);
 

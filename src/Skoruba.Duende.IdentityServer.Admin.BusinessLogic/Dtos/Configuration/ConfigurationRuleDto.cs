@@ -3,6 +3,7 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.ConfigurationRules;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities;
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration;
@@ -10,8 +11,13 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration;
 public class ConfigurationRuleDto
 {
     public int Id { get; set; }
+    /// <summary>
+    /// Key of the rule, e.g. <c>MissingPkce</c> or <c>Contoso.ClientSecretMustExpireWithinOneYear</c>;
+    /// one of the keys <c>GET /api/ConfigurationRules/metadata</c> lists.
+    /// </summary>
     [Required]
-    public ConfigurationRuleType RuleType { get; set; }
+    [MaxLength(ConfigurationRuleKeys.MaxLength)]
+    public string RuleType { get; set; }
     [Required]
     public ConfigurationResourceType ResourceType { get; set; }
     [Required]

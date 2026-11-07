@@ -3287,7 +3287,7 @@ export interface IConfigurationRulesClient {
 
     getAllMetadata(): Promise<ConfigurationRuleMetadataDto[]>;
 
-    getMetadata(ruleType: ConfigurationRuleType): Promise<ConfigurationRuleMetadataDto>;
+    getMetadata(ruleType: string): Promise<ConfigurationRuleMetadataDto>;
 }
 
 export class ConfigurationRulesClient extends WebApiClientBase implements IConfigurationRulesClient {
@@ -3662,7 +3662,7 @@ export class ConfigurationRulesClient extends WebApiClientBase implements IConfi
         return Promise.resolve<ConfigurationRuleMetadataDto[]>(null as any);
     }
 
-    getMetadata(ruleType: ConfigurationRuleType): Promise<ConfigurationRuleMetadataDto> {
+    getMetadata(ruleType: string): Promise<ConfigurationRuleMetadataDto> {
         let url_ = this.baseUrl + "/api/ConfigurationRules/metadata/{ruleType}";
         if (ruleType === undefined || ruleType === null)
             throw new globalThis.Error("The parameter 'ruleType' must be defined.");
@@ -8920,7 +8920,7 @@ export interface IConfigurationRulesDto {
 
 export class ConfigurationRuleDto implements IConfigurationRuleDto {
     id!: number;
-    ruleType!: ConfigurationRuleType;
+    ruleType!: string;
     resourceType!: ConfigurationResourceType;
     issueType!: ConfigurationIssueType;
     isEnabled!: boolean;
@@ -8979,7 +8979,7 @@ export class ConfigurationRuleDto implements IConfigurationRuleDto {
 
 export interface IConfigurationRuleDto {
     id: number;
-    ruleType: ConfigurationRuleType;
+    ruleType: string;
     resourceType: ConfigurationResourceType;
     issueType: ConfigurationIssueType;
     isEnabled: boolean;
@@ -8988,32 +8988,6 @@ export interface IConfigurationRuleDto {
     fixDescription: string | undefined;
     createdAt: Date;
     updatedAt: Date | undefined;
-}
-
-export enum ConfigurationRuleType {
-    ObsoleteImplicitGrant = "ObsoleteImplicitGrant",
-    ObsoletePasswordGrant = "ObsoletePasswordGrant",
-    MissingPkce = "MissingPkce",
-    ClientRedirectUrisMustUseHttps = "ClientRedirectUrisMustUseHttps",
-    ClientMustHaveScopes = "ClientMustHaveScopes",
-    ClientAccessTokenLifetimeTooLong = "ClientAccessTokenLifetimeTooLong",
-    ClientRefreshTokenLifetimeTooLong = "ClientRefreshTokenLifetimeTooLong",
-    ApiScopeNameMustStartWith = "ApiScopeNameMustStartWith",
-    ApiScopeNameMustNotContain = "ApiScopeNameMustNotContain",
-    ApiScopeMustHaveDisplayName = "ApiScopeMustHaveDisplayName",
-    ApiResourceMustHaveScopes = "ApiResourceMustHaveScopes",
-    ApiResourceNameMustStartWith = "ApiResourceNameMustStartWith",
-    IdentityResourceMustBeEnabled = "IdentityResourceMustBeEnabled",
-    IdentityResourceNameMustStartWith = "IdentityResourceNameMustStartWith",
-    ScopeIsUnused = "ScopeIsUnused",
-    SecretIsExpiredInDays = "SecretIsExpiredInDays",
-    ClientNameMustStartWith = "ClientNameMustStartWith",
-    ClientNameMustNotContain = "ClientNameMustNotContain",
-    ClientIdMustStartWith = "ClientIdMustStartWith",
-    ClientIdMustNotContain = "ClientIdMustNotContain",
-    ClientScopeMustExist = "ClientScopeMustExist",
-    ClientSigningAlgorithmsMustBeFapiCompliant = "ClientSigningAlgorithmsMustBeFapiCompliant",
-    ApiResourceSigningAlgorithmsMustBeFapiCompliant = "ApiResourceSigningAlgorithmsMustBeFapiCompliant",
 }
 
 export enum ConfigurationIssueType {

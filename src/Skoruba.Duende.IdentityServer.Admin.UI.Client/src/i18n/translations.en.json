@@ -1135,7 +1135,9 @@
     "ApiScope": "API Scope",
     "ApiResource": "API Resource",
     "IdentityResource": "Identity Resource",
-    "DuplicateRuleError": "This rule type already exists. Each rule type can only be configured once."
+    "DuplicateRuleError": "This rule type already exists. Each rule type can only be configured once.",
+    "UnknownRule": "Unknown rule",
+    "UnknownRuleDescription": "No registered rule has this key, so the rule is skipped during validation and its settings cannot be edited. Disable or delete it, or register the rule in the Admin API again."
   },
   "AuditLogs": {
     "PageTitle": "Audit Logs",

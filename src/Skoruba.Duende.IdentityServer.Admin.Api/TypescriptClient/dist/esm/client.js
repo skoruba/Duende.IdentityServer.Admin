@@ -8452,32 +8452,6 @@ export class ConfigurationRuleDto {
         return data;
     }
 }
-export var ConfigurationRuleType;
-(function (ConfigurationRuleType) {
-    ConfigurationRuleType["ObsoleteImplicitGrant"] = "ObsoleteImplicitGrant";
-    ConfigurationRuleType["ObsoletePasswordGrant"] = "ObsoletePasswordGrant";
-    ConfigurationRuleType["MissingPkce"] = "MissingPkce";
-    ConfigurationRuleType["ClientRedirectUrisMustUseHttps"] = "ClientRedirectUrisMustUseHttps";
-    ConfigurationRuleType["ClientMustHaveScopes"] = "ClientMustHaveScopes";
-    ConfigurationRuleType["ClientAccessTokenLifetimeTooLong"] = "ClientAccessTokenLifetimeTooLong";
-    ConfigurationRuleType["ClientRefreshTokenLifetimeTooLong"] = "ClientRefreshTokenLifetimeTooLong";
-    ConfigurationRuleType["ApiScopeNameMustStartWith"] = "ApiScopeNameMustStartWith";
-    ConfigurationRuleType["ApiScopeNameMustNotContain"] = "ApiScopeNameMustNotContain";
-    ConfigurationRuleType["ApiScopeMustHaveDisplayName"] = "ApiScopeMustHaveDisplayName";
-    ConfigurationRuleType["ApiResourceMustHaveScopes"] = "ApiResourceMustHaveScopes";
-    ConfigurationRuleType["ApiResourceNameMustStartWith"] = "ApiResourceNameMustStartWith";
-    ConfigurationRuleType["IdentityResourceMustBeEnabled"] = "IdentityResourceMustBeEnabled";
-    ConfigurationRuleType["IdentityResourceNameMustStartWith"] = "IdentityResourceNameMustStartWith";
-    ConfigurationRuleType["ScopeIsUnused"] = "ScopeIsUnused";
-    ConfigurationRuleType["SecretIsExpiredInDays"] = "SecretIsExpiredInDays";
-    ConfigurationRuleType["ClientNameMustStartWith"] = "ClientNameMustStartWith";
-    ConfigurationRuleType["ClientNameMustNotContain"] = "ClientNameMustNotContain";
-    ConfigurationRuleType["ClientIdMustStartWith"] = "ClientIdMustStartWith";
-    ConfigurationRuleType["ClientIdMustNotContain"] = "ClientIdMustNotContain";
-    ConfigurationRuleType["ClientScopeMustExist"] = "ClientScopeMustExist";
-    ConfigurationRuleType["ClientSigningAlgorithmsMustBeFapiCompliant"] = "ClientSigningAlgorithmsMustBeFapiCompliant";
-    ConfigurationRuleType["ApiResourceSigningAlgorithmsMustBeFapiCompliant"] = "ApiResourceSigningAlgorithmsMustBeFapiCompliant";
-})(ConfigurationRuleType || (ConfigurationRuleType = {}));
 export var ConfigurationIssueType;
 (function (ConfigurationIssueType) {
     ConfigurationIssueType["Warning"] = "Warning";

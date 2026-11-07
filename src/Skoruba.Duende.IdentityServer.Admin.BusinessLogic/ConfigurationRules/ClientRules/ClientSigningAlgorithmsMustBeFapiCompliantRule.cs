@@ -21,11 +21,26 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.C
 /// Access token algorithms are configured on the API resource and are covered by
 /// <see cref="ApiResourceRules.ApiResourceSigningAlgorithmsMustBeFapiCompliantRule"/>.
 /// </summary>
-public class ClientSigningAlgorithmsMustBeFapiCompliantRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
+public class ClientSigningAlgorithmsMustBeFapiCompliantRule : ConfigurationRuleBase
 {
+    public override string Key => ConfigurationRuleKeys.ClientSigningAlgorithmsMustBeFapiCompliant;
+    public override ConfigurationResourceType ResourceType => ConfigurationResourceType.Client;
+    public override string DisplayName => "Client Signing Algorithms Must Be FAPI 2.0 Compliant";
+    public override string Description => "Detects clients signing with an algorithm outside this deployment's FAPI 2.0 allow-list. Section 5.4 of the profile is a closed enumeration - PS256, ES256 and EdDSA - so the longer RS/PS/ES variants are non-conformant despite the larger key. Both the allowed identity token signing algorithms and the algorithm of JWK secrets are checked.";
+
+    public override IReadOnlyList<ConfigurationRuleParameter> Parameters { get; } =
+    [
+        ConfigurationRuleParameter.Array("allowedAlgorithms", "Allowed Algorithms", "Signing algorithms enabled by this deployment's FAPI profile. Defaults to PS256 and ES256; FAPI also permits EdDSA (Ed25519), but enable it here only after configuring compatible validation support.", defaultValue: new[] { "PS256", "ES256" })
+    ];
+
+    public override string DefaultConfiguration => "{\"allowedAlgorithms\": [\"PS256\", \"ES256\"]}";
+    public override string ExampleConfiguration => "{\"allowedAlgorithms\": [\"PS256\", \"ES256\", \"EdDSA\"]}";
+    public override string DefaultMessageTemplate => "Client '{clientName}' uses {count} signing algorithm(s) outside this deployment's FAPI 2.0 allow-list: {algorithms}";
+    public override string DefaultFixDescription => "Navigate to Client Details → Advanced tab → Token → Identity Token, find 'Allowed Identity Token Signing Algorithms' field and keep only {allowedAlgorithms}. If a JWK secret carries an algorithm outside this deployment's allow-list, regenerate the key in Client Details → Secrets tab and update the client application.";
+
     private const string JwkSecretType = "JWK";
 
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
+    public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<FapiSigningAlgorithmsConfig>(configuration);
         var allowedAlgorithms = FapiSigningAlgorithms.ReadAllowedAlgorithms(config);

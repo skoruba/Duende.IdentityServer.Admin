@@ -9,9 +9,25 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfac
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.IdentityResourceRules;
 
-public class IdentityResourceNameMustStartWithRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
+public class IdentityResourceNameMustStartWithRule : ConfigurationRuleBase
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
+    public override string Key => ConfigurationRuleKeys.IdentityResourceNameMustStartWith;
+    public override ConfigurationResourceType ResourceType => ConfigurationResourceType.IdentityResource;
+    public override string DisplayName => "Identity Resource Name Must Start With";
+    public override string Description => "Ensures identity resource names follow a naming convention by requiring a prefix or one of multiple allowed prefixes.";
+
+    public override IReadOnlyList<ConfigurationRuleParameter> Parameters { get; } =
+    [
+        ConfigurationRuleParameter.Array("prefixes", "Required Prefixes", "The prefix(es) that identity resource names must start with. A name has to start with at least one of them.", defaultValue: new[] { "custom." }, required: true),
+        ConfigurationRuleParameter.Boolean("excludeStandard", "Exclude Standard Resources", "Exclude standard OIDC resources (openid, profile, email, etc.) from this rule", defaultValue: true)
+    ];
+
+    public override string DefaultConfiguration => "{\"prefixes\": [\"custom.\"], \"excludeStandard\": true}";
+    public override string ExampleConfiguration => "{\"prefixes\": [\"app.\", \"custom.\"], \"excludeStandard\": false}";
+    public override string DefaultMessageTemplate => "Identity Resource '{actualName}' must start with one of: {allowedPrefixes}";
+    public override string DefaultFixDescription => "Navigate to Identity Resource Details → Basic Information section and rename the resource to follow the naming convention.";
+
+    public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<PrefixConfig>(configuration);
 
