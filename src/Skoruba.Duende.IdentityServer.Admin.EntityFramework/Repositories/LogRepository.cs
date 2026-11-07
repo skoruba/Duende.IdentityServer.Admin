@@ -47,7 +47,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
             pageSize = QueryableExtensions.NormalizePageSize(pageSize);
 
             var pagedList = new PagedList<Log>();
-            Expression<Func<Log, bool>> searchCondition = x => x.LogEvent.Contains(search) || x.Message.Contains(search) || x.Exception.Contains(search);
+            // PostgreSQL compares case-sensitively, SQL Server by its collation; lower case on both sides finds the same everywhere
+            var term = search?.ToLower();
+            Expression<Func<Log, bool>> searchCondition = x =>
+                (x.LogEvent != null && x.LogEvent.ToLower().Contains(term)) ||
+                (x.Message != null && x.Message.ToLower().Contains(term)) ||
+                (x.Exception != null && x.Exception.ToLower().Contains(term));
             var logs = await DbContext.Logs
                 .WhereIf(!string.IsNullOrEmpty(search), searchCondition)                
                 .PageBy(x => x.Id, page, pageSize)

@@ -8,10 +8,15 @@ export type UiConfiguration = {
    * deployments that keep their users elsewhere.
    */
   identityManagementEnabled: boolean;
+  /**
+   * Monitoring → Error Logs, the log events the STS writes into the database.
+   */
+  errorLogsEnabled: boolean;
 };
 
 export const DEFAULT_UI_CONFIGURATION: UiConfiguration = {
   identityManagementEnabled: true,
+  errorLogsEnabled: true,
 };
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -25,5 +30,6 @@ export const parseUiConfiguration = (raw: unknown): UiConfiguration => {
 
   return {
     identityManagementEnabled: value.identityManagementEnabled !== false,
+    errorLogsEnabled: value.errorLogsEnabled !== false,
   };
 };

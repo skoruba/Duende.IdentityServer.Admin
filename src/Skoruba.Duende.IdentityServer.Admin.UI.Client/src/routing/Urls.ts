@@ -36,3 +36,4 @@ export const KeysUrl = "/keys";
 export const ConfigurationIssuesUrl = "/configuration-issues";
 export const ConfigurationRulesUrl = "/configuration-rules";
 export const AuditLogsUrl = "/audit-logs";
+export const ErrorLogsUrl = "/error-logs";

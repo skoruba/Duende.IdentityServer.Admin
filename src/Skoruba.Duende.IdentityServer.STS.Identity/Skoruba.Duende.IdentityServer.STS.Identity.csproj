@@ -40,6 +40,7 @@
 		<PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
 		<PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
 		<PackageReference Include="Serilog.Sinks.MSSqlServer" Version="10.0.0" />
+		<PackageReference Include="Serilog.Sinks.Postgresql.Alternative" Version="4.3.0" />
 		<PackageReference Include="Serilog.Sinks.Seq" Version="9.1.0" />
 		<PackageReference Include="Skoruba.AuditLogging.EntityFramework" Version="3.0.0" />
 		<PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />

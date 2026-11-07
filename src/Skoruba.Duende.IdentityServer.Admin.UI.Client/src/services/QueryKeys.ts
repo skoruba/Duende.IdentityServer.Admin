@@ -33,6 +33,7 @@ export const queryKeys = {
   clientSecrets: "clientSecrets",
   clientSecret: "clientSecret",
   auditLogs: "auditLogs",
+  errorLogs: "errorLogs",
   keys: "keys",
   grantTypes: "grantTypes",
   standardClaims: "standardClaims",

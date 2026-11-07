@@ -20,6 +20,7 @@
     "LogsDescription": "View Audit logs",
     "AuditLogs": "Audit Logs",
     "AuditLogsDescription": "Overview of Audit logs for the last 30 days",
+    "ErrorLogs": "Error Logs",
     "ConfigurationIssues": "Configuration Issues",
     "ConfigurationIssuesDescription": "Overview of configuration issues",
     "ConfigurationRules": "Configuration Rules",
@@ -1193,6 +1194,24 @@
     "AnomalyDetected": "Anomaly detected",
     "NormalActivityShort": "Normal",
     "AnomalyOnShort": "anomaly {{date}}"
+  },
+  "ErrorLogs": {
+    "PageTitle": "Error Logs",
+    "TimeStamp": "Time",
+    "Level": "Level",
+    "Application": "Application",
+    "Message": "Message",
+    "ViewDetails": "View",
+    "SearchPlaceholder": "Search in message, exception or properties",
+    "DeleteOlderThan": "Delete older than…",
+    "DeleteConfirm": "Delete all log events older than {{date}}?",
+    "Deleted": "Log events older than {{date}} were deleted.",
+    "DetailsModalTitle": "Log Event",
+    "Exception": "Exception",
+    "Properties": "Properties",
+    "NoProperties": "No properties were recorded for this event.",
+    "Copy": "Copy",
+    "Empty": "No log events yet"
   },
   "Pages": {
     "AccessDenied": {

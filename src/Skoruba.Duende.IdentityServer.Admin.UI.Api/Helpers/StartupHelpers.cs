@@ -43,6 +43,7 @@ using Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration.AuditLogging;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration.Constants;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.ExceptionHandling;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers.Localization;
+using Skoruba.Duende.IdentityServer.Admin.UI.Api.Services;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Mappers;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Resources;
 using Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers;
@@ -457,6 +458,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
             // The section is optional: every DashboardConfiguration value has a default.
             services.AddSingleton(configuration.GetSection(nameof(DashboardConfiguration)).Get<DashboardConfiguration>() ?? new DashboardConfiguration());
             services.AddSingleton<SystemHealthReportCache>();
+
+            services.AddSingleton(configuration.GetSection(nameof(DatabaseLogConfiguration)).Get<DatabaseLogConfiguration>() ?? new DatabaseLogConfiguration());
+            services.AddHostedService<LogRetentionService>();
 
             services.AddSingleton(configuration.GetSection(nameof(IdentityServerData))
                 .Get<IdentityServerData>());
