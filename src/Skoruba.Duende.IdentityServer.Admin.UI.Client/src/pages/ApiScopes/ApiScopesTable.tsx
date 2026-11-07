@@ -42,17 +42,21 @@ const ApiScopesTable = ({
       },
     },
     {
+      id: "usedBy",
+      header: t("ScopeUsage.UsedBy"),
+      cell: ({ row }: { row: { original: ApiScopeData } }) => (
+        <ScopeUsageButton
+          scopeKind="apiScope"
+          scopeId={row.original.id}
+          scopeName={row.original.name}
+          clientCount={clientCounts.data?.[row.original.name]}
+        />
+      ),
+    },
+    {
       id: "actions",
       cell: ({ row }: { row: { original: ApiScopeData } }) => (
-        <div className="flex items-center justify-end gap-2">
-          <ScopeUsageButton
-            scopeKind="apiScope"
-            scopeId={row.original.id}
-            scopeName={row.original.name}
-            clientCount={clientCounts.data?.[row.original.name]}
-          />
-          <ApiScopesActions scope={row.original} />
-        </div>
+        <ApiScopesActions scope={row.original} />
       ),
     },
   ];

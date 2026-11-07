@@ -446,8 +446,9 @@
   },
   "ScopeUsage": {
     "UsedBy": "Used By",
-    "ClientCount_one": "Used by {{count}} client",
-    "ClientCount_other": "Used by {{count}} clients",
+    "ClientCount_one": "{{count}} client",
+    "ClientCount_other": "{{count}} clients",
+    "NoClients": "No clients",
     "Clients": "Clients",
     "ApiResources": "API Resources",
     "DisplayName": "Display Name",

@@ -2,6 +2,7 @@ import { t } from "i18next";
 import {
   formSchema,
   ClientEditFormData,
+  ClientEditFormInput,
   mapFormDataToEditClient,
 } from "../ClientSchema";
 import { Form } from "@/components/ui/form";
@@ -102,7 +103,7 @@ const clientValidationFieldLabelKeys: Record<string, string> = {
 };
 
 const ClientEditForm = ({ clientId, client }: ClientEditFormType) => {
-  const form = useForm<ClientEditFormData>({
+  const form = useForm<ClientEditFormInput, unknown, ClientEditFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: client,
   });

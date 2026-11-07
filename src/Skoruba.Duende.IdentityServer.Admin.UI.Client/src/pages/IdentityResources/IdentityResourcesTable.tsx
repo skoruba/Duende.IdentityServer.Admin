@@ -44,17 +44,21 @@ const IdentityResourcesTable = ({ data, pagination, setPagination }: Props) => {
       },
     },
     {
+      id: "usedBy",
+      header: t("ScopeUsage.UsedBy"),
+      cell: ({ row }: { row: { original: IdentityResourceData } }) => (
+        <ScopeUsageButton
+          scopeKind="identityResource"
+          scopeId={row.original.id}
+          scopeName={row.original.name}
+          clientCount={clientCounts.data?.[row.original.name]}
+        />
+      ),
+    },
+    {
       id: "actions",
       cell: ({ row }: { row: { original: IdentityResourceData } }) => (
-        <div className="flex items-center justify-end gap-2">
-          <ScopeUsageButton
-            scopeKind="identityResource"
-            scopeId={row.original.id}
-            scopeName={row.original.name}
-            clientCount={clientCounts.data?.[row.original.name]}
-          />
-          <IdentityResourcesActions resource={row.original} />
-        </div>
+        <IdentityResourcesActions resource={row.original} />
       ),
     },
   ];

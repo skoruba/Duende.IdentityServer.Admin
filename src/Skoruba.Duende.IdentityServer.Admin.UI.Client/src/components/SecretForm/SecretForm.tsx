@@ -158,7 +158,7 @@ export const createSecretFormSchema = (t: TFunction) =>
         .min(1, { message: t("Validation.SecretValueRequired") }),
       secretHashType: z
         .enum(["sha256", "sha512"], {
-          required_error: t("Validation.SecretHashTypeRequired"),
+          error: t("Validation.SecretHashTypeRequired"),
         })
         .optional(),
       secretDescription: z.string().optional(),
@@ -208,12 +208,16 @@ export const createSecretFormSchema = (t: TFunction) =>
       }
     });
 
-export type SecretsFormData = z.infer<
+export type SecretsFormInput = z.input<
+  ReturnType<typeof createSecretFormSchema>
+>;
+
+export type SecretsFormData = z.output<
   ReturnType<typeof createSecretFormSchema>
 >;
 
 type SecretFormProps = {
-  form: UseFormReturn<SecretsFormData>;
+  form: UseFormReturn<SecretsFormInput, unknown, SecretsFormData>;
 };
 
 const SecretForm = ({ form }: SecretFormProps) => {
