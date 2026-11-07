@@ -8,7 +8,7 @@ The suite covers:
 
 1. Full authentication path (redirect to STS and back)
 2. `Clients` list + seeded client detail
-3. `Clients` create/edit/persistence flow
+3. `Clients` create/edit/persistence flow, followed by a second pass that clears every optional value, empties every list and flips every switch, then reads the stored client back through the API
 4. `Users` list + seeded user detail
 5. `Users` create/edit/persistence flow
 6. `Roles` list + seeded role detail
@@ -27,7 +27,8 @@ The suite covers:
 19. `ConfigurationRules` to `ConfigurationIssues`: an enabled rule reports an issue with its placeholders filled in, the issue links to the client, and disabling the rule removes it
 20. Client wizard for the high secure client type: starts with a JWK secret, warns about a shared secret and creates a private key JWT client
 21. Client `Integration` tab: generated setup code follows the unsaved form, grant types, scopes, client authentication and the tab's own settings
-22. Identity management switched off (`AdminConfiguration:BasicConfiguration:IdentityManagementEnabled`): users and roles leave the navigation, the dashboard and the command palette, no identity endpoint is called, and the user and role pages lead to the dashboard
+22. Saving an edit form without changes keeps the stored data: clients, API resources, API scopes, identity resources, identity providers, users and roles are stored through the API once with every optional value empty (NULL as older versions leave it) and once with every value set, the form is saved untouched and the stored entity has to stay the same
+23. Identity management switched off (`AdminConfiguration:BasicConfiguration:IdentityManagementEnabled`): users and roles leave the navigation, the dashboard and the command palette, no identity endpoint is called, and the user and role pages lead to the dashboard
 
 ## Test Structure
 
@@ -35,6 +36,7 @@ The suite covers:
 - `tests/client-secrets-jwk.spec.ts` - JWK secret generation on the client `Secrets` tab
 - `tests/client-wizard-high-secure.spec.ts` - secret step of the wizard for the high secure client type; deletes the client it creates
 - `tests/client-integration.spec.ts` - setup code generation on the client `Integration` tab; changes the form without saving, only the JWK test writes a secret and removes it again
+- `tests/save-without-changes.spec.ts` - untouched save of every edit form; creates its entities through the API and deletes them again
 - `tests/identity-management-disabled.spec.ts` - the Admin UI without identity management; answers `GET /configuration` of the host itself, so it needs no change to the running environment
 - `tests/api-resources.spec.ts` - API resources test orchestration
 - `tests/users.spec.ts` - users test orchestration
@@ -44,6 +46,7 @@ The suite covers:
 - `tests/api-scopes.spec.ts` - API scopes test orchestration
 - `tests/configuration-rules.spec.ts` - configuration rules test orchestration
 - `tests/helpers/*` - reusable UI/auth/form helpers
+- `tests/helpers/admin-api.ts` - calls the Admin API through the SPA proxy with the logged-in session, to prepare data the form cannot produce and to read back what got stored
 - `tests/scenarios/client-persistence-flow.ts` - full create/update/reopen persistence scenario
 - `tests/scenarios/user-persistence-flow.ts` - user create/update/reopen persistence scenario
 - `tests/scenarios/role-persistence-flow.ts` - role create/update/reopen persistence scenario

@@ -321,3 +321,47 @@ export async function getSelectValueByLabel(
   await expect(trigger).toBeVisible();
   return ((await trigger.textContent()) ?? "").trim();
 }
+
+export async function clearNumberByLabel(
+  panel: Locator,
+  label: string,
+): Promise<void> {
+  const input = panel.getByRole("spinbutton", { name: label, exact: true }).first();
+
+  await expect(input).toBeVisible();
+  await input.fill("");
+  await expect(input).toHaveValue("");
+}
+
+/**
+ * Removes the table row that shows the value. The item lists offer Edit and
+ * Delete, the claim and property tables a single icon button.
+ */
+export async function removeTableRowByCell(
+  panel: Locator,
+  value: string,
+): Promise<void> {
+  const row = panel
+    .getByRole("row")
+    .filter({ has: panel.page().getByRole("cell", { name: value, exact: true }) });
+  await expect(row).toHaveCount(1);
+
+  const deleteButton = row.getByRole("button", {
+    name: UI_TEXT.actions.delete,
+    exact: true,
+  });
+  const button =
+    (await deleteButton.count()) > 0 ? deleteButton : row.getByRole("button").last();
+
+  await button.click();
+  await expect(row).toHaveCount(0);
+}
+
+export async function setDualListToNoneSelected(panel: Locator): Promise<void> {
+  const deselectAll = panel
+    .getByRole("button", { name: UI_TEXT.actions.deselectAll, exact: true })
+    .first();
+
+  await expect(deselectAll).toBeVisible();
+  await deselectAll.click();
+}

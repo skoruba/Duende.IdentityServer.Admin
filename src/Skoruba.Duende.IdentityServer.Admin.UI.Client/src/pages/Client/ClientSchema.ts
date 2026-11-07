@@ -99,6 +99,7 @@ export const formSchema = z.object({
   deviceCodeLifetime: optionalNumberField,
   consentLifetime: nullableOptionalNumberField,
   protocolType: z.string().optional(),
+  nonEditable: z.boolean().optional(),
   userSsoLifetime: nullableOptionalNumberField,
   properties: z
     .array(z.object({ id: z.number(), key: z.string(), value: z.string() }))
@@ -265,8 +266,7 @@ export const mapEditClientToFormData = (
     alwaysIncludeUserClaimsInIdToken:
       client.alwaysIncludeUserClaimsInIdToken ??
       clientDefaultValues.alwaysIncludeUserClaimsInIdToken,
-    clientClaimsPrefix:
-      client.clientClaimsPrefix ?? clientDefaultValues.clientClaimsPrefix,
+    clientClaimsPrefix: client.clientClaimsPrefix ?? undefined,
     pairWiseSubjectSalt:
       client.pairWiseSubjectSalt ?? clientDefaultValues.pairWiseSubjectSalt,
     requireDPoP: client.requireDPoP ?? clientDefaultValues.requireDPoP,
@@ -293,6 +293,8 @@ export const mapEditClientToFormData = (
       client.deviceCodeLifetime ?? clientDefaultValues.deviceCodeLifetime,
     consentLifetime:
       client.consentLifetime ?? clientDefaultValues.consentLifetime,
+    protocolType: client.protocolType ?? clientDefaultValues.protocolType,
+    nonEditable: client.nonEditable,
     properties:
       client.properties?.map((property) => ({
         id: property.id,
@@ -445,7 +447,7 @@ export const mapFormDataToEditClient = (
     identityTokenLifetime: formData.identityTokenLifetime!,
     includeJwtId: formData.includeJti!,
     logoUri: formData.logoUri || undefined,
-    clientClaimsPrefix: formData.clientClaimsPrefix || undefined,
+    clientClaimsPrefix: formData.clientClaimsPrefix ?? "",
     pairWiseSubjectSalt: formData.pairWiseSubjectSalt || undefined,
     protocolType: formData.protocolType || undefined,
     refreshTokenExpiration: formData.refreshTokenExpiration!,
@@ -519,6 +521,6 @@ export const mapFormDataToEditClient = (
       ) ?? [],
     updated: undefined,
     lastAccessed: undefined,
-    nonEditable: false,
+    nonEditable: formData.nonEditable ?? false,
   };
 };

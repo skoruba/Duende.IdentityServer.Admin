@@ -6,6 +6,7 @@ export const UI_TEXT = {
     close: "Close",
     next: "Next",
     addItem: "Add Item",
+    delete: "Delete",
     selectAll: "Select All",
     deselectAll: "Deselect All",
     openMenu: "Open menu",

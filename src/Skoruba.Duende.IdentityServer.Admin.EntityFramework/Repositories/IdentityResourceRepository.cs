@@ -161,8 +161,11 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
             //Remove old relations
             await RemoveIdentityResourceClaimsAsync(identityResource);
 
-            //Update with new data
-            DbContext.IdentityResources.Update(identityResource);
+            //Update with new data, keeping the values the update does not carry
+            identityResource.Updated = DateTime.UtcNow;
+            var entry = DbContext.IdentityResources.Update(identityResource);
+            entry.Property(x => x.Created).IsModified = false;
+            entry.Property(x => x.NonEditable).IsModified = false;
 
             return await AutoSaveChangesAsync();
         }

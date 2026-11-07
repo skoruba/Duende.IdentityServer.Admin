@@ -166,5 +166,36 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 canInsert.Should().BeFalse();
             }
         }
+
+        [Fact]
+        public async Task UpdateApiScopeAsyncKeepsValuesTheUpdateDoesNotCarry()
+        {
+            using (var context = GetDbContext())
+            {
+                var apiScopeRepository = GetApiScopeRepository(context);
+
+                var apiScope = ApiScopeMock.GenerateRandomApiScope(0);
+                apiScope.Created = new DateTime(2020, 1, 2, 3, 4, 5, DateTimeKind.Utc);
+                apiScope.LastAccessed = new DateTime(2021, 2, 3, 4, 5, 6, DateTimeKind.Utc);
+                apiScope.NonEditable = true;
+                await apiScopeRepository.AddApiScopeAsync(apiScope);
+                context.ChangeTracker.Clear();
+
+                //The update comes without these values, as from the API
+                var updatedApiScope = ApiScopeMock.GenerateRandomApiScope(apiScope.Id);
+                updatedApiScope.Created = DateTime.UtcNow;
+                updatedApiScope.LastAccessed = null;
+                updatedApiScope.NonEditable = false;
+                await apiScopeRepository.UpdateApiScopeAsync(updatedApiScope);
+                context.ChangeTracker.Clear();
+
+                var storedApiScope = await context.ApiScopes.SingleAsync(x => x.Id == apiScope.Id);
+                storedApiScope.Created.Should().Be(apiScope.Created);
+                storedApiScope.Updated.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMinutes(1));
+                storedApiScope.LastAccessed.Should().Be(apiScope.LastAccessed);
+                storedApiScope.NonEditable.Should().BeTrue();
+                storedApiScope.Name.Should().Be(updatedApiScope.Name);
+            }
+        }
     }
 }
