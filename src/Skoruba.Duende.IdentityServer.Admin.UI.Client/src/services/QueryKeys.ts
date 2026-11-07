@@ -7,6 +7,7 @@ export const queryKeys = {
   identityResourceClients: "identityResourceClients",
   users: "users",
   user: "user",
+  userOptions: "userOptions",
   userRoles: "userRoles",
   userClaims: "userClaims",
   roles: "roles",

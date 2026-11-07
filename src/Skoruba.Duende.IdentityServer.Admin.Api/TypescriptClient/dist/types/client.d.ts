@@ -480,6 +480,7 @@ export declare class RolesClient extends WebApiClientBase implements IRolesClien
     protected processPutRoleClaims(response: Response): Promise<void>;
 }
 export interface IUsersClient {
+    getOptions(): Promise<UserOptionsApiDto>;
     get(id: string): Promise<IdentityUserDto>;
     delete(id: string): Promise<void>;
     get2(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<IdentityUsersDto>;
@@ -506,6 +507,8 @@ export declare class UsersClient extends WebApiClientBase implements IUsersClien
     constructor(baseUrl?: string, http?: {
         fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
     });
+    getOptions(): Promise<UserOptionsApiDto>;
+    protected processGetOptions(response: Response): Promise<UserOptionsApiDto>;
     get(id: string): Promise<IdentityUserDto>;
     protected processGet(response: Response): Promise<IdentityUserDto>;
     delete(id: string): Promise<void>;
@@ -1653,7 +1656,7 @@ export interface IBaseUserDtoOfString {
 }
 export declare class UserDtoOfString extends BaseUserDtoOfString implements IUserDtoOfString {
     userName: string;
-    email: string;
+    email: string | undefined;
     emailConfirmed: boolean;
     phoneNumber: string | undefined;
     phoneNumberConfirmed: boolean;
@@ -1668,7 +1671,7 @@ export declare class UserDtoOfString extends BaseUserDtoOfString implements IUse
 }
 export interface IUserDtoOfString extends IBaseUserDtoOfString {
     userName: string;
-    email: string;
+    email: string | undefined;
     emailConfirmed: boolean;
     phoneNumber: string | undefined;
     phoneNumberConfirmed: boolean;
@@ -1738,6 +1741,16 @@ export declare class TKey implements ITKey {
     toJSON(data?: any): any;
 }
 export interface ITKey {
+}
+export declare class UserOptionsApiDto implements IUserOptionsApiDto {
+    requireUniqueEmail: boolean;
+    constructor(data?: IUserOptionsApiDto);
+    init(_data?: any): void;
+    static fromJS(data: any): UserOptionsApiDto;
+    toJSON(data?: any): any;
+}
+export interface IUserOptionsApiDto {
+    requireUniqueEmail: boolean;
 }
 export declare class UserRolesApiDtoOfIdentityRoleDto implements IUserRolesApiDtoOfIdentityRoleDto {
     roles: IdentityRoleDto[] | undefined;

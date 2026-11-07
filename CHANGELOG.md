@@ -19,6 +19,8 @@
 
 - Rule metadata lives in the rule classes; `ConfigurationRuleMetadataProvider` and `ConfigurationRuleValidatorFactory` read from the new `IConfigurationRuleRegistry`
 - Configuration rules and the *Rule Type* list are ordered by resource type and name
+- The email of a user is optional in the Admin API and the Admin UI: `UserDto.Email` drops `[Required]` (keeps `[EmailAddress]`), and `IdentityOptions:User:RequireUniqueEmail` decides whether a user without an email can be saved. With the default `true` the API still returns 400 for it. The new `GET /api/Users/Options` returns the setting, and the user form marks and validates the email by it; against an Admin API without the endpoint the email stays required. The TypeScript client types `IdentityUserDto.email` as `string | undefined`
+- Admin UI dependencies updated for `npm audit`: `zod` 4, `@hookform/resolvers` 7, `react-hook-form` 7.91, `vite` 6.4.5; `minimatch` is overridden to 11 for the lint tooling. The unused `i18next-http-backend` is removed. STS: `rimraf` 6.1.4
 
 ### Fixed
 
@@ -26,6 +28,12 @@
 - A number parameter only accepts a whole number: a fraction or a value out of the int range was saved and left the rule on its default configuration
 - The *Enabled* switch does not validate the configuration of the rule again
 - The rule form saves a number parameter with only a minimum or only a maximum; it failed with "Number must be less than or equal to null"
+- Saving a client without changes keeps an empty or missing *Client Claims Prefix*; it was saved as the default `client_` ([#334](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/334))
+- Saving a client without changes no longer resets *Protocol Type* to `oidc` and *Non Editable* to `false`
+- Updating a client, an API resource, an API scope, an identity resource or an identity provider keeps the stored `Created` (and `LastAccessed`, `NonEditable` where the API does not carry them); `Updated` is set by the server
+- Saving a user without changes keeps the stored *Lockout End* including seconds
+- The first click on the delete button of a claim or a property right after leaving another field is no longer lost
+- The user lists no longer fail on a user without an email; the avatar takes the initials of the user name ([#333](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/333))
 
 ### Breaking Changes
 
@@ -34,6 +42,7 @@
 - `PUT /api/ConfigurationRules/{id}` with a `ruleType` other than the stored one returns 409 instead of saving the other fields and keeping the stored key; the configuration is validated against the stored rule. A rule no registered rule describes returns 409 as well
 - `POST` and `PUT /api/ConfigurationRules` with a fraction for a number parameter return 409
 - `PATCH /api/ConfigurationRules/{id}/toggle` that would enable a rule no registered rule describes returns 409
+- Forks of the Admin UI move to `zod` 4 and `@hookform/resolvers` 7: `invalid_type_error` and `required_error` become `error`, `ZodError.errors` becomes `issues`, and a form whose schema has `.default()` or `.transform()` is typed `useForm<z.input<…>, unknown, z.output<…>>`
 - `IClientRepository` and `IClientService` have `GetClientsByScopeAsync` and `GetClientCountsByScopesAsync`, `IApiResourceRepository` and `IApiResourceService` have `GetApiResourcesByScopeAsync`; a custom implementation of these interfaces has to add them. `ApiScopesController` takes `IClientService` and `IApiResourceService`, `IdentityResourcesController` takes `IClientService`
 
 ## [3.2.0] - 2026-10-03
