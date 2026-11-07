@@ -13,6 +13,7 @@
 - The Admin API project contains an example custom rule, `Contoso.ClientSecretMustExpireWithinOneYear` in `ConfigurationRules/`, and registers every rule of the project in `Startup`
 - `SeedConfiguration:ApplyConfigurationRulesSeed` (default `false`) creates a disabled row for every registered rule that has none on startup
 - A stored rule no registered rule describes is marked *Unknown rule* in the list; validation skips it. It can be disabled or deleted; it can be enabled and its settings edited once the rule is registered again
+- *Used By* for API scopes and identity resources: a button in the list shows how many clients allow the scope and opens a dialog, the detail has a tab of the same name. Both list the clients that allow the scope and, for an API scope, the API resources that include it. Served by `GET /api/ApiScopes/{id}/Clients`, `GET /api/ApiScopes/{id}/ApiResources`, `GET /api/IdentityResources/{id}/Clients` and `GET /api/Clients/GetClientCountsByScopes?scopes=...` (one grouped query for the whole page of the list)
 
 ### Changed
 
@@ -33,6 +34,7 @@
 - `PUT /api/ConfigurationRules/{id}` with a `ruleType` other than the stored one returns 409 instead of saving the other fields and keeping the stored key; the configuration is validated against the stored rule. A rule no registered rule describes returns 409 as well
 - `POST` and `PUT /api/ConfigurationRules` with a fraction for a number parameter return 409
 - `PATCH /api/ConfigurationRules/{id}/toggle` that would enable a rule no registered rule describes returns 409
+- `IClientRepository` and `IClientService` have `GetClientsByScopeAsync` and `GetClientCountsByScopesAsync`, `IApiResourceRepository` and `IApiResourceService` have `GetApiResourcesByScopeAsync`; a custom implementation of these interfaces has to add them. `ApiScopesController` takes `IClientService` and `IApiResourceService`, `IdentityResourcesController` takes `IClientService`
 
 ## [3.2.0] - 2026-10-03
 

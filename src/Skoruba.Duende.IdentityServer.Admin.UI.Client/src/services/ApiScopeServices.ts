@@ -3,6 +3,12 @@ import { client } from "@skoruba/duende.identityserver.admin.api.client";
 import { ApiScopeData, ApiScopesData } from "@/models/ApiScopes/ApiScopeModels";
 import { PropertyData, PropertiesData } from "@/models/Common/CommonModels";
 import { ApiScopeFormData } from "@/pages/ApiScope/Common/ApiScopeSchema";
+import { ScopeClientsData } from "@/models/Clients/ClientModels";
+import {
+  ScopeApiResourceData,
+  ScopeApiResourcesData,
+} from "@/models/ApiResources/ApiResourceModels";
+import { mapScopeClients } from "@/services/ClientServices";
 
 export const getApiScopes = async (
   searchTerm: string,
@@ -127,4 +133,42 @@ export const addApiScopeProperty = async (
 export const deleteApiScopeProperty = async (propertyId: number) => {
   const apiScopesClient = new client.ApiScopesClient(ApiHelper.getApiBaseUrl());
   await apiScopesClient.deleteProperty(propertyId);
+};
+
+export const getApiScopeClients = async (
+  scopeId: number,
+  pageIndex: number,
+  pageSize: number
+): Promise<ScopeClientsData> => {
+  const apiScopesClient = new client.ApiScopesClient(ApiHelper.getApiBaseUrl());
+  const response = await apiScopesClient.getScopeClients(
+    scopeId,
+    pageIndex + 1,
+    pageSize
+  );
+
+  return mapScopeClients(response);
+};
+
+export const getApiScopeApiResources = async (
+  scopeId: number,
+  pageIndex: number,
+  pageSize: number
+): Promise<ScopeApiResourcesData> => {
+  const apiScopesClient = new client.ApiScopesClient(ApiHelper.getApiBaseUrl());
+  const response = await apiScopesClient.getScopeApiResources(
+    scopeId,
+    pageIndex + 1,
+    pageSize
+  );
+
+  const items: ScopeApiResourceData[] =
+    response.apiResources?.map((apiResource) => ({
+      id: apiResource.id,
+      name: apiResource.name ?? "",
+      displayName: apiResource.displayName ?? "",
+      enabled: apiResource.enabled,
+    })) ?? [];
+
+  return { items, totalCount: response.totalCount };
 };

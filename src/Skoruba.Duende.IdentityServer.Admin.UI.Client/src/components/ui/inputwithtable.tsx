@@ -54,7 +54,7 @@ const InputWithTable: React.FC<{
     const validationResult = schema.safeParse(value);
     return validationResult.success
       ? null
-      : validationResult.error.errors[0].message;
+      : validationResult.error.issues[0].message;
   };
 
   const handleAddItem = () => {

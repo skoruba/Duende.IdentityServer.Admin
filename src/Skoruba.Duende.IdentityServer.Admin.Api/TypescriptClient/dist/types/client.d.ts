@@ -66,6 +66,8 @@ export interface IApiScopesClient {
     deleteScope(id: number): Promise<void>;
     getScopeProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiScopePropertiesApiDto>;
     postProperty(id: number, apiScopePropertyApi: ApiScopePropertyApiDto): Promise<ApiScopePropertyApiDto>;
+    getScopeClients(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientsApiDto>;
+    getScopeApiResources(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiResourcesApiDto>;
     getProperty(propertyId: number): Promise<ApiScopePropertyApiDto>;
     deleteProperty(propertyId: number): Promise<void>;
 }
@@ -94,6 +96,10 @@ export declare class ApiScopesClient extends WebApiClientBase implements IApiSco
     protected processGetScopeProperties(response: Response): Promise<ApiScopePropertiesApiDto>;
     postProperty(id: number, apiScopePropertyApi: ApiScopePropertyApiDto): Promise<ApiScopePropertyApiDto>;
     protected processPostProperty(response: Response): Promise<ApiScopePropertyApiDto>;
+    getScopeClients(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientsApiDto>;
+    protected processGetScopeClients(response: Response): Promise<ClientsApiDto>;
+    getScopeApiResources(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiResourcesApiDto>;
+    protected processGetScopeApiResources(response: Response): Promise<ApiResourcesApiDto>;
     getProperty(propertyId: number): Promise<ApiScopePropertyApiDto>;
     protected processGetProperty(response: Response): Promise<ApiScopePropertyApiDto>;
     deleteProperty(propertyId: number): Promise<void>;
@@ -105,6 +111,9 @@ export interface IClientsClient {
     put(client: ClientApiDto): Promise<void>;
     get2(id: number): Promise<ClientApiDto>;
     delete(id: number): Promise<void>;
+    getClientCountsByScopes(scopes: string[] | null | undefined): Promise<{
+        [key: string]: number;
+    }>;
     getAccessTokenTypes(): Promise<SelectItemDto[]>;
     getTokenExpirations(): Promise<SelectItemDto[]>;
     getTokenUsage(): Promise<SelectItemDto[]>;
@@ -148,6 +157,12 @@ export declare class ClientsClient extends WebApiClientBase implements IClientsC
     protected processGet2(response: Response): Promise<ClientApiDto>;
     delete(id: number): Promise<void>;
     protected processDelete(response: Response): Promise<void>;
+    getClientCountsByScopes(scopes: string[] | null | undefined): Promise<{
+        [key: string]: number;
+    }>;
+    protected processGetClientCountsByScopes(response: Response): Promise<{
+        [key: string]: number;
+    }>;
     getAccessTokenTypes(): Promise<SelectItemDto[]>;
     protected processGetAccessTokenTypes(response: Response): Promise<SelectItemDto[]>;
     getTokenExpirations(): Promise<SelectItemDto[]>;
@@ -309,6 +324,7 @@ export interface IIdentityResourcesClient {
     canInsertIdentityResourceProperty(id: number | undefined, key: string | null | undefined): Promise<boolean>;
     getProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<IdentityResourcePropertiesApiDto>;
     postProperty(id: number, identityResourcePropertyApi: IdentityResourcePropertyApiDto): Promise<IdentityResourcePropertyApiDto>;
+    getClients(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientsApiDto>;
     getProperty(propertyId: number): Promise<IdentityResourcePropertyApiDto>;
     deleteProperty(propertyId: number): Promise<void>;
 }
@@ -337,6 +353,8 @@ export declare class IdentityResourcesClient extends WebApiClientBase implements
     protected processGetProperties(response: Response): Promise<IdentityResourcePropertiesApiDto>;
     postProperty(id: number, identityResourcePropertyApi: IdentityResourcePropertyApiDto): Promise<IdentityResourcePropertyApiDto>;
     protected processPostProperty(response: Response): Promise<IdentityResourcePropertyApiDto>;
+    getClients(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientsApiDto>;
+    protected processGetClients(response: Response): Promise<ClientsApiDto>;
     getProperty(propertyId: number): Promise<IdentityResourcePropertyApiDto>;
     protected processGetProperty(response: Response): Promise<IdentityResourcePropertyApiDto>;
     deleteProperty(propertyId: number): Promise<void>;

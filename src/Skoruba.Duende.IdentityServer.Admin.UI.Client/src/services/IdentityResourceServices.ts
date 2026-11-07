@@ -10,6 +10,8 @@ import {
   IdentityResourcesData,
 } from "@/models/IdentityResources/IdentityResourceModels";
 import { PropertiesData, PropertyData } from "@/models/Common/CommonModels";
+import { ScopeClientsData } from "@/models/Clients/ClientModels";
+import { mapScopeClients } from "@/services/ClientServices";
 
 export const getIdentityResources = async (
   searchTerm: string,
@@ -99,4 +101,15 @@ export const deleteIdentityResourceProperty = async (
 ): Promise<void> => {
   const api = new client.IdentityResourcesClient(ApiHelper.getApiBaseUrl());
   await api.deleteProperty(propertyId);
+};
+
+export const getIdentityResourceClients = async (
+  id: number,
+  pageIndex: number,
+  pageSize: number
+): Promise<ScopeClientsData> => {
+  const api = new client.IdentityResourcesClient(ApiHelper.getApiBaseUrl());
+  const result = await api.getClients(id, pageIndex + 1, pageSize);
+
+  return mapScopeClients(result);
 };

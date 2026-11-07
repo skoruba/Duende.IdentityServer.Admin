@@ -7,6 +7,8 @@ import {
   SelectItem,
   ClientSecretData,
   ClientSecretsData,
+  ScopeClientData,
+  ScopeClientsData,
 } from "@/models/Clients/ClientModels";
 import { SecretsFormData } from "@/components/SecretForm/SecretForm";
 import { client } from "@skoruba/duende.identityserver.admin.api.client";
@@ -321,4 +323,27 @@ export const useCreateClient = () => {
 export const deleteClient = async (id: number): Promise<void> => {
   const clientClient = new client.ClientsClient(ApiHelper.getApiBaseUrl());
   await clientClient.delete(id);
+};
+
+export const mapScopeClients = (
+  clients: client.ClientsApiDto,
+): ScopeClientsData => ({
+  items:
+    clients.clients?.map(
+      (scopeClient): ScopeClientData => ({
+        id: scopeClient.id,
+        clientId: scopeClient.clientId ?? "",
+        clientName: scopeClient.clientName ?? "",
+        enabled: scopeClient.enabled,
+      }),
+    ) ?? [],
+  totalCount: clients.totalCount,
+});
+
+export const getClientCountsByScopes = async (
+  scopes: string[],
+): Promise<Record<string, number>> => {
+  const clientsClient = new client.ClientsClient(ApiHelper.getApiBaseUrl());
+
+  return clientsClient.getClientCountsByScopes(scopes);
 };

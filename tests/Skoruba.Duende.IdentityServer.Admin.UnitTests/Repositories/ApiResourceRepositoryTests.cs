@@ -2,8 +2,10 @@
 // Licensed under the Apache License, Version 2.0.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Duende.IdentityServer.EntityFramework.Entities;
 using Duende.IdentityServer.EntityFramework.Options;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -86,6 +88,31 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 apiResource.UserClaims.Should().BeEquivalentTo(newApiResource.UserClaims,
                     option => option.Excluding(x => x.Path.EndsWith("Id"))
                         .Excluding(x => x.Path.EndsWith("ApiResource")));
+            }
+        }
+
+        [Fact]
+        public async Task GetApiResourcesByScopeAsync()
+        {
+            const string usedScope = "used_by_scope_test";
+
+            using (var context = GetDbContext())
+            {
+                var apiResourceRepository = GetApiResourceRepository(context);
+
+                var apiResourceWithScope = ApiResourceMock.GenerateRandomApiResource(0);
+                apiResourceWithScope.Scopes = new List<ApiResourceScope> { new ApiResourceScope { Scope = usedScope } };
+
+                var otherApiResource = ApiResourceMock.GenerateRandomApiResource(0);
+                otherApiResource.Scopes = new List<ApiResourceScope> { new ApiResourceScope { Scope = $"{usedScope}_other" } };
+
+                await apiResourceRepository.AddApiResourceAsync(apiResourceWithScope);
+                await apiResourceRepository.AddApiResourceAsync(otherApiResource);
+
+                var apiResources = await apiResourceRepository.GetApiResourcesByScopeAsync(usedScope);
+
+                apiResources.TotalCount.Should().Be(1);
+                apiResources.Data.Should().ContainSingle(x => x.Id == apiResourceWithScope.Id);
             }
         }
 

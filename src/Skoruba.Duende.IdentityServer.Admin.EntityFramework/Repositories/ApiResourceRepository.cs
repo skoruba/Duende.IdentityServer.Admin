@@ -44,6 +44,22 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
             return pagedList;
         }
 
+        public virtual async Task<PagedList<ApiResource>> GetApiResourcesByScopeAsync(string scope, int page = 1, int pageSize = 10)
+        {
+            pageSize = QueryableExtensions.NormalizePageSize(pageSize);
+
+            var pagedList = new PagedList<ApiResource>();
+            var query = DbContext.ApiResources.Where(x => x.Scopes.Any(s => s.Scope == scope));
+
+            var apiResources = await query.PageBy(x => x.Name, page, pageSize, orderByDescending: false).ToListAsync();
+
+            pagedList.Data.AddRange(apiResources);
+            pagedList.TotalCount = await query.CountAsync();
+            pagedList.PageSize = pageSize;
+
+            return pagedList;
+        }
+
         public virtual Task<ApiResource> GetApiResourceAsync(int apiResourceId)
         {
             return DbContext.ApiResources

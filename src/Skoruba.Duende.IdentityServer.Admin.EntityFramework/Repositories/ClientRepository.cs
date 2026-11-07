@@ -80,6 +80,44 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
             return pagedList;
         }
 
+        public virtual async Task<PagedList<Client>> GetClientsByScopeAsync(string scope, int page = 1, int pageSize = 10)
+        {
+            pageSize = QueryableExtensions.NormalizePageSize(pageSize);
+
+            var query = DbContext.Clients
+                .Include(x => x.Properties)
+                .Where(x => x.AllowedScopes.Any(s => s.Scope == scope));
+
+            var totalCount = await query.CountAsync();
+
+            var clients = await query
+                .PageBy(x => x.ClientId, page, pageSize, orderByDescending: false)
+                .ToListAsync();
+
+            var pagedList = new PagedList<Client>
+            {
+                TotalCount = totalCount,
+                PageSize = pageSize
+            };
+
+            pagedList.Data.AddRange(clients);
+
+            return pagedList;
+        }
+
+        public virtual async Task<Dictionary<string, int>> GetClientCountsByScopesAsync(IEnumerable<string> scopes)
+        {
+            var requestedScopes = scopes.Where(x => !string.IsNullOrEmpty(x)).Distinct().ToList();
+
+            var counts = await DbContext.ClientScopes
+                .Where(x => requestedScopes.Contains(x.Scope))
+                .GroupBy(x => x.Scope)
+                .Select(x => new { Scope = x.Key, Count = x.Count() })
+                .ToDictionaryAsync(x => x.Scope, x => x.Count);
+
+            return requestedScopes.ToDictionary(x => x, x => counts.GetValueOrDefault(x));
+        }
+
         public virtual async Task<List<string>> GetScopesAsync(string scope, int limit = 0, bool excludeIdentityResources = false, bool excludeApiScopes = false)
         {
             var identityResources = await DbContext.IdentityResources

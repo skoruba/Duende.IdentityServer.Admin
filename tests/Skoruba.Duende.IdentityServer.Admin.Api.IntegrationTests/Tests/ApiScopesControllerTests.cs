@@ -33,7 +33,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Tests
         {
         }
 
-        private static ApiScopeApiDto BuildApiScopeCreatePayload(string name)
+        internal static ApiScopeApiDto BuildApiScopeCreatePayload(string name)
         {
             var payload = ApiScopeApiDtoMock.GenerateRandomApiScope(0);
             payload.Id = 0;

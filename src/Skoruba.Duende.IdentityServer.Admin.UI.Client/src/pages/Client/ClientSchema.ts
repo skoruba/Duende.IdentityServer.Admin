@@ -16,17 +16,18 @@ const DualListTypeSchema = z.object({
 
 const optionalNumberField = z
   .number({
-    invalid_type_error: t("Validation.InvalidNumber"),
+    error: t("Validation.InvalidNumber"),
   })
   .optional();
 
 const nullableOptionalNumberField = z
   .number({
-    invalid_type_error: t("Validation.InvalidNumber"),
+    error: t("Validation.InvalidNumber"),
   })
   .nullable()
   .optional()
-  .transform((value) => value ?? undefined);
+  .transform((value) => value ?? undefined)
+  .optional();
 
 const optionalSelectNumberField = z.preprocess(
   (value) => (value === "" || value === null || value === undefined ? undefined : value),
@@ -107,7 +108,8 @@ export const formSchema = z.object({
     .optional(),
 });
 
-export type ClientEditFormData = z.infer<typeof formSchema>;
+export type ClientEditFormInput = z.input<typeof formSchema>;
+export type ClientEditFormData = z.output<typeof formSchema>;
 
 export const clientDefaultValues: ClientEditFormData = {
   clientId: "",

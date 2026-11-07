@@ -39,7 +39,11 @@ export const IdentityProviderFormSchema = z.object({
     .default([]),
 });
 
-export type IdentityProviderFormData = z.infer<
+export type IdentityProviderFormInput = z.input<
+  typeof IdentityProviderFormSchema
+>;
+
+export type IdentityProviderFormData = z.output<
   typeof IdentityProviderFormSchema
 >;
 

@@ -877,6 +877,10 @@ export interface IApiScopesClient {
 
     postProperty(id: number, apiScopePropertyApi: ApiScopePropertyApiDto): Promise<ApiScopePropertyApiDto>;
 
+    getScopeClients(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientsApiDto>;
+
+    getScopeApiResources(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiResourcesApiDto>;
+
     getProperty(propertyId: number): Promise<ApiScopePropertyApiDto>;
 
     deleteProperty(propertyId: number): Promise<void>;
@@ -1372,6 +1376,116 @@ export class ApiScopesClient extends WebApiClientBase implements IApiScopesClien
         return Promise.resolve<ApiScopePropertyApiDto>(null as any);
     }
 
+    getScopeClients(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientsApiDto> {
+        let url_ = this.baseUrl + "/api/ApiScopes/{id}/Clients?";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (page === null)
+            throw new globalThis.Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new globalThis.Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetScopeClients(_response);
+        });
+    }
+
+    protected processGetScopeClients(response: Response): Promise<ClientsApiDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ClientsApiDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ClientsApiDto>(null as any);
+    }
+
+    getScopeApiResources(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiResourcesApiDto> {
+        let url_ = this.baseUrl + "/api/ApiScopes/{id}/ApiResources?";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (page === null)
+            throw new globalThis.Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new globalThis.Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetScopeApiResources(_response);
+        });
+    }
+
+    protected processGetScopeApiResources(response: Response): Promise<ApiResourcesApiDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ApiResourcesApiDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ApiResourcesApiDto>(null as any);
+    }
+
     getProperty(propertyId: number): Promise<ApiScopePropertyApiDto> {
         let url_ = this.baseUrl + "/api/ApiScopes/Properties/{propertyId}";
         if (propertyId === undefined || propertyId === null)
@@ -1481,6 +1595,8 @@ export interface IClientsClient {
     get2(id: number): Promise<ClientApiDto>;
 
     delete(id: number): Promise<void>;
+
+    getClientCountsByScopes(scopes: string[] | null | undefined): Promise<{ [key: string]: number; }>;
 
     getAccessTokenTypes(): Promise<SelectItemDto[]>;
 
@@ -1806,6 +1922,61 @@ export class ClientsClient extends WebApiClientBase implements IClientsClient {
             });
         }
         return Promise.resolve<void>(null as any);
+    }
+
+    getClientCountsByScopes(scopes: string[] | null | undefined): Promise<{ [key: string]: number; }> {
+        let url_ = this.baseUrl + "/api/Clients/GetClientCountsByScopes?";
+        if (scopes !== undefined && scopes !== null)
+            scopes && scopes.forEach(item => { url_ += "scopes=" + encodeURIComponent("" + item) + "&"; });
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetClientCountsByScopes(_response);
+        });
+    }
+
+    protected processGetClientCountsByScopes(response: Response): Promise<{ [key: string]: number; }> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200) {
+                result200 = {} as any;
+                for (let key in resultData200) {
+                    if (resultData200.hasOwnProperty(key))
+                        (result200 as any)![key] = resultData200[key] !== undefined ? resultData200[key] : null as any;
+                }
+            }
+            else {
+                result200 = null as any;
+            }
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<{ [key: string]: number; }>(null as any);
     }
 
     getAccessTokenTypes(): Promise<SelectItemDto[]> {
@@ -4288,6 +4459,8 @@ export interface IIdentityResourcesClient {
 
     postProperty(id: number, identityResourcePropertyApi: IdentityResourcePropertyApiDto): Promise<IdentityResourcePropertyApiDto>;
 
+    getClients(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientsApiDto>;
+
     getProperty(propertyId: number): Promise<IdentityResourcePropertyApiDto>;
 
     deleteProperty(propertyId: number): Promise<void>;
@@ -4781,6 +4954,61 @@ export class IdentityResourcesClient extends WebApiClientBase implements IIdenti
             });
         }
         return Promise.resolve<IdentityResourcePropertyApiDto>(null as any);
+    }
+
+    getClients(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientsApiDto> {
+        let url_ = this.baseUrl + "/api/IdentityResources/{id}/Clients?";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (page === null)
+            throw new globalThis.Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new globalThis.Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetClients(_response);
+        });
+    }
+
+    protected processGetClients(response: Response): Promise<ClientsApiDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ClientsApiDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ClientsApiDto>(null as any);
     }
 
     getProperty(propertyId: number): Promise<IdentityResourcePropertyApiDto> {
