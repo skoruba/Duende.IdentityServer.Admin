@@ -15,7 +15,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuditLogDto = exports.DashboardAuditLogStatisticsDto = exports.DashboardAuditLogDto = exports.DashboardDto = exports.ConfigurationRuleParameterDto = exports.ConfigurationRuleMetadataDto = exports.ConfigurationIssueType = exports.ConfigurationRuleDto = exports.ConfigurationRulesDto = exports.ConfigurationIssueSummaryDto = exports.ConfigurationResourceType = exports.ConfigurationIssueTypeView = exports.ConfigurationIssueDto = exports.ConfigurationIssuesPagedDto = exports.ClientClaimsApiDto = exports.ClientPropertiesApiDto = exports.ClientSecretApiDto = exports.ClientSecretsApiDto = exports.ClientCloneApiDto = exports.SelectItemDto = exports.ClientPropertyApiDto = exports.ClientClaimApiDto = exports.ClientApiDto = exports.ClientsApiDto = exports.ApiScopePropertiesApiDto = exports.ApiScopePropertyApiDto = exports.ApiScopeApiDto = exports.ApiScopesApiDto = exports.ApiResourcePropertyApiDto = exports.ApiResourcePropertiesApiDto = exports.ApiSecretApiDto = exports.ApiSecretsApiDto = exports.ProblemDetails = exports.ApiResourceApiDto = exports.ApiResourcesApiDto = exports.UsersClient = exports.RolesClient = exports.PersistedGrantsClient = exports.LogsClient = exports.KeysClient = exports.InfoClient = exports.IdentityResourcesClient = exports.IdentityProvidersClient = exports.DashboardClient = exports.ConfigurationRulesClient = exports.ConfigurationIssuesClient = exports.ClientsClient = exports.ApiScopesClient = exports.ApiResourcesClient = exports.WebApiClientBase = void 0;
-exports.SwaggerException = exports.UserChangePasswordApiDtoOfString = exports.UserProviderDeleteApiDtoOfString = exports.UserProviderApiDtoOfString = exports.UserProvidersApiDtoOfString = exports.UserClaimApiDtoOfString = exports.UserClaimsApiDtoOfString = exports.UserRoleApiDtoOfString = exports.UserRolesApiDtoOfIdentityRoleDto = exports.TKey = exports.RoleClaimApiDto_1 = exports.RoleClaimApiDtoOfString = exports.RoleClaimsApiDtoOfString = exports.IdentityUserDto = exports.UserDtoOfString = exports.BaseUserDtoOfString = exports.IdentityUsersDto = exports.UsersDtoOfIdentityUserDtoAndString = exports.IdentityRolesDto = exports.RolesDtoOfIdentityRoleDtoAndString = exports.IdentityRoleDto = exports.RoleDtoOfString = exports.BaseRoleDtoOfString = exports.PersistedGrantsApiDto = exports.PersistedGrantApiDto = exports.PersistedGrantSubjectApiDto = exports.PersistedGrantSubjectsApiDto = exports.AuditLogsDto = exports.KeyApiDto = exports.KeysApiDto = exports.EnvironmentInfoApiDto = exports.SystemHealthEntryApiDto = exports.SystemHealthStatus = exports.SystemHealthApiDto = exports.IdentityResourcePropertyApiDto = exports.IdentityResourcePropertiesApiDto = exports.IdentityResourceApiDto = exports.IdentityResourcesApiDto = exports.IdentityProviderApiDto = exports.IdentityProvidersApiDto = exports.DashboardIdentityDto = void 0;
+exports.SwaggerException = exports.UserChangePasswordApiDtoOfString = exports.UserProviderDeleteApiDtoOfString = exports.UserProviderApiDtoOfString = exports.UserProvidersApiDtoOfString = exports.UserClaimApiDtoOfString = exports.UserClaimsApiDtoOfString = exports.UserRoleApiDtoOfString = exports.UserRolesApiDtoOfIdentityRoleDto = exports.UserOptionsApiDto = exports.TKey = exports.RoleClaimApiDto_1 = exports.RoleClaimApiDtoOfString = exports.RoleClaimsApiDtoOfString = exports.IdentityUserDto = exports.UserDtoOfString = exports.BaseUserDtoOfString = exports.IdentityUsersDto = exports.UsersDtoOfIdentityUserDtoAndString = exports.IdentityRolesDto = exports.RolesDtoOfIdentityRoleDtoAndString = exports.IdentityRoleDto = exports.RoleDtoOfString = exports.BaseRoleDtoOfString = exports.PersistedGrantsApiDto = exports.PersistedGrantApiDto = exports.PersistedGrantSubjectApiDto = exports.PersistedGrantSubjectsApiDto = exports.AuditLogsDto = exports.KeyApiDto = exports.KeysApiDto = exports.EnvironmentInfoApiDto = exports.SystemHealthEntryApiDto = exports.SystemHealthStatus = exports.SystemHealthApiDto = exports.IdentityResourcePropertyApiDto = exports.IdentityResourcePropertiesApiDto = exports.IdentityResourceApiDto = exports.IdentityResourcesApiDto = exports.IdentityProviderApiDto = exports.IdentityProvidersApiDto = exports.DashboardIdentityDto = void 0;
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 class WebApiClientBase {
@@ -6465,6 +6465,53 @@ class UsersClient extends WebApiClientBase {
         this.http = http ? http : window;
         this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
     }
+    getOptions() {
+        let url_ = this.baseUrl + "/api/Users/Options";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
+            return this.processGetOptions(_response);
+        });
+    }
+    processGetOptions(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = UserOptionsApiDto.fromJS(resultData200);
+                return result200;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
+    }
     get(id) {
         let url_ = this.baseUrl + "/api/Users/{id}";
         if (id === undefined || id === null)
@@ -10077,6 +10124,33 @@ class TKey {
     }
 }
 exports.TKey = TKey;
+class UserOptionsApiDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            this.requireUniqueEmail = _data["requireUniqueEmail"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserOptionsApiDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        data["requireUniqueEmail"] = this.requireUniqueEmail;
+        return data;
+    }
+}
+exports.UserOptionsApiDto = UserOptionsApiDto;
 class UserRolesApiDtoOfIdentityRoleDto {
     constructor(data) {
         if (data) {

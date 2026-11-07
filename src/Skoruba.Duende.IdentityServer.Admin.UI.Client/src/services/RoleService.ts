@@ -142,7 +142,7 @@ export const getRoleUsers = async (
       res.users?.map((u) => ({
         id: u.id!,
         userName: u.userName!,
-        email: u.email!,
+        email: u.email ?? "",
       })) ?? [],
     totalCount: res.totalCount ?? 0,
   };

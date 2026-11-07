@@ -127,6 +127,39 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Tests
         }
 
         [Fact]
+        public async Task GetUserOptionsReturnsRequireUniqueEmail()
+        {
+            SetupAdminAuthorization();
+
+            var options = await Client.GetFromJsonAsync<UserOptionsApiDto>($"{UsersRoute}/options");
+
+            options.Should().NotBeNull();
+            options!.RequireUniqueEmail.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task GetUserOptionsWithoutPermissionsReturnsUnauthorized()
+        {
+            ClearAuthorization();
+
+            var response = await Client.GetAsync($"{UsersRoute}/options");
+
+            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        }
+
+        [Fact]
+        public async Task UserCreateWithoutEmailReturnsBadRequestWhenUniqueEmailIsRequired()
+        {
+            SetupAdminAuthorization();
+            var createRequest = UserCreateFaker.Generate();
+            createRequest.Email = null;
+
+            var response = await Client.PostAsJsonAsync(UsersRoute, createRequest);
+
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
         public async Task UserCreateWithExplicitIdReturnsBadRequest()
         {
             SetupAdminAuthorization();

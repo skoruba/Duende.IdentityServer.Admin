@@ -17,6 +17,23 @@ import {
 
 const getClient = () => new client.UsersClient(ApiHelper.getApiBaseUrl());
 
+// IdentityOptions:User:RequireUniqueEmail of the Admin API decides whether a user
+// needs an email. An Admin API without the endpoint keeps it required.
+export const useUserOptions = () =>
+  useQuery({
+    queryKey: [queryKeys.userOptions],
+    queryFn: async () => {
+      try {
+        const options = await getClient().getOptions();
+
+        return { requireUniqueEmail: options.requireUniqueEmail };
+      } catch {
+        return { requireUniqueEmail: true };
+      }
+    },
+    staleTime: Infinity,
+  });
+
 const getPersistedGrantsClient = () =>
   new client.PersistedGrantsClient(ApiHelper.getApiBaseUrl());
 
@@ -146,7 +163,7 @@ export const getUsers = async (
     response.users?.map((u) => ({
       id: u.id!,
       userName: u.userName!,
-      email: u.email!,
+      email: u.email ?? "",
     })) ?? [];
 
   return {
@@ -163,7 +180,7 @@ export const getUser = async (id: string): Promise<UserFormData> => {
 
   return {
     userName: user.userName!,
-    email: user.email!,
+    email: user.email ?? "",
     emailConfirmed: user.emailConfirmed ?? false,
     phoneNumber: user.phoneNumber ?? "",
     phoneNumberConfirmed: user.phoneNumberConfirmed ?? false,
@@ -185,7 +202,7 @@ export const createUser = async (data: UserFormData): Promise<void> => {
     new client.IdentityUserDto({
       id: undefined,
       userName: data.userName,
-      email: data.email,
+      email: data.email || undefined,
       lockoutEnd: lockoutEnd === null ? undefined : lockoutEnd,
       emailConfirmed: data.emailConfirmed ?? false,
       phoneNumber: data.phoneNumber ?? undefined,
@@ -213,6 +230,7 @@ export const updateUser = async (
     new client.IdentityUserDto({
       ...data,
       id: id,
+      email: data.email || undefined,
       lockoutEnd: lockoutEnd === null ? undefined : lockoutEnd,
       emailConfirmed: data.emailConfirmed ?? false,
       phoneNumber: data.phoneNumber ?? undefined,

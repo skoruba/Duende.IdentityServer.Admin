@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0.
 
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
@@ -17,7 +18,11 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Tests.Base
         public TestServer TestServer { get; }
         public HttpClient Client { get; }
 
-        public TestFixture()
+        public TestFixture() : this(null)
+        {
+        }
+
+        protected TestFixture(IDictionary<string, string> configurationOverrides)
         {
             Host = new HostBuilder()
                 .ConfigureAppConfiguration((hostContext, configApp) =>
@@ -31,6 +36,11 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Tests.Base
 
                     configApp.AddJsonFile($"serilog.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
                     configApp.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+
+                    if (configurationOverrides != null)
+                    {
+                        configApp.AddInMemoryCollection(configurationOverrides);
+                    }
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

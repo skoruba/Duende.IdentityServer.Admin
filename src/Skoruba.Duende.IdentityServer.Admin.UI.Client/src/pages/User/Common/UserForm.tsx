@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
@@ -6,8 +6,12 @@ import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { toast } from "@/components/ui/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createUser, updateUser } from "@/services/UserServices";
-import { UserFormData, formSchema } from "../Common/UserSchema";
+import {
+  createUser,
+  updateUser,
+  useUserOptions,
+} from "@/services/UserServices";
+import { UserFormData, createFormSchema } from "../Common/UserSchema";
 import { UsersUrl } from "@/routing/Urls";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import BasicsTab from "./Tabs/BasicsTab";
@@ -51,8 +55,12 @@ const UserForm: React.FC<Props> = ({ mode, userId, defaultValues }) => {
   const [activeTab, setActiveTab] = useState("basics");
   const deleteModal = useModal();
 
+  const { data: userOptions } = useUserOptions();
+  const requireEmail = userOptions?.requireUniqueEmail ?? true;
+  const schema = useMemo(() => createFormSchema(requireEmail), [requireEmail]);
+
   const form = useForm<UserFormData>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(schema),
     defaultValues,
   });
 

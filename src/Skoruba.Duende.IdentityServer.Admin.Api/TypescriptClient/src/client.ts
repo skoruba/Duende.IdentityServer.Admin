@@ -6415,6 +6415,8 @@ export class RolesClient extends WebApiClientBase implements IRolesClient {
 
 export interface IUsersClient {
 
+    getOptions(): Promise<UserOptionsApiDto>;
+
     get(id: string): Promise<IdentityUserDto>;
 
     delete(id: string): Promise<void>;
@@ -6461,6 +6463,50 @@ export class UsersClient extends WebApiClientBase implements IUsersClient {
         super();
         this.http = http ? http : window as any;
         this.baseUrl = baseUrl ?? "";
+    }
+
+    getOptions(): Promise<UserOptionsApiDto> {
+        let url_ = this.baseUrl + "/api/Users/Options";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processGetOptions(_response);
+        });
+    }
+
+    protected processGetOptions(response: Response): Promise<UserOptionsApiDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = UserOptionsApiDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<UserOptionsApiDto>(null as any);
     }
 
     get(id: string): Promise<IdentityUserDto> {
@@ -10855,7 +10901,7 @@ export interface IBaseUserDtoOfString {
 
 export class UserDtoOfString extends BaseUserDtoOfString implements IUserDtoOfString {
     userName!: string;
-    email!: string;
+    email!: string | undefined;
     emailConfirmed!: boolean;
     phoneNumber!: string | undefined;
     phoneNumberConfirmed!: boolean;
@@ -10908,7 +10954,7 @@ export class UserDtoOfString extends BaseUserDtoOfString implements IUserDtoOfSt
 
 export interface IUserDtoOfString extends IBaseUserDtoOfString {
     userName: string;
-    email: string;
+    email: string | undefined;
     emailConfirmed: boolean;
     phoneNumber: string | undefined;
     phoneNumberConfirmed: boolean;
@@ -11121,6 +11167,42 @@ export class TKey implements ITKey {
 }
 
 export interface ITKey {
+}
+
+export class UserOptionsApiDto implements IUserOptionsApiDto {
+    requireUniqueEmail!: boolean;
+
+    constructor(data?: IUserOptionsApiDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.requireUniqueEmail = _data["requireUniqueEmail"];
+        }
+    }
+
+    static fromJS(data: any): UserOptionsApiDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserOptionsApiDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["requireUniqueEmail"] = this.requireUniqueEmail;
+        return data;
+    }
+}
+
+export interface IUserOptionsApiDto {
+    requireUniqueEmail: boolean;
 }
 
 export class UserRolesApiDtoOfIdentityRoleDto implements IUserRolesApiDtoOfIdentityRoleDto {
