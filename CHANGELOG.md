@@ -8,6 +8,11 @@
 - The Admin UI needs the Admin API TypeScript client regenerated for this version: `ConfigurationRuleDto.ruleType` is a string and the `ConfigurationRuleType` enum is gone
 - Error Logs: the settings are new and optional, a missing one keeps the behavior of the previous version. The STS writes into the `Log` table only once `ConnectionStrings:AdminLogDbConnection` is added to its configuration; the Admin API deletes nothing until `DatabaseLogConfiguration:RetentionDays` is set; the Admin UI shows the (then empty) page unless `AdminConfiguration:BasicConfiguration:ErrorLogsEnabled` is `false`. If your STS or Admin API `serilog.json` still has the `MSSqlServer` sink from the previous versions, remove it before you add `AdminLogDbConnection` to the STS - the STS writes into the table itself now, and both would write every event twice
 
+### Security
+
+- `System.Security.Cryptography.Xml` and `System.Security.Cryptography.Pkcs` resolve to 10.0.14 instead of the vulnerable 10.0.12 and 9.0.x (CVE-2026-84008, CVE-2026-70162 and three advisories for `Cryptography.Xml`). `Microsoft.Data.SqlClient` asks only for `Pkcs` 9.x, so the projects referencing it name `Pkcs` 10.0.14 explicitly
+- NuGet packages updated within their major versions: ASP.NET Core and EF Core 10.0.14, Duende IdentityServer 8.0.10, Duende.AccessTokenManagement 4.3.0, Microsoft.Identity.Web 4.18.0, Azure SDK and the test tooling
+
 ### Added
 
 - Custom configuration rules ([#340](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/340)): derive from `ConfigurationRuleBase<TConfiguration>`, register with `services.AddConfigurationRule<TRule>()` or `AddConfigurationRulesFromAssemblyContaining<T>()`, and the rule is offered under *Configuration Rules*, where it is created like a built-in one. No migration involved. A rule may take constructor dependencies, scoped ones included; a rule that cannot be registered - a key without a namespace, a duplicate key - stops the host from starting

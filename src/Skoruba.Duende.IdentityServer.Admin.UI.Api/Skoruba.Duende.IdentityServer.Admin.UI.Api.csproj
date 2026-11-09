@@ -18,16 +18,18 @@
         <PackageReference Include="KubernetesClient" Version="19.0.2" />
         <PackageReference Include="IdentityModel" Version="7.0.0" />
         <PackageReference Include="Riok.Mapperly" Version="4.3.1" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.12" />
-        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="10.0.12" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.12" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.12" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.12" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.12">
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.14" />
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="10.0.14" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.14" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.14" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.14" />
+        <!-- Microsoft.Data.SqlClient asks only for 9.x, which has CVE-2026-84008 and CVE-2026-70162 -->
+        <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.14">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.12" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.14" />
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
         <PackageReference Include="NSwag.Generation" Version="14.7.1" />
         <PackageReference Include="Serilog" Version="4.4.0" />

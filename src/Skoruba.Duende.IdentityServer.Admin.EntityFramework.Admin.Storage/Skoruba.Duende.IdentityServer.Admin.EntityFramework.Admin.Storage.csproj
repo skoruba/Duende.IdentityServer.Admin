@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
-    <PackageReference Include="Duende.IdentityServer.EntityFramework" Version="8.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.14" />
+    <PackageReference Include="Duende.IdentityServer.EntityFramework" Version="8.0.10" />
   </ItemGroup>
 
 </Project>
