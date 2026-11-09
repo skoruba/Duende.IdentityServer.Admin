@@ -47,6 +47,7 @@ const DateTimeFilter = ({ label, value, onChange }: DateTimeFilterProps) => {
             <Calendar
               mode="single"
               selected={value.date}
+              defaultMonth={value.date}
               onSelect={(date) => {
                 setIsOpen(false);
                 onChange({ date, time: date ? value.time : undefined });

@@ -200,6 +200,7 @@ const ErrorLogs = () => {
           <Calendar
             mode="single"
             selected={deleteOlderThan}
+            defaultMonth={deleteOlderThan}
             disabled={{ after: new Date() }}
             onSelect={(day) => {
               setIsCalendarOpen(false);
