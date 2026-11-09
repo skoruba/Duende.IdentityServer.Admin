@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
-import { Code, FileWarning, Search, Trash2 } from "lucide-react";
+import { Code, FileWarning, FilterX, Search, Trash2 } from "lucide-react";
 import Page from "@/components/Page/Page";
 import Loading from "@/components/Loading/Loading";
 import { DataTable } from "@/components/DataTable/DataTable";
@@ -20,12 +21,20 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import useSearch from "@/hooks/useSearch";
 import { parseLogEvent } from "@/lib/errorLogs/parseLogEvent";
+import {
+  DateTimeValue,
+  ERROR_LOG_LEVELS,
+  formatDateTimeParam,
+  parseDateTimeParam,
+  toTimeRange,
+} from "@/lib/errorLogs/errorLogFilters";
 import { ErrorLogData } from "@/models/ErrorLogs/ErrorLogModels";
 import {
   deleteErrorLogsOlderThan,
   getErrorLogs,
 } from "@/services/ErrorLogsService";
 import { queryKeys } from "@/services/QueryKeys";
+import DateTimeFilter from "./DateTimeFilter";
 import ErrorLogDetail from "./ErrorLogDetail";
 import LogLevelBadge from "./LogLevelBadge";
 
@@ -51,10 +60,69 @@ const ErrorLogs = () => {
     onSearchComplete: () => setPagination({ ...pagination, pageIndex: 0 }),
   });
 
+  // The filters live in the URL (?level=Error&from=2026-11-09T09:30&to=...),
+  // so a filtered view can be shared and survives a reload.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const levels = searchParams.getAll("level");
+  const from = parseDateTimeParam(searchParams.get("from"));
+  const to = parseDateTimeParam(searchParams.get("to"));
+  const timeRange = toTimeRange(from, to);
+  const hasFilters = levels.length > 0 || !!from.date || !!to.date;
+
+  const updateFilters = (update: (params: URLSearchParams) => void) => {
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        update(next);
+        return next;
+      },
+      { replace: true },
+    );
+    setPagination({ ...pagination, pageIndex: 0 });
+  };
+
+  const toggleLevel = (level: string) =>
+    updateFilters((params) => {
+      const current = params.getAll("level");
+      params.delete("level");
+      const next = current.includes(level)
+        ? current.filter((x) => x !== level)
+        : [...current, level];
+      next.forEach((x) => params.append("level", x));
+    });
+
+  const setDateTime = (name: "from" | "to", value: DateTimeValue) =>
+    updateFilters((params) => {
+      const formatted = formatDateTimeParam(value);
+      if (formatted) {
+        params.set(name, formatted);
+      } else {
+        params.delete(name);
+      }
+    });
+
+  const clearFilters = () =>
+    updateFilters((params) => {
+      params.delete("level");
+      params.delete("from");
+      params.delete("to");
+    });
+
   const logs = useQuery({
-    queryKey: [queryKeys.errorLogs, pagination, searchTerm],
+    queryKey: [
+      queryKeys.errorLogs,
+      pagination,
+      searchTerm,
+      levels,
+      timeRange.from?.getTime(),
+      timeRange.to?.getTime(),
+    ],
     queryFn: () =>
-      getErrorLogs(searchTerm, pagination.pageIndex, pagination.pageSize),
+      getErrorLogs(
+        { searchText: searchTerm, levels, ...timeRange },
+        pagination.pageIndex,
+        pagination.pageSize,
+      ),
     placeholderData: (previousData) => previousData,
   });
 
@@ -160,7 +228,47 @@ const ErrorLogs = () => {
     </div>
   );
 
-  const isEmpty = logs.data?.totalCount === 0 && !searchTerm;
+  const isEmpty = logs.data?.totalCount === 0 && !searchTerm && !hasFilters;
+
+  const filters = (
+    <div className="mb-4 flex flex-wrap items-end gap-x-6 gap-y-3">
+      <div className="flex flex-col gap-1.5">
+        <span className="text-xs font-medium text-muted-foreground">
+          {t("ErrorLogs.Level")}
+        </span>
+        <div className="flex gap-1">
+          {ERROR_LOG_LEVELS.map((level) => (
+            <Button
+              key={level}
+              type="button"
+              size="sm"
+              variant={levels.includes(level) ? "default" : "outline"}
+              aria-pressed={levels.includes(level)}
+              onClick={() => toggleLevel(level)}
+            >
+              {level}
+            </Button>
+          ))}
+        </div>
+      </div>
+      <DateTimeFilter
+        label={t("ErrorLogs.From")}
+        value={from}
+        onChange={(value) => setDateTime("from", value)}
+      />
+      <DateTimeFilter
+        label={t("ErrorLogs.To")}
+        value={to}
+        onChange={(value) => setDateTime("to", value)}
+      />
+      {hasFilters && (
+        <Button type="button" variant="ghost" onClick={clearFilters}>
+          <FilterX className="mr-2 h-4 w-4" />
+          {t("ErrorLogs.ClearFilters")}
+        </Button>
+      )}
+    </div>
+  );
 
   return (
     <Page
@@ -169,6 +277,7 @@ const ErrorLogs = () => {
       accentKind="monitoring"
       topSection={headerActions}
     >
+      {!isEmpty && filters}
       {logs.isLoading ? (
         <Loading fullscreen />
       ) : isEmpty ? (

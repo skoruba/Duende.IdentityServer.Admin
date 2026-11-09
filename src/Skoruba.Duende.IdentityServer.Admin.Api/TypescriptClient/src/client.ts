@@ -5484,7 +5484,7 @@ export interface ILogsClient {
 
     auditLog(event: string | null | undefined, source: string | null | undefined, category: string | null | undefined, createdDate: string | null | undefined, subjectIdentifier: string | null | undefined, subjectName: string | null | undefined, pageSize: number | undefined, page: number | undefined): Promise<AuditLogsDto>;
 
-    errorLog(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ErrorLogsApiDto>;
+    errorLog(searchText: string | null | undefined, levels: string[] | null | undefined, from: Date | null | undefined, to: Date | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ErrorLogsApiDto>;
 
     deleteErrorLog(deleteOlderThan: Date | undefined): Promise<void>;
 }
@@ -5564,10 +5564,16 @@ export class LogsClient extends WebApiClientBase implements ILogsClient {
         return Promise.resolve<AuditLogsDto>(null as any);
     }
 
-    errorLog(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ErrorLogsApiDto> {
+    errorLog(searchText: string | null | undefined, levels: string[] | null | undefined, from: Date | null | undefined, to: Date | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ErrorLogsApiDto> {
         let url_ = this.baseUrl + "/api/Logs/ErrorLog?";
         if (searchText !== undefined && searchText !== null)
             url_ += "searchText=" + encodeURIComponent("" + searchText) + "&";
+        if (levels !== undefined && levels !== null)
+            levels && levels.forEach(item => { url_ += "levels=" + encodeURIComponent("" + item) + "&"; });
+        if (from !== undefined && from !== null)
+            url_ += "from=" + encodeURIComponent(from ? "" + from.toISOString() : "") + "&";
+        if (to !== undefined && to !== null)
+            url_ += "to=" + encodeURIComponent(to ? "" + to.toISOString() : "") + "&";
         if (page === null)
             throw new globalThis.Error("The parameter 'page' cannot be null.");
         else if (page !== undefined)

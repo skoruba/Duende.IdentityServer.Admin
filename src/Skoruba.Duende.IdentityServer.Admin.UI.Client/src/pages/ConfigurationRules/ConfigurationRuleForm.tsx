@@ -209,9 +209,7 @@ const ConfigurationRuleForm: React.FC<ConfigurationRuleFormProps> = ({
   const handleFormSubmit = (data: FormData) => {
     if (!isEditMode && !selectedRuleType) return;
 
-    const resolvedRuleType = isEditMode
-      ? rule?.ruleType
-      : (selectedRuleType as client.ConfigurationRuleDto["ruleType"]);
+    const resolvedRuleType = isEditMode ? rule?.ruleType : selectedRuleType;
     if (!resolvedRuleType) return;
 
     const resolvedResourceType = isEnumValue(

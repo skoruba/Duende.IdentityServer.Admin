@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0.
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Entities;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Extensions.Common;
@@ -11,6 +12,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Inter
     public interface ILogRepository
     {
         Task<PagedList<Log>> GetLogsAsync(string search, int page = 1, int pageSize = 10);
+
+        Task<PagedList<Log>> GetLogsAsync(string search, IReadOnlyCollection<string> levels, DateTimeOffset? from, DateTimeOffset? to,
+            int page = 1, int pageSize = 10);
 
         Task DeleteLogsOlderThanAsync(DateTime deleteOlderThan);
 

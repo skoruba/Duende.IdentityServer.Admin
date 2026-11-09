@@ -7,13 +7,25 @@ import { client } from "@skoruba/duende.identityserver.admin.api.client";
 
 const getClient = () => new client.LogsClient(ApiHelper.getApiBaseUrl());
 
+export type ErrorLogsQuery = {
+  searchText: string;
+  levels: string[];
+  /** inclusive */
+  from?: Date;
+  /** exclusive */
+  to?: Date;
+};
+
 export const getErrorLogs = async (
-  searchText: string,
+  query: ErrorLogsQuery,
   pageIndex: number,
   pageSize: number,
 ): Promise<ErrorLogsData> => {
   const response = await getClient().errorLog(
-    searchText || undefined,
+    query.searchText || undefined,
+    query.levels.length > 0 ? query.levels : undefined,
+    query.from,
+    query.to,
     pageIndex + 1,
     pageSize,
   );

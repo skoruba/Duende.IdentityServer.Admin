@@ -28,18 +28,21 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Tests
         private Task<string> SeedLogsAsync(params int[] ageInDays) =>
             SeedLogsAsync(ageInDays.Select(days => (DateTimeOffset.UtcNow.AddDays(-days), $"{days} days old")).ToArray());
 
-        private async Task<string> SeedLogsAsync(params (DateTimeOffset TimeStamp, string Name)[] logs)
+        private Task<string> SeedLogsAsync(params (DateTimeOffset TimeStamp, string Name)[] logs) =>
+            SeedLogsAsync(logs.Select(x => (x.TimeStamp, x.Name, "Error")).ToArray());
+
+        private async Task<string> SeedLogsAsync(params (DateTimeOffset TimeStamp, string Name, string Level)[] logs)
         {
             var marker = UniqueValue("error_log");
 
             using var scope = TestServer.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AdminLogDbContext>();
 
-            foreach (var (timeStamp, name) in logs)
+            foreach (var (timeStamp, name, level) in logs)
             {
                 context.Logs.Add(new Log
                 {
-                    Level = "Error",
+                    Level = level,
                     Message = $"{marker} {name}",
                     MessageTemplate = "{Marker} days old",
                     Exception = "System.InvalidOperationException: boom",
@@ -78,6 +81,26 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Tests
             log.Exception.Should().Contain("InvalidOperationException");
             log.LogEvent.Should().Contain("SourceContext");
             log.MessageTemplate.Should().Be("{Marker} days old");
+        }
+
+        [Fact]
+        public async Task GetErrorLogsFiltersByLevelsAndTime()
+        {
+            SetupAdminAuthorization();
+            var from = new DateTimeOffset(2026, 11, 9, 8, 30, 0, TimeSpan.Zero);
+            var marker = await SeedLogsAsync(
+                (from.AddSeconds(-1), "before", "Error"),
+                (from, "at from", "Error"),
+                (from.AddMinutes(5), "warning inside", "Warning"),
+                (from.AddMinutes(10), "information inside", "Information"),
+                (from.AddMinutes(16), "at to", "Error"));
+
+            var query = $"searchText={marker}&levels=Error&levels=Warning" +
+                        $"&from={Uri.EscapeDataString(from.ToString("O"))}&to={Uri.EscapeDataString(from.AddMinutes(16).ToString("O"))}";
+            var logs = await Client.GetFromJsonAsync<ErrorLogsApiDto>($"{ErrorLogRoute}?{query}");
+
+            logs!.TotalCount.Should().Be(2);
+            logs.Logs.Select(x => x.Message).Should().Equal($"{marker} warning inside", $"{marker} at from");
         }
 
         [Fact]

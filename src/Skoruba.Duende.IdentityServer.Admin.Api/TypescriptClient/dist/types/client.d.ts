@@ -403,7 +403,7 @@ export declare class KeysClient extends WebApiClientBase implements IKeysClient 
 }
 export interface ILogsClient {
     auditLog(event: string | null | undefined, source: string | null | undefined, category: string | null | undefined, createdDate: string | null | undefined, subjectIdentifier: string | null | undefined, subjectName: string | null | undefined, pageSize: number | undefined, page: number | undefined): Promise<AuditLogsDto>;
-    errorLog(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ErrorLogsApiDto>;
+    errorLog(searchText: string | null | undefined, levels: string[] | null | undefined, from: Date | null | undefined, to: Date | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ErrorLogsApiDto>;
     deleteErrorLog(deleteOlderThan: Date | undefined): Promise<void>;
 }
 export declare class LogsClient extends WebApiClientBase implements ILogsClient {
@@ -415,7 +415,7 @@ export declare class LogsClient extends WebApiClientBase implements ILogsClient 
     });
     auditLog(event: string | null | undefined, source: string | null | undefined, category: string | null | undefined, createdDate: string | null | undefined, subjectIdentifier: string | null | undefined, subjectName: string | null | undefined, pageSize: number | undefined, page: number | undefined): Promise<AuditLogsDto>;
     protected processAuditLog(response: Response): Promise<AuditLogsDto>;
-    errorLog(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ErrorLogsApiDto>;
+    errorLog(searchText: string | null | undefined, levels: string[] | null | undefined, from: Date | null | undefined, to: Date | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ErrorLogsApiDto>;
     protected processErrorLog(response: Response): Promise<ErrorLogsApiDto>;
     deleteErrorLog(deleteOlderThan: Date | undefined): Promise<void>;
     protected processDeleteErrorLog(response: Response): Promise<void>;

@@ -1211,7 +1211,13 @@
     "Properties": "Properties",
     "NoProperties": "No properties were recorded for this event.",
     "Copy": "Copy",
-    "Empty": "No log events yet"
+    "Empty": "No log events yet",
+    "From": "From",
+    "To": "To",
+    "Time": "time",
+    "AnyDate": "Any date",
+    "ClearDate": "Clear date",
+    "ClearFilters": "Clear filters"
   },
   "Pages": {
     "AccessDenied": {

@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -42,7 +43,16 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
             await AutoSaveChangesAsync();
         }
 
-        public virtual async Task<PagedList<Log>> GetLogsAsync(string search, int page = 1, int pageSize = 10)
+        public virtual Task<PagedList<Log>> GetLogsAsync(string search, int page = 1, int pageSize = 10)
+        {
+            return GetLogsAsync(search, null, null, null, page, pageSize);
+        }
+
+        /// <summary>
+        /// <paramref name="from"/> is inclusive, <paramref name="to"/> exclusive.
+        /// </summary>
+        public virtual async Task<PagedList<Log>> GetLogsAsync(string search, IReadOnlyCollection<string> levels, DateTimeOffset? from, DateTimeOffset? to,
+            int page = 1, int pageSize = 10)
         {
             pageSize = QueryableExtensions.NormalizePageSize(pageSize);
 
@@ -53,14 +63,24 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
                 (x.LogEvent != null && x.LogEvent.ToLower().Contains(term)) ||
                 (x.Message != null && x.Message.ToLower().Contains(term)) ||
                 (x.Exception != null && x.Exception.ToLower().Contains(term));
-            var logs = await DbContext.Logs
-                .WhereIf(!string.IsNullOrEmpty(search), searchCondition)                
+            var levelList = levels?.Where(x => !string.IsNullOrWhiteSpace(x)).ToList() ?? [];
+            // PostgreSQL takes a time stamp with time zone only in UTC
+            var fromUtc = from?.ToUniversalTime();
+            var toUtc = to?.ToUniversalTime();
+
+            var query = DbContext.Logs
+                .WhereIf(!string.IsNullOrEmpty(search), searchCondition)
+                .WhereIf(levelList.Count > 0, x => levelList.Contains(x.Level))
+                .WhereIf(fromUtc.HasValue, x => x.TimeStamp >= fromUtc.Value)
+                .WhereIf(toUtc.HasValue, x => x.TimeStamp < toUtc.Value);
+
+            var logs = await query
                 .PageBy(x => x.Id, page, pageSize)
                 .ToListAsync();
 
             pagedList.Data.AddRange(logs);
             pagedList.PageSize = pageSize;
-            pagedList.TotalCount = await DbContext.Logs.WhereIf(!string.IsNullOrEmpty(search), searchCondition).CountAsync();
+            pagedList.TotalCount = await query.CountAsync();
 
             return pagedList;
         }

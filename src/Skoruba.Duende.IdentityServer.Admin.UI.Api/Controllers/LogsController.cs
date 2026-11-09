@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0.
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,9 +31,11 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         }
 
         [HttpGet(nameof(ErrorLog))]
-        public async Task<ActionResult<ErrorLogsApiDto>> ErrorLog(string searchText, int page = 1, int pageSize = 10)
+        public async Task<ActionResult<ErrorLogsApiDto>> ErrorLog(string searchText, [FromQuery] List<string> levels,
+            DateTimeOffset? from, DateTimeOffset? to, int page = 1, int pageSize = 10)
         {
-            var logs = await logService.GetLogsAsync(searchText, page, pageSize);
+            // from is inclusive, to exclusive; both are instants with an offset, unlike a DateTime, which is converted to the server time zone
+            var logs = await logService.GetLogsAsync(searchText, levels, from, to, page, pageSize);
 
             return Ok(logs.ToErrorLogsApiDto());
         }

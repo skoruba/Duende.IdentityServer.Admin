@@ -5600,10 +5600,16 @@ class LogsClient extends WebApiClientBase {
         }
         return Promise.resolve(null);
     }
-    errorLog(searchText, page, pageSize) {
+    errorLog(searchText, levels, from, to, page, pageSize) {
         let url_ = this.baseUrl + "/api/Logs/ErrorLog?";
         if (searchText !== undefined && searchText !== null)
             url_ += "searchText=" + encodeURIComponent("" + searchText) + "&";
+        if (levels !== undefined && levels !== null)
+            levels && levels.forEach(item => { url_ += "levels=" + encodeURIComponent("" + item) + "&"; });
+        if (from !== undefined && from !== null)
+            url_ += "from=" + encodeURIComponent(from ? "" + from.toISOString() : "") + "&";
+        if (to !== undefined && to !== null)
+            url_ += "to=" + encodeURIComponent(to ? "" + to.toISOString() : "") + "&";
         if (page === null)
             throw new globalThis.Error("The parameter 'page' cannot be null.");
         else if (page !== undefined)

@@ -20,7 +20,7 @@
 - `SeedConfiguration:ApplyConfigurationRulesSeed` (default `false`) creates a disabled row for every registered rule that has none on startup
 - A stored rule no registered rule describes is marked *Unknown rule* in the list; validation skips it. It can be disabled or deleted; it can be enabled and its settings edited once the rule is registered again
 - *Used By* for API scopes and identity resources: a button in the list shows how many clients allow the scope and opens a dialog, the detail has a tab of the same name. Both list the clients that allow the scope and, for an API scope, the API resources that include it. Served by `GET /api/ApiScopes/{id}/Clients`, `GET /api/ApiScopes/{id}/ApiResources`, `GET /api/IdentityResources/{id}/Clients` and `GET /api/Clients/GetClientCountsByScopes?scopes=...` (one grouped query for the whole page of the list)
-- Error Logs ([#317](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/317)): **Monitoring → Error Logs** lists the warnings and errors of the STS with a search that ignores case on both providers, the exception and the properties of each event, and deletes the events older than a picked day. `GET` and `DELETE /api/Logs/ErrorLog`
+- Error Logs ([#317](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/317)): **Monitoring → Error Logs** lists the warnings and errors of the STS with a search that ignores case on both providers, filters by level and by a time range to the minute (kept in the URL), shows the exception and the properties of each event, and deletes the events older than a picked day. `GET /api/Logs/ErrorLog` (`searchText`, `levels`, `from` inclusive, `to` exclusive) and `DELETE /api/Logs/ErrorLog`
 - The STS writes its log events into the `Log` table of `AdminLogDbConnection` on SQL Server and PostgreSQL (new `Serilog.Sinks.Postgresql.Alternative`). `DatabaseLogConfiguration:Enabled` (default `true`) and `DatabaseLogConfiguration:MinimumLevel` (default `Warning`) of the STS control it
 - `DatabaseLogConfiguration:RetentionDays` of the Admin API deletes the older log events on startup and once a day (default `0`, off; `appsettings.json` ships `30`)
 - `AdminConfiguration:BasicConfiguration:ErrorLogsEnabled` of the Admin UI (default `true`) hides the page, its menu entry and the command palette item
@@ -56,6 +56,7 @@
 - Forks of the Admin UI move to `zod` 4 and `@hookform/resolvers` 7: `invalid_type_error` and `required_error` become `error`, `ZodError.errors` becomes `issues`, and a form whose schema has `.default()` or `.transform()` is typed `useForm<z.input<…>, unknown, z.output<…>>`
 - `IClientRepository` and `IClientService` have `GetClientsByScopeAsync` and `GetClientCountsByScopesAsync`, `IApiResourceRepository` and `IApiResourceService` have `GetApiResourcesByScopeAsync`; a custom implementation of these interfaces has to add them. `ApiScopesController` takes `IClientService` and `IApiResourceService`, `IdentityResourcesController` takes `IClientService`
 - `LogsController` takes `ILogService` next to `IAuditLogService`
+- `ILogRepository` and `ILogService` have a `GetLogsAsync` overload with levels and a time range; a custom implementation of these interfaces has to add it
 
 ## [3.2.0] - 2026-10-03
 
