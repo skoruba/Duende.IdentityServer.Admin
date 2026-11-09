@@ -12,7 +12,7 @@ public class ConfigurationRuleDto
 {
     public int Id { get; set; }
     /// <summary>
-    /// Key of the rule, e.g. <c>MissingPkce</c> or <c>Contoso.ClientSecretMustExpireWithinOneYear</c>;
+    /// Key of the rule, e.g. <c>MissingPkce</c> or <c>Skoruba.ClientSecretMustExpireWithinOneYear</c>;
     /// one of the keys <c>GET /api/ConfigurationRules/metadata</c> lists.
     /// </summary>
     [Required]

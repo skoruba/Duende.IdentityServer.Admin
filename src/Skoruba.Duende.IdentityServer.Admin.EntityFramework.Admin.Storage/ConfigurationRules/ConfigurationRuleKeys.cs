@@ -12,7 +12,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Conf
 /// The key is what a stored <see cref="Entities.ConfigurationRule"/> uses to find its
 /// <see cref="IConfigurationRule"/>, so it must never change once rules are stored under it.
 /// A built-in key is a plain name; a custom key carries a namespace, e.g.
-/// <c>Contoso.ClientSecretMustExpireWithinOneYear</c>, so that it can never collide
+/// <c>Skoruba.ClientSecretMustExpireWithinOneYear</c>, so that it can never collide
 /// with a rule added to this project later.
 /// </summary>
 public static class ConfigurationRuleKeys
@@ -133,7 +133,7 @@ public static class ConfigurationRuleKeys
         if (!isBuiltIn && !IsCustom(key))
         {
             throw new ArgumentException(
-                $"Custom configuration rule key '{key}' must be namespaced, e.g. 'Contoso.{key}', so that it cannot collide with a built-in rule.",
+                $"Custom configuration rule key '{key}' must be namespaced, e.g. 'Skoruba.{key}', so that it cannot collide with a built-in rule.",
                 nameof(key));
         }
     }

@@ -86,6 +86,7 @@ configuration health, auditing, and security from one modern interface.
 - [API & Swagger](#-api--swagger)
 - [Admin UI Configuration](#-admin-ui-configuration)
 - [STS Configuration](#️-sts-configuration)
+- [Custom Configuration Rules](#-custom-configuration-rules)
 - [Identity Mapping Customization](#-identity-mapping-customization)
 - [Solution Overview](#-solution-overview)
 - [Roadmap & Changelog](#-roadmap--changelog)
@@ -132,56 +133,7 @@ Define and track configuration rules for clients, API resources, and identity re
 
 ![Configuration-Issues](docs/Images/configuration-issues.png)
 
-#### 🔌 Custom Configuration Rules
-
-A deployment adds its own rules next to the built-in ones. A rule is one class - its key, the texts the Admin UI shows, its parameters and the check over the pre-loaded configuration:
-
-```csharp
-public class ClientSecretMustExpireWithinOneYearRule
-    : ConfigurationRuleBase<ClientSecretMustExpireWithinOneYearRule.Configuration>
-{
-    public override string Key => "Contoso.ClientSecretMustExpireWithinOneYear";
-    public override ConfigurationResourceType ResourceType => ConfigurationResourceType.Client;
-    public override string DisplayName => "Client Secret Must Expire Within One Year";
-    public override string Description => "Detects client secrets without an expiration or with one further away than the limit.";
-    public override IReadOnlyList<ConfigurationRuleParameter> Parameters { get; } =
-    [
-        ConfigurationRuleParameter.Number("maxDays", "Maximum Days", "Days a secret may stay valid", defaultValue: 365, minValue: 1)
-    ];
-    public override string DefaultConfiguration => "{\"maxDays\": 365}";
-    public override string DefaultMessageTemplate => "Client '{clientName}' has a secret that expires {expiration}, the limit is {maxDays} days";
-    public override string DefaultFixDescription => "Set the expiration of the secret to at most {maxDays} days from now.";
-
-    protected override IEnumerable<ConfigurationIssueView> Validate(ValidationContext context, Configuration configuration)
-    {
-        var maxDays = configuration.MaxDays ?? 365;
-        var limit = DateTime.UtcNow.AddDays(maxDays);
-
-        foreach (var client in context.Clients)
-        foreach (var secret in client.ClientSecrets.Where(s => s.Expiration == null || s.Expiration > limit))
-        {
-            yield return Issue(client, new Dictionary<string, string>
-            {
-                ["clientName"] = GetDisplayName(client.ClientName, client.ClientId),
-                ["expiration"] = secret.Expiration?.ToString("yyyy-MM-dd") ?? "never",
-                ["maxDays"] = maxDays.ToString()
-            });
-        }
-    }
-
-    public class Configuration { public int? MaxDays { get; set; } }
-}
-```
-
-Register it in the Admin API host, before or after `AddIdentityServerAdminApi`:
-
-```csharp
-services.AddConfigurationRulesFromAssemblyContaining<ClientSecretMustExpireWithinOneYearRule>();
-```
-
-The Admin API project already does this for itself: the rule above is in its `ConfigurationRules` folder and `Startup` registers every rule of the project with `AddConfigurationRulesFromAssemblyContaining<Startup>()`, so another rule is just another class in that folder. Use `AddConfigurationRule<TRule>()` to register a single rule instead.
-
-The rule appears under **Configuration Rules → Add New Rule** and is created, configured and enabled like a built-in one. No migration is needed - a rule is a row, not schema; `SeedConfiguration:ApplyConfigurationRulesSeed` creates the rows automatically on startup. Keys of custom rules are namespaced (`Vendor.RuleName`) so they never collide with rules added to this project later. A rule must not query the database itself: everything it needs is in the pre-loaded context, and it runs on every dashboard load.
+Custom rules of your own deployment: see [Custom Configuration Rules](#-custom-configuration-rules).
 
 ### Solution Structure
 
@@ -765,6 +717,59 @@ Enable or disable user registration:
 ### FAPI 2.0 Security Profile
 
 `Fapi2SecurityProfile:Enabled` applies the FAPI 2.0 cryptographic restrictions to the STS - see [FAPI 2.0 Security Profile](#-fapi-20-security-profile).
+
+---
+
+## 🔌 Custom Configuration Rules
+
+A deployment adds its own rules next to the built-in ones. A rule is one class - its key, the texts the Admin UI shows, its parameters and the check over the pre-loaded configuration:
+
+```csharp
+public class ClientSecretMustExpireWithinOneYearRule
+    : ConfigurationRuleBase<ClientSecretMustExpireWithinOneYearRule.Configuration>
+{
+    public override string Key => "Skoruba.ClientSecretMustExpireWithinOneYear";
+    public override ConfigurationResourceType ResourceType => ConfigurationResourceType.Client;
+    public override string DisplayName => "Client Secret Must Expire Within One Year";
+    public override string Description => "Detects client secrets without an expiration or with one further away than the limit.";
+    public override IReadOnlyList<ConfigurationRuleParameter> Parameters { get; } =
+    [
+        ConfigurationRuleParameter.Number("maxDays", "Maximum Days", "Days a secret may stay valid", defaultValue: 365, minValue: 1)
+    ];
+    public override string DefaultConfiguration => "{\"maxDays\": 365}";
+    public override string DefaultMessageTemplate => "Client '{clientName}' has a secret that expires {expiration}, the limit is {maxDays} days";
+    public override string DefaultFixDescription => "Set the expiration of the secret to at most {maxDays} days from now.";
+
+    protected override IEnumerable<ConfigurationIssueView> Validate(ValidationContext context, Configuration configuration)
+    {
+        var maxDays = configuration.MaxDays ?? 365;
+        var limit = DateTime.UtcNow.AddDays(maxDays);
+
+        foreach (var client in context.Clients)
+        foreach (var secret in client.ClientSecrets.Where(s => s.Expiration == null || s.Expiration > limit))
+        {
+            yield return Issue(client, new Dictionary<string, string>
+            {
+                ["clientName"] = GetDisplayName(client.ClientName, client.ClientId),
+                ["expiration"] = secret.Expiration?.ToString("yyyy-MM-dd") ?? "never",
+                ["maxDays"] = maxDays.ToString()
+            });
+        }
+    }
+
+    public class Configuration { public int? MaxDays { get; set; } }
+}
+```
+
+Register the rules in `Startup` of the Admin API host, before or after `AddIdentityServerAdminApi`:
+
+```csharp
+services.AddConfigurationRulesFromAssemblyContaining<Startup>();
+```
+
+It registers every rule of the Admin API project, so another rule is just another class, e.g. in a `ConfigurationRules` folder. Use `AddConfigurationRule<TRule>()` to register a single rule instead.
+
+The rule appears under **Configuration Rules → Add New Rule** and is created, configured and enabled like a built-in one. No migration is needed - a rule is a row, not schema; `SeedConfiguration:ApplyConfigurationRulesSeed` creates the rows automatically on startup. Keys of custom rules are namespaced (`Vendor.RuleName`) so they never collide with rules added to this project later. A rule must not query the database itself: everything it needs is in the pre-loaded context, and it runs on every dashboard load.
 
 ---
 

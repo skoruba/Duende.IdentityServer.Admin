@@ -67,6 +67,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skoruba.Duende.IdentityServ
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Skoruba.Duende.IdentityServer.Admin.UI.Client.IntegrationTests", "tests\Skoruba.Duende.IdentityServer.Admin.UI.Client.IntegrationTests\Skoruba.Duende.IdentityServer.Admin.UI.Client.IntegrationTests.esproj", "{39655974-1DF0-4CEE-8863-EE4BCBE18B34}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{808186BE-9BD0-DD1D-D574-36EEAD1E7F8F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MyProject", "MyProject", "{7AA3B475-4BA4-40E1-6EA1-CE580E9F8E7D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{41E3AAF0-C365-528E-8CC7-A53BB455E3E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -418,6 +424,8 @@ Global
 		{CAFEC130-06CC-4F0D-8F08-E302C8671704} = {2A514C8F-6A53-41CA-AB41-B644E7BC92A7}
 		{158B1F25-243E-4629-8095-BF42734E5F57} = {2A514C8F-6A53-41CA-AB41-B644E7BC92A7}
 		{39655974-1DF0-4CEE-8863-EE4BCBE18B34} = {0BC0CC4E-A0F1-45E8-B41A-AE0FA76BF3E5}
+		{7AA3B475-4BA4-40E1-6EA1-CE580E9F8E7D} = {808186BE-9BD0-DD1D-D574-36EEAD1E7F8F}
+		{41E3AAF0-C365-528E-8CC7-A53BB455E3E5} = {7AA3B475-4BA4-40E1-6EA1-CE580E9F8E7D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B3166EDE-037B-4C68-BEBA-5DE9C5E3DB82}

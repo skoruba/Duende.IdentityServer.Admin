@@ -22,7 +22,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Extensions
     {
         /// <summary>
         /// Registers one custom rule. Its <see cref="IConfigurationRule.Key"/> must be namespaced,
-        /// e.g. <c>Contoso.ClientSecretMustExpireWithinOneYear</c>.
+        /// e.g. <c>Skoruba.ClientSecretMustExpireWithinOneYear</c>.
         /// </summary>
         public static IServiceCollection AddConfigurationRule<TRule>(this IServiceCollection services)
             where TRule : class, IConfigurationRule

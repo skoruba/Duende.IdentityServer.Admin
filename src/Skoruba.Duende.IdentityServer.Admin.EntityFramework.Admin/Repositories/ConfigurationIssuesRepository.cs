@@ -75,6 +75,12 @@ public class ConfigurationIssuesRepository<TDbContext, TRulesDbContext> : IConfi
 
                     issues.AddRange(ruleIssues);
                 }
+                catch (NotSupportedException)
+                {
+                    // A stored rule whose implementation is not registered in this deployment; the Admin UI marks it as an unknown rule
+                    _logger.LogDebug("Skipping configuration rule {RuleType} (ID: {RuleId}), it is not registered in this deployment",
+                        rule.RuleType, rule.Id);
+                }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex,

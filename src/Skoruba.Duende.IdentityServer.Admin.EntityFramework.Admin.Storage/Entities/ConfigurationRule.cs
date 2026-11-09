@@ -11,7 +11,7 @@ public class ConfigurationRule
 
     /// <summary>
     /// Key of the rule that checks this row, e.g. <c>MissingPkce</c> for a built-in rule or
-    /// <c>Contoso.ClientSecretMustExpireWithinOneYear</c> for a custom one.
+    /// <c>Skoruba.ClientSecretMustExpireWithinOneYear</c> for a custom one.
     /// See <see cref="ConfigurationRules.ConfigurationRuleKeys"/>.
     /// </summary>
     public string RuleType { get; set; }
