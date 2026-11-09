@@ -403,6 +403,8 @@ export declare class KeysClient extends WebApiClientBase implements IKeysClient 
 }
 export interface ILogsClient {
     auditLog(event: string | null | undefined, source: string | null | undefined, category: string | null | undefined, createdDate: string | null | undefined, subjectIdentifier: string | null | undefined, subjectName: string | null | undefined, pageSize: number | undefined, page: number | undefined): Promise<AuditLogsDto>;
+    errorLog(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ErrorLogsApiDto>;
+    deleteErrorLog(deleteOlderThan: Date | undefined): Promise<void>;
 }
 export declare class LogsClient extends WebApiClientBase implements ILogsClient {
     private http;
@@ -413,6 +415,10 @@ export declare class LogsClient extends WebApiClientBase implements ILogsClient 
     });
     auditLog(event: string | null | undefined, source: string | null | undefined, category: string | null | undefined, createdDate: string | null | undefined, subjectIdentifier: string | null | undefined, subjectName: string | null | undefined, pageSize: number | undefined, page: number | undefined): Promise<AuditLogsDto>;
     protected processAuditLog(response: Response): Promise<AuditLogsDto>;
+    errorLog(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ErrorLogsApiDto>;
+    protected processErrorLog(response: Response): Promise<ErrorLogsApiDto>;
+    deleteErrorLog(deleteOlderThan: Date | undefined): Promise<void>;
+    protected processDeleteErrorLog(response: Response): Promise<void>;
 }
 export interface IPersistedGrantsClient {
     get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<PersistedGrantSubjectsApiDto>;
@@ -1479,6 +1485,42 @@ export interface IAuditLogsDto {
     logs: AuditLogDto[] | undefined;
     totalCount: number;
     pageSize: number;
+}
+export declare class ErrorLogsApiDto implements IErrorLogsApiDto {
+    logs: ErrorLogApiDto[] | undefined;
+    totalCount: number;
+    pageSize: number;
+    constructor(data?: IErrorLogsApiDto);
+    init(_data?: any): void;
+    static fromJS(data: any): ErrorLogsApiDto;
+    toJSON(data?: any): any;
+}
+export interface IErrorLogsApiDto {
+    logs: ErrorLogApiDto[] | undefined;
+    totalCount: number;
+    pageSize: number;
+}
+export declare class ErrorLogApiDto implements IErrorLogApiDto {
+    id: number;
+    level: string | undefined;
+    timeStamp: Date;
+    message: string | undefined;
+    messageTemplate: string | undefined;
+    exception: string | undefined;
+    logEvent: string | undefined;
+    constructor(data?: IErrorLogApiDto);
+    init(_data?: any): void;
+    static fromJS(data: any): ErrorLogApiDto;
+    toJSON(data?: any): any;
+}
+export interface IErrorLogApiDto {
+    id: number;
+    level: string | undefined;
+    timeStamp: Date;
+    message: string | undefined;
+    messageTemplate: string | undefined;
+    exception: string | undefined;
+    logEvent: string | undefined;
 }
 export declare class PersistedGrantSubjectsApiDto implements IPersistedGrantSubjectsApiDto {
     totalCount: number;

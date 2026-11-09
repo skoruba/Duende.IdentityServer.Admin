@@ -5483,6 +5483,10 @@ export class KeysClient extends WebApiClientBase implements IKeysClient {
 export interface ILogsClient {
 
     auditLog(event: string | null | undefined, source: string | null | undefined, category: string | null | undefined, createdDate: string | null | undefined, subjectIdentifier: string | null | undefined, subjectName: string | null | undefined, pageSize: number | undefined, page: number | undefined): Promise<AuditLogsDto>;
+
+    errorLog(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ErrorLogsApiDto>;
+
+    deleteErrorLog(deleteOlderThan: Date | undefined): Promise<void>;
 }
 
 export class LogsClient extends WebApiClientBase implements ILogsClient {
@@ -5558,6 +5562,104 @@ export class LogsClient extends WebApiClientBase implements ILogsClient {
             });
         }
         return Promise.resolve<AuditLogsDto>(null as any);
+    }
+
+    errorLog(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ErrorLogsApiDto> {
+        let url_ = this.baseUrl + "/api/Logs/ErrorLog?";
+        if (searchText !== undefined && searchText !== null)
+            url_ += "searchText=" + encodeURIComponent("" + searchText) + "&";
+        if (page === null)
+            throw new globalThis.Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new globalThis.Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processErrorLog(_response);
+        });
+    }
+
+    protected processErrorLog(response: Response): Promise<ErrorLogsApiDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ErrorLogsApiDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ErrorLogsApiDto>(null as any);
+    }
+
+    deleteErrorLog(deleteOlderThan: Date | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Logs/ErrorLog?";
+        if (deleteOlderThan === null)
+            throw new globalThis.Error("The parameter 'deleteOlderThan' cannot be null.");
+        else if (deleteOlderThan !== undefined)
+            url_ += "deleteOlderThan=" + encodeURIComponent(deleteOlderThan ? "" + deleteOlderThan.toISOString() : "") + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processDeleteErrorLog(_response);
+        });
+    }
+
+    protected processDeleteErrorLog(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
     }
 }
 
@@ -10343,6 +10445,118 @@ export interface IAuditLogsDto {
     logs: AuditLogDto[] | undefined;
     totalCount: number;
     pageSize: number;
+}
+
+export class ErrorLogsApiDto implements IErrorLogsApiDto {
+    logs!: ErrorLogApiDto[] | undefined;
+    totalCount!: number;
+    pageSize!: number;
+
+    constructor(data?: IErrorLogsApiDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["logs"])) {
+                this.logs = [] as any;
+                for (let item of _data["logs"])
+                    this.logs!.push(ErrorLogApiDto.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+            this.pageSize = _data["pageSize"];
+        }
+    }
+
+    static fromJS(data: any): ErrorLogsApiDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ErrorLogsApiDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.logs)) {
+            data["logs"] = [];
+            for (let item of this.logs)
+                data["logs"].push(item ? item.toJSON() : undefined as any);
+        }
+        data["totalCount"] = this.totalCount;
+        data["pageSize"] = this.pageSize;
+        return data;
+    }
+}
+
+export interface IErrorLogsApiDto {
+    logs: ErrorLogApiDto[] | undefined;
+    totalCount: number;
+    pageSize: number;
+}
+
+export class ErrorLogApiDto implements IErrorLogApiDto {
+    id!: number;
+    level!: string | undefined;
+    timeStamp!: Date;
+    message!: string | undefined;
+    messageTemplate!: string | undefined;
+    exception!: string | undefined;
+    logEvent!: string | undefined;
+
+    constructor(data?: IErrorLogApiDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.level = _data["level"];
+            this.timeStamp = _data["timeStamp"] ? new Date(_data["timeStamp"].toString()) : undefined as any;
+            this.message = _data["message"];
+            this.messageTemplate = _data["messageTemplate"];
+            this.exception = _data["exception"];
+            this.logEvent = _data["logEvent"];
+        }
+    }
+
+    static fromJS(data: any): ErrorLogApiDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ErrorLogApiDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["level"] = this.level;
+        data["timeStamp"] = this.timeStamp ? this.timeStamp.toISOString() : undefined as any;
+        data["message"] = this.message;
+        data["messageTemplate"] = this.messageTemplate;
+        data["exception"] = this.exception;
+        data["logEvent"] = this.logEvent;
+        return data;
+    }
+}
+
+export interface IErrorLogApiDto {
+    id: number;
+    level: string | undefined;
+    timeStamp: Date;
+    message: string | undefined;
+    messageTemplate: string | undefined;
+    exception: string | undefined;
+    logEvent: string | undefined;
 }
 
 export class PersistedGrantSubjectsApiDto implements IPersistedGrantSubjectsApiDto {

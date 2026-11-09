@@ -6,6 +6,7 @@
 
 - New EF migration `ConfigurationRuleKeys` (SQL Server, PostgreSQL) changes `ConfigurationRules.RuleType` from a number to the key of the rule (`MissingPkce`, ...). A number the migration does not know - a custom rule stored under a value such as `1000` - becomes the text `"1000"`. No rule can be registered under it, because a custom key needs a namespace, so the list marks the row *Unknown rule* and validation skips it. Register the rule under a namespaced key and rename the row, which keeps its configuration, severity and texts: `UPDATE [ConfigurationRules] SET [RuleType] = 'Contoso.MyRule' WHERE [RuleType] = '1000'` (SQL Server) or `UPDATE "ConfigurationRules" SET "RuleType" = 'Contoso.MyRule' WHERE "RuleType" = '1000'` (PostgreSQL). The key is unique: if `SeedConfiguration:ApplyConfigurationRulesSeed` has already added a row for the new key, delete that row first. Alternatively delete the old row and create the rule again in the Admin UI
 - The Admin UI needs the Admin API TypeScript client regenerated for this version: `ConfigurationRuleDto.ruleType` is a string and the `ConfigurationRuleType` enum is gone
+- Error Logs: the settings are new and optional, a missing one keeps the behavior of the previous version. The STS writes into the `Log` table only once `ConnectionStrings:AdminLogDbConnection` is added to its configuration; the Admin API deletes nothing until `DatabaseLogConfiguration:RetentionDays` is set; the Admin UI shows the (then empty) page unless `AdminConfiguration:BasicConfiguration:ErrorLogsEnabled` is `false`. If your STS or Admin API `serilog.json` still has the `MSSqlServer` sink from the previous versions, remove it before you add `AdminLogDbConnection` to the STS - the STS writes into the table itself now, and both would write every event twice
 
 ### Added
 
@@ -14,6 +15,10 @@
 - `SeedConfiguration:ApplyConfigurationRulesSeed` (default `false`) creates a disabled row for every registered rule that has none on startup
 - A stored rule no registered rule describes is marked *Unknown rule* in the list; validation skips it. It can be disabled or deleted; it can be enabled and its settings edited once the rule is registered again
 - *Used By* for API scopes and identity resources: a button in the list shows how many clients allow the scope and opens a dialog, the detail has a tab of the same name. Both list the clients that allow the scope and, for an API scope, the API resources that include it. Served by `GET /api/ApiScopes/{id}/Clients`, `GET /api/ApiScopes/{id}/ApiResources`, `GET /api/IdentityResources/{id}/Clients` and `GET /api/Clients/GetClientCountsByScopes?scopes=...` (one grouped query for the whole page of the list)
+- Error Logs ([#317](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/317)): **Monitoring → Error Logs** lists the warnings and errors of the STS with a search that ignores case on both providers, the exception and the properties of each event, and deletes the events older than a picked day. `GET` and `DELETE /api/Logs/ErrorLog`
+- The STS writes its log events into the `Log` table of `AdminLogDbConnection` on SQL Server and PostgreSQL (new `Serilog.Sinks.Postgresql.Alternative`). `DatabaseLogConfiguration:Enabled` (default `true`) and `DatabaseLogConfiguration:MinimumLevel` (default `Warning`) of the STS control it
+- `DatabaseLogConfiguration:RetentionDays` of the Admin API deletes the older log events on startup and once a day (default `0`, off; `appsettings.json` ships `30`)
+- `AdminConfiguration:BasicConfiguration:ErrorLogsEnabled` of the Admin UI (default `true`) hides the page, its menu entry and the command palette item
 
 ### Changed
 
@@ -21,6 +26,7 @@
 - Configuration rules and the *Rule Type* list are ordered by resource type and name
 - The email of a user is optional in the Admin API and the Admin UI: `UserDto.Email` drops `[Required]` (keeps `[EmailAddress]`), and `IdentityOptions:User:RequireUniqueEmail` decides whether a user without an email can be saved. With the default `true` the API still returns 400 for it. The new `GET /api/Users/Options` returns the setting, and the user form marks and validates the email by it; against an Admin API without the endpoint the email stays required. The TypeScript client types `IdentityUserDto.email` as `string | undefined`
 - Admin UI dependencies updated for `npm audit`: `zod` 4, `@hookform/resolvers` 7, `react-hook-form` 7.91, `vite` 6.4.5; `minimatch` is overridden to 11 for the lint tooling. The unused `i18next-http-backend` is removed. STS: `rimraf` 6.1.4
+- `serilog.json` of the STS and the Admin API no longer configure the `MSSqlServer` sink: its connection string pointed to LocalDB, and nothing was written outside Windows or on PostgreSQL
 
 ### Fixed
 
@@ -44,6 +50,7 @@
 - `PATCH /api/ConfigurationRules/{id}/toggle` that would enable a rule no registered rule describes returns 409
 - Forks of the Admin UI move to `zod` 4 and `@hookform/resolvers` 7: `invalid_type_error` and `required_error` become `error`, `ZodError.errors` becomes `issues`, and a form whose schema has `.default()` or `.transform()` is typed `useForm<z.input<…>, unknown, z.output<…>>`
 - `IClientRepository` and `IClientService` have `GetClientsByScopeAsync` and `GetClientCountsByScopesAsync`, `IApiResourceRepository` and `IApiResourceService` have `GetApiResourcesByScopeAsync`; a custom implementation of these interfaces has to add them. `ApiScopesController` takes `IClientService` and `IApiResourceService`, `IdentityResourcesController` takes `IClientService`
+- `LogsController` takes `ILogService` next to `IAuditLogService`
 
 ## [3.2.0] - 2026-10-03
 

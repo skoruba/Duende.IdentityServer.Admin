@@ -550,46 +550,43 @@ Azure Key Vault supports:
 
 ## 📝 Logging
 
-Uses **Serilog** with the following sinks (configured in `serilog.json`):
+Uses **Serilog**, configured in `serilog.json` of each host: Console and File out of the box, Seq can be added there as well.
 
-- Console
-- File
-- MSSqlServer
-- Seq
+### Error Logs in the Admin UI
 
-**Example configuration:**
+The STS writes its warnings and errors into the `Log` table of `AdminLogDbConnection` (SQL Server and PostgreSQL), and the Admin UI shows them under **Monitoring → Error Logs** with the exception and the properties of each event. It is meant for a quick look at what went wrong in a smaller deployment; for production, send the logs to a log platform (Seq, OpenTelemetry, Elastic, Application Insights) through `serilog.json` and switch the database off.
+
+STS (`appsettings.json`):
 
 ```json
 {
-  "Serilog": {
-    "MinimumLevel": {
-      "Default": "Error",
-      "Override": {
-        "Skoruba": "Information"
-      }
-    },
-    "WriteTo": [
-      {
-        "Name": "Console"
-      },
-      {
-        "Name": "File",
-        "Args": {
-          "path": "log.txt",
-          "rollingInterval": "Day"
-        }
-      },
-      {
-        "Name": "MSSqlServer",
-        "Args": {
-          "connectionString": "...",
-          "tableName": "Log"
-        }
-      }
-    ]
+  "ConnectionStrings": {
+    "AdminLogDbConnection": "..."
+  },
+  "DatabaseLogConfiguration": {
+    "Enabled": true,
+    "MinimumLevel": "Warning"
   }
 }
 ```
+
+- Without `AdminLogDbConnection`, or with `Enabled: false`, nothing is written into the database
+- `MinimumLevel` applies on top of the Serilog minimum level of `serilog.json`, so the console can log more than the database
+- The STS `serilog.json` logs from `Error` (the `Skoruba` namespace from `Information`). The cause of a failed request (e.g. `Unknown client or not enabled`) is logged at `Information`, together with every request - switch it on for a while (`Serilog:MinimumLevel:Default=Information`) or send it to a file or Seq rather than to the database
+
+Admin API (`appsettings.json`) deletes the old events on startup and then once a day:
+
+```json
+{
+  "DatabaseLogConfiguration": {
+    "RetentionDays": 30
+  }
+}
+```
+
+`0` keeps them all. They can also be deleted from the page (**Delete older than…**).
+
+Admin UI (`appsettings.json`) hides the page with `AdminConfiguration:BasicConfiguration:ErrorLogsEnabled: false`.
 
 ---
 

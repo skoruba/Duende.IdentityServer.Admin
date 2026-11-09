@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers;
+using Skoruba.Duende.IdentityServer.STS.Identity.Helpers;
 
 namespace Skoruba.Duende.IdentityServer.STS.Identity
 {
@@ -91,7 +92,8 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity
                 {
                     loggerConfig
                         .ReadFrom.Configuration(hostContext.Configuration)
-                        .Enrich.WithProperty("ApplicationName", hostContext.HostingEnvironment.ApplicationName);
+                        .Enrich.WithProperty("ApplicationName", hostContext.HostingEnvironment.ApplicationName)
+                        .WriteToAdminLogDatabase(hostContext.Configuration);
                 });
     }
 }

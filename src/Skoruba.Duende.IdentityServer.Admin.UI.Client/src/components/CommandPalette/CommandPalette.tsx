@@ -26,7 +26,7 @@ import {
   clientsResourcesItems,
   identityItems,
   providersKeysItems,
-  monitoringItems,
+  getMonitoringItems,
   IconType,
 } from "@/components/MainNav/navItems";
 import {
@@ -94,7 +94,7 @@ export function CommandPalette() {
   const [selected, setSelected] = useState("");
 
   const translate = useCallback((key: string) => String(t(key as never)), [t]);
-  const { identityManagementEnabled } = useUiConfiguration();
+  const { identityManagementEnabled, errorLogsEnabled } = useUiConfiguration();
 
   const searchTerm = useDebouncedValue(query.trim(), SEARCH_DEBOUNCE_MS);
   const searchEnabled = open && searchTerm.length >= MIN_SEARCH_LENGTH;
@@ -205,7 +205,7 @@ export function CommandPalette() {
         ...clientsResourcesItems,
         ...(identityManagementEnabled ? identityItems : []),
         ...providersKeysItems,
-        ...monitoringItems,
+        ...getMonitoringItems(errorLogsEnabled),
       ].map((item) => ({
         id: item.href,
         label: translate(item.translationKey),
@@ -213,7 +213,7 @@ export function CommandPalette() {
         onSelect: () => go(item.href),
       })),
     ],
-    [t, translate, go, identityManagementEnabled],
+    [t, translate, go, identityManagementEnabled, errorLogsEnabled],
   );
 
   const matches = (item: PaletteItem) =>
