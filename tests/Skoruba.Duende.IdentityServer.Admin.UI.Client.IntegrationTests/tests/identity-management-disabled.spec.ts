@@ -71,7 +71,7 @@ test.describe("Admin UI with identity management switched off", () => {
       .click();
     const palette = page.getByRole("dialog");
     await expect(
-      palette.getByRole("option", { name: UI_TEXT.wizard.addNewClient }),
+      palette.getByRole("option", { name: UI_TEXT.quickActions.newClient }),
     ).toBeVisible();
     for (const name of [
       UI_TEXT.quickActions.newUser,
