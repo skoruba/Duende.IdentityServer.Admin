@@ -1154,8 +1154,12 @@
     "ApiResource": "API Resource",
     "IdentityResource": "Identity Resource",
     "DuplicateRuleError": "This rule type already exists. Each rule type can only be configured once.",
-    "UnknownRule": "Unknown rule",
-    "UnknownRuleDescription": "No registered rule has this key, so the rule is skipped during validation and its settings cannot be edited. Disable or delete it, or register the rule in the Admin API again."
+    "UnknownRule": "Not registered",
+    "UnknownRuleDescription": "This deployment has no registered rule with this key, so the rule is skipped during validation and its settings cannot be edited. Register the rule in the Admin API again, or disable or delete it.",
+    "DeleteRegisteredRuleDisabled": "A registered rule can be disabled, not deleted.",
+    "UnknownRulesWarningTitle": "Rules not registered",
+    "UnknownRulesWarning_one": "{{count}} enabled rule is not registered in this deployment and is skipped during validation. Register it in the Admin API again, or disable or delete it.",
+    "UnknownRulesWarning_other": "{{count}} enabled rules are not registered in this deployment and are skipped during validation. Register them in the Admin API again, or disable or delete them."
   },
   "AuditLogs": {
     "PageTitle": "Audit Logs",

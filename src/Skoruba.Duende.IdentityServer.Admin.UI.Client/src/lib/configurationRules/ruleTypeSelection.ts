@@ -32,3 +32,12 @@ export const isUnknownRuleType = (
 ): boolean =>
   metadata !== undefined &&
   !metadata.some((item) => String(item.ruleType) === String(ruleType));
+
+/** Only an enabled rule calls for action; a disabled one is never run anyway. */
+export const countEnabledUnknownRules = (
+  metadata: RuleTypeMetadataLike[] | undefined,
+  rules: (ExistingRuleLike & { isEnabled?: boolean })[],
+): number =>
+  rules.filter(
+    (rule) => rule.isEnabled && isUnknownRuleType(metadata, rule.ruleType),
+  ).length;

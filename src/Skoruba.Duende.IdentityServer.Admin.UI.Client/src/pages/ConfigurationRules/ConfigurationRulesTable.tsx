@@ -3,16 +3,20 @@ import { useTranslation } from "react-i18next";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { client } from "@skoruba/duende.identityserver.admin.api.client";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2 } from "lucide-react";
+import { AlertTriangle, Edit, Trash2 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   toggleConfigurationRule,
   deleteConfigurationRule,
   useConfigurationRulesMetadata,
 } from "@/services/ConfigurationRulesService";
 import { summarizeRule } from "@/lib/configurationRules/summarizeRule";
-import { isUnknownRuleType } from "@/lib/configurationRules/ruleTypeSelection";
+import {
+  countEnabledUnknownRules,
+  isUnknownRuleType,
+} from "@/lib/configurationRules/ruleTypeSelection";
 import { useMutation } from "@tanstack/react-query";
 import { IssueTypeBadge } from "../ConfigurationIssues/IssueTypeBadge";
 import { toast } from "@/components/ui/use-toast";
@@ -206,38 +210,70 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
       id: "actions",
       header: t("Actions.Actions"),
       cell: ({ row }) => {
+        const isUnknown = isUnknownRuleType(metadata, row.original.ruleType);
+
         return (
           <div className="flex space-x-2">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => onEdit(row.original)}
-              disabled={isUnknownRuleType(metadata, row.original.ruleType)}
+              disabled={isUnknown}
             >
               <Edit className="h-4 w-4" />
             </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => handleDelete(row.original.id)}
-              disabled={deleteMutation.isPending}
+            {/* A disabled button gets no pointer events, so the span carries the explanation */}
+            <span
+              title={
+                isUnknown
+                  ? undefined
+                  : t("ConfigurationRules.DeleteRegisteredRuleDisabled")
+              }
             >
-              <Trash2 className="h-4 w-4 text-destructive" />
-            </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                aria-label={t("Actions.Delete")}
+                onClick={() => handleDelete(row.original.id)}
+                disabled={!isUnknown || deleteMutation.isPending}
+              >
+                <Trash2 className="h-4 w-4 text-destructive" />
+              </Button>
+            </span>
           </div>
         );
       },
     },
   ];
 
+  const enabledUnknownRules = countEnabledUnknownRules(
+    metadata,
+    data.rules || [],
+  );
+
   return (
-    <DataTable
-      columns={columns}
-      data={data.rules || []}
-      pagination={{ pageIndex: 0, pageSize: 10, hidePagination: true }}
-      setPagination={() => {}}
-      totalCount={data.totalCount}
-    />
+    <div className="space-y-4">
+      {enabledUnknownRules > 0 && (
+        <Alert variant="destructive">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertTitle>
+            {t("ConfigurationRules.UnknownRulesWarningTitle")}
+          </AlertTitle>
+          <AlertDescription>
+            {t("ConfigurationRules.UnknownRulesWarning", {
+              count: enabledUnknownRules,
+            })}
+          </AlertDescription>
+        </Alert>
+      )}
+      <DataTable
+        columns={columns}
+        data={data.rules || []}
+        pagination={{ pageIndex: 0, pageSize: 10, hidePagination: true }}
+        setPagination={() => {}}
+        totalCount={data.totalCount}
+      />
+    </div>
   );
 };
 

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  countEnabledUnknownRules,
   isRuleTypeInUse,
   isUnknownRuleType,
   resolveRuleType,
@@ -48,5 +49,21 @@ describe("isUnknownRuleType", () => {
   it("does not flag a described rule or a list that is still loading", () => {
     expect(isUnknownRuleType(metadata, "MissingPkce")).toBe(false);
     expect(isUnknownRuleType(undefined, "Contoso.Removed")).toBe(false);
+  });
+});
+
+describe("countEnabledUnknownRules", () => {
+  const rules = [
+    { ruleType: "Contoso.Removed", isEnabled: true },
+    { ruleType: "Contoso.Renamed", isEnabled: false },
+    { ruleType: "MissingPkce", isEnabled: true },
+  ];
+
+  it("counts only the enabled rules the metadata does not describe", () => {
+    expect(countEnabledUnknownRules(metadata, rules)).toBe(1);
+  });
+
+  it("counts nothing while the metadata is still loading", () => {
+    expect(countEnabledUnknownRules(undefined, rules)).toBe(0);
   });
 });

@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { expect, type Locator, type Page } from "@playwright/test";
+import { apiDelete, apiGet } from "../helpers/admin-api";
 import { type LoginCredentials } from "../helpers/auth";
 import {
   ensureLoggedInAndOpenConfigurationRules,
@@ -14,6 +15,11 @@ import {
 import { createDebugLogger } from "../helpers/debug-log";
 import { ensureLoggedInAndOpenListPage } from "../helpers/list-page";
 import { UI_TEXT } from "../helpers/ui-texts";
+
+type StoredRule = {
+  id: number;
+  ruleType: string;
+};
 
 type RuleDefinition = {
   ruleType: string;
@@ -89,26 +95,37 @@ async function expectIssueType(
   await expect(dialog.getByRole("combobox").first()).toContainText(issueType);
 }
 
+/**
+ * The list offers the delete button only for a rule that is not registered, so a
+ * registered rule the test creates again is removed through the API.
+ */
 async function deleteRuleByTypeIfPresent(
   page: Page,
   ruleType: string,
 ): Promise<void> {
-  const rows = findConfigurationRuleRowsByType(page, ruleType);
-
-  while ((await rows.count()) > 0) {
-    const existingCount = await rows.count();
-    const firstRow = rows.first();
-    const actionButtons = getRowActionButtons(firstRow);
-
-    page.once("dialog", (dialog) => {
-      void dialog.accept();
-    });
-
-    await actionButtons.nth(1).click();
-    await expect(rows).toHaveCount(existingCount - 1, {
-      timeout: 60_000,
-    });
+  const { rules } = await apiGet<{ rules?: StoredRule[] }>(
+    page,
+    "ConfigurationRules",
+  );
+  const stored = (rules ?? []).filter((rule) => rule.ruleType === ruleType);
+  if (stored.length === 0) {
+    return;
   }
+
+  for (const rule of stored) {
+    await apiDelete(page, `ConfigurationRules/${rule.id}`);
+  }
+
+  const reloaded = page.waitForResponse(
+    (response) =>
+      response.request().method() === "GET" &&
+      /\/api\/ConfigurationRules$/i.test(new URL(response.url()).pathname) &&
+      response.ok(),
+    { timeout: 60_000 },
+  );
+  await page.reload();
+  await reloaded;
+  await expect(findConfigurationRuleRowsByType(page, ruleType)).toHaveCount(0);
 }
 
 async function openEditRuleDialog(
