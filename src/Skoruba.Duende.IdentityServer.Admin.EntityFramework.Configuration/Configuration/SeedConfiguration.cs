@@ -10,7 +10,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Conf
         /// <summary>
         /// Creates a disabled row for every registered configuration rule that has none yet,
         /// so that rules added in code exist in every environment without a migration.
+        /// On by default; existing rows are never changed.
         /// </summary>
-        public bool ApplyConfigurationRulesSeed { get; set; } = false;
+        public bool ApplyConfigurationRulesSeed { get; set; } = true;
     }
 }

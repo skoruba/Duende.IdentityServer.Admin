@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { client } from "@skoruba/duende.identityserver.admin.api.client";
@@ -7,6 +7,7 @@ import { AlertTriangle, Edit, Trash2 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import DeleteDialog from "@/components/DeleteDialog/DeleteDialog";
 import {
   toggleConfigurationRule,
   deleteConfigurationRule,
@@ -73,11 +74,8 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
     await toggleMutation.mutateAsync(rule.id);
   };
 
-  const handleDelete = async (id: number) => {
-    if (confirm(t("ConfigurationRules.ConfirmDelete"))) {
-      await deleteMutation.mutateAsync(id);
-    }
-  };
+  const [ruleToDelete, setRuleToDelete] =
+    useState<client.ConfigurationRuleDto | null>(null);
 
   const getIssueTypeBadge = (issueType: client.ConfigurationIssueType) => {
     const isError =
@@ -234,7 +232,7 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
                 variant="ghost"
                 size="sm"
                 aria-label={t("Actions.Delete")}
-                onClick={() => handleDelete(row.original.id)}
+                onClick={() => setRuleToDelete(row.original)}
                 disabled={!isUnknown || deleteMutation.isPending}
               >
                 <Trash2 className="h-4 w-4 text-destructive" />
@@ -272,6 +270,18 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
         pagination={{ pageIndex: 0, pageSize: 10, hidePagination: true }}
         setPagination={() => {}}
         totalCount={data.totalCount}
+      />
+      <DeleteDialog
+        isAlertOpen={!!ruleToDelete}
+        setIsAlertOpen={(open) => !open && setRuleToDelete(null)}
+        title={t("ConfigurationRules.ConfirmDeleteTitle")}
+        message={t("ConfigurationRules.ConfirmDeleteMessage")}
+        handleDelete={() => {
+          if (ruleToDelete) {
+            deleteMutation.mutate(ruleToDelete.id);
+          }
+          setRuleToDelete(null);
+        }}
       />
     </div>
   );

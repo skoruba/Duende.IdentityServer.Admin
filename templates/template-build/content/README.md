@@ -739,7 +739,7 @@ services.AddConfigurationRulesFromAssemblyContaining<Startup>();
 
 It registers every rule of the Admin API project, so another rule is just another class, e.g. in a `ConfigurationRules` folder. Use `AddConfigurationRule<TRule>()` to register a single rule instead.
 
-The rule appears under **Configuration Rules → Add New Rule** and is created, configured and enabled like a built-in one. No migration is needed - a rule is a row, not schema; `SeedConfiguration:ApplyConfigurationRulesSeed` creates the rows automatically on startup. Keys of custom rules are namespaced (`Vendor.RuleName`) so they never collide with rules added to this project later. A rule must not query the database itself: everything it needs is in the pre-loaded context, and it runs on every dashboard load.
+After the next start of the Admin API the rule is in the **Configuration Rules** list, switched off, with its default settings: `SeedConfiguration:ApplyConfigurationRulesSeed` (on by default) adds a disabled row for every registered rule that has none and never changes an existing one. Configure and enable it there like a built-in one. With the seed turned off, create it under **Configuration Rules → Add New Rule**. No migration is needed - a rule is a row, not schema. Keys of custom rules are namespaced (`Vendor.RuleName`) so they never collide with rules added to this project later. A rule must not query the database itself: everything it needs is in the pre-loaded context, and it runs on every dashboard load.
 
 ---
 

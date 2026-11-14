@@ -116,7 +116,21 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Helpers
 
             if (added > 0)
             {
-                await context.SaveChangesAsync();
+                try
+                {
+                    await context.SaveChangesAsync();
+                }
+                catch (DbUpdateException)
+                {
+                    // Another instance starting at the same time added the rows first
+                    var storedKeys = await context.ConfigurationRules.AsNoTracking().Select(rule => rule.RuleType).ToListAsync();
+                    if (registry.Rules.Any(descriptor => !storedKeys.Contains(descriptor.Key)))
+                    {
+                        throw;
+                    }
+
+                    return 0;
+                }
             }
 
             return added;
