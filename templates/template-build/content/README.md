@@ -616,16 +616,31 @@ Configure external providers in STS (`appsettings.json`):
 
 ## 🏥 Health Checks
 
-All services expose a `/health` endpoint for monitoring:
+The STS (`https://localhost:44310`) and the Admin API (`https://localhost:44302`) expose three endpoints:
 
-- Admin UI: `https://localhost:7127/health`
-- Admin API: `https://localhost:44302/health`
-- STS: `https://localhost:44310/health`
+| Endpoint | Checks | Use |
+|---|---|---|
+| `/health/live` | none - the process responds | liveness probe |
+| `/health/ready` | the databases; the STS also its signing keys, the Admin API also IdentityServer availability | readiness probe |
+| `/health` | the same checks as `/health/ready` | monitoring, the Admin UI dashboard |
 
-Checks include:
+Keep the dependencies out of the liveness probe: a short database outage then takes the instances out of the load balancer instead of restarting all of them. The signing key check of the STS loads and unprotects the keys, so a new instance does that before it receives the first sign-in.
 
-- Database connectivity
-- IdentityServer availability
+Kubernetes example for the STS:
+
+```yaml
+startupProbe:
+  httpGet: { path: /health/live, port: 8080 }
+  periodSeconds: 5
+  failureThreshold: 30
+readinessProbe:
+  httpGet: { path: /health/ready, port: 8080 }
+  periodSeconds: 10
+  timeoutSeconds: 5
+livenessProbe:
+  httpGet: { path: /health/live, port: 8080 }
+  periodSeconds: 10
+```
 
 ---
 

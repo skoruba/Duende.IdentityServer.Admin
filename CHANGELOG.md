@@ -24,6 +24,7 @@
 - The STS writes its log events into the `Log` table of `AdminLogDbConnection` on SQL Server and PostgreSQL (new `Serilog.Sinks.Postgresql.Alternative`). `DatabaseLogConfiguration:Enabled` (default `true`) and `DatabaseLogConfiguration:MinimumLevel` (default `Warning`) of the STS control it
 - `DatabaseLogConfiguration:RetentionDays` of the Admin API deletes the older log events on startup and once a day (default `0`, off; `appsettings.json` ships `30`)
 - `AdminConfiguration:BasicConfiguration:ErrorLogsEnabled` of the Admin UI (default `true`) hides the page, its menu entry and the command palette item
+- Health endpoints `/health/live` and `/health/ready` on the STS and the Admin API ([discussion #344](https://github.com/skoruba/Duende.IdentityServer.Admin/discussions/344)). `/health/live` runs no checks and is meant for the liveness probe, so a database outage no longer restarts every instance; `/health/ready` runs the checks tagged `ready` (`HealthCheckEndpoints.ReadyTag`) for the readiness probe. `/health` is unchanged. The STS has a new `SigningKeys` check that loads its signing keys, so a new instance is ready only once it can issue tokens
 
 ### Changed
 

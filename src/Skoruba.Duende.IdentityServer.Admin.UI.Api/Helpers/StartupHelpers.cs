@@ -303,16 +303,17 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
             var dataProtectionDbConnectionString = configuration.GetConnectionString(ConfigurationConsts.DataProtectionDbConnectionStringKey);
 
             var identityServerUri = adminApiConfiguration.IdentityServerBaseUrl;
+            string[] ready = [HealthCheckEndpoints.ReadyTag];
             var healthChecksBuilder = services.AddHealthChecks()
-                .AddDbContextCheck<TConfigurationDbContext>("ConfigurationDbContext")
-                .AddDbContextCheck<TPersistedGrantDbContext>("PersistedGrantsDbContext")
-                .AddDbContextCheck<TIdentityDbContext>("IdentityDbContext")
-                .AddDbContextCheck<TLogDbContext>("LogDbContext")
-                .AddDbContextCheck<TAuditLoggingDbContext>("AuditLogDbContext")
-                .AddDbContextCheck<TDataProtectionDbContext>("DataProtectionDbContext")
+                .AddDbContextCheck<TConfigurationDbContext>("ConfigurationDbContext", tags: ready)
+                .AddDbContextCheck<TPersistedGrantDbContext>("PersistedGrantsDbContext", tags: ready)
+                .AddDbContextCheck<TIdentityDbContext>("IdentityDbContext", tags: ready)
+                .AddDbContextCheck<TLogDbContext>("LogDbContext", tags: ready)
+                .AddDbContextCheck<TAuditLoggingDbContext>("AuditLogDbContext", tags: ready)
+                .AddDbContextCheck<TDataProtectionDbContext>("DataProtectionDbContext", tags: ready)
                 // Bounded - an unreachable IdentityServer must not hold the report until the HttpClient gives up
                 .AddOpenIdConnectServer(oidcSvrUri: new Uri(identityServerUri), name: ConfigurationConsts.IdentityServerHealthCheckName,
-                    timeout: TimeSpan.FromSeconds(IdentityServerHealthCheckTimeoutSeconds));
+                    timeout: TimeSpan.FromSeconds(IdentityServerHealthCheckTimeoutSeconds), tags: ready);
 
             var serviceProvider = services.BuildServiceProvider();
             var scopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
@@ -331,32 +332,32 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers
                     case DatabaseProviderType.SqlServer:
                         healthChecksBuilder
                             .AddSqlServer(configurationDbConnectionString, name: "ConfigurationDb",
-                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{configurationTableName}]")
+                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{configurationTableName}]", tags: ready)
                             .AddSqlServer(persistedGrantsDbConnectionString, name: "PersistentGrantsDb",
-                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{persistedGrantTableName}]")
+                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{persistedGrantTableName}]", tags: ready)
                             .AddSqlServer(identityDbConnectionString, name: "IdentityDb",
-                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{identityTableName}]")
+                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{identityTableName}]", tags: ready)
                             .AddSqlServer(logDbConnectionString, name: "LogDb",
-                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{logTableName}]")
+                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{logTableName}]", tags: ready)
                             .AddSqlServer(auditLogDbConnectionString, name: "AuditLogDb",
-                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{auditLogTableName}]")
+                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{auditLogTableName}]", tags: ready)
                             .AddSqlServer(dataProtectionDbConnectionString, name: "DataProtectionDb",
-                            healthQuery: $"SELECT TOP 1 * FROM dbo.[{dataProtectionTableName}]");
+                            healthQuery: $"SELECT TOP 1 * FROM dbo.[{dataProtectionTableName}]", tags: ready);
                         break;
                     case DatabaseProviderType.PostgreSQL:
                         healthChecksBuilder
                             .AddNpgSql(configurationDbConnectionString, name: "ConfigurationDb",
-                                healthQuery: $"SELECT * FROM \"{configurationTableName}\" LIMIT 1")
+                                healthQuery: $"SELECT * FROM \"{configurationTableName}\" LIMIT 1", tags: ready)
                             .AddNpgSql(persistedGrantsDbConnectionString, name: "PersistentGrantsDb",
-                                healthQuery: $"SELECT * FROM \"{persistedGrantTableName}\" LIMIT 1")
+                                healthQuery: $"SELECT * FROM \"{persistedGrantTableName}\" LIMIT 1", tags: ready)
                             .AddNpgSql(identityDbConnectionString, name: "IdentityDb",
-                                healthQuery: $"SELECT * FROM \"{identityTableName}\" LIMIT 1")
+                                healthQuery: $"SELECT * FROM \"{identityTableName}\" LIMIT 1", tags: ready)
                             .AddNpgSql(logDbConnectionString, name: "LogDb",
-                                healthQuery: $"SELECT * FROM \"{logTableName}\" LIMIT 1")
+                                healthQuery: $"SELECT * FROM \"{logTableName}\" LIMIT 1", tags: ready)
                             .AddNpgSql(auditLogDbConnectionString, name: "AuditLogDb",
-                                healthQuery: $"SELECT * FROM \"{auditLogTableName}\"  LIMIT 1")
+                                healthQuery: $"SELECT * FROM \"{auditLogTableName}\"  LIMIT 1", tags: ready)
                             .AddNpgSql(dataProtectionDbConnectionString, name: "DataProtectionDb",
-                                healthQuery: $"SELECT * FROM \"{dataProtectionTableName}\"  LIMIT 1");
+                                healthQuery: $"SELECT * FROM \"{dataProtectionTableName}\"  LIMIT 1", tags: ready);
                         break;
                     default:
                         throw new NotImplementedException($"Health checks not defined for database provider {databaseProvider.ProviderType}");
