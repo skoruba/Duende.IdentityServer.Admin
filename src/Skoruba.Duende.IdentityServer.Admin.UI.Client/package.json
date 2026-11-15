@@ -1,7 +1,7 @@
 {
   "name": "skoruba-duende-identityserver-admin",
   "private": true,
-  "version": "3.3.0-preview4",
+  "version": "3.3.0",
   "description": "Skoruba Duende IdentityServer Admin UI",
   "author": "Jan Skoruba <jan@skoruba.com>",
   "license": "Apache-2.0",

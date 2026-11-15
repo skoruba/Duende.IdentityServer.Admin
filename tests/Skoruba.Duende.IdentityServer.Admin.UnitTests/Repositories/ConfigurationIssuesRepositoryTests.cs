@@ -95,5 +95,29 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
             issues.Should().ContainSingle().Which.Should().BeSameAs(issue);
             logger.Levels.Should().ContainSingle(x => x == LogLevel.Error, "only the rule that failed while validating is an error");
         }
+
+        [Fact]
+        public async Task GetAllIssuesAsyncLogsANotSupportedExceptionOfARegisteredRuleAsAnError()
+        {
+            var validator = new Mock<IConfigurationRuleValidator>();
+            validator
+                .Setup(x => x.ValidateWithContext(It.IsAny<ValidationContext>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ConfigurationIssueTypeView>()))
+                .Throws(new NotSupportedException("thrown by the rule itself"));
+
+            var factory = new Mock<IConfigurationRuleValidatorFactory>();
+            factory.Setup(x => x.Create("Contoso.Registered")).Returns(validator.Object);
+
+            var logger = new RecordingLogger<ConfigurationIssuesRepository<IdentityServerConfigurationDbContext, AdminConfigurationDbContext>>();
+            var repository = new ConfigurationIssuesRepository<IdentityServerConfigurationDbContext, AdminConfigurationDbContext>(
+                GetConfigurationDbContext(),
+                await GetRulesDbContextAsync("Contoso.Registered"),
+                factory.Object,
+                logger);
+
+            var issues = await repository.GetAllIssuesAsync();
+
+            issues.Should().BeEmpty();
+            logger.Levels.Should().ContainSingle(x => x == LogLevel.Error, "the rule is registered, so its failure is not a missing registration");
+        }
     }
 }
