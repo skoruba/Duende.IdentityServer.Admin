@@ -17,6 +17,7 @@ using SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.DbContexts;
 using SkorubaDuende.IdentityServerAdmin.Admin.EntityFramework.Shared.Entities.Identity;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Helpers;
+using Skoruba.Duende.IdentityServer.Shared.Configuration.Constants;
 using Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers;
 using SkorubaDuende.IdentityServerAdmin.Shared.Dtos;
 using SkorubaDuende.IdentityServerAdmin.Shared.Dtos.Identity;
@@ -98,9 +99,18 @@ namespace SkorubaDuende.IdentityServerAdmin.Admin.Api
             {
                 endpoints.MapControllers();
 
-                endpoints.MapHealthChecks("/health", new HealthCheckOptions
+                endpoints.MapHealthChecks(HealthCheckEndpoints.Health, new HealthCheckOptions
                 {
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+                endpoints.MapHealthChecks(HealthCheckEndpoints.Ready, new HealthCheckOptions
+                {
+                    Predicate = check => check.Tags.Contains(HealthCheckEndpoints.ReadyTag),
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+                endpoints.MapHealthChecks(HealthCheckEndpoints.Live, new HealthCheckOptions
+                {
+                    Predicate = _ => false
                 });
             });
         }
