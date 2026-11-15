@@ -7,6 +7,7 @@ import { AlertTriangle, Edit, Trash2 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import DeleteDialog from "@/components/DeleteDialog/DeleteDialog";
+import { TooltipField } from "@/components/FormRow/FormRow";
 import {
   toggleConfigurationRule,
   deleteConfigurationRule,
@@ -19,6 +20,22 @@ import { IssueTypeBadge } from "../ConfigurationIssues/IssueTypeBadge";
 import { toast } from "@/components/ui/use-toast";
 import type { ColumnDef } from "@tanstack/react-table";
 import { configurationChangeMeta } from "@/services/mutationMeta";
+
+/**
+ * Says why a control is locked. A disabled control takes no pointer events, so
+ * the span around it is what the pointer meets and what opens the tooltip.
+ */
+const LockedHint: React.FC<{ reason?: string; children: React.ReactNode }> = ({
+  reason,
+  children,
+}) =>
+  reason ? (
+    <TooltipField side="top" description={reason}>
+      <span className="inline-flex cursor-not-allowed">{children}</span>
+    </TooltipField>
+  ) : (
+    <>{children}</>
+  );
 
 interface ConfigurationRulesTableProps {
   visibleRules: client.ConfigurationRuleDto[];
@@ -148,17 +165,23 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
                 {summary.name}
               </span>
               {isUnknown && (
-                <Badge
-                  variant="outline"
-                  className="gap-1 text-muted-foreground"
-                  title={t("ConfigurationRules.UnknownRuleDescription")}
+                <TooltipField
+                  side="top"
+                  description={t("ConfigurationRules.UnknownRuleDescription")}
                 >
-                  {/* The icon of the note above the list: only an enabled rule calls for action */}
-                  {row.original.isEnabled && (
-                    <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-orange-500" />
-                  )}
-                  {t("ConfigurationRules.UnknownRule")}
-                </Badge>
+                  <span className="inline-flex">
+                    <Badge
+                      variant="outline"
+                      className="gap-1 text-muted-foreground"
+                    >
+                      {/* The icon of the note above the list: only an enabled rule calls for action */}
+                      {row.original.isEnabled && (
+                        <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-orange-500" />
+                      )}
+                      {t("ConfigurationRules.UnknownRule")}
+                    </Badge>
+                  </span>
+                </TooltipField>
               )}
             </div>
             {summary.description && (
@@ -209,16 +232,25 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
       accessorKey: "isEnabled",
       header: t("ConfigurationRules.Enabled"),
       cell: ({ row }) => {
+        const cannotEnable =
+          !row.original.isEnabled &&
+          isUnknownRuleType(metadata, row.original.ruleType);
+
         return (
-          <Switch
-            checked={row.original.isEnabled}
-            onCheckedChange={() => handleToggle(row.original)}
-            disabled={
-              toggleMutation.isPending ||
-              (!row.original.isEnabled &&
-                isUnknownRuleType(metadata, row.original.ruleType))
+          <LockedHint
+            reason={
+              cannotEnable
+                ? t("ConfigurationRules.EnableUnknownRuleDisabled")
+                : undefined
             }
-          />
+          >
+            <Switch
+              className={cannotEnable ? "pointer-events-none" : undefined}
+              checked={row.original.isEnabled}
+              onCheckedChange={() => handleToggle(row.original)}
+              disabled={toggleMutation.isPending || cannotEnable}
+            />
+          </LockedHint>
         );
       },
     },
@@ -238,9 +270,8 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
             >
               <Edit className="h-4 w-4" />
             </Button>
-            {/* A disabled button gets no pointer events, so the span carries the explanation */}
-            <span
-              title={
+            <LockedHint
+              reason={
                 isUnknown
                   ? undefined
                   : t("ConfigurationRules.DeleteRegisteredRuleDisabled")
@@ -255,7 +286,7 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
               >
                 <Trash2 className="h-4 w-4 text-destructive" />
               </Button>
-            </span>
+            </LockedHint>
           </div>
         );
       },
