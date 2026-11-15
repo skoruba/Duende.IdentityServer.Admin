@@ -28,15 +28,13 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
 
         public virtual async Task DeleteLogsOlderThanAsync(DateTime deleteOlderThan)
         {
-            var threshold = deleteOlderThan.Date;
-
             if (AutoSaveChanges && DbContext.Database.IsRelational())
             {
-                await DbContext.Logs.Where(x => x.TimeStamp < threshold).ExecuteDeleteAsync();
+                await DbContext.Logs.Where(x => x.TimeStamp < deleteOlderThan).ExecuteDeleteAsync();
                 return;
             }
 
-            var logsToDelete = await DbContext.Logs.Where(x => x.TimeStamp < threshold).ToListAsync();
+            var logsToDelete = await DbContext.Logs.Where(x => x.TimeStamp < deleteOlderThan).ToListAsync();
             if (logsToDelete.Count == 0) return;
 
             DbContext.Logs.RemoveRange(logsToDelete);

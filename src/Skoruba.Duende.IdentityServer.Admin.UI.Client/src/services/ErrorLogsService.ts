@@ -4,6 +4,7 @@ import {
   ErrorLogsData,
 } from "@/models/ErrorLogs/ErrorLogModels";
 import { client } from "@skoruba/duende.identityserver.admin.api.client";
+import { startOfDay } from "date-fns";
 
 const getClient = () => new client.LogsClient(ApiHelper.getApiBaseUrl());
 
@@ -44,10 +45,8 @@ export const getErrorLogs = async (
   return { items, totalCount: response.totalCount };
 };
 
-// The API takes the day as midnight UTC, so the picked calendar day is kept
-// whatever the time zone of the browser.
+// The table and the filters show the time of the browser, so the picked day
+// starts at its midnight, not at midnight UTC.
 export const deleteErrorLogsOlderThan = async (day: Date): Promise<void> => {
-  await getClient().deleteErrorLog(
-    new Date(Date.UTC(day.getFullYear(), day.getMonth(), day.getDate())),
-  );
+  await getClient().deleteErrorLog(startOfDay(day));
 };

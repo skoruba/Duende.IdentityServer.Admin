@@ -38,14 +38,17 @@ configuration health, auditing, and security from one modern interface.
 
 > [!IMPORTANT]
 >
-> ## Version 3.2.0 is here 🚀
+> ## Version 3.3.0 is here 🚀
 >
-> **Version 3.2.0** moves the Admin UI to **React 19** and updates **Duende IdentityServer to 8.0.9**
-> (a security fix for pushed authorization requests).
+> **Version 3.3.0** adds [**custom configuration rules**](#-custom-configuration-rules) registered
+> from your own code, an [**Error Logs**](#error-logs-in-the-admin-ui) page with the warnings and
+> errors of the STS, and **Used By** for API scopes and identity resources. The STS and the Admin API
+> have [`/health/live` and `/health/ready`](#-health-checks) for container probes, and
+> **Duende IdentityServer is updated to 8.0.10**.
 >
-> ⚠️ Upgrading from 3.0.0 requires new EF migrations, and 3.2.0 adds an index on the `AuditLog`
-> table (migration `AddAuditLogCreatedIndex`). See the
-> [changelog](CHANGELOG.md) for the full list of changes.
+> ⚠️ Upgrading from 3.2.0 requires the new EF migration `ConfigurationRuleKeys`, which stores the
+> configuration rules under string keys. See the [changelog](CHANGELOG.md) for the upgrade notes and
+> the full list of changes.
 > See the [roadmap and changelog](#-roadmap--changelog) for release history and upcoming features.
 
 ---
@@ -55,8 +58,8 @@ configuration health, auditing, and security from one modern interface.
 |     | Area                  | Highlights                                                                  |
 | --- | --------------------- | --------------------------------------------------------------------------- |
 | 🧭  | **New Admin UI**      | React, TypeScript, Tailwind CSS, and shadcn/ui                              |
-| ⚙️  | **Modern backend**    | .NET 10 and Duende IdentityServer 8.0.9                                     |
-| 📊  | **Monitoring**        | Dashboards, configuration rules, and issue tracking                         |
+| ⚙️  | **Modern backend**    | .NET 10 and Duende IdentityServer 8.0.10                                    |
+| 📊  | **Monitoring**        | Dashboard, built-in and custom configuration rules, issues, and error logs  |
 | 🧙  | **Client management** | Improved workflows and guided client creation wizard                        |
 | 🧾  | **Integration code**  | Generated .NET 10 setup for the client you are editing                      |
 | 🔐  | **Authentication**    | Passkey support in STS Identity                                             |
@@ -146,7 +149,7 @@ Custom rules of your own deployment: see [Custom Configuration Rules](#-custom-c
 - .NET 10 SDK
 - Node.js 22.12+ and npm (required for the React client)
 - SQL Server (default LocalDB) or PostgreSQL
-- Duende IdentityServer 8.0.9
+- Duende IdentityServer 8.0.10
 
 > **Note:** Using older .NET versions may cause 502.5 errors on IIS or application startup failures.
 
@@ -163,7 +166,7 @@ Custom rules of your own deployment: see [Custom Configuration Rules](#-custom-c
 ### 1. Install the template
 
 ```sh
-dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::3.2.0
+dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::3.3.0
 ```
 
 ### 2. Create a new project
@@ -523,6 +526,8 @@ STS (`appsettings.json`):
 ```
 
 - Without `AdminLogDbConnection`, or with `Enabled: false`, nothing is written into the database
+- The shipped `appsettings.json` has `AdminLogDbConnection` with the same LocalDB value as the other connection strings. In Docker, pass `ConnectionStrings__AdminLogDbConnection` to the STS container together with them
+- A write that fails (an unreachable database, a missing `Log` table) does not stop the STS. The events are missing on the page and the STS reports the failure on its standard error output
 - `MinimumLevel` applies on top of the Serilog minimum level of `serilog.json`, so the console can log more than the database
 - The STS `serilog.json` logs from `Error` (the `Skoruba` namespace from `Information`). The cause of a failed request (e.g. `Unknown client or not enabled`) is logged at `Information`, together with every request - switch it on for a while (`Serilog:MinimumLevel:Default=Information`) or send it to a file or Seq rather than to the database
 
@@ -536,7 +541,7 @@ Admin API (`appsettings.json`) deletes the old events on startup and then once a
 }
 ```
 
-`0` keeps them all. They can also be deleted from the page (**Delete older than…**).
+`0`, the default, keeps them all. They can also be deleted from the page (**Delete older than…**); the picked day starts at midnight in the time zone of the browser.
 
 Admin UI (`appsettings.json`) hides the page with `AdminConfiguration:BasicConfiguration:ErrorLogsEnabled: false`.
 
@@ -935,10 +940,11 @@ For detailed release history and upcoming features, see [CHANGELOG.md](CHANGELOG
 
 **Upcoming releases:**
 
-### 3.3.0
+### 3.4.0
 
 - Manage SAML service providers from the Admin UI (schema ships with IdentityServer 8 in 3.1.0)
 - Add support for importing/exporting IdentityServer data in JSON format ([20](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/20))
+- Sorting in the lists of the Admin UI ([#331](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/331))
 
 ### 4.0.0
 

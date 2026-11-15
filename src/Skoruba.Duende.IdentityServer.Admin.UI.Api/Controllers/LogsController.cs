@@ -44,9 +44,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
         [ProducesResponseType(204)]
         public async Task<IActionResult> DeleteErrorLog([FromQuery] DateTimeOffset deleteOlderThan)
         {
-            // The Admin UI sends the picked day as midnight UTC. The offset survives the binding, unlike
-            // a DateTime, which is converted to the server time zone; PostgreSQL only takes a UTC one.
-            await logService.DeleteLogsOlderThanAsync(deleteOlderThan.UtcDateTime.Date);
+            // The Admin UI sends the midnight of the picked day in the time zone of the browser, the one its
+            // table shows. The offset survives the binding, unlike a DateTime, which is converted to the
+            // server time zone; PostgreSQL only takes a UTC one.
+            await logService.DeleteLogsOlderThanAsync(deleteOlderThan.UtcDateTime);
 
             return NoContent();
         }

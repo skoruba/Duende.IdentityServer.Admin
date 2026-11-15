@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http.Json;
@@ -128,12 +129,33 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Tests
             var response = await Client.DeleteAsync($"{ErrorLogRoute}?deleteOlderThan={Uri.EscapeDataString(pickedDay.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"))}");
 
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+            (await RemainingMessagesAsync(marker)).Should().Equal($"{marker} the picked day");
+        }
+
+        [Fact]
+        public async Task DeleteErrorLogsTakesTheMidnightOfTheBrowser()
+        {
+            SetupAdminAuthorization();
+            // The midnight of the picked day in UTC+1 is 23:00 UTC of the day before
+            var browserMidnight = new DateTimeOffset(DateTime.UtcNow.Date.AddDays(-3), TimeSpan.Zero).AddHours(-1);
+            var marker = await SeedLogsAsync(
+                (browserMidnight.AddMinutes(-30), "before the midnight"),
+                (browserMidnight.AddMinutes(30), "after the midnight"));
+
+            var response = await Client.DeleteAsync($"{ErrorLogRoute}?deleteOlderThan={Uri.EscapeDataString(browserMidnight.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"))}");
+
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+            (await RemainingMessagesAsync(marker)).Should().Equal($"{marker} after the midnight");
+        }
+
+        private async Task<List<string>> RemainingMessagesAsync(string marker)
+        {
             using var scope = TestServer.Services.CreateScope();
-            var remaining = await scope.ServiceProvider.GetRequiredService<AdminLogDbContext>().Logs
+
+            return await scope.ServiceProvider.GetRequiredService<AdminLogDbContext>().Logs
                 .Where(x => x.Message.StartsWith(marker))
                 .Select(x => x.Message)
                 .ToListAsync();
-            remaining.Should().Equal($"{marker} the picked day");
         }
 
         [Fact]
