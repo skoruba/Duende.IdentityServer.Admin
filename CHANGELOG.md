@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.3.1] - Unreleased
+
+### Fixed
+
+- The Admin UI image of a project created from the template with `--dockersupport true` can be built: since 3.0.0 its `Dockerfile` copied projects the template ships as NuGet packages, so `docker-compose build` failed on it. The build no longer needs Node.js either
+
 ## [3.3.0] - 2026-11-15
 
 ### Upgrading
