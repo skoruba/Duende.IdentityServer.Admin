@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { AlertTriangle, Edit, Trash2 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import DeleteDialog from "@/components/DeleteDialog/DeleteDialog";
 import {
   toggleConfigurationRule,
@@ -14,10 +13,7 @@ import {
   useConfigurationRulesMetadata,
 } from "@/services/ConfigurationRulesService";
 import { summarizeRule } from "@/lib/configurationRules/summarizeRule";
-import {
-  countEnabledUnknownRules,
-  isUnknownRuleType,
-} from "@/lib/configurationRules/ruleTypeSelection";
+import { isUnknownRuleType } from "@/lib/configurationRules/ruleTypeSelection";
 import { useMutation } from "@tanstack/react-query";
 import { IssueTypeBadge } from "../ConfigurationIssues/IssueTypeBadge";
 import { toast } from "@/components/ui/use-toast";
@@ -25,13 +21,15 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { configurationChangeMeta } from "@/services/mutationMeta";
 
 interface ConfigurationRulesTableProps {
-  data: client.ConfigurationRulesDto;
+  visibleRules: client.ConfigurationRuleDto[];
+  filters: React.ReactNode;
   onEdit: (rule: client.ConfigurationRuleDto) => void;
   onRefresh: () => void;
 }
 
 const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
-  data,
+  visibleRules,
+  filters,
   onEdit,
   onRefresh,
 }) => {
@@ -124,6 +122,9 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
     );
   };
 
+  const mutedIfUnknown = (rule: client.ConfigurationRuleDto) =>
+    isUnknownRuleType(metadata, rule.ruleType) ? "opacity-50" : undefined;
+
   const columns: ColumnDef<client.ConfigurationRuleDto, unknown>[] = [
     {
       accessorKey: "ruleType",
@@ -135,14 +136,27 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
         return (
           <div className="space-y-1">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="font-medium" title={String(row.original.ruleType)}>
+              <span
+                // Nothing runs a rule that is not registered, so it reads as switched off
+                className={
+                  isUnknown
+                    ? "font-medium text-muted-foreground"
+                    : "font-medium"
+                }
+                title={String(row.original.ruleType)}
+              >
                 {summary.name}
               </span>
               {isUnknown && (
                 <Badge
-                  variant="destructive"
+                  variant="outline"
+                  className="gap-1 text-muted-foreground"
                   title={t("ConfigurationRules.UnknownRuleDescription")}
                 >
+                  {/* The icon of the note above the list: only an enabled rule calls for action */}
+                  {row.original.isEnabled && (
+                    <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-orange-500" />
+                  )}
                   {t("ConfigurationRules.UnknownRule")}
                 </Badge>
               )}
@@ -176,16 +190,20 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
     {
       accessorKey: "resourceType",
       header: t("ConfigurationRules.ResourceType"),
-      cell: ({ row }) => {
-        return getResourceTypeBadge(row.original.resourceType);
-      },
+      cell: ({ row }) => (
+        <div className={mutedIfUnknown(row.original)}>
+          {getResourceTypeBadge(row.original.resourceType)}
+        </div>
+      ),
     },
     {
       accessorKey: "issueType",
       header: t("ConfigurationRules.IssueType"),
-      cell: ({ row }) => {
-        return getIssueTypeBadge(row.original.issueType);
-      },
+      cell: ({ row }) => (
+        <div className={mutedIfUnknown(row.original)}>
+          {getIssueTypeBadge(row.original.issueType)}
+        </div>
+      ),
     },
     {
       accessorKey: "isEnabled",
@@ -244,32 +262,15 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
     },
   ];
 
-  const enabledUnknownRules = countEnabledUnknownRules(
-    metadata,
-    data.rules || [],
-  );
-
   return (
     <div className="space-y-4">
-      {enabledUnknownRules > 0 && (
-        <Alert variant="destructive">
-          <AlertTriangle className="h-4 w-4" />
-          <AlertTitle>
-            {t("ConfigurationRules.UnknownRulesWarningTitle")}
-          </AlertTitle>
-          <AlertDescription>
-            {t("ConfigurationRules.UnknownRulesWarning", {
-              count: enabledUnknownRules,
-            })}
-          </AlertDescription>
-        </Alert>
-      )}
+      {filters}
       <DataTable
         columns={columns}
-        data={data.rules || []}
+        data={visibleRules}
         pagination={{ pageIndex: 0, pageSize: 10, hidePagination: true }}
         setPagination={() => {}}
-        totalCount={data.totalCount}
+        totalCount={visibleRules.length}
       />
       <DeleteDialog
         isAlertOpen={!!ruleToDelete}
