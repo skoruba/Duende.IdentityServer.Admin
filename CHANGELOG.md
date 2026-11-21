@@ -1,6 +1,22 @@
 # Changelog
 
-## [3.3.1] - Unreleased
+## [3.3.1] - 2026-11-21
+
+### Upgrading
+
+- Duende IdentityServer 8.0.11 changes the behavior of the STS in three places. With `ServerSideSessionsConfiguration:Enabled` (`true` in the shipped `appsettings.json`), a user who signs in on a browser that still carries the session of another user is signed out and has to sign in a second time. The introspection endpoint returns 401 to public clients and to clients with the implicit grant only; an application that relied on it needs a confidential client. The end session endpoint ignores an `id_token_hint` that is not an ID token or has no `sub` claim and shows the sign-out prompt
+- An STS extended with `AddMutualTlsSecretValidators()`, an own `IServerSideTicketStore`, an own DPoP proof or client assertion validation, or SAML has more to check in the [IdentityServer 8.0.11 release notes](https://github.com/DuendeSoftware/products/releases/tag/is-8.0.11). The STS of this repository and of the template uses none of them
+- Update the .NET runtime of the hosts to 10.0.15 as well: what belongs to the ASP.NET Core shared framework is fixed by the runtime, not by the NuGet packages. The Docker images are built from `mcr.microsoft.com/dotnet/aspnet:10.0` and pick it up when they are built again
+
+### Security
+
+- Duende IdentityServer 8.0.11 instead of 8.0.10, which has the advisories Duende published on 2026-11-16: a DPoP proof key confusion that allows leaked DPoP refresh and access tokens to be used ([GHSA-qqfr-626g-64rp](https://github.com/DuendeSoftware/products/security/advisories/GHSA-qqfr-626g-64rp), critical), session fixation with server-side sessions ([GHSA-4xw7-58r7-8h6h](https://github.com/DuendeSoftware/products/security/advisories/GHSA-4xw7-58r7-8h6h)), insufficient validation of `id_token_hint` ([GHSA-478v-p4g7-f7g4](https://github.com/DuendeSoftware/products/security/advisories/GHSA-478v-p4g7-f7g4)), a bypass of the mTLS client authentication with a self-signed certificate ([GHSA-mv65-jhg4-3qh6](https://github.com/DuendeSoftware/products/security/advisories/GHSA-mv65-jhg4-3qh6)) and four advisories for SAML ([GHSA-wcc6-7mjx-g6j5](https://github.com/DuendeSoftware/products/security/advisories/GHSA-wcc6-7mjx-g6j5), [GHSA-hmrv-xfgm-wgh2](https://github.com/DuendeSoftware/products/security/advisories/GHSA-hmrv-xfgm-wgh2), [GHSA-6xhh-5qhq-m9vf](https://github.com/DuendeSoftware/products/security/advisories/GHSA-6xhh-5qhq-m9vf), [GHSA-hhqg-4hp5-4v5h](https://github.com/DuendeSoftware/products/security/advisories/GHSA-hhqg-4hp5-4v5h))
+- ASP.NET Core and EF Core 10.0.15, the packages of the .NET security release of 2026-11-10
+
+### Changed
+
+- The projects referencing `Microsoft.Data.SqlClient` no longer name `System.Security.Cryptography.Pkcs` explicitly: `Microsoft.EntityFrameworkCore.SqlServer` 10.0.15 asks for 10.0.13 itself, so the package resolves to 10.0.13 or newer, none of which has a known vulnerability
+- NuGet packages updated within their major versions: `Npgsql.EntityFrameworkCore.PostgreSQL` 10.0.4, `Serilog.Sinks.MSSqlServer` 10.0.1, NSwag 14.8.0 (the generated TypeScript client differs in its header only) and the test tooling
 
 ### Fixed
 

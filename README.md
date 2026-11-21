@@ -46,6 +46,9 @@ configuration health, auditing, and security from one modern interface.
 > have [`/health/live` and `/health/ready`](#-health-checks) for container probes, and
 > **Duende IdentityServer is updated to 8.0.10**.
 >
+> 🔒 **Version 3.3.1** updates Duende IdentityServer to **8.0.11**, which fixes the security
+> advisories Duende published on 2026-11-16. Upgrading is recommended.
+>
 > ⚠️ Upgrading from 3.2.0 requires the new EF migration `ConfigurationRuleKeys`, which stores the
 > configuration rules under string keys. See the [changelog](CHANGELOG.md) for the upgrade notes and
 > the full list of changes.
@@ -58,7 +61,7 @@ configuration health, auditing, and security from one modern interface.
 |     | Area                  | Highlights                                                                  |
 | --- | --------------------- | --------------------------------------------------------------------------- |
 | 🧭  | **New Admin UI**      | React, TypeScript, Tailwind CSS, and shadcn/ui                              |
-| ⚙️  | **Modern backend**    | .NET 10 and Duende IdentityServer 8.0.10                                    |
+| ⚙️  | **Modern backend**    | .NET 10 and Duende IdentityServer 8.0.11                                    |
 | 📊  | **Monitoring**        | Dashboard, built-in and custom configuration rules, issues, and error logs  |
 | 🧙  | **Client management** | Improved workflows and guided client creation wizard                        |
 | 🧾  | **Integration code**  | Generated .NET 10 setup for the client you are editing                      |
@@ -149,7 +152,7 @@ Custom rules of your own deployment: see [Custom Configuration Rules](#-custom-c
 - .NET 10 SDK
 - Node.js 22.12+ and npm (required for the React client)
 - SQL Server (default LocalDB) or PostgreSQL
-- Duende IdentityServer 8.0.10
+- Duende IdentityServer 8.0.11
 
 > **Note:** Using older .NET versions may cause 502.5 errors on IIS or application startup failures.
 
@@ -166,7 +169,7 @@ Custom rules of your own deployment: see [Custom Configuration Rules](#-custom-c
 ### 1. Install the template
 
 ```sh
-dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::3.3.0
+dotnet new install Skoruba.Duende.IdentityServer.Admin.Templates::3.3.1
 ```
 
 ### 2. Create a new project
