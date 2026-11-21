@@ -24,7 +24,7 @@ public class IdentityResourceMustBeEnabledRule : ConfigurationRuleBase
     public override string DefaultConfiguration => "{\"requiredResources\": [\"openid\", \"profile\"]}";
     public override string ExampleConfiguration => "{\"requiredResources\": [\"openid\", \"profile\", \"email\"]}";
     public override string DefaultMessageTemplate => "Required identity resource '{resourceName}' ({displayName}) is disabled";
-    public override string DefaultFixDescription => "Navigate to Identity Resource Details → Basic Information section and enable the 'Enabled' toggle.";
+    public override string DefaultFixDescription => "Navigate to Identity Resource Details → Basics tab and enable the 'Enabled' toggle.";
 
     public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {

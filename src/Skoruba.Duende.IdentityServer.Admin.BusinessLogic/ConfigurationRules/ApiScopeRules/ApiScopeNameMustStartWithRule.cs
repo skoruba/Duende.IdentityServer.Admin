@@ -24,7 +24,7 @@ public class ApiScopeNameMustStartWithRule : ConfigurationRuleBase
     public override string DefaultConfiguration => "{\"prefixes\": [\"scope_\"]}";
     public override string ExampleConfiguration => "{\"prefixes\": [\"api.\", \"scope_\", \"resource.\"]}";
     public override string DefaultMessageTemplate => "API Scope '{actualName}' must start with one of: {allowedPrefixes}";
-    public override string DefaultFixDescription => "Navigate to API Scope Details → Basic Information section and rename the scope to start with one of the required prefixes: {allowedPrefixes}.";
+    public override string DefaultFixDescription => "Navigate to API Scope Details → Basics tab and rename the scope to start with one of the required prefixes: {allowedPrefixes}.";
 
     public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {

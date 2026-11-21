@@ -24,7 +24,7 @@ public class ClientMustHaveScopesRule : ConfigurationRuleBase
     public override string DefaultConfiguration => "{\"minScopes\": 1}";
     public override string ExampleConfiguration => "{\"minScopes\": 3}";
     public override string DefaultMessageTemplate => "Client '{clientName}' has {actualCount} allowed scope(s), but requires at least {requiredCount}";
-    public override string DefaultFixDescription => "Navigate to Client Details → Resources tab → Allowed Scopes section and add at least one scope from the available list.";
+    public override string DefaultFixDescription => "Navigate to Client Details → Scopes tab → Allowed Scopes and add at least one scope from the available list.";
 
     public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {

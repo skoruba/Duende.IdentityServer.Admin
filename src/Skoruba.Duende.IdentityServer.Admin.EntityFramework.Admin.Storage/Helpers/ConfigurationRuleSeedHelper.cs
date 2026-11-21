@@ -31,7 +31,7 @@ public static class ConfigurationRuleSeedHelper
 
         [ConfigurationRuleKeys.MissingPkce] = (
             "Client uses authorization code flow without PKCE",
-            "Navigate to Client Details → Advanced tab → Authentication, scroll down and enable 'Require Proof Key for Code Exchange (PKCE)' toggle.",
+            "Navigate to Client Details → Advanced tab → Authorization → PKCE and enable the 'Require Pkce' toggle.",
             null
         ),
 
@@ -43,61 +43,61 @@ public static class ConfigurationRuleSeedHelper
 
         [ConfigurationRuleKeys.ClientMustHaveScopes] = (
             "Client '{clientName}' has {actualCount} allowed scope(s), but requires at least {requiredCount}",
-            "Navigate to Client Details → Resources tab → Allowed Scopes section and add at least one scope from the available list.",
+            "Navigate to Client Details → Scopes tab → Allowed Scopes and add at least one scope from the available list.",
             "{\"minScopes\": 1}"
         ),
 
         [ConfigurationRuleKeys.ClientAccessTokenLifetimeTooLong] = (
             "Access token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s",
-            "Navigate to Client Details → Advanced tab → Token, find 'Access Token Lifetime' field and reduce the value to {maxLifetime} seconds or less.",
+            "Navigate to Client Details → Advanced tab → Tokens → Access Token, find 'Access Token Lifetime' field and reduce the value to {maxLifetime} seconds or less.",
             "{\"maxLifetimeSeconds\": 3600}"
         ),
 
         [ConfigurationRuleKeys.ClientRefreshTokenLifetimeTooLong] = (
             "Client '{clientName}' refresh token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s",
-            "Navigate to Client Details → Advanced tab → Token, find 'Refresh Token Lifetime' field and reduce the value to {maxLifetime} seconds or less.",
+            "Navigate to Client Details → Advanced tab → Tokens → Refresh Token, find 'Absolute Refresh Token Lifetime' field and reduce the value to {maxLifetime} seconds or less.",
             "{\"maxLifetimeSeconds\": 2592000}"
         ),
 
         [ConfigurationRuleKeys.ApiScopeNameMustStartWith] = (
             "API Scope '{actualName}' must start with one of: {allowedPrefixes}",
-            "Navigate to API Scope Details → Basic Information section and rename the scope to start with one of the required prefixes: {allowedPrefixes}.",
+            "Navigate to API Scope Details → Basics tab and rename the scope to start with one of the required prefixes: {allowedPrefixes}.",
             "{\"prefixes\": [\"scope_\"]}"
         ),
 
         [ConfigurationRuleKeys.ApiScopeNameMustNotContain] = (
             "API Scope '{scopeName}' contains forbidden string(s): {forbiddenStrings}",
-            "Navigate to API Scope Details → Basic Information section and rename the scope to remove forbidden strings from the name.",
+            "Navigate to API Scope Details → Basics tab and rename the scope to remove forbidden strings from the name.",
             "{\"forbiddenStrings\": [\"test\", \"temp\", \"debug\"]}"
         ),
 
         [ConfigurationRuleKeys.ApiScopeMustHaveDisplayName] = (
             "API Scope is missing a display name",
-            "Navigate to API Scope Details → Basic Information section and add a user-friendly Display Name.",
+            "Navigate to API Scope Details → Basics tab and add a user-friendly Display Name.",
             null
         ),
 
         [ConfigurationRuleKeys.ApiResourceMustHaveScopes] = (
             "API Resource '{resourceName}' has {actualCount} scope(s), but requires at least {requiredCount}",
-            "Navigate to API Resource Details → Scopes section and add at least one scope to this API Resource.",
+            "Navigate to API Resource Details → Scopes tab and add at least one scope to this API Resource.",
             "{\"minScopes\": 1}"
         ),
 
         [ConfigurationRuleKeys.ApiResourceNameMustStartWith] = (
             "API Resource '{actualName}' must start with one of: {allowedPrefixes}",
-            "Navigate to API Resource Details → Basic Information section and rename the resource to follow the naming convention.",
+            "Navigate to API Resource Details → Basics tab and rename the resource to follow the naming convention.",
             "{\"prefixes\": [\"api.\"]}"
         ),
 
         [ConfigurationRuleKeys.IdentityResourceMustBeEnabled] = (
             "Required identity resource '{resourceName}' ({displayName}) is disabled",
-            "Navigate to Identity Resource Details → Basic Information section and enable the 'Enabled' toggle.",
+            "Navigate to Identity Resource Details → Basics tab and enable the 'Enabled' toggle.",
             "{\"requiredResources\": [\"openid\", \"profile\"]}"
         ),
 
         [ConfigurationRuleKeys.IdentityResourceNameMustStartWith] = (
             "Identity Resource '{actualName}' must start with one of: {allowedPrefixes}",
-            "Navigate to Identity Resource Details → Basic Information section and rename the resource to follow the naming convention.",
+            "Navigate to Identity Resource Details → Basics tab and rename the resource to follow the naming convention.",
             "{\"prefixes\": [\"custom.\"], \"excludeStandard\": true}"
         ),
 
@@ -109,7 +109,7 @@ public static class ConfigurationRuleSeedHelper
 
         [ConfigurationRuleKeys.SecretIsExpiredInDays] = (
             "Client '{clientName}' has a secret ({secretType}) that {status} in {daysUntilExpiry} day(s) on {expirationDate}",
-            "Navigate to Client Details → Advanced tab → Authentication → Secrets section, remove the expired secret and add a new one with proper expiration date.",
+            "Navigate to Client Details → Secrets tab, remove the expired secret and add a new one with proper expiration date.",
             "{\"warningDays\": 30, \"includeAlreadyExpired\": true}"
         ),
 
@@ -139,19 +139,19 @@ public static class ConfigurationRuleSeedHelper
 
         [ConfigurationRuleKeys.ClientScopeMustExist] = (
             "Client '{clientName}' allows {count} scope(s) that no longer exist: {missingScopes}",
-            "Navigate to Client Details → Resources tab → Allowed Scopes section and remove the scope(s) that no longer exist: {missingScopes}.",
+            "Navigate to Client Details → Scopes tab → Allowed Scopes and remove the scope(s) that no longer exist: {missingScopes}.",
             "{\"excludeScopes\": [\"offline_access\"]}"
         ),
 
         [ConfigurationRuleKeys.ClientSigningAlgorithmsMustBeFapiCompliant] = (
             "Client '{clientName}' uses {count} signing algorithm(s) outside this deployment's FAPI 2.0 allow-list: {algorithms}",
-            "Navigate to Client Details → Advanced tab → Token → Identity Token, find 'Allowed Identity Token Signing Algorithms' field and keep only {allowedAlgorithms}. If a JWK secret carries an algorithm outside this deployment's allow-list, regenerate the key in Client Details → Secrets tab and update the client application.",
+            "Navigate to Client Details → Advanced tab → Tokens → Identity Token, find 'Allowed Identity Token Signing Algorithms' field and keep only {allowedAlgorithms}. If a JWK secret carries an algorithm outside this deployment's allow-list, regenerate the key in Client Details → Secrets tab and update the client application.",
             "{\"allowedAlgorithms\": [\"PS256\", \"ES256\"]}"
         ),
 
         [ConfigurationRuleKeys.ApiResourceSigningAlgorithmsMustBeFapiCompliant] = (
             "API Resource '{resourceName}' allows {count} access token signing algorithm(s) outside this deployment's FAPI 2.0 allow-list: {algorithms}",
-            "Navigate to API Resource Details → Basic Information section, find 'Allowed Access Token Signing Algorithms' field and keep only {allowedAlgorithms}.",
+            "Navigate to API Resource Details → Basics tab, find 'Allowed Access Token Signing Algorithms' field and keep only {allowedAlgorithms}.",
             "{\"allowedAlgorithms\": [\"PS256\", \"ES256\"]}"
         )
     };

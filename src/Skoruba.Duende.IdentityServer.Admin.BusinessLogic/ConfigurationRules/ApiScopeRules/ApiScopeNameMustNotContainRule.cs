@@ -24,7 +24,7 @@ public class ApiScopeNameMustNotContainRule : ConfigurationRuleBase
     public override string DefaultConfiguration => "{\"forbiddenStrings\": [\"test\", \"temp\", \"debug\"]}";
     public override string ExampleConfiguration => "{\"forbiddenStrings\": [\"admin\", \"internal\"]}";
     public override string DefaultMessageTemplate => "API Scope '{scopeName}' contains forbidden string(s): {forbiddenStrings}";
-    public override string DefaultFixDescription => "Navigate to API Scope Details → Basic Information section and rename the scope to remove forbidden strings from the name.";
+    public override string DefaultFixDescription => "Navigate to API Scope Details → Basics tab and rename the scope to remove forbidden strings from the name.";
 
     public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {

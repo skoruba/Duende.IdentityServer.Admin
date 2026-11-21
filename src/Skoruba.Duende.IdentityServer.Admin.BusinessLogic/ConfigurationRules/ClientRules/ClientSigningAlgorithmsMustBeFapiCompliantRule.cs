@@ -36,7 +36,7 @@ public class ClientSigningAlgorithmsMustBeFapiCompliantRule : ConfigurationRuleB
     public override string DefaultConfiguration => "{\"allowedAlgorithms\": [\"PS256\", \"ES256\"]}";
     public override string ExampleConfiguration => "{\"allowedAlgorithms\": [\"PS256\", \"ES256\", \"EdDSA\"]}";
     public override string DefaultMessageTemplate => "Client '{clientName}' uses {count} signing algorithm(s) outside this deployment's FAPI 2.0 allow-list: {algorithms}";
-    public override string DefaultFixDescription => "Navigate to Client Details → Advanced tab → Token → Identity Token, find 'Allowed Identity Token Signing Algorithms' field and keep only {allowedAlgorithms}. If a JWK secret carries an algorithm outside this deployment's allow-list, regenerate the key in Client Details → Secrets tab and update the client application.";
+    public override string DefaultFixDescription => "Navigate to Client Details → Advanced tab → Tokens → Identity Token, find 'Allowed Identity Token Signing Algorithms' field and keep only {allowedAlgorithms}. If a JWK secret carries an algorithm outside this deployment's allow-list, regenerate the key in Client Details → Secrets tab and update the client application.";
 
     private const string JwkSecretType = "JWK";
 

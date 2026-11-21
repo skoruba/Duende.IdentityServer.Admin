@@ -16,7 +16,7 @@ public class ApiScopeMustHaveDisplayNameRule : ConfigurationRuleBase
     public override string DisplayName => "API Scope Must Have Display Name";
     public override string Description => "Ensures all API scopes have a user-friendly display name.";
     public override string DefaultMessageTemplate => "API Scope is missing a display name";
-    public override string DefaultFixDescription => "Navigate to API Scope Details → Basic Information section and add a user-friendly Display Name.";
+    public override string DefaultFixDescription => "Navigate to API Scope Details → Basics tab and add a user-friendly Display Name.";
 
     public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {

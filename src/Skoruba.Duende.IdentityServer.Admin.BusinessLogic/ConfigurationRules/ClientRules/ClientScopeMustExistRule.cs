@@ -25,7 +25,7 @@ public class ClientScopeMustExistRule : ConfigurationRuleBase
     public override string DefaultConfiguration => "{\"excludeScopes\": [\"offline_access\"]}";
     public override string ExampleConfiguration => "{\"excludeScopes\": [\"offline_access\", \"legacy_api\"]}";
     public override string DefaultMessageTemplate => "Client '{clientName}' allows {count} scope(s) that no longer exist: {missingScopes}";
-    public override string DefaultFixDescription => "Navigate to Client Details → Resources tab → Allowed Scopes section and remove the scope(s) that no longer exist: {missingScopes}.";
+    public override string DefaultFixDescription => "Navigate to Client Details → Scopes tab → Allowed Scopes and remove the scope(s) that no longer exist: {missingScopes}.";
 
     public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {

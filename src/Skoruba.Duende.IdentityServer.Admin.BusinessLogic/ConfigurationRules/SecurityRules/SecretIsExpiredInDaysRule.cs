@@ -26,7 +26,7 @@ public class SecretIsExpiredInDaysRule : ConfigurationRuleBase
     public override string DefaultConfiguration => "{\"warningDays\": 30, \"includeAlreadyExpired\": true}";
     public override string ExampleConfiguration => "{\"warningDays\": 14, \"includeAlreadyExpired\": false}";
     public override string DefaultMessageTemplate => "Client '{clientName}' has a secret ({secretType}) that {status} in {daysUntilExpiry} day(s) on {expirationDate}";
-    public override string DefaultFixDescription => "Navigate to Client Details → Advanced tab → Authentication → Secrets section, remove the expired secret and add a new one with proper expiration date.";
+    public override string DefaultFixDescription => "Navigate to Client Details → Secrets tab, remove the expired secret and add a new one with proper expiration date.";
 
     public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {

@@ -24,7 +24,7 @@ public class ClientRefreshTokenLifetimeTooLongRule : ConfigurationRuleBase
     public override string DefaultConfiguration => "{\"maxLifetimeSeconds\": 2592000}";
     public override string ExampleConfiguration => "{\"maxLifetimeSeconds\": 7776000}";
     public override string DefaultMessageTemplate => "Client '{clientName}' refresh token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s";
-    public override string DefaultFixDescription => "Navigate to Client Details → Advanced tab → Token, find 'Refresh Token Lifetime' field and reduce the value to {maxLifetime} seconds or less.";
+    public override string DefaultFixDescription => "Navigate to Client Details → Advanced tab → Tokens → Refresh Token, find 'Absolute Refresh Token Lifetime' field and reduce the value to {maxLifetime} seconds or less.";
 
     public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {

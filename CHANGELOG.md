@@ -2,9 +2,18 @@
 
 ## [3.3.2] - Unreleased
 
+### Upgrading
+
+- New EF migration `ConfigurationRuleFixDescriptions` (SQL Server, PostgreSQL) updates the fix descriptions of the built-in configuration rules. It changes a row only while it holds the old default text, under any Id, so a fix description edited in the Admin UI stays as it is
+- A project created from the template keeps the migrations in its own `Admin.EntityFramework.SqlServer` and `Admin.EntityFramework.PostgreSQL` projects: copy `ConfigurationRuleFixDescriptions`, its `Designer` file and the model snapshot from a project created from the 3.3.2 template and adjust the namespace. The seeded rules are part of the model, so without the migration EF Core reports pending model changes and `DatabaseMigrationsConfiguration:ApplyDatabaseMigrations` stops the start of the Admin API
+
 ### Changed
 
 - The grant types of a client (`Advanced` / `Grant Types`) offer `implicit` and `password` again, with a `Deprecated` mark in the available and in the selected list; the available list has the deprecated ones last. A client that has one of them shows it under its name and it can be removed and added back. `Select All` leaves the deprecated ones out, so they are only added one by one
+
+### Fixed
+
+- The fix descriptions of 15 built-in configuration rules lead to the tabs the Admin UI has: `Advanced` / `Authorization` / `PKCE` for missing PKCE, the `Secrets` tab for expiring secrets, `Advanced` / `Tokens` / `Access Token`, `Refresh Token` and `Identity Token` for the lifetimes and the FAPI signing algorithms, the `Scopes` tab of a client and of an API resource, and the `Basics` tab of API scopes, API resources and identity resources. The refresh token rule names the field it checks, `Absolute Refresh Token Lifetime`
 
 ## [3.3.1] - 2026-11-21
 

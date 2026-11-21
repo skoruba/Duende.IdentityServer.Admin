@@ -24,7 +24,7 @@ public class ApiResourceNameMustStartWithRule : ConfigurationRuleBase
     public override string DefaultConfiguration => "{\"prefixes\": [\"api.\"]}";
     public override string ExampleConfiguration => "{\"prefixes\": [\"api.\", \"resource.\", \"service.\"]}";
     public override string DefaultMessageTemplate => "API Resource '{actualName}' must start with one of: {allowedPrefixes}";
-    public override string DefaultFixDescription => "Navigate to API Resource Details → Basic Information section and rename the resource to follow the naming convention.";
+    public override string DefaultFixDescription => "Navigate to API Resource Details → Basics tab and rename the resource to follow the naming convention.";
 
     public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {

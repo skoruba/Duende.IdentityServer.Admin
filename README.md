@@ -745,44 +745,27 @@ Enable or disable user registration:
 
 ## 🔌 Custom Configuration Rules
 
-A deployment adds its own rules next to the built-in ones. A rule is one class - its key, the texts the Admin UI shows, its parameters and the check over the pre-loaded configuration:
+A deployment adds its own rules next to the built-in ones. A rule is one class - its key, the texts the Admin UI shows and the check over the pre-loaded configuration. This one reports clients that authenticate with a shared secret instead of `private_key_jwt`:
 
 ```csharp
-public class ClientSecretMustExpireWithinOneYearRule
-    : ConfigurationRuleBase<ClientSecretMustExpireWithinOneYearRule.Configuration>
+public class ClientMustNotUseSharedSecretRule : ConfigurationRuleBase<NoConfiguration>
 {
-    public override string Key => "Skoruba.ClientSecretMustExpireWithinOneYear";
+    public override string Key => "Skoruba.ClientMustNotUseSharedSecret";
     public override ConfigurationResourceType ResourceType => ConfigurationResourceType.Client;
-    public override string DisplayName => "Client Secret Must Expire Within One Year";
-    public override string Description => "Detects client secrets without an expiration or with one further away than the limit.";
-    public override IReadOnlyList<ConfigurationRuleParameter> Parameters { get; } =
-    [
-        ConfigurationRuleParameter.Number("maxDays", "Maximum Days", "Days a secret may stay valid", defaultValue: 365, minValue: 1)
-    ];
-    public override string DefaultConfiguration => "{\"maxDays\": 365}";
-    public override string DefaultMessageTemplate => "Client '{clientName}' has a secret that expires {expiration}, the limit is {maxDays} days";
-    public override string DefaultFixDescription => "Set the expiration of the secret to at most {maxDays} days from now.";
+    public override string DisplayName => "Client Must Not Use Shared Secret";
+    public override string Description => "Detects clients that authenticate with a shared secret.";
+    public override string DefaultMessageTemplate => "Client '{clientName}' authenticates with a shared secret";
+    public override string DefaultFixDescription => "Replace the shared secret with a JSON Web Key (private_key_jwt).";
 
-    protected override IEnumerable<ConfigurationIssueView> Validate(ValidationContext context, Configuration configuration)
+    protected override IEnumerable<ConfigurationIssueView> Validate(ValidationContext context, NoConfiguration _)
     {
-        var maxDays = configuration.MaxDays ?? 365;
-        var limit = DateTime.UtcNow.AddDays(maxDays);
-
-        foreach (var client in context.Clients)
-        foreach (var secret in client.ClientSecrets.Where(s => s.Expiration == null || s.Expiration > limit))
-        {
-            yield return Issue(client, new Dictionary<string, string>
-            {
-                ["clientName"] = GetDisplayName(client.ClientName, client.ClientId),
-                ["expiration"] = secret.Expiration?.ToString("yyyy-MM-dd") ?? "never",
-                ["maxDays"] = maxDays.ToString()
-            });
-        }
+        foreach (var client in context.Clients.Where(c => c.ClientSecrets.Any(s => s.Type is null or "SharedSecret")))
+            yield return Issue(client, new() { ["clientName"] = GetDisplayName(client.ClientName, client.ClientId) });
     }
-
-    public class Configuration { public int? MaxDays { get; set; } }
 }
 ```
+
+A rule without parameters uses `NoConfiguration`. A rule with parameters declares them in `Parameters` (e.g. `ConfigurationRuleParameter.Number(...)`), derives from `ConfigurationRuleBase<TConfiguration>` with a class that has a nullable property per parameter, and sets `DefaultConfiguration` to the JSON with the default values.
 
 Register the rules in `Startup` of the Admin API host, before or after `AddIdentityServerAdminApi`:
 

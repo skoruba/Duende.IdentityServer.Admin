@@ -33,7 +33,7 @@ public class ApiResourceSigningAlgorithmsMustBeFapiCompliantRule : Configuration
     public override string DefaultConfiguration => "{\"allowedAlgorithms\": [\"PS256\", \"ES256\"]}";
     public override string ExampleConfiguration => "{\"allowedAlgorithms\": [\"PS256\", \"ES256\", \"EdDSA\"]}";
     public override string DefaultMessageTemplate => "API Resource '{resourceName}' allows {count} access token signing algorithm(s) outside this deployment's FAPI 2.0 allow-list: {algorithms}";
-    public override string DefaultFixDescription => "Navigate to API Resource Details → Basic Information section, find 'Allowed Access Token Signing Algorithms' field and keep only {allowedAlgorithms}.";
+    public override string DefaultFixDescription => "Navigate to API Resource Details → Basics tab, find 'Allowed Access Token Signing Algorithms' field and keep only {allowedAlgorithms}.";
 
     public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {

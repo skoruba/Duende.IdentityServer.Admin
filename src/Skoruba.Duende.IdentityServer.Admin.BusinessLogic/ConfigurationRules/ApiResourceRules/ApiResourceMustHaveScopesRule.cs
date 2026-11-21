@@ -24,7 +24,7 @@ public class ApiResourceMustHaveScopesRule : ConfigurationRuleBase
     public override string DefaultConfiguration => "{\"minScopes\": 1}";
     public override string ExampleConfiguration => "{\"minScopes\": 2}";
     public override string DefaultMessageTemplate => "API Resource '{resourceName}' has {actualCount} scope(s), but requires at least {requiredCount}";
-    public override string DefaultFixDescription => "Navigate to API Resource Details → Scopes section and add at least one scope to this API Resource.";
+    public override string DefaultFixDescription => "Navigate to API Resource Details → Scopes tab and add at least one scope to this API Resource.";
 
     public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {

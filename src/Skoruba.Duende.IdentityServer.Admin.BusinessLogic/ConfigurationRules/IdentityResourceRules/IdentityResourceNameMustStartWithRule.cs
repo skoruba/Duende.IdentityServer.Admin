@@ -25,7 +25,7 @@ public class IdentityResourceNameMustStartWithRule : ConfigurationRuleBase
     public override string DefaultConfiguration => "{\"prefixes\": [\"custom.\"], \"excludeStandard\": true}";
     public override string ExampleConfiguration => "{\"prefixes\": [\"app.\", \"custom.\"], \"excludeStandard\": false}";
     public override string DefaultMessageTemplate => "Identity Resource '{actualName}' must start with one of: {allowedPrefixes}";
-    public override string DefaultFixDescription => "Navigate to Identity Resource Details → Basic Information section and rename the resource to follow the naming convention.";
+    public override string DefaultFixDescription => "Navigate to Identity Resource Details → Basics tab and rename the resource to follow the naming convention.";
 
     public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {

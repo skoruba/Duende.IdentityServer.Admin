@@ -16,7 +16,7 @@ public class MissingPkceRule : ConfigurationRuleBase
     public override string DisplayName => "Missing PKCE";
     public override string Description => "Detects clients using authorization code flow without PKCE (Proof Key for Code Exchange).";
     public override string DefaultMessageTemplate => "Client uses authorization code flow without PKCE";
-    public override string DefaultFixDescription => "Navigate to Client Details → Advanced tab → Authentication, scroll down and enable 'Require Proof Key for Code Exchange (PKCE)' toggle.";
+    public override string DefaultFixDescription => "Navigate to Client Details → Advanced tab → Authorization → PKCE and enable the 'Require Pkce' toggle.";
 
     public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {

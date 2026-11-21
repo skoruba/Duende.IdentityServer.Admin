@@ -24,7 +24,7 @@ public class ClientAccessTokenLifetimeTooLongRule : ConfigurationRuleBase
     public override string DefaultConfiguration => "{\"maxLifetimeSeconds\": 3600}";
     public override string ExampleConfiguration => "{\"maxLifetimeSeconds\": 7200}";
     public override string DefaultMessageTemplate => "Access token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s";
-    public override string DefaultFixDescription => "Navigate to Client Details → Advanced tab → Token, find 'Access Token Lifetime' field and reduce the value to {maxLifetime} seconds or less.";
+    public override string DefaultFixDescription => "Navigate to Client Details → Advanced tab → Tokens → Access Token, find 'Access Token Lifetime' field and reduce the value to {maxLifetime} seconds or less.";
 
     public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
