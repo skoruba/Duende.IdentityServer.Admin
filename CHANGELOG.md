@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.3.2] - Unreleased
+
+### Changed
+
+- The grant types of a client (`Advanced` / `Grant Types`) offer `implicit` and `password` again, with a `Deprecated` mark in the available and in the selected list; the available list has the deprecated ones last. A client that has one of them shows it under its name and it can be removed and added back. `Select All` leaves the deprecated ones out, so they are only added one by one
+
 ## [3.3.1] - 2026-11-21
 
 ### Upgrading

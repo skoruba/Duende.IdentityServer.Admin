@@ -29,6 +29,7 @@ The suite covers:
 21. Client `Integration` tab: generated setup code follows the unsaved form, grant types, scopes, client authentication and the tab's own settings
 22. Saving an edit form without changes keeps the stored data: clients, API resources, API scopes, identity resources, identity providers, users and roles are stored through the API once with every optional value empty (NULL as older versions leave it) and once with every value set, the form is saved untouched and the stored entity has to stay the same
 23. Identity management switched off (`AdminConfiguration:BasicConfiguration:IdentityManagementEnabled`): users and roles leave the navigation, the dashboard and the command palette, no identity endpoint is called, and the user and role pages lead to the dashboard
+24. Client `Grant Types`: the deprecated grant types (implicit, password) are offered with a `Deprecated` mark in the available and in the selected list, and `Select All` leaves them out
 
 ## Test Structure
 

@@ -82,6 +82,19 @@ export const GrantTypeIds = {
   Ciba: "urn:openid:params:grant-type:ciba",
 } as const;
 
+/**
+ * Grant types that are still offered so an existing client can keep them, but
+ * are marked as deprecated - the ones OAuth 2.1 leaves out. The same two are
+ * flagged in ClientConsts.GetGrantTypes().
+ */
+export const DEPRECATED_GRANT_TYPE_IDS: readonly string[] = [
+  GrantTypeIds.Implicit,
+  GrantTypeIds.Password,
+];
+
+export const isDeprecatedGrantType = (grantTypeId: string): boolean =>
+  DEPRECATED_GRANT_TYPE_IDS.includes(grantTypeId);
+
 /** Secret types as returned by the API - see ClientConsts.GetSecretTypes(). */
 export const SecretTypes = {
   SharedSecret: "SharedSecret",

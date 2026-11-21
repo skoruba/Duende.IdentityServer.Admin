@@ -232,6 +232,28 @@ export async function setDualListItemSelected(
   await expect(targetRow).toBeVisible();
 }
 
+/**
+ * A dual list row in the available or in the selected column. The row is found by
+ * the label of its item alone, so one that also carries the "Deprecated" mark is
+ * found as well - its cell reads "<label> Deprecated".
+ */
+export function getDualListRow(
+  panel: Locator,
+  itemLabel: string,
+  selected: boolean,
+): Locator {
+  const bulkAction = selected
+    ? UI_TEXT.actions.deselectAll
+    : UI_TEXT.actions.selectAll;
+
+  return panel
+    .getByRole("button", { name: bulkAction, exact: true })
+    .first()
+    .locator("xpath=ancestor::div[1]")
+    .locator("tbody tr")
+    .filter({ has: panel.page().getByText(itemLabel, { exact: true }) });
+}
+
 export async function getDualListSelectedRowCount(panel: Locator): Promise<number> {
   const deselectAllButton = panel.getByRole("button", {
     name: UI_TEXT.actions.deselectAll,

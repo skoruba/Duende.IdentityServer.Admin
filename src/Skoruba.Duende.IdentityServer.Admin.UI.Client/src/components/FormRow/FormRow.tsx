@@ -37,10 +37,11 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import DualListSelectorAdapter from "@/components/ui/DualListSelectorAdapter";
+import DualListSelectorAdapter, {
+  DualListSettings,
+} from "@/components/ui/DualListSelectorAdapter";
 import InputWithTable from "@/components/ui/inputwithtable";
 import { FieldValues, Path, useFormContext, Control } from "react-hook-form";
-import { Item } from "../ui/dualListselector";
 import {
   generateRandomClientId,
   generateRandomSharedSecret,
@@ -104,7 +105,7 @@ type SelectFieldProps = {
 type DualListFieldProps = {
   field: FieldAdapter;
   control: Control;
-  initialItems: Item[];
+  settings: Partial<DualListSettings>;
 };
 
 type DateFieldProps = {
@@ -330,12 +331,13 @@ const SelectField: React.FC<SelectFieldProps> = ({
 const DualListField: React.FC<DualListFieldProps> = ({
   field,
   control,
-  initialItems,
+  settings,
 }) => (
   <FormControl>
     <DualListSelectorAdapter
+      {...settings}
       control={control}
-      initialItems={initialItems}
+      initialItems={settings.initialItems ?? []}
       name={field.name}
     />
   </FormControl>
@@ -514,9 +516,7 @@ type FormRowProps<T extends FieldValues> = {
      */
     highlightKey?: string;
   };
-  dualListSettings?: {
-    initialItems?: Item[];
-  };
+  dualListSettings?: Partial<DualListSettings>;
   searchDropdownSettings?: {
     items: { id: string; name: string }[];
   };
@@ -555,7 +555,7 @@ export const FormRow = <T extends FieldValues>({
     rows,
     highlightKey,
   } = {},
-  dualListSettings: { initialItems } = { initialItems: [] },
+  dualListSettings = {},
   searchDropdownSettings: { items } = { items: [] },
   includeSeparator = false,
   inputWithTableSettings: { validationSchema, search, searchDataSource } = {
@@ -628,7 +628,7 @@ export const FormRow = <T extends FieldValues>({
                   <DualListField
                     field={field}
                     control={control}
-                    initialItems={initialItems!}
+                    settings={dualListSettings}
                   />
                 )}
                 {type === "searchDropdown" && (

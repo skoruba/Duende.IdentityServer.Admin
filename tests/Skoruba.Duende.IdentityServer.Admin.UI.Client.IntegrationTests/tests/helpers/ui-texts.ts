@@ -61,6 +61,10 @@ export const UI_TEXT = {
   grantTypes: {
     authorizationCode: "Authorization Code",
     clientCredentials: "Client Credentials",
+    implicit: "Implicit",
+    password: "Password",
+    hybrid: "Hybrid",
+    deprecated: "Deprecated",
   },
   integration: {
     tab: "Integration",

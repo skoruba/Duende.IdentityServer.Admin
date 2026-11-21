@@ -15,6 +15,7 @@ import CustomItemModal from "@/pages/Client/CustomItemModal";
 import { useToast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
 import {
+  getItemsForSelectAll,
   mergeDualListItems,
   rememberDeselectedItems,
 } from "@/lib/dualList/dualListItems";
@@ -26,16 +27,20 @@ export interface Item {
   label: string;
 }
 
-interface DualListSelectorProps {
+export interface DualListSelectorProps {
   initialItems: Item[];
   initialSelectedItems?: Item[];
   onSelectedItemsChange?: (selectedItems: Item[]) => void;
+  renderItem?: (item: Item) => React.ReactNode;
+  selectAllFilter?: (item: Item) => boolean;
 }
 
 const DualListSelector: React.FC<DualListSelectorProps> = ({
   initialItems,
   initialSelectedItems = [],
   onSelectedItemsChange,
+  renderItem,
+  selectAllFilter,
 }) => {
   const { toast } = useToast();
   const { t } = useTranslation();
@@ -107,8 +112,10 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
   };
 
   const selectAll = () => {
-    const toSelect = allItems.filter(
-      (item) => !selectedItems.find((i) => i.id === item.id),
+    const toSelect = getItemsForSelectAll(
+      allItems,
+      selectedItems,
+      selectAllFilter,
     );
     notifySelectedItemsChange([...selectedItems, ...toSelect]);
   };
@@ -173,7 +180,7 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
               {filteredLeft.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell className="truncate" title={item.label}>
-                    {item.label}
+                    {renderItem ? renderItem(item) : item.label}
                   </TableCell>
                   <TableCell>
                     <Button
@@ -240,7 +247,7 @@ const DualListSelector: React.FC<DualListSelectorProps> = ({
                     </Button>
                   </TableCell>
                   <TableCell className="truncate" title={item.label}>
-                    {item.label}
+                    {renderItem ? renderItem(item) : item.label}
                   </TableCell>
                 </TableRow>
               ))}

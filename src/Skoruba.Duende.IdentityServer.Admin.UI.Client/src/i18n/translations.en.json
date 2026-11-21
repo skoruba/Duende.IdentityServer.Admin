@@ -759,6 +759,8 @@
       "AllowedCorsOrigins_Label": "Allowed Cors Origins",
       "AllowedGrantTypes_Info": "Specifies the grant types the client is allowed to use. Use the GrantTypes class for common combinations. List of default grants: Implicit Grant - (implicit), Client Credentials Grant - (client_credentials), Authorization Code Grant - (authorization_code), Hybrid grant - (hybrid), Resource Owner Password Credentials Grant - (password)",
       "AllowedGrantTypes_Label": "Allowed Grant Types",
+      "AllowedGrantTypes_Deprecated": "Deprecated",
+      "AllowedGrantTypes_DeprecatedInfo": "This grant type is deprecated and is offered so that an existing client can keep it. Prefer authorization code with PKCE. 'Select All' leaves it out.",
       "AllowedScopes_Info": "By default a client has no access to any resources - specify the allowed resources by adding the corresponding scopes names",
       "AllowedScopes_Label": "Allowed Scopes",
       "IdentityProviderRestrictions_Info": "Specifies which external IdPs can be used with this client (if list is empty all IdPs are allowed). Defaults to empty.",

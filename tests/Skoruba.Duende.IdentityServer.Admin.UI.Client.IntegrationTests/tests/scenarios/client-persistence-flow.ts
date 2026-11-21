@@ -523,8 +523,9 @@ export async function runCreateUpdateAndVerifyClientPersistence(
     });
     await expect(page.locator('input[name="clientId"]')).toHaveValue(updatedClientId);
 
-    // The update selected every grant type, so nothing is hidden any more and
-    // the "show all settings" switch is gone - every tab is already there.
+    // The update selected every grant type but the deprecated ones. `delegation`
+    // is among them, so nothing is hidden any more and the "show all settings"
+    // switch is gone - every tab is already there.
     await expect(
       page.getByRole("switch", { name: UI_TEXT.clientTabs.showAllSettings }),
     ).toHaveCount(0);

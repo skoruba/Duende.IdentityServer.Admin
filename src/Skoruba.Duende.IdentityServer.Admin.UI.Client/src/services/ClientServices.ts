@@ -96,7 +96,9 @@ export const getClientScopes = async (
 export const getGrantTypes = async (): Promise<GrantType[]> => {
   const clientClient = new client.ClientsClient(ApiHelper.getApiBaseUrl());
 
-  const grantTypes = await clientClient.getGrantTypes(null, false, undefined);
+  // The obsolete grants are included - the list marks them as deprecated
+  // instead of hiding them, see DEPRECATED_GRANT_TYPE_IDS.
+  const grantTypes = await clientClient.getGrantTypes(null, true, undefined);
 
   const items = grantTypes.map((type) => ({ id: type.id!, label: type.text! }));
 

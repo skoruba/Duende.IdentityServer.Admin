@@ -6,6 +6,8 @@ import {
 } from "./helpers/auth";
 import { findClientRow } from "./helpers/client-list";
 import { showAllClientSettings } from "./helpers/client-tabs";
+import { getDualListRow } from "./helpers/form-controls";
+import { UI_TEXT } from "./helpers/ui-texts";
 import { runCreateUpdateAndVerifyClientPersistence } from "./scenarios/client-persistence-flow";
 
 const seedData = loadE2ESeedData();
@@ -80,5 +82,70 @@ test.describe("Admin UI OIDC login", () => {
     await expect(
       page.getByRole("tab", { name: "Device Flow", exact: true }),
     ).toBeVisible();
+  });
+
+  test("marks the deprecated grant types and leaves them out of select all", async ({
+    page,
+  }) => {
+    await ensureLoggedInAndOpenClients(page, credentials);
+
+    const targetRow = await findClientRow(page, seedData.expectedClientId);
+    await targetRow.getByRole("link").first().click();
+
+    await expect(page.locator('input[name="clientId"]')).toHaveValue(
+      seedData.expectedClientId,
+      { timeout: 60_000 },
+    );
+
+    // Grant Types is the first sub tab of Advanced. The form is not saved, so
+    // the seeded client keeps authorization_code only.
+    await page.getByRole("tab", { name: "Advanced", exact: true }).click();
+    const advancedPanel = page.getByRole("tabpanel", {
+      name: "Advanced",
+      exact: true,
+    });
+    await expect(advancedPanel).toBeVisible();
+
+    const TEXT = UI_TEXT.grantTypes;
+    const deprecatedMark = (row: ReturnType<typeof getDualListRow>) =>
+      row.getByText(TEXT.deprecated, { exact: true });
+
+    const deprecatedGrantTypes = [TEXT.implicit, TEXT.password];
+    // Hybrid is not deprecated - OAuth 2.1 leaves out implicit and password only.
+    const otherGrantTypes = [TEXT.clientCredentials, TEXT.hybrid];
+
+    for (const grantType of deprecatedGrantTypes) {
+      const availableRow = getDualListRow(advancedPanel, grantType, false);
+      await expect(availableRow).toBeVisible();
+      await expect(deprecatedMark(availableRow)).toBeVisible();
+    }
+
+    for (const grantType of otherGrantTypes) {
+      const availableRow = getDualListRow(advancedPanel, grantType, false);
+      await expect(availableRow).toBeVisible();
+      await expect(deprecatedMark(availableRow)).toHaveCount(0);
+    }
+
+    await advancedPanel
+      .getByRole("button", { name: UI_TEXT.actions.selectAll, exact: true })
+      .first()
+      .click();
+
+    for (const grantType of otherGrantTypes) {
+      await expect(getDualListRow(advancedPanel, grantType, true)).toBeVisible();
+    }
+    for (const grantType of deprecatedGrantTypes) {
+      await expect(getDualListRow(advancedPanel, grantType, false)).toBeVisible();
+      await expect(getDualListRow(advancedPanel, grantType, true)).toHaveCount(0);
+    }
+
+    // A deprecated grant can still be picked on its own and keeps its mark.
+    await getDualListRow(advancedPanel, TEXT.implicit, false)
+      .getByRole("button")
+      .click();
+
+    const selectedImplicitRow = getDualListRow(advancedPanel, TEXT.implicit, true);
+    await expect(selectedImplicitRow).toBeVisible();
+    await expect(deprecatedMark(selectedImplicitRow)).toBeVisible();
   });
 });

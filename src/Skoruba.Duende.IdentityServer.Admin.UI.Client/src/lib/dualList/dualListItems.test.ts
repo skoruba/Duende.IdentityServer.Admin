@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { mergeDualListItems, rememberDeselectedItems } from "./dualListItems";
+import {
+  getItemsForSelectAll,
+  mergeDualListItems,
+  rememberDeselectedItems,
+} from "./dualListItems";
 
 const api = { id: "api1", label: "api1" };
 const apiRead = { id: "api1.read", label: "api1.read" };
@@ -69,5 +73,28 @@ describe("mergeDualListItems", () => {
     expect(mergeDualListItems([api, apiRead], [apiRead, openid], [custom], [])).toEqual(
       [api, apiRead, openid, custom],
     );
+  });
+});
+
+describe("getItemsForSelectAll", () => {
+  const withoutOpenid = (item: { id: string }) => item.id !== openid.id;
+
+  it("adds everything that is not selected yet", () => {
+    expect(getItemsForSelectAll([api, apiRead, openid], [api])).toEqual([
+      apiRead,
+      openid,
+    ]);
+  });
+
+  it("leaves out what the filter rejects", () => {
+    expect(
+      getItemsForSelectAll([api, openid, apiRead], [], withoutOpenid),
+    ).toEqual([api, apiRead]);
+  });
+
+  it("does not add a selected item again, whatever the filter says", () => {
+    expect(
+      getItemsForSelectAll([api, openid], [openid, api], withoutOpenid),
+    ).toEqual([]);
   });
 });

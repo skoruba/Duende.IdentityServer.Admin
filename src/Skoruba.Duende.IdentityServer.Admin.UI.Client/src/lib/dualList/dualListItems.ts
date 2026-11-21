@@ -41,5 +41,18 @@ export const rememberDeselectedItems = (
       !deselectedItems.some((known) => known.id === item.id),
   );
 
-  return removed.length > 0 ? [...deselectedItems, ...removed] : deselectedItems;
+  return removed.length > 0
+    ? [...deselectedItems, ...removed]
+    : deselectedItems;
 };
+
+export const getItemsForSelectAll = (
+  allItems: Item[],
+  selectedItems: Item[],
+  filter?: (item: Item) => boolean,
+): Item[] =>
+  allItems.filter(
+    (item) =>
+      !selectedItems.some((selected) => selected.id === item.id) &&
+      (filter?.(item) ?? true),
+  );

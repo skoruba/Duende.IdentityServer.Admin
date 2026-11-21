@@ -1,19 +1,26 @@
 import React from "react";
 import { Controller, Control } from "react-hook-form";
-import DualListSelector, { Item } from "./dualListselector";
+import DualListSelector, {
+  DualListSelectorProps,
+  Item,
+} from "./dualListselector";
 
-interface DualListSelectorAdapterProps {
+export type DualListSettings = Omit<
+  DualListSelectorProps,
+  "initialSelectedItems" | "onSelectedItemsChange"
+>;
+
+interface DualListSelectorAdapterProps extends DualListSettings {
   control: Control;
   name: string;
-  initialItems: Item[];
   initialSelectedItems?: Item[];
 }
 
 const DualListSelectorAdapter: React.FC<DualListSelectorAdapterProps> = ({
   control,
   name,
-  initialItems,
   initialSelectedItems = [],
+  ...settings
 }) => {
   return (
     <Controller
@@ -21,7 +28,7 @@ const DualListSelectorAdapter: React.FC<DualListSelectorAdapterProps> = ({
       name={name}
       render={({ field: { onChange, value } }) => (
         <DualListSelector
-          initialItems={initialItems}
+          {...settings}
           initialSelectedItems={value || initialSelectedItems}
           onSelectedItemsChange={(newSelectedItems: Item[]) =>
             onChange(newSelectedItems)
