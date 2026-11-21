@@ -13,6 +13,10 @@
 - Duende IdentityServer 8.0.11 instead of 8.0.10, which has the advisories Duende published on 2026-11-16: a DPoP proof key confusion that allows leaked DPoP refresh and access tokens to be used ([GHSA-qqfr-626g-64rp](https://github.com/DuendeSoftware/products/security/advisories/GHSA-qqfr-626g-64rp), critical), session fixation with server-side sessions ([GHSA-4xw7-58r7-8h6h](https://github.com/DuendeSoftware/products/security/advisories/GHSA-4xw7-58r7-8h6h)), insufficient validation of `id_token_hint` ([GHSA-478v-p4g7-f7g4](https://github.com/DuendeSoftware/products/security/advisories/GHSA-478v-p4g7-f7g4)), a bypass of the mTLS client authentication with a self-signed certificate ([GHSA-mv65-jhg4-3qh6](https://github.com/DuendeSoftware/products/security/advisories/GHSA-mv65-jhg4-3qh6)) and four advisories for SAML ([GHSA-wcc6-7mjx-g6j5](https://github.com/DuendeSoftware/products/security/advisories/GHSA-wcc6-7mjx-g6j5), [GHSA-hmrv-xfgm-wgh2](https://github.com/DuendeSoftware/products/security/advisories/GHSA-hmrv-xfgm-wgh2), [GHSA-6xhh-5qhq-m9vf](https://github.com/DuendeSoftware/products/security/advisories/GHSA-6xhh-5qhq-m9vf), [GHSA-hhqg-4hp5-4v5h](https://github.com/DuendeSoftware/products/security/advisories/GHSA-hhqg-4hp5-4v5h))
 - ASP.NET Core and EF Core 10.0.15, the packages of the .NET security release of 2026-11-10
 
+### Added
+
+- The health status on the dashboard opens a list of what the health checks watch: IdentityServer and the databases, each with a short description and its status, the failing ones first. A database that fails names the check that does not pass - the connection or the table query - with the name it has in `/health`. A check added by the host is listed under its own name
+
 ### Changed
 
 - The projects referencing `Microsoft.Data.SqlClient` no longer name `System.Security.Cryptography.Pkcs` explicitly: `Microsoft.EntityFrameworkCore.SqlServer` 10.0.15 asks for 10.0.13 itself, so the package resolves to 10.0.13 or newer, none of which has a known vulnerability
