@@ -1,1 +1,0 @@
-import{j as s}from"./ui-vendor-CnsGLHLH.js";import{u as r}from"./i18n-vendor-myjn-ygD.js";import{C as o}from"./circle-check-big-ps_4zV8k.js";const n=()=>{const{t:e}=r();return s.jsxs("div",{className:"flex items-center gap-2",children:[s.jsx(o,{className:"h-5 w-5 text-green-500"}),s.jsx("span",{children:e("Actions.Hooray")})]})};export{n as H};
