@@ -380,11 +380,13 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
             var loginConfiguration = GetLoginConfiguration(configuration);
             var registrationConfiguration = GetRegistrationConfiguration(configuration);
             var identityOptions = configuration.GetSection(nameof(IdentityOptions)).Get<IdentityOptions>();
+            var externalProvidersConfiguration = configuration.GetSection(nameof(ExternalProvidersConfiguration)).Get<ExternalProvidersConfiguration>() ?? new ExternalProvidersConfiguration();
 
             services
                 .AddSingleton(registrationConfiguration)
                 .AddSingleton(loginConfiguration)
                 .AddSingleton(identityOptions)
+                .AddSingleton(externalProvidersConfiguration)
                 .AddScoped<ApplicationSignInManager<TUserIdentity>>()
                 .AddScoped<UserResolver<TUserIdentity>>()
                 .AddIdentity<TUserIdentity, TUserIdentityRole>(options =>
@@ -503,6 +505,7 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
             }
 
             builder.AddExtensionGrantValidator<DelegationGrantValidator>();
+            builder.AddExtensionGrantValidator<TokenExchangeGrantValidator<TUserIdentity>>();
 
             // Check if server-side sessions should be enabled from configuration
             var serverSideSessionsConfig = configuration.GetSection(Configuration.ServerSideSessionsConfiguration.SectionName).Get<Configuration.ServerSideSessionsConfiguration>() ?? new Configuration.ServerSideSessionsConfiguration();

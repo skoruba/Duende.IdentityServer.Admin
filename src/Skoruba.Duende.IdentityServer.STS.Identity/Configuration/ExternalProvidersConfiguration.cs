@@ -1,6 +1,9 @@
 ﻿// Copyright (c) Jan Škoruba. All Rights Reserved.
 // Licensed under the Apache License, Version 2.0.
 
+using System;
+using System.Collections.Generic;
+
 namespace Skoruba.Duende.IdentityServer.STS.Identity.Configuration
 {
     public class ExternalProvidersConfiguration
@@ -17,5 +20,17 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Configuration
         public string AzureInstance { get; set; }
         public string AzureAdCallbackPath { get; set; }
         public string AzureDomain { get; set; }
+        public Dictionary<string, TokenExchangeProviderConfiguration> TokenExchangeProviders { get; set; } = new();
+    }
+
+    public class TokenExchangeProviderConfiguration
+    {
+        public bool Enabled { get; set; } = true;
+        public string TenantId { get; set; }
+        public string[] Authorities { get; set; } = Array.Empty<string>();
+        public string Audience { get; set; }
+        public string LoginProvider { get; set; }
+        public string SubjectClaim { get; set; } = "sub";
+        public string EmailClaim { get; set; }
     }
 }
