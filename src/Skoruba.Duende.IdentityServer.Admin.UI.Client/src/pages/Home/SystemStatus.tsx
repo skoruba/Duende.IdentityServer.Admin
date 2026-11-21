@@ -9,6 +9,7 @@ import { useSystemHealth } from "@/services/InfoServices";
 import { useConfigurationIssuesSummary } from "@/services/DashboardService";
 import { ConfigurationIssuesUrl } from "@/routing/Urls";
 import EnvironmentBadge from "./EnvironmentBadge";
+import HealthChecksPopover from "./HealthChecksPopover";
 
 const TICK_MS = 15_000;
 // Two missed refreshes (the health query refetches every minute).
@@ -78,9 +79,7 @@ const SystemStatus = ({ version }: { version?: string }) => {
         : "border-border bg-muted text-muted-foreground hover:bg-muted/70";
 
   const entries = data?.entries ?? [];
-  const failingChecks = entries
-    .filter((entry) => entry.status !== Healthy)
-    .map((entry) => entry.name ?? "");
+  const failingChecks = entries.filter((entry) => entry.status !== Healthy);
 
   // IdentityServer reachability is the headline, unless another failing check
   // (databases) makes the overall status worse - the headline shows the worse one.
@@ -117,12 +116,33 @@ const SystemStatus = ({ version }: { version?: string }) => {
   // The age only matters once it stops refreshing (offline, failing requests).
   const checkedAt = new Date(dataUpdatedAt);
   const isStale = now.getTime() - checkedAt.getTime() > STALE_AFTER_MS;
-  const tooltip = [
-    t("Home.Status.LastChecked", { time: checkedAt.toLocaleTimeString() }),
-    failingChecks.length > 0 ? failingChecks.join(", ") : undefined,
-  ]
-    .filter(Boolean)
-    .join(" · ");
+
+  // The headline says how many checks fail; which ones is one click away.
+  const headline = status && (
+    <>
+      <span
+        className={cn(
+          "inline-flex items-center gap-1.5 font-medium",
+          STATUS_STYLES[status].text,
+        )}
+      >
+        <span className="relative flex h-2 w-2">
+          {status === Healthy && (
+            <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-500/60 motion-safe:animate-ping" />
+          )}
+          <span
+            className={cn(
+              "relative inline-flex h-2 w-2 rounded-full",
+              STATUS_STYLES[status].dot,
+            )}
+          />
+        </span>
+        {t(`Home.Status.${status}`)}
+      </span>
+      <Separator />
+      <span>{detail}</span>
+    </>
+  );
 
   return (
     <div className="mt-2 flex min-h-6 flex-wrap items-center gap-x-2 gap-y-1.5 text-[13px] text-muted-foreground/80">
@@ -139,28 +159,13 @@ const SystemStatus = ({ version }: { version?: string }) => {
         status &&
         data && (
           <>
-            <span
-              className={cn(
-                "inline-flex items-center gap-1.5 font-medium",
-                STATUS_STYLES[status].text,
-              )}
-              title={tooltip}
-            >
-              <span className="relative flex h-2 w-2">
-                {status === Healthy && (
-                  <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-500/60 motion-safe:animate-ping" />
-                )}
-                <span
-                  className={cn(
-                    "relative inline-flex h-2 w-2 rounded-full",
-                    STATUS_STYLES[status].dot,
-                  )}
-                />
-              </span>
-              {t(`Home.Status.${status}`)}
-            </span>
-            <Separator />
-            <span>{detail}</span>
+            {entries.length > 0 ? (
+              <HealthChecksPopover entries={entries} checkedAt={checkedAt}>
+                {headline}
+              </HealthChecksPopover>
+            ) : (
+              headline
+            )}
             {isStale && (
               <>
                 <Separator />

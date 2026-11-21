@@ -107,6 +107,48 @@
       "ChecksFailing_one": "{{count}} of {{total}} checks failing",
       "ChecksFailing_other": "{{count}} of {{total}} checks failing",
       "ChecksPassing": "{{passing}}/{{total}} checks passing",
+      "ChecksTitle": "Health checks",
+      "NotPassing": "Not passing: {{checks}}",
+      "Parts": {
+        "Connection": "connection",
+        "Query": "table query"
+      },
+      "Components": {
+        "IdentityServer": {
+          "Name": "IdentityServer",
+          "Description": "Sign-in and token service"
+        },
+        "ConfigurationDb": {
+          "Name": "Configuration database",
+          "Description": "Clients, resources and scopes"
+        },
+        "OperationalDb": {
+          "Name": "Operational database",
+          "Description": "Grants, sessions and signing keys"
+        },
+        "IdentityDb": {
+          "Name": "Identity database",
+          "Description": "Users and roles"
+        },
+        "DataProtectionDb": {
+          "Name": "Data protection keys",
+          "Description": "Keys that encrypt cookies"
+        },
+        "AuditLogDb": {
+          "Name": "Audit log database",
+          "Description": "Changes made through the Admin API"
+        },
+        "LogDb": {
+          "Name": "Error log database",
+          "Description": "Warnings and errors of the STS"
+        }
+      },
+      "Check": {
+        "Healthy": "Healthy",
+        "Degraded": "Degraded",
+        "Unhealthy": "Unhealthy",
+        "Unknown": "Unknown"
+      },
       "Checked": "last checked {{age}} ago",
       "ConfigurationIssues_one": "{{count}} configuration issue",
       "ConfigurationIssues_other": "{{count}} configuration issues",
