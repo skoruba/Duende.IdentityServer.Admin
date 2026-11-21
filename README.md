@@ -38,16 +38,16 @@ configuration health, auditing, and security from one modern interface.
 
 > [!IMPORTANT]
 >
-> ## Version 3.3.0 is here 🚀
+> ## Version 3.3.1 is here 🚀
 >
-> **Version 3.3.0** adds [**custom configuration rules**](#-custom-configuration-rules) registered
+> 🔒 **Version 3.3.1** updates **Duende IdentityServer to 8.0.11**, which fixes the security
+> advisories Duende published on 2026-11-16. If you run 3.3.0 or older, upgrading is recommended.
+>
+> **Version 3.3** adds [**custom configuration rules**](#-custom-configuration-rules) registered
 > from your own code, an [**Error Logs**](#error-logs-in-the-admin-ui) page with the warnings and
 > errors of the STS, and **Used By** for API scopes and identity resources. The STS and the Admin API
-> have [`/health/live` and `/health/ready`](#-health-checks) for container probes, and
-> **Duende IdentityServer is updated to 8.0.10**.
->
-> 🔒 **Version 3.3.1** updates Duende IdentityServer to **8.0.11**, which fixes the security
-> advisories Duende published on 2026-11-16. Upgrading is recommended.
+> have [`/health/live` and `/health/ready`](#-health-checks) for container probes, and the dashboard
+> shows which health check is failing.
 >
 > ⚠️ Upgrading from 3.2.0 requires the new EF migration `ConfigurationRuleKeys`, which stores the
 > configuration rules under string keys. See the [changelog](CHANGELOG.md) for the upgrade notes and
