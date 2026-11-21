@@ -11,6 +11,7 @@ using Duende.IdentityServer;
 using Duende.IdentityServer.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.DbContexts;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Shared.Entities.Identity;
+using Skoruba.Duende.IdentityServer.Shared.Configuration.Constants;
 using Skoruba.Duende.IdentityServer.Shared.Configuration.Helpers;
 using Skoruba.Duende.IdentityServer.STS.Identity.Configuration;
 using Skoruba.Duende.IdentityServer.STS.Identity.Configuration.Constants;
@@ -103,9 +104,18 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity
                 endpoint.MapPasskeyEndpoints<UserIdentity>();
 
                 endpoint.MapDefaultControllerRoute();
-                endpoint.MapHealthChecks("/health", new HealthCheckOptions
+                endpoint.MapHealthChecks(HealthCheckEndpoints.Health, new HealthCheckOptions
                 {
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+                endpoint.MapHealthChecks(HealthCheckEndpoints.Ready, new HealthCheckOptions
+                {
+                    Predicate = check => check.Tags.Contains(HealthCheckEndpoints.ReadyTag),
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+                endpoint.MapHealthChecks(HealthCheckEndpoints.Live, new HealthCheckOptions
+                {
+                    Predicate = _ => false
                 });
             });
         }

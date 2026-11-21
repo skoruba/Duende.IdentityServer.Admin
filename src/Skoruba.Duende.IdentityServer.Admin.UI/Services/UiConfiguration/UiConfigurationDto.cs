@@ -7,4 +7,6 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Services.UiConfiguration;
 public class UiConfigurationDto
 {
     public bool IdentityManagementEnabled { get; set; } = true;
+
+    public bool ErrorLogsEnabled { get; set; } = true;
 }

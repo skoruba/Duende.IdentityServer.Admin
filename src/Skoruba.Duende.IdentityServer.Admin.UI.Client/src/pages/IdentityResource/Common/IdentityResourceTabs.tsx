@@ -2,10 +2,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import IdentityResourceBasicsTab from "./Tabs/IdentityResourceBasicsTab";
 import IdentityResourceClaimsTab from "./Tabs/IdentityResourceClaimsTab";
 import IdentityResourcePropertiesTab from "./Tabs/IdentityResourcePropertiesTab";
+import IdentityResourceUsageTab from "./Tabs/IdentityResourceUsageTab";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Trash2, Info, User, Settings } from "lucide-react";
+import { Trash2, Info, User, Settings, Link2 } from "lucide-react";
 
 type IdentityResourceTabsProps = {
   onIdentityResourceDelete?: () => void;
@@ -37,6 +38,13 @@ const IdentityResourceTabs: React.FC<IdentityResourceTabsProps> = ({
               {t("IdentityResource.Tabs.Properties")}
             </TabsTrigger>
           )}
+
+          {resourceId && (
+            <TabsTrigger value="usedBy" className="flex items-center gap-2">
+              <Link2 className="h-4 w-4" />
+              {t("IdentityResource.Tabs.UsedBy")}
+            </TabsTrigger>
+          )}
         </TabsList>
 
         <div className="inline-flex">
@@ -62,6 +70,11 @@ const IdentityResourceTabs: React.FC<IdentityResourceTabsProps> = ({
       {resourceId && (
         <TabsContent value="properties">
           <IdentityResourcePropertiesTab />
+        </TabsContent>
+      )}
+      {resourceId && (
+        <TabsContent value="usedBy">
+          <IdentityResourceUsageTab />
         </TabsContent>
       )}
     </Tabs>

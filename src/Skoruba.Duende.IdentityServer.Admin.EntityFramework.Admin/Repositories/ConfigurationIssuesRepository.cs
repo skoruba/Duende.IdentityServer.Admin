@@ -55,9 +55,22 @@ public class ConfigurationIssuesRepository<TDbContext, TRulesDbContext> : IConfi
 
             foreach (var rule in enabledRules)
             {
+                IConfigurationRuleValidator validator;
+
                 try
                 {
-                    var validator = _ruleValidatorFactory.Create(rule.RuleType);
+                    validator = _ruleValidatorFactory.Create(rule.RuleType);
+                }
+                catch (NotSupportedException)
+                {
+                    // A stored rule whose implementation is not registered in this deployment; the Admin UI marks it as an unknown rule
+                    _logger.LogDebug("Skipping configuration rule {RuleType} (ID: {RuleId}), it is not registered in this deployment",
+                        rule.RuleType, rule.Id);
+                    continue;
+                }
+
+                try
+                {
                     var issueTypeView = MapIssueType(rule.IssueType);
 
                     var ruleIssues = validator.ValidateWithContext(

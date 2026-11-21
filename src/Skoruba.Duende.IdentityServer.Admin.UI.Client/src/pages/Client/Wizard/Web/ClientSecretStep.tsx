@@ -11,6 +11,7 @@ import {
 import SecretForm, {
   defaultValues,
   SecretsFormData,
+  SecretsFormInput,
   createSecretFormSchema as secretFormSchema,
 } from "@/components/SecretForm/SecretForm";
 import { useClientWizard } from "@/contexts/ClientWizardContext";
@@ -43,7 +44,7 @@ export const SecretStep = () => {
     [clientType],
   );
 
-  const form = useForm<SecretsFormData>({
+  const form = useForm<SecretsFormInput, unknown, SecretsFormData>({
     defaultValues: stepDefaultValues,
     resolver: zodResolver(secretFormSchema(t)),
     mode: "onChange",

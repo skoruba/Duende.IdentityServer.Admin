@@ -9,9 +9,24 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfac
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.ClientRules;
 
-public class ClientIdMustNotContainRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
+public class ClientIdMustNotContainRule : ConfigurationRuleBase
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
+    public override string Key => ConfigurationRuleKeys.ClientIdMustNotContain;
+    public override ConfigurationResourceType ResourceType => ConfigurationResourceType.Client;
+    public override string DisplayName => "Client ID Must Not Contain";
+    public override string Description => "Ensures client identifiers do not contain forbidden strings or characters.";
+
+    public override IReadOnlyList<ConfigurationRuleParameter> Parameters { get; } =
+    [
+        ConfigurationRuleParameter.Array("forbiddenStrings", "Forbidden Strings", "Array of strings that must not appear in client identifiers", defaultValue: new[] { "test", "temp", "debug" }, required: true)
+    ];
+
+    public override string DefaultConfiguration => "{\"forbiddenStrings\": [\"test\", \"temp\", \"debug\"]}";
+    public override string ExampleConfiguration => "{\"forbiddenStrings\": [\"copy\", \"old\", \"deprecated\"]}";
+    public override string DefaultMessageTemplate => "Client ID '{clientId}' contains forbidden string(s): {forbiddenStrings}";
+    public override string DefaultFixDescription => "Navigate to Client Details → Basics tab and rename the Client ID to remove forbidden strings from it.";
+
+    public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<ForbiddenConfig>(configuration);
 

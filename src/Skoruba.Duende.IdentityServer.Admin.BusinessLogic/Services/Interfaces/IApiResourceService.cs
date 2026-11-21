@@ -12,6 +12,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces
 
         Task<ApiResourcesDto> GetApiResourcesAsync(string search, int page = 1, int pageSize = 10);
 
+        Task<ApiResourcesDto> GetApiResourcesByScopeAsync(string scope, int page = 1, int pageSize = 10);
+
         Task<ApiResourcePropertiesDto> GetApiResourcePropertiesAsync(int apiResourceId, int page = 1, int pageSize = 10);
 
         Task<ApiResourcePropertiesDto> GetApiResourcePropertyAsync(int apiResourcePropertyId);

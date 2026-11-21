@@ -10,9 +10,24 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfac
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.ClientRules;
 
-public class ClientScopeMustExistRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
+public class ClientScopeMustExistRule : ConfigurationRuleBase
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
+    public override string Key => ConfigurationRuleKeys.ClientScopeMustExist;
+    public override ConfigurationResourceType ResourceType => ConfigurationResourceType.Client;
+    public override string DisplayName => "Client Scope Must Exist";
+    public override string Description => "Detects clients that still allow a scope which no longer exists as an API scope or identity resource. An allowed scope is stored as a plain name, so deleting the scope leaves the client pointing at nothing.";
+
+    public override IReadOnlyList<ConfigurationRuleParameter> Parameters { get; } =
+    [
+        ConfigurationRuleParameter.Array("excludeScopes", "Exclude Scopes", "Scope names to ignore - protocol scopes such as offline_access are not stored as API scopes and would be reported otherwise", defaultValue: new[] { "offline_access" })
+    ];
+
+    public override string DefaultConfiguration => "{\"excludeScopes\": [\"offline_access\"]}";
+    public override string ExampleConfiguration => "{\"excludeScopes\": [\"offline_access\", \"legacy_api\"]}";
+    public override string DefaultMessageTemplate => "Client '{clientName}' allows {count} scope(s) that no longer exist: {missingScopes}";
+    public override string DefaultFixDescription => "Navigate to Client Details → Resources tab → Allowed Scopes section and remove the scope(s) that no longer exist: {missingScopes}.";
+
+    public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<MissingScopeConfig>(configuration);
         var excludeScopes = config.ExcludeScopes ?? new[] { "offline_access" };

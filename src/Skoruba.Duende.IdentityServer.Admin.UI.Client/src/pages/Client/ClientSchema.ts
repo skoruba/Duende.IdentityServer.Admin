@@ -16,17 +16,18 @@ const DualListTypeSchema = z.object({
 
 const optionalNumberField = z
   .number({
-    invalid_type_error: t("Validation.InvalidNumber"),
+    error: t("Validation.InvalidNumber"),
   })
   .optional();
 
 const nullableOptionalNumberField = z
   .number({
-    invalid_type_error: t("Validation.InvalidNumber"),
+    error: t("Validation.InvalidNumber"),
   })
   .nullable()
   .optional()
-  .transform((value) => value ?? undefined);
+  .transform((value) => value ?? undefined)
+  .optional();
 
 const optionalSelectNumberField = z.preprocess(
   (value) => (value === "" || value === null || value === undefined ? undefined : value),
@@ -98,6 +99,7 @@ export const formSchema = z.object({
   deviceCodeLifetime: optionalNumberField,
   consentLifetime: nullableOptionalNumberField,
   protocolType: z.string().optional(),
+  nonEditable: z.boolean().optional(),
   userSsoLifetime: nullableOptionalNumberField,
   properties: z
     .array(z.object({ id: z.number(), key: z.string(), value: z.string() }))
@@ -107,7 +109,8 @@ export const formSchema = z.object({
     .optional(),
 });
 
-export type ClientEditFormData = z.infer<typeof formSchema>;
+export type ClientEditFormInput = z.input<typeof formSchema>;
+export type ClientEditFormData = z.output<typeof formSchema>;
 
 export const clientDefaultValues: ClientEditFormData = {
   clientId: "",
@@ -263,8 +266,7 @@ export const mapEditClientToFormData = (
     alwaysIncludeUserClaimsInIdToken:
       client.alwaysIncludeUserClaimsInIdToken ??
       clientDefaultValues.alwaysIncludeUserClaimsInIdToken,
-    clientClaimsPrefix:
-      client.clientClaimsPrefix ?? clientDefaultValues.clientClaimsPrefix,
+    clientClaimsPrefix: client.clientClaimsPrefix ?? undefined,
     pairWiseSubjectSalt:
       client.pairWiseSubjectSalt ?? clientDefaultValues.pairWiseSubjectSalt,
     requireDPoP: client.requireDPoP ?? clientDefaultValues.requireDPoP,
@@ -291,6 +293,8 @@ export const mapEditClientToFormData = (
       client.deviceCodeLifetime ?? clientDefaultValues.deviceCodeLifetime,
     consentLifetime:
       client.consentLifetime ?? clientDefaultValues.consentLifetime,
+    protocolType: client.protocolType ?? clientDefaultValues.protocolType,
+    nonEditable: client.nonEditable,
     properties:
       client.properties?.map((property) => ({
         id: property.id,
@@ -443,7 +447,7 @@ export const mapFormDataToEditClient = (
     identityTokenLifetime: formData.identityTokenLifetime!,
     includeJwtId: formData.includeJti!,
     logoUri: formData.logoUri || undefined,
-    clientClaimsPrefix: formData.clientClaimsPrefix || undefined,
+    clientClaimsPrefix: formData.clientClaimsPrefix ?? "",
     pairWiseSubjectSalt: formData.pairWiseSubjectSalt || undefined,
     protocolType: formData.protocolType || undefined,
     refreshTokenExpiration: formData.refreshTokenExpiration!,
@@ -517,6 +521,6 @@ export const mapFormDataToEditClient = (
       ) ?? [],
     updated: undefined,
     lastAccessed: undefined,
-    nonEditable: false,
+    nonEditable: formData.nonEditable ?? false,
   };
 };

@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0.
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Skoruba.AuditLogging.Services;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Log;
@@ -23,9 +24,15 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services
             AuditEventLogger = auditEventLogger;
         }
 
-        public virtual async Task<LogsDto> GetLogsAsync(string search, int page = 1, int pageSize = 10)
+        public virtual Task<LogsDto> GetLogsAsync(string search, int page = 1, int pageSize = 10)
         {
-            var pagedList = await Repository.GetLogsAsync(search, page, pageSize);
+            return GetLogsAsync(search, null, null, null, page, pageSize);
+        }
+
+        public virtual async Task<LogsDto> GetLogsAsync(string search, IReadOnlyCollection<string> levels, DateTimeOffset? from, DateTimeOffset? to,
+            int page = 1, int pageSize = 10)
+        {
+            var pagedList = await Repository.GetLogsAsync(search, levels, from, to, page, pageSize);
             var logs = pagedList.ToModel();
 
             await AuditEventLogger.LogEventAsync(new LogsRequestedEvent());

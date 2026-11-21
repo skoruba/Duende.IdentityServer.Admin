@@ -6,6 +6,7 @@ import { Form } from "@/components/ui/form";
 import { toast } from "@/components/ui/use-toast";
 import SecretForm, {
   SecretsFormData,
+  SecretsFormInput,
   defaultValues,
   createSecretFormSchema as secretFormSchema,
 } from "../SecretForm/SecretForm";
@@ -24,7 +25,7 @@ const AddSecretForm: React.FC<AddSecretFormProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const form = useForm<SecretsFormData>({
+  const form = useForm<SecretsFormInput, unknown, SecretsFormData>({
     defaultValues,
     resolver: zodResolver(secretFormSchema(t)),
     mode: "onChange",

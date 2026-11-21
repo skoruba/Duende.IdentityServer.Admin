@@ -1,7 +1,10 @@
 import { expect, test } from "@playwright/test";
 import { loadE2ESeedData } from "../utils/seed-data";
 import { type LoginCredentials } from "./helpers/auth";
-import { ensureLoggedInAndOpenConfigurationRules } from "./helpers/configuration-rules-list";
+import {
+  ensureLoggedInAndOpenConfigurationRules,
+  findConfigurationRuleRowByType,
+} from "./helpers/configuration-rules-list";
 import {
   runConfigurationRuleReportsIssueFlow,
   runCreateAndVerifyConfigurationRulesFlow,
@@ -24,6 +27,16 @@ test.describe("Admin UI Configuration Rules", () => {
       }),
     ).toBeVisible();
     await expect(page.locator("table").first()).toBeVisible();
+  });
+
+  test("offers no delete for a registered rule", async ({ page }) => {
+    await ensureLoggedInAndOpenConfigurationRules(page, credentials);
+
+    // Every built-in rule is seeded, so its row is always there
+    const row = await findConfigurationRuleRowByType(page, "MissingPkce");
+    await expect(
+      row.getByRole("button", { name: UI_TEXT.actions.delete, exact: true }),
+    ).toBeDisabled();
   });
 
   test("creates rules with different property types and prevents duplicates", async ({

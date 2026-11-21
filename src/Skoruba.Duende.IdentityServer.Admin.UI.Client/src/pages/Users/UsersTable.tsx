@@ -26,7 +26,9 @@ const UsersTable = ({ data, pagination, setPagination }: UsersTableProps) => {
         const user = row.original;
         return (
           <Avatar>
-            <AvatarFallback>{getInitialsFromEmail(user.email)}</AvatarFallback>
+            <AvatarFallback>
+              {getInitialsFromEmail(user.email, user.userName)}
+            </AvatarFallback>
           </Avatar>
         );
       },

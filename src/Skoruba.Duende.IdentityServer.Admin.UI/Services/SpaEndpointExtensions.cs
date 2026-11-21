@@ -62,7 +62,8 @@ public static class SpaEndpointExtensions
     {
         var configuration = new UiConfigurationDto
         {
-            IdentityManagementEnabled = options.AdminConfiguration.BasicConfiguration.IdentityManagementEnabled
+            IdentityManagementEnabled = options.AdminConfiguration.BasicConfiguration.IdentityManagementEnabled,
+            ErrorLogsEnabled = options.AdminConfiguration.BasicConfiguration.ErrorLogsEnabled
         };
 
         endpoints.MapGet(UiConfigurationPath, () => Results.Ok(configuration))

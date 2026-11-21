@@ -51,6 +51,7 @@ const ConfigurationRules = lazy(
   () => import("@/pages/ConfigurationRules/ConfigurationRules"),
 );
 const AuditLogs = lazy(() => import("@/pages/AuditLogs/AuditLogs"));
+const ErrorLogs = lazy(() => import("@/pages/ErrorLogs/ErrorLogs"));
 const RoleUsers = lazy(() => import("@/pages/RoleUsers/RoleUsers"));
 const AccessDenied = lazy(() => import("@/pages/AccessDenied/AccessDenied"));
 const Unauthorized = lazy(() => import("@/pages/Unauthorized/Unauthorized"));
@@ -82,6 +83,7 @@ import {
   ConfigurationIssuesUrl,
   ConfigurationRulesUrl,
   AuditLogsUrl,
+  ErrorLogsUrl,
   RoleUsersUrl,
   NotFoundUrl,
   AccessDeniedUrl,
@@ -111,6 +113,18 @@ const IdentityRouteGuard = ({ children }: { children: JSX.Element }) => {
   const { identityManagementEnabled } = useUiConfiguration();
 
   if (!identityManagementEnabled) {
+    return <Navigate to={HomeUrl} replace />;
+  }
+
+  return <RouteGuard>{children}</RouteGuard>;
+};
+
+// Error Logs can be switched off the same way
+// (AdminConfiguration:BasicConfiguration:ErrorLogsEnabled).
+const ErrorLogsRouteGuard = ({ children }: { children: JSX.Element }) => {
+  const { errorLogsEnabled } = useUiConfiguration();
+
+  if (!errorLogsEnabled) {
     return <Navigate to={HomeUrl} replace />;
   }
 
@@ -333,6 +347,14 @@ export const router = createBrowserRouter(
             <RouteGuard>
               <AuditLogs />
             </RouteGuard>
+          ),
+        },
+        {
+          path: ErrorLogsUrl,
+          element: (
+            <ErrorLogsRouteGuard>
+              <ErrorLogs />
+            </ErrorLogsRouteGuard>
           ),
         },
         {

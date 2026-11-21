@@ -106,16 +106,15 @@ describe("summarizeRule", () => {
     ).toEqual([]);
   });
 
-  it("humanizes a rule the metadata does not know and keeps its template", () => {
+  it("names a rule that is not registered after its key, without the namespace and the template", () => {
     const rule = {
-      ruleType: "SecretIsExpiredInDays",
-      messageTemplate: "Client '{clientName}' has a secret that expires",
+      ruleType: "MyProject.ClientRedirectUriLimit",
+      messageTemplate: "Client '{clientName}' has {count} redirect URIs",
     };
 
     for (const known of [metadata, undefined]) {
       expect(summarizeRule(rule, known, yesNo)).toEqual({
-        name: "Secret Is Expired In Days",
-        description: "Client '{clientName}' has a secret that expires",
+        name: "Client Redirect Uri Limit",
         parameters: [],
       });
     }

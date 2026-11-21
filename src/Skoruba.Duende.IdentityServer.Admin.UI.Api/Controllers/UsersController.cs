@@ -8,6 +8,7 @@ using IdentityModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Dtos.Identity;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Services.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration.Constants;
@@ -68,6 +69,15 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
             _identityService = identityService;
             _localizer = localizer;
             _errorResources = errorResources;
+        }
+
+        [HttpGet("Options")]
+        public ActionResult<UserOptionsApiDto> GetOptions([FromServices] IOptions<IdentityOptions> identityOptions)
+        {
+            return Ok(new UserOptionsApiDto
+            {
+                RequireUniqueEmail = identityOptions.Value.User.RequireUniqueEmail
+            });
         }
 
         [HttpGet("{id}")]

@@ -3,6 +3,8 @@ import { IdentityResourceEditUrl } from "@/routing/Urls";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import IdentityResourcesActions from "./IdentityResourcesActions";
+import ScopeUsageButton from "@/components/ScopeUsage/ScopeUsageButton";
+import { useScopeClientCounts } from "@/components/ScopeUsage/useScopeClientCounts";
 import {
   IdentityResourceData,
   IdentityResourcesData,
@@ -18,6 +20,9 @@ type Props = {
 
 const IdentityResourcesTable = ({ data, pagination, setPagination }: Props) => {
   const { t } = useTranslation();
+  const clientCounts = useScopeClientCounts(
+    data.items.map((resource) => resource.name),
+  );
 
   const columns = [
     {
@@ -37,6 +42,18 @@ const IdentityResourcesTable = ({ data, pagination, setPagination }: Props) => {
           </Link>
         );
       },
+    },
+    {
+      id: "usedBy",
+      header: t("ScopeUsage.UsedBy"),
+      cell: ({ row }: { row: { original: IdentityResourceData } }) => (
+        <ScopeUsageButton
+          scopeKind="identityResource"
+          scopeId={row.original.id}
+          scopeName={row.original.name}
+          clientCount={clientCounts.data?.[row.original.name]}
+        />
+      ),
     },
     {
       id: "actions",

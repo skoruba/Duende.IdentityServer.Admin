@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration.Constants;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.ExceptionHandling;
 
@@ -126,10 +125,18 @@ public class ConfigurationRulesController : ControllerBase
             return NotFound();
         }
 
-        rule.IsEnabled = !rule.IsEnabled;
-        await _configurationRulesService.UpdateRuleAsync(rule);
+        // Unlike an update, the toggle does not validate the configuration again, so a rule no
+        // registered rule describes can still be disabled.
+        try
+        {
+            await _configurationRulesService.ToggleRuleAsync(id);
+        }
+        catch (System.InvalidOperationException ex)
+        {
+            return Conflict(new { message = ex.Message });
+        }
 
-        return Ok(new { isEnabled = rule.IsEnabled });
+        return Ok(new { isEnabled = !rule.IsEnabled });
     }
 
     [HttpGet("metadata")]
@@ -140,7 +147,7 @@ public class ConfigurationRulesController : ControllerBase
     }
 
     [HttpGet("metadata/{ruleType}")]
-    public ActionResult<ConfigurationRuleMetadataDto> GetMetadata(ConfigurationRuleType ruleType)
+    public ActionResult<ConfigurationRuleMetadataDto> GetMetadata(string ruleType)
     {
         var metadata = _metadataProvider.GetMetadata(ruleType);
 

@@ -90,8 +90,12 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories
 
         public virtual async Task<int> UpdateIdentityProviderAsync(IdentityProvider identityProvider)
         {
-            //Update with new data
-            DbContext.IdentityProviders.Update(identityProvider);
+            //Update with new data, keeping the values the update does not carry
+            identityProvider.Updated = DateTime.UtcNow;
+            var entry = DbContext.IdentityProviders.Update(identityProvider);
+            entry.Property(x => x.Created).IsModified = false;
+            entry.Property(x => x.LastAccessed).IsModified = false;
+            entry.Property(x => x.NonEditable).IsModified = false;
 
             return await AutoSaveChangesAsync();
         }

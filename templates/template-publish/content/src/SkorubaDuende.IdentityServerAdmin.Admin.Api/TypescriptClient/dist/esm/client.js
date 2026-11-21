@@ -1381,6 +1381,122 @@ export class ApiScopesClient extends WebApiClientBase {
         }
         return Promise.resolve(null);
     }
+    getScopeClients(id, page, pageSize) {
+        let url_ = this.baseUrl + "/api/ApiScopes/{id}/Clients?";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (page === null)
+            throw new globalThis.Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new globalThis.Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
+            return this.processGetScopeClients(_response);
+        });
+    }
+    processGetScopeClients(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ClientsApiDto.fromJS(resultData200);
+                return result200;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
+    }
+    getScopeApiResources(id, page, pageSize) {
+        let url_ = this.baseUrl + "/api/ApiScopes/{id}/ApiResources?";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (page === null)
+            throw new globalThis.Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new globalThis.Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
+            return this.processGetScopeApiResources(_response);
+        });
+    }
+    processGetScopeApiResources(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ApiResourcesApiDto.fromJS(resultData200);
+                return result200;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
+    }
     getProperty(propertyId) {
         let url_ = this.baseUrl + "/api/ApiScopes/Properties/{propertyId}";
         if (propertyId === undefined || propertyId === null)
@@ -1763,6 +1879,64 @@ export class ClientsClient extends WebApiClientBase {
                 let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result404 = ProblemDetails.fromJS(resultData404);
                 return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
+    }
+    getClientCountsByScopes(scopes) {
+        let url_ = this.baseUrl + "/api/Clients/GetClientCountsByScopes?";
+        if (scopes !== undefined && scopes !== null)
+            scopes && scopes.forEach(item => { url_ += "scopes=" + encodeURIComponent("" + item) + "&"; });
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
+            return this.processGetClientCountsByScopes(_response);
+        });
+    }
+    processGetClientCountsByScopes(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (resultData200) {
+                    result200 = {};
+                    for (let key in resultData200) {
+                        if (resultData200.hasOwnProperty(key))
+                            result200[key] = resultData200[key] !== undefined ? resultData200[key] : null;
+                    }
+                }
+                else {
+                    result200 = null;
+                }
+                return result200;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
             });
         }
         else if (status !== 200 && status !== 204) {
@@ -4813,6 +4987,64 @@ export class IdentityResourcesClient extends WebApiClientBase {
         }
         return Promise.resolve(null);
     }
+    getClients(id, page, pageSize) {
+        let url_ = this.baseUrl + "/api/IdentityResources/{id}/Clients?";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (page === null)
+            throw new globalThis.Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new globalThis.Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
+            return this.processGetClients(_response);
+        });
+    }
+    processGetClients(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ClientsApiDto.fromJS(resultData200);
+                return result200;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
+    }
     getProperty(propertyId) {
         let url_ = this.baseUrl + "/api/IdentityResources/Properties/{propertyId}";
         if (propertyId === undefined || propertyId === null)
@@ -5334,6 +5566,115 @@ export class LogsClient extends WebApiClientBase {
                 let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = AuditLogsDto.fromJS(resultData200);
                 return result200;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
+    }
+    errorLog(searchText, levels, from, to, page, pageSize) {
+        let url_ = this.baseUrl + "/api/Logs/ErrorLog?";
+        if (searchText !== undefined && searchText !== null)
+            url_ += "searchText=" + encodeURIComponent("" + searchText) + "&";
+        if (levels !== undefined && levels !== null)
+            levels && levels.forEach(item => { url_ += "levels=" + encodeURIComponent("" + item) + "&"; });
+        if (from !== undefined && from !== null)
+            url_ += "from=" + encodeURIComponent(from ? "" + from.toISOString() : "") + "&";
+        if (to !== undefined && to !== null)
+            url_ += "to=" + encodeURIComponent(to ? "" + to.toISOString() : "") + "&";
+        if (page === null)
+            throw new globalThis.Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new globalThis.Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
+            return this.processErrorLog(_response);
+        });
+    }
+    processErrorLog(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ErrorLogsApiDto.fromJS(resultData200);
+                return result200;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
+    }
+    deleteErrorLog(deleteOlderThan) {
+        let url_ = this.baseUrl + "/api/Logs/ErrorLog?";
+        if (deleteOlderThan === null)
+            throw new globalThis.Error("The parameter 'deleteOlderThan' cannot be null.");
+        else if (deleteOlderThan !== undefined)
+            url_ += "deleteOlderThan=" + encodeURIComponent(deleteOlderThan ? "" + deleteOlderThan.toISOString() : "") + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "DELETE",
+            headers: {}
+        };
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
+            return this.processDeleteErrorLog(_response);
+        });
+    }
+    processDeleteErrorLog(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+                return;
             });
         }
         else if (status === 401) {
@@ -6214,6 +6555,53 @@ export class UsersClient extends WebApiClientBase {
         this.jsonParseReviver = undefined;
         this.http = http ? http : window;
         this.baseUrl = baseUrl !== null && baseUrl !== void 0 ? baseUrl : "";
+    }
+    getOptions() {
+        let url_ = this.baseUrl + "/api/Users/Options";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response) => {
+            return this.processGetOptions(_response);
+        });
+    }
+    processGetOptions(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach((v, k) => _headers[k] = v);
+        }
+        ;
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200 = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = UserOptionsApiDto.fromJS(resultData200);
+                return result200;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        }
+        else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        }
+        else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve(null);
     }
     get(id) {
         let url_ = this.baseUrl + "/api/Users/{id}";
@@ -8452,32 +8840,6 @@ export class ConfigurationRuleDto {
         return data;
     }
 }
-export var ConfigurationRuleType;
-(function (ConfigurationRuleType) {
-    ConfigurationRuleType["ObsoleteImplicitGrant"] = "ObsoleteImplicitGrant";
-    ConfigurationRuleType["ObsoletePasswordGrant"] = "ObsoletePasswordGrant";
-    ConfigurationRuleType["MissingPkce"] = "MissingPkce";
-    ConfigurationRuleType["ClientRedirectUrisMustUseHttps"] = "ClientRedirectUrisMustUseHttps";
-    ConfigurationRuleType["ClientMustHaveScopes"] = "ClientMustHaveScopes";
-    ConfigurationRuleType["ClientAccessTokenLifetimeTooLong"] = "ClientAccessTokenLifetimeTooLong";
-    ConfigurationRuleType["ClientRefreshTokenLifetimeTooLong"] = "ClientRefreshTokenLifetimeTooLong";
-    ConfigurationRuleType["ApiScopeNameMustStartWith"] = "ApiScopeNameMustStartWith";
-    ConfigurationRuleType["ApiScopeNameMustNotContain"] = "ApiScopeNameMustNotContain";
-    ConfigurationRuleType["ApiScopeMustHaveDisplayName"] = "ApiScopeMustHaveDisplayName";
-    ConfigurationRuleType["ApiResourceMustHaveScopes"] = "ApiResourceMustHaveScopes";
-    ConfigurationRuleType["ApiResourceNameMustStartWith"] = "ApiResourceNameMustStartWith";
-    ConfigurationRuleType["IdentityResourceMustBeEnabled"] = "IdentityResourceMustBeEnabled";
-    ConfigurationRuleType["IdentityResourceNameMustStartWith"] = "IdentityResourceNameMustStartWith";
-    ConfigurationRuleType["ScopeIsUnused"] = "ScopeIsUnused";
-    ConfigurationRuleType["SecretIsExpiredInDays"] = "SecretIsExpiredInDays";
-    ConfigurationRuleType["ClientNameMustStartWith"] = "ClientNameMustStartWith";
-    ConfigurationRuleType["ClientNameMustNotContain"] = "ClientNameMustNotContain";
-    ConfigurationRuleType["ClientIdMustStartWith"] = "ClientIdMustStartWith";
-    ConfigurationRuleType["ClientIdMustNotContain"] = "ClientIdMustNotContain";
-    ConfigurationRuleType["ClientScopeMustExist"] = "ClientScopeMustExist";
-    ConfigurationRuleType["ClientSigningAlgorithmsMustBeFapiCompliant"] = "ClientSigningAlgorithmsMustBeFapiCompliant";
-    ConfigurationRuleType["ApiResourceSigningAlgorithmsMustBeFapiCompliant"] = "ApiResourceSigningAlgorithmsMustBeFapiCompliant";
-})(ConfigurationRuleType || (ConfigurationRuleType = {}));
 export var ConfigurationIssueType;
 (function (ConfigurationIssueType) {
     ConfigurationIssueType["Warning"] = "Warning";
@@ -9227,6 +9589,82 @@ export class AuditLogsDto {
         return data;
     }
 }
+export class ErrorLogsApiDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            if (Array.isArray(_data["logs"])) {
+                this.logs = [];
+                for (let item of _data["logs"])
+                    this.logs.push(ErrorLogApiDto.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+            this.pageSize = _data["pageSize"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new ErrorLogsApiDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.logs)) {
+            data["logs"] = [];
+            for (let item of this.logs)
+                data["logs"].push(item ? item.toJSON() : undefined);
+        }
+        data["totalCount"] = this.totalCount;
+        data["pageSize"] = this.pageSize;
+        return data;
+    }
+}
+export class ErrorLogApiDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            this.id = _data["id"];
+            this.level = _data["level"];
+            this.timeStamp = _data["timeStamp"] ? new Date(_data["timeStamp"].toString()) : undefined;
+            this.message = _data["message"];
+            this.messageTemplate = _data["messageTemplate"];
+            this.exception = _data["exception"];
+            this.logEvent = _data["logEvent"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new ErrorLogApiDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["level"] = this.level;
+        data["timeStamp"] = this.timeStamp ? this.timeStamp.toISOString() : undefined;
+        data["message"] = this.message;
+        data["messageTemplate"] = this.messageTemplate;
+        data["exception"] = this.exception;
+        data["logEvent"] = this.logEvent;
+        return data;
+    }
+}
 export class PersistedGrantSubjectsApiDto {
     constructor(data) {
         if (data) {
@@ -9786,6 +10224,32 @@ export class TKey {
     }
     toJSON(data) {
         data = typeof data === 'object' ? data : {};
+        return data;
+    }
+}
+export class UserOptionsApiDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            this.requireUniqueEmail = _data["requireUniqueEmail"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserOptionsApiDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        data["requireUniqueEmail"] = this.requireUniqueEmail;
         return data;
     }
 }

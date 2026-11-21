@@ -9,9 +9,24 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfac
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.ApiResourceRules;
 
-public class ApiResourceNameMustStartWithRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
+public class ApiResourceNameMustStartWithRule : ConfigurationRuleBase
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
+    public override string Key => ConfigurationRuleKeys.ApiResourceNameMustStartWith;
+    public override ConfigurationResourceType ResourceType => ConfigurationResourceType.ApiResource;
+    public override string DisplayName => "API Resource Name Must Start With";
+    public override string Description => "Ensures API resource names follow a specific naming convention by requiring a prefix or one of multiple allowed prefixes.";
+
+    public override IReadOnlyList<ConfigurationRuleParameter> Parameters { get; } =
+    [
+        ConfigurationRuleParameter.Array("prefixes", "Required Prefixes", "The prefix(es) that API resource names must start with. A name has to start with at least one of them.", defaultValue: new[] { "api." }, required: true)
+    ];
+
+    public override string DefaultConfiguration => "{\"prefixes\": [\"api.\"]}";
+    public override string ExampleConfiguration => "{\"prefixes\": [\"api.\", \"resource.\", \"service.\"]}";
+    public override string DefaultMessageTemplate => "API Resource '{actualName}' must start with one of: {allowedPrefixes}";
+    public override string DefaultFixDescription => "Navigate to API Resource Details → Basic Information section and rename the resource to follow the naming convention.";
+
+    public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<PrefixConfig>(configuration);
 

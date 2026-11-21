@@ -25,7 +25,9 @@ const RoleUsersTable = ({ data, pagination, setPagination }: Props) => {
         const user = row.original;
         return (
           <Avatar>
-            <AvatarFallback>{getInitialsFromEmail(user.email)}</AvatarFallback>
+            <AvatarFallback>
+              {getInitialsFromEmail(user.email, user.userName)}
+            </AvatarFallback>
           </Avatar>
         );
       },

@@ -54,9 +54,3 @@ export const useConfigurationRulesMetadata = (enabled = true) =>
     staleTime: Infinity,
     enabled,
   });
-
-export const getConfigurationRuleMetadata = async (
-  ruleType: client.ConfigurationRuleType
-): Promise<client.ConfigurationRuleMetadataDto> => {
-  return await apiClient.getMetadata(ruleType);
-};

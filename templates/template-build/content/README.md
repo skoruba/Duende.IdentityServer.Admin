@@ -86,6 +86,7 @@ configuration health, auditing, and security from one modern interface.
 - [Localization](#-localization)
 - [API & Swagger](#-api--swagger)
 - [STS Configuration](#️-sts-configuration)
+- [Custom Configuration Rules](#-custom-configuration-rules)
 - [Identity Mapping Customization](#-identity-mapping-customization)
 - [Solution Overview](#-solution-overview)
 - [Roadmap & Changelog](#-roadmap--changelog)
@@ -131,6 +132,8 @@ Define and track configuration rules for clients, API resources, and identity re
 #### 🧩 Configuration Issues
 
 ![Configuration-Issues](https://raw.githubusercontent.com/skoruba/Duende.IdentityServer.Admin/main/docs/Images/configuration-issues.png)
+
+Custom rules of your own deployment: see [Custom Configuration Rules](#-custom-configuration-rules).
 
 ### Solution Structure
 
@@ -491,46 +494,43 @@ Azure Key Vault supports:
 
 ## 📝 Logging
 
-Uses **Serilog** with the following sinks (configured in `serilog.json`):
+Uses **Serilog**, configured in `serilog.json` of each host: Console and File out of the box, Seq can be added there as well.
 
-- Console
-- File
-- MSSqlServer
-- Seq
+### Error Logs in the Admin UI
 
-**Example configuration:**
+The STS writes its warnings and errors into the `Log` table of `AdminLogDbConnection` (SQL Server and PostgreSQL), and the Admin UI shows them under **Monitoring → Error Logs** with the exception and the properties of each event. It is meant for a quick look at what went wrong in a smaller deployment; for production, send the logs to a log platform (Seq, OpenTelemetry, Elastic, Application Insights) through `serilog.json` and switch the database off.
+
+STS (`appsettings.json`):
 
 ```json
 {
-  "Serilog": {
-    "MinimumLevel": {
-      "Default": "Error",
-      "Override": {
-        "Skoruba": "Information"
-      }
-    },
-    "WriteTo": [
-      {
-        "Name": "Console"
-      },
-      {
-        "Name": "File",
-        "Args": {
-          "path": "log.txt",
-          "rollingInterval": "Day"
-        }
-      },
-      {
-        "Name": "MSSqlServer",
-        "Args": {
-          "connectionString": "...",
-          "tableName": "Log"
-        }
-      }
-    ]
+  "ConnectionStrings": {
+    "AdminLogDbConnection": "..."
+  },
+  "DatabaseLogConfiguration": {
+    "Enabled": true,
+    "MinimumLevel": "Warning"
   }
 }
 ```
+
+- Without `AdminLogDbConnection`, or with `Enabled: false`, nothing is written into the database
+- `MinimumLevel` applies on top of the Serilog minimum level of `serilog.json`, so the console can log more than the database
+- The STS `serilog.json` logs from `Error` (the `Skoruba` namespace from `Information`). The cause of a failed request (e.g. `Unknown client or not enabled`) is logged at `Information`, together with every request - switch it on for a while (`Serilog:MinimumLevel:Default=Information`) or send it to a file or Seq rather than to the database
+
+Admin API (`appsettings.json`) deletes the old events on startup and then once a day:
+
+```json
+{
+  "DatabaseLogConfiguration": {
+    "RetentionDays": 30
+  }
+}
+```
+
+`0` keeps them all. They can also be deleted from the page (**Delete older than…**).
+
+Admin UI (`appsettings.json`) hides the page with `AdminConfiguration:BasicConfiguration:ErrorLogsEnabled: false`.
 
 ---
 
@@ -616,16 +616,31 @@ Configure external providers in STS (`appsettings.json`):
 
 ## 🏥 Health Checks
 
-All services expose a `/health` endpoint for monitoring:
+The STS (`https://localhost:44310`) and the Admin API (`https://localhost:44302`) expose three endpoints:
 
-- Admin UI: `https://localhost:7127/health`
-- Admin API: `https://localhost:44302/health`
-- STS: `https://localhost:44310/health`
+| Endpoint | Checks | Use |
+|---|---|---|
+| `/health/live` | none - the process responds | liveness probe |
+| `/health/ready` | the databases; the STS also its signing keys, the Admin API also IdentityServer availability | readiness probe |
+| `/health` | the same checks as `/health/ready` | monitoring, the Admin UI dashboard |
 
-Checks include:
+Keep the dependencies out of the liveness probe: a short database outage then takes the instances out of the load balancer instead of restarting all of them. The signing key check of the STS loads and unprotects the keys, so a new instance does that before it receives the first sign-in.
 
-- Database connectivity
-- IdentityServer availability
+Kubernetes example for the STS:
+
+```yaml
+startupProbe:
+  httpGet: { path: /health/live, port: 8080 }
+  periodSeconds: 5
+  failureThreshold: 30
+readinessProbe:
+  httpGet: { path: /health/ready, port: 8080 }
+  periodSeconds: 10
+  timeoutSeconds: 5
+livenessProbe:
+  httpGet: { path: /health/live, port: 8080 }
+  periodSeconds: 10
+```
 
 ---
 
@@ -687,6 +702,59 @@ Enable or disable user registration:
 ### FAPI 2.0 Security Profile
 
 `Fapi2SecurityProfile:Enabled` applies the FAPI 2.0 cryptographic restrictions to the STS - see [FAPI 2.0 Security Profile](#-fapi-20-security-profile).
+
+---
+
+## 🔌 Custom Configuration Rules
+
+A deployment adds its own rules next to the built-in ones. A rule is one class - its key, the texts the Admin UI shows, its parameters and the check over the pre-loaded configuration:
+
+```csharp
+public class ClientSecretMustExpireWithinOneYearRule
+    : ConfigurationRuleBase<ClientSecretMustExpireWithinOneYearRule.Configuration>
+{
+    public override string Key => "Skoruba.ClientSecretMustExpireWithinOneYear";
+    public override ConfigurationResourceType ResourceType => ConfigurationResourceType.Client;
+    public override string DisplayName => "Client Secret Must Expire Within One Year";
+    public override string Description => "Detects client secrets without an expiration or with one further away than the limit.";
+    public override IReadOnlyList<ConfigurationRuleParameter> Parameters { get; } =
+    [
+        ConfigurationRuleParameter.Number("maxDays", "Maximum Days", "Days a secret may stay valid", defaultValue: 365, minValue: 1)
+    ];
+    public override string DefaultConfiguration => "{\"maxDays\": 365}";
+    public override string DefaultMessageTemplate => "Client '{clientName}' has a secret that expires {expiration}, the limit is {maxDays} days";
+    public override string DefaultFixDescription => "Set the expiration of the secret to at most {maxDays} days from now.";
+
+    protected override IEnumerable<ConfigurationIssueView> Validate(ValidationContext context, Configuration configuration)
+    {
+        var maxDays = configuration.MaxDays ?? 365;
+        var limit = DateTime.UtcNow.AddDays(maxDays);
+
+        foreach (var client in context.Clients)
+        foreach (var secret in client.ClientSecrets.Where(s => s.Expiration == null || s.Expiration > limit))
+        {
+            yield return Issue(client, new Dictionary<string, string>
+            {
+                ["clientName"] = GetDisplayName(client.ClientName, client.ClientId),
+                ["expiration"] = secret.Expiration?.ToString("yyyy-MM-dd") ?? "never",
+                ["maxDays"] = maxDays.ToString()
+            });
+        }
+    }
+
+    public class Configuration { public int? MaxDays { get; set; } }
+}
+```
+
+Register the rules in `Startup` of the Admin API host, before or after `AddIdentityServerAdminApi`:
+
+```csharp
+services.AddConfigurationRulesFromAssemblyContaining<Startup>();
+```
+
+It registers every rule of the Admin API project, so another rule is just another class, e.g. in a `ConfigurationRules` folder. Use `AddConfigurationRule<TRule>()` to register a single rule instead.
+
+After the next start of the Admin API the rule is in the **Configuration Rules** list, switched off, with its default settings: `SeedConfiguration:ApplyConfigurationRulesSeed` (on by default) adds a disabled row for every registered rule that has none and never changes an existing one. Configure and enable it there like a built-in one. With the seed turned off, create it under **Configuration Rules → Add New Rule**. No migration is needed - a rule is a row, not schema. Keys of custom rules are namespaced (`Vendor.RuleName`) so they never collide with rules added to this project later. A rule must not query the database itself: everything it needs is in the pre-loaded context, and it runs on every dashboard load.
 
 ---
 

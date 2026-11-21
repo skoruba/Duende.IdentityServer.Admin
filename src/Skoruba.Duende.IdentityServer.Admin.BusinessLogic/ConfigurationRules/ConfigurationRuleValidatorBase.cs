@@ -55,7 +55,8 @@ public abstract class ConfigurationRuleValidatorBase
     /// </summary>
     protected string FormatMessage(string template, Dictionary<string, string> parameters)
     {
-        if (parameters == null || parameters.Count == 0)
+        // The fix description is optional, so an administrator may have cleared it
+        if (string.IsNullOrEmpty(template) || parameters == null || parameters.Count == 0)
         {
             return template;
         }

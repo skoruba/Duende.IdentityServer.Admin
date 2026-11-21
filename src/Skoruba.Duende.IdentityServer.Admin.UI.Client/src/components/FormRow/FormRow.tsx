@@ -387,6 +387,7 @@ const DateField: React.FC<DateFieldProps> = ({ field }) => {
           <Calendar
             mode="single"
             selected={selectedDate}
+            defaultMonth={selectedDate}
             onSelect={(date) => field.onChange(date ?? null)}
             autoFocus
           />

@@ -1,17 +1,18 @@
-export function getInitialsFromEmail(email: string): string {
-  const localPart = email.split("@")[0];
-  const parts = localPart.split(".");
+export function getInitialsFromEmail(
+  email: string | null | undefined,
+  fallbackName?: string | null,
+): string {
+  const localPart = email?.trim().split("@")[0];
+  const source = localPart || fallbackName?.trim();
 
-  let initials: string;
+  const parts = (source ?? "").split(".").filter((part) => part.length > 0);
 
-  if (parts.length === 1) {
-    initials = parts[0].charAt(0).toUpperCase();
-  } else {
-    initials = parts
-      .slice(0, 3)
-      .map((p) => p.charAt(0).toUpperCase())
-      .join("");
+  if (parts.length === 0) {
+    return "?";
   }
 
-  return initials;
+  return parts
+    .slice(0, 3)
+    .map((p) => p.charAt(0).toUpperCase())
+    .join("");
 }

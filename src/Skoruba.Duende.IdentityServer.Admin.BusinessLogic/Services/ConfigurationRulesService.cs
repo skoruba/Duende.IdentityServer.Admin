@@ -46,7 +46,12 @@ public class ConfigurationRulesService : IConfigurationRulesService
 
     public async Task<int> AddRuleAsync(ConfigurationRuleDto ruleDto)
     {
-        ValidateConfiguration(ruleDto);
+        if (_metadataProvider.GetMetadata(ruleDto.RuleType) == null)
+        {
+            throw new InvalidOperationException($"Rule type '{ruleDto.RuleType}' is not registered in this deployment.");
+        }
+
+        ValidateConfiguration(ruleDto.RuleType, ruleDto.Configuration);
 
         var exists = await _repository.RuleTypeExistsAsync(ruleDto.RuleType);
         if (exists)
@@ -59,15 +64,34 @@ public class ConfigurationRulesService : IConfigurationRulesService
         return created.Id;
     }
 
+    /// <summary>
+    /// Updates the settings of a stored rule. Its key stays - the repository does not write it -
+    /// so the configuration is checked against the stored rule, and a request with another key
+    /// is refused rather than validated against a rule it does not change. A rule no registered
+    /// rule describes is refused too: nothing could check its configuration, and a form without
+    /// the parameters would save it without one. It can still be toggled or deleted.
+    /// </summary>
     public async Task<int> UpdateRuleAsync(ConfigurationRuleDto ruleDto)
     {
-        ValidateConfiguration(ruleDto);
-
-        var exists = await _repository.RuleTypeExistsAsync(ruleDto.RuleType, ruleDto.Id);
-        if (exists)
+        var stored = await _repository.GetRuleByIdAsync(ruleDto.Id);
+        if (stored == null)
         {
-            throw new InvalidOperationException($"A rule with type '{ruleDto.RuleType}' already exists.");
+            return 0;
         }
+
+        if (!string.Equals(ruleDto.RuleType, stored.RuleType, StringComparison.Ordinal))
+        {
+            throw new InvalidOperationException(
+                $"The type of a stored rule cannot be changed from '{stored.RuleType}' to '{ruleDto.RuleType}'. Delete the rule and create it again.");
+        }
+
+        if (_metadataProvider.GetMetadata(stored.RuleType) == null)
+        {
+            throw new InvalidOperationException(
+                $"Rule type '{stored.RuleType}' is not registered in this deployment. Register the rule again to change its settings, or delete it.");
+        }
+
+        ValidateConfiguration(stored.RuleType, ruleDto.Configuration);
 
         var rule = ruleDto.ToEntity();
         return await _repository.UpdateRuleAsync(rule);
@@ -78,6 +102,10 @@ public class ConfigurationRulesService : IConfigurationRulesService
         return await _repository.DeleteRuleAsync(id);
     }
 
+    /// <summary>
+    /// Switches a rule on or off without validating its configuration again. A rule no registered
+    /// rule describes can be switched off, not on - the validation would skip it anyway.
+    /// </summary>
     public async Task<bool> ToggleRuleAsync(int id)
     {
         var rule = await _repository.GetRuleByIdAsync(id);
@@ -86,30 +114,36 @@ public class ConfigurationRulesService : IConfigurationRulesService
             return false;
         }
 
+        if (!rule.IsEnabled && _metadataProvider.GetMetadata(rule.RuleType) == null)
+        {
+            throw new InvalidOperationException(
+                $"Rule type '{rule.RuleType}' is not registered in this deployment. Register the rule again to enable it, or delete it.");
+        }
+
         rule.IsEnabled = !rule.IsEnabled;
         await _repository.UpdateRuleAsync(rule);
         return true;
     }
 
-    private void ValidateConfiguration(ConfigurationRuleDto ruleDto)
+    private void ValidateConfiguration(string ruleType, string configuration)
     {
-        if (string.IsNullOrWhiteSpace(ruleDto.Configuration))
+        if (string.IsNullOrWhiteSpace(configuration))
         {
             return;
         }
 
-        var metadata = _metadataProvider.GetMetadata(ruleDto.RuleType);
+        var metadata = _metadataProvider.GetMetadata(ruleType);
         if (metadata == null)
         {
-            throw new InvalidOperationException($"No metadata found for rule type '{ruleDto.RuleType}'");
+            throw new InvalidOperationException($"No metadata found for rule type '{ruleType}'");
         }
 
         if (metadata.Parameters == null || metadata.Parameters.Count == 0)
         {
-            if (!string.IsNullOrWhiteSpace(ruleDto.Configuration))
+            if (!string.IsNullOrWhiteSpace(configuration))
             {
                 throw new InvalidOperationException(
-                    $"Rule type '{ruleDto.RuleType}' does not accept configuration parameters, but configuration was provided: {ruleDto.Configuration}");
+                    $"Rule type '{ruleType}' does not accept configuration parameters, but configuration was provided: {configuration}");
             }
             return;
         }
@@ -117,12 +151,12 @@ public class ConfigurationRulesService : IConfigurationRulesService
         JsonDocument json;
         try
         {
-            json = JsonDocument.Parse(ruleDto.Configuration);
+            json = JsonDocument.Parse(configuration);
         }
         catch (JsonException ex)
         {
             throw new InvalidOperationException(
-                $"Invalid JSON in Configuration field: {ex.Message}. Configuration: {ruleDto.Configuration}",
+                $"Invalid JSON in Configuration field: {ex.Message}. Configuration: {configuration}",
                 ex);
         }
 
@@ -143,21 +177,23 @@ public class ConfigurationRulesService : IConfigurationRulesService
                                     $"Parameter '{paramName}' must be a number, but got {value.ValueKind}. Value: {value}");
                             }
 
-                            if (param.MinValue != null || param.MaxValue != null)
+                            // A number parameter is read as an int. A fraction or a value out of its range
+                            // would fail the deserialization and leave every parameter of the rule on its default
+                            if (!value.TryGetInt32(out var intValue))
                             {
-                                if (value.TryGetInt32(out var intValue))
-                                {
-                                    if (param.MinValue != null && intValue < Convert.ToInt32(param.MinValue))
-                                    {
-                                        throw new InvalidOperationException(
-                                            $"Parameter '{paramName}' value {intValue} is below minimum {param.MinValue}");
-                                    }
-                                    if (param.MaxValue != null && intValue > Convert.ToInt32(param.MaxValue))
-                                    {
-                                        throw new InvalidOperationException(
-                                            $"Parameter '{paramName}' value {intValue} exceeds maximum {param.MaxValue}");
-                                    }
-                                }
+                                throw new InvalidOperationException(
+                                    $"Parameter '{paramName}' must be a whole number, but got {value}");
+                            }
+
+                            if (param.MinValue != null && intValue < Convert.ToInt32(param.MinValue))
+                            {
+                                throw new InvalidOperationException(
+                                    $"Parameter '{paramName}' value {intValue} is below minimum {param.MinValue}");
+                            }
+                            if (param.MaxValue != null && intValue > Convert.ToInt32(param.MaxValue))
+                            {
+                                throw new InvalidOperationException(
+                                    $"Parameter '{paramName}' value {intValue} exceeds maximum {param.MaxValue}");
                             }
                             break;
 

@@ -9,9 +9,16 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfac
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.ClientRules;
 
-public class ObsoleteImplicitGrantRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
+public class ObsoleteImplicitGrantRule : ConfigurationRuleBase
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
+    public override string Key => ConfigurationRuleKeys.ObsoleteImplicitGrant;
+    public override ConfigurationResourceType ResourceType => ConfigurationResourceType.Client;
+    public override string DisplayName => "Obsolete Implicit Grant";
+    public override string Description => "Detects clients using the obsolete implicit grant flow which is no longer recommended for security reasons.";
+    public override string DefaultMessageTemplate => "Client uses obsolete implicit grant flow";
+    public override string DefaultFixDescription => "Navigate to Client Details → Advanced tab → Grant Types, remove 'implicit' and add 'authorization_code' instead.";
+
+    public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         return context.Clients
             .Where(c => c.AllowedGrantTypes.Any(g => g.GrantType == "implicit"))

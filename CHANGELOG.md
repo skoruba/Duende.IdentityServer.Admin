@@ -1,5 +1,71 @@
 # Changelog
 
+## [3.3.0] - 2026-11-15
+
+### Upgrading
+
+- New EF migration `ConfigurationRuleKeys` (SQL Server, PostgreSQL) changes `ConfigurationRules.RuleType` from a number to the key of the rule (`MissingPkce`, ...). A number the migration does not know - a custom rule stored under a value such as `1000` - becomes the text `"1000"`. No rule can be registered under it, because a custom key needs a namespace, so the list marks the row *Not registered* and validation skips it. Register the rule under a namespaced key and rename the row, which keeps its configuration, severity and texts: `UPDATE [ConfigurationRules] SET [RuleType] = 'Skoruba.MyRule' WHERE [RuleType] = '1000'` (SQL Server) or `UPDATE "ConfigurationRules" SET "RuleType" = 'Skoruba.MyRule' WHERE "RuleType" = '1000'` (PostgreSQL). The key is unique: if `SeedConfiguration:ApplyConfigurationRulesSeed` has already added a row for the new key, delete that row first. Alternatively delete the old row and create the rule again in the Admin UI
+- Apply `ConfigurationRuleKeys` before the Admin API of this version starts. The Admin API does it itself with `DatabaseMigrationsConfiguration:ApplyDatabaseMigrations`; where the migrations are applied outside the application, a start against the old column ends with an `InvalidCastException` (`Unable to cast object of type 'System.Int32' to type 'System.String'` on SQL Server, `Reading as 'System.String' is not supported for fields having DataTypeName 'integer'` on PostgreSQL)
+- A project created from the template keeps the migrations in its own `Admin.EntityFramework.SqlServer` and `Admin.EntityFramework.PostgreSQL` projects: copy `ConfigurationRuleKeys`, its `Designer` file and the model snapshot from a project created from the 3.3.0 template and adjust the namespace. A migration generated with `dotnet ef migrations add` changes the column and the seeded rows only, so a rule that was deleted and created again in the Admin UI keeps its number as the key and ends up *Not registered*
+- The Admin UI needs the Admin API TypeScript client regenerated for this version: `ConfigurationRuleDto.ruleType` is a string and the `ConfigurationRuleType` enum is gone
+- Error Logs: the settings are new and optional, a missing one keeps the behavior of the previous version. The STS writes into the `Log` table only once `ConnectionStrings:AdminLogDbConnection` is added to its configuration; the Admin API deletes nothing until `DatabaseLogConfiguration:RetentionDays` is set; the Admin UI shows the (then empty) page unless `AdminConfiguration:BasicConfiguration:ErrorLogsEnabled` is `false`. The `appsettings.json` shipped with the STS - the one in the Docker image - has `AdminLogDbConnection` with the LocalDB value of the other connection strings: a deployment that keeps the shipped file and sets the connection strings through the environment passes `ConnectionStrings__AdminLogDbConnection` to the STS as well, or switches the writing off with `DatabaseLogConfiguration__Enabled=false`. Until then the page stays empty and the STS reports every failed write on its standard error output. If your STS or Admin API `serilog.json` still has the `MSSqlServer` sink from the previous versions, remove it before you add `AdminLogDbConnection` to the STS - the STS writes into the table itself now, and both would write every event twice
+
+### Security
+
+- `System.Security.Cryptography.Xml` and `System.Security.Cryptography.Pkcs` resolve to 10.0.14 instead of the vulnerable 10.0.12 and 9.0.x (CVE-2026-84008, CVE-2026-70162 and three advisories for `Cryptography.Xml`). `Microsoft.Data.SqlClient` asks only for `Pkcs` 9.x, so the projects referencing it name `Pkcs` 10.0.14 explicitly
+- NuGet packages updated within their major versions: ASP.NET Core and EF Core 10.0.14, Duende IdentityServer 8.0.10, Duende.AccessTokenManagement 4.3.0, Microsoft.Identity.Web 4.18.0, Azure SDK and the test tooling
+
+### Added
+
+- Custom configuration rules ([#340](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/340)): derive from `ConfigurationRuleBase<TConfiguration>`, register with `services.AddConfigurationRule<TRule>()` or `AddConfigurationRulesFromAssemblyContaining<T>()`, and the rule is offered under *Configuration Rules*, where it is created like a built-in one. No migration involved. A rule may take constructor dependencies, scoped ones included; a rule that cannot be registered - a key without a namespace, a duplicate key - stops the host from starting
+- The README shows a custom rule and its registration in `Startup` of the Admin API host; the host itself registers only the built-in rules
+- `SeedConfiguration:ApplyConfigurationRulesSeed` (default `true`) creates a disabled row for every registered rule that has none on startup, so a rule added in code is in the list right after the deployment; existing rows are never changed. A built-in rule deleted in an earlier version comes back as a disabled row. Instances starting at the same time do not fail on the rows another instance saved first
+- *Configuration Rules* has a search and filters: the search goes through the name, the description, the key and the parameter values of a rule, the buttons filter by resource type and by enabled or disabled rules. They are kept in the URL
+- A stored rule no registered rule describes is marked *Not registered* in the list, which shows it muted, named after its key and without a description; validation skips it. It can be disabled or deleted; it can be enabled and its settings edited once the rule is registered again. While such a rule is enabled, a note next to the filters says how many enabled rules are not registered, and the row carries the same warning icon. The list offers the delete button only for such a rule; a registered rule is disabled instead (the API still deletes any rule)
+- *Used By* for API scopes and identity resources: a button in the list shows how many clients allow the scope and opens a dialog, the detail has a tab of the same name. Both list the clients that allow the scope and, for an API scope, the API resources that include it. Served by `GET /api/ApiScopes/{id}/Clients`, `GET /api/ApiScopes/{id}/ApiResources`, `GET /api/IdentityResources/{id}/Clients` and `GET /api/Clients/GetClientCountsByScopes?scopes=...` (one grouped query for the whole page of the list)
+- Error Logs ([#317](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/317)): **Monitoring → Error Logs** lists the warnings and errors of the STS with a search that ignores case on both providers, filters by level and by a time range to the minute (kept in the URL), shows the exception and the properties of each event, and deletes the events older than a picked day, which starts at midnight in the time zone of the browser like the times in the list. `GET /api/Logs/ErrorLog` (`searchText`, `levels`, `from` inclusive, `to` exclusive) and `DELETE /api/Logs/ErrorLog`
+- The STS writes its log events into the `Log` table of `AdminLogDbConnection` on SQL Server and PostgreSQL (new `Serilog.Sinks.Postgresql.Alternative`). `DatabaseLogConfiguration:Enabled` (default `true`) and `DatabaseLogConfiguration:MinimumLevel` (default `Warning`) of the STS control it. A write that fails - an unreachable database, a missing table - does not stop the STS and is reported on its standard error output
+- `DatabaseLogConfiguration:RetentionDays` of the Admin API deletes the older log events on startup and once a day (default `0`, off)
+- `AdminConfiguration:BasicConfiguration:ErrorLogsEnabled` of the Admin UI (default `true`) hides the page, its menu entry and the command palette item
+- Health endpoints `/health/live` and `/health/ready` on the STS and the Admin API ([#345](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/345), [discussion #344](https://github.com/skoruba/Duende.IdentityServer.Admin/discussions/344)). `/health/live` runs no checks and is meant for the liveness probe, so a database outage no longer restarts every instance; `/health/ready` runs the checks tagged `ready` (`HealthCheckEndpoints.ReadyTag`) for the readiness probe. `/health` is unchanged. The STS has a new `SigningKeys` check that loads its signing keys, so a new instance is ready only once it can issue tokens
+
+### Changed
+
+- Rule metadata lives in the rule classes; `ConfigurationRuleMetadataProvider` and `ConfigurationRuleValidatorFactory` read from the new `IConfigurationRuleRegistry`
+- Configuration rules and the *Rule Type* list are ordered by resource type and name
+- The email of a user is optional in the Admin API and the Admin UI: `UserDto.Email` drops `[Required]` (keeps `[EmailAddress]`), and `IdentityOptions:User:RequireUniqueEmail` decides whether a user without an email can be saved. With the default `true` the API still returns 400 for it. The new `GET /api/Users/Options` returns the setting, and the user form marks and validates the email by it; against an Admin API without the endpoint the email stays required. The TypeScript client types `IdentityUserDto.email` as `string | undefined`
+- Admin UI dependencies updated for `npm audit`: `zod` 4, `@hookform/resolvers` 7, `react-hook-form` 7.91, `vite` 6.4.5; `minimatch` is overridden to 11 for the lint tooling. The unused `i18next-http-backend` is removed. STS: `rimraf` 6.1.4
+- `serilog.json` of the STS and the Admin API no longer configure the `MSSqlServer` sink: its connection string pointed to LocalDB, and nothing was written outside Windows or on PostgreSQL
+- `ILogRepository.DeleteLogsOlderThanAsync` deletes the events older than the given instant; it used to cut the instant to the start of its day
+
+### Fixed
+
+- A rule with parameters whose fix description was cleared is no longer skipped by the validation
+- A number parameter only accepts a whole number: a fraction or a value out of the int range was saved and left the rule on its default configuration
+- The *Enabled* switch does not validate the configuration of the rule again
+- The rule form saves a number parameter with only a minimum or only a maximum; it failed with "Number must be less than or equal to null"
+- Saving a client without changes keeps an empty or missing *Client Claims Prefix*; it was saved as the default `client_` ([#334](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/334))
+- Saving a client without changes no longer resets *Protocol Type* to `oidc` and *Non Editable* to `false`
+- Updating a client, an API resource, an API scope, an identity resource or an identity provider keeps the stored `Created` (and `LastAccessed`, `NonEditable` where the API does not carry them); `Updated` is set by the server
+- Saving a user without changes keeps the stored *Lockout End* including seconds
+- The first click on the delete button of a claim or a property right after leaving another field is no longer lost
+- An enabled stored rule that no registered rule describes no longer logs an error with a stack trace on every validation; it is skipped quietly, as the list already marks it *Not registered*
+- The arrows of the date pickers switch the month again (secrets, user lockout, audit and error logs); the month caption covered them since `react-day-picker` 10; the pickers open on the month of the selected date ([#335](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/335), thanks @simontherry in [#336](https://github.com/skoruba/Duende.IdentityServer.Admin/pull/336))
+- Deleting a configuration rule is confirmed in the Admin UI dialog instead of the browser's `confirm`
+- The user lists no longer fail on a user without an email; the avatar takes the initials of the user name ([#333](https://github.com/skoruba/Duende.IdentityServer.Admin/issues/333))
+
+### Breaking Changes
+
+- The `ConfigurationRuleType` enum is replaced by string keys (`ConfigurationRuleKeys`): `ConfigurationRule.RuleType`, `ConfigurationRuleDto.RuleType`, `IConfigurationRuleValidatorFactory.Create`, `IConfigurationRuleMetadataProvider.GetMetadata` and `IConfigurationRulesRepository.RuleTypeExistsAsync` take a string. Code that replaced the factory or the metadata provider to add rules registers them with `AddConfigurationRule` instead
+- `POST /api/ConfigurationRules` with a key no registered rule has returns 409
+- `PUT /api/ConfigurationRules/{id}` with a `ruleType` other than the stored one returns 409 instead of saving the other fields and keeping the stored key; the configuration is validated against the stored rule. A rule no registered rule describes returns 409 as well
+- `POST` and `PUT /api/ConfigurationRules` with a fraction for a number parameter return 409
+- `PATCH /api/ConfigurationRules/{id}/toggle` that would enable a rule no registered rule describes returns 409
+- Forks of the Admin UI move to `zod` 4 and `@hookform/resolvers` 7: `invalid_type_error` and `required_error` become `error`, `ZodError.errors` becomes `issues`, and a form whose schema has `.default()` or `.transform()` is typed `useForm<z.input<…>, unknown, z.output<…>>`
+- `IClientRepository` and `IClientService` have `GetClientsByScopeAsync` and `GetClientCountsByScopesAsync`, `IApiResourceRepository` and `IApiResourceService` have `GetApiResourcesByScopeAsync`; a custom implementation of these interfaces has to add them. `ApiScopesController` takes `IClientService` and `IApiResourceService`, `IdentityResourcesController` takes `IClientService`
+- `LogsController` takes `ILogService` next to `IAuditLogService`
+- `ILogRepository` and `ILogService` have a `GetLogsAsync` overload with levels and a time range; a custom implementation of these interfaces has to add it
+
 ## [3.2.0] - 2026-10-03
 
 ### Upgrading

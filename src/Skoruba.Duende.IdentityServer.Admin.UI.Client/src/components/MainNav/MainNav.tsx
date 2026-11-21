@@ -44,6 +44,8 @@ import {
   identityItems,
   providersKeysItems,
   monitoringItems,
+  errorLogsItem,
+  getMonitoringItems,
 } from "./navItems";
 
 function isActive(item: NavItem, pathname: string) {
@@ -123,7 +125,7 @@ export function MainNav() {
   // session answers 401, and the global query error handler would then redirect
   // to /unauthorized while the login flow is still running.
   const { isAuthenticated } = useAuth();
-  const { identityManagementEnabled } = useUiConfiguration();
+  const { identityManagementEnabled, errorLogsEnabled } = useUiConfiguration();
   const { data, isLoading } = useConfigurationIssuesSummary({
     enabled: isAuthenticated,
   });
@@ -209,7 +211,7 @@ export function MainNav() {
         </NavDropdown>
 
         <NavDropdown
-          active={isGroupActive(monitoringItems)}
+          active={isGroupActive(getMonitoringItems(errorLogsEnabled))}
           label={t("Home.Monitoring")}
           icon={<Activity className="h-4 w-4" />}
           badge={
@@ -225,7 +227,6 @@ export function MainNav() {
           }
         >
           <div className="grid min-w-[420px] grid-cols-1 gap-2">
-            {renderDropdownItem(monitoringItems[0])}
             <DropdownMenuItem asChild>
               <Link
                 to={ConfigurationIssuesUrl}
@@ -257,7 +258,9 @@ export function MainNav() {
                 )}
               </Link>
             </DropdownMenuItem>
+            {renderDropdownItem(monitoringItems[1])}
             {renderDropdownItem(monitoringItems[2])}
+            {errorLogsEnabled && renderDropdownItem(errorLogsItem)}
           </div>
         </NavDropdown>
       </div>
@@ -273,7 +276,7 @@ function MobileNav() {
   const location = useLocation();
   const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
-  const { identityManagementEnabled } = useUiConfiguration();
+  const { identityManagementEnabled, errorLogsEnabled } = useUiConfiguration();
   const { data, isLoading } = useConfigurationIssuesSummary({
     enabled: isAuthenticated,
   });
@@ -309,7 +312,7 @@ function MobileNav() {
     {
       title: t("Home.Monitoring"),
       icon: <Activity className="h-4 w-4" />,
-      items: monitoringItems,
+      items: getMonitoringItems(errorLogsEnabled),
     },
   ];
 

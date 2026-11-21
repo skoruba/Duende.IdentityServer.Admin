@@ -250,8 +250,11 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Services
 
                 var updatedClientDto = await clientService.GetClientAsync(updatedClientEntity.Id);
 
-                //Assert updated client
-                updatedClientDto.Should().BeEquivalentTo(updatedClient, options => options.Excluding(o => o.Id));
+                //Assert updated client - the time stamps are kept by the server
+                updatedClientDto.Should().BeEquivalentTo(updatedClient, options => options
+                    .Excluding(o => o.Id)
+                    .Excluding(o => o.Updated)
+                    .Excluding(o => o.LastAccessed));
             }
         }
 

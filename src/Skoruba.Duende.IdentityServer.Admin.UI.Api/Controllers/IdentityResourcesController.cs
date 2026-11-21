@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration.Constants;
+using Skoruba.Duende.IdentityServer.Admin.UI.Api.Dtos.Clients;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Dtos.IdentityResources;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.ExceptionHandling;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Mappers;
@@ -23,11 +24,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
     {
         private readonly IIdentityResourceService _identityResourceService;
         private readonly IApiErrorResources _errorResources;
+        private readonly IClientService _clientService;
 
-        public IdentityResourcesController(IIdentityResourceService identityResourceService, IApiErrorResources errorResources)
+        public IdentityResourcesController(IIdentityResourceService identityResourceService, IApiErrorResources errorResources,
+            IClientService clientService)
         {
             _identityResourceService = identityResourceService;
             _errorResources = errorResources;
+            _clientService = clientService;
         }
 
         [HttpGet]
@@ -124,6 +128,16 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
             var identityResourcePropertiesApiDto = identityResourcePropertiesDto.ToIdentityResourcePropertiesApiDto();
 
             return Ok(identityResourcePropertiesApiDto);
+        }
+
+        [HttpGet("{id}/Clients")]
+        public async Task<ActionResult<ClientsApiDto>> GetClients(int id, int page = 1, int pageSize = 10)
+        {
+            var identityResourceDto = await _identityResourceService.GetIdentityResourceAsync(id);
+            var clientsDto = await _clientService.GetClientsByScopeAsync(identityResourceDto.Name, page, pageSize);
+            var clientsApiDto = clientsDto.ToClientsApiDto();
+
+            return Ok(clientsApiDto);
         }
 
         [HttpGet("Properties/{propertyId}")]

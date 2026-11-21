@@ -34,6 +34,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Inter
 
         Task<PagedList<Client>> GetClientsAsync(string search = "", int page = 1, int pageSize = 10);
 
+        Task<PagedList<Client>> GetClientsByScopeAsync(string scope, int page = 1, int pageSize = 10);
+
+        Task<Dictionary<string, int>> GetClientCountsByScopesAsync(IEnumerable<string> scopes);
+
         Task<List<string>> GetScopesAsync(string scope, int limit = 0, bool excludeIdentityResources = false,
 	        bool excludeApiScopes = false);
 

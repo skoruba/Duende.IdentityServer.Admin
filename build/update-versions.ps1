@@ -21,12 +21,12 @@ $targets = @(
     @{
         Path = Join-Path $root "src/Skoruba.Duende.IdentityServer.Admin.UI.Client/package.json"
         Pattern = '(?m)^(\s*)"version"\s*:\s*"[^"]+"'
-        Replacement = "$1`"version`": `"$new`""
+        Replacement = '$1"version": "' + $new + '"'
     },
     @{
         Path = Join-Path $root "src/Skoruba.Duende.IdentityServer.STS.Identity/package.json"
         Pattern = '(?m)^(\s*)"version"\s*:\s*"[^"]+"'
-        Replacement = "$1`"version`": `"$new`""
+        Replacement = '$1"version": "' + $new + '"'
     }
 )
 

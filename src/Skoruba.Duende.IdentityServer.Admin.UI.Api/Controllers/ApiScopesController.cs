@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Dtos.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services.Interfaces;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Configuration.Constants;
+using Skoruba.Duende.IdentityServer.Admin.UI.Api.Dtos.ApiResources;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Dtos.ApiScopes;
+using Skoruba.Duende.IdentityServer.Admin.UI.Api.Dtos.Clients;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.ExceptionHandling;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Mappers;
 using Skoruba.Duende.IdentityServer.Admin.UI.Api.Resources;
@@ -23,11 +25,16 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
     {
         private readonly IApiErrorResources _errorResources;
         private readonly IApiScopeService _apiScopeService;
+        private readonly IClientService _clientService;
+        private readonly IApiResourceService _apiResourceService;
 
-        public ApiScopesController(IApiErrorResources errorResources, IApiScopeService apiScopeService)
+        public ApiScopesController(IApiErrorResources errorResources, IApiScopeService apiScopeService,
+            IClientService clientService, IApiResourceService apiResourceService)
         {
             _errorResources = errorResources;
             _apiScopeService = apiScopeService;
+            _clientService = clientService;
+            _apiResourceService = apiResourceService;
         }
 
         [HttpGet]
@@ -79,6 +86,26 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
             var apiScopePropertiesApiDto = apiScopePropertiesDto.ToApiScopePropertiesApiDto();
 
             return Ok(apiScopePropertiesApiDto);
+        }
+
+        [HttpGet("{id}/Clients")]
+        public async Task<ActionResult<ClientsApiDto>> GetScopeClients(int id, int page = 1, int pageSize = 10)
+        {
+            var apiScopeDto = await _apiScopeService.GetApiScopeAsync(id);
+            var clientsDto = await _clientService.GetClientsByScopeAsync(apiScopeDto.Name, page, pageSize);
+            var clientsApiDto = clientsDto.ToClientsApiDto();
+
+            return Ok(clientsApiDto);
+        }
+
+        [HttpGet("{id}/ApiResources")]
+        public async Task<ActionResult<ApiResourcesApiDto>> GetScopeApiResources(int id, int page = 1, int pageSize = 10)
+        {
+            var apiScopeDto = await _apiScopeService.GetApiScopeAsync(id);
+            var apiResourcesDto = await _apiResourceService.GetApiResourcesByScopeAsync(apiScopeDto.Name, page, pageSize);
+            var apiResourcesApiDto = apiResourcesDto.ToApiResourcesApiDto();
+
+            return Ok(apiResourcesApiDto);
         }
 
         [HttpPost]

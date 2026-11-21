@@ -50,6 +50,14 @@ namespace Skoruba.Duende.IdentityServer.Admin.UI.Api.Controllers
             return Ok(clientApiDto);
         }
 
+        [HttpGet(nameof(GetClientCountsByScopes))]
+        public async Task<ActionResult<Dictionary<string, int>>> GetClientCountsByScopes([FromQuery] List<string> scopes)
+        {
+            var counts = await _clientService.GetClientCountsByScopesAsync(scopes ?? new List<string>());
+
+            return Ok(counts);
+        }
+
         [HttpGet(nameof(GetAccessTokenTypes))]
         public ActionResult<List<SelectItemDto>> GetAccessTokenTypes()
         {

@@ -112,3 +112,15 @@ export interface ClientSecretsData {
   totalCount: number;
   items: ClientSecretData[];
 }
+
+export interface ScopeClientData {
+  id: number;
+  clientId: string;
+  clientName: string;
+  enabled: boolean;
+}
+
+export interface ScopeClientsData {
+  totalCount: number;
+  items: ScopeClientData[];
+}

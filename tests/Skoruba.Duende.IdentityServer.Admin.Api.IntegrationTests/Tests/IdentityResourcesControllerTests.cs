@@ -33,7 +33,7 @@ namespace Skoruba.Duende.IdentityServer.Admin.Api.IntegrationTests.Tests
         {
         }
 
-        private static IdentityResourceApiDto BuildIdentityResourceCreatePayload(string name)
+        internal static IdentityResourceApiDto BuildIdentityResourceCreatePayload(string name)
         {
             var payload = IdentityResourceApiDtoMock.GenerateRandomIdentityResource(0);
             payload.Id = 0;

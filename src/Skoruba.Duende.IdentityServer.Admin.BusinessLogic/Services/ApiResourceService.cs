@@ -45,6 +45,16 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Services
             return apiResourcesDto;
         }
 
+        public virtual async Task<ApiResourcesDto> GetApiResourcesByScopeAsync(string scope, int page = 1, int pageSize = 10)
+        {
+            var pagedList = await ApiResourceRepository.GetApiResourcesByScopeAsync(scope, page, pageSize);
+            var apiResourcesDto = pagedList.ToModel();
+
+            await AuditEventLogger.LogEventAsync(new ApiResourcesRequestedEvent(apiResourcesDto));
+
+            return apiResourcesDto;
+        }
+
         public virtual async Task<ApiResourcePropertiesDto> GetApiResourcePropertiesAsync(int apiResourceId, int page = 1, int pageSize = 10)
         {
             var apiResource = await ApiResourceRepository.GetApiResourceAsync(apiResourceId);

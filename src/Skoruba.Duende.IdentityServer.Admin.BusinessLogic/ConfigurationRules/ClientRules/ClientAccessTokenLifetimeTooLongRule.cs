@@ -9,9 +9,24 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfac
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.ClientRules;
 
-public class ClientAccessTokenLifetimeTooLongRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
+public class ClientAccessTokenLifetimeTooLongRule : ConfigurationRuleBase
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
+    public override string Key => ConfigurationRuleKeys.ClientAccessTokenLifetimeTooLong;
+    public override ConfigurationResourceType ResourceType => ConfigurationResourceType.Client;
+    public override string DisplayName => "Client Access Token Lifetime Too Long";
+    public override string Description => "Detects clients with access token lifetime exceeding the recommended maximum.";
+
+    public override IReadOnlyList<ConfigurationRuleParameter> Parameters { get; } =
+    [
+        ConfigurationRuleParameter.Number("maxLifetimeSeconds", "Maximum Lifetime (seconds)", "Maximum allowed access token lifetime in seconds", defaultValue: 3600, minValue: 300, maxValue: 86400, required: true)
+    ];
+
+    public override string DefaultConfiguration => "{\"maxLifetimeSeconds\": 3600}";
+    public override string ExampleConfiguration => "{\"maxLifetimeSeconds\": 7200}";
+    public override string DefaultMessageTemplate => "Access token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s";
+    public override string DefaultFixDescription => "Navigate to Client Details → Advanced tab → Token, find 'Access Token Lifetime' field and reduce the value to {maxLifetime} seconds or less.";
+
+    public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<TokenLifetimeConfig>(configuration);
         var maxLifetime = config.MaxLifetimeSeconds > 0 ? config.MaxLifetimeSeconds : 3600; // Default 1 hour

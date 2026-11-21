@@ -3,9 +3,10 @@ import { useTranslation } from "react-i18next";
 import ApiScopeBasicsTab from "./Tabs/ApiScopeBasicsTab";
 import ApiScopeClaimsTab from "./Tabs/ApiScopeClaimsTab";
 import ApiScopeProperties from "./Tabs/ApiScopeProperties";
+import ApiScopeUsageTab from "./Tabs/ApiScopeUsageTab";
 import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Trash2, Info, User, Settings } from "lucide-react";
+import { Trash2, Info, User, Settings, Link2 } from "lucide-react";
 
 type ApiScopeTabsProps = {
   apiScopeDelete?: () => void;
@@ -35,6 +36,13 @@ const ApiScopeTabs: React.FC<ApiScopeTabsProps> = ({ apiScopeDelete }) => {
               {t("ApiScope.Tabs.Properties")}
             </TabsTrigger>
           )}
+
+          {scopeId && (
+            <TabsTrigger value="usedBy" className="flex items-center gap-2">
+              <Link2 className="h-4 w-4" />
+              {t("ApiScope.Tabs.UsedBy")}
+            </TabsTrigger>
+          )}
         </TabsList>
 
         <div className="inline-flex">
@@ -60,6 +68,11 @@ const ApiScopeTabs: React.FC<ApiScopeTabsProps> = ({ apiScopeDelete }) => {
       {scopeId && (
         <TabsContent value="properties">
           <ApiScopeProperties />
+        </TabsContent>
+      )}
+      {scopeId && (
+        <TabsContent value="usedBy">
+          <ApiScopeUsageTab />
         </TabsContent>
       )}
     </Tabs>

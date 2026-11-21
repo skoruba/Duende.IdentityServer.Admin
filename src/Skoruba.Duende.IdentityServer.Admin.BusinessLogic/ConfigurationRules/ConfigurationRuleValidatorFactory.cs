@@ -2,46 +2,31 @@
 // Licensed under the Apache License, Version 2.0.
 
 using System;
-using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.ApiResourceRules;
-using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.ApiScopeRules;
-using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.ClientRules;
-using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.IdentityResourceRules;
-using Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.SecurityRules;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Entities;
+using Microsoft.Extensions.DependencyInjection;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.ConfigurationRules;
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules;
 
+/// <summary>
+/// Creates a rule instance for one validation run. The instance comes from the service
+/// provider, so a rule may take constructor dependencies.
+/// </summary>
 public class ConfigurationRuleValidatorFactory : IConfigurationRuleValidatorFactory
 {
-    public IConfigurationRuleValidator Create(ConfigurationRuleType ruleType)
+    private readonly IConfigurationRuleRegistry _registry;
+    private readonly IServiceProvider _serviceProvider;
+
+    public ConfigurationRuleValidatorFactory(IConfigurationRuleRegistry registry, IServiceProvider serviceProvider)
     {
-        return ruleType switch
-        {
-            ConfigurationRuleType.ObsoleteImplicitGrant => new ObsoleteImplicitGrantRule(),
-            ConfigurationRuleType.ObsoletePasswordGrant => new ObsoletePasswordGrantRule(),
-            ConfigurationRuleType.MissingPkce => new MissingPkceRule(),
-            ConfigurationRuleType.ClientRedirectUrisMustUseHttps => new ClientRedirectUrisMustUseHttpsRule(),
-            ConfigurationRuleType.ClientAccessTokenLifetimeTooLong => new ClientAccessTokenLifetimeTooLongRule(),
-            ConfigurationRuleType.ClientMustHaveScopes => new ClientMustHaveScopesRule(),
-            ConfigurationRuleType.ClientRefreshTokenLifetimeTooLong => new ClientRefreshTokenLifetimeTooLongRule(),
-            ConfigurationRuleType.ClientNameMustStartWith => new ClientNameMustStartWithRule(),
-            ConfigurationRuleType.ClientNameMustNotContain => new ClientNameMustNotContainRule(),
-            ConfigurationRuleType.ClientIdMustStartWith => new ClientIdMustStartWithRule(),
-            ConfigurationRuleType.ClientIdMustNotContain => new ClientIdMustNotContainRule(),
-            ConfigurationRuleType.ClientScopeMustExist => new ClientScopeMustExistRule(),
-            ConfigurationRuleType.ClientSigningAlgorithmsMustBeFapiCompliant => new ClientSigningAlgorithmsMustBeFapiCompliantRule(),
-            ConfigurationRuleType.ApiResourceSigningAlgorithmsMustBeFapiCompliant => new ApiResourceSigningAlgorithmsMustBeFapiCompliantRule(),
-            ConfigurationRuleType.ApiScopeNameMustStartWith => new ApiScopeNameMustStartWithRule(),
-            ConfigurationRuleType.ApiScopeNameMustNotContain => new ApiScopeNameMustNotContainRule(),
-            ConfigurationRuleType.ApiScopeMustHaveDisplayName => new ApiScopeMustHaveDisplayNameRule(),
-            ConfigurationRuleType.ApiResourceMustHaveScopes => new ApiResourceMustHaveScopesRule(),
-            ConfigurationRuleType.ApiResourceNameMustStartWith => new ApiResourceNameMustStartWithRule(),
-            ConfigurationRuleType.IdentityResourceMustBeEnabled => new IdentityResourceMustBeEnabledRule(),
-            ConfigurationRuleType.IdentityResourceNameMustStartWith => new IdentityResourceNameMustStartWithRule(),
-            ConfigurationRuleType.ScopeIsUnused => new ScopeIsUnusedRule(),
-            ConfigurationRuleType.SecretIsExpiredInDays => new SecretIsExpiredInDaysRule(),
-            _ => throw new NotSupportedException($"Rule type {ruleType} is not implemented yet")
-        };
+        _registry = registry;
+        _serviceProvider = serviceProvider;
+    }
+
+    public IConfigurationRuleValidator Create(string ruleType)
+    {
+        var descriptor = _registry.Find(ruleType)
+            ?? throw new NotSupportedException($"Configuration rule '{ruleType}' is not registered in this deployment. Register it with services.AddConfigurationRule<TRule>() or delete the stored rule.");
+
+        return (IConfigurationRuleValidator)ActivatorUtilities.CreateInstance(_serviceProvider, descriptor.ImplementationType);
     }
 }

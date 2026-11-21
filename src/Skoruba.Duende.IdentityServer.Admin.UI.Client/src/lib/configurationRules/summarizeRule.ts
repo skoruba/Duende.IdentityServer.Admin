@@ -68,12 +68,15 @@ const formatValues = (
   return [String(value)];
 };
 
+const nameFromKey = (ruleType: string): string =>
+  humanizePascalCase(ruleType.slice(ruleType.lastIndexOf(".") + 1));
+
 /**
  * What the rules list shows for a rule: the name and description from the rule
  * metadata, and the values it checks against. A parameter missing from the stored
  * configuration shows its default, which is the value the rule validator falls
- * back to. A rule the metadata does not know keeps its humanized type and its
- * message template.
+ * back to. A rule that is not registered has no metadata: the list names it
+ * after its key. Its message template is not a description, so it stays out.
  */
 export const summarizeRule = (
   rule: RuleLike,
@@ -86,8 +89,7 @@ export const summarizeRule = (
 
   if (!meta) {
     return {
-      name: humanizePascalCase(String(rule.ruleType)),
-      description: rule.messageTemplate,
+      name: nameFromKey(String(rule.ruleType)),
       parameters: [],
     };
   }
@@ -105,7 +107,7 @@ export const summarizeRule = (
   });
 
   return {
-    name: meta.displayName || humanizePascalCase(String(rule.ruleType)),
+    name: meta.displayName || nameFromKey(String(rule.ruleType)),
     description: meta.description || rule.messageTemplate,
     parameters,
   };

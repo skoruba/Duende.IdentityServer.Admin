@@ -12,6 +12,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Repositories.Inter
     {
         Task<PagedList<ApiResource>> GetApiResourcesAsync(string search, int page = 1, int pageSize = 10);
 
+        Task<PagedList<ApiResource>> GetApiResourcesByScopeAsync(string scope, int page = 1, int pageSize = 10);
+
         Task<ApiResource> GetApiResourceAsync(int apiResourceId);
 
         Task<PagedList<ApiResourceProperty>> GetApiResourcePropertiesAsync(int apiResourceId, int page = 1, int pageSize = 10);

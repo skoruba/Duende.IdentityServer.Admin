@@ -47,8 +47,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Extensions
 
             // Configuration Rules
             services.AddTransient<IConfigurationRulesRepository, ConfigurationRulesRepository<TAdminConfigurationDbContext>>();
+            services.AddBuiltInConfigurationRules();
             services.AddScoped<IConfigurationRuleValidatorFactory, ConfigurationRuleValidatorFactory>();
-            services.AddScoped<IConfigurationRuleMetadataProvider, ConfigurationRuleMetadataProvider>();
+            services.AddSingleton<IConfigurationRuleMetadataProvider, ConfigurationRuleMetadataProvider>();
 
             //Services
             services.AddTransient<IClientService, ClientService>();

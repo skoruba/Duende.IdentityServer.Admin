@@ -2,8 +2,10 @@
 // Licensed under the Apache License, Version 2.0.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Duende.IdentityServer.EntityFramework.Entities;
 using Duende.IdentityServer.EntityFramework.Options;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -86,6 +88,31 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
                 apiResource.UserClaims.Should().BeEquivalentTo(newApiResource.UserClaims,
                     option => option.Excluding(x => x.Path.EndsWith("Id"))
                         .Excluding(x => x.Path.EndsWith("ApiResource")));
+            }
+        }
+
+        [Fact]
+        public async Task GetApiResourcesByScopeAsync()
+        {
+            const string usedScope = "used_by_scope_test";
+
+            using (var context = GetDbContext())
+            {
+                var apiResourceRepository = GetApiResourceRepository(context);
+
+                var apiResourceWithScope = ApiResourceMock.GenerateRandomApiResource(0);
+                apiResourceWithScope.Scopes = new List<ApiResourceScope> { new ApiResourceScope { Scope = usedScope } };
+
+                var otherApiResource = ApiResourceMock.GenerateRandomApiResource(0);
+                otherApiResource.Scopes = new List<ApiResourceScope> { new ApiResourceScope { Scope = $"{usedScope}_other" } };
+
+                await apiResourceRepository.AddApiResourceAsync(apiResourceWithScope);
+                await apiResourceRepository.AddApiResourceAsync(otherApiResource);
+
+                var apiResources = await apiResourceRepository.GetApiResourcesByScopeAsync(usedScope);
+
+                apiResources.TotalCount.Should().Be(1);
+                apiResources.Data.Should().ContainSingle(x => x.Id == apiResourceWithScope.Id);
             }
         }
 
@@ -378,6 +405,37 @@ namespace Skoruba.Duende.IdentityServer.Admin.UnitTests.Repositories
 
                 apiResourceProperty.Should().BeEquivalentTo(resourceProperty,
                     options => options.Excluding(o => o.Id).Excluding(x => x.ApiResource));
+            }
+        }
+
+        [Fact]
+        public async Task UpdateApiResourceAsyncKeepsValuesTheUpdateDoesNotCarry()
+        {
+            using (var context = GetDbContext())
+            {
+                var apiResourceRepository = GetApiResourceRepository(context);
+
+                var apiResource = ApiResourceMock.GenerateRandomApiResource(0);
+                apiResource.Created = new DateTime(2020, 1, 2, 3, 4, 5, DateTimeKind.Utc);
+                apiResource.LastAccessed = new DateTime(2021, 2, 3, 4, 5, 6, DateTimeKind.Utc);
+                apiResource.NonEditable = true;
+                await apiResourceRepository.AddApiResourceAsync(apiResource);
+                context.ChangeTracker.Clear();
+
+                //The update comes without these values, as from the API
+                var updatedApiResource = ApiResourceMock.GenerateRandomApiResource(apiResource.Id);
+                updatedApiResource.Created = DateTime.UtcNow;
+                updatedApiResource.LastAccessed = null;
+                updatedApiResource.NonEditable = false;
+                await apiResourceRepository.UpdateApiResourceAsync(updatedApiResource);
+                context.ChangeTracker.Clear();
+
+                var storedApiResource = await context.ApiResources.SingleAsync(x => x.Id == apiResource.Id);
+                storedApiResource.Created.Should().Be(apiResource.Created);
+                storedApiResource.Updated.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMinutes(1));
+                storedApiResource.LastAccessed.Should().Be(apiResource.LastAccessed);
+                storedApiResource.NonEditable.Should().BeTrue();
+                storedApiResource.Name.Should().Be(updatedApiResource.Name);
             }
         }
     }

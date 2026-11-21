@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { UserFormMode } from "../UserForm";
 import { CardWrapper } from "@/components/CardWrapper/CardWrapper";
 import { Info } from "lucide-react";
+import { useUserOptions } from "@/services/UserServices";
 
 type BasicsTabProps = {
   mode: UserFormMode;
@@ -10,6 +11,7 @@ type BasicsTabProps = {
 
 const BasicsTab: React.FC<BasicsTabProps> = ({ mode }) => {
   const { t } = useTranslation();
+  const { data: userOptions } = useUserOptions();
 
   return (
     <CardWrapper
@@ -37,7 +39,7 @@ const BasicsTab: React.FC<BasicsTabProps> = ({ mode }) => {
           label={t("User.Section.Label.UserEmail_Label")}
           description={t("User.Section.Label.UserEmail_Info")}
           type="input"
-          required
+          required={userOptions?.requireUniqueEmail ?? true}
         />
         {mode === UserFormMode.Edit && (
           <FormRow

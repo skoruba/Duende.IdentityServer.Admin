@@ -10,9 +10,25 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfac
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.SecurityRules;
 
-public class SecretIsExpiredInDaysRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
+public class SecretIsExpiredInDaysRule : ConfigurationRuleBase
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
+    public override string Key => ConfigurationRuleKeys.SecretIsExpiredInDays;
+    public override ConfigurationResourceType ResourceType => ConfigurationResourceType.Client;
+    public override string DisplayName => "Secret Is Expired In Days";
+    public override string Description => "Detects client secrets that are expired or will expire within a specified number of days, helping prevent authentication failures.";
+
+    public override IReadOnlyList<ConfigurationRuleParameter> Parameters { get; } =
+    [
+        ConfigurationRuleParameter.Number("warningDays", "Warning Days", "Number of days before expiration to start warning", defaultValue: 30, minValue: 1, maxValue: 365),
+        ConfigurationRuleParameter.Boolean("includeAlreadyExpired", "Include Already Expired", "Include secrets that are already expired", defaultValue: true)
+    ];
+
+    public override string DefaultConfiguration => "{\"warningDays\": 30, \"includeAlreadyExpired\": true}";
+    public override string ExampleConfiguration => "{\"warningDays\": 14, \"includeAlreadyExpired\": false}";
+    public override string DefaultMessageTemplate => "Client '{clientName}' has a secret ({secretType}) that {status} in {daysUntilExpiry} day(s) on {expirationDate}";
+    public override string DefaultFixDescription => "Navigate to Client Details → Advanced tab → Authentication → Secrets section, remove the expired secret and add a new one with proper expiration date.";
+
+    public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<ExpirationConfig>(configuration);
         var warningDays = config.WarningDays ?? 30;

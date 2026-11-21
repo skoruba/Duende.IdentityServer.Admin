@@ -66,6 +66,8 @@ export interface IApiScopesClient {
     deleteScope(id: number): Promise<void>;
     getScopeProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiScopePropertiesApiDto>;
     postProperty(id: number, apiScopePropertyApi: ApiScopePropertyApiDto): Promise<ApiScopePropertyApiDto>;
+    getScopeClients(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientsApiDto>;
+    getScopeApiResources(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiResourcesApiDto>;
     getProperty(propertyId: number): Promise<ApiScopePropertyApiDto>;
     deleteProperty(propertyId: number): Promise<void>;
 }
@@ -94,6 +96,10 @@ export declare class ApiScopesClient extends WebApiClientBase implements IApiSco
     protected processGetScopeProperties(response: Response): Promise<ApiScopePropertiesApiDto>;
     postProperty(id: number, apiScopePropertyApi: ApiScopePropertyApiDto): Promise<ApiScopePropertyApiDto>;
     protected processPostProperty(response: Response): Promise<ApiScopePropertyApiDto>;
+    getScopeClients(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientsApiDto>;
+    protected processGetScopeClients(response: Response): Promise<ClientsApiDto>;
+    getScopeApiResources(id: number, page: number | undefined, pageSize: number | undefined): Promise<ApiResourcesApiDto>;
+    protected processGetScopeApiResources(response: Response): Promise<ApiResourcesApiDto>;
     getProperty(propertyId: number): Promise<ApiScopePropertyApiDto>;
     protected processGetProperty(response: Response): Promise<ApiScopePropertyApiDto>;
     deleteProperty(propertyId: number): Promise<void>;
@@ -105,6 +111,9 @@ export interface IClientsClient {
     put(client: ClientApiDto): Promise<void>;
     get2(id: number): Promise<ClientApiDto>;
     delete(id: number): Promise<void>;
+    getClientCountsByScopes(scopes: string[] | null | undefined): Promise<{
+        [key: string]: number;
+    }>;
     getAccessTokenTypes(): Promise<SelectItemDto[]>;
     getTokenExpirations(): Promise<SelectItemDto[]>;
     getTokenUsage(): Promise<SelectItemDto[]>;
@@ -148,6 +157,12 @@ export declare class ClientsClient extends WebApiClientBase implements IClientsC
     protected processGet2(response: Response): Promise<ClientApiDto>;
     delete(id: number): Promise<void>;
     protected processDelete(response: Response): Promise<void>;
+    getClientCountsByScopes(scopes: string[] | null | undefined): Promise<{
+        [key: string]: number;
+    }>;
+    protected processGetClientCountsByScopes(response: Response): Promise<{
+        [key: string]: number;
+    }>;
     getAccessTokenTypes(): Promise<SelectItemDto[]>;
     protected processGetAccessTokenTypes(response: Response): Promise<SelectItemDto[]>;
     getTokenExpirations(): Promise<SelectItemDto[]>;
@@ -223,7 +238,7 @@ export interface IConfigurationRulesClient {
     delete(id: number): Promise<FileResponse>;
     toggleRule(id: number): Promise<FileResponse>;
     getAllMetadata(): Promise<ConfigurationRuleMetadataDto[]>;
-    getMetadata(ruleType: ConfigurationRuleType): Promise<ConfigurationRuleMetadataDto>;
+    getMetadata(ruleType: string): Promise<ConfigurationRuleMetadataDto>;
 }
 export declare class ConfigurationRulesClient extends WebApiClientBase implements IConfigurationRulesClient {
     private http;
@@ -246,7 +261,7 @@ export declare class ConfigurationRulesClient extends WebApiClientBase implement
     protected processToggleRule(response: Response): Promise<FileResponse>;
     getAllMetadata(): Promise<ConfigurationRuleMetadataDto[]>;
     protected processGetAllMetadata(response: Response): Promise<ConfigurationRuleMetadataDto[]>;
-    getMetadata(ruleType: ConfigurationRuleType): Promise<ConfigurationRuleMetadataDto>;
+    getMetadata(ruleType: string): Promise<ConfigurationRuleMetadataDto>;
     protected processGetMetadata(response: Response): Promise<ConfigurationRuleMetadataDto>;
 }
 export interface IDashboardClient {
@@ -309,6 +324,7 @@ export interface IIdentityResourcesClient {
     canInsertIdentityResourceProperty(id: number | undefined, key: string | null | undefined): Promise<boolean>;
     getProperties(id: number, page: number | undefined, pageSize: number | undefined): Promise<IdentityResourcePropertiesApiDto>;
     postProperty(id: number, identityResourcePropertyApi: IdentityResourcePropertyApiDto): Promise<IdentityResourcePropertyApiDto>;
+    getClients(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientsApiDto>;
     getProperty(propertyId: number): Promise<IdentityResourcePropertyApiDto>;
     deleteProperty(propertyId: number): Promise<void>;
 }
@@ -337,6 +353,8 @@ export declare class IdentityResourcesClient extends WebApiClientBase implements
     protected processGetProperties(response: Response): Promise<IdentityResourcePropertiesApiDto>;
     postProperty(id: number, identityResourcePropertyApi: IdentityResourcePropertyApiDto): Promise<IdentityResourcePropertyApiDto>;
     protected processPostProperty(response: Response): Promise<IdentityResourcePropertyApiDto>;
+    getClients(id: number, page: number | undefined, pageSize: number | undefined): Promise<ClientsApiDto>;
+    protected processGetClients(response: Response): Promise<ClientsApiDto>;
     getProperty(propertyId: number): Promise<IdentityResourcePropertyApiDto>;
     protected processGetProperty(response: Response): Promise<IdentityResourcePropertyApiDto>;
     deleteProperty(propertyId: number): Promise<void>;
@@ -385,6 +403,8 @@ export declare class KeysClient extends WebApiClientBase implements IKeysClient 
 }
 export interface ILogsClient {
     auditLog(event: string | null | undefined, source: string | null | undefined, category: string | null | undefined, createdDate: string | null | undefined, subjectIdentifier: string | null | undefined, subjectName: string | null | undefined, pageSize: number | undefined, page: number | undefined): Promise<AuditLogsDto>;
+    errorLog(searchText: string | null | undefined, levels: string[] | null | undefined, from: Date | null | undefined, to: Date | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ErrorLogsApiDto>;
+    deleteErrorLog(deleteOlderThan: Date | undefined): Promise<void>;
 }
 export declare class LogsClient extends WebApiClientBase implements ILogsClient {
     private http;
@@ -395,6 +415,10 @@ export declare class LogsClient extends WebApiClientBase implements ILogsClient 
     });
     auditLog(event: string | null | undefined, source: string | null | undefined, category: string | null | undefined, createdDate: string | null | undefined, subjectIdentifier: string | null | undefined, subjectName: string | null | undefined, pageSize: number | undefined, page: number | undefined): Promise<AuditLogsDto>;
     protected processAuditLog(response: Response): Promise<AuditLogsDto>;
+    errorLog(searchText: string | null | undefined, levels: string[] | null | undefined, from: Date | null | undefined, to: Date | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<ErrorLogsApiDto>;
+    protected processErrorLog(response: Response): Promise<ErrorLogsApiDto>;
+    deleteErrorLog(deleteOlderThan: Date | undefined): Promise<void>;
+    protected processDeleteErrorLog(response: Response): Promise<void>;
 }
 export interface IPersistedGrantsClient {
     get(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<PersistedGrantSubjectsApiDto>;
@@ -462,6 +486,7 @@ export declare class RolesClient extends WebApiClientBase implements IRolesClien
     protected processPutRoleClaims(response: Response): Promise<void>;
 }
 export interface IUsersClient {
+    getOptions(): Promise<UserOptionsApiDto>;
     get(id: string): Promise<IdentityUserDto>;
     delete(id: string): Promise<void>;
     get2(searchText: string | null | undefined, page: number | undefined, pageSize: number | undefined): Promise<IdentityUsersDto>;
@@ -488,6 +513,8 @@ export declare class UsersClient extends WebApiClientBase implements IUsersClien
     constructor(baseUrl?: string, http?: {
         fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
     });
+    getOptions(): Promise<UserOptionsApiDto>;
+    protected processGetOptions(response: Response): Promise<UserOptionsApiDto>;
     get(id: string): Promise<IdentityUserDto>;
     protected processGet(response: Response): Promise<IdentityUserDto>;
     delete(id: string): Promise<void>;
@@ -1086,7 +1113,7 @@ export interface IConfigurationRulesDto {
 }
 export declare class ConfigurationRuleDto implements IConfigurationRuleDto {
     id: number;
-    ruleType: ConfigurationRuleType;
+    ruleType: string;
     resourceType: ConfigurationResourceType;
     issueType: ConfigurationIssueType;
     isEnabled: boolean;
@@ -1102,7 +1129,7 @@ export declare class ConfigurationRuleDto implements IConfigurationRuleDto {
 }
 export interface IConfigurationRuleDto {
     id: number;
-    ruleType: ConfigurationRuleType;
+    ruleType: string;
     resourceType: ConfigurationResourceType;
     issueType: ConfigurationIssueType;
     isEnabled: boolean;
@@ -1111,31 +1138,6 @@ export interface IConfigurationRuleDto {
     fixDescription: string | undefined;
     createdAt: Date;
     updatedAt: Date | undefined;
-}
-export declare enum ConfigurationRuleType {
-    ObsoleteImplicitGrant = "ObsoleteImplicitGrant",
-    ObsoletePasswordGrant = "ObsoletePasswordGrant",
-    MissingPkce = "MissingPkce",
-    ClientRedirectUrisMustUseHttps = "ClientRedirectUrisMustUseHttps",
-    ClientMustHaveScopes = "ClientMustHaveScopes",
-    ClientAccessTokenLifetimeTooLong = "ClientAccessTokenLifetimeTooLong",
-    ClientRefreshTokenLifetimeTooLong = "ClientRefreshTokenLifetimeTooLong",
-    ApiScopeNameMustStartWith = "ApiScopeNameMustStartWith",
-    ApiScopeNameMustNotContain = "ApiScopeNameMustNotContain",
-    ApiScopeMustHaveDisplayName = "ApiScopeMustHaveDisplayName",
-    ApiResourceMustHaveScopes = "ApiResourceMustHaveScopes",
-    ApiResourceNameMustStartWith = "ApiResourceNameMustStartWith",
-    IdentityResourceMustBeEnabled = "IdentityResourceMustBeEnabled",
-    IdentityResourceNameMustStartWith = "IdentityResourceNameMustStartWith",
-    ScopeIsUnused = "ScopeIsUnused",
-    SecretIsExpiredInDays = "SecretIsExpiredInDays",
-    ClientNameMustStartWith = "ClientNameMustStartWith",
-    ClientNameMustNotContain = "ClientNameMustNotContain",
-    ClientIdMustStartWith = "ClientIdMustStartWith",
-    ClientIdMustNotContain = "ClientIdMustNotContain",
-    ClientScopeMustExist = "ClientScopeMustExist",
-    ClientSigningAlgorithmsMustBeFapiCompliant = "ClientSigningAlgorithmsMustBeFapiCompliant",
-    ApiResourceSigningAlgorithmsMustBeFapiCompliant = "ApiResourceSigningAlgorithmsMustBeFapiCompliant"
 }
 export declare enum ConfigurationIssueType {
     Warning = "Warning",
@@ -1484,6 +1486,42 @@ export interface IAuditLogsDto {
     totalCount: number;
     pageSize: number;
 }
+export declare class ErrorLogsApiDto implements IErrorLogsApiDto {
+    logs: ErrorLogApiDto[] | undefined;
+    totalCount: number;
+    pageSize: number;
+    constructor(data?: IErrorLogsApiDto);
+    init(_data?: any): void;
+    static fromJS(data: any): ErrorLogsApiDto;
+    toJSON(data?: any): any;
+}
+export interface IErrorLogsApiDto {
+    logs: ErrorLogApiDto[] | undefined;
+    totalCount: number;
+    pageSize: number;
+}
+export declare class ErrorLogApiDto implements IErrorLogApiDto {
+    id: number;
+    level: string | undefined;
+    timeStamp: Date;
+    message: string | undefined;
+    messageTemplate: string | undefined;
+    exception: string | undefined;
+    logEvent: string | undefined;
+    constructor(data?: IErrorLogApiDto);
+    init(_data?: any): void;
+    static fromJS(data: any): ErrorLogApiDto;
+    toJSON(data?: any): any;
+}
+export interface IErrorLogApiDto {
+    id: number;
+    level: string | undefined;
+    timeStamp: Date;
+    message: string | undefined;
+    messageTemplate: string | undefined;
+    exception: string | undefined;
+    logEvent: string | undefined;
+}
 export declare class PersistedGrantSubjectsApiDto implements IPersistedGrantSubjectsApiDto {
     totalCount: number;
     pageSize: number;
@@ -1660,7 +1698,7 @@ export interface IBaseUserDtoOfString {
 }
 export declare class UserDtoOfString extends BaseUserDtoOfString implements IUserDtoOfString {
     userName: string;
-    email: string;
+    email: string | undefined;
     emailConfirmed: boolean;
     phoneNumber: string | undefined;
     phoneNumberConfirmed: boolean;
@@ -1675,7 +1713,7 @@ export declare class UserDtoOfString extends BaseUserDtoOfString implements IUse
 }
 export interface IUserDtoOfString extends IBaseUserDtoOfString {
     userName: string;
-    email: string;
+    email: string | undefined;
     emailConfirmed: boolean;
     phoneNumber: string | undefined;
     phoneNumberConfirmed: boolean;
@@ -1745,6 +1783,16 @@ export declare class TKey implements ITKey {
     toJSON(data?: any): any;
 }
 export interface ITKey {
+}
+export declare class UserOptionsApiDto implements IUserOptionsApiDto {
+    requireUniqueEmail: boolean;
+    constructor(data?: IUserOptionsApiDto);
+    init(_data?: any): void;
+    static fromJS(data: any): UserOptionsApiDto;
+    toJSON(data?: any): any;
+}
+export interface IUserOptionsApiDto {
+    requireUniqueEmail: boolean;
 }
 export declare class UserRolesApiDtoOfIdentityRoleDto implements IUserRolesApiDtoOfIdentityRoleDto {
     roles: IdentityRoleDto[] | undefined;

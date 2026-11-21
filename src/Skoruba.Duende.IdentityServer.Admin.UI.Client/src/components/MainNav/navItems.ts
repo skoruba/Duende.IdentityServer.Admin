@@ -3,6 +3,7 @@ import {
   Cable,
   Cog,
   FileLock2,
+  FileWarning,
   Fingerprint,
   KeyRound,
   Laptop,
@@ -35,6 +36,7 @@ import {
   IdentityProviderCreateUrl,
   KeysUrl,
   AuditLogsUrl,
+  ErrorLogsUrl,
   ConfigurationIssuesUrl,
   ConfigurationRulesUrl,
 } from "@/routing/Urls";
@@ -149,14 +151,15 @@ export const providersKeysItems: NavItem[] = [
   },
 ];
 
+export const errorLogsItem: NavItem = {
+  translationKey: "Home.ErrorLogs",
+  href: ErrorLogsUrl,
+  activeBasePaths: [ErrorLogsUrl],
+  icon: FileWarning,
+  kind: "monitoring",
+};
+
 export const monitoringItems: NavItem[] = [
-  {
-    translationKey: "Home.AuditLogs",
-    href: AuditLogsUrl,
-    activeBasePaths: [AuditLogsUrl],
-    icon: Activity,
-    kind: "monitoring",
-  },
   {
     translationKey: "Home.ConfigurationIssues",
     href: ConfigurationIssuesUrl,
@@ -171,4 +174,16 @@ export const monitoringItems: NavItem[] = [
     icon: Settings,
     kind: "monitoring",
   },
+  {
+    translationKey: "Home.AuditLogs",
+    href: AuditLogsUrl,
+    activeBasePaths: [AuditLogsUrl],
+    icon: Activity,
+    kind: "monitoring",
+  },
 ];
+
+// Error Logs can be switched off in the host configuration
+// (AdminConfiguration:BasicConfiguration:ErrorLogsEnabled); it follows Audit Logs.
+export const getMonitoringItems = (errorLogsEnabled: boolean): NavItem[] =>
+  errorLogsEnabled ? [...monitoringItems, errorLogsItem] : monitoringItems;

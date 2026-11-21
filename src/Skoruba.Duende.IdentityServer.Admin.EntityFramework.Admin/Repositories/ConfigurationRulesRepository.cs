@@ -74,7 +74,7 @@ public class ConfigurationRulesRepository<TDbContext>(TDbContext dbContext) : IC
         return await _dbContext.ConfigurationRules.AnyAsync(r => r.Id == id);
     }
 
-    public async Task<bool> RuleTypeExistsAsync(ConfigurationRuleType ruleType, int? excludeId = null)
+    public async Task<bool> RuleTypeExistsAsync(string ruleType, int? excludeId = null)
     {
         var query = _dbContext.ConfigurationRules.Where(r => r.RuleType == ruleType);
 

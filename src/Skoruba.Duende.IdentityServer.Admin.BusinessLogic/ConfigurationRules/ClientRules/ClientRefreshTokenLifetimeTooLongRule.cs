@@ -9,9 +9,24 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfac
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.ClientRules;
 
-public class ClientRefreshTokenLifetimeTooLongRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
+public class ClientRefreshTokenLifetimeTooLongRule : ConfigurationRuleBase
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
+    public override string Key => ConfigurationRuleKeys.ClientRefreshTokenLifetimeTooLong;
+    public override ConfigurationResourceType ResourceType => ConfigurationResourceType.Client;
+    public override string DisplayName => "Client Refresh Token Lifetime Too Long";
+    public override string Description => "Detects clients with refresh token lifetime exceeding the recommended maximum.";
+
+    public override IReadOnlyList<ConfigurationRuleParameter> Parameters { get; } =
+    [
+        ConfigurationRuleParameter.Number("maxLifetimeSeconds", "Maximum Lifetime (seconds)", "Maximum allowed refresh token lifetime in seconds", defaultValue: 2592000, minValue: 3600, maxValue: 31536000, required: true)
+    ];
+
+    public override string DefaultConfiguration => "{\"maxLifetimeSeconds\": 2592000}";
+    public override string ExampleConfiguration => "{\"maxLifetimeSeconds\": 7776000}";
+    public override string DefaultMessageTemplate => "Client '{clientName}' refresh token lifetime {actualLifetime}s exceeds maximum {maxLifetime}s";
+    public override string DefaultFixDescription => "Navigate to Client Details → Advanced tab → Token, find 'Refresh Token Lifetime' field and reduce the value to {maxLifetime} seconds or less.";
+
+    public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<LifetimeConfig>(configuration);
         var maxLifetimeSeconds = config.MaxLifetimeSeconds ?? 2592000; // 30 days default

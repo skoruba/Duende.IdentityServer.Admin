@@ -9,9 +9,24 @@ using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Admin.Storage.Interfac
 
 namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.ConfigurationRules.IdentityResourceRules;
 
-public class IdentityResourceMustBeEnabledRule : ConfigurationRuleValidatorBase, IConfigurationRuleValidator
+public class IdentityResourceMustBeEnabledRule : ConfigurationRuleBase
 {
-    public List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
+    public override string Key => ConfigurationRuleKeys.IdentityResourceMustBeEnabled;
+    public override ConfigurationResourceType ResourceType => ConfigurationResourceType.IdentityResource;
+    public override string DisplayName => "Identity Resource Must Be Enabled";
+    public override string Description => "Detects disabled identity resources that should be enabled.";
+
+    public override IReadOnlyList<ConfigurationRuleParameter> Parameters { get; } =
+    [
+        ConfigurationRuleParameter.Array("requiredResources", "Required Resources", "List of identity resource names that must be enabled", defaultValue: new[] { "openid", "profile" })
+    ];
+
+    public override string DefaultConfiguration => "{\"requiredResources\": [\"openid\", \"profile\"]}";
+    public override string ExampleConfiguration => "{\"requiredResources\": [\"openid\", \"profile\", \"email\"]}";
+    public override string DefaultMessageTemplate => "Required identity resource '{resourceName}' ({displayName}) is disabled";
+    public override string DefaultFixDescription => "Navigate to Identity Resource Details → Basic Information section and enable the 'Enabled' toggle.";
+
+    public override List<ConfigurationIssueView> ValidateWithContext(ValidationContext context, string configuration, string messageTemplate, string fixDescriptionTemplate, ConfigurationIssueTypeView issueType)
     {
         var config = DeserializeConfiguration<RequiredResourcesConfig>(configuration);
         var requiredResources = config.RequiredResources ?? new[] { "openid", "profile" };

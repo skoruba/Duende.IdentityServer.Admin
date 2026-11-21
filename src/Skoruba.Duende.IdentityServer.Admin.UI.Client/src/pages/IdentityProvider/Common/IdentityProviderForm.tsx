@@ -23,6 +23,7 @@ import {
 } from "@/hooks/useConfirmUnsavedChanges";
 import {
   IdentityProviderFormData,
+  IdentityProviderFormInput,
   IdentityProviderFormSchema,
 } from "./IdentityProviderSchema";
 
@@ -41,7 +42,11 @@ const IdentityProviderForm: React.FC<Props> = ({ mode, defaultValues }) => {
   const deleteModal = useModal();
   const [activeTab, setActiveTab] = useState("basics");
 
-  const form = useForm<IdentityProviderFormData>({
+  const form = useForm<
+    IdentityProviderFormInput,
+    unknown,
+    IdentityProviderFormData
+  >({
     resolver: zodResolver(IdentityProviderFormSchema),
     defaultValues,
   });

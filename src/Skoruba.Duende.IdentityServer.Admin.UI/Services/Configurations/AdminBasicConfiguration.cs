@@ -12,4 +12,11 @@ public class AdminBasicConfiguration
     /// user and role pages lead to the dashboard. The Admin API is not affected.
     /// </summary>
     public bool IdentityManagementEnabled { get; set; } = true;
+
+    /// <summary>
+    /// Shows Monitoring → Error Logs, the log events the STS writes into the Log table. With <c>false</c> the SPA
+    /// hides the menu entry and the command palette item, and the page leads to the dashboard. Turn it off together
+    /// with DatabaseLogConfiguration:Enabled of the STS. The Admin API is not affected.
+    /// </summary>
+    public bool ErrorLogsEnabled { get; set; } = true;
 }

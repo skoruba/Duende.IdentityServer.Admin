@@ -1,31 +1,52 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { client } from "@skoruba/duende.identityserver.admin.api.client";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2 } from "lucide-react";
+import { AlertTriangle, Edit, Trash2 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
+import DeleteDialog from "@/components/DeleteDialog/DeleteDialog";
+import { TooltipField } from "@/components/FormRow/FormRow";
 import {
   toggleConfigurationRule,
   deleteConfigurationRule,
   useConfigurationRulesMetadata,
 } from "@/services/ConfigurationRulesService";
 import { summarizeRule } from "@/lib/configurationRules/summarizeRule";
+import { isUnknownRuleType } from "@/lib/configurationRules/ruleTypeSelection";
 import { useMutation } from "@tanstack/react-query";
 import { IssueTypeBadge } from "../ConfigurationIssues/IssueTypeBadge";
 import { toast } from "@/components/ui/use-toast";
 import type { ColumnDef } from "@tanstack/react-table";
 import { configurationChangeMeta } from "@/services/mutationMeta";
 
+/**
+ * Says why a control is locked. A disabled control takes no pointer events, so
+ * the span around it is what the pointer meets and what opens the tooltip.
+ */
+const LockedHint: React.FC<{ reason?: string; children: React.ReactNode }> = ({
+  reason,
+  children,
+}) =>
+  reason ? (
+    <TooltipField side="top" description={reason}>
+      <span className="inline-flex cursor-not-allowed">{children}</span>
+    </TooltipField>
+  ) : (
+    <>{children}</>
+  );
+
 interface ConfigurationRulesTableProps {
-  data: client.ConfigurationRulesDto;
+  visibleRules: client.ConfigurationRuleDto[];
+  filters: React.ReactNode;
   onEdit: (rule: client.ConfigurationRuleDto) => void;
   onRefresh: () => void;
 }
 
 const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
-  data,
+  visibleRules,
+  filters,
   onEdit,
   onRefresh,
 }) => {
@@ -68,11 +89,8 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
     await toggleMutation.mutateAsync(rule.id);
   };
 
-  const handleDelete = async (id: number) => {
-    if (confirm(t("ConfigurationRules.ConfirmDelete"))) {
-      await deleteMutation.mutateAsync(id);
-    }
-  };
+  const [ruleToDelete, setRuleToDelete] =
+    useState<client.ConfigurationRuleDto | null>(null);
 
   const getIssueTypeBadge = (issueType: client.ConfigurationIssueType) => {
     const isError =
@@ -121,17 +139,50 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
     );
   };
 
+  const mutedIfUnknown = (rule: client.ConfigurationRuleDto) =>
+    isUnknownRuleType(metadata, rule.ruleType) ? "opacity-50" : undefined;
+
   const columns: ColumnDef<client.ConfigurationRuleDto, unknown>[] = [
     {
       accessorKey: "ruleType",
       header: t("ConfigurationRules.RuleType"),
       cell: ({ row }) => {
         const summary = summarizeRule(row.original, metadata, formatBoolean);
+        const isUnknown = isUnknownRuleType(metadata, row.original.ruleType);
 
         return (
           <div className="space-y-1">
-            <div className="font-medium" title={row.original.ruleType}>
-              {summary.name}
+            <div className="flex flex-wrap items-center gap-2">
+              <span
+                // Nothing runs a rule that is not registered, so it reads as switched off
+                className={
+                  isUnknown
+                    ? "font-medium text-muted-foreground"
+                    : "font-medium"
+                }
+                title={String(row.original.ruleType)}
+              >
+                {summary.name}
+              </span>
+              {isUnknown && (
+                <TooltipField
+                  side="top"
+                  description={t("ConfigurationRules.UnknownRuleDescription")}
+                >
+                  <span className="inline-flex">
+                    <Badge
+                      variant="outline"
+                      className="gap-1 text-muted-foreground"
+                    >
+                      {/* The icon of the note above the list: only an enabled rule calls for action */}
+                      {row.original.isEnabled && (
+                        <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-orange-500" />
+                      )}
+                      {t("ConfigurationRules.UnknownRule")}
+                    </Badge>
+                  </span>
+                </TooltipField>
+              )}
             </div>
             {summary.description && (
               <div className="text-xs text-muted-foreground">
@@ -162,27 +213,44 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
     {
       accessorKey: "resourceType",
       header: t("ConfigurationRules.ResourceType"),
-      cell: ({ row }) => {
-        return getResourceTypeBadge(row.original.resourceType);
-      },
+      cell: ({ row }) => (
+        <div className={mutedIfUnknown(row.original)}>
+          {getResourceTypeBadge(row.original.resourceType)}
+        </div>
+      ),
     },
     {
       accessorKey: "issueType",
       header: t("ConfigurationRules.IssueType"),
-      cell: ({ row }) => {
-        return getIssueTypeBadge(row.original.issueType);
-      },
+      cell: ({ row }) => (
+        <div className={mutedIfUnknown(row.original)}>
+          {getIssueTypeBadge(row.original.issueType)}
+        </div>
+      ),
     },
     {
       accessorKey: "isEnabled",
       header: t("ConfigurationRules.Enabled"),
       cell: ({ row }) => {
+        const cannotEnable =
+          !row.original.isEnabled &&
+          isUnknownRuleType(metadata, row.original.ruleType);
+
         return (
-          <Switch
-            checked={row.original.isEnabled}
-            onCheckedChange={() => handleToggle(row.original)}
-            disabled={toggleMutation.isPending}
-          />
+          <LockedHint
+            reason={
+              cannotEnable
+                ? t("ConfigurationRules.EnableUnknownRuleDisabled")
+                : undefined
+            }
+          >
+            <Switch
+              className={cannotEnable ? "pointer-events-none" : undefined}
+              checked={row.original.isEnabled}
+              onCheckedChange={() => handleToggle(row.original)}
+              disabled={toggleMutation.isPending || cannotEnable}
+            />
+          </LockedHint>
         );
       },
     },
@@ -190,23 +258,35 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
       id: "actions",
       header: t("Actions.Actions"),
       cell: ({ row }) => {
+        const isUnknown = isUnknownRuleType(metadata, row.original.ruleType);
+
         return (
           <div className="flex space-x-2">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => onEdit(row.original)}
+              disabled={isUnknown}
             >
               <Edit className="h-4 w-4" />
             </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => handleDelete(row.original.id)}
-              disabled={deleteMutation.isPending}
+            <LockedHint
+              reason={
+                isUnknown
+                  ? undefined
+                  : t("ConfigurationRules.DeleteRegisteredRuleDisabled")
+              }
             >
-              <Trash2 className="h-4 w-4 text-destructive" />
-            </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                aria-label={t("Actions.Delete")}
+                onClick={() => setRuleToDelete(row.original)}
+                disabled={!isUnknown || deleteMutation.isPending}
+              >
+                <Trash2 className="h-4 w-4 text-destructive" />
+              </Button>
+            </LockedHint>
           </div>
         );
       },
@@ -214,13 +294,28 @@ const ConfigurationRulesTable: React.FC<ConfigurationRulesTableProps> = ({
   ];
 
   return (
-    <DataTable
-      columns={columns}
-      data={data.rules || []}
-      pagination={{ pageIndex: 0, pageSize: 10, hidePagination: true }}
-      setPagination={() => {}}
-      totalCount={data.totalCount}
-    />
+    <div className="space-y-4">
+      {filters}
+      <DataTable
+        columns={columns}
+        data={visibleRules}
+        pagination={{ pageIndex: 0, pageSize: 10, hidePagination: true }}
+        setPagination={() => {}}
+        totalCount={visibleRules.length}
+      />
+      <DeleteDialog
+        isAlertOpen={!!ruleToDelete}
+        setIsAlertOpen={(open) => !open && setRuleToDelete(null)}
+        title={t("ConfigurationRules.ConfirmDeleteTitle")}
+        message={t("ConfigurationRules.ConfirmDeleteMessage")}
+        handleDelete={() => {
+          if (ruleToDelete) {
+            deleteMutation.mutate(ruleToDelete.id);
+          }
+          setRuleToDelete(null);
+        }}
+      />
+    </div>
   );
 };
 
